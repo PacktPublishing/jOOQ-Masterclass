@@ -19,6 +19,8 @@ public class ClassicModelsRepository {
     public Order findOrderTooMuchFields(Long orderId) {
       
         Order result = create.select() // or, selectFrom(ORDER)
+                                       //     select(asterisk())     
+                                       //     select(ORDER.fields())
                 .from(ORDER)
                 .where(ORDER.ORDER_ID.eq(orderId))
                 .fetchOneInto(Order.class);
