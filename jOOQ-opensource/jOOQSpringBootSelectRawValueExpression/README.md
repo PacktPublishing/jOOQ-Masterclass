@@ -1,1 +1,1 @@
-jOOQ generate POJOs (run against MySQL)
+Using row value expressions in predicates
