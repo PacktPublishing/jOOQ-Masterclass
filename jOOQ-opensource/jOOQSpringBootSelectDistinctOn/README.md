@@ -1,1 +1,1 @@
-jOOQ - select only the needed columns in POJOs
+PostgreSQL DISTINCT ON and jOOQ
