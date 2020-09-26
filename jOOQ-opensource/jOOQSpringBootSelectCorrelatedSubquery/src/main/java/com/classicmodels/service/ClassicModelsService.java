@@ -1,5 +1,6 @@
 package com.classicmodels.service;
 
+import com.classicmodels.pojo.CustomerPojo;
 import com.classicmodels.pojo.EmployeePojo;
 import com.classicmodels.pojo.ProductPojo;
 import com.classicmodels.repository.ClassicModelsRepository;
@@ -28,4 +29,9 @@ public class ClassicModelsService {
         return classicModelsRepository.findEmployeesBySumSales();
     }
     
+    @Transactional(readOnly = true)
+    public List<CustomerPojo> fetchCustomerFullNameCityCountry() {
+        
+        return classicModelsRepository.findCustomerFullNameCityCountry();
+    }
 }

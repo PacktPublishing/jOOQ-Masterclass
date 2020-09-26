@@ -28,6 +28,9 @@ public class MainApplication {
 
             System.out.println("Sample: Call fetchEmployeesBySumSales():");
             System.out.println(classicModelsService.fetchEmployeesBySumSales());
+            
+            System.out.println("Sample: Call findCustomerFullNameCityCountry()");
+            System.out.println(classicModelsService.fetchCustomerFullNameCityCountry());
         };
     }
 }
