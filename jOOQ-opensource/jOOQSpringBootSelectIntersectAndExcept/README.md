@@ -1,1 +1,1 @@
-jOOQ using intersect and except (run against PostgreSQL)
+jOOQ using intersect and except (run against PostgreSQL) 
