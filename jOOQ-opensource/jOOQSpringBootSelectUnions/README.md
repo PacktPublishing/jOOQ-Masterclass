@@ -1,1 +1,1 @@
-jOOQ - select only the needed columns in POJOs
+jOOQ union and union all
