@@ -33,6 +33,5 @@ public class ClassicModelsController {
     public List<CustomerPojo> fetchCustomerFullNameCityCountry() {
 
         return classicModelsService.fetchCustomerFullNameCityCountry();
-    }
-
+    }       
 }

@@ -77,6 +77,7 @@ public class ClassicModelsRepository {
         return result;
     }
 
+    /* correlated subquery - example 3 */
     public List<CustomerPojo> findCustomerFullNameCityCountry() {
         
         Field<?> fullName = select(concat(CUSTOMER.CONTACT_FIRST_NAME, val(" "), CUSTOMER.CONTACT_LAST_NAME))
@@ -97,6 +98,5 @@ public class ClassicModelsRepository {
                 .fetchInto(CustomerPojo.class);
         
         return result;
-    }
-
+    }    
 }

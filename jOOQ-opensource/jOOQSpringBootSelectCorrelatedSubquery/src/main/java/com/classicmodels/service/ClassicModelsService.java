@@ -33,5 +33,5 @@ public class ClassicModelsService {
     public List<CustomerPojo> fetchCustomerFullNameCityCountry() {
         
         return classicModelsRepository.findCustomerFullNameCityCountry();
-    }
+    }    
 }
