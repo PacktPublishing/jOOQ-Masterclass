@@ -43,7 +43,7 @@ public class ClassicModelsRepository {
                 .groupBy(p2.PRODUCT_LINE);
 
         List<ProductPojo> result = create.select(p1.PRODUCT_ID, p1.PRODUCT_NAME,
-                p1.PRODUCT_VENDOR, p1.BUY_PRICE)
+                p1.PRODUCT_LINE, p1.PRODUCT_VENDOR, p1.BUY_PRICE)
                 .from(p1)
                 .where(p1.BUY_PRICE.in(maxBuyPrice))
                 .orderBy(p1.PRODUCT_LINE, p1.BUY_PRICE)
