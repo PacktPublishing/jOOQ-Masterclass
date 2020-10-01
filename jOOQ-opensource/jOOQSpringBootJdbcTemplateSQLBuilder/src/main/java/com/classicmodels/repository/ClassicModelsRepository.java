@@ -42,7 +42,7 @@ public class ClassicModelsRepository {
         
         /* Using jOOQ to build the SQL and JdbcTemplate to execute it */                
         Query query = create.selectFrom(table(name("ORDER")))
-                .where(field("ORDER.ORDER_ID").eq(orderId));
+                .where(field(name("ORDER").append("ORDER_ID")).eq(orderId));
 
         Order result = (Order) jdbcTemplate.queryForObject(query.getSQL(),
                 query.getBindValues().toArray(), new BeanPropertyRowMapper(Order.class));
@@ -101,13 +101,12 @@ public class ClassicModelsRepository {
          */
         
         /* Using jOOQ to build the SQL and JdbcTemplate to execute it */
-        Name no = name("ORDER", "ORDER_DATE");
-        Name nc = name("ORDER", "CUSTOMER_NUMBER");
-        Query query = create.select(field("CUSTOMER.CUSTOMER_NAME"), field(no),
-                lead(field(no), 1).over(partitionBy(field(nc))
+        Name no = name("ORDER", "ORDER_DATE");        
+         Query query = create.select(field("CUSTOMER.CUSTOMER_NAME"), field(no),
+                lead(field(no), 1).over(partitionBy(field("CUSTOMER_NUMBER"))
                         .orderBy(field(no))).as("NEXT_ORDER_DATE"))
                 .from(table(name("ORDER")))
-                .join(table("CUSTOMER")).using(field(nc));
+                .join(table("CUSTOMER")).using(field("CUSTOMER_NUMBER"));
 
         /* using unqualified name */
         /*
