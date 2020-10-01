@@ -60,6 +60,12 @@ EXCEPTION
 END;
 /
 BEGIN
+   EXECUTE IMMEDIATE 'DROP TABLE "CUSTOMERDETAIL" CASCADE CONSTRAINTS';
+EXCEPTION
+   WHEN OTHERS THEN NULL;
+END;
+/
+BEGIN
    EXECUTE IMMEDIATE 'DROP TABLE "SALE" CASCADE CONSTRAINTS';
 EXCEPTION
    WHEN OTHERS THEN NULL;
@@ -155,12 +161,6 @@ CREATE TABLE customer (
   contact_last_name varchar2(50) NOT NULL,
   contact_first_name varchar2(50) NOT NULL,
   phone varchar2(50) NOT NULL,
-  address_line_first varchar2(50) NOT NULL,
-  address_line_second varchar2(50) DEFAULT NULL,
-  city varchar2(50) NOT NULL,
-  state varchar2(50) DEFAULT NULL,
-  postal_code varchar2(15) DEFAULT NULL,
-  country varchar2(50) NOT NULL,
   sales_rep_employee_number number(10) DEFAULT NULL,
   credit_limit number(10,2) DEFAULT NULL,
   PRIMARY KEY (customer_number)
@@ -169,6 +169,21 @@ CREATE TABLE customer (
 ) ;
 
 CREATE INDEX sales_rep_employee_number ON customer (sales_rep_employee_number);
+
+/*Table structure for table `customerdetail` */
+
+CREATE TABLE customerdetail (
+  customer_number number(10) NOT NULL,
+  address_line_first varchar2(50) NOT NULL,
+  address_line_second varchar2(50) DEFAULT NULL,
+  city varchar2(50) NOT NULL,
+  state varchar2(50) DEFAULT NULL,
+  postal_code varchar2(15) DEFAULT NULL,
+  country varchar2(50) NOT NULL,
+  PRIMARY KEY (customer_number)
+ ,
+  CONSTRAINT customers_details_ibfk_1 FOREIGN KEY (customer_number) REFERENCES customer (customer_number)
+) ; 
 
 /*Table structure for table `manager` */
 
