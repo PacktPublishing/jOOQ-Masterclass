@@ -1,1 +1,1 @@
-jOOQ union and union all
+jOOQ subquery via derived table
