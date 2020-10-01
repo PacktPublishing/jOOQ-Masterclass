@@ -31,6 +31,34 @@ insert  into `office`(`office_code`,`city`,`phone`,`address_line_first`,`address
 
 ('7','London','+44 20 7877 2041','25 Old Broad Street','Level 7',NULL,'UK','EC2N 1HN','EMEA') ON DUPLICATE KEY UPDATE office_code=office_code;
 
+/*Data for the table `manager` */
+
+insert into `manager` (`manager_id`, `manager_name`) values 
+
+('1', 'Joana Nimar'),
+
+('2', 'Mark Janel'),
+
+('3', 'Olivia Goy') ON DUPLICATE KEY UPDATE manager_id=manager_id;
+
+/*Data for the table `office_has_manager` */
+
+insert into `office_has_manager` (`offices_office_code`, `managers_manager_id`) values 
+
+('1', '1'),
+
+('2', '1'),
+
+('3', '1'),
+
+('4', '2'),
+
+('5', '3'),
+
+('6', '3'),
+
+('7', '2') ON DUPLICATE KEY UPDATE offices_office_code=offices_office_code;
+
 /*Data for the table `employee` */
 
 insert  into `employee`(`employee_number`,`last_name`,`first_name`,`extension`,`email`,`office_code`,`salary`, `reports_to`,`job_title`) values 
@@ -80,34 +108,6 @@ insert  into `employee`(`employee_number`,`last_name`,`first_name`,`extension`,`
 (1625,'Kato','Yoshimi','x102','ykato@classicmodelcars.com','5',60000,1621,'Sales Rep'),
 
 (1702,'Gerard','Martin','x2312','mgerard@classicmodelcars.com','4',50000,1102,'Sales Rep') ON DUPLICATE KEY UPDATE employee_number=employee_number;
-
-/*Data for the table `manager` */
-
-insert into `manager` (`manager_id`, `manager_name`) values 
-
-('1', 'Joana Nimar'),
-
-('2', 'Mark Janel'),
-
-('3', 'Olivia Goy') ON DUPLICATE KEY UPDATE manager_id=manager_id;
-
-/*Data for the table `office_has_manager` */
-
-insert into `office_has_manager` (`offices_office_code`, `managers_manager_id`) values 
-
-('1', '1'),
-
-('2', '1'),
-
-('3', '1'),
-
-('4', '2'),
-
-('5', '3'),
-
-('6', '3'),
-
-('7', '2') ON DUPLICATE KEY UPDATE offices_office_code=offices_office_code;
 
 /*Data for the table `customer` */
 
@@ -8047,7 +8047,7 @@ insert  into `payment`(`customer_number`,`check_number`,`payment_date`,`invoice_
 
 (496,'MN89921','2004-12-31','52166.00', '2004-12-31') ON DUPLICATE KEY UPDATE customer_number=customer_number;
 
-insert  into `sale`(`sale_id`,`fiscal_year`,`sale`,`employee_number`) values 
+insert into sale(sale_id,fiscal_year,sale,employee_number) values 
 
 (1, 2003, 5282.64, 1370),
 
