@@ -85,6 +85,7 @@ END;
 /
 COMMIT;
 
+
 /*Table structure for table `office` */
 
 CREATE TABLE office (
@@ -214,12 +215,12 @@ END;
 /*Table structure for table `office_has_manager` */
 
 CREATE TABLE office_has_manager (
-  office_code varchar2(10) REFERENCES office (office_code),
-  manager_id number(10) REFERENCES manager (manager_id),
-  CONSTRAINT offices_managers_pkey PRIMARY KEY (office_code, manager_id) 
+  offices_office_code varchar2(10) REFERENCES office (office_code),
+  managers_manager_id number(10) REFERENCES manager (manager_id),
+  CONSTRAINT offices_managers_pkey PRIMARY KEY (offices_office_code, managers_manager_id) 
 );
 
-CREATE INDEX idx_offices_has_managers_id ON office_has_manager(manager_id, office_code);
+CREATE INDEX idx_offices_has_managers_id ON office_has_manager(managers_manager_id, offices_office_code);
 
 /*Table structure for table `productline` */
 
