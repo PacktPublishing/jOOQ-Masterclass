@@ -3,7 +3,7 @@ package com.classicmodels.controller;
 import com.classicmodels.pojo.DelayedPayment;
 import com.classicmodels.pojo.Order;
 import com.classicmodels.pojo.OrderAndNextOrderDate;
-import com.classicmodels.service.OrderPaymentService;
+import com.classicmodels.service.ClassicModelsService;
 import java.time.LocalDate;
 import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,32 +11,31 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class OrderPaymentController {
+public class ClassicModelsController {
 
-    private final OrderPaymentService paymentService;
+    private final ClassicModelsService classicModelsService;
 
-    public OrderPaymentController(OrderPaymentService paymentService) {
-        this.paymentService = paymentService;
+    public ClassicModelsController(ClassicModelsService classicModelsService) {
+        this.classicModelsService = classicModelsService;
     }
     
     @GetMapping("/order")
     public Order fetchOrder(@RequestParam Long orderId) {
 
-        return paymentService.fetchOrder(orderId);
+        return classicModelsService.fetchOrder(orderId);
     } 
+       
+    @GetMapping("/orderandnextorderdate")
+    public List<OrderAndNextOrderDate> fetchOrderAndNextOrderDate() {
+
+        return classicModelsService.fetchOrderAndNextOrderDate();
+    }        
     
     @GetMapping("/delayedpayments")
     public List<DelayedPayment> fetchDelayedPayments(
             @RequestParam String sd, @RequestParam String ed) {
 
-        return paymentService.fetchDelayedPayments(
+        return classicModelsService.fetchDelayedPayments(
                 LocalDate.parse(sd), LocalDate.parse(ed));
     }        
-
-    @GetMapping("/orderandnextorderdate")
-    public List<OrderAndNextOrderDate> fetchOrderAndNextOrderDate() {
-
-        return paymentService.fetchOrderAndNextOrderDate();
-    }        
-    
 }
