@@ -93,25 +93,25 @@ public class ClassicModelsRepository {
     
     public List<DelayedPayment> findDelayedPayments(LocalDate startDate, LocalDate endDate) {
 
-        /* Using only JdbcTemplate */
+        /* Using only JdbcTemplate */    
         /*
         String sql = """  
-                   SELECT c.customer_name,
-                              p.payment_date,
-                              p.caching_date,
-                              p.invoice_amount
-                       FROM payment p
-                       JOIN customer c ON p.customer_number = c.customer_number
-                       WHERE (p.payment_date BETWEEN cast(? as date) AND cast(? as date)
-                              AND NOT EXISTS (SELECT p.payment_date "x" 
-                                              FROM DUAL INTERSECT SELECT p.caching_date "x" FROM DUAL)) 
+                   SELECT C.CUSTOMER_NAME,
+                          P.PAYMENT_DATE,
+                          P.CACHING_DATE,
+                          P.INVOICE_AMOUNT
+                       FROM PAYMENT P
+                       JOIN CUSTOMER C ON P.CUSTOMER_NUMBER = C.CUSTOMER_NUMBER
+                       WHERE (P.PAYMENT_DATE BETWEEN cast(? AS date) AND cast(? AS date)
+                              AND NOT EXISTS (SELECT P.PAYMENT_DATE "x" 
+                                              FROM DUAL INTERSECT SELECT P.CACHING_DATE "x" FROM DUAL)) 
                    """;        
-                
+        
         List<DelayedPayment> result = jdbcTemplate.query(sql, new Object[]{startDate, endDate},
                 new BeanPropertyRowMapper(DelayedPayment.class));
         */
         
-        /* Using jOOQ to build the SQL and JdbcTemplate to execute it */        
+        /* Using jOOQ to build the SQL and JdbcTemplate to execute it */                
         Query query = create.select(field("CUSTOMER.CUSTOMER_NAME"), field("PAYMENT.PAYMENT_DATE"),
                                     field("PAYMENT.CACHING_DATE"), field("PAYMENT.INVOICE_AMOUNT"))
                 .from(table("PAYMENT"))
