@@ -39,10 +39,7 @@
         <maven.compiler.source>14</maven.compiler.source>
         <maven.compiler.target>14</maven.compiler.target>
         
-        <jooq.version>3.13.2</jooq.version>     
-        <ojdbc8.version>19.6.0.0</ojdbc8.version>    
-        <codehaus.mojo.version>1.0.0</codehaus.mojo.version>                
-        <hibernate.validator.version>5.2.4.Final</hibernate.validator.version>
+        <jooq.version>3.13.2</jooq.version>             
     </properties>
 
     <dependencies>        
@@ -72,21 +69,14 @@
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
-        </dependency>
+        </dependency>        
         <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <version>${hibernate.validator.version}</version>
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ojdbc8</artifactId>            
         </dependency>
         <dependency>
             <groupId>com.oracle.database.jdbc</groupId>
-            <artifactId>ojdbc8</artifactId>
-            <version>${ojdbc8.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.oracle.database.jdbc</groupId>
-            <artifactId>ucp</artifactId>
-            <version>${ojdbc8.version}</version>
+            <artifactId>ucp</artifactId>            
         </dependency>       
         <dependency>
             <groupId>org.springframework.boot</groupId>
