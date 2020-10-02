@@ -10,11 +10,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class OrderPaymentService {
+public class ClassicModelsService {
 
     private final ClassicModelsRepository classicModelsRepository;
 
-    public OrderPaymentService(ClassicModelsRepository classicModelsRepository) {
+    public ClassicModelsService(ClassicModelsRepository classicModelsRepository) {
         this.classicModelsRepository = classicModelsRepository;
     }
 
@@ -25,15 +25,15 @@ public class OrderPaymentService {
     }
 
     @Transactional(readOnly = true)
+    public List<OrderAndNextOrderDate> fetchOrderAndNextOrderDate() {
+
+        return classicModelsRepository.findOrderAndNextOrderDate();
+    }
+
+    @Transactional(readOnly = true)
     public List<DelayedPayment> fetchDelayedPayments(
             LocalDate startDate, LocalDate endDate) {
 
         return classicModelsRepository.findDelayedPayments(startDate, endDate);
-    }
-
-    @Transactional(readOnly = true)
-    public List<OrderAndNextOrderDate> fetchOrderAndNextOrderDate() {
-
-        return classicModelsRepository.findOrderAndNextOrderDate();
     }
 }
