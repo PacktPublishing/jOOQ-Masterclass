@@ -55,17 +55,7 @@
             <groupId>org.jooq.trial</groupId>
             <artifactId>jooq</artifactId>
             <version>${jooq.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jooq.trial</groupId>
-            <artifactId>jooq-meta</artifactId>
-            <version>${jooq.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jooq.trial</groupId>
-            <artifactId>jooq-codegen</artifactId>
-            <version>${jooq.version}</version>
-        </dependency>              
+        </dependency>                       
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
