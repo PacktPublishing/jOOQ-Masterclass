@@ -100,7 +100,7 @@ public class ClassicModelsRepository {
                               P.CACHING_DATE,
                               P.INVOICE_AMOUNT
                        FROM PAYMENT P
-                       JOIN CUSTOMER C ON p.CUSTOMER_NUMBER = C.CUSTOMER_NUMBER
+                       JOIN CUSTOMER C ON P.CUSTOMER_NUMBER = C.CUSTOMER_NUMBER
                        WHERE (P.PAYMENT_DATE BETWEEN ? AND ?
                               AND (NOT(P.PAYMENT_DATE <=> P.CACHING_DATE))) 
                    """;        
