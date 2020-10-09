@@ -70,10 +70,10 @@ public class ClassicModelsRepository {
         
         /* Using jOOQ to build the typesafe SQL and JdbcTemplate to execute it */
         Query query = create.select(CUSTOMER.CUSTOMER_NAME, ORDER.ORDER_DATE,
-                lead(ORDER.ORDER_DATE, 1).over(partitionBy(ORDER.CUSTOMER_NUMBER)
+                lead(ORDER.ORDER_DATE, 1).over(partitionBy(ORDER.CUSTOMER_NUMBER.as("CUSTOMER_NUMBER"))
                         .orderBy(ORDER.ORDER_DATE)).as("NEXT_ORDER_DATE"))
                 .from(ORDER)
-                .join(CUSTOMER).using(ORDER.CUSTOMER_NUMBER);
+                .join(CUSTOMER).using(ORDER.CUSTOMER_NUMBER.as("CUSTOMER_NUMBER"));
        
         List<OrderAndNextOrderDate> result = jdbcTemplate.query(query.getSQL(),
                 new BeanPropertyRowMapper(OrderAndNextOrderDate.class));
@@ -83,9 +83,7 @@ public class ClassicModelsRepository {
     
     public List<DelayedPayment> findDelayedPayments(LocalDate startDate, LocalDate endDate) {
 
-        /* Using only JdbcTemplate */
-        
-        // Explicit join
+        /* Using only JdbcTemplate */        
         /*
         String sql = """  
                    SELECT C.CUSTOMER_NAME,
@@ -98,40 +96,17 @@ public class ClassicModelsRepository {
                               AND (NOT(P.PAYMENT_DATE <=> P.CACHING_DATE))) 
                    """;                                
         
-        // Same query using implicit join         
-        String sql = """
-                     SELECT C.CUSTOMER_NAME,
-                            P.PAYMENT_DATE,
-                            P.CACHING_DATE,
-                            P.INVOICE_AMOUNT
-                         FROM PAYMENT P,
-                              CUSTOMER C
-                         WHERE P.CUSTOMER_NUMBER = C.CUSTOMER_NUMBER
-                           AND (P.PAYMENT_DATE BETWEEN ? AND ?
-                                AND (NOT(P.PAYMENT_DATE <=> P.CACHING_DATE)))
-                     """;       
-        
         List<DelayedPayment> result = jdbcTemplate.query(sql, new Object[]{startDate, endDate},
                 new BeanPropertyRowMapper(DelayedPayment.class));
         */
         
-        /* Using jOOQ to build the typesafe SQL and JdbcTemplate to execute it */        
-        // Explicit join
-        /*
+        /* Using jOOQ to build the typesafe SQL and JdbcTemplate to execute it */                
         Query query = create.select(CUSTOMER.CUSTOMER_NAME, PAYMENT.PAYMENT_DATE,
                                     PAYMENT.CACHING_DATE, PAYMENT.INVOICE_AMOUNT)
                 .from(PAYMENT)
                 .join(CUSTOMER).on(PAYMENT.CUSTOMER_NUMBER.eq(CUSTOMER.CUSTOMER_NUMBER))
                 .where(PAYMENT.PAYMENT_DATE.between(startDate).and(endDate))
                 .and(PAYMENT.PAYMENT_DATE.isDistinctFrom(PAYMENT.CACHING_DATE));    
-        */
-        
-        // Same query using implicit join             
-        Query query = create.select(PAYMENT.customer().CUSTOMER_NAME, PAYMENT.PAYMENT_DATE,
-                                    PAYMENT.CACHING_DATE, PAYMENT.INVOICE_AMOUNT)
-                .from(PAYMENT)                
-                .where(PAYMENT.PAYMENT_DATE.between(startDate).and(endDate))
-                .and(PAYMENT.PAYMENT_DATE.isDistinctFrom(PAYMENT.CACHING_DATE));       
         
         List<DelayedPayment> result = jdbcTemplate.query(query.getSQL(),
                 query.getBindValues().toArray(), new BeanPropertyRowMapper(DelayedPayment.class));
