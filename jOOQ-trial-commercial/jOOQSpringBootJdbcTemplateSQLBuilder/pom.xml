@@ -26,7 +26,7 @@
         <maven.compiler.source>14</maven.compiler.source>
         <maven.compiler.target>14</maven.compiler.target>
         
-        <jooq.version>3.13.2</jooq.version>             
+        <jooq.version>3.13.5</jooq.version>             
         <maven.compiler.plugin.version>3.3</maven.compiler.plugin.version>
     </properties>
 
@@ -40,7 +40,7 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>        
         <dependency>
-            <groupId>org.jooq.trial</groupId>
+            <groupId>org.jooq.trial-java-8</groupId>
             <artifactId>jooq</artifactId>
             <version>${jooq.version}</version>
         </dependency>                       
