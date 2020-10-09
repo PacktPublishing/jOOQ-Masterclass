@@ -73,7 +73,7 @@ public class ClassicModelsRepository {
                 lead(ORDER.ORDER_DATE, 1).over(partitionBy(ORDER.CUSTOMER_NUMBER.as("CUSTOMER_NUMBER"))
                         .orderBy(ORDER.ORDER_DATE)).as("NEXT_ORDER_DATE"))
                 .from(ORDER)
-                .join(CUSTOMER).using(ORDER.CUSTOMER_NUMBER.as("CUSTOMER_NUMBER"));
+                .join(CUSTOMER).using(ORDER.CUSTOMER_NUMBER);
        
         List<OrderAndNextOrderDate> result = jdbcTemplate.query(query.getSQL(),
                 new BeanPropertyRowMapper(OrderAndNextOrderDate.class));
