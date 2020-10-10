@@ -2,8 +2,8 @@ package com.classicmodels.service;
 
 import com.classicmodels.repository.ClassicModelsRepository;
 import com.classicmodels.pojo.DelayedPayment;
-import com.classicmodels.pojo.Order;
-import com.classicmodels.pojo.OrderAndNextOrderDate;
+import com.classicmodels.pojo.Manager;
+import com.classicmodels.pojo.CustomerCachingDate;
 import java.time.LocalDate;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -19,15 +19,15 @@ public class ClassicModelsService {
     }
 
     @Transactional(readOnly = true)
-    public Order fetchOrder(Long orderId) {
+    public Manager fetchManager(Long managerId) {
 
-        return classicModelsRepository.findOrder(orderId);
+        return classicModelsRepository.findManager(managerId);
     }
 
     @Transactional(readOnly = true)
-    public List<OrderAndNextOrderDate> fetchOrderAndNextOrderDate() {
+    public List<CustomerCachingDate> fetchCustomerCachingDate() {
 
-        return classicModelsRepository.findOrderAndNextOrderDate();
+        return classicModelsRepository.findCustomerCachingDate();
     }
 
     @Transactional(readOnly = true)

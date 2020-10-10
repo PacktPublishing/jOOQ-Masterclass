@@ -1,8 +1,8 @@
 package com.classicmodels.controller;
 
 import com.classicmodels.pojo.DelayedPayment;
-import com.classicmodels.pojo.Order;
-import com.classicmodels.pojo.OrderAndNextOrderDate;
+import com.classicmodels.pojo.Manager;
+import com.classicmodels.pojo.CustomerCachingDate;
 import com.classicmodels.service.ClassicModelsService;
 import java.time.LocalDate;
 import java.util.List;
@@ -19,16 +19,16 @@ public class ClassicModelsController {
         this.classicModelsService = classicModelsService;
     }
     
-    @GetMapping("/order")
-    public Order fetchOrder(@RequestParam Long orderId) {
+    @GetMapping("/manager")
+    public Manager fetchManager(@RequestParam Long managerId) {
 
-        return classicModelsService.fetchOrder(orderId);
+        return classicModelsService.fetchManager(managerId);
     }                 
 
-    @GetMapping("/orderandnextorderdate")
-    public List<OrderAndNextOrderDate> fetchOrderAndNextOrderDate() {
+    @GetMapping("/customercachingdate")
+    public List<CustomerCachingDate> fetchCustomerCachingDate() {
 
-        return classicModelsService.fetchOrderAndNextOrderDate();
+        return classicModelsService.fetchCustomerCachingDate();
     }        
     
     @GetMapping("/delayedpayments")
