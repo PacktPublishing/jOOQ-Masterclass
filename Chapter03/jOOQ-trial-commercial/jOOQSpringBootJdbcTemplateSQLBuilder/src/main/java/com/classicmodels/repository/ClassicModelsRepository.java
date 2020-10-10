@@ -33,7 +33,7 @@ public class ClassicModelsRepository {
          */
         
         /* Using jOOQ to build the SQL and JdbcTemplate to execute it */
-        Query query = ctx.selectFrom(table("MANAGER"))
+        Query query = ctx.selectFrom(table("MANAGER")) // or, ctx.select().from(table("MANAGER"))
                 .where(field("MANAGER_ID").eq(managerId));
 
         Manager result = (Manager) jdbcTemplate.queryForObject(query.getSQL(),
