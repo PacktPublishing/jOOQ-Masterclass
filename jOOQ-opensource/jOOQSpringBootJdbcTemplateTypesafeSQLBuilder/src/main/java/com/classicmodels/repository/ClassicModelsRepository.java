@@ -61,19 +61,21 @@ public class ClassicModelsRepository {
                           LEAD(ORDER_DATE, 1) OVER (PARTITION BY CUSTOMER_NUMBER
                                                     ORDER BY ORDER_DATE) NEXT_ORDER_DATE
                    FROM `ORDER`
-                   INNER JOIN CUSTOMER USING (CUSTOMER_NUMBER)
+                   INNER JOIN CUSTOMER 
+                     ON CUSTOMER.CUSTOMER_NUMBER = PAYMENT.CUSTOMER_NUMBER
                    """;
 
         List<OrderAndNextOrderDate> result = jdbcTemplate.query(sql,
                 new BeanPropertyRowMapper(OrderAndNextOrderDate.class));
-         */
+        */
         
         /* Using jOOQ to build the typesafe SQL and JdbcTemplate to execute it */
         Query query = create.select(CUSTOMER.CUSTOMER_NAME, ORDER.ORDER_DATE,
-                lead(ORDER.ORDER_DATE, 1).over(partitionBy(ORDER.CUSTOMER_NUMBER.as("CUSTOMER_NUMBER"))
+                lead(ORDER.ORDER_DATE, 1).over(partitionBy(ORDER.CUSTOMER_NUMBER)
                         .orderBy(ORDER.ORDER_DATE)).as("NEXT_ORDER_DATE"))
                 .from(ORDER)
-                .join(CUSTOMER).using(ORDER.CUSTOMER_NUMBER);
+                .join(CUSTOMER)
+                   .on(CUSTOMER.CUSTOMER_NUMBER.eq(ORDER.CUSTOMER_NUMBER));
        
         List<OrderAndNextOrderDate> result = jdbcTemplate.query(query.getSQL(),
                 new BeanPropertyRowMapper(OrderAndNextOrderDate.class));

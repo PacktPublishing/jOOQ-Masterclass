@@ -9,6 +9,7 @@ import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Payment.PAYMENT;
 import org.jooq.DSLContext;
+import org.jooq.Field;
 import org.jooq.Query;
 import static org.jooq.impl.DSL.asterisk;
 import static org.jooq.impl.DSL.lead;
@@ -34,7 +35,7 @@ public class ClassicModelsRepository {
         /*
         String sql = """
                      SELECT * FROM "ORDER" WHERE ORDER_ID=?
-                     """;
+                     """;                
 
         Order result = (Order) jdbcTemplate.queryForObject(sql, new Object[]{orderId},
                 new BeanPropertyRowMapper(Order.class));                 
@@ -61,7 +62,8 @@ public class ClassicModelsRepository {
                           LEAD(ORDER_DATE, 1) OVER (PARTITION BY CUSTOMER_NUMBER
                                                     ORDER BY ORDER_DATE) NEXT_ORDER_DATE
                    FROM "ORDER"
-                   INNER JOIN CUSTOMER USING (CUSTOMER_NUMBER)
+                   INNER JOIN CUSTOMER 
+                          ON CUSTOMER.CUSTOMER_NUMBER = PAYMENT.CUSTOMER_NUMBER
                    """;
 
         List<OrderAndNextOrderDate> result = jdbcTemplate.query(sql,
@@ -69,11 +71,14 @@ public class ClassicModelsRepository {
         */
         
         /* Using jOOQ to build the SQL and JdbcTemplate to execute it */        
-        Query query = create.select(CUSTOMER.CUSTOMER_NAME, ORDER.ORDER_DATE,
-                lead(ORDER.ORDER_DATE, 1).over(partitionBy(ORDER.CUSTOMER_NUMBER.as("CUSTOMER_NUMBER"))
-                        .orderBy(ORDER.ORDER_DATE)).as("NEXT_ORDER_DATE"))
+        Field<LocalDate> orderDate = ORDER.ORDER_DATE;
+        
+        Query query = create.select(CUSTOMER.CUSTOMER_NAME, orderDate,
+                lead(orderDate, 1).over(partitionBy(ORDER.CUSTOMER_NUMBER)
+                        .orderBy(orderDate)).as("NEXT_ORDER_DATE"))
                 .from(ORDER)
-                .join(CUSTOMER).using(ORDER.CUSTOMER_NUMBER);
+                .join(CUSTOMER)
+                   .on(CUSTOMER.CUSTOMER_NUMBER.eq(ORDER.CUSTOMER_NUMBER));
 
         List<OrderAndNextOrderDate> result = jdbcTemplate.query(query.getSQL(),
                 new BeanPropertyRowMapper(OrderAndNextOrderDate.class));
