@@ -9,6 +9,7 @@ import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Payment.PAYMENT;
 import org.jooq.DSLContext;
+import org.jooq.Field;
 import org.jooq.Query;
 import static org.jooq.impl.DSL.asterisk;
 import static org.jooq.impl.DSL.lead;
@@ -70,9 +71,11 @@ public class ClassicModelsRepository {
         */
         
         /* Using jOOQ to build the typesafe SQL and JdbcTemplate to execute it */
-        Query query = create.select(CUSTOMER.CUSTOMER_NAME, ORDER.ORDER_DATE,
-                lead(ORDER.ORDER_DATE, 1).over(partitionBy(ORDER.CUSTOMER_NUMBER)
-                        .orderBy(ORDER.ORDER_DATE)).as("NEXT_ORDER_DATE"))
+        Field<LocalDate> orderDate = ORDER.ORDER_DATE;
+        
+        Query query = create.select(CUSTOMER.CUSTOMER_NAME, orderDate,
+                lead(orderDate, 1).over(partitionBy(ORDER.CUSTOMER_NUMBER)
+                        .orderBy(orderDate)).as("NEXT_ORDER_DATE"))
                 .from(ORDER)
                 .join(CUSTOMER)
                    .on(CUSTOMER.CUSTOMER_NUMBER.eq(ORDER.CUSTOMER_NUMBER));
