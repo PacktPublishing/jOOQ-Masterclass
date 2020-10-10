@@ -57,13 +57,13 @@ public class ClassicModelsRepository {
         /* Using only JdbcTemplate */
         /*
         String sql = """
-                   SELECT CUSTOMER_NAME,
-                          ORDER_DATE,
-                          LEAD(ORDER_DATE, 1) OVER (PARTITION BY CUSTOMER_NUMBER
-                                                    ORDER BY ORDER_DATE) NEXT_ORDER_DATE
-                   FROM "ORDER"
-                   INNER JOIN CUSTOMER 
-                          ON CUSTOMER.CUSTOMER_NUMBER = PAYMENT.CUSTOMER_NUMBER
+                   SELECT C.CUSTOMER_NAME,
+                          O.ORDER_DATE,
+                          LEAD(O.ORDER_DATE, 1) OVER (PARTITION BY O.CUSTOMER_NUMBER
+                                                    ORDER BY O.ORDER_DATE) NEXT_ORDER_DATE
+                   FROM `ORDER` O
+                   INNER JOIN CUSTOMER C
+                     ON C.CUSTOMER_NUMBER = O.CUSTOMER_NUMBER
                    """;
 
         List<OrderAndNextOrderDate> result = jdbcTemplate.query(sql,
