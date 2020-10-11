@@ -25,6 +25,8 @@ IF OBJECT_ID('office_has_manager', 'U') IS NOT NULL
   DROP TABLE office_has_manager;
 IF OBJECT_ID('manager', 'U') IS NOT NULL 
   DROP TABLE manager;
+IF OBJECT_ID('customerdetail', 'U') IS NOT NULL 
+  DROP TABLE customerdetail;
 IF OBJECT_ID('customer', 'U') IS NOT NULL 
   DROP TABLE customer;
 IF OBJECT_ID('sale', 'U') IS NOT NULL 
@@ -92,12 +94,6 @@ CREATE TABLE customer (
   [contact_last_name] varchar(50) NOT NULL,
   [contact_first_name] varchar(50) NOT NULL,
   [phone] varchar(50) NOT NULL,
-  [address_line_first] varchar(50) NOT NULL,
-  [address_line_second] varchar(50) DEFAULT NULL,
-  [city] varchar(50) NOT NULL,
-  [state] varchar(50) DEFAULT NULL,
-  [postal_code] varchar(15) DEFAULT NULL,
-  [country] varchar(50) NOT NULL,
   [sales_rep_employee_number] bigint DEFAULT NULL,
   [credit_limit] decimal(10,2) DEFAULT NULL,
   PRIMARY KEY ([customer_number])
@@ -106,6 +102,20 @@ CREATE TABLE customer (
 ) ;
 
 CREATE INDEX [sales_rep_employee_number] ON customer ([sales_rep_employee_number]);
+
+/* Table structure for table `customerdetail` */
+CREATE TABLE customerdetail (
+  [customer_number] bigint NOT NULL,
+  [address_line_first] varchar(50) NOT NULL,
+  [address_line_second] varchar(50) DEFAULT NULL,
+  [city] varchar(50) NOT NULL,
+  [state] varchar(50) DEFAULT NULL,
+  [postal_code] varchar(15) DEFAULT NULL,
+  [country] varchar(50) NOT NULL,
+PRIMARY KEY ([customer_number])
+ ,
+ CONSTRAINT [customers_details_ibfk_1] FOREIGN KEY ([customer_number]) REFERENCES customer ([customer_number])
+) ; 
 
 /*Table structure for table `manager` */
 
@@ -118,12 +128,12 @@ CREATE TABLE manager (
 /*Table structure for table `office_has_manager` */
 
 CREATE TABLE office_has_manager (
-  [office_code] varchar(10) REFERENCES office ([office_code]) ON UPDATE NO ACTION ON DELETE NO ACTION,
-  [manager_id] bigint REFERENCES manager ([manager_id]) ON UPDATE NO ACTION ON DELETE NO ACTION,
-  CONSTRAINT [offices_managers_pkey] PRIMARY KEY ([office_code], [manager_id]) 
+  [offices_office_code] varchar(10) REFERENCES office ([office_code]) ON UPDATE NO ACTION ON DELETE NO ACTION,
+  [managers_manager_id] bigint REFERENCES manager ([manager_id]) ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT [offices_managers_pkey] PRIMARY KEY ([offices_office_code], [managers_manager_id]) 
 );
 
-CREATE INDEX [idx_offices_has_managers_id] ON office_has_manager([manager_id], [office_code]);
+CREATE INDEX [idx_offices_has_managers_id] ON office_has_manager([managers_manager_id], [offices_office_code]);
 
 /*Table structure for table `productline` */
 
