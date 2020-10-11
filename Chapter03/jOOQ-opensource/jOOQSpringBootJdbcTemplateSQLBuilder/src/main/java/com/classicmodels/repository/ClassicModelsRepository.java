@@ -25,7 +25,7 @@ public class ClassicModelsRepository {
         /* Using only JdbcTemplate */
         /*
         String sql = """
-                     SELECT * FROM MANAGER WHERE MANAGER_ID=?
+                     SELECT * FROM manager WHERE manager_id=?
                      """;        
         
         Manager result = (Manager) jdbcTemplate.queryForObject(sql, new Object[]{managerId},
@@ -33,8 +33,8 @@ public class ClassicModelsRepository {
          */
         
         /* Using jOOQ to build the SQL and JdbcTemplate to execute it */
-        Query query = ctx.selectFrom(table("MANAGER")) // or, ctx.select().from(table("MANAGER"))
-                .where(field("MANAGER_ID").eq(managerId));
+        Query query = ctx.selectFrom(table("manager")) // or, ctx.select().from(table("manager"))
+                .where(field("manager_id").eq(managerId));
 
         Manager result = (Manager) jdbcTemplate.queryForObject(query.getSQL(),
                 query.getBindValues().toArray(), new BeanPropertyRowMapper(Manager.class));
