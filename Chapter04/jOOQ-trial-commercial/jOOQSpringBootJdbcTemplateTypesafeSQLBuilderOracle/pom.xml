@@ -126,7 +126,7 @@
                             <goal>generate</goal>
                         </goals>                                  
                         <configuration>                                                 
-                            <!-- Configure the database connection here -->
+                            <!-- Configure the database connection here. -->
                             <jdbc>
                                 <driver>${spring.datasource.driverClassName}</driver>
                                 <url>${spring.datasource.url}</url>
@@ -148,7 +148,7 @@
                                     <name>org.jooq.meta.oracle.OracleDatabase</name>
             
                                     <!-- The database schema (or in the absence of schema support, in your RDBMS this
-                                    can be the owner, user, database name) to be generated. This cannot be combined with the <schemata> element.                                     
+                                    can be the owner, user, database name) to be generated. This cannot be combined with the <schemata/> element.                                     
                                     If <inputSchema/> is missing then all schemas will be considered. -->
                                     <inputSchema>SYSTEM</inputSchema>                 
             
@@ -159,12 +159,12 @@
                                     Whitespace is ignored and comments are possible. -->                                           
                                     <includes>.*</includes>
             
-                                    <!-- schema version provider -->            
+                                    <!-- Schema version provider -->            
                                     <schemaVersionProvider>SELECT MAX("version") FROM "SYSTEM"."flyway_schema_history"</schemaVersionProvider>
             
                                     <!-- All elements that are excluded from your schema
                                     (A Java regular expression. Use the pipe to separate several expressions).
-                                    Excludes match before includes, i.e. excludes have a higher priority -->
+                                    Excludes match before includes, i.e. excludes have a higher priority. -->
                                     <excludes>
                                         flyway_schema_history | HELP | ROLLING.* | LOGMNR.* 
                                         | AQ.* | MVIEW.* | LOGMNRC.* | LOGMNRGGC.* | LOGMNRP.* 
@@ -176,24 +176,27 @@
                                     <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>
                                 </database>
                                 <target>
-                                    <!-- The destination package of your generated classes (within the destination directory) -->
+                                    <!-- The destination package of your generated classes (within the destination directory).
+                                    jOOQ may append the schema name to this package if generating multiple schemas,
+                                       e.g. org.jooq.your.packagename.schema1
+                                       org.jooq.your.packagename.schema2-->
                                     <packageName>jooq.generated</packageName>
             
-                                    <!-- The destination directory of your generated classes. Using Maven directory layout here -->
+                                    <!-- The destination directory of your generated classes. Using Maven directory layout here. -->
                                     <directory>target/generated-sources/jooq</directory>
                                 </target>
                             </generator>    
                                                                                               
-                            <!-- A boolean property (or constant) can be specified here to tell the plugin not to do anything -->
+                            <!-- A boolean property (or constant) can be specified here to tell the plugin not to do anything. -->
                             <skip>false</skip>
 
                             <!--Additional Maven-specific flags -->
                             <!-- ============================== -->
-                            <!-- Instead of providing an inline configuration here, you can specify an external XML configuration file here -->
+                            <!-- Instead of providing an inline configuration here, you can specify an external XML configuration file here. -->
                             <!-- <configurationFile>${externalfile}</configurationFile> -->
     
                             <!-- Alternatively, you can provide several external configuration files. These will be merged by using
-                            Maven's combine.children="append" policy -->
+                            Maven's combine.children="append" policy. -->
                             <!--
                             <configurationFiles>
                                 <configurationFile>${file1}</configurationFile>
