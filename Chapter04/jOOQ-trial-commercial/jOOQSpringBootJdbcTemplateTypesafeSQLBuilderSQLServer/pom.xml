@@ -144,14 +144,17 @@
                                     <name>org.jooq.meta.sqlserver.SQLServerDatabase</name>
             
                                     <!-- The database schema (or in the absence of schema support, in your RDBMS this
-                                    can be the owner, user, database name) to be generated. If <inputSchema/> is missing then all 
-                                    schemas will be considered -->
+                                    can be the owner, user, database name) to be generated. This cannot be combined with the <schemata> element. 
+                                    If <inputSchema/> is missing then all schemata will be considered -->
                                     <inputCatalog>classicmodels</inputCatalog>
                                     <inputSchema>dbo</inputSchema>                   
             
                                     <!-- All elements that are generated from your schema
                                     (A Java regular expression. Use the pipe to separate several expressions)
-                                    Watch out for case-sensitivity. Depending on your database, this might be important! -->       
+                                    Watch out for case-sensitivity. Depending on your database, this might be important! 
+                                    You can create case-insensitive regular expressions using this syntax: (?i:expr).
+                                    Whitespace is ignored and comments are possible.
+                                    -->       
                                     <includes>.*</includes>
             
                                     <!-- schema version provider -->            
@@ -167,7 +170,11 @@
                                     <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>
                                 </database>
                                 <target>
-                                    <!-- The destination package of your generated classes (within the destination directory) -->
+                                    <!-- The destination package of your generated classes (within the destination directory) 
+                                    jOOQ may append the schema name to this package if generating multiple schemas,
+                                       e.g. org.jooq.your.packagename.schema1
+                                       org.jooq.your.packagename.schema2
+                                    -->
                                     <packageName>jooq.generated</packageName>
             
                                     <!-- The destination directory of your generated classes. Using Maven directory layout here -->
