@@ -133,7 +133,8 @@
                             </jdbc>                                        
 
                             <generator>
-                                <!-- The default code generator. You can override this one, to generate your own code style.
+                                <!-- The default code generator. 
+                                You can override this one, to generate your own code style.
                                 Supported generators:
                                 - org.jooq.codegen.JavaGenerator
                                 - org.jooq.codegen.ScalaGenerator
@@ -146,21 +147,23 @@
                                     <name>org.jooq.meta.postgres.PostgresDatabase</name>
             
                                     <!-- The database schema (or in the absence of schema support, in your RDBMS this
-                                    can be the owner, user, database name) to be generated. If <inputSchema/> is missing then all 
-                                    schemas will be considered -->
+                                    can be the owner, user, database name) to be generated. This cannot be combined with the <schemata/> element.                                     
+                                    If <inputSchema/> is missing then all schemas will be considered. -->
                                     <inputSchema>public</inputSchema>                 
             
                                     <!-- All elements that are generated from your schema
                                     (A Java regular expression. Use the pipe to separate several expressions)
-                                    Watch out for case-sensitivity. Depending on your database, this might be important! -->       
+                                    Watch out for case-sensitivity. Depending on your database, this might be important! 
+                                    You can create case-insensitive regular expressions using this syntax: (?i:expr).
+                                    Whitespace is ignored and comments are possible. -->       
                                     <includes>.*</includes>
             
-                                    <!-- schema version provider -->            
+                                    <!-- Schema version provider -->            
                                     <schemaVersionProvider>SELECT MAX(version) FROM flyway_schema_history</schemaVersionProvider>
             
                                     <!-- All elements that are excluded from your schema
                                     (A Java regular expression. Use the pipe to separate several expressions).
-                                    Excludes match before includes, i.e. excludes have a higher priority -->
+                                    Excludes match before includes, i.e. excludes have a higher priority. -->
                                     <excludes>flyway_schema_history</excludes>
                                     
                                     <!-- Give enough time to jOOQ to trigger the queries needed for generating sources 
@@ -168,10 +171,13 @@
                                     <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>
                                 </database>
                                 <target>
-                                    <!-- The destination package of your generated classes (within the destination directory) -->
+                                    <!-- The destination package of your generated classes (within the destination directory).
+                                    jOOQ may append the schema name to this package if generating multiple schemas,
+                                       e.g. org.jooq.your.packagename.schema1
+                                       org.jooq.your.packagename.schema2 -->
                                     <packageName>jooq.generated</packageName>
             
-                                    <!-- The destination directory of your generated classes. Using Maven directory layout here -->
+                                    <!-- The destination directory of your generated classes. Using Maven directory layout here. -->
                                     <directory>target/generated-sources/jooq</directory>
                                 </target>
                             </generator>    
@@ -185,7 +191,7 @@
                             <!-- <configurationFile>${externalfile}</configurationFile> -->
     
                             <!-- Alternatively, you can provide several external configuration files. These will be merged by using
-                            Maven's combine.children="append" policy -->
+                            Maven's combine.children="append" policy. -->
                             <!--
                             <configurationFiles>
                                 <configurationFile>${file1}</configurationFile>
