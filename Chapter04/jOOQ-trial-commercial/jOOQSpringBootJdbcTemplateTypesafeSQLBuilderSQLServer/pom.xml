@@ -122,7 +122,7 @@
                             <goal>generate</goal>
                         </goals>                                  
                         <configuration>                                                 
-                            <!-- Configure the database connection here -->
+                            <!-- Configure the database connection here. -->
                             <jdbc>
                                 <driver>${spring.datasource.driverClassName}</driver>
                                 <url>${spring.datasource.url}</url>
@@ -144,8 +144,8 @@
                                     <name>org.jooq.meta.sqlserver.SQLServerDatabase</name>
             
                                     <!-- The database schema (or in the absence of schema support, in your RDBMS this
-                                    can be the owner, user, database name) to be generated. This cannot be combined with the <schemata> element. 
-                                    If <inputSchema/> is missing then all schemata will be considered -->
+                                    can be the owner, user, database name) to be generated. This cannot be combined with the <schemata/> element. 
+                                    If <inputSchema/> is missing then all schemata will be considered. -->
                                     <inputCatalog>classicmodels</inputCatalog>
                                     <inputSchema>dbo</inputSchema>                   
             
@@ -153,8 +153,7 @@
                                     (A Java regular expression. Use the pipe to separate several expressions)
                                     Watch out for case-sensitivity. Depending on your database, this might be important! 
                                     You can create case-insensitive regular expressions using this syntax: (?i:expr).
-                                    Whitespace is ignored and comments are possible.
-                                    -->       
+                                    Whitespace is ignored and comments are possible. -->       
                                     <includes>.*</includes>
             
                                     <!-- schema version provider -->            
@@ -162,7 +161,7 @@
             
                                     <!-- All elements that are excluded from your schema
                                     (A Java regular expression. Use the pipe to separate several expressions).
-                                    Excludes match before includes, i.e. excludes have a higher priority -->
+                                    Excludes match before includes, i.e. excludes have a higher priority. -->
                                     <excludes>flyway_schema_history</excludes>
                                     
                                     <!-- Give enough time to jOOQ to trigger the queries needed for generating sources 
@@ -177,21 +176,21 @@
                                     -->
                                     <packageName>jooq.generated</packageName>
             
-                                    <!-- The destination directory of your generated classes. Using Maven directory layout here -->
+                                    <!-- The destination directory of your generated classes. Using Maven directory layout here. -->
                                     <directory>target/generated-sources/jooq</directory>
                                 </target>
                             </generator>    
                                                                                               
-                            <!-- A boolean property (or constant) can be specified here to tell the plugin not to do anything -->
+                            <!-- A boolean property (or constant) can be specified here to tell the plugin not to do anything. -->
                             <skip>false</skip>
 
                             <!--Additional Maven-specific flags -->
                             <!-- ============================== -->
-                            <!-- Instead of providing an inline configuration here, you can specify an external XML configuration file here -->
+                            <!-- Instead of providing an inline configuration here, you can specify an external XML configuration file here. -->
                             <!-- <configurationFile>${externalfile}</configurationFile> -->
     
                             <!-- Alternatively, you can provide several external configuration files. These will be merged by using
-                            Maven's combine.children="append" policy -->
+                            Maven's combine.children="append" policy. -->
                             <!--
                             <configurationFiles>
                                 <configurationFile>${file1}</configurationFile>
