@@ -135,7 +135,8 @@
                             </jdbc>                                        
 
                             <generator>
-                                <!-- The default code generator. You can override this one, to generate your own code style.
+                                <!-- The default code generator. 
+                                You can override this one, to generate your own code style.
                                 Supported generators:
                                 - org.jooq.codegen.JavaGenerator
                                 - org.jooq.codegen.ScalaGenerator
@@ -179,7 +180,7 @@
                                     <!-- The destination package of your generated classes (within the destination directory).
                                     jOOQ may append the schema name to this package if generating multiple schemas,
                                        e.g. org.jooq.your.packagename.schema1
-                                       org.jooq.your.packagename.schema2-->
+                                       org.jooq.your.packagename.schema2 -->
                                     <packageName>jooq.generated</packageName>
             
                                     <!-- The destination directory of your generated classes. Using Maven directory layout here. -->
@@ -187,12 +188,12 @@
                                 </target>
                             </generator>    
                                                                                               
-                            <!-- A boolean property (or constant) can be specified here to tell the plugin not to do anything. -->
+                            <!-- A boolean property (or constant) can be specified here to tell the plugin not to do anything -->
                             <skip>false</skip>
 
                             <!--Additional Maven-specific flags -->
                             <!-- ============================== -->
-                            <!-- Instead of providing an inline configuration here, you can specify an external XML configuration file here. -->
+                            <!-- Instead of providing an inline configuration here, you can specify an external XML configuration file here -->
                             <!-- <configurationFile>${externalfile}</configurationFile> -->
     
                             <!-- Alternatively, you can provide several external configuration files. These will be merged by using
