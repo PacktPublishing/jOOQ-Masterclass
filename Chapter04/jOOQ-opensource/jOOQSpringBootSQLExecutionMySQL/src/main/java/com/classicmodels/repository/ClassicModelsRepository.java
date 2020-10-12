@@ -25,7 +25,7 @@ public class ClassicModelsRepository {
         /* Using jOOQ to build a typesafe SQL and to execute it */
         Manager result = ctx.selectFrom(MANAGER) // or, ctx.select().from(MANAGER)
                 .where(MANAGER.MANAGER_ID.eq(managerId))
-                .fetchOne().into(Manager.class);//fetchOneInto(Manager.class);
+                .fetchOneInto(Manager.class); // or, fetchOne().into(Manager.class)
 
         return result;
     }
@@ -34,8 +34,8 @@ public class ClassicModelsRepository {
 
         /* Using jOOQ to build the typesafe SQL and to execute it */
         List<Order> result = ctx.selectFrom(ORDER)
-                .where(ORDER.REQUIRED_DATE.between(startDate, endDate))
-                .fetchInto(Order.class);
+                .where(ORDER.REQUIRED_DATE.between(startDate, endDate))                
+                .fetchInto(Order.class); // or, fetch().into(Order.class)
 
         return result;
     }
@@ -47,7 +47,7 @@ public class ClassicModelsRepository {
                 .from(ORDER)
                 .innerJoin(CUSTOMER).using(CUSTOMER.CUSTOMER_NUMBER)
                 .orderBy(ORDER.ORDER_DATE.desc())
-                .fetchInto(CustomerAndOrder.class);
+                .fetchInto(CustomerAndOrder.class); // or, fetch().into(CustomerAndOrder.class)
 
         return result;
     }
