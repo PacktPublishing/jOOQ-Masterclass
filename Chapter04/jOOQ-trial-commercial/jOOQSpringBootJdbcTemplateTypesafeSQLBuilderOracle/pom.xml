@@ -148,13 +148,15 @@
                                     <name>org.jooq.meta.oracle.OracleDatabase</name>
             
                                     <!-- The database schema (or in the absence of schema support, in your RDBMS this
-                                    can be the owner, user, database name) to be generated. If <inputSchema/> is missing then all 
-                                    schemas will be considered -->
+                                    can be the owner, user, database name) to be generated. This cannot be combined with the <schemata> element.                                     
+                                    If <inputSchema/> is missing then all schemas will be considered. -->
                                     <inputSchema>SYSTEM</inputSchema>                 
             
                                     <!-- All elements that are generated from your schema
                                     (A Java regular expression. Use the pipe to separate several expressions)
-                                    Watch out for case-sensitivity. Depending on your database, this might be important! -->       
+                                    Watch out for case-sensitivity. Depending on your database, this might be important! 
+                                    You can create case-insensitive regular expressions using this syntax: (?i:expr).
+                                    Whitespace is ignored and comments are possible. -->                                           
                                     <includes>.*</includes>
             
                                     <!-- schema version provider -->            
