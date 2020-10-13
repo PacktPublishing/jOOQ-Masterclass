@@ -4,8 +4,8 @@ import com.classicmodels.pojo.CustomerAndOrder;
 import com.classicmodels.repository.ClassicModelsRepository;
 import java.time.LocalDate;
 import java.util.List;
-import jooq.generated.tables.pojos.Manager;
-import jooq.generated.tables.pojos.Order;
+import jooq.generated.tables.pojos.JooqManager;
+import jooq.generated.tables.pojos.JooqOrder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,13 +19,13 @@ public class ClassicModelsService {
     }
 
     @Transactional(readOnly = true)
-    public Manager fetchManager(Long managerId) {
+    public JooqManager fetchManager(Long managerId) {
 
         return classicModelsRepository.findManager(managerId);
     }
 
     @Transactional(readOnly = true)
-    public List<Order> fetchOrdersByRequiredDate(LocalDate startDate, LocalDate endDate) {
+    public List<JooqOrder> fetchOrdersByRequiredDate(LocalDate startDate, LocalDate endDate) {
 
         return classicModelsRepository.findOrdersByRequiredDate(startDate, endDate);
     }
