@@ -6,8 +6,8 @@ import java.util.List;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Manager.MANAGER;
 import static jooq.generated.tables.Order.ORDER;
-import jooq.generated.tables.pojos.Manager;
-import jooq.generated.tables.pojos.Order;
+import jooq.generated.tables.pojos.JooqManager;
+import jooq.generated.tables.pojos.JooqOrder;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
@@ -20,22 +20,22 @@ public class ClassicModelsRepository {
         this.ctx = ctx;
     }
 
-    public Manager findManager(Long managerId) {
+    public JooqManager findManager(Long managerId) {
 
         /* Using jOOQ to build a typesafe SQL and to execute it */
-        Manager result = ctx.selectFrom(MANAGER) // or, ctx.select().from(MANAGER)
+        JooqManager result = ctx.selectFrom(MANAGER) // or, ctx.select().from(MANAGER)
                 .where(MANAGER.MANAGER_ID.eq(managerId))
-                .fetchOneInto(Manager.class); // or, fetchOne().into(Manager.class)
+                .fetchOneInto(JooqManager.class); // or, fetchOne().into(Manager.class)
 
         return result;
     }
 
-    public List<Order> findOrdersByRequiredDate(LocalDate startDate, LocalDate endDate) {
+    public List<JooqOrder> findOrdersByRequiredDate(LocalDate startDate, LocalDate endDate) {
 
         /* Using jOOQ to build the typesafe SQL and to execute it */
-        List<Order> result = ctx.selectFrom(ORDER)
+        List<JooqOrder> result = ctx.selectFrom(ORDER)
                 .where(ORDER.REQUIRED_DATE.between(startDate, endDate))                
-                .fetchInto(Order.class); // or, fetch().into(Order.class)
+                .fetchInto(JooqOrder.class); // or, fetch().into(Order.class)
 
         return result;
     }
