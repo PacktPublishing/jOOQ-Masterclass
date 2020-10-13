@@ -178,7 +178,7 @@
                                     <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>
                                 </database>
                                 
-                                <!-- Rename the generated POJOs classes -->                      
+                                <!-- Rename the generated POJOs and DAOs classes -->                      
                                 <strategy>
                                     <matchers>
                                         <tables>
