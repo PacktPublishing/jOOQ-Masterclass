@@ -199,6 +199,7 @@
                                     <validationAnnotations>true</validationAnnotations>                            
                                     <springAnnotations>true</springAnnotations>   
                                 </generate>
+                                
                                 <target>
                                     <!-- The destination package of your generated classes (within the destination directory).
                                     jOOQ may append the schema name to this package if generating multiple schemas,
