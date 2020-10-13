@@ -4,8 +4,8 @@ import com.classicmodels.pojo.CustomerAndOrder;
 import com.classicmodels.service.ClassicModelsService;
 import java.time.LocalDate;
 import java.util.List;
-import jooq.generated.tables.pojos.Manager;
-import jooq.generated.tables.pojos.Order;
+import jooq.generated.tables.pojos.JooqManager;
+import jooq.generated.tables.pojos.JooqOrder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,13 +20,13 @@ public class ClassicModelsController {
     }
 
     @GetMapping("/manager")
-    public Manager fetchManager(@RequestParam Long managerId) {
+    public JooqManager fetchManager(@RequestParam Long managerId) {
 
         return classicModelsService.fetchManager(managerId);
     }
 
     @GetMapping("/ordersbyrequireddate")
-    public List<Order> fetchOrdersByRequiredDate(
+    public List<JooqOrder> fetchOrdersByRequiredDate(
             @RequestParam String startDate, @RequestParam String endDate) {
 
         return classicModelsService.fetchOrdersByRequiredDate(
