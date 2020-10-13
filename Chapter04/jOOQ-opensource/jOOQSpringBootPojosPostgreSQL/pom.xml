@@ -177,6 +177,21 @@
                                     (default is 5 seconds) -->
                                     <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>
                                 </database>
+                                
+                                <!-- Rename the generated POJOs classes -->                      
+                                <strategy>
+                                    <matchers>
+                                        <tables>
+                                            <table>
+                                                <pojoClass>                                                         
+                                                    <expression>JOOQ_$0</expression>
+                                                    <transform>PASCAL</transform>                                                                                      
+                                                </pojoClass>
+                                            </table>
+                                        </tables>
+                                    </matchers>
+                                </strategy>
+                                
                                 <!-- jOOQ will generate POJOs in your behalf -->
                                 <generate>
                                     <pojos>true</pojos> 
