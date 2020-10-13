@@ -200,6 +200,7 @@
                                     <pojos>true</pojos> 
                                     <validationAnnotations>true</validationAnnotations>                            
                                 </generate>
+                                
                                 <target>
                                     <!-- The destination package of your generated classes (within the destination directory).
                                     jOOQ may append the schema name to this package if generating multiple schemas,
