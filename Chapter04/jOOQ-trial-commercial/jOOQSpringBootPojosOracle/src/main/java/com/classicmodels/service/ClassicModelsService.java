@@ -2,10 +2,10 @@ package com.classicmodels.service;
 
 import com.classicmodels.pojo.CustomerAndOrder;
 import com.classicmodels.repository.ClassicModelsRepository;
-import com.classicmodels.pojo.Manager;
-import com.classicmodels.pojo.Order;
 import java.time.LocalDate;
 import java.util.List;
+import jooq.generated.tables.pojos.Manager;
+import jooq.generated.tables.pojos.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -1,11 +1,11 @@
 package com.classicmodels;
 
 import com.classicmodels.pojo.CustomerAndOrder;
-import com.classicmodels.pojo.Order;
-import com.classicmodels.pojo.Manager;
 import com.classicmodels.service.ClassicModelsService;
 import java.time.LocalDate;
 import java.util.List;
+import jooq.generated.tables.pojos.Manager;
+import jooq.generated.tables.pojos.Order;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

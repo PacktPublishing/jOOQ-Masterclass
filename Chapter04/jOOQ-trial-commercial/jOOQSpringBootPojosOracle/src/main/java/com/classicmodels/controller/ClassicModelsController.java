@@ -1,11 +1,11 @@
 package com.classicmodels.controller;
 
 import com.classicmodels.pojo.CustomerAndOrder;
-import com.classicmodels.pojo.Manager;
-import com.classicmodels.pojo.Order;
 import com.classicmodels.service.ClassicModelsService;
 import java.time.LocalDate;
 import java.util.List;
+import jooq.generated.tables.pojos.Manager;
+import jooq.generated.tables.pojos.Order;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;

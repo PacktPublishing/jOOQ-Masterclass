@@ -1,13 +1,13 @@
 package com.classicmodels.repository;
 
-import com.classicmodels.pojo.Manager;
-import com.classicmodels.pojo.Order;
 import com.classicmodels.pojo.CustomerAndOrder;
 import java.time.LocalDate;
 import java.util.List;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Manager.MANAGER;
 import static jooq.generated.tables.Order.ORDER;
+import jooq.generated.tables.pojos.Manager;
+import jooq.generated.tables.pojos.Order;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
