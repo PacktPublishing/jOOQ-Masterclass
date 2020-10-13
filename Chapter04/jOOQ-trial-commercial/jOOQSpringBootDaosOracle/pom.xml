@@ -181,7 +181,7 @@
                                     <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>
                                 </database>
                                 
-                                <!-- Rename the generated POJOs classes -->                      
+                                <!-- Rename the generated POJOs and DAOs classes -->                      
                                 <strategy>
                                     <matchers>
                                         <tables>
@@ -190,16 +190,22 @@
                                                     <expression>JOOQ_$0</expression>
                                                     <transform>PASCAL</transform>                                                                                      
                                                 </pojoClass>
+                                                <daoClass>
+                                                    <expression>$0_Repository</expression>
+                                                    <transform>PASCAL</transform>                                                                                      
+                                                </daoClass>
                                             </table>
                                         </tables>
                                     </matchers>
                                 </strategy>
                                 
-                                <!-- jOOQ will generate POJOs in your behalf -->
+                                <!-- jOOQ will generate POJOs and DAOs in your behalf -->
                                 <generate>
-                                    <pojos>true</pojos> 
+                                    <daos>true</daos>                                   
                                     <validationAnnotations>true</validationAnnotations>                            
+                                    <springAnnotations>true</springAnnotations>   
                                 </generate>
+                                
                                 <target>
                                     <!-- The destination package of your generated classes (within the destination directory).
                                     jOOQ may append the schema name to this package if generating multiple schemas,
