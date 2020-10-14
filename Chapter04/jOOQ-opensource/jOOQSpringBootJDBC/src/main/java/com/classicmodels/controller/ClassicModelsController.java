@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -26,17 +27,17 @@ public class ClassicModelsController {
     }
 
     @GetMapping("/updateproductlinejdbc")
-    public String updateProductLineDescription() {
+    public String updateProductLineDescription(@RequestParam String id) {
 
-        classicModelsService.updateProductLineDescription();
+        classicModelsService.updateProductLineDescription(id);
 
         return "Done via Spring Data JDBC!";
     }
 
     @GetMapping("/updateproductlinejooq")
-    public String updateProductLineDescriptionJooq() {
+    public String updateProductLineDescriptionJooq(@RequestParam String id) {
 
-        classicModelsService.updateProductLineDescriptionJooq();
+        classicModelsService.updateProductLineDescriptionJooq(id);
 
         return "Done via jOOQ!";
     }

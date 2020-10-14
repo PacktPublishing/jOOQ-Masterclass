@@ -17,11 +17,11 @@ public class ClassicModelsRepositoryImpl implements ClassicModelsRepository {
 
     @Override
     @Transactional
-    public void updateProductLineDescriptionJooq() {
+    public void updateProductLineDescriptionJooq(String id) {
 
         ctx.update(PRODUCTLINE)
-                .set(PRODUCTLINE.TEXT_DESCRIPTION, "Classic cars are so cool (jOOQ as well)!")
-                .where(PRODUCTLINE.PRODUCT_LINE.eq("Classic Cars"))
+                .set(PRODUCTLINE.TEXT_DESCRIPTION, "Lorem ipsum dolor sit amet via jOOQ")
+                .where(PRODUCTLINE.PRODUCT_LINE.eq(id))
                 .execute();
     }
 }

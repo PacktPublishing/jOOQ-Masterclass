@@ -20,18 +20,18 @@ public class ClassicModelsService {
     }
     
     @Transactional
-    public void updateProductLineDescription() {
+    public void updateProductLineDescription(String id) {
     
         // Spring Data JDBC removes all products, updates the product line and insert the products back
-        ProductLine classicCars = productLineRepository.findById("Classic Cars").get();
-        classicCars.setTextDescription("Classic cars are so cool!");
+        ProductLine classicCars = productLineRepository.findById(id).get();
+        classicCars.setTextDescription("Lorem ipsum dolor sit amet via JDBC");
         
         productLineRepository.save(classicCars);
     }
         
-    public void updateProductLineDescriptionJooq() {
+    public void updateProductLineDescriptionJooq(String id) {
         
         // jOOQ uses a single update query to achieve the same result
-        productLineRepository.updateProductLineDescriptionJooq();
+        productLineRepository.updateProductLineDescriptionJooq(id);
     }
 }

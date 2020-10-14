@@ -28,10 +28,10 @@ public class MainApplication {
             productlinesAndProduct.iterator().forEachRemaining(System.out::println);
             
             System.out.println("\n\nExample: Update a product line description via Spring Data JDBC");
-            productLineService.updateProductLineDescription();
+            productLineService.updateProductLineDescription("Classic cars");
             
             System.out.println("\n\nExample: Update a product line description via jOOQ");
-            productLineService.updateProductLineDescriptionJooq();
+            productLineService.updateProductLineDescriptionJooq("Classic cars");
         };
     }
 }
