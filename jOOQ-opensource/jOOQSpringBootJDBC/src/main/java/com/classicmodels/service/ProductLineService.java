@@ -27,7 +27,8 @@ public class ProductLineService {
     
     @Transactional
     public void updateProductLineDescription() {
-        
+    
+        // Spring Data JDBC removes all products, updates the product line and insert the products back
         ProductLine classicCars = productLineRepository.findById("Classic Cars").get();
         classicCars.setTextDescription("Classic cars are so cool!");
         
@@ -36,6 +37,7 @@ public class ProductLineService {
         
     public void updateProductLineDescriptionJooq() {
         
+        // jOOQ uses a single update query to achieve the same result
         productLineRepository.updateProductLineDescriptionJooq();
     }
 }
