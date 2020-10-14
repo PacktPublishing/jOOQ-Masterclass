@@ -2,7 +2,6 @@ package com.classicmodels;
 
 import com.classicmodels.model.ProductLine;
 import com.classicmodels.service.ClassicModelsService;
-import java.util.List;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -27,10 +26,6 @@ public class MainApplication {
             System.out.println("\n\nExample: Fetch 'productline' and 'product'");
             Iterable<ProductLine> productlinesAndProduct = productLineService.fetchProductLineAndProduct();
             productlinesAndProduct.iterator().forEachRemaining(System.out::println);
-            
-            System.out.println("\n\nExample: Fetch only 'productline'");
-            List<ProductLine> productlines = productLineService.fetchProductLineJooq();
-            productlines.forEach(System.out::println);
             
             System.out.println("\n\nExample: Update a product line description via Spring Data JDBC");
             productLineService.updateProductLineDescription();

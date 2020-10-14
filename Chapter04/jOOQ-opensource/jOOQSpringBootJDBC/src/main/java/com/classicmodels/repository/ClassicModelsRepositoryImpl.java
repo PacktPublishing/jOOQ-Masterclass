@@ -1,7 +1,5 @@
 package com.classicmodels.repository;
 
-import com.classicmodels.model.ProductLine;
-import java.util.List;
 import static jooq.generated.tables.Productline.PRODUCTLINE;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
@@ -15,13 +13,7 @@ public class ClassicModelsRepositoryImpl implements ClassicModelsRepository {
 
     public ClassicModelsRepositoryImpl(DSLContext ctx) {
         this.ctx = ctx;
-    }
-
-    @Override
-    public List<ProductLine> findProductLineJooq() {
-        return ctx.selectFrom(PRODUCTLINE)
-                .fetchInto(ProductLine.class);
-    }
+    }   
 
     @Override
     @Transactional

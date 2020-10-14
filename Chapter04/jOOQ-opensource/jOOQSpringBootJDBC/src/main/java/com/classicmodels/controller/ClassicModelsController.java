@@ -24,26 +24,20 @@ public class ClassicModelsController {
                 classicModelsService.fetchProductLineAndProduct().spliterator(), false)
                 .collect(Collectors.toList());
     }
-    
-    @GetMapping("/productlinejooq")
-    public List<ProductLine> fetchProductLineJooq() {
 
-        return classicModelsService.fetchProductLineJooq();
-    }
-    
     @GetMapping("/updateproductlinejdbc")
     public String updateProductLineDescription() {
 
         classicModelsService.updateProductLineDescription();
-        
+
         return "Done via Spring Data JDBC!";
     }
-    
+
     @GetMapping("/updateproductlinejooq")
     public String updateProductLineDescriptionJooq() {
 
         classicModelsService.updateProductLineDescriptionJooq();
-        
+
         return "Done via jOOQ!";
     }
 }
