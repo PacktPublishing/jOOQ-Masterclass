@@ -21,6 +21,46 @@ public class ProductLine implements Serializable {
     @MappedCollection
     Set<Product> products = new HashSet<>();               
 
+    public String getProductLine() {
+        return productLine;
+    }
+
+    public void setProductLine(String productLine) {
+        this.productLine = productLine;
+    }
+
+    public String getTextDescription() {
+        return textDescription;
+    }
+
+    public void setTextDescription(String textDescription) {
+        this.textDescription = textDescription;
+    }
+
+    public String getHtmlDescription() {
+        return htmlDescription;
+    }
+
+    public void setHtmlDescription(String htmlDescription) {
+        this.htmlDescription = htmlDescription;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
+
+    public Set<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(Set<Product> products) {
+        this.products = products;
+    }
+        
     @Override
     public String toString() {
         return "ProductLine{" + "productLine=" + productLine + ", textDescription=" 

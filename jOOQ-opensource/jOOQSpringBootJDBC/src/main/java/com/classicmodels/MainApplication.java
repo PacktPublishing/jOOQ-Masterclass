@@ -24,13 +24,19 @@ public class MainApplication {
     @Bean
     public ApplicationRunner init() {
         return args -> {
-            System.out.println("\n\nSample: Fetch 'productline' and 'product'");
+            System.out.println("\n\nExample: Fetch 'productline' and 'product'");
             Iterable<ProductLine> productlinesAndProduct = productLineService.fetchProductLineAndProduct();
             productlinesAndProduct.iterator().forEachRemaining(System.out::println);
             
-            System.out.println("\n\nSample: Fetch only 'productline'");
-            List<ProductLine> productlines = productLineService.fetchOnlyProductLine();
+            System.out.println("\n\nExample: Fetch only 'productline'");
+            List<ProductLine> productlines = productLineService.fetchProductLineJooq();
             productlines.forEach(System.out::println);
+            
+            System.out.println("\n\nExample: Update a product line description via Spring Data JDBC");
+            productLineService.updateProductLineDescription();
+            
+            System.out.println("\n\nExample: Update a product line description via jOOQ");
+            productLineService.updateProductLineDescriptionJooq();
         };
     }
 }
