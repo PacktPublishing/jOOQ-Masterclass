@@ -22,23 +22,22 @@ public class ClassicModelsRepository {
                 .newMapper(ProductLine.class);
     }
 
-    public List<ProductLine> findProductLineAndProduct() {
-        
+    public List<ProductLine> findProductLineAndProductJooq() {
+
         List<ProductLine> products = productMapper.asList(
                 ctx.select()
                         .from(PRODUCTLINE)
                         .innerJoin(PRODUCT).on(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE))
-                        .orderBy(PRODUCTLINE.PRODUCT_LINE)
-        );
-        
+                        .orderBy(PRODUCTLINE.PRODUCT_LINE));
+
         return products;
     }
-        
+
     public List<ProductLine> findProductLineJooq() {
         return ctx.selectFrom(PRODUCTLINE)
                 .fetchInto(ProductLine.class);
     }
-    
+
     public void updateProductLineDescriptionJooq() {
 
         ctx.update(PRODUCTLINE)

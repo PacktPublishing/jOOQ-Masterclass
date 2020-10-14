@@ -16,21 +16,20 @@ public class ClassicModelsService {
     }
 
     @Transactional(readOnly = true)
-    public List<ProductLine> fetchProductLineAndProduct() {
-        // Spring Data JDBC always fetches the entire aggregate via N+1 queries
-        return classicModelsRepository.findProductLineAndProduct();
+    public List<ProductLine> fetchProductLineAndProductJooq() {
+        
+        return classicModelsRepository.findProductLineAndProductJooq();
     }
 
     @Transactional(readOnly = true)
     public List<ProductLine> fetchProductLineJooq() {
-        // jOOQ fetches only the data from 'productline'
+        
         return classicModelsRepository.findProductLineJooq();
     }    
         
     @Transactional
     public void updateProductLineDescriptionJooq() {
-        
-        // jOOQ uses a single update query to achieve the same result
+                
         classicModelsRepository.updateProductLineDescriptionJooq();
     }
 }

@@ -24,17 +24,16 @@ public class MainApplication {
     @Bean
     public ApplicationRunner init() {
         return args -> {
-            System.out.println("\n\nExample: Fetch 'productline' and 'product'");
-            List<ProductLine> productlinesAndProducts = productLineService.fetchProductLineAndProduct();
+            System.out.println("\n\nExample: Fetch 'productline' and 'product' via jOOQ");
+            List<ProductLine> productlinesAndProducts = productLineService.fetchProductLineAndProductJooq();
             System.out.println(productlinesAndProducts);
-            /*
-            System.out.println("\n\nExample: Fetch only 'productline'");
+            
+            System.out.println("\n\nExample: Fetch only 'productline' via jOOQ");
             List<ProductLine> productlines = productLineService.fetchProductLineJooq();
             productlines.forEach(System.out::println);
                        
             System.out.println("\n\nExample: Update a product line description via jOOQ");
             productLineService.updateProductLineDescriptionJooq();
-*/
         };
     }
 }

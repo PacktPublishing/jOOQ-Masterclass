@@ -3,8 +3,6 @@ package com.classicmodels.controller;
 import com.classicmodels.model.ProductLine;
 import com.classicmodels.service.ClassicModelsService;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,13 +15,13 @@ public class ClassicModelsController {
         this.classicModelsService = classicModelsService;
     }
 
-    @GetMapping("/productlineandproduct")
-    public List<ProductLine> fetchProductLineAndProduct() {
+    @GetMapping("/productlineandproductjooq")
+    public List<ProductLine> fetchProductLineAndProductJooq() {
 
-        return classicModelsService.fetchProductLineAndProduct();
+        return classicModelsService.fetchProductLineAndProductJooq();
     }
     
-    @GetMapping("/productlineonly")
+    @GetMapping("/productlinejooq")
     public List<ProductLine> fetchProductLineJooq() {
 
         return classicModelsService.fetchProductLineJooq();
