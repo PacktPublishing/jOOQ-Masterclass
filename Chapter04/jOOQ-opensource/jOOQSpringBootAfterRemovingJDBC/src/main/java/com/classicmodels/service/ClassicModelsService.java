@@ -28,8 +28,8 @@ public class ClassicModelsService {
     }    
         
     @Transactional
-    public void updateProductLineDescription() {
+    public void updateProductLineDescription(String id) {
                 
-        classicModelsRepository.updateProductLineDescription();
+        classicModelsRepository.updateProductLineDescription(id);
     }
 }

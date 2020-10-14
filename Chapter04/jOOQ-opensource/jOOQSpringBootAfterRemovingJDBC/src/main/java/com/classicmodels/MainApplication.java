@@ -33,7 +33,7 @@ public class MainApplication {
             productlines.forEach(System.out::println);
                        
             System.out.println("\n\nExample: Update a product line description via jOOQ");
-            productLineService.updateProductLineDescription();
+            productLineService.updateProductLineDescription("Classic cars");
         };
     }
 }

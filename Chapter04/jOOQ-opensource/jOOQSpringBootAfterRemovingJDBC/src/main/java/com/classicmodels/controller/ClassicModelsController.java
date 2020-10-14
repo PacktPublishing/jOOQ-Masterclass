@@ -4,6 +4,7 @@ import com.classicmodels.model.ProductLine;
 import com.classicmodels.service.ClassicModelsService;
 import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -28,9 +29,9 @@ public class ClassicModelsController {
     }
     
     @GetMapping("/updateproductline")
-    public String updateProductLineDescription() {
+    public String updateProductLineDescription(@RequestParam String id) {
 
-        classicModelsService.updateProductLineDescription();
+        classicModelsService.updateProductLineDescription(id);
         
         return "Done via jOOQ!";
     }

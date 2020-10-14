@@ -38,11 +38,11 @@ public class ClassicModelsRepository {
                 .fetchInto(ProductLine.class);
     }
 
-    public void updateProductLineDescription() {
+    public void updateProductLineDescription(String id) {
 
         ctx.update(PRODUCTLINE)
-                .set(PRODUCTLINE.TEXT_DESCRIPTION, "Classic cars are so cool (jOOQ as well)!")
-                .where(PRODUCTLINE.PRODUCT_LINE.eq("Classic Cars"))
+                .set(PRODUCTLINE.TEXT_DESCRIPTION, "Lorem ipsum dolor sit amet via jOOQ")
+                .where(PRODUCTLINE.PRODUCT_LINE.eq(id))
                 .execute();
     }
 }
