@@ -16,20 +16,20 @@ public class ClassicModelsService {
     }
 
     @Transactional(readOnly = true)
-    public List<ProductLine> fetchProductLineAndProductJooq() {
+    public List<ProductLine> fetchProductLineAndProduct() {
         
-        return classicModelsRepository.findProductLineAndProductJooq();
+        return classicModelsRepository.findProductLineAndProduct();
     }
 
     @Transactional(readOnly = true)
-    public List<ProductLine> fetchProductLineJooq() {
+    public List<ProductLine> fetchProductLine() {
         
-        return classicModelsRepository.findProductLineJooq();
+        return classicModelsRepository.findProductLine();
     }    
         
     @Transactional
-    public void updateProductLineDescriptionJooq() {
+    public void updateProductLineDescription() {
                 
-        classicModelsRepository.updateProductLineDescriptionJooq();
+        classicModelsRepository.updateProductLineDescription();
     }
 }

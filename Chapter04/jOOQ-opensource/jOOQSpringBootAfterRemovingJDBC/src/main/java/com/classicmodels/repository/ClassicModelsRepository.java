@@ -22,7 +22,7 @@ public class ClassicModelsRepository {
                 .newMapper(ProductLine.class);
     }
 
-    public List<ProductLine> findProductLineAndProductJooq() {
+    public List<ProductLine> findProductLineAndProduct() {
 
         List<ProductLine> products = productMapper.asList(
                 ctx.select()
@@ -33,12 +33,12 @@ public class ClassicModelsRepository {
         return products;
     }
 
-    public List<ProductLine> findProductLineJooq() {
+    public List<ProductLine> findProductLine() {
         return ctx.selectFrom(PRODUCTLINE)
                 .fetchInto(ProductLine.class);
     }
 
-    public void updateProductLineDescriptionJooq() {
+    public void updateProductLineDescription() {
 
         ctx.update(PRODUCTLINE)
                 .set(PRODUCTLINE.TEXT_DESCRIPTION, "Classic cars are so cool (jOOQ as well)!")

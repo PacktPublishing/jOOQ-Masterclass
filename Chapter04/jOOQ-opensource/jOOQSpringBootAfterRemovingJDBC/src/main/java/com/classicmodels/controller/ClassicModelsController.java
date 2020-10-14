@@ -15,22 +15,22 @@ public class ClassicModelsController {
         this.classicModelsService = classicModelsService;
     }
 
-    @GetMapping("/productlineandproductjooq")
-    public List<ProductLine> fetchProductLineAndProductJooq() {
+    @GetMapping("/productlineandproduct")
+    public List<ProductLine> fetchProductLineAndProduct() {
 
-        return classicModelsService.fetchProductLineAndProductJooq();
+        return classicModelsService.fetchProductLineAndProduct();
     }
     
-    @GetMapping("/productlinejooq")
-    public List<ProductLine> fetchProductLineJooq() {
+    @GetMapping("/productline")
+    public List<ProductLine> fetchProductLine() {
 
-        return classicModelsService.fetchProductLineJooq();
+        return classicModelsService.fetchProductLine();
     }
     
-    @GetMapping("/updateproductlinejooq")
-    public String updateProductLineDescriptionJooq() {
+    @GetMapping("/updateproductline")
+    public String updateProductLineDescription() {
 
-        classicModelsService.updateProductLineDescriptionJooq();
+        classicModelsService.updateProductLineDescription();
         
         return "Done via jOOQ!";
     }
