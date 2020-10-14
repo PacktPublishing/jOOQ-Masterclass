@@ -2,15 +2,15 @@ package com.classicmodels.service;
 
 import com.classicmodels.model.ProductLine;
 import org.springframework.stereotype.Service;
-import com.classicmodels.repository.ProductlineRepository;
 import org.springframework.transaction.annotation.Transactional;
+import com.classicmodels.repository.ProducLineRepository;
 
 @Service
 public class ClassicModelsService {
 
-    private final ProductlineRepository productLineRepository;
+    private final ProducLineRepository productLineRepository;
 
-    public ClassicModelsService(ProductlineRepository productLineRepository) {
+    public ClassicModelsService(ProducLineRepository productLineRepository) {
         this.productLineRepository = productLineRepository;        
     }
 
