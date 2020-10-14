@@ -23,10 +23,10 @@ public class ClassicModelsService {
     public void updateProductLineDescription(String id) {
     
         // Spring Data JDBC removes all products, updates the product line and insert the products back
-        ProductLine classicCars = productLineRepository.findById(id).get();
-        classicCars.setTextDescription("Lorem ipsum dolor sit amet via JDBC");
+        ProductLine pl = productLineRepository.findById(id).get();
+        pl.setTextDescription("Lorem ipsum dolor sit amet via JDBC");
         
-        productLineRepository.save(classicCars);
+        productLineRepository.save(pl);
     }
         
     public void updateProductLineDescriptionJooq(String id) {
