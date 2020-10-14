@@ -17,7 +17,7 @@ public class ClassicModelsController {
         this.classicModelsService = classicModelsService;
     }
 
-    @GetMapping("/productline")
+    @GetMapping("/productlineandproductjdbc")
     public List<ProductLine> fetchProductLineAndProduct() {
 
         return StreamSupport.stream(
@@ -31,7 +31,7 @@ public class ClassicModelsController {
         return classicModelsService.fetchProductLineJooq();
     }
     
-    @GetMapping("/updateproductline")
+    @GetMapping("/updateproductlinejdbc")
     public String updateProductLineDescription() {
 
         classicModelsService.updateProductLineDescription();

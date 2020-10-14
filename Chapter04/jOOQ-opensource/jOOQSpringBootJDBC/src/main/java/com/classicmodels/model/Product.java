@@ -1,6 +1,7 @@
 package com.classicmodels.model;
 
 import java.io.Serializable;
+import java.util.Objects;
 import org.springframework.data.annotation.Id;
 
 public class Product implements Serializable {
@@ -89,7 +90,42 @@ public class Product implements Serializable {
     public void setMsrp(Float msrp) {
         this.msrp = msrp;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 47 * hash + Objects.hashCode(this.productId);
+        hash = 47 * hash + Objects.hashCode(this.productName);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
         
+        if (this == obj) {
+            return true;
+        }
+        
+        if (obj == null) {
+            return false;
+        }
+        
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        
+        final Product other = (Product) obj;
+        if (!Objects.equals(this.productName, other.productName)) {
+            return false;
+        }
+        
+        if (!Objects.equals(this.productId, other.productId)) {
+            return false;
+        }
+        
+        return true;
+    }
+                
     @Override
     public String toString() {
         return "Product{" + "productId=" + productId + ", productName=" + productName 
