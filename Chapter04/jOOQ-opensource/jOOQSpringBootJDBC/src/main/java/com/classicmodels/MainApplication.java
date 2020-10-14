@@ -1,7 +1,7 @@
 package com.classicmodels;
 
 import com.classicmodels.model.ProductLine;
-import com.classicmodels.service.ProductLineService;
+import com.classicmodels.service.ClassicModelsService;
 import java.util.List;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
@@ -11,9 +11,9 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class MainApplication {
 
-    private final ProductLineService productLineService;
+    private final ClassicModelsService productLineService;
 
-    public MainApplication(ProductLineService productLineService) {
+    public MainApplication(ClassicModelsService productLineService) {
         this.productLineService = productLineService;
     }
 

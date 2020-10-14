@@ -1,8 +1,8 @@
 package com.classicmodels.model;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.MappedCollection;
 import org.springframework.data.relational.core.mapping.Table;
@@ -18,8 +18,8 @@ public class ProductLine implements Serializable {
     private String htmlDescription;
     private byte[] image;
     
-    @MappedCollection
-    Set<Product> products = new HashSet<>();               
+    @MappedCollection(idColumn="product_line", keyColumn="product_id")
+    List<Product> products = new ArrayList<>();               
 
     public String getProductLine() {
         return productLine;
@@ -53,11 +53,11 @@ public class ProductLine implements Serializable {
         this.image = image;
     }
 
-    public Set<Product> getProducts() {
+    public List<Product> getProducts() {
         return products;
     }
 
-    public void setProducts(Set<Product> products) {
+    public void setProducts(List<Product> products) {
         this.products = products;
     }
         

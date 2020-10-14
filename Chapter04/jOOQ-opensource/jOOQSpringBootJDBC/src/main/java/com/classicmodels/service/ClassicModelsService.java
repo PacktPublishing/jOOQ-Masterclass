@@ -7,11 +7,11 @@ import java.util.List;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class ProductLineService {
+public class ClassicModelsService {
 
     private final ProductlineRepository productLineRepository;
 
-    public ProductLineService(ProductlineRepository productLineRepository) {
+    public ClassicModelsService(ProductlineRepository productLineRepository) {
         this.productLineRepository = productLineRepository;        
     }
 
