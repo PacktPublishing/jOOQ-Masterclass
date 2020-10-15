@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.app</groupId>
-    <artifactId>jOOQSpringBootAfterRemovingJDBC</artifactId>
+    <artifactId>jOOQSpringBootAfterRemovingSDJDBC</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQSpringBootAfterRemovingJDBC</name>
+    <name>jOOQSpringBootAfterRemovingSDJDBC</name>
     <description>jOOQ kickoff for Spring Boot</description>    
 
     <parent>
