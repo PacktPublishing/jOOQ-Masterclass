@@ -1,19 +1,19 @@
 package com.classicmodels.service;
 
 import com.classicmodels.entity.Employee;
-import com.classicmodels.pojo.EmployeeDto;
-import com.classicmodels.pojo.EmployeeDtoCntr;
+import com.classicmodels.pojo.EmployeeNoCntr;
+import com.classicmodels.pojo.EmployeeCntr;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.classicmodels.repository.EmployeeRepository;
 
 @Service
-public class HRService {
+public class ClassicModelsService {
     
     private final EmployeeRepository employeeRepository;
 
-    public HRService(EmployeeRepository employeeRepository) {
+    public ClassicModelsService(EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
     }
     
@@ -26,14 +26,14 @@ public class HRService {
     
     // uses jOOQ
     @Transactional(readOnly = true)
-    public List<EmployeeDto> fetchEmployeesAndLeastSalary() {
+    public List<EmployeeNoCntr> fetchEmployeesAndLeastSalary() {
         
         return employeeRepository.findEmployeesAndLeastSalary();
     }
     
     // uses jOOQ
     @Transactional(readOnly = true)
-    public List<EmployeeDtoCntr> findEmployeesAndLeastSalaryCntr() {
+    public List<EmployeeCntr> findEmployeesAndLeastSalaryCntr() {
         
         return employeeRepository.findEmployeesAndLeastSalaryCntr();
     }
@@ -43,6 +43,12 @@ public class HRService {
     public List<Employee> fetchEmployeeInCity(String city) {
         
         return employeeRepository.findEmployeeInCity(city);
+    }
+    
+    @Transactional(readOnly = true)
+    public List<Object[]> fetchEmployeeAndOffices() {
+        
+        return employeeRepository.findEmployeeAndOffices();
     }
     
     // classic Spring Data JPA

@@ -168,5 +168,10 @@ public class Office implements Serializable {
 
         return officeCode != null && officeCode.equals(((Office) obj).officeCode);
     }
-    
+
+    @Override
+    public String toString() {
+        return "Office{" + "officeCode=" + officeCode + ", city=" + city 
+                + ", phone=" + phone + ", state=" + state + ", country=" + country + '}';
+    }        
 }

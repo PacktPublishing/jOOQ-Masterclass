@@ -7,8 +7,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface EmployeeRepository 
-        extends JpaRepository<Employee, Long>, QueryRepository {
-       
-    // @Query("SELECT e FROM Office e WHERE e.state=?1")
+        extends JpaRepository<Employee, Long>, ClassicModelsRepository {
+           
     public List<Employee> findByJobTitle(String jobTitle);
 }
