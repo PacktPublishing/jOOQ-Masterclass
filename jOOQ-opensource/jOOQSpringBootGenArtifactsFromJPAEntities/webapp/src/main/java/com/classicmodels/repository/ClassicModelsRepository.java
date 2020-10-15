@@ -1,11 +1,11 @@
 package com.classicmodels.repository;
 
-import com.classicmodels.pojo.EmployeeDto;
+import com.classicmodels.pojo.EmployeeNoCntr;
 import java.util.List;
 
-public interface QueryRepository {
+public interface ClassicModelsRepository {
 
     public List<Object[]> findEmployeesWithTotalSalesByFiscalYear();
-    public List<EmployeeDto> findEmployeesAndLeastSalary();
+    public List<EmployeeNoCntr> findEmployeesAndLeastSalary();
     public String findEmployeesFirstNamesAsCsv();
 }

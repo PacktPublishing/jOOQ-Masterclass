@@ -1,17 +1,17 @@
 package com.classicmodels.service;
 
-import com.classicmodels.pojo.EmployeeDto;
+import com.classicmodels.pojo.EmployeeNoCntr;
 import com.classicmodels.repository.EmployeeRepository;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class HRService {
+public class ClassicModelsService {
 
     private final EmployeeRepository employeeRepository;
 
-    public HRService(EmployeeRepository employeeRepository) {
+    public ClassicModelsService(EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
     }
     
@@ -24,7 +24,7 @@ public class HRService {
     
     // uses jOOQ
     @Transactional(readOnly = true)
-    public List<EmployeeDto> fetchEmployeesAndLeastSalary() {
+    public List<EmployeeNoCntr> fetchEmployeesAndLeastSalary() {
 
         return employeeRepository.findEmployeesAndLeastSalary();
     }

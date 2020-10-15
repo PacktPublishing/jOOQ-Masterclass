@@ -1,6 +1,6 @@
 package com.classicmodels.repository;
 
-import com.classicmodels.pojo.EmployeeDto;
+import com.classicmodels.pojo.EmployeeNoCntr;
 import java.util.List;
 import jooq.generated.tables.Employee;
 import static jooq.generated.tables.Employee.EMPLOYEE;
@@ -12,11 +12,11 @@ import static org.jooq.impl.DSL.sum;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class QueryRepositoryImpl implements QueryRepository {
+public class ClassicModelsRepositoryImpl implements ClassicModelsRepository {
 
     private final DSLContext create;
 
-    public QueryRepositoryImpl(DSLContext create) {
+    public ClassicModelsRepositoryImpl(DSLContext create) {
         this.create = create;
     }
 
@@ -35,15 +35,15 @@ public class QueryRepositoryImpl implements QueryRepository {
     }
 
     @Override
-    public List<EmployeeDto> findEmployeesAndLeastSalary() {
+    public List<EmployeeNoCntr> findEmployeesAndLeastSalary() {
 
-        List<EmployeeDto> result = create.select(EMPLOYEE.FIRST_NAME,
+        List<EmployeeNoCntr> result = create.select(EMPLOYEE.FIRST_NAME,
                 EMPLOYEE.LAST_NAME,
                 EMPLOYEE.SALARY,
                 firstValue(EMPLOYEE.FIRST_NAME)
                         .over().orderBy(EMPLOYEE.SALARY).as("leastSalary"))
                 .from(EMPLOYEE)
-                .fetchInto(EmployeeDto.class);
+                .fetchInto(EmployeeNoCntr.class);
 
         return result;
     }

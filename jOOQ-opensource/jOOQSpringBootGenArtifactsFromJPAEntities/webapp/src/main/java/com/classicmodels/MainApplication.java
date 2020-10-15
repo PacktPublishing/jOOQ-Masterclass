@@ -1,6 +1,6 @@
 package com.classicmodels;
 
-import com.classicmodels.service.HRService;
+import com.classicmodels.service.ClassicModelsService;
 import java.util.Arrays;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
@@ -16,9 +16,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @ComponentScan(basePackages = {"com.classicmodels"})
 public class MainApplication {              
     
-    private final HRService hrService;
+    private final ClassicModelsService hrService;
 
-    public MainApplication(HRService hrService) {
+    public MainApplication(ClassicModelsService hrService) {
         this.hrService = hrService;
     }        
 

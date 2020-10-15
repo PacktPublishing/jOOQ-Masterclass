@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface EmployeeRepository extends 
-        JpaRepository<com.classicmodels.entity.Employee, Long>, QueryRepository {
+        JpaRepository<com.classicmodels.entity.Employee, Long>, ClassicModelsRepository {
     
     /* This doesn't work! */
     /*

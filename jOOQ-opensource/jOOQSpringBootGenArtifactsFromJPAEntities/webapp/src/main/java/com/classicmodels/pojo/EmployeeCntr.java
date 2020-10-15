@@ -2,7 +2,7 @@ package com.classicmodels.pojo;
 
 import java.io.Serializable;
 
-public class EmployeeDtoCntr implements Serializable {
+public class EmployeeCntr implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -11,7 +11,7 @@ public class EmployeeDtoCntr implements Serializable {
     private final Integer salary;
     private final String leastSalary;
 
-    public EmployeeDtoCntr(String firstName, String lastName, Integer salary, String leastSalary) {
+    public EmployeeCntr(String firstName, String lastName, Integer salary, String leastSalary) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.salary = salary;
