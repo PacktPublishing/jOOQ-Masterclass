@@ -35,15 +35,7 @@
         <dependency>
             <groupId>org.jooq</groupId>
             <artifactId>jooq</artifactId>              
-        </dependency> 
-        <dependency>
-            <groupId>org.jooq</groupId>
-            <artifactId>jooq-meta</artifactId>                       
-        </dependency>    
-        <dependency>
-            <groupId>org.jooq</groupId>
-            <artifactId>jooq-codegen</artifactId>                       
-        </dependency>               
+        </dependency>                      
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>
@@ -126,6 +118,7 @@
                     <!-- This is needed for the JPADatabase -->
                     <dependency>
                         <groupId>org.jooq</groupId>
+                        <!-- jOOQ 3.14.x <artifactId>jooq-meta-extensions-hibernate</artifactId> -->
                         <artifactId>jooq-meta-extensions</artifactId>
                         <version>3.13.4</version>
                     </dependency>
