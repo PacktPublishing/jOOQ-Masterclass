@@ -45,7 +45,8 @@ public class ClassicModelsService {
         return employeeRepository.findEmployeeInCity(city);
     }
     
-    @Transactional(readOnly = true)
+    // uses jOOQ
+    @Transactional
     public List<Object[]> fetchEmployeeAndOffices() {
         
         return employeeRepository.findEmployeeAndOffices();
