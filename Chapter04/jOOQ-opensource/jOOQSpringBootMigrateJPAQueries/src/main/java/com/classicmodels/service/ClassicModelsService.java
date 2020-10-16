@@ -6,11 +6,11 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.classicmodels.repository.EmployeeRepository;
-import com.classicmodels.pojo.EmployeeProjection1;
-import com.classicmodels.pojo.EmployeeProjection2;
 import java.util.Random;
 import jooq.generated.tables.interfaces.IEmployee;
 import jooq.generated.tables.pojos.JooqEmployee;
+import com.classicmodels.pojo.EmployeeSlim;
+import com.classicmodels.pojo.EmployeeLeastSalary;
 
 @Service
 public class ClassicModelsService {
@@ -30,7 +30,7 @@ public class ClassicModelsService {
 
     // uses jOOQ
     @Transactional(readOnly = true)
-    public List<EmployeeProjection1> fetchEmployeesAndLeastSalary() {
+    public List<EmployeeLeastSalary> fetchEmployeesAndLeastSalary() {
 
         return employeeRepository.findEmployeesAndLeastSalary();
     }
@@ -44,7 +44,7 @@ public class ClassicModelsService {
 
     // uses jOOQ
     @Transactional(readOnly = true)
-    public List<EmployeeProjection2> fetchFirst5ByOrderBySalaryDesc() {
+    public List<EmployeeSlim> fetchFirst5ByOrderBySalaryDesc() {
 
         return employeeRepository.findFirst5ByOrderBySalaryDesc();
     }

@@ -7,10 +7,10 @@ import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.classicmodels.pojo.EmployeeProjection1;
-import com.classicmodels.pojo.EmployeeProjection2;
 import jooq.generated.tables.interfaces.IEmployee;
 import jooq.generated.tables.pojos.JooqEmployee;
+import com.classicmodels.pojo.EmployeeSlim;
+import com.classicmodels.pojo.EmployeeLeastSalary;
 
 @RestController
 public class ClassicModelsController {
@@ -28,7 +28,7 @@ public class ClassicModelsController {
     }
 
     @GetMapping("/leastsalary")
-    public List<EmployeeProjection1> fetchEmployeesAndLeastSalary() {
+    public List<EmployeeLeastSalary> fetchEmployeesAndLeastSalary() {
 
         return classicModelsService.fetchEmployeesAndLeastSalary();
     }
@@ -40,7 +40,7 @@ public class ClassicModelsController {
     }
 
     @GetMapping("/first5employee")
-    public List<EmployeeProjection2> fetchFirst5ByOrderBySalaryDesc() {
+    public List<EmployeeSlim> fetchFirst5ByOrderBySalaryDesc() {
 
         return classicModelsService.fetchFirst5ByOrderBySalaryDesc();
     }

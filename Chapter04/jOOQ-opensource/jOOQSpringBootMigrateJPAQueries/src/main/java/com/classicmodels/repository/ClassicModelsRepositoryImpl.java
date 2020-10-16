@@ -10,11 +10,11 @@ import static org.jooq.impl.DSL.firstValue;
 import static org.jooq.impl.DSL.partitionBy;
 import static org.jooq.impl.DSL.sum;
 import org.springframework.stereotype.Repository;
-import com.classicmodels.pojo.EmployeeProjection1;
-import com.classicmodels.pojo.EmployeeProjection2;
 import javax.persistence.EntityManager;
 import static jooq.generated.tables.Office.OFFICE;
 import static org.jooq.impl.DSL.select;
+import com.classicmodels.pojo.EmployeeSlim;
+import com.classicmodels.pojo.EmployeeLeastSalary;
 
 @Repository
 public class ClassicModelsRepositoryImpl implements ClassicModelsRepository {
@@ -42,15 +42,15 @@ public class ClassicModelsRepositoryImpl implements ClassicModelsRepository {
     }
 
     @Override
-    public List<EmployeeProjection1> findEmployeesAndLeastSalary() {
+    public List<EmployeeLeastSalary> findEmployeesAndLeastSalary() {
 
-        List<EmployeeProjection1> result = ctx.select(EMPLOYEE.FIRST_NAME,
+        List<EmployeeLeastSalary> result = ctx.select(EMPLOYEE.FIRST_NAME,
                 EMPLOYEE.LAST_NAME,
                 EMPLOYEE.SALARY,
                 firstValue(EMPLOYEE.FIRST_NAME)
                         .over().orderBy(EMPLOYEE.SALARY).as("least_salary"))
                 .from(EMPLOYEE)
-                .fetchInto(EmployeeProjection1.class);
+                .fetchInto(EmployeeLeastSalary.class);
 
         return result;
     }
@@ -68,14 +68,14 @@ public class ClassicModelsRepositoryImpl implements ClassicModelsRepository {
     }
 
     @Override
-    public List<EmployeeProjection2> findFirst5ByOrderBySalaryDesc() {
+    public List<EmployeeSlim> findFirst5ByOrderBySalaryDesc() {
 
-        List<EmployeeProjection2> result = ctx.select(
+        List<EmployeeSlim> result = ctx.select(
                 EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
                 .from(EMPLOYEE)
                 .orderBy(EMPLOYEE.SALARY.desc())
                 .limit(5)
-                .fetchInto(EmployeeProjection2.class);
+                .fetchInto(EmployeeSlim.class);
 
         return result;
     }
