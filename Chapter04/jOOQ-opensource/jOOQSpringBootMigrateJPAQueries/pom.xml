@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.jpa</groupId>
-    <artifactId>jOOQSpringBootJPANoEm</artifactId>
+    <artifactId>jOOQSpringBootMigrateJPAQueries</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQSpringBootJPANoEm</name>
+    <name>jOOQSpringBootMigrateJPAQueries</name>
     <description>jOOQ - Spring Boot app</description>
 
     <parent>
@@ -201,6 +201,7 @@
                                 
                                 <!-- jOOQ will generate POJOs in your behalf -->
                                 <generate>
+                                    <interfaces>true</interfaces>
                                     <pojos>true</pojos> 
                                     <validationAnnotations>true</validationAnnotations>                            
                                 </generate>

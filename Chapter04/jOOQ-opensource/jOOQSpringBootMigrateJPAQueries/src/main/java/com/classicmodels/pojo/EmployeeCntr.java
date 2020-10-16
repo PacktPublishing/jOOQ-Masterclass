@@ -8,14 +8,12 @@ public class EmployeeCntr implements Serializable {
 
     private final String firstName;
     private final String lastName;
-    private final Integer salary;
-    private final String leastSalary;
+    private final Integer salary;    
 
-    public EmployeeCntr(String firstName, String lastName, Integer salary, String leastSalary) {
+    public EmployeeCntr(String firstName, String lastName, Integer salary) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.salary = salary;
-        this.leastSalary = leastSalary;
+        this.salary = salary;    
     }   
     
     public String getFirstName() {
@@ -29,17 +27,12 @@ public class EmployeeCntr implements Serializable {
     public Integer getSalary() {
         return salary;
     }
-
-    public String getLeastSalary() {
-        return leastSalary;
-    }
-
+   
     @Override
     public String toString() {
         return "EmployeeDtoCntr{" + "firstName=" + firstName 
                 + ", lastName=" + lastName 
-                + ", salary=" + salary 
-                + ", leastSalary=" + leastSalary + '}';
+                + ", salary=" + salary + '}';
     }
     
 }
