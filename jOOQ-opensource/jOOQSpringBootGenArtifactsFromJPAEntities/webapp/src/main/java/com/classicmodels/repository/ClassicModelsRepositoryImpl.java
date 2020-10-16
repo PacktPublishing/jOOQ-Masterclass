@@ -2,7 +2,6 @@ package com.classicmodels.repository;
 
 import com.classicmodels.pojo.EmployeeNoCntr;
 import java.util.List;
-import jooq.generated.tables.Employee;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
@@ -14,17 +13,17 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class ClassicModelsRepositoryImpl implements ClassicModelsRepository {
 
-    private final DSLContext create;
+    private final DSLContext ctx;
 
-    public ClassicModelsRepositoryImpl(DSLContext create) {
-        this.create = create;
+    public ClassicModelsRepositoryImpl(DSLContext ctx) {
+        this.ctx = ctx;
     }
 
     @Override
     public List<Object[]> findEmployeesWithTotalSalesByFiscalYear() {
 
         List<Object[]> result
-                = create.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME,
+                = ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME,
                         SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER,
                         sum(SALE.SALE_).over(partitionBy(SALE.FISCAL_YEAR)).as("TOTAL_SALES"))
                         .from(SALE)
@@ -37,7 +36,7 @@ public class ClassicModelsRepositoryImpl implements ClassicModelsRepository {
     @Override
     public List<EmployeeNoCntr> findEmployeesAndLeastSalary() {
 
-        List<EmployeeNoCntr> result = create.select(EMPLOYEE.FIRST_NAME,
+        List<EmployeeNoCntr> result = ctx.select(EMPLOYEE.FIRST_NAME,
                 EMPLOYEE.LAST_NAME,
                 EMPLOYEE.SALARY,
                 firstValue(EMPLOYEE.FIRST_NAME)
@@ -51,7 +50,7 @@ public class ClassicModelsRepositoryImpl implements ClassicModelsRepository {
     @Override
     public String findEmployeesFirstNamesAsCsv() {
         
-        String result = create.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME,
+        String result = ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME,
                 EMPLOYEE.JOB_TITLE, EMPLOYEE.SALARY)                
                 .from(EMPLOYEE)
                 .orderBy(EMPLOYEE.SALARY.desc())

@@ -3,8 +3,9 @@ package com.classicmodels.service;
 import com.classicmodels.pojo.EmployeeNoCntr;
 import com.classicmodels.repository.EmployeeRepository;
 import java.util.List;
+import jooq.generated.tables.interfaces.IEmployee;
+import jooq.generated.tables.pojos.JooqEmployee;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ClassicModelsService {
@@ -15,15 +16,13 @@ public class ClassicModelsService {
         this.employeeRepository = employeeRepository;
     }
     
-    // uses jOOQ
-    @Transactional(readOnly = true)
+    // uses jOOQ    
     public List<Object[]> fetchEmployeesWithTotalSalesByFiscalYear() {
         
         return employeeRepository.findEmployeesWithTotalSalesByFiscalYear();
     }
     
-    // uses jOOQ
-    @Transactional(readOnly = true)
+    // uses jOOQ   
     public List<EmployeeNoCntr> fetchEmployeesAndLeastSalary() {
 
         return employeeRepository.findEmployeesAndLeastSalary();
@@ -33,5 +32,23 @@ public class ClassicModelsService {
     public String fetchEmployeesFirstNamesAsCsv() {
         
         return employeeRepository.findEmployeesFirstNamesAsCsv();
+    }
+    
+    // uses jOOQ generated POJO
+    public List<JooqEmployee> fetchByJobTitleCntr(String jobTitle) {
+        
+        return employeeRepository.findByJobTitleCntr(jobTitle);
+    }
+    
+    // uses jOOQ generated interface (JPQL query)
+    public List<IEmployee> fetchByJobTitleJpql(String jobTitle) {
+        
+        return employeeRepository.findByJobTitleJpql(jobTitle);
+    }
+    
+    // uses jOOQ generated interface (native query)
+    public List<IEmployee> fetchByJobTitleNative(String jobTitle) {
+        
+        return employeeRepository.findByJobTitleNative(jobTitle);        
     }
 }

@@ -12,7 +12,20 @@
         <groupId>org-jooq-jpa</groupId>
         <artifactId>jOOQSpringBootGenArtifactsFromJPAEntities</artifactId>
         <version>1.0</version>        
-    </parent>       
+    </parent>
+    
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        
+        <java.version>1.8</java.version>                
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        
+        <maven.compiler.plugin.version>3.8.0</maven.compiler.plugin.version>    
+        <jooq.meta.extensions.version>3.13.4</jooq.meta.extensions.version>
+        <javax.persistence.api.version>2.2</javax.persistence.api.version>        
+    </properties>       
         
     <dependencies>               
         <dependency>
@@ -47,8 +60,8 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.0</version>
-                <configuration>
+                <version>${maven.compiler.plugin.version}</version>
+                <configuration>                    
                     <fork>true</fork>
                     <maxmem>1024m</maxmem>
                     <meminitial>256m</meminitial>
@@ -58,7 +71,7 @@
                     <!-- [#2413] Make compiler warnings a bit more visible
                     But don't fail (yet) -->
                     <compilerArgs>
-                        <arg>-Xlint:varargs</arg>
+                        <arg>-Xlint:varargs</arg>                        
                     </compilerArgs>
                 </configuration>
             </plugin>
@@ -69,7 +82,7 @@
                 <artifactId>jooq-codegen-maven</artifactId>            
                 <executions>
                     <execution>
-                        <id>generate-h2-jpa</id>
+                        <id>generate-jooq-from-jpa-entities</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>generate</goal>
@@ -100,7 +113,27 @@
                                     </properties>
                                     <includes>.*</includes>                                                                     
                                 </database>
+                                
+                                <!-- Rename the generated POJOs and DAOs classes -->                      
+                                <strategy>
+                                    <matchers>
+                                        <tables>
+                                            <table>
+                                                <pojoClass>                                                         
+                                                    <expression>JOOQ_$0</expression>
+                                                    <transform>PASCAL</transform>                                                                                      
+                                                </pojoClass>
+                                                <daoClass>
+                                                    <expression>$0_Repository</expression>
+                                                    <transform>PASCAL</transform>                                                                                      
+                                                </daoClass>
+                                            </table>
+                                        </tables>
+                                    </matchers>
+                                </strategy>
+                                
                                 <generate>
+                                    <interfaces>true</interfaces>
                                     <daos>true</daos> <!-- daos will generate pojos as well -->
                                     <!-- <pojos>true</pojos> --> <!-- this is needed to generated pojos without daos -->                             
                                     <validationAnnotations>true</validationAnnotations>
@@ -120,18 +153,13 @@
                         <groupId>org.jooq</groupId>
                         <!-- jOOQ 3.14.x <artifactId>jooq-meta-extensions-hibernate</artifactId> -->
                         <artifactId>jooq-meta-extensions</artifactId>
-                        <version>3.13.4</version>
+                        <version>${jooq.meta.extensions.version}</version>
                     </dependency>
                     <dependency>
                         <groupId>javax.persistence</groupId>
                         <artifactId>javax.persistence-api</artifactId>
-                        <version>2.2</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>javax.validation</groupId>
-                        <artifactId>validation-api</artifactId>
-                        <version>2.0.1.Final</version>
-                    </dependency>                  
+                        <version>${javax.persistence.api.version}</version>
+                    </dependency>                                    
                 </dependencies>                  
             </plugin>            
         </plugins>
