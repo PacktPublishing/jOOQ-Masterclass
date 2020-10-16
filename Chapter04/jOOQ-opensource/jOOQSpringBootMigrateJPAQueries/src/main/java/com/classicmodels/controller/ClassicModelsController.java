@@ -33,6 +33,13 @@ public class ClassicModelsController {
         return classicModelsService.fetchEmployeesAndLeastSalary();
     }
 
+    @GetMapping("/first3employee")
+    public List<Employee> findFirst3BySalaryLessThanAndJobTitleOrderByFirstNameDesc(
+            @RequestParam int salary, @RequestParam String jobTitle) {
+        
+        return classicModelsService.findFirst3BySalaryLessThanAndJobTitleOrderByFirstNameDesc(salary, jobTitle);
+    }
+    
     @GetMapping("/leastsalarycntr")
     public List<EmployeeCntr> fetchEmployeesAndLeastSalaryCntr() {
 

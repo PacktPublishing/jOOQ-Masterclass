@@ -44,14 +44,25 @@ public interface EmployeeRepository
                  FROM
                    employee
                  """, nativeQuery = true)
-    public List<EmployeeProjection> findEmployeesAndLeastSalary();
+    public List<EmployeeLeastSalary> findEmployeesAndLeastSalary();
     */
             
     /* Migrating queries generated via Query Builder Mechanism that doesn't return JPA entities */
     /* This query was migrated to jOOQ  */
-    //public List<EmployeeProjection2> findFirst5ByOrderBySalaryDesc();
+    //public List<EmployeeSlim> findFirst5ByOrderBySalaryDesc();
         
-    /* Migrating queries that return entities */
+    /* Migrating JPQLs that doesn't return JPA entities */
+    /* This query was migrated to jOOQ  */
+    /*
+    @Query(value="""
+                 SELECT new com.classicmodels.pojo.EmployeeCntr(
+                   e.firstName, e.lastName, e.salary)
+                 FROM Employee e WHERE e.salary > 80000
+                 """)
+    public List<EmployeeCntr> findEmployeesAndLeastSalaryCntr();
+    */
+    
+    /* Migrating native queries that return entities */
     /* This query was migrated to jOOQ  */
     /*
     @Query(value = """
@@ -68,17 +79,11 @@ public interface EmployeeRepository
     public List<Employee> findEmployeeInCity(String city);   
     */  
     
-    /* Migrating JPQLs that doesn't return JPA entities */
+    /* Migrating queries generated via Query Builder Mechanism that return JPA entities */
     /* This query was migrated to jOOQ  */
     /*
-    @Query(value="""
-                 SELECT new com.classicmodels.pojo.EmployeeCntr(
-                   e.firstName, e.lastName, e.salary)
-                 FROM Employee e WHERE e.salary > 80000
-                 """)
-    public List<EmployeeCntr> findEmployeesAndLeastSalaryCntr();
+    public List<Employee> findFirst3BySalaryLessThanAndJobTitleOrderByFirstNameDesc(int salary, String jobTitle);    
     */
-
     /* Migrating JPQLs that return JPA entities */
     /* This query was migrated to jOOQ  */
     /*

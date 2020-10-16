@@ -33,7 +33,7 @@ public class ClassicModelsService {
     public List<EmployeeLeastSalary> fetchEmployeesAndLeastSalary() {
 
         return employeeRepository.findEmployeesAndLeastSalary();
-    }
+    }        
 
     // uses jOOQ
     @Transactional(readOnly = true)
@@ -59,6 +59,13 @@ public class ClassicModelsService {
         result.get(0).setSalary(50000 + new Random().nextInt(50000));
 
         return result;
+    }
+    
+    // uses jOOQ
+    @Transactional
+    public List<Employee> findFirst3BySalaryLessThanAndJobTitleOrderByFirstNameDesc(int salary, String jobTitle) {
+         
+        return employeeRepository.findFirst3BySalaryLessThanAndJobTitleOrderByFirstNameDesc(salary, jobTitle);
     }
 
     // uses jOOQ
