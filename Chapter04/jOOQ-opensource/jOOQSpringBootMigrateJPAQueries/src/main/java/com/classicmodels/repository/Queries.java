@@ -2,6 +2,7 @@ package com.classicmodels.repository;
 
 import java.util.List;
 import javax.persistence.EntityManager;
+import org.jooq.Param;
 
 public class Queries {
 
@@ -43,4 +44,8 @@ public class Queries {
         return result.getResultList();
     }
      */
+    
+    private static <T> Object convertToDatabaseType(Param<T> param) {
+        return param.getBinding().converter().to(param.getValue());
+    }
 }

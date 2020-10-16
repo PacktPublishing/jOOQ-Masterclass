@@ -49,8 +49,10 @@ public interface EmployeeRepository
             
     /* Migrating queries generated via Query Builder Mechanism that doesn't return JPA entities */
     /* This query was migrated to jOOQ  */
-    //public List<EmployeeSlim> findFirst5ByOrderBySalaryDesc();
-        
+    /*
+    public List<EmployeeSlim> findFirst5ByOrderBySalaryDesc();
+    */
+    
     /* Migrating JPQLs that doesn't return JPA entities */
     /* This query was migrated to jOOQ  */
     /*
