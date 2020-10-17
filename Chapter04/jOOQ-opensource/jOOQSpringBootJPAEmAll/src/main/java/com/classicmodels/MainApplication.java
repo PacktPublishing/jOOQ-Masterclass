@@ -19,10 +19,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @ComponentScan(basePackages = {"com.classicmodels"})
 public class MainApplication {
 
-    private final ClassicModelsService hrService;
+    private final ClassicModelsService classicModelsService;
 
-    public MainApplication(ClassicModelsService hrService) {
-        this.hrService = hrService;
+    public MainApplication(ClassicModelsService classicModelsService) {
+        this.classicModelsService = classicModelsService;
     }
 
     public static void main(String[] args) {
@@ -34,18 +34,21 @@ public class MainApplication {
         return args -> {
             
             System.out.println("Fetch employees and least salary:");
-            System.out.println(hrService.fetchEmployeesAndLeastSalary());
+            System.out.println(classicModelsService.fetchEmployeesAndLeastSalary());
 
             System.out.println("Fetch employees and least salary via contructor mapping:");
-            System.out.println(hrService.findEmployeesAndLeastSalaryCntr());
+            System.out.println(classicModelsService.findEmployeesAndLeastSalaryCntr());
 
             System.out.println("Fetch employees in city:");
-            System.out.println(hrService.fetchEmployeeInCity("Boston"));
+            System.out.println(classicModelsService.fetchEmployeeInCity("Boston"));
+            
+            System.out.println("Fetch employees by salary:");
+            System.out.println(classicModelsService.fetchEmployeeBySalary(60000));
             
             System.out.println("Fetch employees by job title:");
-            System.out.println(hrService.fetchByJobTitle("Sales Manager (APAC)"));
+            System.out.println(classicModelsService.fetchByJobTitle("Sales Manager (APAC)"));
              
-            List<Object[]> result = hrService.fetchEmployeeAndOffices();
+            List<Object[]> result = classicModelsService.fetchEmployeeAndOffices();
             result.forEach((Object[] entities) -> {
                 Employee employee = (Employee) entities[0];
                 Office office = (Office) entities[1];

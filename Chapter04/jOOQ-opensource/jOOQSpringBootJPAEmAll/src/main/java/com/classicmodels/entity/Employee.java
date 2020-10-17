@@ -31,6 +31,22 @@ import javax.persistence.SqlResultSetMapping;
                     @ColumnResult(name = "leastSalary")}))
 
 @SqlResultSetMapping(
+        name = "EmployeeEntityMapping",
+        entities = {
+            @EntityResult(
+                    entityClass = Employee.class,
+                    fields = {
+                        @FieldResult(name = "employeeNumber", column = "employee_number"),
+                        @FieldResult(name = "lastName", column = "last_name"),
+                        @FieldResult(name = "firstName", column = "first_name"),
+                        @FieldResult(name = "extension", column = "extension"),
+                        @FieldResult(name = "email", column = "email"),
+                        @FieldResult(name = "jobTitle", column = "job_title"),
+                        @FieldResult(name = "salary", column = "salary"),
+                        @FieldResult(name = "reports", column = "reports_to"),
+                        @FieldResult(name = "office", column = "first_name")})})
+
+@SqlResultSetMapping(
         name = "EmployeeOfficeEntityMapping",
         entities = {
             @EntityResult(
@@ -85,7 +101,7 @@ public class Employee implements Serializable {
     @Column(nullable = false)
     private int salary;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "reports_to")
     private Employee reports;
 

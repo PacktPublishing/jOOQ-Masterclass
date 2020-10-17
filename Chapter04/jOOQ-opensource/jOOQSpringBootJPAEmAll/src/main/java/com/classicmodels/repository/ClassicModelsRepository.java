@@ -11,5 +11,6 @@ public interface ClassicModelsRepository {
     public List<EmployeeNoCntr> findEmployeesAndLeastSalary();
     public List<EmployeeCntr> findEmployeesAndLeastSalaryCntr();
     public List<Employee> findEmployeeInCity(String city);
+    public List<Employee> findEmployeeBySalary(int salary);
     public List<Object[]> findEmployeeAndOffices();
 }

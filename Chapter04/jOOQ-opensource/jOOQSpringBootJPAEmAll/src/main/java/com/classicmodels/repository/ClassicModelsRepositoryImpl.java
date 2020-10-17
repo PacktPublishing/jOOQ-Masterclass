@@ -80,6 +80,17 @@ public class ClassicModelsRepositoryImpl implements ClassicModelsRepository {
     }
     
     @Override
+    public List<Employee> findEmployeeBySalary(int salary) {
+        
+        org.jooq.Query query
+                = ctx.select()
+                        .from(EMPLOYEE)
+                        .where(EMPLOYEE.SALARY.eq(salary));
+        
+        return Queries.nativeQueryToEntityResult(em, query, "EmployeeEntityMapping");
+    }
+    
+    @Override
     public List<Object[]> findEmployeeAndOffices() {
       
         org.jooq.Query query
@@ -87,6 +98,6 @@ public class ClassicModelsRepositoryImpl implements ClassicModelsRepository {
                 .from(EMPLOYEE)
                 .join(OFFICE).on(EMPLOYEE.OFFICE_CODE.eq(OFFICE.OFFICE_CODE));        
         
-        return Queries.nativeQueryToEntityResult(em, query, "EmployeeOfficeEntityMapping");
+        return Queries.nativeQueryToMultipleEntityResult(em, query, "EmployeeOfficeEntityMapping");
     }   
 }

@@ -47,6 +47,13 @@ public class ClassicModelsService {
     
     // uses jOOQ
     @Transactional
+    public List<Employee> fetchEmployeeBySalary(int salary) {
+        
+        return employeeRepository.findEmployeeBySalary(salary);
+    }
+    
+    // uses jOOQ
+    @Transactional
     public List<Object[]> fetchEmployeeAndOffices() {
         
         return employeeRepository.findEmployeeAndOffices();

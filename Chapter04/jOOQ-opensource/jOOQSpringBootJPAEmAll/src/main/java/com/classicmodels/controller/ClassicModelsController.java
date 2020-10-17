@@ -42,6 +42,12 @@ public class ClassicModelsController {
         return classicModelsService.fetchEmployeeInCity(city);
     } 
     
+    @GetMapping("/employeebysalary")
+    public List<Employee> fetchEmployeeBySalary(@RequestParam int salary) {
+
+        return classicModelsService.fetchEmployeeBySalary(salary);
+    }
+    
     @GetMapping("/officeandemployee")
     public List<Object[]> fetchEmployeeAndOffices() {
 

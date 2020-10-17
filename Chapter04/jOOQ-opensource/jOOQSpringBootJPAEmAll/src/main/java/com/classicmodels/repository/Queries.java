@@ -7,7 +7,7 @@ import org.jooq.Param;
 
 public final class Queries {
 
-    private void QueryUtil() {
+    private void Queries() {
         throw new AssertionError("Cannot be instantiated");
     }
 
@@ -170,8 +170,46 @@ public final class Queries {
     }
     */
     
-    // Executes a native query and fetch entities via JPA EntityResult
-    protected static List<Object[]> nativeQueryToEntityResult(
+    // Executes a native query and fetch entities via a single JPA EntityResult
+    protected static <E> List<E> nativeQueryToEntityResult(
+            EntityManager em, org.jooq.Query query, String mapping) {
+        
+        // Extract the SQL statement from the jOOQ query
+        javax.persistence.Query result = em.createNativeQuery(query.getSQL(), mapping);
+
+        // Extract the bind values from the jOOQ query
+        List<Object> values = query.getBindValues();
+        for (int i = 0; i < values.size(); i++) {
+            result.setParameter(i + 1, values.get(i));
+        }
+        
+        // JPA returns the right type
+        return result.getResultList();
+    }
+    
+    // If you're using custom data types or bindings then call this method
+    /*
+    protected static <E> List<E> nativeQueryToEntityResult(
+            EntityManager em, org.jooq.Query query, String mapping) {
+        
+        // Extract the SQL statement from the jOOQ query
+        javax.persistence.Query result = em.createNativeQuery(query.getSQL(), mapping);
+
+        // Extract the bind values from the jOOQ query
+        int i = 1;
+        for (Param<?> param : query.getParams().values()) {
+            if (!param.isInline()) {
+                result.setParameter(i++, convertToDatabaseType(param));
+            }
+        }
+        
+        // JPA returns the right type
+        return result.getResultList();
+    }
+    */
+    
+    // Executes a native query and fetch entities via multiple JPA EntityResult
+    protected static List<Object[]> nativeQueryToMultipleEntityResult(
             EntityManager em, org.jooq.Query query, String mapping) {
 
         // Extract the SQL statement from the jOOQ query
@@ -189,16 +227,18 @@ public final class Queries {
     
     // If you're using custom data types or bindings then call this method
     /*
-    protected static List<Object[]> nativeQueryToEntityResult(
+    protected static List<Object[]> nativeQueryToMultipleEntityResult(
             EntityManager em, org.jooq.Query query, String mapping) {
 
         // Extract the SQL statement from the jOOQ query
         javax.persistence.Query result = em.createNativeQuery(query.getSQL(), mapping);
 
         // Extract the bind values from the jOOQ query
-        List<Object> values = query.getBindValues();
-        for (int i = 0; i < values.size(); i++) {
-            result.setParameter(i + 1, values.get(i));
+        int i = 1;
+        for (Param<?> param : query.getParams().values()) {
+            if (!param.isInline()) {
+                result.setParameter(i++, convertToDatabaseType(param));
+            }
         }
 
         // JPA returns the right type
