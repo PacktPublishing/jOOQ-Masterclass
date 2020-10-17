@@ -1,7 +1,6 @@
 package com.classicmodels;
 
 import com.classicmodels.service.ClassicModelsService;
-import java.util.Arrays;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -29,24 +28,14 @@ public class MainApplication {
     @Bean
     public ApplicationRunner init() {
         return args -> {
-            /*
-            System.out.println("Fetch employees and least salary:");
-            System.out.println(hrService.fetchEmployeesAndLeastSalary());
-            
-            System.out.println("Fetch employees and least salary:");
-            System.out.println(hrService.fetchEmployeesAndLeastSalary());
-            
-            System.out.println("Fetch the employees names as CSV");
-            System.out.println(hrService.fetchEmployeesFirstNamesAsCsv());
-             */
-            System.out.println("Fetch the employees by title (1)");
-            System.out.println(classicModelsService.fetchByJobTitleCntr("Sales Rep"));
 
-            System.out.println("Fetch the employees by title (2)");
-            System.out.println(classicModelsService.fetchByJobTitleJpql("Sales Rep"));
-            
-            System.out.println("Fetch the employees by title (3)");
-            System.out.println(classicModelsService.fetchByJobTitleNative("Sales Rep"));
+            // uses jOOQ
+            System.out.println("Fetch employees and least salary:");
+            System.out.println(classicModelsService.fetchEmployeesAndLeastSalary());
+
+            // uses Spring Data JPA
+            System.out.println("Fetch the employees  by job title:");
+            System.out.println(classicModelsService.fetchByJobTitle("Sales Rep"));
         };
     }
 }

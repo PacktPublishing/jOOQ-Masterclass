@@ -24,7 +24,8 @@
         
         <maven.compiler.plugin.version>3.8.0</maven.compiler.plugin.version>    
         <jooq.meta.extensions.version>3.13.4</jooq.meta.extensions.version>
-        <javax.persistence.api.version>2.2</javax.persistence.api.version>        
+        <javax.persistence.api.version>2.2</javax.persistence.api.version>     
+        <validation.api.version>2.0.1.Final</validation.api.version>
     </properties>       
         
     <dependencies>               
@@ -88,28 +89,50 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
+                            <!-- JDBC connection to the H2 in-memory database -->
                             <jdbc>
                                 <driver>org.h2.Driver</driver>
                                 <url>jdbc:h2:~/yourdatabase</url>
                             </jdbc>
                             <generator>
                                 <database>
-                                    <name>org.jooq.meta.extensions.jpa.JPADatabase</name>                                    
+                                    <name>org.jooq.meta.extensions.jpa.JPADatabase</name>
+                                                                                                              
                                     <properties>
+                                        <!-- The current versions of jOOQ use Hibernate behind the scenes 
+                                        to generate an in-memory H2 database from which to reverse engineer 
+                                        jOOQ code. In order to influence Hibernate's schema generation, 
+                                        Hibernate specific flags can be passed to MetadataSources. 
+                                        All properties that are prefixed with hibernate. 
+                                        or javax.persistence. will be passed along to Hibernate. -->
                                         <property>
                                             <key>hibernate.physical_naming_strategy</key>
                                             <value>org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy</value>
                                         </property>
+                                        <!-- A comma separated list of Java packages, that contain your entities -->
                                         <property>
                                             <key>packages</key>
                                             <value>
                                                 com.classicmodels.entity
                                             </value>
                                         </property>
+                                        <!-- Whether JPA 2.1 AttributeConverters should be auto-mapped to jOOQ Converters.
+                                        Custom <forcedType/> configurations will have a higher priority than these auto-mapped converters. 
+                                        This defaults to true. -->
                                         <property>
                                             <key>useAttributeConverters</key>
                                             <value>true</value>
-                                        </property>                                        
+                                        </property> 
+                                        <!-- The default schema for unqualified objects:
+  
+                                        - public: all unqualified objects are located in the PUBLIC (upper case) schema
+                                        - none: all unqualified objects are located in the default schema (default) 
+                
+                                        This configuration can be overridden with the schema mapping feature -->
+                                        <property>
+                                            <key>unqualifiedSchema</key>
+                                            <value>none</value>
+                                        </property>                                       
                                     </properties>
                                     <includes>.*</includes>                                                                     
                                 </database>
@@ -160,6 +183,11 @@
                         <artifactId>javax.persistence-api</artifactId>
                         <version>${javax.persistence.api.version}</version>
                     </dependency>                                    
+                    <dependency>
+                        <groupId>javax.validation</groupId>
+                        <artifactId>validation-api</artifactId>
+                        <version>${validation.api.version}</version>
+                    </dependency>                  
                 </dependencies>                  
             </plugin>            
         </plugins>
