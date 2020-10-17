@@ -10,10 +10,10 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class MainApplication {
 
-    private final ClassicModelsService orderPaymentService;
+    private final ClassicModelsService classicModelsService;
 
-    public MainApplication(ClassicModelsService orderPaymentService) {
-        this.orderPaymentService = orderPaymentService;
+    public MainApplication(ClassicModelsService classicModelsService) {
+        this.classicModelsService = classicModelsService;
     }
 
     public static void main(String[] args) {
@@ -25,7 +25,7 @@ public class MainApplication {
         return args -> {
 
             System.out.println("Example: Fetched manager with id: 1");
-            Manager manager = orderPaymentService.fetchManager(1L);
+            Manager manager = classicModelsService.fetchManager(1L);
             System.out.println(manager);                                      
         };
     }
