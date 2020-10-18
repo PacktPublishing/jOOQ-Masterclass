@@ -61,7 +61,7 @@ public interface EmployeeRepository
                    e.firstName, e.lastName, e.salary)
                  FROM Employee e WHERE e.salary > 80000
                  """)
-    public List<EmployeeCntr> findEmployeesAndLeastSalaryCntr();
+    public List<EmployeeCntr> findEmployeesSalaryGt80000();
     */
     
     /* Migrating native queries that return entities */

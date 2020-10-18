@@ -57,7 +57,7 @@ public class ClassicModelsRepositoryImpl implements ClassicModelsRepository {
     }
     
     @Override
-    public List<EmployeeCntr> findEmployeesAndLeastSalaryCntr() {
+    public List<EmployeeCntr> findEmployeesSalaryGt80000() {
         
         List<EmployeeCntr> result = ctx.select(EMPLOYEE.FIRST_NAME,
                 EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)

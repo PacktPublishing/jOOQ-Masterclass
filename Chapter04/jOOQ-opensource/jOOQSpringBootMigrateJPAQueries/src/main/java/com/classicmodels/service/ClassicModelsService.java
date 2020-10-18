@@ -37,9 +37,9 @@ public class ClassicModelsService {
 
     // uses jOOQ
     @Transactional(readOnly = true)
-    public List<EmployeeCntr> findEmployeesAndLeastSalaryCntr() {
+    public List<EmployeeCntr> fetchEmployeesSalaryGt80000() {
 
-        return employeeRepository.findEmployeesAndLeastSalaryCntr();
+        return employeeRepository.findEmployeesSalaryGt80000();
     }
 
     // uses jOOQ

@@ -40,10 +40,10 @@ public class ClassicModelsController {
         return classicModelsService.findFirst3BySalaryLessThanAndJobTitleOrderByFirstNameDesc(salary, jobTitle);
     }
     
-    @GetMapping("/leastsalarycntr")
-    public List<EmployeeCntr> fetchEmployeesAndLeastSalaryCntr() {
+    @GetMapping("/salarygt80000")
+    public List<EmployeeCntr> fetchEmployeesSalaryGt80000() {
 
-        return classicModelsService.findEmployeesAndLeastSalaryCntr();
+        return classicModelsService.fetchEmployeesSalaryGt80000();
     }
 
     @GetMapping("/first5employee")

@@ -35,8 +35,8 @@ public class MainApplication {
             System.out.println("Fetch employees and least salary:");
             System.out.println(classicModelsService.fetchEmployeesAndLeastSalary());
 
-            System.out.println("Fetch employees and least salary via contructor mapping:");
-            System.out.println(classicModelsService.findEmployeesAndLeastSalaryCntr());
+            System.out.println("Fetch employees having salary greater than 80000:");
+            System.out.println(classicModelsService.fetchEmployeesSalaryGt80000());
 
             System.out.println("Fetch first 5 employees by salary (desc):");
             System.out.println(classicModelsService.fetchFirst5ByOrderBySalaryDesc());

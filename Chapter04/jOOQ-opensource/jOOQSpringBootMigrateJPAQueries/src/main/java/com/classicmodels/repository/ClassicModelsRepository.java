@@ -12,7 +12,7 @@ public interface ClassicModelsRepository {
 
     public List<EmployeeLeastSalary> findEmployeesAndLeastSalary();
         
-    public List<EmployeeCntr> findEmployeesAndLeastSalaryCntr();
+    public List<EmployeeCntr> findEmployeesSalaryGt80000();
 
     public List<EmployeeSlim> findFirst5ByOrderBySalaryDesc();
 
