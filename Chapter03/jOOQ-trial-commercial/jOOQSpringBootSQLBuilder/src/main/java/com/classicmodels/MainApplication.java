@@ -1,7 +1,8 @@
 package com.classicmodels;
 
-import com.classicmodels.pojo.Manager;
+import com.classicmodels.pojo.Office;
 import com.classicmodels.service.ClassicModelsService;
+import java.util.List;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,10 +11,10 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class MainApplication {
 
-    private final ClassicModelsService orderPaymentService;
+    private final ClassicModelsService classicModelsService;
 
-    public MainApplication(ClassicModelsService orderPaymentService) {
-        this.orderPaymentService = orderPaymentService;
+    public MainApplication(ClassicModelsService classicModelsService) {
+        this.classicModelsService = classicModelsService;
     }
 
     public static void main(String[] args) {
@@ -24,9 +25,9 @@ public class MainApplication {
     public ApplicationRunner init() {
         return args -> {
 
-            System.out.println("Example: Fetched manager with id: 1");
-            Manager manager = orderPaymentService.fetchManager(1L);
-            System.out.println(manager);                           
+            System.out.println("Fetched list of offices in territory:");
+            List<Office> offices = classicModelsService.fetchOfficesInTerritory("NA");
+            System.out.println(offices);
         };
     }
 }

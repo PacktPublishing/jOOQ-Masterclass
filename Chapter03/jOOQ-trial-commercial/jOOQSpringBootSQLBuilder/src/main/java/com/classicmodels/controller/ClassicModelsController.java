@@ -1,7 +1,8 @@
 package com.classicmodels.controller;
 
-import com.classicmodels.pojo.Manager;
+import com.classicmodels.pojo.Office;
 import com.classicmodels.service.ClassicModelsService;
+import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,10 +15,10 @@ public class ClassicModelsController {
     public ClassicModelsController(ClassicModelsService classicModelsService) {
         this.classicModelsService = classicModelsService;
     }
-    
-    @GetMapping("/manager")
-    public Manager fetchManager(@RequestParam Long managerId) {
 
-        return classicModelsService.fetchManager(managerId);
-    }                 
+    @GetMapping("/office")
+    public List<Office> fetchOfficesInTerritory(@RequestParam String territory) {
+
+        return classicModelsService.fetchOfficesInTerritory(territory);
+    }
 }

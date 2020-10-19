@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.app</groupId>
-    <artifactId>jOOQSpringBootJdbcTemplateSQLBuilder</artifactId>
+    <artifactId>jOOQSpringBootSQLBuilder</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQSpringBootJdbcTemplateSQLBuilder</name>
+    <name>jOOQSpringBootSQLBuilder</name>
     <description>jOOQ kickoff for Spring Boot</description>    
 
     <parent>

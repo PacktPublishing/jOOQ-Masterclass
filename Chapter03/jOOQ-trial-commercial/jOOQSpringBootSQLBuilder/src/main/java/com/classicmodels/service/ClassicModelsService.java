@@ -1,7 +1,8 @@
 package com.classicmodels.service;
 
 import com.classicmodels.repository.ClassicModelsRepository;
-import com.classicmodels.pojo.Manager;
+import com.classicmodels.pojo.Office;
+import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,8 +16,8 @@ public class ClassicModelsService {
     }
 
     @Transactional(readOnly = true)
-    public Manager fetchManager(Long managerId) {
+    public List<Office> fetchOfficesInTerritory(String territory) {
 
-        return classicModelsRepository.findManager(managerId);
+        return classicModelsRepository.findOfficesInTerritory(territory);
     }
 }
