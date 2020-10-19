@@ -2,7 +2,7 @@ package com.classicmodels;
 
 import com.classicmodels.pojo.CustomerAndOrder;
 import com.classicmodels.pojo.Order;
-import com.classicmodels.pojo.Manager;
+import com.classicmodels.pojo.Office;
 import com.classicmodels.service.ClassicModelsService;
 import java.time.LocalDate;
 import java.util.List;
@@ -28,16 +28,16 @@ public class MainApplication {
     public ApplicationRunner init() {
         return args -> {
 
-            System.out.println("Example: Fetched manager with id: 1");
-            Manager manager = classicModelsService.fetchManager(1L);
-            System.out.println(manager);
+            System.out.println("Fetching offices from 'NA' territory:");
+            List<Office> offices = classicModelsService.fetchOfficesInTerritory("NA");
+            System.out.println(offices);
 
-            System.out.println("Example: Fetched orders between 2002-01-01 and 2004-12-31:");
+            System.out.println("Fetching orders between 2002-01-01 and 2004-12-31:");
             List<Order> orders = classicModelsService
                     .fetchOrdersByRequiredDate(LocalDate.of(2002, 1, 1), LocalDate.of(2004, 12, 31));
             System.out.println(orders);
 
-            System.out.println("Example: Fetched customers and orders:");
+            System.out.println("Fetching customers and orders:");
             List<CustomerAndOrder> custAndOrd = classicModelsService.fetchCustomersAndOrders();
             System.out.println(custAndOrd);
         };

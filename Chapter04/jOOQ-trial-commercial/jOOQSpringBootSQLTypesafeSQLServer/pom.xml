@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.app</groupId>
-    <artifactId>jOOQSpringBootSQLExecutionSQLServer</artifactId>
+    <artifactId>jOOQSpringBootSQLTypesafeSQLServer</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQSpringBootSQLExecutionSQLServer</name>
+    <name>jOOQSpringBootSQLTypesafeSQLServer</name>
     <description>jOOQ - Spring Boot app</description>    
 
     <parent>

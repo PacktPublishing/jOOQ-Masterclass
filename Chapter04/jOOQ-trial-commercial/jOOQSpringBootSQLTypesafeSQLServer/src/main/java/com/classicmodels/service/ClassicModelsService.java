@@ -1,8 +1,8 @@
 package com.classicmodels.service;
 
 import com.classicmodels.pojo.CustomerAndOrder;
+import com.classicmodels.pojo.Office;
 import com.classicmodels.repository.ClassicModelsRepository;
-import com.classicmodels.pojo.Manager;
 import com.classicmodels.pojo.Order;
 import java.time.LocalDate;
 import java.util.List;
@@ -19,9 +19,9 @@ public class ClassicModelsService {
     }
 
     @Transactional(readOnly = true)
-    public Manager fetchManager(Long managerId) {
+    public List<Office> fetchOfficesInTerritory(String territory) {
 
-        return classicModelsRepository.findManager(managerId);
+        return classicModelsRepository.findOfficesInTerritory(territory);
     }
 
     @Transactional(readOnly = true)
