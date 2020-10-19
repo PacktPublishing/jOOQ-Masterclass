@@ -4,7 +4,7 @@ import com.classicmodels.pojo.CustomerAndOrder;
 import com.classicmodels.service.ClassicModelsService;
 import java.time.LocalDate;
 import java.util.List;
-import jooq.generated.tables.pojos.JooqManager;
+import jooq.generated.tables.pojos.JooqOffice;
 import jooq.generated.tables.pojos.JooqOrder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,13 +19,13 @@ public class ClassicModelsController {
         this.classicModelsService = classicModelsService;
     }
 
-    @GetMapping("/manager")
-    public JooqManager fetchManager(@RequestParam Long managerId) {
+    @GetMapping("/officesInTerritory")
+    public List<JooqOffice> fetchOfficesInTerritory(@RequestParam String territory) {
 
-        return classicModelsService.fetchManager(managerId);
+        return classicModelsService.fetchOfficesInTerritory(territory);
     }
 
-    @GetMapping("/ordersbyrequireddate")
+    @GetMapping("/ordersByRequiredDate")
     public List<JooqOrder> fetchOrdersByRequiredDate(
             @RequestParam String startDate, @RequestParam String endDate) {
 
@@ -33,7 +33,7 @@ public class ClassicModelsController {
                 LocalDate.parse(startDate), LocalDate.parse(endDate));
     }
 
-    @GetMapping("/customersandorders")
+    @GetMapping("/customersAndOrders")
     public List<CustomerAndOrder> fetchCustomersAndOrders() {
 
         return classicModelsService.fetchCustomersAndOrders();
