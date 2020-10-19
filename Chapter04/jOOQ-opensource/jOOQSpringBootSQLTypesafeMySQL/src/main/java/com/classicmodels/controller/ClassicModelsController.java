@@ -1,7 +1,7 @@
 package com.classicmodels.controller;
 
 import com.classicmodels.pojo.CustomerAndOrder;
-import com.classicmodels.pojo.Manager;
+import com.classicmodels.pojo.Office;
 import com.classicmodels.pojo.Order;
 import com.classicmodels.service.ClassicModelsService;
 import java.time.LocalDate;
@@ -19,13 +19,13 @@ public class ClassicModelsController {
         this.classicModelsService = classicModelsService;
     }
 
-    @GetMapping("/manager")
-    public Manager fetchManager(@RequestParam Long managerId) {
+    @GetMapping("/officesInTerritory")
+    public List<Office> fetchOfficesInTerritory(@RequestParam String territory) {
 
-        return classicModelsService.fetchManager(managerId);
+        return classicModelsService.fetchOfficesInTerritory(territory);
     }
 
-    @GetMapping("/ordersbyrequireddate")
+    @GetMapping("/ordersByRequiredDate")
     public List<Order> fetchOrdersByRequiredDate(
             @RequestParam String startDate, @RequestParam String endDate) {
 
@@ -33,7 +33,7 @@ public class ClassicModelsController {
                 LocalDate.parse(startDate), LocalDate.parse(endDate));
     }
 
-    @GetMapping("/customersandorders")
+    @GetMapping("/customersAndOrders")
     public List<CustomerAndOrder> fetchCustomersAndOrders() {
 
         return classicModelsService.fetchCustomersAndOrders();
