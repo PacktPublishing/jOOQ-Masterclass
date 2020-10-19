@@ -4,9 +4,9 @@ import com.classicmodels.pojo.CustomerAndOrder;
 import java.time.LocalDate;
 import java.util.List;
 import static jooq.generated.tables.Customer.CUSTOMER;
-import static jooq.generated.tables.Manager.MANAGER;
+import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Order.ORDER;
-import jooq.generated.tables.pojos.JooqManager;
+import jooq.generated.tables.pojos.JooqOffice;
 import jooq.generated.tables.pojos.JooqOrder;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
@@ -20,12 +20,12 @@ public class ClassicModelsRepository {
         this.ctx = ctx;
     }
 
-    public JooqManager findManager(Long managerId) {
+    public List<JooqOffice> findOfficesInTerritory(String territory) {
 
-        /* Using jOOQ to build a typesafe SQL and to execute it */
-        JooqManager result = ctx.selectFrom(MANAGER) // or, ctx.select().from(MANAGER)
-                .where(MANAGER.MANAGER_ID.eq(managerId))
-                .fetchOneInto(JooqManager.class); // or, fetchOne().into(Manager.class)
+        /* Using jOOQ to build the typesafe SQL and to execute it */
+        List<JooqOffice> result = ctx.selectFrom(OFFICE) // or, ctx.select().from(OFFICE)
+                .where(OFFICE.TERRITORY.eq(territory))
+                .fetchInto(JooqOffice.class); // or, fetch().into(JooqOffice.class)
 
         return result;
     }
