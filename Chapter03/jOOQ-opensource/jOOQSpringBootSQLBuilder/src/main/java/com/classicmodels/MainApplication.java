@@ -1,7 +1,8 @@
 package com.classicmodels;
 
-import com.classicmodels.pojo.Manager;
+import com.classicmodels.pojo.Office;
 import com.classicmodels.service.ClassicModelsService;
+import java.util.List;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -24,9 +25,9 @@ public class MainApplication {
     public ApplicationRunner init() {
         return args -> {
 
-            System.out.println("Example: Fetched manager with id: 1");
-            Manager manager = classicModelsService.fetchManager(1L);
-            System.out.println(manager);                                      
+            System.out.println("Fetched list of offices in territory:");
+            List<Office> offices = classicModelsService.fetchOfficesInTerritory("NA");
+            System.out.println(offices);
         };
     }
 }
