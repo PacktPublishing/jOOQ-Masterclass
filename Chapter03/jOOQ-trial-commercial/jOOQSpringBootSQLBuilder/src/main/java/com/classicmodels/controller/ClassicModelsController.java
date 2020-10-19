@@ -16,7 +16,7 @@ public class ClassicModelsController {
         this.classicModelsService = classicModelsService;
     }
 
-    @GetMapping("/office")
+    @GetMapping("/officesInTerritory")
     public List<Office> fetchOfficesInTerritory(@RequestParam String territory) {
 
         return classicModelsService.fetchOfficesInTerritory(territory);
