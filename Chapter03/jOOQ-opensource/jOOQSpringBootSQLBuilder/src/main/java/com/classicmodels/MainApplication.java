@@ -25,7 +25,7 @@ public class MainApplication {
     public ApplicationRunner init() {
         return args -> {
 
-            System.out.println("Fetched list of offices in territory:");
+            System.out.println("Fetching offices from 'NA' territory:");
             List<Office> offices = classicModelsService.fetchOfficesInTerritory("NA");
             System.out.println(offices);
         };
