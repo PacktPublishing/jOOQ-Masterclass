@@ -1,12 +1,12 @@
 package com.classicmodels.repository;
 
-import com.classicmodels.pojo.Manager;
 import com.classicmodels.pojo.Order;
 import com.classicmodels.pojo.CustomerAndOrder;
+import com.classicmodels.pojo.Office;
 import java.time.LocalDate;
 import java.util.List;
 import static jooq.generated.tables.Customer.CUSTOMER;
-import static jooq.generated.tables.Manager.MANAGER;
+import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Order.ORDER;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
@@ -20,12 +20,12 @@ public class ClassicModelsRepository {
         this.ctx = ctx;
     }
 
-    public Manager findManager(Long managerId) {
+    public List<Office> findOfficesInTerritory(String territory) {
 
-        /* Using jOOQ to build a typesafe SQL and to execute it */
-        Manager result = ctx.selectFrom(MANAGER) // or, ctx.select().from(MANAGER)
-                .where(MANAGER.MANAGER_ID.eq(managerId))
-                .fetchOneInto(Manager.class); // or, fetchOne().into(Manager.class)
+        /* Using jOOQ to build and execute the SQL */
+        List<Office> result = ctx.selectFrom(OFFICE) // or, ctx.select().from(table("office"))
+                .where(OFFICE.TERRITORY.eq(territory))
+                .fetchInto(Office.class); // or, fetch().into(Office.class)
 
         return result;
     }
