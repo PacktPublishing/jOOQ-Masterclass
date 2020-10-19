@@ -3,6 +3,7 @@ target/
 dist/
 nbproject/
 nbactions.xml
+nb-configuration.xml
 build.xml
 manifest.mf
 
