@@ -22,7 +22,7 @@ public class ClassicModelsRepository {
 
     public List<Office> findOfficesInTerritory(String territory) {
 
-        /* Using jOOQ to build and execute the SQL */
+        /* Using jOOQ to build the typesafe SQL and to execute it */
         List<Office> result = ctx.selectFrom(OFFICE) // or, ctx.select().from(table("office"))
                 .where(OFFICE.TERRITORY.eq(territory))
                 .fetchInto(Office.class); // or, fetch().into(Office.class)
