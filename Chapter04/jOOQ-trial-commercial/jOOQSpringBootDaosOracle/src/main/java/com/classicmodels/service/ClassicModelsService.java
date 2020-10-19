@@ -4,9 +4,9 @@ import com.classicmodels.pojo.CustomerAndOrder;
 import com.classicmodels.repository.ClassicModelsRepository;
 import java.time.LocalDate;
 import java.util.List;
-import jooq.generated.tables.daos.ManagerRepository;
+import jooq.generated.tables.daos.OfficeRepository;
 import jooq.generated.tables.daos.OrderRepository;
-import jooq.generated.tables.pojos.JooqManager;
+import jooq.generated.tables.pojos.JooqOffice;
 import jooq.generated.tables.pojos.JooqOrder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,22 +16,22 @@ public class ClassicModelsService {
 
     /* our repository */
     private final ClassicModelsRepository classicModelsRepository;
-
+    
     /* jOOQ generated repositories */
-    private final ManagerRepository managerRepository;
+    private final OfficeRepository officeRepository;
     private final OrderRepository orderRepository;
 
     public ClassicModelsService(ClassicModelsRepository classicModelsRepository,
-            ManagerRepository managerRepository, OrderRepository orderRepository) {
+            OfficeRepository officeRepository, OrderRepository orderRepository) {
         this.classicModelsRepository = classicModelsRepository;
-        this.managerRepository = managerRepository;
+        this.officeRepository = officeRepository;
         this.orderRepository = orderRepository;
     }
 
     @Transactional(readOnly = true)
-    public JooqManager fetchManager(Long managerId) {
+    public List<JooqOffice> fetchOfficesInTerritory(String territory) {
 
-        return managerRepository.fetchOneByManagerId(managerId);
+        return officeRepository.fetchByTerritory(territory);
     }
 
     @Transactional(readOnly = true)

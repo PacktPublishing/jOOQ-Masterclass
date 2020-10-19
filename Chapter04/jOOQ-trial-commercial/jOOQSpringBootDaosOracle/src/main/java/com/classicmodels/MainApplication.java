@@ -4,7 +4,7 @@ import com.classicmodels.pojo.CustomerAndOrder;
 import com.classicmodels.service.ClassicModelsService;
 import java.time.LocalDate;
 import java.util.List;
-import jooq.generated.tables.pojos.JooqManager;
+import jooq.generated.tables.pojos.JooqOffice;
 import jooq.generated.tables.pojos.JooqOrder;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
@@ -30,16 +30,16 @@ public class MainApplication {
     public ApplicationRunner init() {
         return args -> {
 
-            System.out.println("Example: Fetched manager with id: 1");
-            JooqManager manager = classicModelsService.fetchManager(1L);
-            System.out.println(manager);
+            System.out.println("Fetching offices from 'NA' territory:");
+            List<JooqOffice> offices = classicModelsService.fetchOfficesInTerritory("NA");
+            System.out.println(offices);
 
-            System.out.println("Example: Fetched orders between 2002-01-01 and 2004-12-31:");
+            System.out.println("Fetching orders between 2002-01-01 and 2004-12-31:");
             List<JooqOrder> orders = classicModelsService
                     .fetchOrdersByRequiredDate(LocalDate.of(2002, 1, 1), LocalDate.of(2004, 12, 31));
             System.out.println(orders);
 
-            System.out.println("Example: Fetched customers and orders:");
+            System.out.println("Fetching customers and orders:");
             List<CustomerAndOrder> custAndOrd = classicModelsService.fetchCustomersAndOrders();
             System.out.println(custAndOrd);
         };
