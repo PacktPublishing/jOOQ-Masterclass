@@ -26,15 +26,17 @@ public class MainApplication {
     public ApplicationRunner init() {
         return args -> {
 
+            System.out.println("Fetching all employees:");
+            List<EmployeeData> employees = classicModelsService.fetchAllEmployee();
+            System.out.println(employees);
+
+            System.out.println("Fetching all employees:");
+            List<Double> salesVals = classicModelsService.fetchAllSales();
+            System.out.println(salesVals);
+
             System.out.println("Fetching sales and total sale:");
             SaleStats sales = classicModelsService.fetchSalesAndTotalSale();
-            System.out.println(sales);
-
-          //  System.out.println("Fetching all employees:");
-          //  List<EmployeeData> employees = classicModelsService.fetchAllEmployee();
-           // System.out.println(employees);
-            
-            //classicModelsService.z();
+            System.out.println("aaa=" + sales);
         };
     }
 }

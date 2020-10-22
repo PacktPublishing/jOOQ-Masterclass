@@ -24,7 +24,7 @@ public class ClassicModelsRepository {
     }
 
     public List<EmployeeData> findAllEmployee() {
-        
+
         // using map()
         List<EmployeeData> result
                 = ctx.fetch("SELECT employee_number, first_name, last_name, salary FROM employee")
@@ -35,8 +35,8 @@ public class ClassicModelsRepository {
                                         new EmployeeName(rs.getValue("first_name", String.class),
                                                 rs.getValue("last_name", String.class))
                                 )
-                        );        
-        
+                        );
+
         // using into()      
         /*
         List<EmployeeData> result = ctx.fetch("""
@@ -44,8 +44,7 @@ public class ClassicModelsRepository {
                                               first_name AS `employeeName.firstName`,
                                               last_name AS `employeeName.lastName` FROM employee""")
                                        .into(EmployeeData.class);
-        */ 
-        
+         */
         // using fetch().map()        
         /*
         List<EmployeeData> result = ctx.select(EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.FIRST_NAME,
@@ -60,8 +59,7 @@ public class ClassicModelsRepository {
                                                 rs.getValue(EMPLOYEE.LAST_NAME))
                         )
                 );         
-        */
-        
+         */
         // or, using fetch(mapper)
         /*
         List<EmployeeData> result = ctx.select(EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.FIRST_NAME,
@@ -76,17 +74,14 @@ public class ClassicModelsRepository {
                         )
                 );
          */
-        
         // using fetchInto()
-        
         /*
         List<EmployeeData> result = ctx.select(EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.SALARY,
                 EMPLOYEE.FIRST_NAME.as("employeeName.firstName"), 
                 EMPLOYEE.LAST_NAME.as("employeeName.lastName"))
                 .from(EMPLOYEE)
                 .fetchInto(EmployeeData.class);
-        */
-        
+         */
         return result;
     }
 
@@ -94,7 +89,7 @@ public class ClassicModelsRepository {
 
         // print all fetched data
         ctx.selectFrom(SALE)
-                .orderBy(SALE.SALE_)                
+                .orderBy(SALE.SALE_)
                 // .fetch() - optional
                 .forEach(System.out::println);
 
@@ -128,28 +123,12 @@ public class ClassicModelsRepository {
                 });
     }
 
-    public SaleStats findSalesAndTotalSale() {        
-        
-        //fetchStream a table
-        /*
-        ctx.fetchStream(SALE) // jOOQ fluent API ends here                
-           .filter(rs -> rs.getValue(SALE.SALE_) > 5000)
-                .forEach(System.out::println); // Stream fluent API starts here               
-        */
-        
-        /*
-        SaleStats result 
-                = ctx.fetchStream("SELECT sale FROM sale") // jOOQ fluent API ends here                                
-                .collect(Collectors.teeing( // Stream API starts here
-                        summingDouble(rs -> rs.getValue("sale", Double.class)), 
-                        mapping(rs -> rs.getValue("sale", Double.class), toList()),
-                        SaleStats::new));
-        */
-                
+    public SaleStats findSalesAndTotalSale() {
+
         SaleStats result = ctx.select(SALE.SALE_)
                 .from(SALE)
-                // .fetch()  - optional // // jOOQ fluent API ends here                
-                // .stream() - optional // Stream fluent API starts here                
+                .fetch() // jOOQ fluent API ends here                  
+                .stream() // Stream fluent API starts here                   
                 .collect(Collectors.teeing(summingDouble(r -> r.getValue(SALE.SALE_)),
                         mapping(r -> r.getValue(SALE.SALE_), toList()),
                         SaleStats::new));

@@ -17,18 +17,20 @@ public class ClassicModelsService {
     }
 
     @Transactional(readOnly = true)
-    public SaleStats fetchSalesAndTotalSale() {
-
-        return classicModelsRepository.findSalesAndTotalSale();
-    }
-
-    @Transactional(readOnly = true)
     public List<EmployeeData> fetchAllEmployee() {
 
         return classicModelsRepository.findAllEmployee();
     }
-    
-    public void z() {
-        //classicModelsRepository.z();
+
+    @Transactional(readOnly = true)
+    public List<Double> fetchAllSales() {
+
+        return classicModelsRepository.findAllSales();
+    }
+
+    @Transactional(readOnly = true)
+    public SaleStats fetchSalesAndTotalSale() {
+
+        return classicModelsRepository.findSalesAndTotalSale();
     }
 }
