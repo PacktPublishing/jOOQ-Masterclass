@@ -125,14 +125,22 @@ public class ClassicModelsRepository {
 
     public SaleStats findSalesAndTotalSale() {
 
+        /*
+        SaleStats result = ctx.fetch("SELECT sale FROM sale")  // jOOQ fluent API ends here                                                
+                .stream() // Stream fluent API starts here                   
+                .collect(Collectors.teeing(summingDouble(rs -> rs.getValue("sale", Double.class)),
+                        mapping(rs -> rs.getValue("sale", Double.class), toList()),
+                        SaleStats::new));
+        */
+                
         SaleStats result = ctx.select(SALE.SALE_)
                 .from(SALE)
                 .fetch() // jOOQ fluent API ends here                  
                 .stream() // Stream fluent API starts here                   
-                .collect(Collectors.teeing(summingDouble(r -> r.getValue(SALE.SALE_)),
-                        mapping(r -> r.getValue(SALE.SALE_), toList()),
+                .collect(Collectors.teeing(summingDouble(rs -> rs.getValue(SALE.SALE_)),
+                        mapping(rs -> rs.getValue(SALE.SALE_), toList()),
                         SaleStats::new));
-
+        
         return result;
     }
 
