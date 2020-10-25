@@ -39,8 +39,7 @@ public class ClassicModelsRepository {
                 .orderBy(ORDERDETAIL.ORDER_LINE_NUMBER)
                 .getSQL();
 
-        /* Identify column expression */
-        
+        /* Identify column expression */        
         Field<Short> tc1 = ORDERDETAIL.ORDER_LINE_NUMBER;  // table column expression 
         // TableField<OrderdetailRecord,Short> tfc1 = ORDERDETAIL.ORDER_LINE_NUMBER; // or, as a TableField
         Field<Integer> tc2 = ORDERDETAIL.QUANTITY_ORDERED; // table column expression (TableField)
