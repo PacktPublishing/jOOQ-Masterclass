@@ -2,6 +2,7 @@ package com.classicmodels.repository;
 
 import java.math.BigDecimal;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
+import jooq.generated.tables.records.OrderdetailRecord;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.jooq.Field;
@@ -72,8 +73,8 @@ public class ClassicModelsRepository {
                 .getSQL();
         
         /* Identify tables */
-        
-        Table<?> t1 = ORDERDETAIL; // table        
+        // Table<?> t1 = ORDERDETAIL;              // non type-safe table expression
+        Table<OrderdetailRecord> t1 = ORDERDETAIL; // type-safe table expression       
         
         /* return */
         ctx.select(tc1, a1, a2)
