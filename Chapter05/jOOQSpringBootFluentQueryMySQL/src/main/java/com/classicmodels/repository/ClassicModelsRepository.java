@@ -40,9 +40,12 @@ public class ClassicModelsRepository {
 
         /* Identify column expression */
         
-        Field<Short> tc1 = ORDERDETAIL.ORDER_LINE_NUMBER;  // table column expression (TableField) 
+        Field<Short> tc1 = ORDERDETAIL.ORDER_LINE_NUMBER;  // table column expression 
+        // TableField<OrderdetailRecord,Short> tfc1 = ORDERDETAIL.ORDER_LINE_NUMBER; // or, as a TableField
         Field<Integer> tc2 = ORDERDETAIL.QUANTITY_ORDERED; // table column expression (TableField)
+        // TableField<OrderdetailRecord,Integer> tfc2 = ORDERDETAIL.QUANTITY_ORDERED; // or, as a TableField
         Field<BigDecimal> tc3 = ORDERDETAIL.PRICE_EACH;    // table column expression (TableField)
+        // TableField<OrderdetailRecord,BigDecimal> tfc3 = ORDERDETAIL.PRICE_EACH; // or, as a TableField
         Field<Integer> uc1 = inline(20);                   // Unnamed column expression     
 
         /* return */
