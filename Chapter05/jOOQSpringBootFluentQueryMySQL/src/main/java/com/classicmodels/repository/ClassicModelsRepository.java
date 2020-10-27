@@ -6,6 +6,7 @@ import jooq.generated.tables.records.OrderdetailRecord;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.jooq.Field;
+import org.jooq.Record3;
 import org.jooq.SelectConditionStep;
 import org.jooq.SelectHavingStep;
 import org.jooq.SelectJoinStep;
@@ -42,9 +43,9 @@ public class ClassicModelsRepository {
         /* Identify column expression */        
         Field<Short> tc1 = ORDERDETAIL.ORDER_LINE_NUMBER;  // table column expression 
         // TableField<OrderdetailRecord,Short> tfc1 = ORDERDETAIL.ORDER_LINE_NUMBER; // or, as a TableField
-        Field<Integer> tc2 = ORDERDETAIL.QUANTITY_ORDERED; // table column expression (TableField)
+        Field<Integer> tc2 = ORDERDETAIL.QUANTITY_ORDERED; // table column expression
         // TableField<OrderdetailRecord,Integer> tfc2 = ORDERDETAIL.QUANTITY_ORDERED; // or, as a TableField
-        Field<BigDecimal> tc3 = ORDERDETAIL.PRICE_EACH;    // table column expression (TableField)
+        Field<BigDecimal> tc3 = ORDERDETAIL.PRICE_EACH;    // table column expression
         // TableField<OrderdetailRecord,BigDecimal> tfc3 = ORDERDETAIL.PRICE_EACH; // or, as a TableField
         Field<Integer> uc1 = inline(20);                   // Unnamed column expression     
 
@@ -101,8 +102,15 @@ public class ClassicModelsRepository {
         SelectJoinStep s2 = s1.from(t1);
         SelectConditionStep s3 = s2.where(c1);
         SelectHavingStep s4 = s3.groupBy(tc1);
-        SelectSeekStep1 s5 = s4.orderBy(tc1);                       
-        return s5.getSQL();        
+        SelectSeekStep1 s5 = s4.orderBy(tc1);   
+        
+        SelectSelectStep<Record3<Short, BigDecimal, BigDecimal>> s1ts = DSL.select(tc1, a1, a2);
+        SelectJoinStep<Record3<Short, BigDecimal, BigDecimal>> s2ts = s1ts.from(t1);
+        SelectConditionStep<Record3<Short, BigDecimal, BigDecimal>> s3ts = s2ts.where(c1);
+        SelectHavingStep<Record3<Short, BigDecimal, BigDecimal>> s4ts = s3ts.groupBy(tc1);
+        SelectSeekStep1<Record3<Short, BigDecimal, BigDecimal>, Short> s5ts = s4ts.orderBy(tc1);
+        
+        return s5ts.getSQL(); // s5.getSQL();               
     }
 
 }
