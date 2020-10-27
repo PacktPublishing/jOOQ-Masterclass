@@ -1,7 +1,6 @@
 package com.classicmodels;
 
 import com.classicmodels.service.ClassicModelsService;
-import java.util.List;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -24,11 +23,8 @@ public class MainApplication {
     public ApplicationRunner init() {
         return args -> {
 
-            System.out.println("Delete query:");
-       classicModelsService.jooqQuery();
-      
-
-           
+            System.out.println("Call all:");
+            classicModelsService.callAll();
         };
     }
 }

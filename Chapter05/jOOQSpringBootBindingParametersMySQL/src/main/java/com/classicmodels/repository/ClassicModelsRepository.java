@@ -200,7 +200,7 @@ public class ClassicModelsRepository {
     }
 
     // set a new bind value
-    public void modifyingTheBindValueIndexed2() {
+    public void modifyingTheBindValueIndexedParam2() {
         try ( ResultQuery query = ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
                 .from(EMPLOYEE)
                 .where(EMPLOYEE.SALARY.gt(5000))
