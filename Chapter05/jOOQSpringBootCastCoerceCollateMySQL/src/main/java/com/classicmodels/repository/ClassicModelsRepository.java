@@ -1,14 +1,13 @@
 package com.classicmodels.repository;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import static jooq.generated.tables.Office.OFFICE;
-import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Product.PRODUCT;
 import org.jooq.DSLContext;
-import static org.jooq.impl.DSL.cast;
-import static org.jooq.impl.DSL.coerce;
+import org.jooq.Record2;
+import org.jooq.Result;
 import org.jooq.impl.SQLDataType;
 import org.springframework.stereotype.Repository;
 
@@ -21,159 +20,69 @@ public class ClassicModelsRepository {
         this.ctx = ctx;
     }
 
-    /* Casting examples */
-    public void printOfficeByCode1(int officeCode) {
+    /* Casting and coercing examples */
+    public void printPaymentAndCachingDateCast() {
 
-        ctx.select(OFFICE.CITY, OFFICE.COUNTRY)
-                .from(OFFICE)
-                .where(OFFICE.OFFICE_CODE.cast(SQLDataType.INTEGER).eq(officeCode))
-                .fetch()
-                .forEach(System.out::println);
+        // no casting
+        Result<Record2<BigDecimal, LocalDateTime>> result1
+                = ctx.select(PAYMENT.INVOICE_AMOUNT.as("invoice_amount"),
+                        PAYMENT.CACHING_DATE.as("caching_date"))
+                        .from(PAYMENT)
+                        .where(PAYMENT.CUSTOMER_NUMBER.eq(103L))
+                        .fetch();
 
-        ctx.select(OFFICE.CITY, OFFICE.COUNTRY)
-                .from(OFFICE)
-                .where(OFFICE.OFFICE_CODE.cast(Integer.class).eq(officeCode))
-                .fetch()
-                .forEach(System.out::println);
+        result1.forEach(System.out::println);
 
-        ctx.select(OFFICE.CITY, OFFICE.COUNTRY)
-                .from(OFFICE)
-                .where(OFFICE.OFFICE_CODE.eq(cast(officeCode, SQLDataType.VARCHAR(10))))
-                .fetch()
-                .forEach(System.out::println);
+        // casting
+        Result<Record2<String, LocalDate>> result2
+                = ctx.select(PAYMENT.INVOICE_AMOUNT.cast(String.class).as("invoice_amount"),
+                        PAYMENT.CACHING_DATE.cast(LocalDate.class).as("caching_date"))
+                        .from(PAYMENT)
+                        .where(PAYMENT.CUSTOMER_NUMBER.eq(103L))
+                        .fetch();
 
-        ctx.select(OFFICE.CITY, OFFICE.COUNTRY)
-                .from(OFFICE)
-                .where(OFFICE.OFFICE_CODE.eq(cast(officeCode, String.class)))
-                .fetch()
-                .forEach(System.out::println);
+        result2.forEach(System.out::println);
     }
 
-    public void printPaymentDatesByAmount1(float amount) {
+    // coercing
+    public void printPaymentAndCachingDateCoerce() {
 
-        ctx.select(PAYMENT.PAYMENT_DATE, PAYMENT.CACHING_DATE)
-                .from(PAYMENT)
-                .where(PAYMENT.INVOICE_AMOUNT.eq(cast(amount, PAYMENT.INVOICE_AMOUNT)))
-                .fetch()
-                .forEach(System.out::println);
+        Result<Record2<String, LocalDate>> result
+                = ctx.select(PAYMENT.INVOICE_AMOUNT.coerce(String.class).as("invoice_amount"),
+                        PAYMENT.CACHING_DATE.coerce(LocalDate.class).as("caching_date"))
+                        .from(PAYMENT)
+                        .where(PAYMENT.CUSTOMER_NUMBER.eq(103L))
+                        .fetch();
+
+        result.forEach(System.out::println);
     }
 
-    public void printOrderStatusByOrderDate1(LocalDateTime ldt) {
+    // coercing - // this doesn't work as expected
+    public void printProductPriceAndDescCoerce() {
 
-        ctx.select(ORDER.STATUS)
-                .from(ORDER)
-                .where(ORDER.ORDER_DATE.gt(cast(ldt, LocalDate.class)))
-                .fetch()
-                .forEach(System.out::println);
+        Result<Record2<BigDecimal, String>> result
+                = ctx.select(PRODUCT.BUY_PRICE.coerce(SQLDataType.DECIMAL(10, 5)).as("buy_price"),
+                        PRODUCT.PRODUCT_DESCRIPTION.coerce(SQLDataType.VARCHAR(10)).as("prod_desc"))
+                        .from(PRODUCT)
+                        .where(PRODUCT.PRODUCT_ID.eq(1L))
+                        .fetch();
 
-        ctx.select(ORDER.STATUS)
-                .from(ORDER)
-                .where(ORDER.ORDER_DATE.cast(SQLDataType.LOCALDATETIME).gt(ldt))
-                .fetch()
-                .forEach(System.out::println);
-
-        ctx.select(ORDER.STATUS)
-                .from(ORDER)
-                .where(ORDER.ORDER_DATE.cast(LocalDateTime.class).gt(ldt))
-                .fetch()
-                .forEach(System.out::println);
+        result.forEach(System.out::println);
     }
 
-    public void printProductNameAndPrice1() {
-        ctx.select(PRODUCT.PRODUCT_NAME, PRODUCT.BUY_PRICE.cast(Integer.class))
-                .from(PRODUCT)
-                .where(PRODUCT.PRODUCT_ID.eq(1L))
-                .fetch()
-                .forEach(System.out::println);
+    // casting - this work as expected
+    public void printProductPriceAndDescCast() {
+
+        Result<Record2<BigDecimal, String>> result
+                = ctx.select(PRODUCT.BUY_PRICE.cast(SQLDataType.DECIMAL(10, 5)).as("buy_price"),
+                        PRODUCT.PRODUCT_DESCRIPTION.cast(SQLDataType.VARCHAR(10)).as("prod_desc"))
+                        .from(PRODUCT)
+                        .where(PRODUCT.PRODUCT_ID.eq(1L))
+                        .fetch();
+
+        result.forEach(System.out::println);
     }
 
-    /* Coercions examples */
-    public void printOfficeByCode2(int officeCode) {
-
-        ctx.select(OFFICE.CITY, OFFICE.COUNTRY)
-                .from(OFFICE)
-                .where(OFFICE.OFFICE_CODE.coerce(SQLDataType.INTEGER).eq(officeCode))
-                .fetch()
-                .forEach(System.out::println);
-
-        ctx.select(OFFICE.CITY, OFFICE.COUNTRY)
-                .from(OFFICE)
-                .where(OFFICE.OFFICE_CODE.coerce(Integer.class).eq(officeCode))
-                .fetch()
-                .forEach(System.out::println);
-
-        ctx.select(OFFICE.CITY, OFFICE.COUNTRY)
-                .from(OFFICE)
-                .where(OFFICE.OFFICE_CODE.eq(coerce(officeCode, SQLDataType.VARCHAR(10))))
-                .fetch()
-                .forEach(System.out::println);
-
-        ctx.select(OFFICE.CITY, OFFICE.COUNTRY)
-                .from(OFFICE)
-                .where(OFFICE.OFFICE_CODE.eq(coerce(officeCode, String.class)))
-                .fetch()
-                .forEach(System.out::println);
-    }
-
-    public void printPaymentDatesByAmount2(float amount) {
-
-        ctx.select(PAYMENT.PAYMENT_DATE, PAYMENT.CACHING_DATE)
-                .from(PAYMENT)
-                .where(PAYMENT.INVOICE_AMOUNT.eq(coerce(amount, PAYMENT.INVOICE_AMOUNT)))
-                .fetch()
-                .forEach(System.out::println);
-    }
-
-    public void printOrderStatusByOrderDate2(LocalDateTime ldt) {
-
-        ctx.select(ORDER.STATUS)
-                .from(ORDER)
-                .where(ORDER.ORDER_DATE.gt(coerce(ldt, LocalDate.class)))
-                .fetch()
-                .forEach(System.out::println);
-
-        ctx.select(ORDER.STATUS)
-                .from(ORDER)
-                .where(ORDER.ORDER_DATE.coerce(SQLDataType.LOCALDATETIME).gt(ldt))
-                .fetch()
-                .forEach(System.out::println);
-
-        ctx.select(ORDER.STATUS)
-                .from(ORDER)
-                .where(ORDER.ORDER_DATE.coerce(LocalDateTime.class).gt(ldt))
-                .fetch()
-                .forEach(System.out::println);
-    }
-
-    public void printProductNameAndPrice2() {
-        ctx.select(PRODUCT.PRODUCT_NAME, PRODUCT.BUY_PRICE.coerce(Integer.class))
-                .from(PRODUCT)
-                .where(PRODUCT.PRODUCT_ID.eq(1L))
-                .fetch()
-                .forEach(System.out::println);
-    }
-
-    // cast vs coerce            
-    // this doesn't work as expected
-    public void printPaymentDatesByAmountCast(float amount) {
-
-        ctx.select(PAYMENT.PAYMENT_DATE, PAYMENT.CACHING_DATE)
-                .from(PAYMENT)
-                .where(PAYMENT.INVOICE_AMOUNT.cast(Float.class).eq(amount))
-                .fetch()
-                .forEach(System.out::println);
-    }
-    
-    // this work as expected
-    public void printPaymentDatesByAmountCoerce(float amount) {
-
-        ctx.select(PAYMENT.PAYMENT_DATE, PAYMENT.CACHING_DATE)
-                .from(PAYMENT)
-                .where(PAYMENT.INVOICE_AMOUNT.coerce(Float.class).eq(amount))
-                .fetch()
-                .forEach(System.out::println);
-    }
-        
     // this doesn't work as expected
     public void printInvoicesPerDayCoerce(LocalDate day) {
 
@@ -183,7 +92,7 @@ public class ClassicModelsRepository {
                 .fetch()
                 .forEach(System.out::println);
     }
-    
+
     // this work as expected
     public void printInvoicesPerDayCast(LocalDate day) {
 
@@ -193,15 +102,15 @@ public class ClassicModelsRepository {
                 .fetch()
                 .forEach(System.out::println);
     }
-    
+
     // set a collation
     public void printProductsName() {
-        
+
         ctx.select(PRODUCT.PRODUCT_NAME)
                 .from(PRODUCT)
                 .orderBy(PRODUCT.PRODUCT_NAME.collate("latin1_spanish_ci"))
                 .fetch()
                 .forEach(System.out::println);
     }
-    
+
 }
