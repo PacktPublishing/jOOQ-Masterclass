@@ -5,10 +5,8 @@ import static jooq.generated.tables.Order.ORDER;
 import jooq.generated.tables.pojos.Order;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-@Transactional(readOnly = true)
 public class OrderRepositoryImpl implements OrderRepository {
 
     private final DSLContext ctx;

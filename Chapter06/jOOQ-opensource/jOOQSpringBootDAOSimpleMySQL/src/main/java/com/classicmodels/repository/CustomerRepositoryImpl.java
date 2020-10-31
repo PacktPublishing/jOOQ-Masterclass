@@ -6,10 +6,8 @@ import static jooq.generated.tables.Customer.CUSTOMER;
 import jooq.generated.tables.pojos.Customer;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-@Transactional(readOnly = true)
 public class CustomerRepositoryImpl implements CustomerRepository {
 
     private final DSLContext ctx;
