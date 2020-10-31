@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class ClassicModelsController {
+public class CustomerOrderManagementController {
 
     private final CustomerOrderManagementService customerOrderManagementService;
 
-    public ClassicModelsController(CustomerOrderManagementService customerOrderManagementService) {
+    public CustomerOrderManagementController(CustomerOrderManagementService customerOrderManagementService) {
         this.customerOrderManagementService = customerOrderManagementService;
     }
 
@@ -24,19 +24,19 @@ public class ClassicModelsController {
     }
     
     @GetMapping("/customerByPhone")
-    public List<Customer> findCustomerByPhone(@RequestParam String phone) {
+    public List<Customer> fetchCustomerByPhone(@RequestParam String phone) {
         
         return customerOrderManagementService.fetchCustomerByPhone(phone);
     }
 
     @GetMapping("/orderStatus")
-    public List<String> findOrderStatus() {
+    public List<String> fetchOrderStatus() {
         
         return customerOrderManagementService.fetchOrderStatus();
     }
     
     @GetMapping("/orderById")
-    public Order findOrderById(@RequestParam Long id) {
+    public Order fetchOrderById(@RequestParam Long id) {
         
         return customerOrderManagementService.fetchOrderById(id);
     }
