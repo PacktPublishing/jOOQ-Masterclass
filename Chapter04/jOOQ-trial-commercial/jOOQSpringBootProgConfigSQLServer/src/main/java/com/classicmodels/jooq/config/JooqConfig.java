@@ -5,6 +5,7 @@ import com.classicmodels.properties.JooqProperties;
 import javax.sql.DataSource;
 import org.flywaydb.core.Flyway;
 import org.jooq.codegen.GenerationTool;
+import org.jooq.conf.Settings;
 import org.jooq.meta.jaxb.Configuration;
 import org.jooq.meta.jaxb.Database;
 import org.jooq.meta.jaxb.Generate;
@@ -48,6 +49,13 @@ public class JooqConfig {
         return Flyway.configure()
                 .dataSource(ds)
                 .load();
+    }
+    
+    @Bean
+    public Settings jooqSettings() {
+        return new Settings()
+                .withRenderCatalog(Boolean.FALSE)
+                .withRenderSchema(Boolean.FALSE);
     }
 
     @Bean
