@@ -7,6 +7,7 @@ import org.jooq.tools.StringUtils;
 
 public class CustomStrategy extends DefaultGeneratorStrategy {
 
+    public static final String DAO_CLASS_PREFIX = "JooqGen";
     public static final String DAO_CLASS_SUFFIX = "RepositoryImpl";
     public static final String DAO_INTERFACE_SUFFIX = "Repository";
 
@@ -15,13 +16,14 @@ public class CustomStrategy extends DefaultGeneratorStrategy {
     public String getJavaClassName(final Definition definition, final Mode mode) {
 
         if (mode.equals(Mode.DAO)) {
-            // get the default name of a DAO class
+            // get the default name of a DAO class (e.g., CustomerDao)            
             String name = super.getJavaClassName(definition, mode); 
             
             // remove the default 'Dao' suffix
             name = name.substring(0, name.length() - 3); 
 
-            return (name + DAO_CLASS_SUFFIX);
+            // CustomerDao -> JooqGenCustomerRepositoryImpl            
+            return (DAO_CLASS_PREFIX + name + DAO_CLASS_SUFFIX);
         } else {
             return super.getJavaClassName(definition, mode);
         }
@@ -36,8 +38,8 @@ public class CustomStrategy extends DefaultGeneratorStrategy {
             // get the default interfaces
             List<String> interfaces = super.getJavaClassImplements(definition, mode);
 
-            // assume PASCAL the default
-            interfaces.add(StringUtils.toCamelCase(definition.getName()) + DAO_INTERFACE_SUFFIX);
+            // assume PASCAL names the default           
+            interfaces.add(DAO_CLASS_PREFIX + StringUtils.toCamelCase(definition.getName()) + DAO_INTERFACE_SUFFIX);
 
             return interfaces;
         }

@@ -4,9 +4,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com-jooq-jpa</groupId>
-    <artifactId>entities</artifactId>
+    <artifactId>jooq-generator</artifactId>
     <version>1.0</version>        
-    <name>entities</name>    
+    <name>jooq-generator</name>    
     
     <parent>
         <groupId>com-jooq-jpa</groupId>

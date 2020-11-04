@@ -28,6 +28,6 @@
 
     <modules>        
         <module>webapp</module>
-        <module>entities</module>
+        <module>jooq-generator</module>
     </modules>   
 </project>
