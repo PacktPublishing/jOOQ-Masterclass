@@ -28,7 +28,7 @@
     <dependencies>               
         <dependency>
             <groupId>com-jooq-jpa</groupId>
-            <artifactId>entities</artifactId>
+            <artifactId>jooq-generator</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>
