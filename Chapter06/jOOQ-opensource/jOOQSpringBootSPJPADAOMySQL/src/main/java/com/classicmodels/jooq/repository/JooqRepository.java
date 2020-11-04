@@ -1,4 +1,8 @@
 package com.classicmodels.jooq.repository;
 
-public interface JooqRepository<T, ID> {    
+import java.util.List;
+
+public interface JooqRepository<T, ID> {  
+    
+    public List<T> findLimitedTo(int value);
 }

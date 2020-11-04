@@ -22,35 +22,47 @@ public class CustomerOrderManagementController {
 
         return customerOrderManagementService.fetchCustomersOrderedByCreditLimit();
     }
-    
+
     @GetMapping("/customerByPhone")
     public List<Customer> fetchCustomerByPhone(@RequestParam String phone) {
-        
+
         return customerOrderManagementService.fetchCustomerByPhone(phone);
     }
-    
+
+    @GetMapping("/customerLimitedTo")
+    public List<Customer> fetchCustomerLimitedTo(@RequestParam int value) {
+
+        return customerOrderManagementService.fetchCustomerLimitedTo(value);
+    }
+
     @GetMapping("/top10By")
     public List<com.classicmodels.entity.Customer> fetchTop10By() {
-        
+
         return customerOrderManagementService.fetchTop10By();
     }
 
     @GetMapping("/orderStatus")
     public List<String> fetchOrderStatus() {
-        
+
         return customerOrderManagementService.fetchOrderStatus();
     }
-    
+
     @GetMapping("/orderById")
     public Order fetchOrderById(@RequestParam Long id) {
-        
+
         return customerOrderManagementService.fetchOrderById(id);
     }
-    
+
+    @GetMapping("/orderLimitedTo")
+    public List<Order> fetchOrderLimitedTo(@RequestParam int value) {
+
+        return customerOrderManagementService.fetchOrderLimitedTo(value);
+    }
+
     @GetMapping("/first5ByStatusOrderByShippedDateAsc")
     public List<com.classicmodels.entity.Order> fetchFirst5ByStatusOrderByShippedDateAsc(
             @RequestParam String status) {
-        
+
         return customerOrderManagementService.fetchFirst5ByStatusOrderByShippedDateAsc(status);
     }
 }
