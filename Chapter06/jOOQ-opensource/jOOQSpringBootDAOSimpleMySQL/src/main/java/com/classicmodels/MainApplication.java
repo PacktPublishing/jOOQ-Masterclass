@@ -34,13 +34,21 @@ public class MainApplication {
             List<Customer> result2 = customerOrderManagementService.fetchCustomerByPhone("03 9520 4555");
             System.out.println(result2);
             
-            System.out.println("Fetching orders status:");
-            List<String> result3 = customerOrderManagementService.fetchOrderStatus();
+            System.out.println("Fetching 5 customers:");
+            List<Customer> result3 = customerOrderManagementService.fetchCustomerLimitedTo(5);
             System.out.println(result3);
             
-            System.out.println("Fetching order by id:");
-            Order result4 = customerOrderManagementService.fetchOrderById(10101L);
+            System.out.println("Fetching orders status:");
+            List<String> result4 = customerOrderManagementService.fetchOrderStatus();
             System.out.println(result4);
+            
+            System.out.println("Fetching order by id:");
+            Order result5 = customerOrderManagementService.fetchOrderById(10101L);
+            System.out.println(result5);
+            
+            System.out.println("Fetching 5 orders:");
+            List<Order> result6 = customerOrderManagementService.fetchOrderLimitedTo(5);
+            System.out.println(result6);
         };
     }
 }
