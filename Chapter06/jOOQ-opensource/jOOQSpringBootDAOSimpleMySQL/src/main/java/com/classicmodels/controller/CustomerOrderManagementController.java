@@ -28,6 +28,12 @@ public class CustomerOrderManagementController {
         
         return customerOrderManagementService.fetchCustomerByPhone(phone);
     }
+    
+    @GetMapping("/customerLimitedTo")
+    public List<Customer> fetchCustomerLimitedTo(@RequestParam int value) {
+        
+        return customerOrderManagementService.fetchCustomerLimitedTo(value);
+    }
 
     @GetMapping("/orderStatus")
     public List<String> fetchOrderStatus() {
@@ -39,5 +45,11 @@ public class CustomerOrderManagementController {
     public Order fetchOrderById(@RequestParam Long id) {
         
         return customerOrderManagementService.fetchOrderById(id);
+    }
+    
+    @GetMapping("/orderLimitedTo")
+    public List<Order> fetchOrderLimitedTo(@RequestParam int value) {
+        
+        return customerOrderManagementService.fetchOrderLimitedTo(value);
     }
 }
