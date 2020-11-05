@@ -30,15 +30,16 @@ public class CustomerOrderManagementController {
         return customerOrderManagementService.fetchCustomerByPhone(phone);
     }
 
-    @GetMapping("/orderStatuses")
-    public List<String> fetchOrderStatuses() {
+    @GetMapping("/orderDescByDate")
+    public List<Order> fetchOrderDescByDate() {
 
-        return customerOrderManagementService.fetchOrderStatuses();
+        return customerOrderManagementService.fetchOrderDescByDate();
     }
 
-    @GetMapping("/orderByShippedDate")
-    public List<Order> fetchOrderByShippedDate(@RequestParam String date) {
+    @GetMapping("/orderBetweenDate")
+    public List<Order> fetchOrderBetweenDate(@RequestParam String sd, @RequestParam String ed) {
 
-        return customerOrderManagementService.fetchOrderByShippedDate(LocalDate.parse(date));
+        return customerOrderManagementService.fetchOrderBetweenDate(
+                LocalDate.parse(sd), LocalDate.parse(ed));
     }
 }

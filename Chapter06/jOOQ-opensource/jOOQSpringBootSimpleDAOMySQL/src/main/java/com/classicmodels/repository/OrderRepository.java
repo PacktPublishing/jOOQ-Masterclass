@@ -10,6 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly=true)
 public interface OrderRepository {
     
-    public List<String> findOrderStatuses();
-    public List<Order> findOrderByShippedDate(LocalDate date);
+    public List<Order> findOrderDescByDate();
+    public List<Order> findOrderBetweenDate(LocalDate sd, LocalDate ed);
 }

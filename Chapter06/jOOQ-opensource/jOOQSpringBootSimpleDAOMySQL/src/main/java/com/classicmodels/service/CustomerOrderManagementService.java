@@ -30,13 +30,13 @@ public class CustomerOrderManagementService {
         return customerRepository.findCustomerByPhone(phone);
     }
 
-    public List<String> fetchOrderStatuses() {
+    public List<Order> fetchOrderDescByDate() {
 
-        return orderRepository.findOrderStatuses();
+        return orderRepository.findOrderDescByDate();
     }
 
-    public List<Order> fetchOrderByShippedDate(LocalDate date) {
+    public List<Order> fetchOrderBetweenDate(LocalDate sd, LocalDate ed) {
 
-        return orderRepository.findOrderByShippedDate(date);
+        return orderRepository.findOrderBetweenDate(sd, ed);
     }
 }

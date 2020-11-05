@@ -30,18 +30,19 @@ public class MainApplication {
             System.out.println("Fetching customers having a credit limit gt 5000:");
             List<Customer> result1 = customerOrderManagementService.fetchCustomerAscGtCreditLimit(5000);
             System.out.println(result1);
-            
+
             System.out.println("Fetching customers by phone:");
             List<Customer> result2 = customerOrderManagementService.fetchCustomerByPhone("03 9520 4555");
             System.out.println(result2);
-                        
-            System.out.println("Fetching orders statuses:");
-            List<String> result3 = customerOrderManagementService.fetchOrderStatuses();
+
+            System.out.println("Fetching orders desc by date:");
+            List<Order> result3 = customerOrderManagementService.fetchOrderDescByDate();
             System.out.println(result3);
-            
-            System.out.println("Fetching orders by shipped date:");
-            List<Order> result4 = customerOrderManagementService.fetchOrderByShippedDate(LocalDate.of(2003, 2, 2));
-            System.out.println(result4);                        
+
+            System.out.println("Fetching orders between dates:");
+            List<Order> result4 = customerOrderManagementService.fetchOrderBetweenDate(
+                    LocalDate.of(2003, 1, 1), LocalDate.of(2003, 12, 31));
+            System.out.println(result4);
         };
     }
 }

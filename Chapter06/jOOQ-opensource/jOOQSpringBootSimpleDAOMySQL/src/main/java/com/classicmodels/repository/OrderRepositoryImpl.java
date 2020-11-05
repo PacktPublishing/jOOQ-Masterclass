@@ -17,20 +17,20 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     @Override
-    public List<String> findOrderStatuses() {
+    public List<Order> findOrderDescByDate() {
 
-        List<String> result = ctx.select(ORDER.STATUS)
-                .from(ORDER)
-                .fetchInto(String.class);
+        List<Order> result = ctx.selectFrom(ORDER)
+                .orderBy(ORDER.ORDER_DATE.desc())
+                .fetchInto(Order.class);
 
         return result;
     }
 
     @Override
-    public List<Order> findOrderByShippedDate(LocalDate date) {
+    public List<Order> findOrderBetweenDate(LocalDate sd, LocalDate ed) {
 
         List<Order> result = ctx.selectFrom(ORDER)
-                .where(ORDER.SHIPPED_DATE.eq(date))
+                .where(ORDER.ORDER_DATE.between(sd, ed))
                 .fetchInto(Order.class);
 
         return result;
