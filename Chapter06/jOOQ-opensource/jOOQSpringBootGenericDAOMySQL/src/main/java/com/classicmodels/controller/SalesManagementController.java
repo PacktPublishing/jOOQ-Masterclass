@@ -30,7 +30,7 @@ public class SalesManagementController {
         return salesManagementService.fetchSaleByFiscalYear(year);
     }
 
-    @GetMapping("/saleById")
+    @GetMapping("/deleteSaleById")
     public void deleteSaleById(@RequestParam Long id) {
 
         salesManagementService.deleteSaleById(id);
