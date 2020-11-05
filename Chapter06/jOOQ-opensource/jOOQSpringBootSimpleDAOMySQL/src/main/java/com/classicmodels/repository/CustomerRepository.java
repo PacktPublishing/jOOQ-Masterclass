@@ -10,5 +10,5 @@ import org.springframework.transaction.annotation.Transactional;
 public interface CustomerRepository {
  
     public List<Customer> findCustomerByPhone(String phone);
-    public List<Customer> findCustomersOrderedBy5000CreditLimit();    
+    public List<Customer> findCustomerOrderGtCreditLimit(int cl);    
 }

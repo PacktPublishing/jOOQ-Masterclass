@@ -18,10 +18,10 @@ public class CustomerOrderManagementController {
         this.customerOrderManagementService = customerOrderManagementService;
     }
 
-    @GetMapping("/customersOrderedBy5000CreditLimit")
-    public List<Customer> fetchCustomersOrderedBy5000CreditLimit() {
+    @GetMapping("/customerOrderGtCreditLimit")
+    public List<Customer> fetchCustomerOrderGtCreditLimit(@RequestParam int cl) {
 
-        return customerOrderManagementService.fetchCustomersOrderedBy5000CreditLimit();
+        return customerOrderManagementService.fetchCustomerOrderGtCreditLimit(cl);
     }
 
     @GetMapping("/customerByPhone")

@@ -27,8 +27,8 @@ public class MainApplication {
     public ApplicationRunner init() {
         return args -> {
 
-            System.out.println("Fetching customers ordered by 5000 credit limit:");
-            List<Customer> result1 = customerOrderManagementService.fetchCustomersOrderedBy5000CreditLimit();
+            System.out.println("Fetching customers having a credit limit gt 5000:");
+            List<Customer> result1 = customerOrderManagementService.fetchCustomerOrderGtCreditLimit(5000);
             System.out.println(result1);
             
             System.out.println("Fetching customers by phone:");

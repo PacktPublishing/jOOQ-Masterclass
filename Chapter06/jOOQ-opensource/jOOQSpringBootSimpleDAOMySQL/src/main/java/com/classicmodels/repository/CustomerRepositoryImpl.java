@@ -28,10 +28,10 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     }
 
     @Override
-    public List<Customer> findCustomersOrderedBy5000CreditLimit() {
+    public List<Customer> findCustomerOrderGtCreditLimit(int cl) {
 
         List<Customer> result = ctx.selectFrom(CUSTOMER)
-                .where(CUSTOMER.CREDIT_LIMIT.eq(BigDecimal.valueOf(5000)))
+                .where(CUSTOMER.CREDIT_LIMIT.coerce(Integer.class).eq(cl))
                 .orderBy(CUSTOMER.CREDIT_LIMIT)                
                 .fetchInto(Customer.class);
 
