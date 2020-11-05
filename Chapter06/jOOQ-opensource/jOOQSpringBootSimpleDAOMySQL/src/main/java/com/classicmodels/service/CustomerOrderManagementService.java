@@ -20,9 +20,9 @@ public class CustomerOrderManagementService {
         this.orderRepository = orderRepository;
     }
 
-    public List<Customer> fetchCustomerOrderGtCreditLimit(int cl) {
+    public List<Customer> fetchCustomerAscGtCreditLimit(int cl) {
 
-        return customerRepository.findCustomerOrderGtCreditLimit(cl);
+        return customerRepository.findCustomerAscGtCreditLimit(cl);
     }
 
     public List<Customer> fetchCustomerByPhone(String phone) {
