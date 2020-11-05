@@ -2,32 +2,32 @@ package com.classicmodels.service;
 
 import java.util.List;
 import org.springframework.stereotype.Service;
-import com.classicmodels.repository.CustomerRepository;
 import com.classicmodels.repository.OrderRepository;
 import java.time.LocalDate;
-import jooq.generated.tables.pojos.Customer;
 import jooq.generated.tables.pojos.Order;
+import com.classicmodels.repository.SaleRepository;
+import jooq.generated.tables.pojos.Sale;
 
 @Service
-public class CustomerOrderManagementService {
+public class SalesManagementService {
 
-    private final CustomerRepository customerRepository;
+    private final SaleRepository saleRepository;
     private final OrderRepository orderRepository;
 
-    public CustomerOrderManagementService(CustomerRepository customerRepository,
+    public SalesManagementService(SaleRepository saleRepository,
             OrderRepository orderRepository) {
-        this.customerRepository = customerRepository;
+        this.saleRepository = saleRepository;
         this.orderRepository = orderRepository;
     }
 
-    public List<Customer> fetchCustomerAscGtCreditLimit(int cl) {
+    public List<Sale> fetchSaleByFiscalYear(int year) {
 
-        return customerRepository.findCustomerAscGtCreditLimit(cl);
+        return saleRepository.findSaleByFiscalYear(year);
     }
 
-    public List<Customer> fetchCustomerByPhone(String phone) {
+    public List<Sale> fetchSaleAscGtLimit(int limit) {
 
-        return customerRepository.findCustomerByPhone(phone);
+        return saleRepository.findSaleAscGtLimit(limit);
     }
 
     public List<Order> fetchOrderDescByDate() {
