@@ -4,15 +4,19 @@ import java.time.LocalDate;
 import java.util.List;
 import static jooq.generated.tables.Order.ORDER;
 import jooq.generated.tables.pojos.Order;
+import jooq.generated.tables.records.OrderRecord;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class OrderRepositoryImpl implements OrderRepository {
+public class OrderRepositoryImpl
+        extends ClassicModelsRepositoryImpl<OrderRecord, Order, Long>
+        implements OrderRepository {
 
     private final DSLContext ctx;
 
     public OrderRepositoryImpl(DSLContext ctx) {
+        super(ORDER, Order.class, ctx);
         this.ctx = ctx;
     }
 
