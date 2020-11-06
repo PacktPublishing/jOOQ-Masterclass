@@ -1,9 +1,8 @@
 package com.classicmodels;
 
-import com.classicmodels.service.CustomerOrderManagementService;
+import com.classicmodels.service.OrderManagementService;
 import java.time.LocalDate;
 import java.util.List;
-import jooq.generated.tables.pojos.Customer;
 import jooq.generated.tables.pojos.Order;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
@@ -12,13 +11,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan(basePackages = { "com.classicmodels", "jooq.generated.tables.daos" })
+@ComponentScan(basePackages = {"com.classicmodels", "jooq.generated.tables.daos"})
 public class MainApplication {
 
-    private final CustomerOrderManagementService customerOrderManagementService;
+    private final OrderManagementService orderManagementService;
 
-    public MainApplication(CustomerOrderManagementService customerOrderManagementService) {
-        this.customerOrderManagementService = customerOrderManagementService;
+    public MainApplication(OrderManagementService orderManagementService) {
+        this.orderManagementService = orderManagementService;
     }
 
     public static void main(String[] args) {
@@ -29,13 +28,14 @@ public class MainApplication {
     public ApplicationRunner init() {
         return args -> {
 
-            List<Customer> customers 
-                    = customerOrderManagementService.fetchFirstNCustomers(5);
-            System.out.println("Result: " + customers);
-            
-            List<Order> orders 
-                    = customerOrderManagementService.fetchStatusAndOrderDate("Shipped", LocalDate.of(2005, 1, 1));
-            System.out.println("Result: " + orders);
+            System.out.println("Fetching shipped orders after 2005-01-01:");
+            List<Order> result1 = orderManagementService.fetchOrderByStatusAndOrderDate(
+                    "Shipped", LocalDate.of(2005, 1, 1));
+            System.out.println(result1);
+
+            System.out.println("Fetching 5 orders:");
+            List<Order> result2 = orderManagementService.fetchLimitedTo(5);
+            System.out.println(result2);
         };
     }
 }
