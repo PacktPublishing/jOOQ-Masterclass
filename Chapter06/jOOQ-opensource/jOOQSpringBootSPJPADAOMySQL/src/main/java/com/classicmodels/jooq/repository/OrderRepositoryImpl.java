@@ -35,14 +35,4 @@ public class OrderRepositoryImpl implements OrderRepository {
         return result;
 
     }
-    
-    @Override
-    public List<Order> findLimitedTo(int value) {
-
-        List<Order> result = ctx.selectFrom(ORDER)
-                .limit(value)
-                .fetchInto(Order.class);
-
-        return result;
-    }
 }

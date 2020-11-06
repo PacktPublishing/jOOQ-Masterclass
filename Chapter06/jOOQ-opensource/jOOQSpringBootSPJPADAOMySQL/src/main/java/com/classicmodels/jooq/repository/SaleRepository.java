@@ -1,14 +1,14 @@
 package com.classicmodels.jooq.repository;
 
 import java.util.List;
-import jooq.generated.tables.pojos.Order;
+import jooq.generated.tables.pojos.Sale;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional(readOnly=true)
-public interface OrderRepository {
-    
-    public List<String> findOrderStatus();
-    public Order findOrderById(Long id);
+public interface SaleRepository {
+ 
+    public List<Sale> findSaleByFiscalYear(int year);
+    public List<Sale> findSaleAscGtLimit(int limit);    
 }
