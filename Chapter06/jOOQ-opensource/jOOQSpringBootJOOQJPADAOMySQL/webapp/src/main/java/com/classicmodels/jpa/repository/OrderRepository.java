@@ -10,8 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional(readOnly = true)
-public interface OrderRepository extends JpaRepository<Order, Long>,
-        JooqOrderRepository, JooqGenOrderRepository {
+public interface OrderRepository extends 
+        JpaRepository<Order, Long>, // Spring built-in DAO
+        JooqOrderRepository,        // User-defined jOOQ DAO
+        JooqGenOrderRepository      // jOOQ generated DAO
+{
     
     public List<Order> findFirst5ByStatusOrderByShippedDateAsc(String status);
 }

@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional(readOnly=true)
-public interface JooqOrderRepository extends JooqRepository<Order, Long> {
+public interface JooqOrderRepository {
     
     public List<String> findOrderStatus();
     public Order findOrderById(Long id);
