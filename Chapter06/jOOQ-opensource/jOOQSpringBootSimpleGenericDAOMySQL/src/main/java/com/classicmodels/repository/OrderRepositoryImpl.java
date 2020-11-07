@@ -38,7 +38,7 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     @Override
-    public List<Order> findAll() {
+    public List<Order> fetchAll() {
 
         return ctx.selectFrom(ORDER)
                 .fetchInto(Order.class);

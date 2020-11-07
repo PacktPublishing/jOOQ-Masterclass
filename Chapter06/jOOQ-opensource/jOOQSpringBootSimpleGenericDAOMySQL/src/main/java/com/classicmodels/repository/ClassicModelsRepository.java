@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public interface ClassicModelsRepository<T, ID> {
 
-    List<T> findAll();
+    List<T> fetchAll();
 
     @Transactional
     void deleteById(ID id);

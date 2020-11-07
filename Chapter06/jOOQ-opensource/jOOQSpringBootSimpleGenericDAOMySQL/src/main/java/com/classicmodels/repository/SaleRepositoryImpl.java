@@ -33,7 +33,7 @@ public class SaleRepositoryImpl implements SaleRepository {
     }
 
     @Override
-    public List<Sale> findAll() {
+    public List<Sale> fetchAll() {
 
         return ctx.selectFrom(SALE)
                 .fetchInto(Sale.class);
