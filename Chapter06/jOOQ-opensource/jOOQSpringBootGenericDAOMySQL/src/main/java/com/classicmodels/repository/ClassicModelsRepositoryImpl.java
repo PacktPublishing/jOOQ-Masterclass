@@ -29,7 +29,7 @@ public abstract class ClassicModelsRepositoryImpl<R extends UpdatableRecord<R>, 
     }
 
     @Override
-    public List<P> findAll() {
+    public List<P> fetchAll() {
         return ctx
                 .selectFrom(table)
                 .fetch(mapper);

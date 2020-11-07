@@ -18,6 +18,7 @@ public class SalesManagementController {
         this.salesManagementService = salesManagementService;
     }
 
+    /* call jOOQ user-defined DAOs */
     @GetMapping("/saleAscGtLimit")
     public List<Sale> fetchSaleAscGtLimit(@RequestParam int limit) {
 
@@ -28,12 +29,6 @@ public class SalesManagementController {
     public List<Sale> fetchSaleByFiscalYear(@RequestParam int year) {
 
         return salesManagementService.fetchSaleByFiscalYear(year);
-    }
-
-    @GetMapping("/deleteSaleById")
-    public void deleteSaleById(@RequestParam Long id) {
-
-        salesManagementService.deleteSaleById(id);
     }
 
     @GetMapping("/orderDescByDate")
@@ -49,9 +44,16 @@ public class SalesManagementController {
                 LocalDate.parse(sd), LocalDate.parse(ed));
     }
 
+    /* call jOOQ user-defined generic DAOs */
     @GetMapping("/allOrder")
     List<Order> fetchAllOrder() {
 
         return salesManagementService.fetchAllOrder();
+    }
+
+    @GetMapping("/deleteSaleById")
+    public void deleteSaleById(@RequestParam Long id) {
+
+        salesManagementService.deleteSaleById(id);
     }
 }

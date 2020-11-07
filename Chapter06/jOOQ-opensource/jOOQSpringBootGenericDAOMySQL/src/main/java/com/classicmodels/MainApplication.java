@@ -27,6 +27,7 @@ public class MainApplication {
     public ApplicationRunner init() {
         return args -> {
             
+            /* call jOOQ user-defined DAOs */
             System.out.println("Fetching sales over 5000:");
             List<Sale> result1 = salesManagementService.fetchSaleAscGtLimit(5000);
             System.out.println(result1);
@@ -34,22 +35,24 @@ public class MainApplication {
             System.out.println("Fetching sales in 2003:");
             List<Sale> result2 = salesManagementService.fetchSaleByFiscalYear(2003);
             System.out.println(result2);
+                        
+            System.out.println("Fetching orders desc by date:");
+            List<Order> result3 = salesManagementService.fetchOrderDescByDate();
+            System.out.println(result3);
+            
+            System.out.println("Fetching orders between dates, 2003-01-01 and 2003-12-31:");
+            List<Order> result4 = salesManagementService.fetchOrderBetweenDate(
+                    LocalDate.of(2003, 1, 1), LocalDate.of(2003, 12, 31));
+            System.out.println(result4);
+            
+            /* call jOOQ user-defined generic DAOs */
+            System.out.println("Fetching all orders:");
+            List<Order> result5 = salesManagementService.fetchAllOrder();
+            System.out.println(result5);
             
             System.out.println("Delete sale with id 1:");
             salesManagementService.deleteSaleById(1L);            
             
-            System.out.println("Fetching orders desc by date:");
-            List<Order> result4 = salesManagementService.fetchOrderDescByDate();
-            System.out.println(result4);
-            
-            System.out.println("Fetching orders between dates:");
-            List<Order> result5 = salesManagementService.fetchOrderBetweenDate(
-                    LocalDate.of(2003, 1, 1), LocalDate.of(2003, 12, 31));
-            System.out.println(result5);
-            
-            System.out.println("Fetching all orders:");
-            List<Order> result6 = salesManagementService.fetchAllOrder();
-            System.out.println(result6);
         };
     }
 }

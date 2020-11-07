@@ -6,11 +6,11 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-@Transactional(readOnly=true)
+@Transactional(readOnly = true)
 public interface ClassicModelsRepository<R extends TableRecord<R>, P, T> {
-       
-       List<P> findAll();
-   
-   @Transactional
-   void deleteById(T id);  
+
+    List<P> fetchAll();
+
+    @Transactional
+    void deleteById(T id);
 }

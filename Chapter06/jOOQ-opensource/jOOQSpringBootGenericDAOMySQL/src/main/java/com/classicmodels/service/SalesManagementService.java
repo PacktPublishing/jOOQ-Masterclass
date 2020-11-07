@@ -20,6 +20,7 @@ public class SalesManagementService {
         this.saleRepository = saleRepository;
     }
 
+    /* call jOOQ user-defined DAO */
     public List<Order> fetchOrderDescByDate() {
 
         return orderRepository.findOrderDescByDate();
@@ -28,11 +29,6 @@ public class SalesManagementService {
     public List<Order> fetchOrderBetweenDate(LocalDate sd, LocalDate ed) {
 
         return orderRepository.findOrderBetweenDate(sd, ed);
-    }
-    
-    public List<Order> fetchAllOrder() {
-        
-        return orderRepository.findAll();
     }
 
     public List<Sale> fetchSaleByFiscalYear(int year) {
@@ -43,8 +39,14 @@ public class SalesManagementService {
     public List<Sale> fetchSaleAscGtLimit(int limit) {
 
         return saleRepository.findSaleAscGtLimit(limit);
-    }    
-    
+    }
+
+    /* call user-defined jOOQ generic DAOs */
+    public List<Order> fetchAllOrder() {
+
+        return orderRepository.fetchAll();
+    }
+
     public void deleteSaleById(Long id) {
 
         saleRepository.deleteById(id);
