@@ -11,7 +11,7 @@ This is a modified version of the original schema for Oracle
 
 /* START */
 
-set define off;
+/* set define off; */
 
 /*Data for the table `office` */
 
@@ -7507,555 +7507,557 @@ insert /*+ ignore_row_on_dupkey_index(orderdetail(order_id, product_id)) */ into
  select 10425,94,18,'94.92',2 from dual;
 
 
-/*Data for the table `payment` */
+/* Data for the table 'payment' */
+
+alter session set nls_timestamp_format='YYYY-MM-DD HH24:MI:SS.FF6';
 
 insert /*+ ignore_row_on_dupkey_index(payment(customer_number,check_number)) */ into payment(customer_number,check_number,payment_date,invoice_amount,caching_date) 
 
- select 103,'HQ336336','2004-10-19','6066.78', '2004-10-19' from dual union all 
+select 103,'HQ336336','2004-10-19 12:00:01','6066.78', '2004-10-19 12:30:15' from dual union all
 
- select 103,'JM555205','2003-06-05','14571.44', '2003-06-05' from dual union all 
+select 103,'JM555205','2003-06-05 11:25:25','14571.44', '2003-06-05 12:34:15' from dual union all
 
- select 103,'OM314933','2004-12-18','1676.14', '2004-12-18' from dual union all 
+select 103,'OM314933','2004-12-18 15:10:25','1676.14', '2004-12-18 16:30:15' from dual union all
 
- select 112,'BO864823','2004-12-17','14191.12', '2004-12-17' from dual union all 
+select 112,'BO864823','2004-12-17 12:30:15','14191.12', '2004-12-17 12:32:15' from dual union all
 
- select 112,'HQ55022','2003-06-06','32641.98', '2003-06-06' from dual union all 
+select 112,'HQ55022','2003-06-06 04:10:15','32641.98', '2003-06-06 19:22:45' from dual union all
 
- select 112,'ND748579','2004-08-20','33347.88', '2004-08-20' from dual union all 
+select 112,'ND748579','2004-08-20 07:10:15','33347.88', '2004-08-20 09:09:09' from dual union all
 
- select 114,'GG31455','2003-05-20','45864.03', '2003-05-20' from dual union all 
+select 114,'GG31455','2003-05-20 08:10:45','45864.03', '2003-05-20 08:30:09' from dual union all
 
- select 114,'MA765515','2004-12-15','82261.22', '2004-12-15' from dual union all 
+select 114,'MA765515','2004-12-15 16:12:15','82261.22', '2004-12-15 18:30:15' from dual union all
 
- select 114,'NP603840','2003-05-31','7565.08', '2003-05-31' from dual union all 
+select 114,'NP603840','2003-05-31 18:32:15','7565.08', '2003-05-31 20:31:31' from dual union all
 
- select 114,'NR27552','2004-03-10','44894.74', '2004-03-10' from dual union all 
+select 114,'NR27552','2004-03-10 07:20:21','44894.74', '2004-03-10 12:33:34' from dual union all
 
- select 119,'DB933704','2004-11-14','19501.82', '2004-11-14' from dual union all 
+select 119,'DB933704','2004-11-14 11:10:15','19501.82', '2004-11-14 11:43:27' from dual union all
 
- select 119,'LN373447','2004-08-08','47924.19', '2004-08-08' from dual union all 
+select 119,'LN373447','2004-08-08 09:30:15','47924.19', '2004-08-08 10:30:15' from dual union all
 
- select 119,'NG94694','2005-02-22','49523.67', '2005-02-22' from dual union all 
+select 119,'NG94694','2005-02-22 23:20:15','49523.67', '2005-02-22 01:22:22' from dual union all
 
- select 121,'DB889831','2003-02-16','50218.95', '2003-02-16' from dual union all 
+select 121,'DB889831','2003-02-16 06:30:15','50218.95', '2003-02-16 08:30:15' from dual union all
 
- select 121,'FD317790','2003-10-28','1491.38', '2003-10-28' from dual union all 
+select 121,'FD317790','2003-10-28 11:37:35','1491.38', '2003-10-28 11:38:15' from dual union all
 
- select 121,'KI831359','2004-11-04','17876.32', '2004-11-04' from dual union all 
+select 121,'KI831359','2004-11-04 11:20:22','17876.32', '2004-11-04 11:45:13' from dual union all
 
- select 121,'MA302151','2004-11-28','34638.14', '2004-11-28' from dual union all 
+select 121,'MA302151','2004-11-28 15:01:15','34638.14', '2004-11-28 17:03:16' from dual union all
 
- select 124,'AE215433','2005-03-05','101244.59', '2005-03-05' from dual union all 
+select 124,'AE215433','2005-03-05 09:01:03','101244.59', '2005-03-05 10:00:15' from dual union all
 
- select 124,'BG255406','2004-08-28','85410.87', '2004-08-28' from dual union all 
+select 124,'BG255406','2004-08-28 18:22:32','85410.87', '2004-08-28 19:30:15' from dual union all
 
- select 124,'CQ287967','2003-04-11','11044.30','2003-04-11' from dual union all 
+select 124,'CQ287967','2003-04-11 17:04:11','11044.30','2003-04-11 17:30:22' from dual union all
 
- select 124,'ET64396','2005-04-16','83598.04', '2005-04-16' from dual union all 
+select 124,'ET64396','2005-04-16 19:18:15','83598.04', '2005-04-16 21:30:15' from dual union all
 
- select 124,'HI366474','2004-12-27','47142.70', '2004-12-27' from dual union all 
+select 124,'HI366474','2004-12-27 21:33:42','47142.70', '2004-12-27 23:10:11' from dual union all
 
- select 124,'HR86578','2004-11-02','55639.66', '2004-11-02' from dual union all 
+select 124,'HR86578','2004-11-02 18:32:15','55639.66', '2004-11-02 19:30:15' from dual union all
 
- select 124,'KI131716','2003-08-15','111654.40', '2003-08-15' from dual union all 
+select 124,'KI131716','2003-08-15 10:02:15','111654.40', '2003-08-15 12:30:15' from dual union all
 
- select 124,'LF217299','2004-03-26','43369.30', '2004-03-26' from dual union all 
+select 124,'LF217299','2004-03-26 10:34:22','43369.30', '2004-03-26 10:38:56' from dual union all
 
- select 124,'NT141748','2003-11-25','45084.38', '2003-11-25' from dual union all 
+select 124,'NT141748','2003-11-25 08:30:15','45084.38', '2003-11-25 09:30:15' from dual union all
 
- select 128,'DI925118','2003-01-28','10549.01', '2003-01-28' from dual union all 
+select 128,'DI925118','2003-01-28 11:10:15','10549.01', '2003-01-28 12:30:15' from dual union all
 
- select 128,'FA465482','2003-10-18','24101.81', '2003-10-18' from dual union all 
+select 128,'FA465482','2003-10-18 18:22:25','24101.81', '2003-10-18 22:03:12' from dual union all
 
- select 128,'FH668230','2004-03-24','33820.62', '2004-03-24' from dual union all 
+select 128,'FH668230','2004-03-24 13:12:15','33820.62', '2004-03-24 14:30:15' from dual union all
 
- select 128,'IP383901','2004-11-18','7466.32', '2004-11-18' from dual union all 
+select 128,'IP383901','2004-11-18 14:30:15','7466.32', '2004-11-18 15:30:15' from dual union all
 
- select 129,'DM826140','2004-12-08','26248.78', '2004-12-08' from dual union all 
+select 129,'DM826140','2004-12-08 14:30:15','26248.78', '2004-12-08 15:30:15' from dual union all
 
- select 129,'ID449593','2003-12-11','23923.93', '2003-12-11' from dual union all 
+select 129,'ID449593','2003-12-11 14:30:15','23923.93', '2003-12-11 15:30:15' from dual union all
 
- select 129,'PI42991','2003-04-09','16537.85', '2003-04-09' from dual union all 
+select 129,'PI42991','2003-04-09 09:21:25','16537.85', '2003-04-09 12:30:15' from dual union all
 
- select 131,'CL442705','2003-03-12','22292.62', '2003-03-12' from dual union all 
+select 131,'CL442705','2003-03-12 10:10:15','22292.62', '2003-03-12 12:30:15' from dual union all
 
- select 131,'MA724562','2004-12-02','50025.35', '2004-12-02' from dual union all 
+select 131,'MA724562','2004-12-02 16:33:44','50025.35', '2004-12-02 17:31:15' from dual union all
 
- select 131,'NB445135','2004-09-11','35321.97', '2004-09-11' from dual union all 
+select 131,'NB445135','2004-09-11 12:30:15','35321.97', '2004-09-11 12:32:15' from dual union all
 
- select 141,'AU364101','2003-07-19','36251.03', '2003-07-19' from dual union all 
+select 141,'AU364101','2003-07-19 01:32:15','36251.03', '2003-07-19 03:03:22' from dual union all
 
- select 141,'DB583216','2004-11-01','36140.38', '2004-11-01' from dual union all 
+select 141,'DB583216','2004-11-01 05:20:15','36140.38', '2004-11-01 07:30:15' from dual union all
 
- select 141,'DL460618','2005-05-19','46895.48', '2005-05-19' from dual union all 
+select 141,'DL460618','2005-05-19 12:30:15','46895.48', '2005-05-19 16:30:15' from dual union all
 
- select 141,'HJ32686','2004-01-30','59830.55', '2004-01-30' from dual union all 
+select 141,'HJ32686','2004-01-30 12:55:15','59830.55', '2004-01-30 13:30:15' from dual union all
 
- select 141,'ID10962','2004-12-31','116208.40', '2004-12-31' from dual union all 
+select 141,'ID10962','2004-12-31 10:01:02','116208.40', '2004-12-31 11:11:25' from dual union all
 
- select 141,'IN446258','2005-03-25','65071.26', '2005-03-25' from dual union all 
+select 141,'IN446258','2005-03-25 11:12:22','65071.26', '2005-03-25 12:04:22' from dual union all
 
- select 141,'JE105477','2005-03-18','120166.58', '2005-03-18' from dual union all 
+select 141,'JE105477','2005-03-18 11:55:15','120166.58', '2005-03-18 12:30:15' from dual union all
 
- select 141,'JN355280','2003-10-26','49539.37', '2003-10-26' from dual union all 
+select 141,'JN355280','2003-10-26 12:36:15','49539.37', '2003-10-26 12:39:15' from dual union all
 
- select 141,'JN722010','2003-02-25','40206.20', '2003-02-25' from dual union all 
+select 141,'JN722010','2003-02-25 17:11:33','40206.20', '2003-02-25 18:33:27' from dual union all
 
- select 141,'KT52578','2003-12-09','63843.55', '2003-12-09' from dual union all 
+select 141,'KT52578','2003-12-09 08:30:15','63843.55', '2003-12-09 12:22:43' from dual union all
 
- select 141,'MC46946','2004-07-09','35420.74', '2004-07-09' from dual union all 
+select 141,'MC46946','2004-07-09 16:12:22','35420.74', '2004-07-09 16:30:15' from dual union all
 
- select 141,'MF629602','2004-08-16','20009.53', '2004-08-16' from dual union all 
+select 141,'MF629602','2004-08-16 11:21:22','20009.53', '2004-08-16 12:36:05' from dual union all
 
- select 141,'NU627706','2004-05-17','26155.91', '2004-05-17' from dual union all 
+select 141,'NU627706','2004-05-17 12:30:15','26155.91', '2004-05-17 19:30:15' from dual union all
 
- select 144,'IR846303','2004-12-12','36005.71', '2004-12-12' from dual union all 
+select 144,'IR846303','2004-12-12 10:22:21','36005.71', '2004-12-12 12:38:15' from dual union all
 
- select 144,'LA685678','2003-04-09','7674.94', '2003-04-09' from dual union all 
+select 144,'LA685678','2003-04-09 12:38:15','7674.94', '2003-04-09 12:39:15' from dual union all
 
- select 145,'CN328545','2004-07-03','4710.73', '2004-07-03' from dual union all 
+select 145,'CN328545','2004-07-03 11:22:15','4710.73', '2004-07-03 12:30:15' from dual union all
 
- select 145,'ED39322','2004-04-26','28211.70', '2004-04-26' from dual union all 
+select 145,'ED39322','2004-04-26 22:32:15','28211.70', '2004-04-26 22:30:33' from dual union all
 
- select 145,'HR182688','2004-12-01','20564.86', '2004-12-01' from dual union all 
+select 145,'HR182688','2004-12-01 22:36:15','20564.86', '2004-12-01 23:30:15' from dual union all
 
- select 145,'JJ246391','2003-02-20','53959.21', '2003-02-20' from dual union all 
+select 145,'JJ246391','2003-02-20 12:30:15','53959.21', '2003-02-20 19:30:15' from dual union all
 
- select 146,'FP549817','2004-03-18','40978.53', '2004-03-18' from dual union all 
+select 146,'FP549817','2004-03-18 11:30:15','40978.53', '2004-03-18 12:30:15' from dual union all
 
- select 146,'FU793410','2004-01-16','49614.72', '2004-01-16' from dual union all 
+select 146,'FU793410','2004-01-16 08:30:15','49614.72', '2004-01-16 12:30:15' from dual union all
 
- select 146,'LJ160635','2003-12-10','39712.10', '2003-12-10' from dual union all 
+select 146,'LJ160635','2003-12-10 11:31:02','39712.10', '2003-12-10 12:02:15' from dual union all
 
- select 148,'BI507030','2003-04-22','44380.15', '2003-04-22' from dual union all 
+select 148,'BI507030','2003-04-22 09:30:15','44380.15', '2003-04-22 10:30:15' from dual union all
 
- select 148,'DD635282','2004-08-11','2611.84', '2004-08-11' from dual union all 
+select 148,'DD635282','2004-08-11 10:10:12','2611.84', '2004-08-11 10:10:22' from dual union all
 
- select 148,'KM172879','2003-12-26','105743.00', '2003-12-26' from dual union all 
+select 148,'KM172879','2003-12-26 12:32:15','105743.00', '2003-12-26 12:41:15' from dual union all
 
- select 148,'ME497970','2005-03-27','3516.04', '2005-03-27' from dual union all 
+select 148,'ME497970','2005-03-27 12:42:15','3516.04', '2005-03-27 12:55:15' from dual union all
 
- select 151,'BF686658','2003-12-22','58793.53', '2003-12-22' from dual union all 
+select 151,'BF686658','2003-12-22 05:30:15','58793.53', '2003-12-22 09:21:02' from dual union all
 
- select 151,'GB852215','2004-07-26','20314.44', '2004-07-26' from dual union all 
+select 151,'GB852215','2004-07-26 14:14:15','20314.44', '2004-07-26 15:32:15' from dual union all
 
- select 151,'IP568906','2003-06-18','58841.35', '2003-06-18' from dual union all 
+select 151,'IP568906','2003-06-18 15:30:15','58841.35', '2003-06-18 15:30:33' from dual union all
 
- select 151,'KI884577','2004-12-14','39964.63', '2004-12-14' from dual union all 
+select 151,'KI884577','2004-12-14 12:30:15','39964.63', '2004-12-14 14:30:15' from dual union all
 
- select 157,'HI618861','2004-11-19','35152.12', '2004-11-19' from dual union all 
+select 157,'HI618861','2004-11-19 14:12:15','35152.12', '2004-11-19 15:30:15' from dual union all
 
- select 157,'NN711988','2004-09-07','63357.13', '2004-09-07' from dual union all 
+select 157,'NN711988','2004-09-07 12:30:15','63357.13', '2004-09-07 12:31:15' from dual union all
 
- select 161,'BR352384','2004-11-14','2434.25', '2004-11-14' from dual union all 
+select 161,'BR352384','2004-11-14 15:02:12','2434.25', '2004-11-14 15:40:25' from dual union all
 
- select 161,'BR478494','2003-11-18','50743.65', '2003-11-18' from dual union all 
+select 161,'BR478494','2003-11-18 15:55:15','50743.65', '2003-11-18 16:30:15' from dual union all
 
- select 161,'KG644125','2005-02-02','12692.19', '2005-02-02' from dual union all 
+select 161,'KG644125','2005-02-02 16:30:15','12692.19', '2005-02-02 18:01:00' from dual union all
 
- select 161,'NI908214','2003-08-05','38675.13', '2003-08-05' from dual union all 
+select 161,'NI908214','2003-08-05 18:00:00','38675.13', '2003-08-05 19:00:03' from dual union all
 
- select 166,'BQ327613','2004-09-16','38785.48', '2004-09-16' from dual union all 
+select 166,'BQ327613','2004-09-16 21:01:15','38785.48', '2004-09-16 22:30:22' from dual union all
 
- select 166,'DC979307','2004-07-07','44160.92', '2004-07-07' from dual union all 
+select 166,'DC979307','2004-07-07 12:30:15','44160.92', '2004-07-07 17:30:15' from dual union all
 
- select 166,'LA318629','2004-02-28','22474.17', '2004-02-28' from dual union all 
+select 166,'LA318629','2004-02-28 08:30:15','22474.17', '2004-02-28 09:30:15' from dual union all
 
- select 167,'ED743615','2004-09-19','12538.01', '2004-09-19' from dual union all 
+select 167,'ED743615','2004-09-19 13:00:15','12538.01', '2004-09-19 14:36:44' from dual union all
 
- select 167,'GN228846','2003-12-03','85024.46', '2003-12-03' from dual union all 
+select 167,'GN228846','2003-12-03 16:02:02','85024.46', '2003-12-03 17:11:15' from dual union all
 
- select 171,'GB878038','2004-03-15','18997.89', '2004-03-15' from dual union all 
+select 171,'GB878038','2004-03-15 01:30:15','18997.89', '2004-03-15 02:32:15' from dual union all
 
- select 171,'IL104425','2003-11-22','42783.81', '2003-11-22' from dual union all 
+select 171,'IL104425','2003-11-22 09:08:15','42783.81', '2003-11-22 11:30:15' from dual union all
 
- select 172,'AD832091','2004-09-09','1960.80', '2004-09-09' from dual union all 
+select 172,'AD832091','2004-09-09 10:10:11','1960.80', '2004-09-09 11:10:11' from dual union all
 
- select 172,'CE51751','2004-12-04','51209.58', '2004-12-04' from dual union all 
+select 172,'CE51751','2004-12-04 11:11:15','51209.58', '2004-12-04 12:30:15' from dual union all
 
- select 172,'EH208589','2003-04-20','33383.14', '2003-04-20' from dual union all 
+select 172,'EH208589','2003-04-20 13:33:13','33383.14', '2003-04-20 13:17:15' from dual union all
 
- select 173,'GP545698','2004-05-13','11843.45', '2004-05-13' from dual union all 
+select 173,'GP545698','2004-05-13 12:30:15','11843.45', '2004-05-13 12:32:15' from dual union all
 
- select 173,'IG462397','2004-03-29','20355.24', '2004-03-29' from dual union all 
+select 173,'IG462397','2004-03-29 12:30:15','20355.24', '2004-03-29 12:33:15' from dual union all
 
- select 175,'CITI3434344','2005-05-19','28500.78', '2005-05-19' from dual union all 
+select 175,'CITI3434344','2005-05-19 12:30:15','28500.78', '2005-05-19 12:34:15' from dual union all
 
- select 175,'IO448913','2003-11-19','24879.08', '2003-11-19' from dual union all 
+select 175,'IO448913','2003-11-19 11:02:15','24879.08', '2003-11-19 12:30:15' from dual union all
 
- select 175,'PI15215','2004-07-10','42044.77', '2004-07-10' from dual union all 
+select 175,'PI15215','2004-07-10 15:33:15','42044.77', '2004-07-10 15:38:33' from dual union all
 
- select 177,'AU750837','2004-04-17','15183.63', '2004-04-17' from dual union all 
+select 177,'AU750837','2004-04-17 17:21:21','15183.63', '2004-04-17 17:22:23' from dual union all
 
- select 177,'CI381435','2004-01-19','47177.59', '2004-01-19' from dual union all 
+select 177,'CI381435','2004-01-19 17:20:15','47177.59', '2004-01-19 18:12:12' from dual union all
 
- select 181,'CM564612','2004-04-25','22602.36', '2004-04-25' from dual union all 
+select 181,'CM564612','2004-04-25 16:06:15','22602.36', '2004-04-25 16:20:15' from dual union all
 
- select 181,'GQ132144','2003-01-30','5494.78', '2003-01-30' from dual union all 
+select 181,'GQ132144','2003-01-30 11:21:25','5494.78', '2003-01-30 12:30:15' from dual union all
 
- select 181,'OH367219','2004-11-16','44400.50', '2004-11-16' from dual union all 
+select 181,'OH367219','2004-11-16 11:11:11','44400.50', '2004-11-16 12:50:15' from dual union all
 
- select 186,'AE192287','2005-03-10','23602.90', '2005-03-10' from dual union all 
+select 186,'AE192287','2005-03-10 12:43:45','23602.90', '2005-03-10 13:31:15' from dual union all
 
- select 186,'AK412714','2003-10-27','37602.48', '2003-10-27' from dual union all 
+select 186,'AK412714','2003-10-27 11:11:12','37602.48', '2003-10-27 12:39:15' from dual union all
 
- select 186,'KA602407','2004-10-21','34341.08', '2004-10-21' from dual union all 
+select 186,'KA602407','2004-10-21 17:22:22','34341.08', '2004-10-21 17:31:12' from dual union all
 
- select 187,'AM968797','2004-11-03','52825.29', '2004-11-03' from dual union all 
+select 187,'AM968797','2004-11-03 18:32:10','52825.29', '2004-11-03 18:30:01' from dual union all
 
- select 187,'BQ39062','2004-12-08','47159.11', '2004-12-08' from dual union all 
+select 187,'BQ39062','2004-12-08 13:55:33','47159.11', '2004-12-08 13:22:22' from dual union all
 
- select 187,'KL124726','2003-03-27','48425.69', '2003-03-27' from dual union all 
+select 187,'KL124726','2003-03-27 12:08:15','48425.69', '2003-03-27 12:10:15' from dual union all
 
- select 189,'BO711618','2004-10-03','17359.53', '2004-10-03' from dual union all 
+select 189,'BO711618','2004-10-03 08:30:15','17359.53', '2004-10-03 09:30:15' from dual union all
 
- select 189,'NM916675','2004-03-01','32538.74', '2004-03-01' from dual union all 
+select 189,'NM916675','2004-03-01 11:31:15','32538.74', '2004-03-01 12:04:15' from dual union all
 
- select 198,'FI192930','2004-12-06','9658.74', '2004-12-06' from dual union all 
+select 198,'FI192930','2004-12-06 10:21:12','9658.74', '2004-12-06 10:30:59' from dual union all
 
- select 198,'HQ920205','2003-07-06','6036.96', '2003-07-06' from dual union all 
+select 198,'HQ920205','2003-07-06 13:33:15','6036.96', '2003-07-06 17:31:15' from dual union all
 
- select 198,'IS946883','2004-09-21','5858.56', '2004-09-21' from dual union all 
+select 198,'IS946883','2004-09-21 17:33:15','5858.56', '2004-09-21 02:30:15' from dual union all
 
- select 201,'DP677013','2003-10-20','23908.24', '2003-10-20' from dual union all 
+select 201,'DP677013','2003-10-20 18:29:22','23908.24', '2003-10-20 18:47:12' from dual union all
 
- select 201,'OO846801','2004-06-15','37258.94', '2004-06-15' from dual union all 
+select 201,'OO846801','2004-06-15 15:32:15','37258.94', '2004-06-15 15:39:15' from dual union all
 
- select 202,'HI358554','2003-12-18','36527.61', '2003-12-18' from dual union all 
+select 202,'HI358554','2003-12-18 09:30:05','36527.61', '2003-12-18 12:30:45' from dual union all
 
- select 202,'IQ627690','2004-11-08','33594.58', '2004-11-08' from dual union all 
+select 202,'IQ627690','2004-11-08 07:09:15','33594.58', '2004-11-08 12:34:15' from dual union all
 
- select 204,'GC697638','2004-08-13','51152.86', '2004-08-13' from dual union all 
+select 204,'GC697638','2004-08-13 14:30:15','51152.86', '2004-08-13 15:30:15' from dual union all
 
- select 204,'IS150005','2004-09-24','4424.40', '2004-09-24' from dual union all 
+select 204,'IS150005','2004-09-24 12:30:15','4424.40', '2004-09-24 12:30:15' from dual union all
 
- select 205,'GL756480','2003-12-04','3879.96', '2003-12-04' from dual union all 
+select 205,'GL756480','2003-12-04 11:11:44','3879.96', '2003-12-04 12:44:44' from dual union all
 
- select 205,'LL562733','2003-09-05','50342.74', '2003-09-05' from dual union all 
+select 205,'LL562733','2003-09-05 15:34:33','50342.74', '2003-09-05 16:37:15' from dual union all
 
- select 205,'NM739638','2005-02-06','39580.60', '2005-02-06' from dual union all 
+select 205,'NM739638','2005-02-06 15:36:25','39580.60', '2005-02-06 16:36:13' from dual union all
 
- select 209,'BOAF82044','2005-05-03','35157.75', '2005-05-03' from dual union all 
+select 209,'BOAF82044','2005-05-03 15:32:15','35157.75', '2005-05-03 16:30:15' from dual union all
 
- select 209,'ED520529','2004-06-21','4632.31', '2004-06-21' from dual union all 
+select 209,'ED520529','2004-06-21 22:31:15','4632.31', '2004-06-21 23:30:15' from dual union all
 
- select 209,'PH785937','2004-05-04','36069.26', '2004-05-04' from dual union all 
+select 209,'PH785937','2004-05-04 22:12:12','36069.26', '2004-05-04 22:31:15' from dual union all
 
- select 211,'BJ535230','2003-12-09','45480.79', '2003-12-09' from dual union all 
+select 211,'BJ535230','2003-12-09 23:30:15','45480.79', '2003-12-09 23:59:35' from dual union all
 
- select 216,'BG407567','2003-05-09','3101.40', '2003-05-09' from dual union all 
+select 216,'BG407567','2003-05-09 21:02:15','3101.40', '2003-05-09 23:09:05' from dual union all
 
- select 216,'ML780814','2004-12-06','24945.21', '2004-12-06' from dual union all 
+select 216,'ML780814','2004-12-06 12:33:15','24945.21', '2004-12-06 22:30:15' from dual union all
 
- select 216,'MM342086','2003-12-14','40473.86', '2003-12-14' from dual union all 
+select 216,'MM342086','2003-12-14 03:30:15','40473.86', '2003-12-14 04:30:15' from dual union all
 
- select 219,'BN17870','2005-03-02','3452.75', '2005-03-02' from dual union all 
+select 219,'BN17870','2005-03-02 12:22:02','3452.75', '2005-03-02 13:30:33' from dual union all
 
- select 219,'BR941480','2003-10-18','4465.85', '2003-10-18' from dual union all 
+select 219,'BR941480','2003-10-18 06:22:15','4465.85', '2003-10-18 08:33:22' from dual union all
 
- select 227,'MQ413968','2003-10-31','36164.46', '2003-10-31' from dual union all 
+select 227,'MQ413968','2003-10-31 16:12:12','36164.46', '2003-10-31 17:30:15' from dual union all
 
- select 227,'NU21326','2004-11-02','53745.34', '2004-11-02' from dual union all 
+select 227,'NU21326','2004-11-02 06:02:02','53745.34', '2004-11-02 06:32:05' from dual union all
 
- select 233,'BOFA23232','2005-05-20','29070.38', '2005-05-20' from dual union all 
+select 233,'BOFA23232','2005-05-20 06:32:12','29070.38', '2005-05-20 12:30:22' from dual union all
 
- select 233,'II180006','2004-07-01','22997.45', '2004-07-01' from dual union all 
+select 233,'II180006','2004-07-01 04:32:15','22997.45', '2004-07-01 07:03:25' from dual union all
 
- select 233,'JG981190','2003-11-18','16909.84', '2003-11-18' from dual union all 
+select 233,'JG981190','2003-11-18 07:08:22','16909.84', '2003-11-18 10:31:25' from dual union all
 
- select 239,'NQ865547','2004-03-15','80375.24', '2004-03-15' from dual union all 
+select 239,'NQ865547','2004-03-15 15:12:12','80375.24', '2004-03-15 15:41:00' from dual union all
 
- select 240,'IF245157','2004-11-16','46788.14', '2004-11-16' from dual union all 
+select 240,'IF245157','2004-11-16 13:43:13','46788.14', '2004-11-16 13:46:13' from dual union all
 
- select 240,'JO719695','2004-03-28','24995.61', '2004-03-28' from dual union all 
+select 240,'JO719695','2004-03-28 17:55:15','24995.61', '2004-03-28 18:30:15' from dual union all
 
- select 242,'AF40894','2003-11-22','33818.34', '2003-11-22' from dual union all 
+select 242,'AF40894','2003-11-22 12:30:15','33818.34', '2003-11-22 12:50:15' from dual union all
 
- select 242,'HR224331','2005-06-03','12432.32', '2005-06-03' from dual union all 
+select 242,'HR224331','2005-06-03 02:32:00','12432.32', '2005-06-03 11:30:00' from dual union all
 
- select 242,'KI744716','2003-07-21','14232.70', '2003-07-21' from dual union all 
+select 242,'KI744716','2003-07-21 04:44:45','14232.70', '2003-07-21 06:33:25' from dual union all
 
- select 249,'IJ399820','2004-09-19','33924.24', '2004-09-19' from dual union all 
+select 249,'IJ399820','2004-09-19 04:02:15','33924.24', '2004-09-19 04:22:15' from dual union all
 
- select 249,'NE404084','2004-09-04','48298.99', '2004-09-04' from dual union all 
+select 249,'NE404084','2004-09-04 12:30:15','48298.99', '2004-09-04 12:30:56' from dual union all
 
- select 250,'EQ12267','2005-05-17','17928.09', '2005-05-17' from dual union all 
+select 250,'EQ12267','2005-05-17 09:32:15','17928.09', '2005-05-17 10:11:15' from dual union all
 
- select 250,'HD284647','2004-12-30','26311.63', '2004-12-30' from dual union all 
+select 250,'HD284647','2004-12-30 10:30:15','26311.63', '2004-12-30 10:38:35' from dual union all
 
- select 250,'HN114306','2003-07-18','23419.47', '2003-07-18' from dual union all 
+select 250,'HN114306','2003-07-18 11:20:25','23419.47', '2003-07-18 12:39:15' from dual union all
 
- select 256,'EP227123','2004-02-10','5759.42', '2004-02-10' from dual union all 
+select 256,'EP227123','2004-02-10 16:32:25','5759.42', '2004-02-10 17:32:15' from dual union all
 
- select 256,'HE84936','2004-10-22','53116.99', '2004-10-22' from dual union all 
+select 256,'HE84936','2004-10-22 17:31:25','53116.99', '2004-10-22 17:37:15' from dual union all
 
- select 259,'EU280955','2004-11-06','61234.67', '2004-11-06' from dual union all 
+select 259,'EU280955','2004-11-06 10:02:15','61234.67', '2004-11-06 12:30:15' from dual union all
 
- select 259,'GB361972','2003-12-07','27988.47', '2003-12-07' from dual union all 
+select 259,'GB361972','2003-12-07 10:22:02','27988.47', '2003-12-07 11:30:15' from dual union all
 
- select 260,'IO164641','2004-08-30','37527.58', '2004-08-30' from dual union all 
+select 260,'IO164641','2004-08-30 11:02:22','37527.58', '2004-08-30 14:33:13' from dual union all
 
- select 260,'NH776924','2004-04-24','29284.42', '2004-04-24' from dual union all 
+select 260,'NH776924','2004-04-24 14:11:23','29284.42', '2004-04-24 14:38:00' from dual union all
 
- select 276,'EM979878','2005-02-09','27083.78', '2005-02-09' from dual union all 
+select 276,'EM979878','2005-02-09 15:32:22','27083.78', '2005-02-09 17:33:15' from dual union all
 
- select 276,'KM841847','2003-11-13','38547.19', '2003-11-13' from dual union all 
+select 276,'KM841847','2003-11-13 01:00:15','38547.19', '2003-11-13 03:12:00' from dual union all
 
- select 276,'LE432182','2003-09-28','41554.73', '2003-09-28' from dual union all 
+select 276,'LE432182','2003-09-28 12:30:15','41554.73', '2003-09-28 12:44:15' from dual union all
 
- select 276,'OJ819725','2005-04-30','29848.52', '2005-04-30' from dual union all 
+select 276,'OJ819725','2005-04-30 03:33:15','29848.52', '2005-04-30 03:37:12' from dual union all
 
- select 278,'BJ483870','2004-12-05','37654.09', '2004-12-05' from dual union all 
+select 278,'BJ483870','2004-12-05 02:02:02','37654.09', '2004-12-05 06:30:43' from dual union all
 
- select 278,'GP636783','2003-03-02','52151.81', '2003-03-02' from dual union all 
+select 278,'GP636783','2003-03-02 11:32:12','52151.81', '2003-03-02 12:32:00' from dual union all
 
- select 278,'NI983021','2003-11-24','37723.79', '2003-11-24' from dual union all 
+select 278,'NI983021','2003-11-24 16:10:15','37723.79', '2003-11-24 16:22:12' from dual union all
 
- select 282,'IA793562','2003-08-03','24013.52', '2003-08-03' from dual union all 
+select 282,'IA793562','2003-08-03 16:23:12','24013.52', '2003-08-03 18:37:17' from dual union all
 
- select 282,'JT819493','2004-08-02','35806.73', '2004-08-02' from dual union all 
+select 282,'JT819493','2004-08-02 12:30:15','35806.73', '2004-08-02 12:30:45' from dual union all
 
- select 282,'OD327378','2005-01-03','31835.36', '2005-01-03' from dual union all 
+select 282,'OD327378','2005-01-03 22:30:15','31835.36', '2005-01-03 23:30:15' from dual union all
 
- select 286,'DR578578','2004-10-28','47411.33', '2004-10-28' from dual union all 
+select 286,'DR578578','2004-10-28 12:34:15','47411.33', '2004-10-28 12:39:15' from dual union all
 
- select 286,'KH910279','2004-09-05','43134.04', '2004-09-05' from dual union all 
+select 286,'KH910279','2004-09-05 11:32:15','43134.04', '2004-09-05 11:36:12' from dual union all
 
- select 298,'AJ574927','2004-03-13','47375.92', '2004-03-13' from dual union all 
+select 298,'AJ574927','2004-03-13 17:30:15','47375.92', '2004-03-13 20:30:15' from dual union all
 
- select 298,'LF501133','2004-09-18','61402.00', '2004-09-18' from dual union all 
+select 298,'LF501133','2004-09-18 14:33:15','61402.00', '2004-09-18 16:30:15' from dual union all
 
- select 299,'AD304085','2003-10-24','36798.88', '2003-10-24' from dual union all 
+select 299,'AD304085','2003-10-24 19:19:15','36798.88', '2003-10-24 19:30:13' from dual union all
 
- select 299,'NR157385','2004-09-05','32260.16', '2004-09-05' from dual union all 
+select 299,'NR157385','2004-09-05 19:02:10','32260.16', '2004-09-05 20:02:12' from dual union all
 
- select 311,'DG336041','2005-02-15','46770.52', '2005-02-15' from dual union all 
+select 311,'DG336041','2005-02-15 18:37:15','46770.52', '2005-02-15 18:38:15' from dual union all
 
- select 311,'FA728475','2003-10-06','32723.04', '2003-10-06' from dual union all 
+select 311,'FA728475','2003-10-06 11:32:12','32723.04', '2003-10-06 18:53:12' from dual union all
 
- select 311,'NQ966143','2004-04-25','16212.59', '2004-04-25' from dual union all 
+select 311,'NQ966143','2004-04-25 09:20:22','16212.59', '2004-04-25 11:37:22' from dual union all
 
- select 314,'LQ244073','2004-08-09','45352.47', '2004-08-09' from dual union all 
+select 314,'LQ244073','2004-08-09 06:12:12','45352.47', '2004-08-09 12:30:15' from dual union all
 
- select 314,'MD809704','2004-03-03','16901.38', '2004-03-03' from dual union all 
+select 314,'MD809704','2004-03-03 02:30:15','16901.38', '2004-03-03 12:30:15' from dual union all
 
- select 319,'HL685576','2004-11-06','42339.76', '2004-11-06' from dual union all 
+select 319,'HL685576','2004-11-06 14:34:45','42339.76', '2004-11-06 19:32:15' from dual union all
 
- select 319,'OM548174','2003-12-07','36092.40', '2003-12-07' from dual union all 
+select 319,'OM548174','2003-12-07 12:44:15','36092.40', '2003-12-07 13:30:15' from dual union all
 
- select 320,'GJ597719','2005-01-18','8307.28', '2005-01-18' from dual union all 
+select 320,'GJ597719','2005-01-18 17:12:12','8307.28', '2005-01-18 18:32:00' from dual union all
 
- select 320,'HO576374','2003-08-20','41016.75', '2003-08-20' from dual union all 
+select 320,'HO576374','2003-08-20 16:30:12','41016.75', '2003-08-20 17:10:15' from dual union all
 
- select 320,'MU817160','2003-11-24','52548.49', '2003-11-24' from dual union all 
+select 320,'MU817160','2003-11-24 14:37:13','52548.49', '2003-11-24 16:10:00' from dual union all
 
- select 321,'DJ15149','2003-11-03','85559.12', '2003-11-12' from dual union all 
+select 321,'DJ15149','2003-11-03 13:11:11','85559.12', '2003-11-12 14:30:15' from dual union all
 
- select 321,'LA556321','2005-03-15','46781.66', '2005-03-15' from dual union all 
+select 321,'LA556321','2005-03-15 09:44:12','46781.66', '2005-03-15 09:46:15' from dual union all
 
- select 323,'AL493079','2005-05-23','75020.13', '2005-05-23' from dual union all 
+select 323,'AL493079','2005-05-23 09:23:25','75020.13', '2005-05-23 09:30:00' from dual union all
 
- select 323,'ES347491','2004-06-24','37281.36', '2004-06-24' from dual union all 
+select 323,'ES347491','2004-06-24 08:32:12','37281.36', '2004-06-24 09:11:15' from dual union all
 
- select 323,'HG738664','2003-07-05','2880.00', '2003-07-05' from dual union all 
+select 323,'HG738664','2003-07-05 12:39:00','2880.00', '2003-07-05 13:00:00' from dual union all
 
- select 323,'PQ803830','2004-12-24','39440.59', '2004-12-24' from dual union all 
+select 323,'PQ803830','2004-12-24 02:45:15','39440.59', '2004-12-24 02:55:15' from dual union all
 
- select 324,'DQ409197','2004-12-13','13671.82', '2004-12-13' from dual union all 
+select 324,'DQ409197','2004-12-13 01:01:25','13671.82', '2004-12-13 03:30:00' from dual union all
 
- select 324,'FP443161','2003-07-07','29429.14', '2003-07-07' from dual union all 
+select 324,'FP443161','2003-07-07 12:30:15','29429.14', '2003-07-07 12:35:15' from dual union all
 
- select 324,'HB150714','2003-11-23','37455.77', '2003-11-23' from dual union all 
+select 324,'HB150714','2003-11-23 11:30:15','37455.77', '2003-11-23 12:30:15' from dual union all
 
- select 328,'EN930356','2004-04-16','7178.66', '2004-04-16' from dual union all 
+select 328,'EN930356','2004-04-16 20:02:15','7178.66', '2004-04-16 21:45:10' from dual union all
 
- select 328,'NR631421','2004-05-30','31102.85', '2004-05-30' from dual union all 
+select 328,'NR631421','2004-05-30 20:12:05','31102.85', '2004-05-30 20:34:35' from dual union all
 
- select 333,'HL209210','2003-11-15','23936.53', '2003-11-15' from dual union all 
+select 333,'HL209210','2003-11-15 12:30:15','23936.53', '2003-11-15 12:30:17' from dual union all
 
- select 333,'JK479662','2003-10-17','9821.32', '2003-10-17' from dual union all 
+select 333,'JK479662','2003-10-17 09:32:15','9821.32', '2003-10-17 12:30:15' from dual union all
 
- select 333,'NF959653','2005-03-01','21432.31', '2005-03-01' from dual union all 
+select 333,'NF959653','2005-03-01 19:10:01','21432.31', '2005-03-01 19:32:56' from dual union all
 
- select 334,'CS435306','2005-01-27','45785.34', '2005-01-27' from dual union all 
+select 334,'CS435306','2005-01-27 16:20:25','45785.34', '2005-01-27 16:39:15' from dual union all
 
- select 334,'HH517378','2003-08-16','29716.86', '2003-08-16' from dual union all 
+select 334,'HH517378','2003-08-16 16:30:12','29716.86', '2003-08-16 16:30:35' from dual union all
 
- select 334,'LF737277','2004-05-22','28394.54', '2004-05-22' from dual union all 
+select 334,'LF737277','2004-05-22 16:33:13','28394.54', '2004-05-22 16:39:25' from dual union all
 
- select 339,'AP286625','2004-10-24','23333.06', '2004-10-24' from dual union all 
+select 339,'AP286625','2004-10-24 02:02:33','23333.06', '2004-10-24 04:33:21' from dual union all
 
- select 339,'DA98827','2003-11-28','34606.28', '2003-11-28' from dual union all 
+select 339,'DA98827','2003-11-28 12:30:15','34606.28', '2003-11-28 12:30:15' from dual union all
 
- select 344,'AF246722','2003-11-24','31428.21', '2003-11-24' from dual union all 
+select 344,'AF246722','2003-11-24 14:33:15','31428.21', '2003-11-24 15:03:00' from dual union all
 
- select 344,'NJ906924','2004-04-02','15322.93', '2004-04-02' from dual union all 
+select 344,'NJ906924','2004-04-02 12:32:15','15322.93', '2004-04-02 12:34:15' from dual union all
 
- select 347,'DG700707','2004-01-18','21053.69', NULL from dual union all 
+select 347,'DG700707','2004-01-18 12:30:15','21053.69', NULL from dual union all
 
- select 347,'LG808674','2003-10-24','20452.50', '2003-10-24' from dual union all 
+select 347,'LG808674','2003-10-24 11:56:15','20452.50', '2003-10-24 12:33:15' from dual union all
 
- select 350,'BQ602907','2004-12-11','18888.31', '2004-12-11' from dual union all 
+select 350,'BQ602907','2004-12-11 02:22:15','18888.31', '2004-12-11 12:30:15' from dual union all
 
- select 350,'CI471510','2003-05-25','50824.66', '2003-05-25' from dual union all 
+select 350,'CI471510','2003-05-25 12:30:12','50824.66', '2003-05-25 12:30:19' from dual union all
 
- select 350,'OB648482','2005-01-29','1834.56', '2005-01-29' from dual union all 
+select 350,'OB648482','2005-01-29 12:34:15','1834.56', '2005-01-29 12:38:15' from dual union all
 
- select 353,'CO351193','2005-01-10','49705.52', '2005-01-10' from dual union all 
+select 353,'CO351193','2005-01-10 14:10:15','49705.52', '2005-01-10 14:30:15' from dual union all
 
- select 353,'ED878227','2003-07-21','13920.26', '2003-07-21' from dual union all 
+select 353,'ED878227','2003-07-21 13:21:12','13920.26', '2003-07-21 13:30:15' from dual union all
 
- select 353,'GT878649','2003-05-21','16700.47', '2003-05-21' from dual union all 
+select 353,'GT878649','2003-05-21 13:02:15','16700.47', '2003-05-21 13:05:15' from dual union all
 
- select 353,'HJ618252','2005-06-09','46656.94', '2005-06-09' from dual union all 
+select 353,'HJ618252','2005-06-09 12:55:25','46656.94', '2005-06-09 13:31:25' from dual union all
 
- select 357,'AG240323','2003-12-16','20220.04', '2003-12-16' from dual union all 
+select 357,'AG240323','2003-12-16 11:54:15','20220.04', '2003-12-16 12:02:15' from dual union all
 
- select 357,'NB291497','2004-05-15','36442.34', '2004-05-15' from dual union all 
+select 357,'NB291497','2004-05-15 11:02:12','36442.34', '2004-05-15 11:30:25' from dual union all
 
- select 362,'FP170292','2004-07-11','18473.71', '2004-07-11' from dual union all 
+select 362,'FP170292','2004-07-11 12:30:15','18473.71', '2004-07-11 21:30:15' from dual union all
 
- select 362,'OG208861','2004-09-21','15059.76', '2004-09-21' from dual union all 
+select 362,'OG208861','2004-09-21 11:31:15','15059.76', '2004-09-21 14:14:15' from dual union all
 
- select 363,'HL575273','2004-11-17','50799.69', '2004-11-17' from dual union all 
+select 363,'HL575273','2004-11-17 19:21:12','50799.69', '2004-11-17 21:20:12' from dual union all
 
- select 363,'IS232033','2003-01-16','10223.83', '2003-01-16' from dual union all 
+select 363,'IS232033','2003-01-16 19:11:11','10223.83', '2003-01-16 19:30:22' from dual union all
 
- select 363,'PN238558','2003-12-05','55425.77', '2003-12-05' from dual union all 
+select 363,'PN238558','2003-12-05 18:20:15','55425.77', '2003-12-05 19:30:15' from dual union all
 
- select 379,'CA762595','2005-02-12','28322.83', '2005-02-12' from dual union all 
+select 379,'CA762595','2005-02-12 11:30:15','28322.83', '2005-02-12 14:30:15' from dual union all
 
- select 379,'FR499138','2003-09-16','32680.31', '2003-09-16' from dual union all 
+select 379,'FR499138','2003-09-16 15:31:15','32680.31', '2003-09-16 17:02:22' from dual union all
 
- select 379,'GB890854','2004-08-02','12530.51', '2004-08-02' from dual union all 
+select 379,'GB890854','2004-08-02 11:22:33','12530.51', '2004-08-02 12:30:15' from dual union all
 
- select 381,'BC726082','2004-12-03','12081.52', '2004-12-03' from dual union all 
+select 381,'BC726082','2004-12-03 22:32:15','12081.52', '2004-12-03 04:30:15' from dual union all
 
- select 381,'CC475233','2003-04-19','1627.56', '2003-04-19' from dual union all 
+select 381,'CC475233','2003-04-19 01:02:15','1627.56', '2003-04-19 02:31:15' from dual union all
 
- select 381,'GB117430','2005-02-03','14379.90', '2005-03-05' from dual union all 
+select 381,'GB117430','2005-02-03 12:37:15','14379.90', '2005-03-05 12:44:15' from dual union all
 
- select 381,'MS154481','2003-08-22','1128.20', '2003-08-22' from dual union all 
+select 381,'MS154481','2003-08-22 02:30:15','1128.20', '2003-08-22 03:30:15' from dual union all
 
- select 382,'CC871084','2003-05-12','35826.33', '2003-05-12' from dual union all 
+select 382,'CC871084','2003-05-12 23:01:15','35826.33', '2003-05-12 23:30:15' from dual union all
 
- select 382,'CT821147','2004-08-01','6419.84', '2004-08-01' from dual union all 
+select 382,'CT821147','2004-08-01 21:02:15','6419.84', '2004-08-01 22:30:15' from dual union all
 
- select 382,'PH29054','2004-11-27','42813.83', '2004-11-27' from dual union all 
+select 382,'PH29054','2004-11-27 17:03:05','42813.83', '2004-11-27 21:22:58' from dual union all
 
- select 385,'BN347084','2003-12-02','20644.24', '2003-12-02' from dual union all 
+select 385,'BN347084','2003-12-02 02:22:02','20644.24', '2003-12-02 06:30:15' from dual union all
 
- select 385,'CP804873','2004-11-19','15822.84', '2004-11-19' from dual union all 
+select 385,'CP804873','2004-11-19 10:30:15','15822.84', '2004-11-19 12:30:15' from dual union all
 
- select 385,'EK785462','2003-03-09','51001.22', '2003-03-09' from dual union all 
+select 385,'EK785462','2003-03-09 11:11:15','51001.22', '2003-03-09 13:45:21' from dual union all
 
- select 386,'DO106109','2003-11-18','38524.29', '2003-11-18' from dual union all 
+select 386,'DO106109','2003-11-18 11:32:22','38524.29', '2003-11-18 12:30:15' from dual union all
 
- select 386,'HG438769','2004-07-18','51619.02', '2004-07-18' from dual union all 
+select 386,'HG438769','2004-07-18 09:30:15','51619.02', '2004-07-18 10:30:15' from dual union all
 
- select 398,'AJ478695','2005-02-14','33967.73', '2005-02-14' from dual union all 
+select 398,'AJ478695','2005-02-14 08:08:02','33967.73', '2005-02-14 12:09:15' from dual union all
 
- select 398,'DO787644','2004-06-21','22037.91', '2004-06-21' from dual union all 
+select 398,'DO787644','2004-06-21 05:32:15','22037.91', '2004-06-21 09:31:01' from dual union all
 
- select 398,'JPMR4544','2005-05-18','615.45', '2005-05-18' from dual union all 
+select 398,'JPMR4544','2005-05-18 04:30:25','615.45', '2005-05-18 11:30:15' from dual union all
 
- select 398,'KB54275','2004-11-29','48927.64', '2004-11-29' from dual union all 
+select 398,'KB54275','2004-11-29 21:21:21','48927.64', '2004-11-29 22:30:15' from dual union all
 
- select 406,'BJMPR4545','2005-04-23','12190.85', '2005-04-23' from dual union all 
+select 406,'BJMPR4545','2005-04-23 16:21:21','12190.85', '2005-04-23 16:32:08' from dual union all
 
- select 406,'HJ217687','2004-01-28','49165.16', '2004-01-28' from dual union all 
+select 406,'HJ217687','2004-01-28 14:03:05','49165.16', '2004-01-28 14:30:45' from dual union all
 
- select 406,'NA197101','2004-06-17','25080.96', '2004-06-17' from dual union all 
+select 406,'NA197101','2004-06-17 17:20:15','25080.96', '2004-06-17 18:02:25' from dual union all
 
- select 412,'GH197075','2004-07-25','35034.57', '2004-07-25' from dual union all 
+select 412,'GH197075','2004-07-25 13:05:02','35034.57', '2004-07-25 14:54:25' from dual union all
 
- select 412,'PJ434867','2004-04-14','31670.37', '2004-04-14' from dual union all 
+select 412,'PJ434867','2004-04-14 12:39:15','31670.37', '2004-04-14 13:33:15' from dual union all
 
- select 415,'ER54537','2004-09-28','31310.09', '2004-09-28' from dual union all 
+select 415,'ER54537','2004-09-28 11:21:25','31310.09', '2004-09-28 12:37:15' from dual union all
 
- select 424,'KF480160','2004-12-07','25505.98', '2004-12-07' from dual union all 
+select 424,'KF480160','2004-12-07 19:03:15','25505.98', '2004-12-07 20:30:45' from dual union all
 
- select 424,'LM271923','2003-04-16','21665.98', '2003-04-18' from dual union all 
+select 424,'LM271923','2003-04-16 19:11:12','21665.98', '2003-04-18 20:32:35' from dual union all
 
- select 424,'OA595449','2003-10-31','22042.37', '2003-10-31' from dual union all 
+select 424,'OA595449','2003-10-31 17:12:22','22042.37', '2003-10-31 17:30:15' from dual union all
 
- select 447,'AO757239','2003-09-15','6631.36', '2003-09-15' from dual union all 
+select 447,'AO757239','2003-09-15 17:21:15','6631.36', '2003-09-15 18:22:54' from dual union all
 
- select 447,'ER615123','2003-06-25','17032.29', '2003-06-25' from dual union all 
+select 447,'ER615123','2003-06-25 12:30:15','17032.29', '2003-06-25 17:30:15' from dual union all
 
- select 447,'OU516561','2004-12-17','26304.13', '2004-12-17' from dual union all 
+select 447,'OU516561','2004-12-17 15:05:33','26304.13', '2004-12-17 16:45:22' from dual union all
 
- select 448,'FS299615','2005-04-18','27966.54', '2005-04-18' from dual union all 
+select 448,'FS299615','2005-04-18 12:30:15','27966.54', '2005-04-18 15:30:15' from dual union all
 
- select 448,'KR822727','2004-09-30','48809.90', '2004-09-30' from dual union all 
+select 448,'KR822727','2004-09-30 08:30:15','48809.90', '2004-09-30 09:30:15' from dual union all
 
- select 450,'EF485824','2004-06-21','59551.38', '2004-06-21' from dual union all 
+select 450,'EF485824','2004-06-21 22:30:15','59551.38', '2004-06-21 22:31:15' from dual union all
 
- select 452,'ED473873','2003-11-15','27121.90', '2003-11-15' from dual union all 
+select 452,'ED473873','2003-11-15 11:11:15','27121.90', '2003-11-15 11:11:21' from dual union all
 
- select 452,'FN640986','2003-11-20','15130.97', '2003-11-20' from dual union all 
+select 452,'FN640986','2003-11-20 18:22:22','15130.97', '2003-11-20 18:30:15' from dual union all
 
- select 452,'HG635467','2005-05-03','8807.12', '2005-05-03' from dual union all 
+select 452,'HG635467','2005-05-03 11:44:04','8807.12', '2005-05-03 12:03:21' from dual union all
 
- select 455,'HA777606','2003-12-05','38139.18', '2003-12-05' from dual union all 
+select 455,'HA777606','2003-12-05 02:30:15','38139.18', '2003-12-05 03:30:15' from dual union all
 
- select 455,'IR662429','2004-05-12','32239.47', '2004-05-12' from dual union all 
+select 455,'IR662429','2004-05-12 16:16:15','32239.47', '2004-05-12 17:30:15' from dual union all
 
- select 456,'GJ715659','2004-11-13','27550.51', '2004-11-13' from dual union all 
+select 456,'GJ715659','2004-11-13 16:21:22','27550.51', '2004-11-13 16:23:22' from dual union all
 
- select 456,'MO743231','2004-04-30','1679.92', '2004-04-30' from dual union all 
+select 456,'MO743231','2004-04-30 12:30:15','1679.92', '2004-04-30 13:33:15' from dual union all
 
- select 458,'DD995006','2004-11-15','33145.56', '2004-11-15' from dual union all 
+select 458,'DD995006','2004-11-15 05:34:44','33145.56', '2004-11-15 05:47:21' from dual union all
 
- select 458,'NA377824','2004-02-06','22162.61', '2004-02-06' from dual union all 
+select 458,'NA377824','2004-02-06 06:21:15','22162.61', '2004-02-06 06:30:15' from dual union all
 
- select 458,'OO606861','2003-06-13','57131.92', '2003-06-13' from dual union all 
+select 458,'OO606861','2003-06-13 04:31:15','57131.92', '2003-06-13 12:12:15' from dual union all
 
- select 462,'ED203908','2005-04-15','30293.77' ,'2005-04-25' from dual union all 
+select 462,'ED203908','2005-04-15 12:32:15','30293.77' ,'2005-04-25 12:34:15' from dual union all
 
- select 462,'GC60330','2003-11-08','9977.85', '2003-11-08' from dual union all 
+select 462,'GC60330','2003-11-08 17:21:15','9977.85', '2003-11-08 18:57:25' from dual union all
 
- select 462,'PE176846','2004-11-27','48355.87', '2004-11-27' from dual union all 
+select 462,'PE176846','2004-11-27 13:05:15','48355.87', '2004-11-27 14:30:22' from dual union all
 
- select 471,'AB661578','2004-07-28','9415.13', '2004-07-28' from dual union all 
+select 471,'AB661578','2004-07-28 06:30:15','9415.13', '2004-07-28 08:33:15' from dual union all
 
- select 471,'CO645196','2003-12-10','35505.63', '2003-12-10' from dual union all 
+select 471,'CO645196','2003-12-10 10:20:15','35505.63', '2003-12-10 10:30:15' from dual union all
 
- select 473,'LL427009','2004-02-17','7612.06', '2004-02-17' from dual union all 
+select 473,'LL427009','2004-02-17 13:33:44','7612.06', '2004-02-17 14:31:00' from dual union all
 
- select 473,'PC688499','2003-10-27','17746.26', '2003-10-27' from dual union all 
+select 473,'PC688499','2003-10-27 07:07:07','17746.26', '2003-10-27 08:22:15' from dual union all
 
- select 475,'JP113227','2003-12-09','7678.25', '2003-12-09' from dual union all 
+select 475,'JP113227','2003-12-09 16:02:15','7678.25', '2003-12-09 16:30:33' from dual union all
 
- select 475,'PB951268','2004-02-13','36070.47', '2004-02-13' from dual union all 
+select 475,'PB951268','2004-02-13 07:30:15','36070.47', '2004-02-13 12:30:15' from dual union all
 
- select 484,'GK294076','2004-10-26','3474.66', '2004-10-26' from dual union all 
+select 484,'GK294076','2004-10-26 08:08:15','3474.66', '2004-10-26 12:11:15' from dual union all
 
- select 484,'JH546765','2003-11-29','47513.19', '2003-11-29' from dual union all 
+select 484,'JH546765','2003-11-29 11:55:25','47513.19', '2003-11-29 11:57:15' from dual union all
 
- select 486,'BL66528','2004-04-14','5899.38', '2004-04-14' from dual union all 
+select 486,'BL66528','2004-04-14 04:20:12','5899.38', '2004-04-14 12:45:01' from dual union all
 
- select 486,'HS86661','2004-11-23','45994.07', '2004-11-23' from dual union all 
+select 486,'HS86661','2004-11-23 21:21:15','45994.07', '2004-11-23 21:30:15' from dual union all
 
- select 486,'JB117768','2003-03-20','25833.14', '2003-03-20' from dual union all 
+select 486,'JB117768','2003-03-20 14:02:15','25833.14', '2003-03-20 16:21:21' from dual union all
 
- select 487,'AH612904','2003-09-28','29997.09', '2003-09-28' from dual union all 
+select 487,'AH612904','2003-09-28 11:10:11','29997.09', '2003-09-28 16:32:15' from dual union all
 
- select 487,'PT550181','2004-02-29','12573.28', NULL from dual union all 
+select 487,'PT550181','2004-02-29 09:30:15','12573.28', NULL  from dual union all
 
- select 489,'OC773849','2003-12-04','22275.73', '2003-12-04' from dual union all 
+select 489,'OC773849','2003-12-04 22:06:15','22275.73', '2003-12-04 22:08:12'  from dual union all
 
- select 489,'PO860906','2004-01-31','7310.42', '2004-01-31' from dual union all 
+select 489,'PO860906','2004-01-31 05:20:15','7310.42', '2004-01-31 07:30:25'  from dual union all
 
- select 495,'BH167026','2003-12-26','59265.14', '2003-12-26' from dual union all 
+select 495,'BH167026','2003-12-26 13:33:13','59265.14', '2003-12-26 15:38:09'  from dual union all
 
- select 495,'FN155234','2004-05-14','6276.60', '2004-05-14' from dual union all 
+select 495,'FN155234','2004-05-14 12:37:35','6276.60', '2004-05-14 12:39:25'  from dual union all
 
- select 496,'EU531600','2005-05-25','30253.75', '2005-05-25' from dual union all 
+select 496,'EU531600','2005-05-25 02:47:35','30253.75', '2005-05-25 03:30:15'  from dual union all
 
- select 496,'MB342426','2003-07-16','32077.44', '2003-07-16' from dual union all 
+select 496,'MB342426','2003-07-16 21:10:15','32077.44', '2003-07-16 23:04:15'  from dual union all
 
- select 496,'MN89921','2004-12-31','52166.00', '2004-12-31' from dual;
+select 496,'MN89921','2004-12-31 09:02:11','52166.00', '2004-12-31 09:02:11'  from dual;
 
 insert /*+ ignore_row_on_dupkey_index(sale(sale_id)) */ into sale(sale_id,fiscal_year,sale,employee_number)
 
