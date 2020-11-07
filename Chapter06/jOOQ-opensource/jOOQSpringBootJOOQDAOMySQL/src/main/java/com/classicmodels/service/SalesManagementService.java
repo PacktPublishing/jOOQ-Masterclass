@@ -20,26 +20,28 @@ public class SalesManagementService {
         this.saleRepository = saleRepository;
         this.orderRepository = orderRepository;
     }
-
-    @Transactional(readOnly = true)
-    public List<Sale> fetchSaleByFiscalYear(int year) {
-
-        return saleRepository.fetchByFiscalYear(year); // call jOOQ DAO
-    }
-
+    
+    /* call jOOQ user-defined DAOs */
     public List<Sale> fetchSaleAscGtLimit(int limit) {
 
         return saleRepository.findSaleAscGtLimit(limit);
     }
-
-    @Transactional(readOnly = true)
-    public List<Order> fetchOrderBetweenDate(LocalDate sd, LocalDate ed) {
-
-        return orderRepository.fetchRangeOfOrderDate(sd, ed); // call jOOQ DAO
-    }
-
+    
     public List<Order> fetchOrderDescByDate() {
 
         return orderRepository.findOrderDescByDate();
     }
+
+    /* call jOOQ generated DAOs */
+    @Transactional(readOnly = true)
+    public List<Order> fetchOrderBetweenDate(LocalDate sd, LocalDate ed) {
+
+        return orderRepository.fetchRangeOfOrderDate(sd, ed);
+    }
+    
+    @Transactional(readOnly = true)
+    public List<Sale> fetchSaleByFiscalYear(int year) {
+
+        return saleRepository.fetchByFiscalYear(year); 
+    }    
 }

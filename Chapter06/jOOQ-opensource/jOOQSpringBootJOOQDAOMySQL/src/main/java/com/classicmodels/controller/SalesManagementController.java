@@ -18,22 +18,24 @@ public class SalesManagementController {
         this.salesManagementService = salesManagementService;
     }
 
+    /* call jOOQ user-defined DAOs */
     @GetMapping("/saleAscGtLimit")
     public List<Sale> fetchSaleAscGtLimit(@RequestParam int limit) {
 
         return salesManagementService.fetchSaleAscGtLimit(limit);
-    }
-
-    @GetMapping("/saleByFiscalYear")
-    public List<Sale> fetchSaleByFiscalYear(@RequestParam int year) {
-
-        return salesManagementService.fetchSaleByFiscalYear(year);
-    }
+    }    
 
     @GetMapping("/orderDescByDate")
     public List<Order> fetchOrderDescByDate() {
 
         return salesManagementService.fetchOrderDescByDate();
+    }
+    
+    /* call jOOQ generated DAOs */
+    @GetMapping("/saleByFiscalYear")
+    public List<Sale> fetchSaleByFiscalYear(@RequestParam int year) {
+
+        return salesManagementService.fetchSaleByFiscalYear(year);
     }
 
     @GetMapping("/orderBetweenDate")
