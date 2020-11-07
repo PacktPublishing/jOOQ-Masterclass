@@ -20,6 +20,7 @@ public class SalesManagementService {
         this.orderRepository = orderRepository;
     }
 
+    /* call jOOQ user-defined DAOs */
     public List<Sale> fetchSaleByFiscalYear(int year) {
 
         return saleRepository.findSaleByFiscalYear(year);
@@ -28,16 +29,6 @@ public class SalesManagementService {
     public List<Sale> fetchSaleAscGtLimit(int limit) {
 
         return saleRepository.findSaleAscGtLimit(limit);
-    }
-
-    public List<com.classicmodels.entity.Sale> fetchTop10By() {
-
-        return saleRepository.findTop10By();
-    }
-
-    public List<Sale> fetchAllSales() {
-
-        return saleRepository.fetchAll();
     }
 
     public List<Order> fetchOrderDescByDate() {
@@ -50,13 +41,25 @@ public class SalesManagementService {
         return orderRepository.findOrderBetweenDate(sd, ed);
     }
 
+    /* call Spring Data JPA DAOs */
+    public List<com.classicmodels.entity.Sale> fetchTop10By() {
+
+        return saleRepository.findTop10By();
+    }
+
     public List<com.classicmodels.entity.Order> fetchFirst5ByStatusOrderByShippedDateAsc(String status) {
 
         return orderRepository.findFirst5ByStatusOrderByShippedDateAsc(status);
     }
 
+    /* call jOOQ user-defined generic DAOs */
     public List<Order> fetchAllOrders() {
 
         return orderRepository.fetchAll();
+    }
+
+    public List<Sale> fetchAllSales() {
+
+        return saleRepository.fetchAll();
     }
 }

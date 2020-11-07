@@ -18,6 +18,7 @@ public class SalesManagementController {
         this.salesManagementService = salesManagementService;
     }
 
+    /* call jOOQ user-defined DAOs */
     @GetMapping("/saleByFiscalYear")
     public List<Sale> fetchSaleByFiscalYear(@RequestParam int year) {
 
@@ -28,18 +29,6 @@ public class SalesManagementController {
     public List<Sale> fetchSaleAscGtLimit(@RequestParam int limit) {
 
         return salesManagementService.fetchSaleAscGtLimit(limit);
-    }
-
-    @GetMapping("/top10By")
-    public List<com.classicmodels.entity.Sale> fetchTop10By() {
-
-        return salesManagementService.fetchTop10By();
-    }
-    
-    @GetMapping("/allSales")
-    public List<Sale> fetchAllSales() {
-
-        return salesManagementService.fetchAllSales();
     }
 
     @GetMapping("/orderDescByDate")
@@ -55,13 +44,27 @@ public class SalesManagementController {
                 LocalDate.parse(sd), LocalDate.parse(ed));
     }
 
+    /* call Spring Data JPA DAOs */
+    @GetMapping("/top10By")
+    public List<com.classicmodels.entity.Sale> fetchTop10By() {
+
+        return salesManagementService.fetchTop10By();
+    }
+
     @GetMapping("/first5ByStatusOrderByShippedDateAsc")
     public List<com.classicmodels.entity.Order> fetchFirst5ByStatusOrderByShippedDateAsc(
             @RequestParam String status) {
 
         return salesManagementService.fetchFirst5ByStatusOrderByShippedDateAsc(status);
     }
-    
+
+    /* call jOOQ user-defined generic DAOs */
+    @GetMapping("/allSales")
+    public List<Sale> fetchAllSales() {
+
+        return salesManagementService.fetchAllSales();
+    }
+
     @GetMapping("/allOrders")
     public List<Order> fetchAllOrders() {
 

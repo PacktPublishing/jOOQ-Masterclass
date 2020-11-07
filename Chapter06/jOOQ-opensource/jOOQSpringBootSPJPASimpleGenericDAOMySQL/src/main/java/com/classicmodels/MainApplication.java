@@ -28,34 +28,37 @@ public class MainApplication {
     public ApplicationRunner init() {
         return args -> {
 
+            /* call jOOQ user-defined DAOs */
             System.out.println("Fetching sales from 2003:");
             List<Sale> result1 = salesManagementService.fetchSaleByFiscalYear(2003);
             System.out.println(result1);
 
-            System.out.println("Fetching sales (asc) greater than limit:");
+            System.out.println("Fetching sales (asc) greater than limit, 5000:");
             List<Sale> result2 = salesManagementService.fetchSaleAscGtLimit(5000);
             System.out.println(result2);
 
-            System.out.println("Fetching top 10 sales:");
-            List<com.classicmodels.entity.Sale> result3 = salesManagementService.fetchTop10By();
+            System.out.println("Fetching orders desc by date:");
+            List<Order> result3 = salesManagementService.fetchOrderDescByDate();
             System.out.println(result3);
 
-            System.out.println("Fetching all sales:");
-            List<Sale> result4 = salesManagementService.fetchAllSales();
+            System.out.println("Fetching orders between dates, 2003-01-01 and 2003-12-31:");
+            List<Order> result4 = salesManagementService.fetchOrderBetweenDate(
+                    LocalDate.of(2003, 1, 1), LocalDate.of(2003, 12, 31));
             System.out.println(result4);
 
-            System.out.println("Fetching orders desc by date:");
-            List<Order> result5 = salesManagementService.fetchOrderDescByDate();
+            /* call Spring Data JPA DAOs */
+            System.out.println("Fetching top 10 sales:");
+            List<com.classicmodels.entity.Sale> result5 = salesManagementService.fetchTop10By();
             System.out.println(result5);
 
-            System.out.println("Fetching orders between dates:");
-            List<Order> result6 = salesManagementService.fetchOrderBetweenDate(
-                    LocalDate.of(2003, 1, 1), LocalDate.of(2003, 12, 31));
+            System.out.println("Fetching first 5 orders by status ordered by shipped date:");
+            List<com.classicmodels.entity.Order> result6
+                    = salesManagementService.fetchFirst5ByStatusOrderByShippedDateAsc("Shipped");
             System.out.println(result6);
 
-            System.out.println("Fetching first 5 orders by status ordered by shipped date:");
-            List<com.classicmodels.entity.Order> result7
-                    = salesManagementService.fetchFirst5ByStatusOrderByShippedDateAsc("Shipped");
+            /* call jOOQ user-defined generic DAOs */
+            System.out.println("Fetching all sales:");
+            List<Sale> result7 = salesManagementService.fetchAllSales();
             System.out.println(result7);
 
             System.out.println("Fetching all orders:");
