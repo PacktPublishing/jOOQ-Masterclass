@@ -1,5 +1,6 @@
 package com.classicmodels.jooq.repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import static jooq.generated.tables.Order.ORDER;
 import jooq.generated.tables.pojos.Order;
@@ -16,21 +17,21 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     @Override
-    public List<String> findOrderStatus() {
+    public List<Order> findOrderDescByDate() {
 
-        List<String> result = ctx.select(ORDER.STATUS)
-                .from(ORDER)
-                .fetchInto(String.class);
+        List<Order> result = ctx.selectFrom(ORDER)
+                .orderBy(ORDER.ORDER_DATE.desc())
+                .fetchInto(Order.class);
 
         return result;
     }
 
     @Override
-    public Order findOrderById(Long id) {
+    public List<Order> findOrderBetweenDate(LocalDate sd, LocalDate ed) {
 
-        Order result = ctx.selectFrom(ORDER)
-                .where(ORDER.ORDER_ID.eq(id))
-                .fetchOneInto(Order.class);
+        List<Order> result = ctx.selectFrom(ORDER)
+                .where(ORDER.ORDER_DATE.between(sd, ed))
+                .fetchInto(Order.class);
 
         return result;
 

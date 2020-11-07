@@ -1,6 +1,7 @@
 package com.classicmodels.controller;
 
 import com.classicmodels.service.SalesManagementService;
+import java.time.LocalDate;
 import java.util.List;
 import jooq.generated.tables.pojos.Order;
 import jooq.generated.tables.pojos.Sale;
@@ -17,34 +18,37 @@ public class SalesManagementController {
         this.salesManagementService = salesManagementService;
     }
 
-    @GetMapping("/saleByFiscalYear")
-    public List<Sale> fetchSaleByFiscalYear(@RequestParam int year) {
-
-        return salesManagementService.fetchSaleByFiscalYear(year);
-    }
-
+    /* call jOOQ user-defined DAOs */
     @GetMapping("/saleAscGtLimit")
     public List<Sale> fetchSaleAscGtLimit(@RequestParam int limit) {
 
         return salesManagementService.fetchSaleAscGtLimit(limit);
     }
 
+    @GetMapping("/saleByFiscalYear")
+    public List<Sale> fetchSaleByFiscalYear(@RequestParam int year) {
+
+        return salesManagementService.fetchSaleByFiscalYear(year);
+    }
+
+    @GetMapping("/orderDescByDate")
+    public List<Order> fetchOrderDescByDate() {
+
+        return salesManagementService.fetchOrderDescByDate();
+    }
+
+    @GetMapping("/orderBetweenDate")
+    public List<Order> fetchOrderBetweenDate(@RequestParam String sd, @RequestParam String ed) {
+
+        return salesManagementService.fetchOrderBetweenDate(
+                LocalDate.parse(sd), LocalDate.parse(ed));
+    }
+
+    /* call Spring Data DAOs */
     @GetMapping("/top10By")
     public List<com.classicmodels.entity.Sale> fetchTop10By() {
 
         return salesManagementService.fetchTop10By();
-    }
-
-    @GetMapping("/orderStatus")
-    public List<String> fetchOrderStatus() {
-
-        return salesManagementService.fetchOrderStatus();
-    }
-
-    @GetMapping("/orderById")
-    public Order fetchOrderById(@RequestParam Long id) {
-
-        return salesManagementService.fetchOrderById(id);
     }
 
     @GetMapping("/first5ByStatusOrderByShippedDateAsc")

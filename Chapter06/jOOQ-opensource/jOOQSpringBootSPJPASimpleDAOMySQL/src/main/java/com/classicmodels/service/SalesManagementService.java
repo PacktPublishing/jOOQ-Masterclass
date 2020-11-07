@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import jooq.generated.tables.pojos.Order;
 import com.classicmodels.jpa.repository.SaleRepository;
+import java.time.LocalDate;
 import jooq.generated.tables.pojos.Sale;
 
 @Service
@@ -19,6 +20,7 @@ public class SalesManagementService {
         this.orderRepository = orderRepository;
     }
 
+    /* call jOOQ user-defined DAOs */
     public List<Sale> fetchSaleByFiscalYear(int year) {
 
         return saleRepository.findSaleByFiscalYear(year);
@@ -27,23 +29,24 @@ public class SalesManagementService {
     public List<Sale> fetchSaleAscGtLimit(int limit) {
 
         return saleRepository.findSaleAscGtLimit(limit);
+    }    
+
+    public List<Order> fetchOrderDescByDate() {
+
+        return orderRepository.findOrderDescByDate();
     }
 
+    public List<Order> fetchOrderBetweenDate(LocalDate sd, LocalDate ed) {
+
+        return orderRepository.findOrderBetweenDate(sd, ed);
+    }
+
+    /* call Spring Data DAOs */
     public List<com.classicmodels.entity.Sale> fetchTop10By() {
 
         return saleRepository.findTop10By();
     }
-
-    public List<String> fetchOrderStatus() {
-
-        return orderRepository.findOrderStatus();
-    }
-
-    public Order fetchOrderById(Long id) {
-
-        return orderRepository.findOrderById(id);
-    }
-
+    
     public List<com.classicmodels.entity.Order> fetchFirst5ByStatusOrderByShippedDateAsc(String status) {
 
         return orderRepository.findFirst5ByStatusOrderByShippedDateAsc(status);

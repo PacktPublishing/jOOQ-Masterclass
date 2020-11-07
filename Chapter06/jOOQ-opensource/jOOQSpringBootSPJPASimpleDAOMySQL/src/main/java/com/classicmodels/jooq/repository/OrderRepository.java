@@ -1,5 +1,6 @@
 package com.classicmodels.jooq.repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import jooq.generated.tables.pojos.Order;
 import org.springframework.stereotype.Repository;
@@ -9,6 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly=true)
 public interface OrderRepository {
     
-    public List<String> findOrderStatus();
-    public Order findOrderById(Long id);
+    public List<Order> findOrderDescByDate();
+    public List<Order> findOrderBetweenDate(LocalDate sd, LocalDate ed);
 }
