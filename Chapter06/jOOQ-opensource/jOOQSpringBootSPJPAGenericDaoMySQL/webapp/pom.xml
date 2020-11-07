@@ -10,7 +10,7 @@
 
     <parent>
         <groupId>com-jooq-jpa</groupId>
-        <artifactId>jOOQSpringBootJOOQJPADAOMySQL</artifactId>
+        <artifactId>jOOQSpringBootSPJPAGenericDaoMySQL</artifactId>
         <version>1.0</version>        
     </parent>
     

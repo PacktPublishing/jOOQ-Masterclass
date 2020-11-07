@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com-jooq-jpa</groupId>
-    <artifactId>jOOQSpringBootJOOQJPADAOMySQL</artifactId>
+    <artifactId>jOOQSpringBootSPJPAGenericDaoMySQL</artifactId>
     <version>1.0</version>
     <packaging>pom</packaging>    
     
-    <name>jOOQSpringBootJOOQJPADAOMySQL</name>
+    <name>jOOQSpringBootSPJPAGenericDaoMySQL</name>
     
     <parent>
         <groupId>org.springframework.boot</groupId>
