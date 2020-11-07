@@ -20,6 +20,7 @@ public class SalesManagementService {
         this.orderRepository = orderRepository;
     }
 
+    /* call jOOQ user-defined DAOs */
     public List<Sale> fetchSaleByFiscalYear(int year) {
 
         return saleRepository.findSaleByFiscalYear(year);

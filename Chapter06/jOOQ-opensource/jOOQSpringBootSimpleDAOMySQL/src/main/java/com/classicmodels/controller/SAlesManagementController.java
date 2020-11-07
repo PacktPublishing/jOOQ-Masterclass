@@ -24,6 +24,7 @@ public class SalesManagementController {
         return salesManagementService.fetchSaleAscGtLimit(limit);
     }
 
+    /* call jOOQ user-defined DAOs */
     @GetMapping("/saleByFiscalYear")
     public List<Sale> fetchSaleByFiscalYear(@RequestParam int year) {
 
