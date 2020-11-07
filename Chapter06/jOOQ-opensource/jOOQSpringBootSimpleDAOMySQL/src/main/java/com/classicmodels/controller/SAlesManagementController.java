@@ -18,13 +18,13 @@ public class SalesManagementController {
         this.salesManagementService = salesManagementService;
     }
 
+    /* call jOOQ user-defined DAOs */
     @GetMapping("/saleAscGtLimit")
     public List<Sale> fetchSaleAscGtLimit(@RequestParam int limit) {
 
         return salesManagementService.fetchSaleAscGtLimit(limit);
     }
-
-    /* call jOOQ user-defined DAOs */
+    
     @GetMapping("/saleByFiscalYear")
     public List<Sale> fetchSaleByFiscalYear(@RequestParam int year) {
 
