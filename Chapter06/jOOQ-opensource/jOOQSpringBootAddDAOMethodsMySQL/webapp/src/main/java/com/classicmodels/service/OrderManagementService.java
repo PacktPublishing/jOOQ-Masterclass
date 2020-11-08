@@ -3,7 +3,6 @@ package com.classicmodels.service;
 import java.time.LocalDate;
 import java.util.List;
 import jooq.generated.tables.daos.OrderRepository;
-import jooq.generated.tables.pojos.Customer;
 import jooq.generated.tables.pojos.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
