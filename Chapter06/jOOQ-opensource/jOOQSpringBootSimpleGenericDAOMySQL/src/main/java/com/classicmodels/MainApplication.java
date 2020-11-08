@@ -35,7 +35,7 @@ public class MainApplication {
             System.out.println(result2);
 
             /* call jOOQ user-defined generic DAO */
-            System.out.println("Fetching all orders:");
+            System.out.println("Fetching all sales:");
             List<Sale> result5 = salesManagementService.fetchAllSale();
             System.out.println(result5);
 
