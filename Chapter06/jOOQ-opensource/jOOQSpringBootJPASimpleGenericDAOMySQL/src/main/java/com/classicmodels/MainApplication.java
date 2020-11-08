@@ -2,9 +2,7 @@ package com.classicmodels;
 
 import com.classicmodels.service.SalesManagementService;
 import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
-import java.time.LocalDate;
 import java.util.List;
-import jooq.generated.tables.pojos.Order;
 import jooq.generated.tables.pojos.Sale;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
@@ -37,33 +35,15 @@ public class MainApplication {
             List<Sale> result2 = salesManagementService.fetchSaleAscGtLimit(5000);
             System.out.println(result2);
 
-            System.out.println("Fetching orders desc by date:");
-            List<Order> result3 = salesManagementService.fetchOrderDescByDate();
-            System.out.println(result3);
-
-            System.out.println("Fetching orders between dates, 2003-01-01 and 2003-12-31:");
-            List<Order> result4 = salesManagementService.fetchOrderBetweenDate(
-                    LocalDate.of(2003, 1, 1), LocalDate.of(2003, 12, 31));
-            System.out.println(result4);
-
             /* call Spring Data JPA DAOs */
             System.out.println("Fetching top 10 sales:");
-            List<com.classicmodels.entity.Sale> result5 = salesManagementService.fetchTop10By();
-            System.out.println(result5);
-
-            System.out.println("Fetching first 5 orders by status ordered by shipped date:");
-            List<com.classicmodels.entity.Order> result6
-                    = salesManagementService.fetchFirst5ByStatusOrderByShippedDateAsc("Shipped");
-            System.out.println(result6);
+            List<com.classicmodels.entity.Sale> result3 = salesManagementService.fetchTop10By();
+            System.out.println(result3);
 
             /* call jOOQ user-defined generic DAOs */
             System.out.println("Fetching all sales:");
-            List<Sale> result7 = salesManagementService.fetchAllSales();
-            System.out.println(result7);
-
-            System.out.println("Fetching all orders:");
-            List<Order> result8 = salesManagementService.fetchAllOrders();
-            System.out.println(result8);
+            List<Sale> result4 = salesManagementService.fetchAllSales();
+            System.out.println(result4);
         };
     }
 
