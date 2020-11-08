@@ -84,4 +84,10 @@ public class Sale implements Serializable {
         return saleId != null && saleId.equals(((Sale) obj).saleId);
     }
 
+    @Override
+    public String toString() {
+        return "Sale{" + "saleId=" + saleId + ", fiscalYear=" 
+                + fiscalYear + ", sale=" + sale + '}';
+    }
+    
 }
