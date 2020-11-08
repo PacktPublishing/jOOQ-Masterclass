@@ -1,9 +1,7 @@
 package com.classicmodels.controller;
 
 import com.classicmodels.service.SalesManagementService;
-import java.time.LocalDate;
 import java.util.List;
-import jooq.generated.tables.pojos.Order;
 import jooq.generated.tables.pojos.Sale;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,25 +28,12 @@ public class SalesManagementController {
 
         return salesManagementService.fetchSaleByFiscalYear(year);
     }    
-
-    @GetMapping("/orderDescByDate")
-    public List<Order> fetchOrderDescByDate() {
-
-        return salesManagementService.fetchOrderDescByDate();
-    }
-
-    @GetMapping("/orderBetweenDate")
-    public List<Order> fetchOrderBetweenDate(@RequestParam String sd, @RequestParam String ed) {
-
-        return salesManagementService.fetchOrderBetweenDate(
-                LocalDate.parse(sd), LocalDate.parse(ed));
-    }
-
+    
     /* call jOOQ user-defined generic DAO */
-    @GetMapping("/allOrder")
-    List<Order> fetchAllOrder() {
+    @GetMapping("/allSale")
+    List<Sale> fetchAllSale() {
 
-        return salesManagementService.fetchAllOrder();
+        return salesManagementService.fetchAllSale();
     }
     
     @GetMapping("/deleteSaleById")
