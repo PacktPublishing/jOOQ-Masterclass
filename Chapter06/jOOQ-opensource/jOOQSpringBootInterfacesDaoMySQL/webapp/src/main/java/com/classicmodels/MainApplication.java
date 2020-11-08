@@ -50,8 +50,8 @@ public class MainApplication {
             System.out.println(result4);
             
             /* call jOOQ generated DAO */
-            System.out.println("Fetching sale by ids, 1-5:");
-            List<Sale> result5 = salesManagementService.fetchBySaleId(1L, 2L, 3L, 4L, 5L);
+            System.out.println("Fetching sale by ids, 1 and 2:");
+            List<Sale> result5 = salesManagementService.fetchBySaleId(1L, 2L);
             System.out.println(result5);
 
             System.out.println("Fetching range of sales, 2000-5000:");

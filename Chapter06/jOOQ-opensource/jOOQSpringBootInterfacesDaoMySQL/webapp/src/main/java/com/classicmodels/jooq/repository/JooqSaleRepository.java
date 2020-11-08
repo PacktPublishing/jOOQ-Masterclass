@@ -1,4 +1,4 @@
-package com.classicmodels.repository;
+package com.classicmodels.jooq.repository;
 
 import java.util.List;
 import jooq.generated.tables.pojos.Sale;

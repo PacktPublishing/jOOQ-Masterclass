@@ -1,7 +1,7 @@
 package com.classicmodels.jpa.repository;
 
 import com.classicmodels.entity.Sale;
-import com.classicmodels.repository.JooqSaleRepository;
+import com.classicmodels.jooq.repository.JooqSaleRepository;
 import java.util.List;
 import jooq.generated.tables.daos.JooqGenSaleRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
