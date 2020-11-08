@@ -171,7 +171,7 @@
                                     (A Java regular expression. Use the pipe to separate several expressions).
                                     Excludes match before includes, i.e. excludes have a higher priority. -->
                                     <excludes>
-                                        flyway_schema_history | HELP | ROLLING.* | LOGMNR.* 
+                                        flyway_schema_history | HELP | ROLLING.* | LOGMNR.* | PRODUCT_PRIVS
                                         | AQ.* | MVIEW.* | LOGMNRC.* | LOGMNRGGC.* | LOGMNRP.* 
                                         | LOGMNRT.* | OL.* | REDO.* | SCHEDULER.* | SQLPLUS.* | LOGSTDBY.*
                                     </excludes>
