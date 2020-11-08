@@ -1,9 +1,7 @@
 package com.classicmodels.controller;
 
 import com.classicmodels.service.SalesManagementService;
-import java.time.LocalDate;
 import java.util.List;
-import jooq.generated.tables.pojos.Order;
 import jooq.generated.tables.pojos.Sale;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,18 +29,6 @@ public class SalesManagementController {
         return salesManagementService.fetchSaleAscGtLimit(limit);
     }
 
-    @GetMapping("/orderStatus")
-    public List<String> fetchOrderStatus() {
-
-        return salesManagementService.fetchOrderStatus();
-    }
-
-    @GetMapping("/orderById")
-    public Order fetchOrderById(@RequestParam Long id) {
-
-        return salesManagementService.fetchOrderById(id);
-    }
-
     /* call methods from Spring Data JPA DAO */
     @GetMapping("/top10By")
     public List<com.classicmodels.entity.Sale> fetchTop10By() {
@@ -56,13 +42,6 @@ public class SalesManagementController {
         return salesManagementService.fetchAll();
     }
 
-    @GetMapping("/first5ByStatusOrderByShippedDateAsc")
-    public List<com.classicmodels.entity.Order>
-            fetchFirst5ByStatusOrderByShippedDateAsc(@RequestParam String status) {
-
-        return salesManagementService.fetchFirst5ByStatusOrderByShippedDateAsc(status);
-    }
-
     /* call jOOQ generated DAO */
     @GetMapping("/bySaleId")
     public List<Sale> fetchBySaleId(@RequestParam Long... ids) {
@@ -74,11 +53,5 @@ public class SalesManagementController {
     public List<Sale> fetchRangeOfSale(@RequestParam Double lb, @RequestParam Double ub) {
 
         return salesManagementService.fetchRangeOfSale(lb, ub);
-    }
-
-    @GetMapping("/byRequiredDate")
-    public List<Order> fetchByRequiredDate(@RequestParam LocalDate... values) {
-
-        return salesManagementService.fetchByRequiredDate(values);
     }
 }
