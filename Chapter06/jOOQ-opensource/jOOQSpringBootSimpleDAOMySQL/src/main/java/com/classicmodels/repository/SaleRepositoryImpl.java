@@ -27,7 +27,7 @@ public class SaleRepositoryImpl implements SaleRepository {
     public List<Sale> findSaleAscGtLimit(int limit) {
 
         return ctx.selectFrom(SALE)
-                .where(SALE.SALE_.coerce(Integer.class).ge(limit))
+                .where(SALE.SALE_.ge(Double.valueOf(limit)))
                 .orderBy(SALE.SALE_)
                 .fetchInto(Sale.class);
     }
