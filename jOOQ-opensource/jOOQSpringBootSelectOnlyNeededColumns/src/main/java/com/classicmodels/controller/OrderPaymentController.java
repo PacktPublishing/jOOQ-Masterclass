@@ -14,7 +14,7 @@ public class OrderPaymentController {
     public OrderPaymentController(OrderPaymentService paymentService) {
         this.paymentService = paymentService;
     }
-    
+    /*
     @GetMapping("/order1")
     public Order fetchOrderTooMuchFields(@RequestParam Long orderId) {
 
@@ -26,4 +26,5 @@ public class OrderPaymentController {
 
         return paymentService.fetchOrderExplicitFields(orderId);
     }
+*/
 }
