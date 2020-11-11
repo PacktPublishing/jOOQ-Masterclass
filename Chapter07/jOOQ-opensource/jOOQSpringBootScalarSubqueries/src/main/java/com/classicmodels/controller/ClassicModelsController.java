@@ -12,7 +12,7 @@ public class ClassicModelsController {
     public ClassicModelsController(ClassicModelsService classicModelsService) {
         this.classicModelsService = classicModelsService;
     }
-
+/*
     @GetMapping("/fetchOfficesAndEmployeesNr")
     public Object[][] fetchOfficesAndEmployeesNr() {
 
@@ -72,4 +72,5 @@ public class ClassicModelsController {
 
         return classicModelsService.maxSalePerFiscalYearAndEmployee();
     }    
+*/
 }
