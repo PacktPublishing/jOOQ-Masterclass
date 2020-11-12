@@ -24,13 +24,8 @@ public class MainApplication {
         return args -> {
 
             System.out.println("Sample: Call fetchProductsMaxBuyPriceByProductionLine():");
-            System.out.println(classicModelsService.fetchProductsMaxBuyPriceByProductionLine());
+           classicModelsService.fetchProductsMaxBuyPriceByProductionLine();
 
-            System.out.println("Sample: Call fetchEmployeesBySumSales():");
-            System.out.println(classicModelsService.fetchEmployeesBySumSales());
-            
-            System.out.println("Sample: Call findCustomerFullNameCityCountry()");
-            System.out.println(classicModelsService.fetchCustomerFullNameCityCountry());
         };
     }
 }
