@@ -23,8 +23,7 @@ public class MainApplication {
     public ApplicationRunner init() {
         return args -> {
 
-            System.out.println("Sample: Call fetchProductsMaxBuyPriceByProductionLine():");
-           classicModelsService.fetchProductsMaxBuyPriceByProductionLine();
+            classicModelsService.callAll();
 
         };
     }

@@ -2,7 +2,6 @@ package com.classicmodels.service;
 
 import com.classicmodels.repository.ClassicModelsRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ClassicModelsService {
@@ -13,8 +12,22 @@ public class ClassicModelsService {
         this.classicModelsRepository = classicModelsRepository;
     }
 
-   
-    public void fetchProductsMaxBuyPriceByProductionLine() {
-        classicModelsRepository.cvb();
+    public void callAll() {
+        classicModelsRepository.findProductMaxBuyPriceByProductionLine();              // EXAMPLE 1
+        classicModelsRepository.findEmployeesBySumSales();                             // EXAMPLE 2
+        classicModelsRepository.findCustomerFullNameCityCountry();                     // EXAMPLE 3
+        classicModelsRepository.findOfficeAndNoOfEmployee();                           // EXAMPLE 4
+        classicModelsRepository.findMaxSalePerFiscalYearAndEmployee();                 // EXAMPLE 5
+        classicModelsRepository.findEmployeeWithAvgSaleLtSumSales();                   // EXAMPLE 6
+        classicModelsRepository.findOfficeAndEmployeeMaxAndAvgSalary();                // EXAMPLE 7
+        classicModelsRepository.findCustomerWithMoreThan10Sales();                     // EXAMPLE 8
+        classicModelsRepository.findOrderdetailWithQuantityInStockLtQuantityOrdered(); // EXAMPLE 9
+        classicModelsRepository.findProductQuantityOrderedGt70();                      // EXAMPLE 10 
+        classicModelsRepository.findProductWithMsrpGtSellPrice();                      // EXAMPLE 11 
+        classicModelsRepository.findProductWithAvgBuyPriceGtAnyPriceEach();            // EXAMPLE 12
+        classicModelsRepository.findProductWithAvgBuyPriceGtAllPriceEach();            // EXAMPLE 13
+        classicModelsRepository.findEmployeeNumberWithMoreSalesIn2005Than2003();       // EXAMPLE 14
+        classicModelsRepository.qq();
+        
     }
 }
