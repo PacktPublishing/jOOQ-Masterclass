@@ -1,8 +1,14 @@
 plugins {
-	id 'org.springframework.boot' version '2.3.5.RELEASE'
+	id 'org.springframework.boot' version '2.3.3.RELEASE'
 	id 'io.spring.dependency-management' version '1.0.10.RELEASE'
-        id 'org.flywaydb.flyway' version '7.2.0'
+        id 'org.flywaydb.flyway' version '6.4.4'
 	id 'java'
+}
+
+compileJava.options.encoding = 'UTF-8'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
 }
 
 group = 'com.classicmodels'
@@ -26,5 +32,5 @@ dependencies {
 }
 
 test {
-	useJUnitPlatform()
+    systemProperty "file.encoding", "utf-8"
 }

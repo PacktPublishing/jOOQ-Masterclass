@@ -59,9 +59,7 @@ insert into `office_has_manager` (`offices_office_code`, `managers_manager_id`) 
 
 ('7', '2') ON DUPLICATE KEY UPDATE offices_office_code=offices_office_code;
 
-/*Data for the table `employee` */
-
-insert  into `employee` (`employee_number`,`last_name`,`first_name`,`extension`,`email`,`office_code`,`salary`, `reports_to`,`job_title`) values 
+insert into `employee` (`employee_number`,`last_name`,`first_name`,`extension`,`email`,`office_code`,`salary`, `reports_to`,`job_title`) values 
 
 (1002,'Murphy','Diane','x5800','dmurphy@classicmodelcars.com','1',120000,NULL,'President'),
 
