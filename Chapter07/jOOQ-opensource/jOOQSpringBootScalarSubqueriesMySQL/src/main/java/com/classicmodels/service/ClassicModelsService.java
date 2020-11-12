@@ -15,15 +15,10 @@ public class ClassicModelsService {
     public void callAll() {
         classicModelsRepository.findSalaryGeAvgPlus25000();
         classicModelsRepository.findMinAndRoundMinInvoiceAmount();
-        classicModelsRepository.findEmployeeAndNoOfSale();
-        classicModelsRepository.findOfficeAndNoOfEmployee();
         classicModelsRepository.findBaseSalary();
-        classicModelsRepository.findOfficeAndEmployeeMaxAndAvgSalary();
-        classicModelsRepository.findEmployeeWithAvgSaleLtSumSales();
         classicModelsRepository.findEmployeeWithSalaryGt();
-        classicModelsRepository.findMaxSalePerFiscalYearAndEmployee();
         classicModelsRepository.insertEmployee();
         classicModelsRepository.deletePaymentsOfAtelierGraphique();
-        classicModelsRepository.updateCustomerCreditLimit();
+        classicModelsRepository.updateEmployeeSalary();
     }       
 }
