@@ -22,6 +22,7 @@ public class ClassicModelsRepository {
         this.ctx = ctx;
     }
 
+    // EXAMPLE 1
     /*
     select
       `classicmodels`.`employee`.`employee_number`,
@@ -52,6 +53,7 @@ public class ClassicModelsRepository {
         );
     }
 
+    // EXAMPLE 2
     /*
     select
        min(`classicmodels`.`payment`.`invoice_amount`),
@@ -77,6 +79,7 @@ public class ClassicModelsRepository {
         );
     }
 
+    // EXAMPLE 3
     /*
     select
       (
@@ -100,6 +103,7 @@ public class ClassicModelsRepository {
         );
     }
 
+    // EXAMPLE 4
     /*
     select
       `classicmodels`.`employee`.`employee_number`,
@@ -134,6 +138,7 @@ public class ClassicModelsRepository {
         );
     }
 
+    // EXAMPLE 5
     /*
     insert into
       `classicmodels`.`employee` (
@@ -180,6 +185,7 @@ public class ClassicModelsRepository {
         );
     }
 
+    // EXAMPLE 6
     /*
     delete from
       `classicmodels`.`payment`
@@ -205,6 +211,7 @@ public class ClassicModelsRepository {
         );
     }
 
+    // EXAMPLE 7
     /*
     update
       `classicmodels`.`employee`
