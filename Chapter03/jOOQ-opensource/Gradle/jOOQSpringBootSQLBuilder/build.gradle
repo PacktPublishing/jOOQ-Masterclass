@@ -5,12 +5,6 @@ plugins {
 	id 'java'
 }
 
-compileJava.options.encoding = 'UTF-8'
-
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
-}
-
 group = 'com.classicmodels'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '14'
@@ -29,8 +23,4 @@ dependencies {
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
-}
-
-test {
-    systemProperty "file.encoding", "utf-8"
 }
