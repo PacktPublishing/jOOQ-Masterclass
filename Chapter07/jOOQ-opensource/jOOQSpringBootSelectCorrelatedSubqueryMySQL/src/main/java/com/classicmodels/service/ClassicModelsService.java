@@ -26,9 +26,10 @@ public class ClassicModelsService {
         classicModelsRepository.findProductWithMsrpGtSellPrice();                      // EXAMPLE 11 
         classicModelsRepository.findProductWithAvgBuyPriceGtAnyPriceEach();            // EXAMPLE 12
         classicModelsRepository.findProductWithAvgBuyPriceGtAllPriceEach();            // EXAMPLE 13
-        classicModelsRepository.findEmployeeNumberWithMoreSalesIn2005Than2003();       // EXAMPLE 14
-        classicModelsRepository.updateCustomerCreditLimit();                           // EXAMPLE 15
-        classicModelsRepository.deletePaymentOfCustomerCreditLimitGt150000();          // EXAMPLE 16
-        classicModelsRepository.insertPaymentInOrder();                                // EXAMPLE 17        
+        classicModelsRepository.findUnprocessedPayments();                             // EXAMPLE 14
+        classicModelsRepository.findEmployeeNumberWithMoreSalesIn2005Than2003();       // EXAMPLE 15
+        classicModelsRepository.updateCustomerCreditLimit();                           // EXAMPLE 16
+        classicModelsRepository.deletePaymentOfCustomerCreditLimitGt150000();          // EXAMPLE 17
+        classicModelsRepository.insertPaymentInOrder();                                // EXAMPLE 18                
     }
 }

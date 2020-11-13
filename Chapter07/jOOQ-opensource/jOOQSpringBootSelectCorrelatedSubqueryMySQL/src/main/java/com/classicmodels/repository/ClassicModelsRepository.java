@@ -16,6 +16,7 @@ import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.all;
 import static org.jooq.impl.DSL.any;
 import static org.jooq.impl.DSL.avg;
+import static org.jooq.impl.DSL.case_;
 import static org.jooq.impl.DSL.concat;
 import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.field;
@@ -623,7 +624,46 @@ public class ClassicModelsRepository {
         );
     }
 
-    // EXAMPLE 14    
+    // EXAMPLE 14
+    /*
+    select
+      `classicmodels`.`payment`.`invoice_amount`,
+      `classicmodels`.`payment`.`payment_date`,
+      `classicmodels`.`payment`.`caching_date`,
+      case
+        when `classicmodels`.`payment`.`caching_date` is null then (
+          select
+            `classicmodels`.`customer`.`credit_limit`
+          from
+            `classicmodels`.`customer`
+          where
+            `classicmodels`.`payment`.`customer_number` = `classicmodels`.`customer`.`customer_number`
+        )
+        else ?
+      end as `credit_limit`
+    from
+      `classicmodels`.`payment`
+    order by
+      `classicmodels`.`payment`.`caching_date`
+    */    
+    public void findUnprocessedPayments() {
+
+        System.out.println(
+                ctx.select(PAYMENT.INVOICE_AMOUNT, PAYMENT.PAYMENT_DATE, PAYMENT.CACHING_DATE,
+                        case_()
+                                .when(PAYMENT.CACHING_DATE.isNull(),
+                                        select(CUSTOMER.CREDIT_LIMIT)
+                                                .from(CUSTOMER)
+                                                .where(PAYMENT.CUSTOMER_NUMBER
+                                                        .eq(CUSTOMER.CUSTOMER_NUMBER)))
+                                .else_(BigDecimal.valueOf(0.0)).as("credit_limit"))
+                        .from(PAYMENT)
+                        .orderBy(PAYMENT.CACHING_DATE)
+                        .fetch()
+        );
+    }       
+    
+    // EXAMPLE 15    
     /*
     select
       `s`.`sale_id`,
@@ -667,7 +707,7 @@ public class ClassicModelsRepository {
                 );
     }
                  
-    // EXAMPLE 15 
+    // EXAMPLE 16 
     /*
     update
       `classicmodels`.`customer`
@@ -693,7 +733,7 @@ public class ClassicModelsRepository {
         );
     }
 
-    // EXAMPLE 16
+    // EXAMPLE 17
     /*
     delete from
       `classicmodels`.`payment`
@@ -723,7 +763,7 @@ public class ClassicModelsRepository {
         );
     }
     
-    // EXAMPLE 17
+    // EXAMPLE 18
     /*
     insert into `classicmodels`.`order` (
       `order_date`,
