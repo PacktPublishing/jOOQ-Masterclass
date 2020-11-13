@@ -1,0 +1,33 @@
+plugins {
+	id 'org.springframework.boot' version '2.3.3.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+        id 'org.flywaydb.flyway' version '6.4.4'
+        id 'nu.studer.jooq' version '5.2'
+	id 'java'
+}
+
+group = 'com.classicmodels'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '14'
+targetCompatibility = '14'
+
+repositories {
+	mavenLocal()
+}
+
+jooq {
+  version = '3.13.5'
+  edition = nu.studer.gradle.jooq.JooqEdition.TRIAL_JAVA_8
+}
+
+dependencies {        
+	implementation 'org.springframework.boot:spring-boot-starter-jdbc'	
+        implementation 'org.springframework.boot:spring-boot-starter-web'        
+        implementation("org.springframework.boot:spring-boot-starter-jooq")
+        implementation 'com.oracle.database.jdbc:ojdbc8'        
+        implementation 'com.oracle.database.jdbc:ucp'
+        implementation 'org.flywaydb:flyway-core'
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+}
