@@ -22,6 +22,7 @@ import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.selectCount;
+import static org.jooq.impl.DSL.selectDistinct;
 import static org.jooq.impl.DSL.sum;
 import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
@@ -665,17 +666,8 @@ public class ClassicModelsRepository {
                 .fetch()
                 );
     }
-             
-    @Transactional
-    public void qq() {
-        ctx.insertInto(SALE, SALE.SALE_ID, SALE.SALE_, SALE.FISCAL_YEAR)
-                .select(select(EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.SALARY
-                        .cast(Double.class), val(2005)).from(EMPLOYEE, SALE)
-                .where(SALE.SALE_ID.notEqual(EMPLOYEE.EMPLOYEE_NUMBER)))
-                .onDuplicateKeyIgnore()
-                .execute();
-    }
-     
+                 
+    // EXAMPLE 15 
     /*
     update
       `classicmodels`.`customer`
@@ -701,8 +693,25 @@ public class ClassicModelsRepository {
         );
     }
 
+    // EXAMPLE 16
+    /*
+    delete from
+      `classicmodels`.`payment`
+    where
+      `classicmodels`.`payment`.`customer_number` in (
+        select
+          `classicmodels`.`customer`.`customer_number`
+        from
+          `classicmodels`.`customer`
+        where
+         (
+           `classicmodels`.`payment`.`customer_number` = `classicmodels`.`customer`.`customer_number`
+              and `classicmodels`.`customer`.`credit_limit` > ?
+         )
+      )
+    */
     @Transactional
-    public void del() {
+    public void deletePaymentOfCustomerCreditLimitGt150000() {
 
         System.out.println("Affected rows:"
                 + ctx.deleteFrom(PAYMENT)
@@ -712,5 +721,39 @@ public class ClassicModelsRepository {
                                 .and(CUSTOMER.CREDIT_LIMIT.gt(BigDecimal.valueOf(150000))))))
                         .execute()
         );
+    }
+    
+    // EXAMPLE 17
+    /*
+    insert into `classicmodels`.`order` (
+      `order_date`,
+      `required_date`,
+      `shipped_date`,
+      `status`,
+      `customer_number`
+    )
+      select distinct `classicmodels`.`payment`.`payment_date`,
+        `classicmodels`.`payment`.`payment_date`,
+        `classicmodels`.`payment`.`caching_date`,
+        ?,
+        `classicmodels`.`payment`.`customer_number`
+      from
+        `classicmodels`.`payment`,
+        `classicmodels`.`order`
+      where
+        `classicmodels`.`payment`.`payment_date` <> `classicmodels`.`order`.`order_date`
+      order by
+        `classicmodels`.`payment`.`payment_date`
+    */
+    @Transactional
+    public void insertPaymentInOrder() {
+        ctx.insertInto(ORDER, ORDER.ORDER_DATE, ORDER.REQUIRED_DATE, 
+                ORDER.SHIPPED_DATE, ORDER.STATUS, ORDER.CUSTOMER_NUMBER)                
+                .select(selectDistinct(PAYMENT.PAYMENT_DATE, PAYMENT.PAYMENT_DATE,
+                        PAYMENT.CACHING_DATE, val("Shipped"), PAYMENT.CUSTOMER_NUMBER).from(PAYMENT, ORDER)                        
+                .where(PAYMENT.PAYMENT_DATE.ne(ORDER.ORDER_DATE))
+                .orderBy(PAYMENT.PAYMENT_DATE))
+                //.onDuplicateKeyIgnore()
+                .execute();
     }
 }
