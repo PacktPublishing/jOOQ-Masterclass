@@ -16,14 +16,15 @@ public class ClassicModelsService {
         classicModelsRepository.findlEmployeeInOfficeStartingS();            // EXAMPLE 1
         classicModelsRepository.findEmployeeInOfficeNotMA();                 // EXAMPLE 2
         classicModelsRepository.findSaleLtAvg();                             // EXAMPLE 3
-        classicModelsRepository.findEmployeeAndSale();                       // EXAMPLE 4
-        classicModelsRepository.findSale();                                  // EXAMPLE 5
-        classicModelsRepository.employeesAndNumberOfSales();                 // EXAMPLE 6
-        classicModelsRepository.findSaleLtAvgAvg();                          // EXAMPLE 7
-        classicModelsRepository.findPaymentForCustomerSignalGiftStores();    // EXAMPLE 8
-        classicModelsRepository.insertIntoOrder();                           // EXAMPLE 9
-        classicModelsRepository.insertAnotherTableInManager();               // EXAMPLE 10
-        classicModelsRepository.updateEmployeeSalaryByJobTitle();            // EXAMPLE 11
-        classicModelsRepository.deletePaymentWithCachingDateNotNull();       // EXAMPLE 12                                
+        classicModelsRepository.findEmployeesWithSalaryGeAvgPerOffice();     // EXAMPLE 4
+        classicModelsRepository.findEmployeeAndSale();                       // EXAMPLE 5        
+        classicModelsRepository.findSale();                                  // EXAMPLE 6
+        classicModelsRepository.employeesAndNumberOfSales();                 // EXAMPLE 7
+        classicModelsRepository.findSaleLtAvgAvg();                          // EXAMPLE 8
+        classicModelsRepository.findPaymentForCustomerSignalGiftStores();    // EXAMPLE 9
+        classicModelsRepository.insertIntoOrder();                           // EXAMPLE 10
+        classicModelsRepository.insertAnotherTableInManager();               // EXAMPLE 11
+        classicModelsRepository.updateEmployeeSalaryByJobTitle();            // EXAMPLE 12
+        classicModelsRepository.deletePaymentWithCachingDateNotNull();       // EXAMPLE 13                     
     }
 }

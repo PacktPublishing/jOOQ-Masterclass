@@ -2,6 +2,7 @@ package com.classicmodels.repository;
 
 import java.math.BigDecimal;
 import static jooq.generated.tables.Customer.CUSTOMER;
+import jooq.generated.tables.Employee;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Manager.MANAGER;
 import static jooq.generated.tables.Office.OFFICE;
@@ -9,7 +10,6 @@ import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
-import org.jooq.Table;
 import static org.jooq.impl.DSL.avg;
 import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.primaryKey;
@@ -142,6 +142,48 @@ public class ClassicModelsRepository {
     }
     
     // EXAMPLE 4
+    /*    
+    select
+      `e1`.`first_name`,
+      `e1`.`last_name`,
+      `e1`.`office_code`
+    from
+      `classicmodels`.`employee` as `e1`,
+      (
+        select
+          avg(`e2`.`salary`) as `avgsal`,
+          `e2`.`office_code`
+        from
+          `classicmodels`.`employee` as `e2`
+        group by
+          `e2`.`office_code`
+      ) as `e3`
+    where
+     (
+       `e1`.`office_code` = `e3`.`office_code`
+       and `e1`.`salary` >= `e3`.`avgsal`
+     )
+     */
+    public void findEmployeesWithSalaryGeAvgPerOffice() {       
+
+        Employee e1 = EMPLOYEE.as("e1");        
+        Employee e2 = EMPLOYEE.as("e2");
+        
+        // Table<?>
+        var e3 = select(avg(e2.SALARY).as("avgsal"), e2.OFFICE_CODE)
+                .from(e2)                        
+                .groupBy(e2.OFFICE_CODE)
+                .asTable("e3");
+        
+        System.out.println(
+                ctx.select(e1.FIRST_NAME, e1.LAST_NAME, e1.OFFICE_CODE).from(e1, e3)
+                        .where(e1.OFFICE_CODE.eq(e3.field("office_code", String.class))
+                                .and(e1.SALARY.ge(e3.field("avgsal", Integer.class))))
+                        .fetch()
+        );
+    }
+
+    // EXAMPLE 5
     /*
     select
       `classicmodels`.`employee`.`employee_number`,
@@ -177,7 +219,7 @@ public class ClassicModelsRepository {
         );
     }
 
-    // EXAMPLE 5
+    // EXAMPLE 6
     /*
     select
       `saleTable`.`sen`,
@@ -208,7 +250,7 @@ public class ClassicModelsRepository {
         );
     }
 
-    // EXAMPLE 6
+    // EXAMPLE 7
     /*
     select
       `saleTable`.`sen`,
@@ -231,7 +273,8 @@ public class ClassicModelsRepository {
     */
     public void employeesAndNumberOfSales() {
 
-        Table<?> salesTable = ctx.select(SALE.EMPLOYEE_NUMBER.as("sen"), count().as("sales"))
+        // Table<?>
+        var salesTable = ctx.select(SALE.EMPLOYEE_NUMBER.as("sen"), count().as("sales"))
                 .from(SALE)
                 .groupBy(SALE.EMPLOYEE_NUMBER).asTable("saleTable");
 
@@ -246,7 +289,7 @@ public class ClassicModelsRepository {
         );
     }        
     
-    // EXAMPLE 7    
+    // EXAMPLE 8    
     /*
     select
       `classicmodels`.`sale`.`sale_id`,
@@ -283,12 +326,14 @@ public class ClassicModelsRepository {
     */
     public void findSaleLtAvgAvg() {
 
-        Table<?> saleTable = ctx.select(avg(SALE.SALE_).as("avgs"), SALE.EMPLOYEE_NUMBER.as("sen"))
+        // Table<?>
+        var saleTable = ctx.select(avg(SALE.SALE_).as("avgs"), SALE.EMPLOYEE_NUMBER.as("sen"))
                 .from(SALE)
                 .groupBy(SALE.EMPLOYEE_NUMBER)
                 .asTable("saleTable");
 
-        Table<?> saleTable2 = ctx.select()
+        // Table<?>
+        var saleTable2 = ctx.select()
                 .from(saleTable)
                 .where(saleTable.field("avgs").coerce(BigDecimal.class)
                         .gt(select(avg(SALE.SALE_)).from(SALE)))
@@ -303,7 +348,7 @@ public class ClassicModelsRepository {
         );
     }
     
-    // EXAMPLE 8
+    // EXAMPLE 9
     /*
     create view `paymentView` as
     select
@@ -342,7 +387,7 @@ public class ClassicModelsRepository {
         ctx.dropView("paymentView").execute();
     }
 
-    // EXAMPLE 9
+    // EXAMPLE 10
     /*
     insert into
       `classicmodels`.`order` (
@@ -377,7 +422,7 @@ public class ClassicModelsRepository {
         );                
     }
     
-    // EXAMPLE 10
+    // EXAMPLE 11
     /*
     insert ignore into `classicmodels`.`manager` (`manager_id`, `manager_name`)
       select * from managerTemp
@@ -408,7 +453,7 @@ public class ClassicModelsRepository {
         );
     }
     
-    // EXAMPLE 11
+    // EXAMPLE 12
     /*
     update
       `classicmodels`.`employee`
@@ -441,7 +486,7 @@ public class ClassicModelsRepository {
         );
     }
     
-    // EXAMPLE 12
+    // EXAMPLE 13
     /*
     delete from
       `classicmodels`.`payment`
