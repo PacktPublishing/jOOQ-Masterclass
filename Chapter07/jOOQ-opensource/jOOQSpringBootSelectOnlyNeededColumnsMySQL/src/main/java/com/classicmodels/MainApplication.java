@@ -1,7 +1,6 @@
 package com.classicmodels;
 
-import com.classicmodels.pojo.Order;
-import com.classicmodels.service.OrderPaymentService;
+import com.classicmodels.service.ClassicModelsService;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,9 +9,9 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class MainApplication {
 
-    private final OrderPaymentService orderPaymentService;
+    private final ClassicModelsService orderPaymentService;
 
-    public MainApplication(OrderPaymentService orderPaymentService) {
+    public MainApplication(ClassicModelsService orderPaymentService) {
         this.orderPaymentService = orderPaymentService;
     }
 
@@ -23,7 +22,7 @@ public class MainApplication {
     @Bean
     public ApplicationRunner init() {
         return args -> {
-orderPaymentService.callAll();
+            orderPaymentService.callAll();
         };
     }
 }
