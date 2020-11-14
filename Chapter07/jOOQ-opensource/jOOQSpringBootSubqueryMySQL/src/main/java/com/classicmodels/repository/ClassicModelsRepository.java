@@ -9,7 +9,6 @@ import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
-import org.jooq.Field;
 import org.jooq.Table;
 import static org.jooq.impl.DSL.avg;
 import static org.jooq.impl.DSL.count;
@@ -209,7 +208,45 @@ public class ClassicModelsRepository {
         );
     }
 
-    // EXAMPLE 6    
+    // EXAMPLE 6
+    /*
+    select
+      `saleTable`.`sen`,
+      `saleTable`.`sales`,
+      `classicmodels`.`employee`.`first_name`,
+      `classicmodels`.`employee`.`last_name`
+    from
+     (
+       select
+         `classicmodels`.`sale`.`employee_number` as `sen`, count(*) as `sales`
+       from
+         `classicmodels`.`sale`
+       group by
+         `classicmodels`.`sale`.`employee_number`
+     ) as `saleTable`
+    join `classicmodels`.`employee` on `saleTable`.`sen` 
+       = `classicmodels`.`employee`.`employee_number`
+    order by
+      `saleTable`.`sales` desc
+    */
+    public void employeesAndNumberOfSales() {
+
+        Table<?> salesTable = ctx.select(SALE.EMPLOYEE_NUMBER.as("sen"), count().as("sales"))
+                .from(SALE)
+                .groupBy(SALE.EMPLOYEE_NUMBER).asTable("saleTable");
+
+        System.out.println(
+                ctx.select(salesTable.field("sen"), salesTable.field("sales"),
+                        EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
+                        .from(salesTable)
+                        .innerJoin(EMPLOYEE).on(salesTable.field("sen").coerce(Long.class)
+                                .eq(EMPLOYEE.EMPLOYEE_NUMBER))
+                        .orderBy(salesTable.field("sales").desc())
+                        .fetch()
+        );
+    }        
+    
+    // EXAMPLE 7    
     /*
     select
       `classicmodels`.`sale`.`sale_id`,
@@ -266,7 +303,7 @@ public class ClassicModelsRepository {
         );
     }
     
-    // EXAMPLE 7
+    // EXAMPLE 8
     /*
     create view `paymentView` as
     select
@@ -305,7 +342,7 @@ public class ClassicModelsRepository {
         ctx.dropView("paymentView").execute();
     }
 
-    // EXAMPLE 8
+    // EXAMPLE 9
     /*
     insert into
       `classicmodels`.`order` (
@@ -340,7 +377,7 @@ public class ClassicModelsRepository {
         );                
     }
     
-    // EXAMPLE 9
+    // EXAMPLE 10
     /*
     insert ignore into `classicmodels`.`manager` (`manager_id`, `manager_name`)
       select * from managerTemp
@@ -371,7 +408,7 @@ public class ClassicModelsRepository {
         );
     }
     
-    // EXAMPLE 10
+    // EXAMPLE 11
     /*
     update
       `classicmodels`.`employee`
@@ -404,7 +441,7 @@ public class ClassicModelsRepository {
         );
     }
     
-    // EXAMPLE 11
+    // EXAMPLE 12
     /*
     delete from
       `classicmodels`.`payment`

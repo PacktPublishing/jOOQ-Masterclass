@@ -18,12 +18,12 @@ public class ClassicModelsService {
         classicModelsRepository.findSaleLtAvg();                             // EXAMPLE 3
         classicModelsRepository.findEmployeeAndSale();                       // EXAMPLE 4
         classicModelsRepository.findSale();                                  // EXAMPLE 5
-        classicModelsRepository.findSaleLtAvgAvg();                          // EXAMPLE 6
-        classicModelsRepository.findPaymentForCustomerSignalGiftStores();    // EXAMPLE 7
-        classicModelsRepository.insertIntoOrder();                           // EXAMPLE 8
-        classicModelsRepository.insertAnotherTableInManager();               // EXAMPLE 9
-        classicModelsRepository.updateEmployeeSalaryByJobTitle();            // EXAMPLE 10
-        classicModelsRepository.deletePaymentWithCachingDateNotNull();       // EXAMPLE 11                
+        classicModelsRepository.employeesAndNumberOfSales();                 // EXAMPLE 6
+        classicModelsRepository.findSaleLtAvgAvg();                          // EXAMPLE 7
+        classicModelsRepository.findPaymentForCustomerSignalGiftStores();    // EXAMPLE 8
+        classicModelsRepository.insertIntoOrder();                           // EXAMPLE 9
+        classicModelsRepository.insertAnotherTableInManager();               // EXAMPLE 10
+        classicModelsRepository.updateEmployeeSalaryByJobTitle();            // EXAMPLE 11
+        classicModelsRepository.deletePaymentWithCachingDateNotNull();       // EXAMPLE 12                                
     }
 }
-
