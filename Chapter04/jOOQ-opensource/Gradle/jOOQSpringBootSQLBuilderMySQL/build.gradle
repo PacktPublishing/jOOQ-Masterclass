@@ -66,7 +66,7 @@ jooq {
                         name = 'org.jooq.meta.mysql.MySQLDatabase'                        
                         inputSchema = 'classicmodels'
                         includes = '.*'
-                        schemaVersionProvider = 'SELECT MAX(version) FROM flyway_schema_history'
+                        // schemaVersionProvider = 'SELECT MAX(version) FROM flyway_schema_history'
                         excludes = 'flyway_schema_history'
                         logSlowQueriesAfterSeconds = 20
                     }

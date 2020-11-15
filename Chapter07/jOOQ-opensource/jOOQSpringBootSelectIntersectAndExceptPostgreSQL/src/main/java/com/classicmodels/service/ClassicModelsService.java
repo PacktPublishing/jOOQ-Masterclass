@@ -14,8 +14,13 @@ public class ClassicModelsService {
 
     public void callAll() {
 
-        classicModelsRepository.intersectOfficeCustomerCityAndCountry();    // EXAMPLE 1
-        classicModelsRepository.exceptOfficeCustomerCityAndCountry();       // EXAMPLE 2
+        classicModelsRepository.intersectBuyPriceWithPriceEach();               // EXAMPLE 1
+        classicModelsRepository.exceptBuyPriceFromPriceEach();                  // EXAMPLE 2
+        classicModelsRepository.intersectOfficeCustomerCityAndCountry();        // EXAMPLE 3 
+        classicModelsRepository.exceptOfficeCustomerCityAndCountry();           // EXAMPLE 4
+
+        classicModelsRepository.emulateIntersectOfficeCustomerCityAndCountry(); // EXAMPLE 5
+        classicModelsRepository.emulateExceptOfficeCustomerCityAndCountry();    // EXAMPLE 6       
     }
 
 }

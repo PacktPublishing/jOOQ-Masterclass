@@ -32,12 +32,12 @@ DROP SEQUENCE IF EXISTS sale_seq;
 
 CREATE TABLE office (
   office_code varchar(10) NOT NULL,
-  city varchar(50) NOT NULL,
+  city varchar(50),
   phone varchar(50) NOT NULL,
   address_line_first varchar(50) NOT NULL,
   address_line_second varchar(50) DEFAULT NULL,
   state varchar(50) DEFAULT NULL,
-  country varchar(50) NOT NULL,
+  country varchar(50),
   postal_code varchar(15) NOT NULL,
   territory varchar(10) NOT NULL,
   PRIMARY KEY (office_code)
@@ -103,10 +103,10 @@ CREATE TABLE customerdetail (
   customer_number bigint NOT NULL,
   address_line_first varchar(50) NOT NULL,
   address_line_second varchar(50) DEFAULT NULL,
-  city varchar(50) NOT NULL,
+  city varchar(50),
   state varchar(50) DEFAULT NULL,
   postal_code varchar(15) DEFAULT NULL,
-  country varchar(50) NOT NULL,
+  country varchar(50),
   PRIMARY KEY (customer_number)
   ,  
   CONSTRAINT customers_details_ibfk_1 FOREIGN KEY (customer_number) REFERENCES customer (customer_number)  
