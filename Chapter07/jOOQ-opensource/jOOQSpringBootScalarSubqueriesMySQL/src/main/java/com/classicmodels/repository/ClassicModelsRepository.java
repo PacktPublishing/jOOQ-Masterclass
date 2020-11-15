@@ -45,7 +45,7 @@ public class ClassicModelsRepository {
      */
     public void findSalaryGeAvgPlus25000() {
 
-        System.out.println(
+        System.out.println("EXAMPLE 1\n" +
                 ctx.selectFrom(EMPLOYEE)
                         .where(EMPLOYEE.SALARY.ge(
                                 select(avg(EMPLOYEE.SALARY).plus(25000)).from(EMPLOYEE).asField()))
@@ -70,7 +70,7 @@ public class ClassicModelsRepository {
      */
     public void findMinAndRoundMinInvoiceAmount() {
 
-        System.out.println(
+        System.out.println("EXAMPLE 2\n" +
                 ctx.select(min(PAYMENT.INVOICE_AMOUNT),
                         round(select(min(PAYMENT.INVOICE_AMOUNT))
                                 .from(PAYMENT).asField(), 0).as("round_min"))
@@ -95,7 +95,7 @@ public class ClassicModelsRepository {
      */
     public void findBaseSalary() {
 
-        System.out.println(
+        System.out.println("EXAMPLE 3\n" +
                 ctx.select(EMPLOYEE.SALARY.plus(
                         select(avg(EMPLOYEE.SALARY)).from(EMPLOYEE).asField()).as("baseSalary"))
                         .from(EMPLOYEE)
@@ -129,7 +129,7 @@ public class ClassicModelsRepository {
      */
     public void findEmployeeWithSalaryGt() {
 
-        System.out.println(
+        System.out.println("EXAMPLE 4\n" +
                 ctx.selectFrom(EMPLOYEE)
                         .where(EMPLOYEE.SALARY.ge(
                                 select(EMPLOYEE.SALARY).from(EMPLOYEE).
@@ -175,7 +175,7 @@ public class ClassicModelsRepository {
     @Transactional
     public void insertEmployee() {
 
-        System.out.println("Affected rows:"
+        System.out.println("EXAMPLE 5 (affected rows): " +
                 + ctx.insertInto(EMPLOYEE)
                         .values(select(max(EMPLOYEE.EMPLOYEE_NUMBER.plus(1))).from(EMPLOYEE),
                                 "Mark", "Janel", "x4443", "markjanel@classicmodelcars.com", "1",
@@ -202,7 +202,7 @@ public class ClassicModelsRepository {
     @Transactional
     public void deletePaymentsOfAtelierGraphique() {
 
-        System.out.println("Affected rows:"
+        System.out.println("EXAMPLE 6 (affected rows): " +
                 + ctx.deleteFrom(PAYMENT)
                         .where(PAYMENT.CUSTOMER_NUMBER.eq(
                                 select(CUSTOMER.CUSTOMER_NUMBER).from(CUSTOMER)
@@ -233,7 +233,7 @@ public class ClassicModelsRepository {
     */
     @Transactional
     public void updateEmployeeSalary() {
-        System.out.println("Affected rows:"
+        System.out.println("EXAMPLE 7 (affected rows): " +
                 + ctx.update(EMPLOYEE)
                         .set(EMPLOYEE.SALARY,
                                 EMPLOYEE.SALARY.plus(select(min(EMPLOYEE.SALARY)).from(EMPLOYEE)
