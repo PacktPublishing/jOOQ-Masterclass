@@ -44,7 +44,7 @@ public class ClassicModelsRepository {
     */
     public void unionEmployeeAndCustomerNames() {
 
-        System.out.println(
+        System.out.println("EXAMPLE 1\n" +
                 ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
                         .from(EMPLOYEE)
                         .union(select(CUSTOMER.CONTACT_FIRST_NAME, CUSTOMER.CONTACT_LAST_NAME)
@@ -75,7 +75,7 @@ public class ClassicModelsRepository {
     */
     public void unionEmployeeAndCustomerNamesConcatColumns() {
 
-        System.out.println(
+        System.out.println("EXAMPLE 2\n" +
                 ctx.select(
                         concat(EMPLOYEE.FIRST_NAME, val(" "), EMPLOYEE.LAST_NAME).as("full_name"))
                         .from(EMPLOYEE)
@@ -110,7 +110,7 @@ public class ClassicModelsRepository {
     */
     public void unionEmployeeAndCustomerNamesDifferentiate() {
 
-        System.out.println(
+        System.out.println("EXAMPLE 3\n" +
                 ctx.select(
                         concat(EMPLOYEE.FIRST_NAME, val(" "),
                                 EMPLOYEE.LAST_NAME).as("full_name"),
@@ -149,7 +149,7 @@ public class ClassicModelsRepository {
     */
     public void unionEmployeeAndCustomerNamesOrderBy() {
 
-        System.out.println(
+        System.out.println("EXAMPLE 4\n" +
                 ctx.select(
                         concat(EMPLOYEE.FIRST_NAME, val(" "), EMPLOYEE.LAST_NAME).as("full_name"))
                         .from(EMPLOYEE)
@@ -204,7 +204,7 @@ public class ClassicModelsRepository {
     */
     public void unionEmployeeSmallestAndHighestSalary() {
 
-        System.out.println(
+        System.out.println("EXAMPLE 5\n" +
                 ctx.selectFrom(EMPLOYEE)
                         .orderBy(EMPLOYEE.SALARY.asc()).limit(1)
                         .union(
@@ -234,7 +234,7 @@ public class ClassicModelsRepository {
     */    
     public void unionAllOfficeCustomerCityAndCountry() {
 
-        System.out.println(
+        System.out.println("EXAMPLE 6\n" +
                 ctx.select(OFFICE.CITY, OFFICE.COUNTRY)
                         .from(OFFICE)
                         .unionAll(select(CUSTOMERDETAIL.CITY, CUSTOMERDETAIL.COUNTRY)
@@ -300,7 +300,7 @@ public class ClassicModelsRepository {
         Orderdetail R2 = ORDERDETAIL.as("R2");
         Orderdetail R3 = ORDERDETAIL.as("R3");
         
-        System.out.println(
+        System.out.println("EXAMPLE 7\n" +
                 ctx.select(R1.PRODUCT_ID, R1.ORDER_ID, min(R1.PRICE_EACH).as("min_price"),
                         count(case_()
                                 .when(notExists(select().from(R2)
