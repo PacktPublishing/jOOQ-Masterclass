@@ -57,7 +57,7 @@ public class ClassicModelsRepository {
     */
     public void findlEmployeeInOfficeStartingS() {
 
-        System.out.println(
+        System.out.println("EXAMPLE 1\n" +
                 ctx.selectFrom(EMPLOYEE)
                         .where(EMPLOYEE.OFFICE_CODE.in(
                                 select(OFFICE.OFFICE_CODE).from(OFFICE).where(OFFICE.CITY.like("S%"))))
@@ -90,7 +90,7 @@ public class ClassicModelsRepository {
     */
     public void findEmployeeInOfficeNotMA() {
         
-        System.out.println(
+        System.out.println("EXAMPLE 2\n" +
                 ctx.select(count(), OFFICE.OFFICE_CODE, OFFICE.STATE)
                         .from(EMPLOYEE)
                         .join(OFFICE)
@@ -132,7 +132,7 @@ public class ClassicModelsRepository {
                 .groupBy(SALE.EMPLOYEE_NUMBER)
                 .asTable("saleTable"); // derived table
 
-        System.out.println(
+        System.out.println("EXAMPLE 3\n" +
                 ctx.select(SALE.SALE_ID, SALE.SALE_)
                         .from(SALE, saleTable)
                         .where(SALE.EMPLOYEE_NUMBER.eq(saleTable.field("sen").coerce(Long.class))
@@ -175,7 +175,7 @@ public class ClassicModelsRepository {
                 .groupBy(e2.OFFICE_CODE)
                 .asTable("e3");
         
-        System.out.println(
+        System.out.println("EXAMPLE 4\n" +
                 ctx.select(e1.FIRST_NAME, e1.LAST_NAME, e1.OFFICE_CODE).from(e1, e3)
                         .where(e1.OFFICE_CODE.eq(e3.field("office_code", String.class))
                                 .and(e1.SALARY.ge(e3.field("avgsal", Integer.class))))
@@ -209,7 +209,7 @@ public class ClassicModelsRepository {
                 .from(SALE)
                 .asTable("saleTable");
 
-        System.out.println(
+        System.out.println("EXAMPLE 5\n" +
                 ctx.select(EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.FIRST_NAME,
                         EMPLOYEE.LAST_NAME, saleTable.field("ss"))
                         .from(saleTable, EMPLOYEE)
@@ -242,7 +242,7 @@ public class ClassicModelsRepository {
                 .from(SALE)
                 .asTable("saleTable");
 
-        System.out.println(
+        System.out.println("EXAMPLE 6\n" +
                 ctx.select(saleTable.fields())
                         .from(saleTable)
                         .orderBy(saleTable.field("ss"))
@@ -278,7 +278,7 @@ public class ClassicModelsRepository {
                 .from(SALE)
                 .groupBy(SALE.EMPLOYEE_NUMBER).asTable("saleTable");
 
-        System.out.println(
+        System.out.println("EXAMPLE 7\n" +
                 ctx.select(salesTable.field("sen"), salesTable.field("sales"),
                         EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
                         .from(salesTable)
@@ -339,7 +339,7 @@ public class ClassicModelsRepository {
                         .gt(select(avg(SALE.SALE_)).from(SALE)))
                 .asTable("saleTable2");
 
-        System.out.println(
+        System.out.println("EXAMPLE 8\n" +
                 ctx.select(SALE.SALE_ID, SALE.SALE_)
                         .from(SALE, saleTable2)
                         .where(SALE.EMPLOYEE_NUMBER.eq(saleTable2.field("sen").coerce(Long.class))
@@ -378,7 +378,7 @@ public class ClassicModelsRepository {
                                 .where(CUSTOMER.CUSTOMER_NAME.eq("Signal Gift Stores"))
                 ))).execute();
 
-        System.out.println(
+        System.out.println("EXAMPLE 9\n" +
                 ctx.selectFrom(table("paymentView"))
                         .fetch()
         );
@@ -411,7 +411,7 @@ public class ClassicModelsRepository {
     @Transactional
     public void insertIntoOrder() {
         
-        System.out.println("Rows affected: "  +
+        System.out.println("EXAMPLE 10 (rows affected):" +
              ctx.insertInto(ORDER, ORDER.COMMENTS, ORDER.CUSTOMER_NUMBER, 
                      ORDER.ORDER_DATE, ORDER.REQUIRED_DATE, ORDER.SHIPPED_DATE, ORDER.STATUS)
                      .select(select(ORDER.COMMENTS, ORDER.CUSTOMER_NUMBER, 
@@ -445,7 +445,7 @@ public class ClassicModelsRepository {
                 .execute();
 
         // insert into MANAGER the data from the temporary table via SELECT 
-        System.out.println(
+        System.out.println("EXAMPLE 11 (rows affected):" +
                 ctx.insertInto(MANAGER)
                         .select(select().from(table("managerTemp")))
                         .onDuplicateKeyIgnore()
@@ -477,7 +477,7 @@ public class ClassicModelsRepository {
     @Transactional
     public void updateEmployeeSalaryByJobTitle() {
         
-        System.out.println(
+        System.out.println("EXAMPLE 12 (rows affected):" +
                 ctx.update(EMPLOYEE)
                         .set(EMPLOYEE.SALARY, EMPLOYEE.SALARY.mul(0.25))
                         .where(EMPLOYEE.JOB_TITLE.in(select(EMPLOYEE.JOB_TITLE).from(EMPLOYEE)
@@ -509,7 +509,7 @@ public class ClassicModelsRepository {
     @Transactional
     public void deletePaymentWithCachingDateNotNull() {
      
-        System.out.println(
+        System.out.println("EXAMPLE 13 (rows affected):" +
         ctx.deleteFrom(PAYMENT)
                 .where(PAYMENT.INVOICE_AMOUNT.in(select(PAYMENT.INVOICE_AMOUNT).from(PAYMENT)
                 .where(PAYMENT.CACHING_DATE.isNotNull())))
