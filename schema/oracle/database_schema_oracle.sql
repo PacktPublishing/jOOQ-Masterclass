@@ -89,12 +89,12 @@ COMMIT;
 
 CREATE TABLE office (
   office_code varchar2(10) NOT NULL,
-  city varchar2(50) NOT NULL,
+  city varchar2(50),
   phone varchar2(50) NOT NULL,
   address_line_first varchar2(50) NOT NULL,
   address_line_second varchar2(50) DEFAULT NULL,
   state varchar2(50) DEFAULT NULL,
-  country varchar2(50) NOT NULL,
+  country varchar2(50),
   postal_code varchar2(15) NOT NULL,
   territory varchar2(10) NOT NULL,
   PRIMARY KEY (office_code)
@@ -176,10 +176,10 @@ CREATE TABLE customerdetail (
   customer_number number(10) NOT NULL,
   address_line_first varchar2(50) NOT NULL,
   address_line_second varchar2(50) DEFAULT NULL,
-  city varchar2(50) NOT NULL,
+  city varchar2(50),
   state varchar2(50) DEFAULT NULL,
   postal_code varchar2(15) DEFAULT NULL,
-  country varchar2(50) NOT NULL,
+  country varchar2(50),
   PRIMARY KEY (customer_number)
  ,
   CONSTRAINT customers_details_ibfk_1 FOREIGN KEY (customer_number) REFERENCES customer (customer_number)

@@ -31,7 +31,17 @@ insert /*+ ignore_row_on_dupkey_index(office(office_code)) */ into office(office
 
  select '6','Sydney','+61 2 9264 2451','5-11 Wentworth Avenue','Floor --2',NULL,'Australia','NSW 2010','APAC' from dual union all 
 
- select '7','London','+44 20 7877 2041','25 Old Broad Street','Level 7',NULL,'UK','EC2N 1HN','EMEA' from dual;
+ select '7','London','+44 20 7877 2041','25 Old Broad Street','Level 7',NULL,'UK','EC2N 1HN','EMEA' from dual union all
+ 
+ select '8',NULL,'+44 20 1827 21411','25 Hum Street','Level 2',NULL,'USA','EC2N 1HN','EMEA' from dual union all 
+
+ select '9','Bucharest','+44 20 1827 21411','22 DN1','Level 12',NULL,NULL,'EC2N 1HN','NA' from dual union all
+
+ select '10',NULL,'+44 20 1827 21411','12 Home','Level 22',NULL,NULL,'EC2N 1HN','NA' from dual union all
+
+ select '11','Paris','+32 12 713 4304','43 Rue 2',NULL,NULL,'France','25017','EMEA' from dual union all
+
+ select '12','Tokyo','+81 33 224 3444','4-1 Kioicho',NULL,'Koil-Ku','Japan','101-6578','Japan' from dual;
 
 /*Data for the table `manager` */
 
@@ -114,6 +124,14 @@ insert /*+ ignore_row_on_dupkey_index(employee(employee_number)) */ into employe
 /*Data for the table `customer` */
 
 insert /*+ ignore_row_on_dupkey_index(customer(customer_number)) */ into customer(customer_number,customer_name,contact_last_name,contact_first_name,phone,sales_rep_employee_number,credit_limit) 
+
+ select 99,'Australian Home','Paoule','Sart ','40.11.2555',1370,'21000.00' from dual union all
+
+ select 100,'Joliyon','Schmitt','Rue ','10.22.2535',1370,'21000.00' from dual union all
+
+ select 101,'Marquez Xioa','Calor','Sar ','`11.12.2525',1370,'21000.00' from dual union all
+
+ select 102,'Falafel 3','Hor','Carine ','20.12.2525',1370,'21000.00' from dual union all
 
  select 103,'Atelier graphique','Schmitt','Carine ','40.32.2555',1370,'21000.00' from dual union all 
 
@@ -362,6 +380,14 @@ insert /*+ ignore_row_on_dupkey_index(customer(customer_number)) */ into custome
 /* Data for the table `customerdetail` */
 
 insert /*+ ignore_row_on_dupkey_index(customerdetail(customer_number)) */ into customerdetail(customer_number,address_line_first,address_line_second,city,state,postal_code,country) 
+
+ select 99,'32, Avenue 90',NULL, 'Paris' ,NULL,'43000','France' from dual union all
+
+ select 100,'51, Avenue 3',NULL, NULL ,NULL,'43000',NULL from dual union all
+
+ select 101,'51, St 5',NULL, NULL ,NULL,'44000','USA' from dual union all
+
+ select 102,'51, St AQ',NULL, 'Bucharest' ,NULL,'12000',NULL from dual union all
 
  select 103,'54, rue Royale',NULL,'Nantes',NULL,'44000','France' from dual union all
 
