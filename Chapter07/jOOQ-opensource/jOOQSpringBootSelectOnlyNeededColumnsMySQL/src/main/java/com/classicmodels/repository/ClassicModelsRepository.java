@@ -35,20 +35,20 @@ public class ClassicModelsRepository {
         where
           `classicmodels`.`order`.`order_id` = ?
         */
-        System.out.println(
+        System.out.println("EXAMPLE 1.1\n" +
                 ctx.select()
                         .from(ORDER)
                         .where(ORDER.ORDER_ID.eq(10101L))
                         .fetch()
         );
         
-        System.out.println(
+        System.out.println("EXAMPLE 1.2\n" +
                 ctx.selectFrom(ORDER)
                         .where(ORDER.ORDER_ID.eq(10101L))
                         .fetch()
         );        
 
-        System.out.println(
+        System.out.println("EXAMPLE 1.3\n" +
                 ctx.select(ORDER.fields())
                         .from(ORDER)
                         .where(ORDER.ORDER_ID.eq(10101L))
@@ -63,7 +63,7 @@ public class ClassicModelsRepository {
         where
           `classicmodels`.`order`.`order_id` = ?
         */
-        System.out.println(
+        System.out.println("EXAMPLE 1.4\n" +
                 ctx.select(asterisk())
                         .from(ORDER)
                         .where(ORDER.ORDER_ID.eq(10101L))
@@ -87,7 +87,7 @@ public class ClassicModelsRepository {
     */
     public void findOrderExplicitFields() {
 
-        System.out.println(
+        System.out.println("EXAMPLE 2\n" +
                 ctx.select(ORDER.ORDER_ID, ORDER.ORDER_DATE,
                         ORDER.REQUIRED_DATE, ORDER.SHIPPED_DATE, ORDER.CUSTOMER_NUMBER)
                         .from(ORDER)
@@ -112,7 +112,7 @@ public class ClassicModelsRepository {
     */
     public void findOrderAsteriskExcept() {
 
-        System.out.println(
+        System.out.println("EXAMPLE 3\n" +
                 ctx.select(asterisk().except(ORDER.COMMENTS, ORDER.STATUS))
                         .from(ORDER)
                         .where(ORDER.ORDER_ID.eq(10101L))
@@ -133,7 +133,7 @@ public class ClassicModelsRepository {
     */
     public void findOrderAndSale() {
 
-        System.out.println(
+        System.out.println("EXAMPLE 4\n" +
                 ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, SALE.asterisk())
                         .from(EMPLOYEE)
                         .join(SALE)
@@ -160,7 +160,7 @@ public class ClassicModelsRepository {
     */
     public void findOrderExceptAndSale() {
 
-        System.out.println(
+        System.out.println("EXAMPLE 5\n" +
                 ctx.select(EMPLOYEE.asterisk().except(EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.OFFICE_CODE),
                         SALE.asterisk())
                         .from(EMPLOYEE)
@@ -182,7 +182,7 @@ public class ClassicModelsRepository {
     */
     public void findEmployeeLimit() {
 
-        System.out.println(
+        System.out.println("EXAMPLE 6\n" +
                 ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
                         .from(EMPLOYEE)
                         .limit(10)
@@ -203,7 +203,7 @@ public class ClassicModelsRepository {
     */
     public void findEmployeeLimitOffset() {
 
-        System.out.println(
+        System.out.println("EXAMPLE 7\n" +
                 ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
                         .from(EMPLOYEE)
                         .limit(10)
@@ -225,7 +225,7 @@ public class ClassicModelsRepository {
     */
     public void findEmployeeLimitAndOffset() {
 
-        System.out.println(
+        System.out.println("EXAMPLE 8\n" +
                 ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
                         .from(EMPLOYEE)
                         .limit(5, 10)                        
