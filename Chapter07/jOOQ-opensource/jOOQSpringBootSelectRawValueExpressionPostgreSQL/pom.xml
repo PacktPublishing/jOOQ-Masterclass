@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.app</groupId>
-    <artifactId>jOOQSpringBootSelectRawValueExpressionMySQL</artifactId>
+    <artifactId>jOOQSpringBootSelectRawValueExpressionPostgreSQL</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQSpringBootSelectRawValueExpressionMySQL</name>
+    <name>jOOQSpringBootSelectRawValueExpressionPostgreSQL</name>
     <description>jOOQ - Spring Boot app</description>    
 
     <parent>
@@ -50,14 +50,14 @@
             <artifactId>flyway-core</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>   
+        <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
             <version>${hibernate.validator.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>        
+        </dependency>     
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -124,7 +124,7 @@
                 <artifactId>jooq-codegen-maven</artifactId>               
                 <executions>
                     <execution>
-                        <id>generate-mysql</id>
+                        <id>generate-postgresql</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>generate</goal>
@@ -151,11 +151,11 @@
                         <database>                            
                             <!-- The database type. The format here is:
                             org.jooq.meta.[database].[database]Database -->
-                            <name>org.jooq.meta.mysql.MySQLDatabase</name>
+                            <name>org.jooq.meta.postgres.PostgresDatabase</name>
             
                             <!-- The database schema (or in the absence of schema support, in your RDBMS this
                             can be the owner, user, database name) to be generated -->
-                            <inputSchema>classicmodels</inputSchema>                                                                                                                    
+                            <inputSchema>public</inputSchema>                 
             
                             <!-- All elements that are generated from your schema
                             (A Java regular expression. Use the pipe to separate several expressions)
@@ -176,7 +176,7 @@
                             <pojos>true</pojos> 
                             <validationAnnotations>true</validationAnnotations>                            
                         </generate>
-                            
+                        
                         <target>
                             <!-- The destination package of your generated classes (within the destination directory) -->
                             <packageName>jooq.generated</packageName>

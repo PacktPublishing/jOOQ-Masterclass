@@ -39,7 +39,7 @@ insert  into `office`(`office_code`,`city`,`phone`,`address_line_first`,`address
 
 ('11','Paris','+32 12 713 4304','43 Rue 2',NULL,NULL,'France','25017','EMEA'),
 
-('12','Tokyo','+81 33 224 3444','4-1 Kioicho',NULL,'Koil-Ku','Japan','101-6578','Japan') ON CONFLICT (office_code) DO NOTHING;
+('12','Tokyo','+81 33 224 3444','4-1 Kioicho',NULL,'Koil-Ku','Japan','101-6578','Japan') ON DUPLICATE KEY UPDATE office_code=office_code;
 
 /*Data for the table `manager` */
 

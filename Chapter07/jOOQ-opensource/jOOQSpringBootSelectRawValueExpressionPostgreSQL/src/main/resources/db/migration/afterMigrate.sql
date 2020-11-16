@@ -11,11 +11,9 @@ This is a modified version of the original schema
 
 /* START */
 
-USE `classicmodels`;
-
 /*Data for the table `office` */
 
-insert  into `office`(`office_code`,`city`,`phone`,`address_line_first`,`address_line_second`,`state`,`country`,`postal_code`,`territory`) values 
+insert  into office(office_code,city,phone,address_line_first,address_line_second,state,country,postal_code,territory) values 
 
 ('1','San Francisco','+1 650 219 4782','100 Market Street','Suite 300','CA','USA','94080','NA'),
 
@@ -23,45 +21,55 @@ insert  into `office`(`office_code`,`city`,`phone`,`address_line_first`,`address
 
 ('3','NYC','+1 212 555 3000','523 East 53rd Street','apt. 5A','NY','USA','10022','NA'),
 
-('4','Paris','+33 14 723 4404','43 Rue Jouffroy D\'abbans',NULL,NULL,'France','75017','EMEA'),
+('4','Paris','+33 14 723 4404','43 Rue Jouffroy D''abbans',NULL,NULL,'France','75017','EMEA'),
 
 ('5','Tokyo','+81 33 224 5000','4-1 Kioicho',NULL,'Chiyoda-Ku','Japan','102-8578','Japan'),
 
-('6','Sydney','+61 2 9264 2451','5-11 Wentworth Avenue','Floor #2',NULL,'Australia','NSW 2010','APAC'),
+('6','Sydney','+61 2 9264 2451','5-11 Wentworth Avenue','Floor --2',NULL,'Australia','NSW 2010','APAC'),
 
-('7','London','+44 20 7877 2041','25 Old Broad Street','Level 7',NULL,'UK','EC2N 1HN','EMEA') ON DUPLICATE KEY UPDATE office_code=office_code;
+('7','London','+44 20 7877 2041','25 Old Broad Street','Level 7',NULL,'UK','EC2N 1HN','EMEA'),
+
+('8',NULL,'+44 20 1827 21411','25 Hum Street','Level 2',NULL,'USA','EC2N 1HN','EMEA'), 
+
+('9','Bucharest','+44 20 1827 21411','22 DN1','Level 12',NULL,NULL,'EC2N 1HN','NA'), 
+
+('10',NULL,'+44 20 1827 21411','12 Home','Level 22',NULL,NULL,'EC2N 1HN','NA'), 
+
+('11','Paris','+32 12 713 4304','43 Rue 2',NULL,NULL,'France','25017','EMEA'),
+
+('12','Tokyo','+81 33 224 3444','4-1 Kioicho',NULL,'Koil-Ku','Japan','101-6578','Japan') ON CONFLICT (office_code) DO NOTHING;
 
 /*Data for the table `manager` */
 
-insert into `manager` (`manager_id`, `manager_name`) values 
+insert into manager (manager_id, manager_name) values 
 
 ('1', 'Joana Nimar'),
 
 ('2', 'Mark Janel'),
 
-('3', 'Olivia Goy') ON DUPLICATE KEY UPDATE manager_id=manager_id;
+('3', 'Olivia Goy') ON CONFLICT (manager_id) DO NOTHING;
 
 /*Data for the table `office_has_manager` */
 
-insert into `office_has_manager` (`offices_office_code`, `managers_manager_id`) values 
+insert into office_has_manager (offices_office_code, managers_manager_id) values 
 
-('1', '1'),
+('1', 1),
 
-('2', '1'),
+('2', 1),
 
-('3', '1'),
+('3', 1),
 
-('4', '2'),
+('4', 2),
 
-('5', '3'),
+('5', 3),
 
-('6', '3'),
+('6', 3),
 
-('7', '2') ON DUPLICATE KEY UPDATE offices_office_code=offices_office_code;
+('7', 2) ON CONFLICT (offices_office_code, managers_manager_id) DO NOTHING;
 
 /*Data for the table `employee` */
 
-insert  into `employee`(`employee_number`,`last_name`,`first_name`,`extension`,`email`,`office_code`,`salary`, `reports_to`,`job_title`) values 
+insert  into employee(employee_number,last_name,first_name,extension,email,office_code,salary,reports_to,job_title) values 
 
 (1002,'Murphy','Diane','x5800','dmurphy@classicmodelcars.com','1',120000,NULL,'President'),
 
@@ -107,11 +115,19 @@ insert  into `employee`(`employee_number`,`last_name`,`first_name`,`extension`,`
 
 (1625,'Kato','Yoshimi','x102','ykato@classicmodelcars.com','5',60000,1621,'Sales Rep'),
 
-(1702,'Gerard','Martin','x2312','mgerard@classicmodelcars.com','4',50000,1102,'Sales Rep') ON DUPLICATE KEY UPDATE employee_number=employee_number;
+(1702,'Gerard','Martin','x2312','mgerard@classicmodelcars.com','4',50000,1102,'Sales Rep') ON CONFLICT (employee_number) DO NOTHING;;
 
 /*Data for the table `customer` */
 
-insert  into `customer`(`customer_number`,`customer_name`,`contact_last_name`,`contact_first_name`,`phone`,`sales_rep_employee_number`,`credit_limit`) values 
+insert  into customer(customer_number,customer_name,contact_last_name,contact_first_name,phone,sales_rep_employee_number,credit_limit) values 
+
+(99,'Australian Home','Paoule','Sart ','40.11.2555',1370,'21000.00'),
+
+(100,'Joliyon','Schmitt','Rue ','10.22.2535',1370,'21000.00'),
+
+(101,'Marquez Xioa','Calor','Sar ','`11.12.2525',1370,'21000.00'),
+
+(102,'Falafel 3','Hor','Carine ','20.12.2525',1370,'21000.00'),
 
 (103,'Atelier graphique','Schmitt','Carine ','40.32.2555',1370,'21000.00'),
 
@@ -159,7 +175,7 @@ insert  into `customer`(`customer_number`,`customer_name`,`contact_last_name`,`c
 
 (171,'Daedalus Designs Imports','Rancé','Martine ','20.16.1555',1370,'82900.00'),
 
-(172,'La Corne D\'abondance, Co.','Bertrand','Marie','(1) 42.34.2555',1337,'84300.00'),
+(172,'La Corne D''abondance, Co.','Bertrand','Marie','(1) 42.34.2555',1337,'84300.00'),
 
 (173,'Cambridge Collectables Co.','Tseng','Jerry','6175555555',1188,'43400.00'),
 
@@ -223,13 +239,13 @@ insert  into `customer`(`customer_number`,`customer_name`,`contact_last_name`,`c
 
 (273,'Franken Gifts, Co','Franken','Peter ','089-0877555',NULL,'0.00'),
 
-(276,'Anna\'s Decorations, Ltd','O\'Hara','Anna','02 9936 8555',1611,'107800.00'),
+(276,'Anna''s Decorations, Ltd','O''Hara','Anna','02 9936 8555',1611,'107800.00'),
 
 (278,'Rovelli Gifts','Rovelli','Giovanni ','035-640555',1401,'119600.00'),
 
 (282,'Souveniers And Things Co.','Huxley','Adrian','+61 2 9495 8555',1611,'93300.00'),
 
-(286,'Marta\'s Replicas Co.','Hernandez','Marta','6175558555',1216,'123700.00'),
+(286,'Marta''s Replicas Co.','Hernandez','Marta','6175558555',1216,'123700.00'),
 
 (293,'BG&E Collectables','Harrison','Ed','+41 26 425 50 01',NULL,'0.00'),
 
@@ -267,7 +283,7 @@ insert  into `customer`(`customer_number`,`customer_name`,`contact_last_name`,`c
 
 (344,'CAF Imports','Fernandez','Jesus','+34 913 728 555',1702,'59600.00'),
 
-(347,'Men \'R\' US Retailers, Ltd.','Chandler','Brian','2155554369',1166,'57700.00'),
+(347,'Men ''R'' US Retailers, Ltd.','Chandler','Brian','2155554369',1166,'57700.00'),
 
 (348,'Asian Treasures, Inc.','McKenna','Patricia ','2967 555',NULL,'0.00'),
 
@@ -297,7 +313,7 @@ insert  into `customer`(`customer_number`,`customer_name`,`contact_last_name`,`c
 
 (385,'Cruz & Sons Co.','Cruz','Arnold','+63 2 555 3587',1621,'81500.00'),
 
-(386,'L\'ordine Souveniers','Moroni','Maurizio ','0522-556555',1401,'121400.00'),
+(386,'L''ordine Souveniers','Moroni','Maurizio ','0522-556555',1401,'121400.00'),
 
 (398,'Tokyo Collectables, Ltd','Shimamura','Akiko','+81 3 3584 0555',1621,'94400.00'),
 
@@ -355,9 +371,19 @@ insert  into `customer`(`customer_number`,`customer_name`,`contact_last_name`,`c
 
 (495,'Diecast Collectables','Franco','Valarie','6175552555',1188,'85100.00'),
 
-(496,'Kelly\'s Gift Shop','Snowden','Tony','+64 9 5555500',1612,'110000.00') ON DUPLICATE KEY UPDATE customer_number=customer_number;
+(496,'Kelly''s Gift Shop','Snowden','Tony','+64 9 5555500',1612,'110000.00') ON CONFLICT (customer_number) DO NOTHING;;
 
-insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_line_second`,`city`,`state`,`postal_code`,`country`) values 
+/*Data for the table `customerdetail` */
+
+insert  into customerdetail(customer_number,address_line_first,address_line_second,city,state,postal_code,country) values 
+
+(99,'32, Avenue 90',NULL, 'Paris' ,NULL,'43000','France'),
+
+(100,'51, Avenue 3',NULL, NULL ,NULL,'43000',NULL),
+
+(101,'51, St 5',NULL, NULL ,NULL,'44000','USA'),
+
+(102,'51, St AQ',NULL, 'Bucharest' ,NULL,'12000',NULL),
 
 (103,'54, rue Royale',NULL,'Nantes',NULL,'44000','France'),
 
@@ -461,7 +487,7 @@ insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_li
 
 (250,'27 rue du Colonel Pierre Avia',NULL,'Paris',NULL,'75508','France'),
 
-(256,'67, avenue de l\'Europe',NULL,'Versailles',NULL,'78000','France'),
+(256,'67, avenue de l''Europe',NULL,'Versailles',NULL,'78000','France'),
 
 (259,'Mehrheimerstr. 369',NULL,'Köln',NULL,'50739','Germany'),
 
@@ -511,7 +537,7 @@ insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_li
 
 (339,'782 First Street',NULL,'Philadelphia','PA','71270','USA'),
 
-(344,'Merchants House','27-30 Merchant\'s Quay','Madrid',NULL,'28023','Spain'),
+(344,'Merchants House','27-30 Merchant''s Quay','Madrid',NULL,'28023','Spain'),
 
 (347,'6047 Douglas Av.',NULL,'Los Angeles','CA','91003','USA'),
 
@@ -519,7 +545,7 @@ insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_li
 
 (350,'12, rue des Bouchers',NULL,'Marseille',NULL,'13008','France'),
 
-(353,'59 rue de l\'Abbaye',NULL,'Reims',NULL,'51100','France'),
+(353,'59 rue de l''Abbaye',NULL,'Reims',NULL,'51100','France'),
 
 (356,'1250 Pretorius Street',NULL,'Hatfield','Pretoria','0028','South Africa'),
 
@@ -601,11 +627,11 @@ insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_li
 
 (495,'6251 Ingle Ln.',NULL,'Boston','MA','51003','USA'),
 
-(496,'Arenales 1938 3\'A\'',NULL,'Auckland  ',NULL,NULL,'New Zealand') ON DUPLICATE KEY UPDATE customer_number=customer_number;
+(496,'Arenales 1938 3''A''',NULL,'Auckland  ',NULL,NULL,'New Zealand') ON CONFLICT (customer_number) DO NOTHING;
 
 /*Data for the table `productline` */
 
-insert  into `productline`(`product_line`,`text_description`,`html_description`,`image`) values 
+insert  into productline(product_line,text_description,html_description,image) values 
 
 ('Classic Cars','Attention car enthusiasts: Make your wildest car ownership dreams come true. Whether you are looking for classic muscle cars, dream sports cars or movie-inspired miniatures, you will find great choices in this category. These replicas feature superb attention to detail and craftsmanship and offer features such as working steering system, opening forward compartment, opening rear trunk with removable spare wheel, 4-wheel independent spring suspension, and so on. The models range in size from 1:10 to 1:24 scale and include numerous limited edition and several out-of-production vehicles. All models include a certificate of authenticity from their manufacturers and come fully assembled and ready for display in the home or office.',NULL,NULL),
 
@@ -615,15 +641,15 @@ insert  into `productline`(`product_line`,`text_description`,`html_description`,
 
 ('Ships','The perfect holiday or anniversary gift for executives, clients, friends, and family. These handcrafted model ships are unique, stunning works of art that will be treasured for generations! They come fully assembled and ready for display in the home or office. We guarantee the highest quality, and best value.',NULL,NULL),
 
-('Trains','Model trains are a rewarding hobby for enthusiasts of all ages. Whether you\'re looking for collectible wooden trains, electric streetcars or locomotives, you\'ll find a number of great choices for any budget within this category. The interactive aspect of trains makes toy trains perfect for young children. The wooden train sets are ideal for children under the age of 5.',NULL,NULL),
+('Trains','Model trains are a rewarding hobby for enthusiasts of all ages. Whether you''re looking for collectible wooden trains, electric streetcars or locomotives, you''ll find a number of great choices for any budget within this category. The interactive aspect of trains makes toy trains perfect for young children. The wooden train sets are ideal for children under the age of 5.',NULL,NULL),
 
 ('Trucks and Buses','The Truck and Bus models are realistic replicas of buses and specialized trucks produced from the early 1920s to present. The models range in size from 1:12 to 1:50 scale and include numerous limited edition and several out-of-production vehicles. Materials used include tin, diecast and plastic. All models include a certificate of authenticity from their manufacturers and are a perfect ornament for the home and office.',NULL,NULL),
 
-('Vintage Cars','Our Vintage Car models realistically portray automobiles produced from the early 1900s through the 1940s. Materials used include Bakelite, diecast, plastic and wood. Most of the replicas are in the 1:18 and 1:24 scale sizes, which provide the optimum in detail and accuracy. Prices range from $30.00 up to $180.00 for some special limited edition replicas. All models include a certificate of authenticity from their manufacturers and come fully assembled and ready for display in the home or office.',NULL,NULL) ON DUPLICATE KEY UPDATE product_line=product_line;
+('Vintage Cars','Our Vintage Car models realistically portray automobiles produced from the early 1900s through the 1940s. Materials used include Bakelite, diecast, plastic and wood. Most of the replicas are in the 1:18 and 1:24 scale sizes, which provide the optimum in detail and accuracy. Prices range from $30.00 up to $180.00 for some special limited edition replicas. All models include a certificate of authenticity from their manufacturers and come fully assembled and ready for display in the home or office.',NULL,NULL) ON CONFLICT (product_line) DO NOTHING;
 
 /*Data for the table `product` */
 
-insert  into `product`(`product_id`,`product_name`,`product_line`,`product_scale`,`product_vendor`,`product_description`,`quantity_in_stock`,`buy_price`,`msrp`) values 
+insert  into product(product_id,product_name,product_line,product_scale,product_vendor,product_description,quantity_in_stock,buy_price,msrp) values 
 
 (1,'1969 Harley Davidson Ultimate Chopper','Motorcycles','1:10','Min Lin Diecast','This replica features working kickstand, front suspension, gear-shift lever, footbrake lever, drive chain, wheels and steering. All parts are particularly delicate due to their precise scale and require special care and attention.',7933,'48.81','95.70'),
 
@@ -631,7 +657,7 @@ insert  into `product`(`product_id`,`product_name`,`product_line`,`product_scale
 
 (3,'1996 Moto Guzzi 1100i','Motorcycles','1:10','Highway 66 Mini Classics','Official Moto Guzzi logos and insignias, saddle bags located on side of motorcycle, detailed engine, working steering, working suspension, two leather seats, luggage rack, dual exhaust pipes, small saddle bag located on handle bars, two-tone paint with chrome accents, superior die-cast detail , rotating wheels , working kick stand, diecast metal with plastic parts and baked enamel finish.',6625,'68.99','118.94'),
 
-(4,'2003 Harley-Davidson Eagle Drag Bike','Motorcycles','1:10','Red Start Diecast','Model features, official Harley Davidson logos and insignias, detachable rear wheelie bar, heavy diecast metal with resin parts, authentic multi-color tampo-printed graphics, separate engine drive belts, free-turning front fork, rotating tires and rear racing slick, certificate of authenticity, detailed engine, display stand\r\n, precision diecast replica, baked enamel finish, 1:10 scale model, removable fender, seat and tank cover piece for displaying the superior detail of the v-twin engine',5582,'91.02','193.66'),
+(4,'2003 Harley-Davidson Eagle Drag Bike','Motorcycles','1:10','Red Start Diecast','Model features, official Harley Davidson logos and insignias, detachable rear wheelie bar, heavy diecast metal with resin parts, authentic multi-color tampo-printed graphics, separate engine drive belts, free-turning front fork, rotating tires and rear racing slick, certificate of authenticity, detailed engine, display standrn, precision diecast replica, baked enamel finish, 1:10 scale model, removable fender, seat and tank cover piece for displaying the superior detail of the v-twin engine',5582,'91.02','193.66'),
 
 (5,'1972 Alfa Romeo GTA','Classic Cars','1:10','Motor City Art Classics','Features include: Turnable front wheels; steering function; detailed interior; detailed engine; opening hood; opening trunk; opening doors; and detailed chassis.',3252,'85.68','136.00'),
 
@@ -645,7 +671,7 @@ insert  into `product`(`product_id`,`product_name`,`product_line`,`product_scale
 
 (10,'2002 Suzuki XREO','Motorcycles','1:12','Unimax Art Galleries','Official logos and insignias, saddle bags located on side of motorcycle, detailed engine, working steering, working suspension, two leather seats, luggage rack, dual exhaust pipes, small saddle bag located on handle bars, two-tone paint with chrome accents, superior die-cast detail , rotating wheels , working kick stand, diecast metal with plastic parts and baked enamel finish.',9997,'66.27','150.62'),
 
-(11,'1969 Corvair Monza','Classic Cars','1:18','Welly Diecast Productions','1:18 scale die-cast about 10\" long doors open, hood opens, trunk opens and wheels roll',6906,'89.14','151.08'),
+(11,'1969 Corvair Monza','Classic Cars','1:18','Welly Diecast Productions','1:18 scale die-cast about 10" long doors open, hood opens, trunk opens and wheels roll',6906,'89.14','151.08'),
 
 (12,'1968 Dodge Charger','Classic Cars','1:12','Welly Diecast Productions','1:12 scale model of a 1968 Dodge Charger. Hood, doors and trunk all open to reveal highly detailed interior features. Steering wheel actually turns the front wheels. Color black',9123,'75.16','117.44'),
 
@@ -653,7 +679,7 @@ insert  into `product`(`product_id`,`product_name`,`product_line`,`product_scale
 
 (14,'1970 Plymouth Hemi Cuda','Classic Cars','1:12','Studio M Art Models','Very detailed 1970 Plymouth Cuda model in 1:12 scale. The Cuda is generally accepted as one of the fastest original muscle cars from the 1970s. This model is a reproduction of one of the orginal 652 cars built in 1970. Red color.',5663,'31.92','79.80'),
 
-(15,'1957 Chevy Pickup','Trucks and Buses','1:12','Exoto Designs','1:12 scale die-cast about 20\" long Hood opens, Rubber wheels',6125,'55.70','118.50'),
+(15,'1957 Chevy Pickup','Trucks and Buses','1:12','Exoto Designs','1:12 scale die-cast about 20" long Hood opens, Rubber wheels',6125,'55.70','118.50'),
 
 (16,'1969 Dodge Charger','Classic Cars','1:12','Welly Diecast Productions','Detailed model of the 1969 Dodge Charger. This model includes finely detailed interior and exterior features. Painted in red and white.',7323,'58.73','115.16'),
 
@@ -667,7 +693,7 @@ insert  into `product`(`product_id`,`product_name`,`product_line`,`product_scale
 
 (21,'1965 Aston Martin DB5','Classic Cars','1:18','Classic Metal Creations','Die-cast model of the silver 1965 Aston Martin DB5 in silver. This model includes full wire wheels and doors that open with fully detailed passenger compartment. In 1:18 scale, this model measures approximately 10 inches/20 cm long.',9042,'65.96','124.44'),
 
-(22,'1980s Black Hawk Helicopter','Planes','1:18','Red Start Diecast','1:18 scale replica of actual Army\'s UH-60L BLACK HAWK Helicopter. 100% hand-assembled. Features rotating rotor blades, propeller blades and rubber wheels.',5330,'77.27','157.69'),
+(22,'1980s Black Hawk Helicopter','Planes','1:18','Red Start Diecast','1:18 scale replica of actual Army''s UH-60L BLACK HAWK Helicopter. 100% hand-assembled. Features rotating rotor blades, propeller blades and rubber wheels.',5330,'77.27','157.69'),
 
 (23,'1917 Grand Touring Sedan','Vintage Cars','1:18','Welly Diecast Productions','This 1:18 scale replica of the 1917 Grand Touring car has all the features you would expect from museum quality reproductions: all four doors and bi-fold hood opening, detailed engine and instrument panel, chrome-look trim, and tufted upholstery, all topped off with a factory baked-enamel finish.',2724,'86.70','170.00'),
 
@@ -675,7 +701,7 @@ insert  into `product`(`product_id`,`product_name`,`product_line`,`product_scale
 
 (25,'1995 Honda Civic','Classic Cars','1:18','Min Lin Diecast','This model features, opening hood, opening doors, detailed engine, rear spoiler, opening trunk, working steering, tinted windows, baked enamel finish. Color yellow.',9772,'93.89','142.25'),
 
-(26,'1998 Chrysler Plymouth Prowler','Classic Cars','1:18','Gearbox Collectibles','Turnable front wheels; steering function; detailed interior; detailed engine; opening hood; opening trunk; opening doors; and detailed chassis.',4724,'101.51','163.73'),
+(26,'1998 Chrysler Plymouth Prowler','Classic Cars','1:18','Gearbox Collectibles','Turnable front wheels; steering create function; detailed interior; detailed engine; opening hood; opening trunk; opening doors; and detailed chassis.',4724,'101.51','163.73'),
 
 (27,'1911 Ford Town Car','Vintage Cars','1:18','Motor City Art Classics','Features opening hood, opening doors, opening trunk, wide white wall tires, front door arm rests, working steering system.',540,'33.30','60.54'),
 
@@ -699,7 +725,7 @@ insert  into `product`(`product_id`,`product_name`,`product_line`,`product_scale
 
 (37,'1999 Yamaha Speed Boat','Ships','1:18','Min Lin Diecast','Exact replica. Wood and Metal. Many extras including rigging, long boats, pilot house, anchors, etc. Comes with three masts, all square-rigged.',4259,'51.61','86.02'),
 
-(38,'18th Century Vintage Horse Carriage','Vintage Cars','1:18','Red Start Diecast','Hand crafted diecast-like metal horse carriage is re-created in about 1:18 scale of antique horse carriage. This antique style metal Stagecoach is all hand-assembled with many different parts.\r\n\r\nThis collectible metal horse carriage is painted in classic Red, and features turning steering wheel and is entirely hand-finished.',5992,'60.74','104.72'),
+(38,'18th Century Vintage Horse Carriage','Vintage Cars','1:18','Red Start Diecast','Hand crafted diecast-like metal horse carriage is re-created in about 1:18 scale of antique horse carriage. This antique style metal Stagecoach is all hand-assembled with many different parts.rnrnThis collectible metal horse carriage is painted in classic Red, and features turning steering wheel and is entirely hand-finished.',5992,'60.74','104.72'),
 
 (39,'1903 Ford Model A','Vintage Cars','1:18','Unimax Art Galleries','Features opening trunk,  working steering system',3913,'68.30','136.59'),
 
@@ -713,7 +739,7 @@ insert  into `product`(`product_id`,`product_name`,`product_line`,`product_scale
 
 (44,'1917 Maxwell Touring Car','Vintage Cars','1:18','Exoto Designs','Features Gold Trim, Full Size Spare Tire, Chrome Trim, Chrome Grille, Opening Hood, Opening Doors, Opening Trunk, Detailed Engine, Working Steering System',7913,'57.54','99.21'),
 
-(45,'1976 Ford Gran Torino','Classic Cars','1:18','Gearbox Collectibles','Highly detailed 1976 Ford Gran Torino \"Starsky and Hutch\" diecast model. Very well constructed and painted in red and white patterns.',9127,'73.49','146.99'),
+(45,'1976 Ford Gran Torino','Classic Cars','1:18','Gearbox Collectibles','Highly detailed 1976 Ford Gran Torino "Starsky and Hutch" diecast model. Very well constructed and painted in red and white patterns.',9127,'73.49','146.99'),
 
 (46,'1948 Porsche Type 356 Roadster','Classic Cars','1:18','Gearbox Collectibles','This model features working front and rear suspension on accurately replicated and actuating shock absorbers as well as opening engine cover, rear stabilizer flap,  and 4 opening doors.',8990,'62.16','141.28'),
 
@@ -727,7 +753,7 @@ insert  into `product`(`product_id`,`product_name`,`product_line`,`product_scale
 
 (51,'1904 Buick Runabout','Vintage Cars','1:18','Exoto Designs','Features opening trunk,  working steering system',8290,'52.66','87.77'),
 
-(52,'1940s Ford truck','Trucks and Buses','1:18','Motor City Art Classics','This 1940s Ford Pick-Up truck is re-created in 1:18 scale of original 1940s Ford truck. This antique style metal 1940s Ford Flatbed truck is all hand-assembled. This collectible 1940\'s Pick-Up truck is painted in classic dark green color, and features rotating wheels.',3128,'84.76','121.08'),
+(52,'1940s Ford truck','Trucks and Buses','1:18','Motor City Art Classics','This 1940s Ford Pick-Up truck is re-created in 1:18 scale of original 1940s Ford truck. This antique style metal 1940s Ford Flatbed truck is all hand-assembled. This collectible 1940''s Pick-Up truck is painted in classic dark green color, and features rotating wheels.',3128,'84.76','121.08'),
 
 (53,'1939 Cadillac Limousine','Vintage Cars','1:18','Studio M Art Models','Features completely detailed interior including Velvet flocked drapes,deluxe wood grain floor, and a wood grain casket with seperate chrome handles',6645,'23.14','50.31'),
 
@@ -737,11 +763,11 @@ insert  into `product`(`product_id`,`product_name`,`product_line`,`product_scale
 
 (56,'1970 Chevy Chevelle SS 454','Classic Cars','1:24','Unimax Art Galleries','This model features rotating wheels, working streering system and opening doors. All parts are particularly delicate due to their precise scale and require special care and attention. It should not be picked up by the doors, roof, hood or trunk.',1005,'49.24','73.49'),
 
-(57,'1970 Dodge Coronet','Classic Cars','1:24','Highway 66 Mini Classics','1:24 scale die-cast about 18\" long doors open, hood opens and rubber wheels',4074,'32.37','57.80'),
+(57,'1970 Dodge Coronet','Classic Cars','1:24','Highway 66 Mini Classics','1:24 scale die-cast about 18" long doors open, hood opens and rubber wheels',4074,'32.37','57.80'),
 
 (58,'1997 BMW R 1100 S','Motorcycles','1:24','Autoart Studio Design','Detailed scale replica with working suspension and constructed from over 70 parts',7003,'60.86','112.70'),
 
-(59,'1966 Shelby Cobra 427 S/C','Classic Cars','1:24','Carousel DieCast Legends','This diecast model of the 1966 Shelby Cobra 427 S/C includes many authentic details and operating parts. The 1:24 scale model of this iconic lighweight sports car from the 1960s comes in silver and it\'s own display case.',8197,'29.18','50.31'),
+(59,'1966 Shelby Cobra 427 S/C','Classic Cars','1:24','Carousel DieCast Legends','This diecast model of the 1966 Shelby Cobra 427 S/C includes many authentic details and operating parts. The 1:24 scale model of this iconic lighweight sports car from the 1960s comes in silver and it''s own display case.',8197,'29.18','50.31'),
 
 (60,'1928 British Royal Navy Airplane','Planes','1:24','Classic Metal Creations','Official logos and insignias',3627,'66.74','109.42'),
 
@@ -779,7 +805,7 @@ insert  into `product`(`product_id`,`product_name`,`product_line`,`product_scale
 
 (77,'1940 Ford Delivery Sedan','Vintage Cars','1:24','Carousel DieCast Legends','Chrome Trim, Chrome Grille, Opening Hood, Opening Doors, Opening Trunk, Detailed Engine, Working Steering System. Color black.',6621,'48.64','83.86'),
 
-(78,'1956 Porsche 356A Coupe','Classic Cars','1:18','Classic Metal Creations','Features include: Turnable front wheels; steering function; detailed interior; detailed engine; opening hood; opening trunk; opening doors; and detailed chassis.',6600,'98.30','140.43'),
+(78,'1956 Porsche 356A Coupe','Classic Cars','1:18','Classic Metal Creations','Features include: Turnable front wheels; steering create function; detailed interior; detailed engine; opening hood; opening trunk; opening doors; and detailed chassis.',6600,'98.30','140.43'),
 
 (79,'Corsair F4U ( Bird Cage)','Planes','1:24','Second Gear Diecast','Has retractable wheels and comes with a stand. Official logos and insignias.',6812,'29.34','68.24'),
 
@@ -801,7 +827,7 @@ insert  into `product`(`product_id`,`product_name`,`product_line`,`product_scale
 
 (88,'1954 Greyhound Scenicruiser','Trucks and Buses','1:32','Classic Metal Creations','Model features bi-level seating, 50 windows, skylights & glare resistant glass, working steering system, original logos',2874,'25.98','54.11'),
 
-(89,'1950\'s Chicago Surface Lines Streetcar','Trains','1:32','Gearbox Collectibles','This streetcar is a joy to see. It has 80 separate windows, electric wire guides, detailed interiors with seats, poles and drivers controls, rolling and turning wheel assemblies, plus authentic factory baked-enamel finishes (Green Hornet for Chicago and Cream and Crimson for Boston).',8601,'26.72','62.14'),
+(89,'1950''s Chicago Surface Lines Streetcar','Trains','1:32','Gearbox Collectibles','This streetcar is a joy to see. It has 80 separate windows, electric wire guides, detailed interiors with seats, poles and drivers controls, rolling and turning wheel assemblies, plus authentic factory baked-enamel finishes (Green Hornet for Chicago and Cream and Crimson for Boston).',8601,'26.72','62.14'),
 
 (90,'1996 Peterbilt 379 Stake Bed with Outrigger','Trucks and Buses','1:32','Red Start Diecast','This model features, opening doors, detailed engine, working steering, tinted windows, detailed interior, die-struck logos, removable stakes operating outriggers, detachable second trailer, functioning 360-degree self loader, precision molded resin trailer and trim, baked enamel finish on cab',814,'33.61','64.64'),
 
@@ -817,23 +843,23 @@ insert  into `product`(`product_id`,`product_name`,`product_line`,`product_scale
 
 (96,'2002 Yamaha YZR M1','Motorcycles','1:50','Autoart Studio Design','Features rotating wheels , working kick stand. Comes with stand.',600,'34.17','81.36'),
 
-(97,'The Schooner Bluenose','Ships','1:700','Autoart Studio Design','All wood with canvas sails. Measures 31 1/2 inches in Length, 22 inches High and 4 3/4 inches Wide. Many extras.\r\nThe schooner Bluenose was built in Nova Scotia in 1921 to fish the rough waters off the coast of Newfoundland. Because of the Bluenose racing prowess she became the pride of all Canadians. Still featured on stamps and the Canadian dime, the Bluenose was lost off Haiti in 1946.',1897,'34.00','66.67'),
+(97,'The Schooner Bluenose','Ships','1:700','Autoart Studio Design','All wood with canvas sails. Measures 31 1/2 inches in Length, 22 inches High and 4 3/4 inches Wide. Many extras.rnThe schooner Bluenose was built in Nova Scotia in 1921 to fish the rough waters off the coast of Newfoundland. Because of the Bluenose racing prowess she became the pride of all Canadians. Still featured on stamps and the Canadian dime, the Bluenose was lost off Haiti in 1946.',1897,'34.00','66.67'),
 
 (98,'American Airlines: B767-300','Planes','1:700','Min Lin Diecast','Exact replia with official logos and insignias and retractable wheels',5841,'51.15','91.34'),
 
-(99,'The Mayflower','Ships','1:700','Studio M Art Models','Measures 31 1/2 inches Long x 25 1/2 inches High x 10 5/8 inches Wide\r\nAll wood with canvas sail. Extras include long boats, rigging, ladders, railing, anchors, side cannons, hand painted, etc.',737,'43.30','86.61'),
+(99,'The Mayflower','Ships','1:700','Studio M Art Models','Measures 31 1/2 inches Long x 25 1/2 inches High x 10 5/8 inches WidernAll wood with canvas sail. Extras include long boats, rigging, ladders, railing, anchors, side cannons, hand painted, etc.',737,'43.30','86.61'),
 
-(100,'HMS Bounty','Ships','1:700','Unimax Art Galleries','Measures 30 inches Long x 27 1/2 inches High x 4 3/4 inches Wide. \r\nMany extras including rigging, long boats, pilot house, anchors, etc. Comes with three masts, all square-rigged.',3501,'39.83','90.52'),
+(100,'HMS Bounty','Ships','1:700','Unimax Art Galleries','Measures 30 inches Long x 27 1/2 inches High x 4 3/4 inches Wide. rnMany extras including rigging, long boats, pilot house, anchors, etc. Comes with three masts, all square-rigged.',3501,'39.83','90.52'),
 
 (101,'America West Airlines B757-200','Planes','1:700','Motor City Art Classics','Official logos and insignias. Working steering system. Rotating jet engines',9653,'68.80','99.72'),
 
-(102,'The USS Constitution Ship','Ships','1:700','Red Start Diecast','All wood with canvas sails. Measures 31 1/2\" Length x 22 3/8\" High x 8 1/4\" Width. Extras include 4 boats on deck, sea sprite on bow, anchors, copper railing, pilot houses, etc.',7083,'33.97','72.28'),
+(102,'The USS Constitution Ship','Ships','1:700','Red Start Diecast','All wood with canvas sails. Measures 31 1/2" Length x 22 3/8" High x 8 1/4" Width. Extras include 4 boats on deck, sea sprite on bow, anchors, copper railing, pilot houses, etc.',7083,'33.97','72.28'),
 
-(103,'1982 Camaro Z28','Classic Cars','1:18','Carousel DieCast Legends','Features include opening and closing doors. Color: White. \r\nMeasures approximately 9 1/2\" Long.',6934,'46.53','101.15'),
+(103,'1982 Camaro Z28','Classic Cars','1:18','Carousel DieCast Legends','Features include opening and closing doors. Color: White. rnMeasures approximately 9 1/2" Long.',6934,'46.53','101.15'),
 
 (104,'ATA: B757-300','Planes','1:700','Highway 66 Mini Classics','Exact replia with official logos and insignias and retractable wheels',7106,'59.33','118.65'),
 
-(105,'F/A 18 Hornet 1/72','Planes','1:72','Motor City Art Classics','10\" Wingspan with retractable landing gears.Comes with pilot',551,'54.40','80.00'),
+(105,'F/A 18 Hornet 1/72','Planes','1:72','Motor City Art Classics','10" Wingspan with retractable landing gears.Comes with pilot',551,'54.40','80.00'),
 
 (106,'The Titanic','Ships','1:700','Carousel DieCast Legends','Completed model measures 19 1/2 inches long, 9 inches high, 3inches wide and is in barn red/black. All wood and metal.',1956,'51.09','100.17'),
 
@@ -841,13 +867,13 @@ insert  into `product`(`product_id`,`product_name`,`product_line`,`product_scale
 
 (108,'American Airlines: MD-11S','Planes','1:700','Second Gear Diecast','Polished finish. Exact replia with official logos and insignias and retractable wheels',8820,'36.27','74.03'),
 
-(109,'Boeing X-32A JSF','Planes','1:72','Motor City Art Classics','10\" Wingspan with retractable landing gears.Comes with pilot',4857,'32.77','49.66'),
+(109,'Boeing X-32A JSF','Planes','1:72','Motor City Art Classics','10" Wingspan with retractable landing gears.Comes with pilot',4857,'32.77','49.66'),
 
-(110,'Pont Yacht','Ships','1:72','Unimax Art Galleries','Measures 38 inches Long x 33 3/4 inches High. Includes a stand.\r\nMany extras including rigging, long boats, pilot house, anchors, etc. Comes with 2 masts, all square-rigged',414,'33.30','54.60') ON DUPLICATE KEY UPDATE product_id=product_id;
+(110,'Pont Yacht','Ships','1:72','Unimax Art Galleries','Measures 38 inches Long x 33 3/4 inches High. Includes a stand.rnMany extras including rigging, long boats, pilot house, anchors, etc. Comes with 2 masts, all square-rigged',414,'33.30','54.60') ON CONFLICT (product_id) DO NOTHING;
 
 /*Data for the table `order` */
 
-insert  into `order`(`order_id`,`order_date`,`required_date`,`shipped_date`,`status`,`comments`,`customer_number`) values 
+insert  into "order"(order_id,order_date,required_date,shipped_date,status,comments,customer_number) values 
 
 (10100,'2003-01-06','2003-01-13','2003-01-10','Shipped',NULL,363),
 
@@ -977,13 +1003,13 @@ insert  into `order`(`order_id`,`order_date`,`required_date`,`shipped_date`,`sta
 
 (10163,'2003-10-20','2003-10-27','2003-10-24','Shipped',NULL,424),
 
-(10164,'2003-10-21','2003-10-30','2003-10-23','Resolved','This order was disputed, but resolved on 11/1/2003; Customer doesn\'t like the colors and precision of the models.',452),
+(10164,'2003-10-21','2003-10-30','2003-10-23','Resolved','This order was disputed, but resolved on 11/1/2003; Customer doesn''t like the colors and precision of the models.',452),
 
-(10165,'2003-10-22','2003-10-31','2003-12-26','Shipped','This order was on hold because customers\'s credit limit had been exceeded. Order will ship when payment is received',148),
+(10165,'2003-10-22','2003-10-31','2003-12-26','Shipped','This order was on hold because customers''s credit limit had been exceeded. Order will ship when payment is received',148),
 
 (10166,'2003-10-21','2003-10-30','2003-10-27','Shipped',NULL,462),
 
-(10167,'2003-10-23','2003-10-30',NULL,'Cancelled','Customer called to cancel. The warehouse was notified in time and the order didn\'t ship. They have a new VP of Sales and are shifting their sales model. Our VP of Sales should contact them.',448),
+(10167,'2003-10-23','2003-10-30',NULL,'Cancelled','Customer called to cancel. The warehouse was notified in time and the order didn''t ship. They have a new VP of Sales and are shifting their sales model. Our VP of Sales should contact them.',448),
 
 (10168,'2003-10-28','2003-11-03','2003-11-01','Shipped',NULL,161),
 
@@ -1303,7 +1329,7 @@ insert  into `order`(`order_id`,`order_date`,`required_date`,`shipped_date`,`sta
 
 (10326,'2004-11-09','2004-11-16','2004-11-10','Shipped',NULL,144),
 
-(10327,'2004-11-10','2004-11-19','2004-11-13','Resolved','Order was disputed and resolved on 12/1/04. The Sales Manager was involved. Customer claims the scales of the models don\'t match what was discussed.',145),
+(10327,'2004-11-10','2004-11-19','2004-11-13','Resolved','Order was disputed and resolved on 12/1/04. The Sales Manager was involved. Customer claims the scales of the models don''t match what was discussed.',145),
 
 (10328,'2004-11-12','2004-11-21','2004-11-18','Shipped','Customer very concerned about the exact color of the models. There is high risk that he may dispute the order because there is a slight color mismatch',278),
 
@@ -1383,7 +1409,7 @@ insert  into `order`(`order_id`,`order_date`,`required_date`,`shipped_date`,`sta
 
 (10366,'2005-01-10','2005-01-19','2005-01-12','Shipped',NULL,381),
 
-(10367,'2005-01-12','2005-01-21','2005-01-16','Resolved','This order was disputed and resolved on 2/1/2005. Customer claimed that container with shipment was damaged. FedEx\'s investigation proved this wrong.',205),
+(10367,'2005-01-12','2005-01-21','2005-01-16','Resolved','This order was disputed and resolved on 2/1/2005. Customer claimed that container with shipment was damaged. FedEx''s investigation proved this wrong.',205),
 
 (10368,'2005-01-19','2005-01-27','2005-01-24','Shipped','Can we renegotiate this one?',124),
 
@@ -1421,7 +1447,7 @@ insert  into `order`(`order_id`,`order_date`,`required_date`,`shipped_date`,`sta
 
 (10385,'2005-02-28','2005-03-09','2005-03-01','Shipped',NULL,124),
 
-(10386,'2005-03-01','2005-03-09','2005-03-06','Resolved','Disputed then Resolved on 3/15/2005. Customer doesn\'t like the craftsmaship of the models.',141),
+(10386,'2005-03-01','2005-03-09','2005-03-06','Resolved','Disputed then Resolved on 3/15/2005. Customer doesn''t like the craftsmaship of the models.',141),
 
 (10387,'2005-03-02','2005-03-09','2005-03-06','Shipped','We need to keep in close contact with their Marketing VP. He is the decision maker for all their purchases.',148),
 
@@ -1479,11 +1505,11 @@ insert  into `order`(`order_id`,`order_date`,`required_date`,`shipped_date`,`sta
 
 (10414,'2005-05-06','2005-05-13',NULL,'On Hold','Customer credit limit exceeded. Will ship when a payment is received.',362),
 
-(10415,'2005-05-09','2005-05-20','2005-05-12','Disputed','Customer claims the scales of the models don\'t match what was discussed. I keep all the paperwork though to prove otherwise',471),
+(10415,'2005-05-09','2005-05-20','2005-05-12','Disputed','Customer claims the scales of the models don''t match what was discussed. I keep all the paperwork though to prove otherwise',471),
 
 (10416,'2005-05-10','2005-05-16','2005-05-14','Shipped',NULL,386),
 
-(10417,'2005-05-13','2005-05-19','2005-05-19','Disputed','Customer doesn\'t like the colors and precision of the models.',141),
+(10417,'2005-05-13','2005-05-19','2005-05-19','Disputed','Customer doesn''t like the colors and precision of the models.',141),
 
 (10418,'2005-05-16','2005-05-24','2005-05-20','Shipped',NULL,412),
 
@@ -1499,11 +1525,11 @@ insert  into `order`(`order_id`,`order_date`,`required_date`,`shipped_date`,`sta
 
 (10424,'2005-05-31','2005-06-08',NULL,'In Process',NULL,141),
 
-(10425,'2005-05-31','2005-06-07',NULL,'In Process',NULL,119) ON DUPLICATE KEY UPDATE order_id=order_id;
+(10425,'2005-05-31','2005-06-07',NULL,'In Process',NULL,119) ON CONFLICT (order_id) DO NOTHING;
 
 /*Data for the table `orderdetail` */
 
-insert  into `orderdetail`(`order_id`,`product_id`,`quantity_ordered`,`price_each`,`order_line_number`) values 
+insert  into orderdetail(order_id,product_id,quantity_ordered,price_each,order_line_number) values 
 
 (10100,23,30,'136.00',3),
 
@@ -7495,557 +7521,558 @@ insert  into `orderdetail`(`order_id`,`product_id`,`quantity_ordered`,`price_eac
 
 (10425,88,11,'50.32',6),
 
-(10425,94,18,'94.92',2) ON DUPLICATE KEY UPDATE order_id=order_id;
+(10425,94,18,'94.92',2) ON CONFLICT (order_id, product_id) DO NOTHING;
 
 /*Data for the table `payment` */
 
-insert  into `payment`(`customer_number`,`check_number`,`payment_date`,`invoice_amount`, `caching_date`) values 
+insert into payment(customer_number,check_number,payment_date,invoice_amount,caching_date) values 
 
-(103,'HQ336336','2004-10-19','6066.78', '2004-10-19'),
 
-(103,'JM555205','2003-06-05','14571.44', '2003-06-05'),
+(103,'HQ336336','2004-10-19 12:00:01','6066.78', '2004-10-19 12:30:15'),
 
-(103,'OM314933','2004-12-18','1676.14', '2004-12-18'),
+(103,'JM555205','2003-06-05 11:25:25','14571.44', '2003-06-05 12:34:15'),
 
-(112,'BO864823','2004-12-17','14191.12', '2004-12-17'),
+(103,'OM314933','2004-12-18 15:10:25','1676.14', '2004-12-18 16:30:15'),
 
-(112,'HQ55022','2003-06-06','32641.98', '2003-06-06'),
+(112,'BO864823','2004-12-17 12:30:15','14191.12', '2004-12-17 12:32:15'),
 
-(112,'ND748579','2004-08-20','33347.88', '2004-08-20'),
+(112,'HQ55022','2003-06-06 04:10:15','32641.98', '2003-06-06 19:22:45'),
 
-(114,'GG31455','2003-05-20','45864.03', '2003-05-20'),
+(112,'ND748579','2004-08-20 07:10:15','33347.88', '2004-08-20 09:09:09'),
 
-(114,'MA765515','2004-12-15','82261.22', '2004-12-15'),
+(114,'GG31455','2003-05-20 08:10:45','45864.03', '2003-05-20 08:30:09'),
 
-(114,'NP603840','2003-05-31','7565.08', '2003-05-31'),
+(114,'MA765515','2004-12-15 16:12:15','82261.22', '2004-12-15 18:30:15'),
 
-(114,'NR27552','2004-03-10','44894.74', '2004-03-10'),
+(114,'NP603840','2003-05-31 18:32:15','7565.08', '2003-05-31 20:31:31'),
 
-(119,'DB933704','2004-11-14','19501.82', '2004-11-14'),
+(114,'NR27552','2004-03-10 07:20:21','44894.74', '2004-03-10 12:33:34'),
 
-(119,'LN373447','2004-08-08','47924.19', '2004-08-08'),
+(119,'DB933704','2004-11-14 11:10:15','19501.82', '2004-11-14 11:43:27'),
 
-(119,'NG94694','2005-02-22','49523.67', '2005-02-22'),
+(119,'LN373447','2004-08-08 09:30:15','47924.19', '2004-08-08 10:30:15'),
 
-(121,'DB889831','2003-02-16','50218.95', '2003-02-16'),
+(119,'NG94694','2005-02-22 23:20:15','49523.67', '2005-02-22 01:22:22'),
 
-(121,'FD317790','2003-10-28','1491.38', '2003-10-28'),
+(121,'DB889831','2003-02-16 06:30:15','50218.95', '2003-02-16 08:30:15'),
 
-(121,'KI831359','2004-11-04','17876.32', '2004-11-04'),
+(121,'FD317790','2003-10-28 11:37:35','1491.38', '2003-10-28 11:38:15'),
 
-(121,'MA302151','2004-11-28','34638.14', '2004-11-28'),
+(121,'KI831359','2004-11-04 11:20:22','17876.32', '2004-11-04 11:45:13'),
 
-(124,'AE215433','2005-03-05','101244.59', '2005-03-05'),
+(121,'MA302151','2004-11-28 15:01:15','34638.14', '2004-11-28 17:03:16'),
 
-(124,'BG255406','2004-08-28','85410.87', '2004-08-28'),
+(124,'AE215433','2005-03-05 09:01:03','101244.59', '2005-03-05 10:00:15'),
 
-(124,'CQ287967','2003-04-11','11044.30','2003-04-11'),
+(124,'BG255406','2004-08-28 18:22:32','85410.87', '2004-08-28 19:30:15'),
 
-(124,'ET64396','2005-04-16','83598.04', '2005-04-16'),
+(124,'CQ287967','2003-04-11 17:04:11','11044.30','2003-04-11 17:30:22'),
 
-(124,'HI366474','2004-12-27','47142.70', '2004-12-27'),
+(124,'ET64396','2005-04-16 19:18:15','83598.04', '2005-04-16 21:30:15'),
 
-(124,'HR86578','2004-11-02','55639.66', '2004-11-02'),
+(124,'HI366474','2004-12-27 21:33:42','47142.70', '2004-12-27 23:10:11'),
 
-(124,'KI131716','2003-08-15','111654.40', '2003-08-15'),
+(124,'HR86578','2004-11-02 18:32:15','55639.66', '2004-11-02 19:30:15'),
 
-(124,'LF217299','2004-03-26','43369.30', '2004-03-26'),
+(124,'KI131716','2003-08-15 10:02:15','111654.40', '2003-08-15 12:30:15'),
 
-(124,'NT141748','2003-11-25','45084.38', '2003-11-25'),
+(124,'LF217299','2004-03-26 10:34:22','43369.30', '2004-03-26 10:38:56'),
 
-(128,'DI925118','2003-01-28','10549.01', '2003-01-28'),
+(124,'NT141748','2003-11-25 08:30:15','45084.38', '2003-11-25 09:30:15'),
 
-(128,'FA465482','2003-10-18','24101.81', '2003-10-18'),
+(128,'DI925118','2003-01-28 11:10:15','10549.01', '2003-01-28 12:30:15'),
 
-(128,'FH668230','2004-03-24','33820.62', '2004-03-24'),
+(128,'FA465482','2003-10-18 18:22:25','24101.81', '2003-10-18 22:03:12'),
 
-(128,'IP383901','2004-11-18','7466.32', '2004-11-18'),
+(128,'FH668230','2004-03-24 13:12:15','33820.62', '2004-03-24 14:30:15'),
 
-(129,'DM826140','2004-12-08','26248.78', '2004-12-08'),
+(128,'IP383901','2004-11-18 14:30:15','7466.32', '2004-11-18 15:30:15'),
 
-(129,'ID449593','2003-12-11','23923.93', '2003-12-11'),
+(129,'DM826140','2004-12-08 14:30:15','26248.78', '2004-12-08 15:30:15'),
 
-(129,'PI42991','2003-04-09','16537.85', '2003-04-09'),
+(129,'ID449593','2003-12-11 14:30:15','23923.93', '2003-12-11 15:30:15'),
 
-(131,'CL442705','2003-03-12','22292.62', '2003-03-12'),
+(129,'PI42991','2003-04-09 09:21:25','16537.85', '2003-04-09 12:30:15'),
 
-(131,'MA724562','2004-12-02','50025.35', '2004-12-02'),
+(131,'CL442705','2003-03-12 10:10:15','22292.62', '2003-03-12 12:30:15'),
 
-(131,'NB445135','2004-09-11','35321.97', '2004-09-11'),
+(131,'MA724562','2004-12-02 16:33:44','50025.35', '2004-12-02 17:31:15'),
 
-(141,'AU364101','2003-07-19','36251.03', '2003-07-19'),
+(131,'NB445135','2004-09-11 12:30:15','35321.97', '2004-09-11 12:32:15'),
 
-(141,'DB583216','2004-11-01','36140.38', '2004-11-01'),
+(141,'AU364101','2003-07-19 01:32:15','36251.03', '2003-07-19 03:03:22'),
 
-(141,'DL460618','2005-05-19','46895.48', '2005-05-19'),
+(141,'DB583216','2004-11-01 05:20:15','36140.38', '2004-11-01 07:30:15'),
 
-(141,'HJ32686','2004-01-30','59830.55', '2004-01-30'),
+(141,'DL460618','2005-05-19 12:30:15','46895.48', '2005-05-19 16:30:15'),
 
-(141,'ID10962','2004-12-31','116208.40', '2004-12-31'),
+(141,'HJ32686','2004-01-30 12:55:15','59830.55', '2004-01-30 13:30:15'),
 
-(141,'IN446258','2005-03-25','65071.26', '2005-03-25'),
+(141,'ID10962','2004-12-31 10:01:02','116208.40', '2004-12-31 11:11:25'),
 
-(141,'JE105477','2005-03-18','120166.58', '2005-03-18'),
+(141,'IN446258','2005-03-25 11:12:22','65071.26', '2005-03-25 12:04:22'),
 
-(141,'JN355280','2003-10-26','49539.37', '2003-10-26'),
+(141,'JE105477','2005-03-18 11:55:15','120166.58', '2005-03-18 12:30:15'),
 
-(141,'JN722010','2003-02-25','40206.20', '2003-02-25'),
+(141,'JN355280','2003-10-26 12:36:15','49539.37', '2003-10-26 12:39:15'),
 
-(141,'KT52578','2003-12-09','63843.55', '2003-12-09'),
+(141,'JN722010','2003-02-25 17:11:33','40206.20', '2003-02-25 18:33:27'),
 
-(141,'MC46946','2004-07-09','35420.74', '2004-07-09'),
+(141,'KT52578','2003-12-09 08:30:15','63843.55', '2003-12-09 12:22:43'),
 
-(141,'MF629602','2004-08-16','20009.53', '2004-08-16'),
+(141,'MC46946','2004-07-09 16:12:22','35420.74', '2004-07-09 16:30:15'),
 
-(141,'NU627706','2004-05-17','26155.91', '2004-05-17'),
+(141,'MF629602','2004-08-16 11:21:22','20009.53', '2004-08-16 12:36:05'),
 
-(144,'IR846303','2004-12-12','36005.71', '2004-12-12'),
+(141,'NU627706','2004-05-17 12:30:15','26155.91', '2004-05-17 19:30:15'),
 
-(144,'LA685678','2003-04-09','7674.94', '2003-04-09'),
+(144,'IR846303','2004-12-12 10:22:21','36005.71', '2004-12-12 12:38:15'),
 
-(145,'CN328545','2004-07-03','4710.73', '2004-07-03'),
+(144,'LA685678','2003-04-09 12:38:15','7674.94', '2003-04-09 12:39:15'),
 
-(145,'ED39322','2004-04-26','28211.70', '2004-04-26'),
+(145,'CN328545','2004-07-03 11:22:15','4710.73', '2004-07-03 12:30:15'),
 
-(145,'HR182688','2004-12-01','20564.86', '2004-12-01'),
+(145,'ED39322','2004-04-26 22:32:15','28211.70', '2004-04-26 22:30:33'),
 
-(145,'JJ246391','2003-02-20','53959.21', '2003-02-20'),
+(145,'HR182688','2004-12-01 22:36:15','20564.86', '2004-12-01 23:30:15'),
 
-(146,'FP549817','2004-03-18','40978.53', '2004-03-18'),
+(145,'JJ246391','2003-02-20 12:30:15','53959.21', '2003-02-20 19:30:15'),
 
-(146,'FU793410','2004-01-16','49614.72', '2004-01-16'),
+(146,'FP549817','2004-03-18 11:30:15','40978.53', '2004-03-18 12:30:15'),
 
-(146,'LJ160635','2003-12-10','39712.10', '2003-12-10'),
+(146,'FU793410','2004-01-16 08:30:15','49614.72', '2004-01-16 12:30:15'),
 
-(148,'BI507030','2003-04-22','44380.15', '2003-04-22'),
+(146,'LJ160635','2003-12-10 11:31:02','39712.10', '2003-12-10 12:02:15'),
 
-(148,'DD635282','2004-08-11','2611.84', '2004-08-11'),
+(148,'BI507030','2003-04-22 09:30:15','44380.15', '2003-04-22 10:30:15'),
 
-(148,'KM172879','2003-12-26','105743.00', '2003-12-26'),
+(148,'DD635282','2004-08-11 10:10:12','2611.84', '2004-08-11 10:10:22'),
 
-(148,'ME497970','2005-03-27','3516.04', '2005-03-27'),
+(148,'KM172879','2003-12-26 12:32:15','105743.00', '2003-12-26 12:41:15'),
 
-(151,'BF686658','2003-12-22','58793.53', '2003-12-22'),
+(148,'ME497970','2005-03-27 12:42:15','3516.04', '2005-03-27 12:55:15'),
 
-(151,'GB852215','2004-07-26','20314.44', '2004-07-26'),
+(151,'BF686658','2003-12-22 05:30:15','58793.53', '2003-12-22 09:21:02'),
 
-(151,'IP568906','2003-06-18','58841.35', '2003-06-18'),
+(151,'GB852215','2004-07-26 14:14:15','20314.44', '2004-07-26 15:32:15'),
 
-(151,'KI884577','2004-12-14','39964.63', '2004-12-14'),
+(151,'IP568906','2003-06-18 15:30:15','58841.35', '2003-06-18 15:30:33'),
 
-(157,'HI618861','2004-11-19','35152.12', '2004-11-19'),
+(151,'KI884577','2004-12-14 12:30:15','39964.63', '2004-12-14 14:30:15'),
 
-(157,'NN711988','2004-09-07','63357.13', '2004-09-07'),
+(157,'HI618861','2004-11-19 14:12:15','35152.12', '2004-11-19 15:30:15'),
 
-(161,'BR352384','2004-11-14','2434.25', '2004-11-14'),
+(157,'NN711988','2004-09-07 12:30:15','63357.13', '2004-09-07 12:31:15'),
 
-(161,'BR478494','2003-11-18','50743.65', '2003-11-18'),
+(161,'BR352384','2004-11-14 15:02:12','2434.25', '2004-11-14 15:40:25'),
 
-(161,'KG644125','2005-02-02','12692.19', '2005-02-02'),
+(161,'BR478494','2003-11-18 15:55:15','50743.65', '2003-11-18 16:30:15'),
 
-(161,'NI908214','2003-08-05','38675.13', '2003-08-05'),
+(161,'KG644125','2005-02-02 16:30:15','12692.19', '2005-02-02 18:01:00'),
 
-(166,'BQ327613','2004-09-16','38785.48', '2004-09-16'),
+(161,'NI908214','2003-08-05 18:00:00','38675.13', '2003-08-05 19:00:03'),
 
-(166,'DC979307','2004-07-07','44160.92', '2004-07-07'),
+(166,'BQ327613','2004-09-16 21:01:15','38785.48', '2004-09-16 22:30:22'),
 
-(166,'LA318629','2004-02-28','22474.17', '2004-02-28'),
+(166,'DC979307','2004-07-07 12:30:15','44160.92', '2004-07-07 17:30:15'),
 
-(167,'ED743615','2004-09-19','12538.01', '2004-09-19'),
+(166,'LA318629','2004-02-28 08:30:15','22474.17', '2004-02-28 09:30:15'),
 
-(167,'GN228846','2003-12-03','85024.46', '2003-12-03'),
+(167,'ED743615','2004-09-19 13:00:15','12538.01', '2004-09-19 14:36:44'),
 
-(171,'GB878038','2004-03-15','18997.89', '2004-03-15'),
+(167,'GN228846','2003-12-03 16:02:02','85024.46', '2003-12-03 17:11:15'),
 
-(171,'IL104425','2003-11-22','42783.81', '2003-11-22'),
+(171,'GB878038','2004-03-15 01:30:15','18997.89', '2004-03-15 02:32:15'),
 
-(172,'AD832091','2004-09-09','1960.80', '2004-09-09'),
+(171,'IL104425','2003-11-22 09:08:15','42783.81', '2003-11-22 11:30:15'),
 
-(172,'CE51751','2004-12-04','51209.58', '2004-12-04'),
+(172,'AD832091','2004-09-09 10:10:11','1960.80', '2004-09-09 11:10:11'),
 
-(172,'EH208589','2003-04-20','33383.14', '2003-04-20'),
+(172,'CE51751','2004-12-04 11:11:15','51209.58', '2004-12-04 12:30:15'),
 
-(173,'GP545698','2004-05-13','11843.45', '2004-05-13'),
+(172,'EH208589','2003-04-20 13:33:13','33383.14', '2003-04-20 13:17:15'),
 
-(173,'IG462397','2004-03-29','20355.24', '2004-03-29'),
+(173,'GP545698','2004-05-13 12:30:15','11843.45', '2004-05-13 12:32:15'),
 
-(175,'CITI3434344','2005-05-19','28500.78', '2005-05-19'),
+(173,'IG462397','2004-03-29 12:30:15','20355.24', '2004-03-29 12:33:15'),
 
-(175,'IO448913','2003-11-19','24879.08', '2003-11-19'),
+(175,'CITI3434344','2005-05-19 12:30:15','28500.78', '2005-05-19 12:34:15'),
 
-(175,'PI15215','2004-07-10','42044.77', '2004-07-10'),
+(175,'IO448913','2003-11-19 11:02:15','24879.08', '2003-11-19 12:30:15'),
 
-(177,'AU750837','2004-04-17','15183.63', '2004-04-17'),
+(175,'PI15215','2004-07-10 15:33:15','42044.77', '2004-07-10 15:38:33'),
 
-(177,'CI381435','2004-01-19','47177.59', '2004-01-19'),
+(177,'AU750837','2004-04-17 17:21:21','15183.63', '2004-04-17 17:22:23'),
 
-(181,'CM564612','2004-04-25','22602.36', '2004-04-25'),
+(177,'CI381435','2004-01-19 17:20:15','47177.59', '2004-01-19 18:12:12'),
 
-(181,'GQ132144','2003-01-30','5494.78', '2003-01-30'),
+(181,'CM564612','2004-04-25 16:06:15','22602.36', '2004-04-25 16:20:15'),
 
-(181,'OH367219','2004-11-16','44400.50', '2004-11-16'),
+(181,'GQ132144','2003-01-30 11:21:25','5494.78', '2003-01-30 12:30:15'),
 
-(186,'AE192287','2005-03-10','23602.90', '2005-03-10'),
+(181,'OH367219','2004-11-16 11:11:11','44400.50', '2004-11-16 12:50:15'),
 
-(186,'AK412714','2003-10-27','37602.48', '2003-10-27'),
+(186,'AE192287','2005-03-10 12:43:45','23602.90', '2005-03-10 13:31:15'),
 
-(186,'KA602407','2004-10-21','34341.08', '2004-10-21'),
+(186,'AK412714','2003-10-27 11:11:12','37602.48', '2003-10-27 12:39:15'),
 
-(187,'AM968797','2004-11-03','52825.29', '2004-11-03'),
+(186,'KA602407','2004-10-21 17:22:22','34341.08', '2004-10-21 17:31:12'),
 
-(187,'BQ39062','2004-12-08','47159.11', '2004-12-08'),
+(187,'AM968797','2004-11-03 18:32:10','52825.29', '2004-11-03 18:30:01'),
 
-(187,'KL124726','2003-03-27','48425.69', '2003-03-27'),
+(187,'BQ39062','2004-12-08 13:55:33','47159.11', '2004-12-08 13:22:22'),
 
-(189,'BO711618','2004-10-03','17359.53', '2004-10-03'),
+(187,'KL124726','2003-03-27 12:08:15','48425.69', '2003-03-27 12:10:15'),
 
-(189,'NM916675','2004-03-01','32538.74', '2004-03-01'),
+(189,'BO711618','2004-10-03 08:30:15','17359.53', '2004-10-03 09:30:15'),
 
-(198,'FI192930','2004-12-06','9658.74', '2004-12-06'),
+(189,'NM916675','2004-03-01 11:31:15','32538.74', '2004-03-01 12:04:15'),
 
-(198,'HQ920205','2003-07-06','6036.96', '2003-07-06'),
+(198,'FI192930','2004-12-06 10:21:12','9658.74', '2004-12-06 10:30:59'),
 
-(198,'IS946883','2004-09-21','5858.56', '2004-09-21'),
+(198,'HQ920205','2003-07-06 13:33:15','6036.96', '2003-07-06 17:31:15'),
 
-(201,'DP677013','2003-10-20','23908.24', '2003-10-20'),
+(198,'IS946883','2004-09-21 17:33:15','5858.56', '2004-09-21 02:30:15'),
 
-(201,'OO846801','2004-06-15','37258.94', '2004-06-15'),
+(201,'DP677013','2003-10-20 18:29:22','23908.24', '2003-10-20 18:47:12'),
 
-(202,'HI358554','2003-12-18','36527.61', '2003-12-18'),
+(201,'OO846801','2004-06-15 15:32:15','37258.94', '2004-06-15 15:39:15'),
 
-(202,'IQ627690','2004-11-08','33594.58', '2004-11-08'),
+(202,'HI358554','2003-12-18 09:30:05','36527.61', '2003-12-18 12:30:45'),
 
-(204,'GC697638','2004-08-13','51152.86', '2004-08-13'),
+(202,'IQ627690','2004-11-08 07:09:15','33594.58', '2004-11-08 12:34:15'),
 
-(204,'IS150005','2004-09-24','4424.40', '2004-09-24'),
+(204,'GC697638','2004-08-13 14:30:15','51152.86', '2004-08-13 15:30:15'),
 
-(205,'GL756480','2003-12-04','3879.96', '2003-12-04'),
+(204,'IS150005','2004-09-24 12:30:15','4424.40', '2004-09-24 12:30:15'),
 
-(205,'LL562733','2003-09-05','50342.74', '2003-09-05'),
+(205,'GL756480','2003-12-04 11:11:44','3879.96', '2003-12-04 12:44:44'),
 
-(205,'NM739638','2005-02-06','39580.60', '2005-02-06'),
+(205,'LL562733','2003-09-05 15:34:33','50342.74', '2003-09-05 16:37:15'),
 
-(209,'BOAF82044','2005-05-03','35157.75', '2005-05-03'),
+(205,'NM739638','2005-02-06 15:36:25','39580.60', '2005-02-06 16:36:13'),
 
-(209,'ED520529','2004-06-21','4632.31', '2004-06-21'),
+(209,'BOAF82044','2005-05-03 15:32:15','35157.75', '2005-05-03 16:30:15'),
 
-(209,'PH785937','2004-05-04','36069.26', '2004-05-04'),
+(209,'ED520529','2004-06-21 22:31:15','4632.31', '2004-06-21 23:30:15'),
 
-(211,'BJ535230','2003-12-09','45480.79', '2003-12-09'),
+(209,'PH785937','2004-05-04 22:12:12','36069.26', '2004-05-04 22:31:15'),
 
-(216,'BG407567','2003-05-09','3101.40', '2003-05-09'),
+(211,'BJ535230','2003-12-09 23:30:15','45480.79', '2003-12-09 23:59:35'),
 
-(216,'ML780814','2004-12-06','24945.21', '2004-12-06'),
+(216,'BG407567','2003-05-09 21:02:15','3101.40', '2003-05-09 23:09:05'),
 
-(216,'MM342086','2003-12-14','40473.86', '2003-12-14'),
+(216,'ML780814','2004-12-06 12:33:15','24945.21', '2004-12-06 22:30:15'),
 
-(219,'BN17870','2005-03-02','3452.75', '2005-03-02'),
+(216,'MM342086','2003-12-14 03:30:15','40473.86', '2003-12-14 04:30:15'),
 
-(219,'BR941480','2003-10-18','4465.85', '2003-10-18'),
+(219,'BN17870','2005-03-02 12:22:02','3452.75', '2005-03-02 13:30:33'),
 
-(227,'MQ413968','2003-10-31','36164.46', '2003-10-31'),
+(219,'BR941480','2003-10-18 06:22:15','4465.85', '2003-10-18 08:33:22'),
 
-(227,'NU21326','2004-11-02','53745.34', '2004-11-02'),
+(227,'MQ413968','2003-10-31 16:12:12','36164.46', '2003-10-31 17:30:15'),
 
-(233,'BOFA23232','2005-05-20','29070.38', '2005-05-20'),
+(227,'NU21326','2004-11-02 06:02:02','53745.34', '2004-11-02 06:32:05'),
 
-(233,'II180006','2004-07-01','22997.45', '2004-07-01'),
+(233,'BOFA23232','2005-05-20 06:32:12','29070.38', '2005-05-20 12:30:22'),
 
-(233,'JG981190','2003-11-18','16909.84', '2003-11-18'),
+(233,'II180006','2004-07-01 04:32:15','22997.45', '2004-07-01 07:03:25'),
 
-(239,'NQ865547','2004-03-15','80375.24', '2004-03-15'),
+(233,'JG981190','2003-11-18 07:08:22','16909.84', '2003-11-18 10:31:25'),
 
-(240,'IF245157','2004-11-16','46788.14', '2004-11-16'),
+(239,'NQ865547','2004-03-15 15:12:12','80375.24', '2004-03-15 15:41:00'),
 
-(240,'JO719695','2004-03-28','24995.61', '2004-03-28'),
+(240,'IF245157','2004-11-16 13:43:13','46788.14', '2004-11-16 13:46:13'),
 
-(242,'AF40894','2003-11-22','33818.34', '2003-11-22'),
+(240,'JO719695','2004-03-28 17:55:15','24995.61', '2004-03-28 18:30:15'),
 
-(242,'HR224331','2005-06-03','12432.32', '2005-06-03'),
+(242,'AF40894','2003-11-22 12:30:15','33818.34', '2003-11-22 12:50:15'),
 
-(242,'KI744716','2003-07-21','14232.70', '2003-07-21'),
+(242,'HR224331','2005-06-03 02:32:00','12432.32', '2005-06-03 11:30:00'),
 
-(249,'IJ399820','2004-09-19','33924.24', '2004-09-19'),
+(242,'KI744716','2003-07-21 04:44:45','14232.70', '2003-07-21 06:33:25'),
 
-(249,'NE404084','2004-09-04','48298.99', '2004-09-04'),
+(249,'IJ399820','2004-09-19 04:02:15','33924.24', '2004-09-19 04:22:15'),
 
-(250,'EQ12267','2005-05-17','17928.09', '2005-05-17'),
+(249,'NE404084','2004-09-04 12:30:15','48298.99', '2004-09-04 12:30:56'),
 
-(250,'HD284647','2004-12-30','26311.63', '2004-12-30'),
+(250,'EQ12267','2005-05-17 09:32:15','17928.09', '2005-05-17 10:11:15'),
 
-(250,'HN114306','2003-07-18','23419.47', '2003-07-18'),
+(250,'HD284647','2004-12-30 10:30:15','26311.63', '2004-12-30 10:38:35'),
 
-(256,'EP227123','2004-02-10','5759.42', '2004-02-10'),
+(250,'HN114306','2003-07-18 11:20:25','23419.47', '2003-07-18 12:39:15'),
 
-(256,'HE84936','2004-10-22','53116.99', '2004-10-22'),
+(256,'EP227123','2004-02-10 16:32:25','5759.42', '2004-02-10 17:32:15'),
 
-(259,'EU280955','2004-11-06','61234.67', '2004-11-06'),
+(256,'HE84936','2004-10-22 17:31:25','53116.99', '2004-10-22 17:37:15'),
 
-(259,'GB361972','2003-12-07','27988.47', '2003-12-07'),
+(259,'EU280955','2004-11-06 10:02:15','61234.67', '2004-11-06 12:30:15'),
 
-(260,'IO164641','2004-08-30','37527.58', '2004-08-30'),
+(259,'GB361972','2003-12-07 10:22:02','27988.47', '2003-12-07 11:30:15'),
 
-(260,'NH776924','2004-04-24','29284.42', '2004-04-24'),
+(260,'IO164641','2004-08-30 11:02:22','37527.58', '2004-08-30 14:33:13'),
 
-(276,'EM979878','2005-02-09','27083.78', '2005-02-09'),
+(260,'NH776924','2004-04-24 14:11:23','29284.42', '2004-04-24 14:38:00'),
 
-(276,'KM841847','2003-11-13','38547.19', '2003-11-13'),
+(276,'EM979878','2005-02-09 15:32:22','27083.78', '2005-02-09 17:33:15'),
 
-(276,'LE432182','2003-09-28','41554.73', '2003-09-28'),
+(276,'KM841847','2003-11-13 01:00:15','38547.19', '2003-11-13 03:12:00'),
 
-(276,'OJ819725','2005-04-30','29848.52', '2005-04-30'),
+(276,'LE432182','2003-09-28 12:30:15','41554.73', '2003-09-28 12:44:15'),
 
-(278,'BJ483870','2004-12-05','37654.09', '2004-12-05'),
+(276,'OJ819725','2005-04-30 03:33:15','29848.52', '2005-04-30 03:37:12'),
 
-(278,'GP636783','2003-03-02','52151.81', '2003-03-02'),
+(278,'BJ483870','2004-12-05 02:02:02','37654.09', '2004-12-05 06:30:43'),
 
-(278,'NI983021','2003-11-24','37723.79', '2003-11-24'),
+(278,'GP636783','2003-03-02 11:32:12','52151.81', '2003-03-02 12:32:00'),
 
-(282,'IA793562','2003-08-03','24013.52', '2003-08-03'),
+(278,'NI983021','2003-11-24 16:10:15','37723.79', '2003-11-24 16:22:12'),
 
-(282,'JT819493','2004-08-02','35806.73', '2004-08-02'),
+(282,'IA793562','2003-08-03 16:23:12','24013.52', '2003-08-03 18:37:17'),
 
-(282,'OD327378','2005-01-03','31835.36', '2005-01-03'),
+(282,'JT819493','2004-08-02 12:30:15','35806.73', '2004-08-02 12:30:45'),
 
-(286,'DR578578','2004-10-28','47411.33', '2004-10-28'),
+(282,'OD327378','2005-01-03 22:30:15','31835.36', '2005-01-03 23:30:15'),
 
-(286,'KH910279','2004-09-05','43134.04', '2004-09-05'),
+(286,'DR578578','2004-10-28 12:34:15','47411.33', '2004-10-28 12:39:15'),
 
-(298,'AJ574927','2004-03-13','47375.92', '2004-03-13'),
+(286,'KH910279','2004-09-05 11:32:15','43134.04', '2004-09-05 11:36:12'),
 
-(298,'LF501133','2004-09-18','61402.00', '2004-09-18'),
+(298,'AJ574927','2004-03-13 17:30:15','47375.92', '2004-03-13 20:30:15'),
 
-(299,'AD304085','2003-10-24','36798.88', '2003-10-24'),
+(298,'LF501133','2004-09-18 14:33:15','61402.00', '2004-09-18 16:30:15'),
 
-(299,'NR157385','2004-09-05','32260.16', '2004-09-05'),
+(299,'AD304085','2003-10-24 19:19:15','36798.88', '2003-10-24 19:30:13'),
 
-(311,'DG336041','2005-02-15','46770.52', '2005-02-15'),
+(299,'NR157385','2004-09-05 19:02:10','32260.16', '2004-09-05 20:02:12'),
 
-(311,'FA728475','2003-10-06','32723.04', '2003-10-06'),
+(311,'DG336041','2005-02-15 18:37:15','46770.52', '2005-02-15 18:38:15'),
 
-(311,'NQ966143','2004-04-25','16212.59', '2004-04-25'),
+(311,'FA728475','2003-10-06 11:32:12','32723.04', '2003-10-06 18:53:12'),
 
-(314,'LQ244073','2004-08-09','45352.47', '2004-08-09'),
+(311,'NQ966143','2004-04-25 09:20:22','16212.59', '2004-04-25 11:37:22'),
 
-(314,'MD809704','2004-03-03','16901.38', '2004-03-03'),
+(314,'LQ244073','2004-08-09 06:12:12','45352.47', '2004-08-09 12:30:15'),
 
-(319,'HL685576','2004-11-06','42339.76', '2004-11-06'),
+(314,'MD809704','2004-03-03 02:30:15','16901.38', '2004-03-03 12:30:15'),
 
-(319,'OM548174','2003-12-07','36092.40', '2003-12-07'),
+(319,'HL685576','2004-11-06 14:34:45','42339.76', '2004-11-06 19:32:15'),
 
-(320,'GJ597719','2005-01-18','8307.28', '2005-01-18'),
+(319,'OM548174','2003-12-07 12:44:15','36092.40', '2003-12-07 13:30:15'),
 
-(320,'HO576374','2003-08-20','41016.75', '2003-08-20'),
+(320,'GJ597719','2005-01-18 17:12:12','8307.28', '2005-01-18 18:32:00'),
 
-(320,'MU817160','2003-11-24','52548.49', '2003-11-24'),
+(320,'HO576374','2003-08-20 16:30:12','41016.75', '2003-08-20 17:10:15'),
 
-(321,'DJ15149','2003-11-03','85559.12', '2003-11-12'),
+(320,'MU817160','2003-11-24 14:37:13','52548.49', '2003-11-24 16:10:00'),
 
-(321,'LA556321','2005-03-15','46781.66', '2005-03-15'),
+(321,'DJ15149','2003-11-03 13:11:11','85559.12', '2003-11-12 14:30:15'),
 
-(323,'AL493079','2005-05-23','75020.13', '2005-05-23'),
+(321,'LA556321','2005-03-15 09:44:12','46781.66', '2005-03-15 09:46:15'),
 
-(323,'ES347491','2004-06-24','37281.36', '2004-06-24'),
+(323,'AL493079','2005-05-23 09:23:25','75020.13', '2005-05-23 09:30:00'),
 
-(323,'HG738664','2003-07-05','2880.00', '2003-07-05'),
+(323,'ES347491','2004-06-24 08:32:12','37281.36', '2004-06-24 09:11:15'),
 
-(323,'PQ803830','2004-12-24','39440.59', '2004-12-24'),
+(323,'HG738664','2003-07-05 12:39:00','2880.00', '2003-07-05 13:00:00'),
 
-(324,'DQ409197','2004-12-13','13671.82', '2004-12-13'),
+(323,'PQ803830','2004-12-24 02:45:15','39440.59', '2004-12-24 02:55:15'),
 
-(324,'FP443161','2003-07-07','29429.14', '2003-07-07'),
+(324,'DQ409197','2004-12-13 01:01:25','13671.82', '2004-12-13 03:30:00'),
 
-(324,'HB150714','2003-11-23','37455.77', '2003-11-23'),
+(324,'FP443161','2003-07-07 12:30:15','29429.14', '2003-07-07 12:35:15'),
 
-(328,'EN930356','2004-04-16','7178.66', '2004-04-16'),
+(324,'HB150714','2003-11-23 11:30:15','37455.77', '2003-11-23 12:30:15'),
 
-(328,'NR631421','2004-05-30','31102.85', '2004-05-30'),
+(328,'EN930356','2004-04-16 20:02:15','7178.66', '2004-04-16 21:45:10'),
 
-(333,'HL209210','2003-11-15','23936.53', '2003-11-15'),
+(328,'NR631421','2004-05-30 20:12:05','31102.85', '2004-05-30 20:34:35'),
 
-(333,'JK479662','2003-10-17','9821.32', '2003-10-17'),
+(333,'HL209210','2003-11-15 12:30:15','23936.53', '2003-11-15 12:30:17'),
 
-(333,'NF959653','2005-03-01','21432.31', '2005-03-01'),
+(333,'JK479662','2003-10-17 09:32:15','9821.32', '2003-10-17 12:30:15'),
 
-(334,'CS435306','2005-01-27','45785.34', '2005-01-27'),
+(333,'NF959653','2005-03-01 19:10:01','21432.31', '2005-03-01 19:32:56'),
 
-(334,'HH517378','2003-08-16','29716.86', '2003-08-16'),
+(334,'CS435306','2005-01-27 16:20:25','45785.34', '2005-01-27 16:39:15'),
 
-(334,'LF737277','2004-05-22','28394.54', '2004-05-22'),
+(334,'HH517378','2003-08-16 16:30:12','29716.86', '2003-08-16 16:30:35'),
 
-(339,'AP286625','2004-10-24','23333.06', '2004-10-24'),
+(334,'LF737277','2004-05-22 16:33:13','28394.54', '2004-05-22 16:39:25'),
 
-(339,'DA98827','2003-11-28','34606.28', '2003-11-28'),
+(339,'AP286625','2004-10-24 02:02:33','23333.06', '2004-10-24 04:33:21'),
 
-(344,'AF246722','2003-11-24','31428.21', '2003-11-24'),
+(339,'DA98827','2003-11-28 12:30:15','34606.28', '2003-11-28 12:30:15'),
 
-(344,'NJ906924','2004-04-02','15322.93', '2004-04-02'),
+(344,'AF246722','2003-11-24 14:33:15','31428.21', '2003-11-24 15:03:00'),
 
-(347,'DG700707','2004-01-18','21053.69', NULL),
+(344,'NJ906924','2004-04-02 12:32:15','15322.93', '2004-04-02 12:34:15'),
 
-(347,'LG808674','2003-10-24','20452.50', '2003-10-24'),
+(347,'DG700707','2004-01-18 12:30:15','21053.69', NULL),
 
-(350,'BQ602907','2004-12-11','18888.31', '2004-12-11'),
+(347,'LG808674','2003-10-24 11:56:15','20452.50', '2003-10-24 12:33:15'),
 
-(350,'CI471510','2003-05-25','50824.66', '2003-05-25'),
+(350,'BQ602907','2004-12-11 02:22:15','18888.31', '2004-12-11 12:30:15'),
 
-(350,'OB648482','2005-01-29','1834.56', '2005-01-29'),
+(350,'CI471510','2003-05-25 12:30:12','50824.66', '2003-05-25 12:30:19'),
 
-(353,'CO351193','2005-01-10','49705.52', '2005-01-10'),
+(350,'OB648482','2005-01-29 12:34:15','1834.56', '2005-01-29 12:38:15'),
 
-(353,'ED878227','2003-07-21','13920.26', '2003-07-21'),
+(353,'CO351193','2005-01-10 14:10:15','49705.52', '2005-01-10 14:30:15'),
 
-(353,'GT878649','2003-05-21','16700.47', '2003-05-21'),
+(353,'ED878227','2003-07-21 13:21:12','13920.26', '2003-07-21 13:30:15'),
 
-(353,'HJ618252','2005-06-09','46656.94', '2005-06-09'),
+(353,'GT878649','2003-05-21 13:02:15','16700.47', '2003-05-21 13:05:15'),
 
-(357,'AG240323','2003-12-16','20220.04', '2003-12-16'),
+(353,'HJ618252','2005-06-09 12:55:25','46656.94', '2005-06-09 13:31:25'),
 
-(357,'NB291497','2004-05-15','36442.34', '2004-05-15'),
+(357,'AG240323','2003-12-16 11:54:15','20220.04', '2003-12-16 12:02:15'),
 
-(362,'FP170292','2004-07-11','18473.71', '2004-07-11'),
+(357,'NB291497','2004-05-15 11:02:12','36442.34', '2004-05-15 11:30:25'),
 
-(362,'OG208861','2004-09-21','15059.76', '2004-09-21'),
+(362,'FP170292','2004-07-11 12:30:15','18473.71', '2004-07-11 21:30:15'),
 
-(363,'HL575273','2004-11-17','50799.69', '2004-11-17'),
+(362,'OG208861','2004-09-21 11:31:15','15059.76', '2004-09-21 14:14:15'),
 
-(363,'IS232033','2003-01-16','10223.83', '2003-01-16'),
+(363,'HL575273','2004-11-17 19:21:12','50799.69', '2004-11-17 21:20:12'),
 
-(363,'PN238558','2003-12-05','55425.77', '2003-12-05'),
+(363,'IS232033','2003-01-16 19:11:11','10223.83', '2003-01-16 19:30:22'),
 
-(379,'CA762595','2005-02-12','28322.83', '2005-02-12'),
+(363,'PN238558','2003-12-05 18:20:15','55425.77', '2003-12-05 19:30:15'),
 
-(379,'FR499138','2003-09-16','32680.31', '2003-09-16'),
+(379,'CA762595','2005-02-12 11:30:15','28322.83', '2005-02-12 14:30:15'),
 
-(379,'GB890854','2004-08-02','12530.51', '2004-08-02'),
+(379,'FR499138','2003-09-16 15:31:15','32680.31', '2003-09-16 17:02:22'),
 
-(381,'BC726082','2004-12-03','12081.52', '2004-12-03'),
+(379,'GB890854','2004-08-02 11:22:33','12530.51', '2004-08-02 12:30:15'),
 
-(381,'CC475233','2003-04-19','1627.56', '2003-04-19'),
+(381,'BC726082','2004-12-03 22:32:15','12081.52', '2004-12-03 04:30:15'),
 
-(381,'GB117430','2005-02-03','14379.90', '2005-03-05'),
+(381,'CC475233','2003-04-19 01:02:15','1627.56', '2003-04-19 02:31:15'),
 
-(381,'MS154481','2003-08-22','1128.20', '2003-08-22'),
+(381,'GB117430','2005-02-03 12:37:15','14379.90', '2005-03-05 12:44:15'),
 
-(382,'CC871084','2003-05-12','35826.33', '2003-05-12'),
+(381,'MS154481','2003-08-22 02:30:15','1128.20', '2003-08-22 03:30:15'),
 
-(382,'CT821147','2004-08-01','6419.84', '2004-08-01'),
+(382,'CC871084','2003-05-12 23:01:15','35826.33', '2003-05-12 23:30:15'),
 
-(382,'PH29054','2004-11-27','42813.83', '2004-11-27'),
+(382,'CT821147','2004-08-01 21:02:15','6419.84', '2004-08-01 22:30:15'),
 
-(385,'BN347084','2003-12-02','20644.24', '2003-12-02'),
+(382,'PH29054','2004-11-27 17:03:05','42813.83', '2004-11-27 21:22:58'),
 
-(385,'CP804873','2004-11-19','15822.84', '2004-11-19'),
+(385,'BN347084','2003-12-02 02:22:02','20644.24', '2003-12-02 06:30:15'),
 
-(385,'EK785462','2003-03-09','51001.22', '2003-03-09'),
+(385,'CP804873','2004-11-19 10:30:15','15822.84', '2004-11-19 12:30:15'),
 
-(386,'DO106109','2003-11-18','38524.29', '2003-11-18'),
+(385,'EK785462','2003-03-09 11:11:15','51001.22', '2003-03-09 13:45:21'),
 
-(386,'HG438769','2004-07-18','51619.02', '2004-07-18'),
+(386,'DO106109','2003-11-18 11:32:22','38524.29', '2003-11-18 12:30:15'),
 
-(398,'AJ478695','2005-02-14','33967.73', '2005-02-14'),
+(386,'HG438769','2004-07-18 09:30:15','51619.02', '2004-07-18 10:30:15'),
 
-(398,'DO787644','2004-06-21','22037.91', '2004-06-21'),
+(398,'AJ478695','2005-02-14 08:08:02','33967.73', '2005-02-14 12:09:15'),
 
-(398,'JPMR4544','2005-05-18','615.45', '2005-05-18'),
+(398,'DO787644','2004-06-21 05:32:15','22037.91', '2004-06-21 09:31:01'),
 
-(398,'KB54275','2004-11-29','48927.64', '2004-11-29'),
+(398,'JPMR4544','2005-05-18 04:30:25','615.45', '2005-05-18 11:30:15'),
 
-(406,'BJMPR4545','2005-04-23','12190.85', '2005-04-23'),
+(398,'KB54275','2004-11-29 21:21:21','48927.64', '2004-11-29 22:30:15'),
 
-(406,'HJ217687','2004-01-28','49165.16', '2004-01-28'),
+(406,'BJMPR4545','2005-04-23 16:21:21','12190.85', '2005-04-23 16:32:08'),
 
-(406,'NA197101','2004-06-17','25080.96', '2004-06-17'),
+(406,'HJ217687','2004-01-28 14:03:05','49165.16', '2004-01-28 14:30:45'),
 
-(412,'GH197075','2004-07-25','35034.57', '2004-07-25'),
+(406,'NA197101','2004-06-17 17:20:15','25080.96', '2004-06-17 18:02:25'),
 
-(412,'PJ434867','2004-04-14','31670.37', '2004-04-14'),
+(412,'GH197075','2004-07-25 13:05:02','35034.57', '2004-07-25 14:54:25'),
 
-(415,'ER54537','2004-09-28','31310.09', '2004-09-28'),
+(412,'PJ434867','2004-04-14 12:39:15','31670.37', '2004-04-14 13:33:15'),
 
-(424,'KF480160','2004-12-07','25505.98', '2004-12-07'),
+(415,'ER54537','2004-09-28 11:21:25','31310.09', '2004-09-28 12:37:15'),
 
-(424,'LM271923','2003-04-16','21665.98', '2003-04-18'),
+(424,'KF480160','2004-12-07 19:03:15','25505.98', '2004-12-07 20:30:45'),
 
-(424,'OA595449','2003-10-31','22042.37', '2003-10-31'),
+(424,'LM271923','2003-04-16 19:11:12','21665.98', '2003-04-18 20:32:35'),
 
-(447,'AO757239','2003-09-15','6631.36', '2003-09-15'),
+(424,'OA595449','2003-10-31 17:12:22','22042.37', '2003-10-31 17:30:15'),
 
-(447,'ER615123','2003-06-25','17032.29', '2003-06-25'),
+(447,'AO757239','2003-09-15 17:21:15','6631.36', '2003-09-15 18:22:54'),
 
-(447,'OU516561','2004-12-17','26304.13', '2004-12-17'),
+(447,'ER615123','2003-06-25 12:30:15','17032.29', '2003-06-25 17:30:15'),
 
-(448,'FS299615','2005-04-18','27966.54', '2005-04-18'),
+(447,'OU516561','2004-12-17 15:05:33','26304.13', '2004-12-17 16:45:22'),
 
-(448,'KR822727','2004-09-30','48809.90', '2004-09-30'),
+(448,'FS299615','2005-04-18 12:30:15','27966.54', '2005-04-18 15:30:15'),
 
-(450,'EF485824','2004-06-21','59551.38', '2004-06-21'),
+(448,'KR822727','2004-09-30 08:30:15','48809.90', '2004-09-30 09:30:15'),
 
-(452,'ED473873','2003-11-15','27121.90', '2003-11-15'),
+(450,'EF485824','2004-06-21 22:30:15','59551.38', '2004-06-21 22:31:15'),
 
-(452,'FN640986','2003-11-20','15130.97', '2003-11-20'),
+(452,'ED473873','2003-11-15 11:11:15','27121.90', '2003-11-15 11:11:21'),
 
-(452,'HG635467','2005-05-03','8807.12', '2005-05-03'),
+(452,'FN640986','2003-11-20 18:22:22','15130.97', '2003-11-20 18:30:15'),
 
-(455,'HA777606','2003-12-05','38139.18', '2003-12-05'),
+(452,'HG635467','2005-05-03 11:44:04','8807.12', '2005-05-03 12:03:21'),
 
-(455,'IR662429','2004-05-12','32239.47', '2004-05-12'),
+(455,'HA777606','2003-12-05 02:30:15','38139.18', '2003-12-05 03:30:15'),
 
-(456,'GJ715659','2004-11-13','27550.51', '2004-11-13'),
+(455,'IR662429','2004-05-12 16:16:15','32239.47', '2004-05-12 17:30:15'),
 
-(456,'MO743231','2004-04-30','1679.92', '2004-04-30'),
+(456,'GJ715659','2004-11-13 16:21:22','27550.51', '2004-11-13 16:23:22'),
 
-(458,'DD995006','2004-11-15','33145.56', '2004-11-15'),
+(456,'MO743231','2004-04-30 12:30:15','1679.92', '2004-04-30 13:33:15'),
 
-(458,'NA377824','2004-02-06','22162.61', '2004-02-06'),
+(458,'DD995006','2004-11-15 05:34:44','33145.56', '2004-11-15 05:47:21'),
 
-(458,'OO606861','2003-06-13','57131.92', '2003-06-13'),
+(458,'NA377824','2004-02-06 06:21:15','22162.61', '2004-02-06 06:30:15'),
 
-(462,'ED203908','2005-04-15','30293.77' ,'2005-04-25'),
+(458,'OO606861','2003-06-13 04:31:15','57131.92', '2003-06-13 12:12:15'),
 
-(462,'GC60330','2003-11-08','9977.85', '2003-11-08'),
+(462,'ED203908','2005-04-15 12:32:15','30293.77' ,'2005-04-25 12:34:15'),
 
-(462,'PE176846','2004-11-27','48355.87', '2004-11-27'),
+(462,'GC60330','2003-11-08 17:21:15','9977.85', '2003-11-08 18:57:25'),
 
-(471,'AB661578','2004-07-28','9415.13', '2004-07-28'),
+(462,'PE176846','2004-11-27 13:05:15','48355.87', '2004-11-27 14:30:22'),
 
-(471,'CO645196','2003-12-10','35505.63', '2003-12-10'),
+(471,'AB661578','2004-07-28 06:30:15','9415.13', '2004-07-28 08:33:15'),
 
-(473,'LL427009','2004-02-17','7612.06', '2004-02-17'),
+(471,'CO645196','2003-12-10 10:20:15','35505.63', '2003-12-10 10:30:15'),
 
-(473,'PC688499','2003-10-27','17746.26', '2003-10-27'),
+(473,'LL427009','2004-02-17 13:33:44','7612.06', '2004-02-17 14:31:00'),
 
-(475,'JP113227','2003-12-09','7678.25', '2003-12-09'),
+(473,'PC688499','2003-10-27 07:07:07','17746.26', '2003-10-27 08:22:15'),
 
-(475,'PB951268','2004-02-13','36070.47', '2004-02-13'),
+(475,'JP113227','2003-12-09 16:02:15','7678.25', '2003-12-09 16:30:33'),
 
-(484,'GK294076','2004-10-26','3474.66', '2004-10-26'),
+(475,'PB951268','2004-02-13 07:30:15','36070.47', '2004-02-13 12:30:15'),
 
-(484,'JH546765','2003-11-29','47513.19', '2003-11-29'),
+(484,'GK294076','2004-10-26 08:08:15','3474.66', '2004-10-26 12:11:15'),
 
-(486,'BL66528','2004-04-14','5899.38', '2004-04-14'),
+(484,'JH546765','2003-11-29 11:55:25','47513.19', '2003-11-29 11:57:15'),
 
-(486,'HS86661','2004-11-23','45994.07', '2004-11-23'),
+(486,'BL66528','2004-04-14 04:20:12','5899.38', '2004-04-14 12:45:01'),
 
-(486,'JB117768','2003-03-20','25833.14', '2003-03-20'),
+(486,'HS86661','2004-11-23 21:21:15','45994.07', '2004-11-23 21:30:15'),
 
-(487,'AH612904','2003-09-28','29997.09', '2003-09-28'),
+(486,'JB117768','2003-03-20 14:02:15','25833.14', '2003-03-20 16:21:21'),
 
-(487,'PT550181','2004-02-29','12573.28', NULL),
+(487,'AH612904','2003-09-28 11:10:11','29997.09', '2003-09-28 16:32:15'),
 
-(489,'OC773849','2003-12-04','22275.73', '2003-12-04'),
+(487,'PT550181','2004-02-29 09:30:15','12573.28', NULL),
 
-(489,'PO860906','2004-01-31','7310.42', '2004-01-31'),
+(489,'OC773849','2003-12-04 22:06:15','22275.73', '2003-12-04 22:08:12'),
 
-(495,'BH167026','2003-12-26','59265.14', '2003-12-26'),
+(489,'PO860906','2004-01-31 05:20:15','7310.42', '2004-01-31 07:30:25'),
 
-(495,'FN155234','2004-05-14','6276.60', '2004-05-14'),
+(495,'BH167026','2003-12-26 13:33:13','59265.14', '2003-12-26 15:38:09'),
 
-(496,'EU531600','2005-05-25','30253.75', '2005-05-25'),
+(495,'FN155234','2004-05-14 12:37:35','6276.60', '2004-05-14 12:39:25'),
 
-(496,'MB342426','2003-07-16','32077.44', '2003-07-16'),
+(496,'EU531600','2005-05-25 02:47:35','30253.75', '2005-05-25 03:30:15'),
 
-(496,'MN89921','2004-12-31','52166.00', '2004-12-31') ON DUPLICATE KEY UPDATE customer_number=customer_number;
+(496,'MB342426','2003-07-16 21:10:15','32077.44', '2003-07-16 23:04:15'),
+
+(496,'MN89921','2004-12-31 09:02:11','52166.00', '2004-12-31 09:02:11') ON CONFLICT (customer_number,check_number) DO NOTHING;
 
 insert into sale(sale_id,fiscal_year,sale,employee_number) values 
 
@@ -8085,6 +8112,6 @@ insert into sale(sale_id,fiscal_year,sale,employee_number) values
 
 (18, 2004, 3884.34, 1504),
 
-(19, 2004, 5241.44, 1504) ON DUPLICATE KEY UPDATE sale_id=sale_id;
+(19, 2004, 5241.44, 1504) ON CONFLICT (sale_id) DO NOTHING;
 
 /* END */
