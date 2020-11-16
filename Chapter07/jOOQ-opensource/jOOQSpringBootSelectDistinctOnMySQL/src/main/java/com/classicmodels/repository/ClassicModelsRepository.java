@@ -1,22 +1,30 @@
 package com.classicmodels.repository;
 
-import java.util.List;
-import static jooq.generated.tables.Product.PRODUCT;
-import static jooq.generated.tables.Sale.SALE;
-import jooq.generated.tables.pojos.Product;
-import jooq.generated.tables.pojos.Sale;
+import static jooq.generated.tables.Office.OFFICE;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class ClassicModelsRepository {
 
-    private final DSLContext create;
+    private final DSLContext ctx;
 
-    public ClassicModelsRepository(DSLContext create) {
-        this.create = create;
+    public ClassicModelsRepository(DSLContext ctx) {
+        this.ctx = ctx;
     }
 
+    public void findDistinctOffices() {
+        
+        System.out.println(
+        ctx.selectDistinct(OFFICE.CITY, OFFICE.COUNTRY)
+                .from(OFFICE)
+                .fetch()
+        );
+                
+    }
+    
+    
+    
     /* PostgreSQL DISTINCT ON */
     
     /* The following statement sorts the result set by the product's vendor and scale, 
