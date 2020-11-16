@@ -25,6 +25,6 @@ public class ClassicModelsService {
         classicModelsRepository.insertIntoOrder();                           // EXAMPLE 10
         classicModelsRepository.insertAnotherTableInManager();               // EXAMPLE 11
         classicModelsRepository.updateEmployeeSalaryByJobTitle();            // EXAMPLE 12
-        classicModelsRepository.deletePaymentWithCachingDateNotNull();       // EXAMPLE 13                     
+        classicModelsRepository.deletePaymentWithCachingDateNotNull();       // EXAMPLE 13                            
     }
 }
