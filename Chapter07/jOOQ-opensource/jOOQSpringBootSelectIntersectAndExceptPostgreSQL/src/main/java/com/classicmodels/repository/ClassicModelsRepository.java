@@ -8,8 +8,10 @@ import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.row;
 import static org.jooq.impl.DSL.select;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
+@Transactional(readOnly = true)
 public class ClassicModelsRepository {
 
     private final DSLContext ctx;
