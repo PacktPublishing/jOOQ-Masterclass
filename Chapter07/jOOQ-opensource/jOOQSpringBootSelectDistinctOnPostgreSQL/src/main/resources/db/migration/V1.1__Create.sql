@@ -18,6 +18,7 @@ DROP TABLE IF EXISTS productline CASCADE;
 DROP TABLE IF EXISTS office_has_manager CASCADE;
 DROP TABLE IF EXISTS manager CASCADE;
 DROP TABLE IF EXISTS customer CASCADE;
+DROP TABLE IF EXISTS customerdetail CASCADE;
 DROP TABLE IF EXISTS sale CASCADE;
 DROP TABLE IF EXISTS employee CASCADE;
 DROP TABLE IF EXISTS office CASCADE;
@@ -31,12 +32,12 @@ DROP SEQUENCE IF EXISTS sale_seq;
 
 CREATE TABLE office (
   office_code varchar(10) NOT NULL,
-  city varchar(50) NOT NULL,
+  city varchar(50),
   phone varchar(50) NOT NULL,
   address_line_first varchar(50) NOT NULL,
   address_line_second varchar(50) DEFAULT NULL,
   state varchar(50) DEFAULT NULL,
-  country varchar(50) NOT NULL,
+  country varchar(50),
   postal_code varchar(15) NOT NULL,
   territory varchar(10) NOT NULL,
   PRIMARY KEY (office_code)
@@ -86,13 +87,7 @@ CREATE TABLE customer (
   customer_name varchar(50) NOT NULL,
   contact_last_name varchar(50) NOT NULL,
   contact_first_name varchar(50) NOT NULL,
-  phone varchar(50) NOT NULL,
-  address_line_first varchar(50) NOT NULL,
-  address_line_second varchar(50) DEFAULT NULL,
-  city varchar(50) NOT NULL,
-  state varchar(50) DEFAULT NULL,
-  postal_code varchar(15) DEFAULT NULL,
-  country varchar(50) NOT NULL,
+  phone varchar(50) NOT NULL,  
   sales_rep_employee_number bigint DEFAULT NULL,
   credit_limit decimal(10,2) DEFAULT NULL,
   PRIMARY KEY (customer_number)
@@ -101,6 +96,21 @@ CREATE TABLE customer (
 ) ;
 
 CREATE INDEX sales_rep_employee_number ON customer (sales_rep_employee_number);
+
+/* Table structure for table `customerdetail` */
+
+CREATE TABLE customerdetail (
+  customer_number bigint NOT NULL,
+  address_line_first varchar(50) NOT NULL,
+  address_line_second varchar(50) DEFAULT NULL,
+  city varchar(50),
+  state varchar(50) DEFAULT NULL,
+  postal_code varchar(15) DEFAULT NULL,
+  country varchar(50),
+  PRIMARY KEY (customer_number)
+  ,  
+  CONSTRAINT customers_details_ibfk_1 FOREIGN KEY (customer_number) REFERENCES customer (customer_number)  
+) ;
 
 /*Table structure for table `manager` */
 
@@ -194,9 +204,9 @@ CREATE INDEX product_id ON orderdetail (product_id);
 CREATE TABLE payment (
   customer_number bigint NOT NULL,
   check_number varchar(50) NOT NULL,
-  payment_date date NOT NULL,
+  payment_date timestamp NOT NULL,
   invoice_amount decimal(10,2) NOT NULL,
-  caching_date date DEFAULT NULL,
+  caching_date timestamp DEFAULT NULL,
   PRIMARY KEY (customer_number,check_number),
   CONSTRAINT payments_ibfk_1 FOREIGN KEY (customer_number) REFERENCES customer (customer_number)
 ) ;

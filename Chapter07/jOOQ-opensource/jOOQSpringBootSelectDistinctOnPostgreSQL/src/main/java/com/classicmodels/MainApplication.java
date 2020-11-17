@@ -1,9 +1,6 @@
 package com.classicmodels;
 
 import com.classicmodels.service.ClassicModelsService;
-import java.util.List;
-import jooq.generated.tables.pojos.Product;
-import jooq.generated.tables.pojos.Sale;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -26,13 +23,7 @@ public class MainApplication {
     public ApplicationRunner init() {
         return args -> {
 
-            System.out.println("Sample: Call fetchProductsByVendorScale():");
-            List<Product> products = classicModelsService.fetchProductsByVendorScale();
-            System.out.println(products);
-            
-            System.out.println("Sample: Call fetchEmployeeNumberOfMaxSalePerFiscalYear():");
-            List<Sale> employees = classicModelsService.fetchEmployeeNumberOfMaxSalePerFiscalYear();
-            System.out.println(employees);                        
+            classicModelsService.callAll();
         };
     }
 }
