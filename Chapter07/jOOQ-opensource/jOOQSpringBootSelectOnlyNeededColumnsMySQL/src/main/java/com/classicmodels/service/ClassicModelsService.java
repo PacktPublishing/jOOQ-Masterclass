@@ -21,5 +21,7 @@ public class ClassicModelsService {
         classicModelsRepository.findEmployeeLimit();            // EXAMPLE 6
         classicModelsRepository.findEmployeeLimitOffset();      // EXAMPLE 7
         classicModelsRepository.findEmployeeLimitAndOffset();   // EXAMPLE 8                
+        classicModelsRepository.decomposeSelect();              // EXAMPLE 9
+        classicModelsRepository.decomposeSelectAndFrom();       // EXAMPLE 10
     }
 }

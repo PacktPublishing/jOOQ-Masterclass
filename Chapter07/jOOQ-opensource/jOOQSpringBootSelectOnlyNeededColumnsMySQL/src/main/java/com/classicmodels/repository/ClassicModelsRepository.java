@@ -1,9 +1,13 @@
 package com.classicmodels.repository;
 
+import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Employee.EMPLOYEE;
+import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Order.ORDER;
+import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
+import org.jooq.SelectQuery;
 import static org.jooq.impl.DSL.asterisk;
 import org.springframework.stereotype.Repository;
 
@@ -168,7 +172,7 @@ public class ClassicModelsRepository {
                         .on(EMPLOYEE.EMPLOYEE_NUMBER.eq(SALE.EMPLOYEE_NUMBER))
                         .fetch()
         );
-    }
+    }                          
 
     // EXAMPLE 6
     /*
@@ -232,4 +236,88 @@ public class ClassicModelsRepository {
                         .fetch()
         );
     }
+    
+    // EXAMPLE 9
+    /*
+    select
+      `classicmodels`.`office`.`city`,
+      `classicmodels`.`office`.`country`,
+      `classicmodels`.`employee`.`job_title`,
+      `classicmodels`.`customer`.`customer_number`,
+      `classicmodels`.`customer`.`customer_name`,
+      `classicmodels`.`customer`.`phone`,
+      `classicmodels`.`customer`.`sales_rep_employee_number`,
+      `classicmodels`.`customer`.`credit_limit`,
+      `classicmodels`.`payment`.`customer_number`,
+      `classicmodels`.`payment`.`check_number`,
+      `classicmodels`.`payment`.`payment_date`,
+      `classicmodels`.`payment`.`invoice_amount`,
+      `classicmodels`.`payment`.`caching_date`
+    from
+      `classicmodels`.`office`,
+      `classicmodels`.`employee`,
+      `classicmodels`.`customer`,
+      `classicmodels`.`payment`
+    limit
+      ?
+    */
+    public void decomposeSelect() {
+        
+        SelectQuery select = ctx.select()
+                .from(OFFICE, EMPLOYEE, CUSTOMER, PAYMENT).limit(100).getQuery();
+                
+        select.addSelect(OFFICE.CITY, OFFICE.COUNTRY);
+        select.addSelect(EMPLOYEE.JOB_TITLE);
+        select.addSelect(CUSTOMER.asterisk().except(CUSTOMER.CONTACT_FIRST_NAME, CUSTOMER.CONTACT_LAST_NAME));
+        select.addSelect(PAYMENT.fields());
+        
+        System.out.println("EXAMPLE 9\n" +
+                select.fetch()
+        );
+    }
+        
+    // EXAMPLE 10
+    /*    
+    select
+      `classicmodels`.`office`.`city`,
+      `classicmodels`.`office`.`country`,
+      `classicmodels`.`employee`.`job_title`,
+      `classicmodels`.`customer`.`customer_number`,
+      `classicmodels`.`customer`.`customer_name`,
+      `classicmodels`.`customer`.`phone`,
+      `classicmodels`.`customer`.`sales_rep_employee_number`,
+      `classicmodels`.`customer`.`credit_limit`,
+      `classicmodels`.`payment`.`customer_number`,
+      `classicmodels`.`payment`.`check_number`,
+      `classicmodels`.`payment`.`payment_date`,
+      `classicmodels`.`payment`.`invoice_amount`,
+      `classicmodels`.`payment`.`caching_date`
+    from
+      `classicmodels`.`office`,
+      `classicmodels`.`employee`,
+      `classicmodels`.`customer`,
+      `classicmodels`.`payment`
+    limit
+      ?
+    */    
+    public void decomposeSelectAndFrom() {
+        
+        SelectQuery select = ctx.select().limit(100).getQuery();
+                        
+        select.addFrom(OFFICE);        
+        select.addSelect(OFFICE.CITY, OFFICE.COUNTRY);
+        
+        select.addFrom(EMPLOYEE);
+        select.addSelect(EMPLOYEE.JOB_TITLE);
+        
+        select.addFrom(CUSTOMER);
+        select.addSelect(CUSTOMER.asterisk().except(CUSTOMER.CONTACT_FIRST_NAME, CUSTOMER.CONTACT_LAST_NAME));
+        
+        select.addFrom(PAYMENT);
+        select.addSelect(PAYMENT.fields());
+        
+        System.out.println("EXAMPLE 10\n" +
+                select.fetch()
+        );
+    }    
 }
