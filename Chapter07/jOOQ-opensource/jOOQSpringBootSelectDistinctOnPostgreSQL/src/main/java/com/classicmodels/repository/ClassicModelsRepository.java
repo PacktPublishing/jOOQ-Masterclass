@@ -8,6 +8,7 @@ import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
+import org.jooq.Table;
 import static org.jooq.impl.DSL.all;
 import static org.jooq.impl.DSL.avg;
 import static org.jooq.impl.DSL.avgDistinct;
@@ -20,10 +21,14 @@ import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.maxDistinct;
 import static org.jooq.impl.DSL.min;
 import static org.jooq.impl.DSL.minDistinct;
+import static org.jooq.impl.DSL.partitionBy;
 import static org.jooq.impl.DSL.row;
+import static org.jooq.impl.DSL.rowNumber;
 import static org.jooq.impl.DSL.select;
+import static org.jooq.impl.DSL.selectDistinct;
 import static org.jooq.impl.DSL.sum;
 import static org.jooq.impl.DSL.sumDistinct;
+import static org.jooq.impl.DSL.table;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -345,22 +350,22 @@ public class ClassicModelsRepository {
     }
     
     // EXAMPLE 11
-    /* What is the employee numbers of the max sales per fiscal years */    
-    /*
-    select distinct on 
-      (
-        "public"."sale"."fiscal_year"
-      ) 
-      "public"."sale"."employee_number",
-      "public"."sale"."fiscal_year"
-    from
-      "public"."sale"
-    order by
-      "public"."sale"."fiscal_year",
-      "public"."sale"."sale" desc
-    */
+    /* What is the employee numbers of the max sales per fiscal years */        
     public void findEmployeeNumberOfMaxSalePerFiscalYear() {
 
+        /*
+        select distinct on 
+          (
+            "public"."sale"."fiscal_year"
+          ) 
+          "public"."sale"."employee_number",
+          "public"."sale"."fiscal_year"
+        from
+         "public"."sale"
+        rder by
+         "public"."sale"."fiscal_year",
+         "public"."sale"."sale" desc
+        */
         System.out.println("EXAMPLE 11.1\n" +
                 ctx.select(
                         SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR)
@@ -393,7 +398,8 @@ public class ClassicModelsRepository {
              )
         order by
           "public"."sale"."fiscal_year"
-        */
+          "public"."sale"."sale" desc
+        */  
         System.out.println("EXAMPLE 11.2\n" + 
                 ctx.select(SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER)
                         .from(SALE)
@@ -402,8 +408,46 @@ public class ClassicModelsRepository {
                                 .groupBy(SALE.FISCAL_YEAR))
                         .on(SALE.FISCAL_YEAR.eq(field("fy", Integer.class))
                                 .and(SALE.SALE_.eq(field("ms", Double.class))))
-                        .orderBy(SALE.FISCAL_YEAR)
+                        .orderBy(SALE.FISCAL_YEAR, SALE.SALE_.desc())
                         .fetch()
         );        
+        
+        /* SQL alternative based on row_number() */        
+        /*
+        select
+          "alias_103841836"."fiscal_year",
+          "alias_103841836"."employee_number"
+        from
+           (
+             select distinct 
+               "public"."sale"."fiscal_year",
+               "public"."sale"."employee_number",
+               row_number() over (
+                 partition by "public"."sale"."fiscal_year"
+                 order by
+                   "public"."sale"."fiscal_year",
+                   "public"."sale"."sale" desc
+               ) as "rn"   
+             from
+               "public"."sale"
+           ) as "alias_103841836"
+        where
+          "alias_103841836"."rn" = ?
+        order by
+          "alias_103841836"."fiscal_year"
+        */
+        // Table<?>
+        var t = selectDistinct(SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER,
+                                rowNumber().over(partitionBy(SALE.FISCAL_YEAR)
+                                        .orderBy(SALE.FISCAL_YEAR, SALE.SALE_.desc())).as("rn"))
+                                        .from(SALE).asTable();
+        
+        System.out.println("EXAMPLE 11.3\n" + 
+                ctx.select(t.field("fiscal_year"), t.field("employee_number"))
+                        .from(t)
+                        .where(t.field("rn", Integer.class).eq(1))
+                        .orderBy(t.field("fiscal_year"))
+                        .fetch()                                                                
+        );
     }
 }
