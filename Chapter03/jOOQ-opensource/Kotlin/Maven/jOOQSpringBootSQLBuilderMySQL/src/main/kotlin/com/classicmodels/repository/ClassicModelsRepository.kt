@@ -11,7 +11,8 @@ import org.jooq.impl.DSL.table;
 class ClassicModelsRepository(private val ctx: DSLContext) {
 
     /* Using jOOQ to build and execute the SQL */
-    fun findOfficesInTerritory(territory: String): MutableList<Office> {
+    fun findOfficesInTerritory(territory: String): MutableList<Office> {        
+        
         return ctx.selectFrom(table("office"))
                 .where(field("territory").eq(territory))
                 .fetchInto(Office::class.java)
