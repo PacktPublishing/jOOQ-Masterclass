@@ -15,7 +15,6 @@ import static jooq.generated.tables.Sale.SALE;
 import jooq.generated.tables.pojos.Sale;
 import jooq.generated.tables.records.SaleRecord;
 import org.jooq.DSLContext;
-import static org.jooq.impl.DSL.inline;
 import static org.jooq.impl.DSL.rand;
 import static org.jooq.impl.DSL.round;
 import org.springframework.stereotype.Repository;
@@ -488,9 +487,8 @@ public class ClassicModelsRepository {
                 + ctx.insertInto(CUSTOMER)
                         .values(1L, customerlevel(BigDecimal.valueOf(50000.00)), "Mark", "Farel",
                                 "+33 44 11223 32", 1370L, BigDecimal.valueOf(50000.00))
+                        .onDuplicateKeyIgnore()
                         .execute()
         );
     }
-
-    // UDT
 }

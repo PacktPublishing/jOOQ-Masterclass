@@ -24,8 +24,6 @@ public class ClassicModelsService {
         classicModelsRepository.insertCollectionOfSaleRecord();         // EXAMPLE 8
         classicModelsRepository.insertNewRecord();                      // EXAMPLE 9
         classicModelsRepository.insertRecordAfterResettingPK();         // EXAMPLE 10
-        classicModelsRepository.usingFunctionsInInsert();               // EXAMPLE 11
-        
-
+        classicModelsRepository.usingFunctionsInInsert();               // EXAMPLE 11        
     }
 }
