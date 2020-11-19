@@ -66,7 +66,7 @@ CREATE INDEX office_code ON employee (office_code);
 
 /*Table structure for table `sale` */
 
-CREATE SEQUENCE sale_seq;
+CREATE SEQUENCE sale_seq START 1000000;
 
 CREATE TABLE sale (
   sale_id bigint NOT NULL DEFAULT NEXTVAL ('sale_seq'),  
@@ -166,7 +166,7 @@ CREATE INDEX product_line ON product (product_line);
 
 /*Table structure for table `order` */
 
-CREATE SEQUENCE order_seq;
+CREATE SEQUENCE order_seq START 1000000;
 
 CREATE TABLE "order" (
   order_id bigint NOT NULL DEFAULT NEXTVAL ('order_seq'),
