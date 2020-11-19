@@ -1,0 +1,1 @@
+jOOQ and scalar subqueries
