@@ -213,3 +213,18 @@ CREATE TABLE payment (
 ) ;
 
 /* END */
+
+/* USER-DEFINED FUNCTIONS */
+
+CREATE FUNCTION get_avg_sale(len_from int, len_to int) 
+  returns int language plpgsql AS $$ 
+DECLARE avg_count integer; 
+begin 
+  SELECT avg(sale.sale) 
+  INTO   avg_count 
+  FROM   sale 
+  WHERE  sale.sale BETWEEN len_from AND len_to; 
+   
+  return avg_count; 
+end; 
+$$;

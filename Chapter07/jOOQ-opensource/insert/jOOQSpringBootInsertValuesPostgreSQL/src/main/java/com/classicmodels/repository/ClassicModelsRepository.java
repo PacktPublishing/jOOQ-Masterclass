@@ -7,16 +7,15 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import static jooq.generated.Routines.getAvgSale;
 import static jooq.generated.Sequences.ORDER_SEQ;
 import static jooq.generated.Sequences.SALE_SEQ;
 import static jooq.generated.tables.Office.OFFICE;
-//import static jooq.generated.Routines.customerlevel;
 import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Sale.SALE;
 import jooq.generated.tables.pojos.Sale;
 import jooq.generated.tables.records.SaleRecord;
-import jooq.generated.udt.Locationtype;
 import static jooq.generated.udt.Locationtype.LOCATIONTYPE;
 import jooq.generated.udt.records.LocationtypeRecord;
 import org.jooq.DSLContext;
@@ -480,36 +479,35 @@ public class ClassicModelsRepository {
                         .onDuplicateKeyIgnore()
                         .execute()
         );
-        /*
+
         System.out.println("EXAMPLE 11.2 (affected rows): "
-                + ctx.insertInto(CUSTOMER)
-                        .values(1L, customerlevel(BigDecimal.valueOf(50000.00)), "Mark", "Farel",
-                                "+33 44 11223 32", 1370L, BigDecimal.valueOf(50000.00))
+                + ctx.insertInto(SALE)
+                        .values(rand().mul(1000), 2005, getAvgSale(1000, 5000), 1370)
                         .onDuplicateKeyIgnore()
                         .execute()
         );
-         */
+
     }
 
     // EXAMPLE 12
     /*
     
-    */
-    public void insertAndUDTRecord() {              
-                
+     */
+    public void insertAndUDTRecord() {
+
         LocationtypeRecord locationtypeRecord = new LocationtypeRecord("Boston", "USA", "EA");
-        System.out.println(
-                ctx.insertInto(OFFICE)
-                        .values(Math.round(Math.random() * 10000) + "PK", 
+        System.out.println("EXAMPLE 12 (affected rows): "
+                + ctx.insertInto(OFFICE)
+                        .values(Math.round(Math.random() * 10000) + "PK",
                                 locationtypeRecord, "+33 223 12", "addr1", "addr2", "659422", "MA")
                         .onDuplicateKeyIgnore()
                         .execute()
         );
-        
+
         // creating a UDT record alternatives
-        LocationtypeRecord r1 = LOCATIONTYPE.newRecord();   
+        LocationtypeRecord r1 = LOCATIONTYPE.newRecord();
         //r1.setCity("Boston"); ...
-        
+
         LocationtypeRecord r2 = ctx.newRecord(LOCATIONTYPE);
         //r2.setCity("Boston"); ...
     }
