@@ -2,8 +2,13 @@ package com.classicmodels.repository;
 
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
+import static jooq.generated.tables.Employee.EMPLOYEE;
+import static jooq.generated.tables.Manager.MANAGER;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
+import static org.jooq.impl.DSL.select;
+import static org.jooq.impl.DSL.concat;
+import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -68,16 +73,48 @@ public class ClassicModelsRepository {
       `state`,`postal_code`,`country`)
     values
       (?, ?, ?, ?, ?, ?, ?)
-    */
+     */
     public void insertReturningOfCustomerInCustomerDetail() {
 
         System.out.println("EXAMPLE 3 (affected rows): "
                 + ctx.insertInto(CUSTOMERDETAIL)
                         .values(ctx.insertInto(CUSTOMER)
                                 .values(null, "Ltd. AirRoads", "Kyle", "Doyle", "+ 44 321 321", null, null)
-                                .returningResult(CUSTOMER.CUSTOMER_NUMBER).fetchOne().value1(), 
+                                .returningResult(CUSTOMER.CUSTOMER_NUMBER).fetchOne().value1(),
                                 "No. 14 Avenue", null, "Los Angeles", null, null, "USA")
                         .execute()
         );
+    }
+
+    // EXAMPLE 4
+    /*
+    insert into `classicmodels`.`manager` (`manager_id`, `manager_name`)
+    values
+     (
+       ?,
+          (
+            select
+              concat(
+               `classicmodels`.`employee`.`first_name`,
+               ?,
+               `classicmodels`.`employee`.`last_name`
+              )
+            from
+              `classicmodels`.`employee`
+            where
+              `classicmodels`.`employee`.`employee_number` = ?
+          )
+      )
+    */
+    public void insertEmployeeInManagerReturningId() {
+
+        var inserted = ctx.insertInto(MANAGER)
+                .values(null, select(concat(EMPLOYEE.FIRST_NAME, val(" "), EMPLOYEE.LAST_NAME))
+                        .from(EMPLOYEE)
+                        .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1165L)))
+                .returningResult(MANAGER.MANAGER_ID)
+                .fetch();
+        
+        System.out.println("EXAMPLE 4 (inserted ids): " + inserted);
     }
 }

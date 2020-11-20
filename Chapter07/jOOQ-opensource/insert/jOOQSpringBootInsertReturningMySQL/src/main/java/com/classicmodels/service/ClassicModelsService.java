@@ -17,5 +17,6 @@ public class ClassicModelsService {
        classicModelsRepository.returnOneId();                                   // EXAMPLE 1
        classicModelsRepository.returnMultipleIds();                             // EXAMPLE 2
        classicModelsRepository.insertReturningOfCustomerInCustomerDetail();     // EXAMPLE 3
+       classicModelsRepository.insertEmployeeInManagerReturningId();            // EXAMPLE 4
     }
 }
