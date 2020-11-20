@@ -75,7 +75,7 @@ CREATE TABLE `sale` (
 /*Table structure for table `customer` */
 
 CREATE TABLE `customer` (
-  `customer_number` bigint NOT NULL,
+  `customer_number` bigint NOT NULL AUTO_INCREMENT,
   `customer_name` varchar(50) NOT NULL,
   `contact_last_name` varchar(50) NOT NULL,
   `contact_first_name` varchar(50) NOT NULL,
@@ -135,8 +135,9 @@ CREATE TABLE `office_has_manager` (
 CREATE TABLE `productline` (
   `product_line` varchar(50) NOT NULL,
   `text_description` varchar(4000) DEFAULT NULL,
-  `html_description` mediumtext,
-  `image` mediumblob,
+  `html_description` mediumtext DEFAULT NULL,
+  `image` mediumblob DEFAULT NULL,
+  `created_on` date DEFAULT (CURRENT_DATE),
   PRIMARY KEY (`product_line`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
