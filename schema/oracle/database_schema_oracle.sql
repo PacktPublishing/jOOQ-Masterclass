@@ -143,7 +143,7 @@ EXCEPTION
 END;
 /
 
-CREATE SEQUENCE sale_seq START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE sale_seq START WITH 1000000 INCREMENT BY 1;
 
 CREATE OR REPLACE TRIGGER sale_seq_tr
  BEFORE INSERT ON sale FOR EACH ROW
@@ -167,6 +167,24 @@ CREATE TABLE customer (
  ,
   CONSTRAINT customers_ibfk_1 FOREIGN KEY (sales_rep_employee_number) REFERENCES employee (employee_number)
 ) ;
+
+-- Generate ID using sequence and trigger
+BEGIN
+   EXECUTE IMMEDIATE 'DROP SEQUENCE "CUSTOMER_SEQ"';
+EXCEPTION
+   WHEN OTHERS THEN NULL;
+END;
+/
+
+CREATE SEQUENCE customer_seq START WITH 1000000 INCREMENT BY 1;
+
+CREATE OR REPLACE TRIGGER customer_seq_tr
+ BEFORE INSERT ON customer FOR EACH ROW
+ WHEN (NEW.customer_id IS NULL)
+BEGIN
+ SELECT customer_seq.NEXTVAL INTO :NEW.customer_id FROM DUAL;
+END;
+/
 
 CREATE INDEX sales_rep_employee_number ON customer (sales_rep_employee_number);
 
@@ -201,7 +219,7 @@ EXCEPTION
 END;
 /
 
-CREATE SEQUENCE manager_seq START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE manager_seq START WITH 1000000 INCREMENT BY 1;
 
 CREATE OR REPLACE TRIGGER manager_seq_tr
  BEFORE INSERT ON manager FOR EACH ROW
@@ -228,6 +246,7 @@ CREATE TABLE productline (
   text_description varchar2(4000) DEFAULT NULL,
   html_description clob,
   image blob,
+  created_on date DEFAULT SYSDATE NOT NULL,
   PRIMARY KEY (product_line)
 ) ;
 
@@ -235,14 +254,14 @@ CREATE TABLE productline (
 
 CREATE TABLE product (
   product_id number(10) NOT NULL,
-  product_name varchar2(70) NOT NULL,
-  product_line varchar2(50) NOT NULL,
-  product_scale varchar2(10) NOT NULL,
-  product_vendor varchar2(50) NOT NULL,
-  product_description clob NOT NULL,
-  quantity_in_stock number(5) NOT NULL,
-  buy_price number(10,2) NOT NULL,
-  msrp number(10,2) NOT NULL,
+  product_name varchar2(70) DEFAULT NULL,
+  product_line varchar2(50) DEFAULT NULL,
+  product_scale varchar2(10) DEFAULT NULL,
+  product_vendor varchar2(50) DEFAULT NULL,
+  product_description clob DEFAULT NULL,
+  quantity_in_stock number(5) DEFAULT 0,
+  buy_price number(10,2) DEFAULT 0.0,
+  msrp number(10,2) DEFAULT 0.0,
   PRIMARY KEY (product_id)
  ,
   CONSTRAINT products_ibfk_1 FOREIGN KEY (product_line) REFERENCES productline (product_line)
@@ -291,7 +310,7 @@ EXCEPTION
 END;
 /
 
-CREATE SEQUENCE order_seq START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE order_seq START WITH 1000000 INCREMENT BY 1;
 
 CREATE OR REPLACE TRIGGER order_seq_tr
  BEFORE INSERT ON "ORDER" FOR EACH ROW

@@ -89,7 +89,7 @@ CREATE INDEX [employee_number] ON sale ([employee_number]);
 /*Table structure for table `customer` */
 
 CREATE TABLE customer (
-  [customer_number] bigint NOT NULL,
+  [customer_number] bigint NOT NULL IDENTITY,
   [customer_name] varchar(50) NOT NULL,
   [contact_last_name] varchar(50) NOT NULL,
   [contact_first_name] varchar(50) NOT NULL,
@@ -142,6 +142,7 @@ CREATE TABLE productline (
   [text_description] varchar(4000) DEFAULT NULL,
   [html_description] varchar(max),
   [image] varbinary(max),
+  [created_on] date DEFAULT GETDATE(),
   PRIMARY KEY ([product_line])
 ) ;
 
@@ -149,14 +150,14 @@ CREATE TABLE productline (
 
 CREATE TABLE product (
   [product_id] bigint NOT NULL IDENTITY,
-  [product_name] varchar(70) NOT NULL,
-  [product_line] varchar(50) NOT NULL,
-  [product_scale] varchar(10) NOT NULL,
-  [product_vendor] varchar(50) NOT NULL,
-  [product_description] varchar(max) NOT NULL,
-  [quantity_in_stock] smallint NOT NULL,
-  [buy_price] decimal(10,2) NOT NULL,
-  [msrp] decimal(10,2) NOT NULL,
+  [product_name] varchar(70) DEFAULT NULL,
+  [product_line] varchar(50) DEFAULT NULL,
+  [product_scale] varchar(10) DEFAULT NULL,
+  [product_vendor] varchar(50) DEFAULT NULL,
+  [product_description] varchar(max) DEFAULT NULL,
+  [quantity_in_stock] smallint DEFAULT 0,
+  [buy_price] decimal(10,2) DEFAULT 0.0,
+  [msrp] decimal(10,2) DEFAULT 0.0,
   PRIMARY KEY ([product_id])
  ,
   CONSTRAINT [products_ibfk_1] FOREIGN KEY ([product_line]) REFERENCES productline ([product_line])
