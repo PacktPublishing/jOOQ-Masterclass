@@ -75,7 +75,7 @@ CREATE TABLE `sale` (
 /*Table structure for table `customer` */
 
 CREATE TABLE `customer` (
-  `customer_number` bigint NOT NULL,
+  `customer_number` bigint NOT NULL AUTO_INCREMENT,
   `customer_name` varchar(50) NOT NULL,
   `contact_last_name` varchar(50) NOT NULL,
   `contact_first_name` varchar(50) NOT NULL,

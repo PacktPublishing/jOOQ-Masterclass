@@ -14,7 +14,8 @@ public class ClassicModelsService {
 
     public void callAll() {
 
-       classicModelsRepository.returnOneId();           // EXAMPLE 1
-       classicModelsRepository.returnMultipleIds();     // EXAMPLE 2
+       classicModelsRepository.returnOneId();                                   // EXAMPLE 1
+       classicModelsRepository.returnMultipleIds();                             // EXAMPLE 2
+       classicModelsRepository.insertReturningOfCustomerInCustomerDetail();     // EXAMPLE 3
     }
 }
