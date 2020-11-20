@@ -1,7 +1,9 @@
 package com.classicmodels.repository;
 
+import com.classicmodels.pojo.ProductPart;
 import java.math.BigDecimal;
 import static jooq.generated.tables.Product.PRODUCT;
+import jooq.generated.tables.records.ProductRecord;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.defaultValue;
 import static org.jooq.impl.DSL.val;
@@ -134,6 +136,64 @@ public class ClassicModelsRepository {
                                 BigDecimal.valueOf(45.99), BigDecimal.valueOf(67.99)
                         )
                         .execute()
+        );
+
+    }
+
+    // EXAMPLE 6
+    public void insertDefaultsViaNewRecordInProduct() {
+
+        /* approach 1 */
+        /*
+        insert into `classicmodels`.`product`
+        values
+          (
+             default,default,default,default,default,default,default,default,default
+          )
+        */
+        System.out.println("EXAMPLE 6.1 (affected rows): "
+                + ctx.newRecord(PRODUCT).insert()
+        );
+
+        /* approach 2 */
+        /*
+        insert into `classicmodels`.`product` (
+          `product_name`,`product_line`,`product_scale`,`product_vendor`,`product_description`,
+          `quantity_in_stock`,`buy_price`,`msrp`
+        )
+        values
+          (?, ?, ?, ?, ?, ?, ?, ?)
+        */
+        ProductRecord pr1 = new ProductRecord();
+        System.out.println("EXAMPLE 6.2 (affected rows): "
+                + ctx.newRecord(PRODUCT, pr1).insert()
+        );
+
+        /* approach 3 */
+        ProductRecord pr2 = new ProductRecord();
+        pr2.setProductName("Ultra Jet X1");
+        pr2.setProductLine("Planes");
+        pr2.setProductVendor("Motor City Art Classics");
+        pr2.setBuyPrice(BigDecimal.valueOf(45.99));
+        pr2.setMsrp(BigDecimal.valueOf(67.99));
+        System.out.println("EXAMPLE 6.3 (affected rows): "
+                + ctx.newRecord(PRODUCT, pr2).insert()
+        );
+
+        /* approach 4 */
+        ProductPart pp1 = new ProductPart();
+        pr1.from(pp1);
+        System.out.println("EXAMPLE 6.4 (affected rows): "
+                + ctx.newRecord(PRODUCT, pr1).insert()
+        );
+
+        /* approach 5 */
+        ProductPart pp2 = new ProductPart(
+                "Ultra Jet X1", "Planes", "Motor City Art Classics",
+                BigDecimal.valueOf(45.99), BigDecimal.valueOf(67.99));
+        pr2.from(pp2);
+        System.out.println("EXAMPLE 6.5 (affected rows): "
+                + ctx.newRecord(PRODUCT, pr2).insert()
         );
     }
 }

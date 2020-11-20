@@ -19,6 +19,7 @@ public class ClassicModelsService {
             classicModelsRepository.insertSomeDefaultsValInProduct();                   // EXAMPLE 3
             classicModelsRepository.insertSomeDefaultsByTypeSomeExplicitInProduct();    // EXAMPLE 4
             classicModelsRepository.insertSomeImplicitDefaultsInProduct();              // EXAMPLE 5
+            classicModelsRepository.insertDefaultsViaNewRecordInProduct();              // EXAMPLE 6
                     
     }
 }
