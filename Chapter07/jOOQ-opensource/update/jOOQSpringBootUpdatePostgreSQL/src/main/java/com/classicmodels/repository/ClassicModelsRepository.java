@@ -5,7 +5,9 @@ import java.math.BigDecimal;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Office.OFFICE;
+import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import static jooq.generated.tables.Payment.PAYMENT;
+import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Sale.SALE;
 import jooq.generated.tables.records.OfficeRecord;
 import org.jooq.DSLContext;
@@ -14,6 +16,7 @@ import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.row;
 import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.val;
+import static org.jooq.impl.DSL.avg;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -217,6 +220,98 @@ public class ClassicModelsRepository {
                                 select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, val("+40 0721 456 322"))
                                         .from(EMPLOYEE)
                                         .where(EMPLOYEE.JOB_TITLE.eq("President")))
+                        .execute()
+        );
+    }
+
+    // EXAMPLE 7
+    /*
+    update
+      "public"."product"
+    set
+      "buy_price" = "public"."orderdetail"."price_each"
+    from
+      "public"."orderdetail"
+    where
+      "public"."product"."product_id" = "public"."orderdetail"."product_id"
+     */
+    public void updateProductBuyPriceWithFirstPriceEach() {
+
+        System.out.println("EXAMPLE 7 (affected rows): "
+                + ctx.update(PRODUCT)
+                        .set(PRODUCT.BUY_PRICE, ORDERDETAIL.PRICE_EACH)
+                        .from(ORDERDETAIL)
+                        .where(PRODUCT.PRODUCT_ID.eq(ORDERDETAIL.PRODUCT_ID))
+                        .execute()
+        );
+    }
+
+    // EXAMPLE 8
+    /*
+    update
+      "public"."office"
+    set
+      "city" = ?,
+      "country" = ?
+    where
+      "public"."office"."office_code" = ? 
+    returning 
+      "public"."office"."city",
+      "public"."office"."country"
+     */
+    public void updateOfficeReturning() {
+
+        System.out.println("EXAMPLE 8: \n"
+                + ctx.update(OFFICE)
+                        .set(OFFICE.CITY, "Paris")
+                        .set(OFFICE.COUNTRY, "France")
+                        .where(OFFICE.OFFICE_CODE.eq("1"))
+                        .returningResult(OFFICE.CITY, OFFICE.COUNTRY)
+                        .fetchOne()
+        );
+    }
+
+    // EXAMPLE 9
+    /*
+    update
+      "public"."employee"
+    set
+      "salary" = (
+        "public"."employee"."salary" + (
+          select
+            avg("public"."sale"."sale")
+          from
+            "public"."sale"
+          where
+            "public"."sale"."employee_number" = "public"."employee"."employee_number"
+        )
+    )
+    where
+      "public"."employee"."employee_number" = ? 
+    returning 
+      "public"."employee"."salary"
+    
+    update
+      "public"."customer"
+    set
+      "credit_limit" = ("public"."customer"."credit_limit" + ?)
+    where
+      "public"."customer"."sales_rep_employee_number" = ?
+     */
+    public void updateEmployeeSalaryAsAvgSaleAndCustomersCreditAsDoubleSalary() {
+
+        System.out.println("EXAMPLE 9 (affected rows): "
+                + ctx.update(CUSTOMER)
+                        .set(CUSTOMER.CREDIT_LIMIT, CUSTOMER.CREDIT_LIMIT.plus(
+                                ctx.update(EMPLOYEE)
+                                        .set(EMPLOYEE.SALARY, EMPLOYEE.SALARY.plus(
+                                                select(avg(SALE.SALE_)).from(SALE)
+                                                        .where(SALE.EMPLOYEE_NUMBER
+                                                                .eq(EMPLOYEE.EMPLOYEE_NUMBER)).asField()))
+                                        .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1504L))
+                                        .returningResult(EMPLOYEE.SALARY.coerce(BigDecimal.class))
+                                        .fetchOne().value1().multiply(BigDecimal.valueOf(2))))
+                        .where(CUSTOMER.SALES_REP_EMPLOYEE_NUMBER.eq(1504L))
                         .execute()
         );
     }
