@@ -44,6 +44,21 @@ CREATE TABLE office (
   PRIMARY KEY (office_code)
 ) ;
 
+/*Table structure for table `department` */
+
+CREATE TABLE department (
+  department_id serial NOT NULL,
+  name varchar(50) NOT NULL,
+  phone varchar(50) NOT NULL,
+  code smallint DEFAULT 1
+  office_code varchar(10) NOT NULL,
+  PRIMARY KEY (department_id)
+,
+  CONSTRAINT department_ibfk_1 FOREIGN KEY (office_code) REFERENCES office (office_code)
+) ;
+
+CREATE INDEX office_code ON department (office_code);
+
 /*Table structure for table `employee` */
 
 CREATE TABLE employee (
