@@ -43,6 +43,22 @@ end try
 begin catch
 end catch
 
+/*Data for the table `department` */
+
+begin try
+insert into [department]([department_id],[name,phone,code],[office_code]) values 
+
+('1','Lumber','-int 4782','1333','1'),
+
+('2','Sales','-int 41233','1441','1'),
+
+('3','Accounting','-int 8233','2311','2'),
+
+('4','Finance','-int 4421','3222','3');
+end try
+begin catch
+end catch
+
 /*Data for the table `manager` */
 
 begin try

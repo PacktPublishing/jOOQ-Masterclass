@@ -78,6 +78,12 @@ EXCEPTION
 END;
 /
 BEGIN
+   EXECUTE IMMEDIATE 'DROP TABLE "DEPARTMENT" CASCADE CONSTRAINTS';
+EXCEPTION
+   WHEN OTHERS THEN NULL;
+END;
+/
+BEGIN
    EXECUTE IMMEDIATE 'DROP TABLE "OFFICE" CASCADE CONSTRAINTS';
 EXCEPTION
    WHEN OTHERS THEN NULL;
@@ -202,6 +208,37 @@ CREATE TABLE customerdetail (
  ,
   CONSTRAINT customers_details_ibfk_1 FOREIGN KEY (customer_number) REFERENCES customer (customer_number)
 ) ; 
+
+/* Table structure for table `department` */
+
+CREATE TABLE department (
+  department_id number(10) NOT NULL,
+  name varchar(50) NOT NULL,
+  phone varchar(50) NOT NULL,
+  code number(5) DEFAULT 1,
+  office_code varchar(10) NOT NULL,
+  PRIMARY KEY (department_id)
+,
+  CONSTRAINT department_ibfk_1 FOREIGN KEY (office_code) REFERENCES office (office_code)
+) ;
+
+-- Generate ID using sequence and trigger
+BEGIN
+   EXECUTE IMMEDIATE 'DROP SEQUENCE "DEPARTMENT_SEQ"';
+EXCEPTION
+   WHEN OTHERS THEN NULL;
+END;
+/
+
+CREATE SEQUENCE department_seq START WITH 10 INCREMENT BY 1;
+
+CREATE OR REPLACE TRIGGER department_seq_tr
+ BEFORE INSERT ON department FOR EACH ROW
+ WHEN (NEW.department_id IS NULL)
+BEGIN
+ SELECT department_seq.NEXTVAL INTO :NEW.department_id FROM DUAL;
+END;
+/
 
 /*Table structure for table `manager` */
 

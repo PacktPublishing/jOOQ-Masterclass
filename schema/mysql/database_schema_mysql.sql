@@ -24,6 +24,7 @@ DROP TABLE IF EXISTS `customer`;
 DROP TABLE IF EXISTS `customerdetail`;
 DROP TABLE IF EXISTS `sale`;
 DROP TABLE IF EXISTS `employee`;
+DROP TABLE IF EXISTS `department`;
 DROP TABLE IF EXISTS `office`;
 
 /*Table structure for table `office` */
@@ -40,6 +41,17 @@ CREATE TABLE `office` (
   `territory` varchar(10) NOT NULL,
   PRIMARY KEY (`office_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `department` (
+  `department_id` bigint NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  `phone` varchar(50) NOT NULL,
+  `code` smallint DEFAULT 1,
+  `office_code` varchar(10) NOT NULL,
+  PRIMARY KEY (department_id),
+  KEY `office_code` (`office_code`),
+  CONSTRAINT `department_ibfk_1` FOREIGN KEY (`office_code`) REFERENCES `office` (`office_code`)
+) ;
 
 /*Table structure for table `employee` */
 

@@ -33,6 +33,8 @@ IF OBJECT_ID('sale', 'U') IS NOT NULL
   DROP TABLE sale;
 IF OBJECT_ID('employee', 'U') IS NOT NULL 
   DROP TABLE employee;
+  IF OBJECT_ID('department', 'U') IS NOT NULL 
+  DROP TABLE department;
 IF OBJECT_ID('office', 'U') IS NOT NULL 
   DROP TABLE office;
 
@@ -72,6 +74,21 @@ CREATE TABLE employee (
 CREATE INDEX [reports_to] ON employee ([reports_to]);
 CREATE INDEX [office_code] ON employee ([office_code]);
 
+/*Table structure for table `department` */
+
+CREATE TABLE department (
+  [department_id] bigint NOT NULL IDENTITY,  
+  [name] varchar(50) NOT NULL,
+  [phone] varchar(50) NOT NULL,
+  [code] smallint DEFAULT 1,
+  [office_code] varchar(10) NOT NULL,
+  PRIMARY KEY ([department_id])
+,
+  CONSTRAINT [department_ibfk_1] FOREIGN KEY ([office_code]) REFERENCES office ([office_code])
+) ;
+
+CREATE INDEX [department_id] ON department ([department_id]);
+
 /*Table structure for table `sale` */
 CREATE TABLE sale (
   [sale_id] bigint NOT NULL IDENTITY,  
@@ -84,7 +101,6 @@ CREATE TABLE sale (
 ) ;
 
 CREATE INDEX [employee_number] ON sale ([employee_number]);
-
 
 /*Table structure for table `customer` */
 

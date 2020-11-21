@@ -43,6 +43,18 @@ insert /*+ ignore_row_on_dupkey_index(office(office_code)) */ into office(office
 
  select '12','Tokyo','+81 33 224 3444','4-1 Kioicho',NULL,'Koil-Ku','Japan','101-6578','Japan' from dual;
 
+/*Data for the table `department` */
+
+insert /*+ ignore_row_on_dupkey_index(department(department_id)) */ into department(department_id,name,phone,code,office_code) 
+
+select '1','Lumber','-int 4782','1333','1' from dual union all
+
+select '2','Sales','-int 41233','1441','1' from dual union all
+
+select '3','Accounting','-int 8233','2311','2' from dual union all
+
+select '4','Finance','-int 4421','3222','3' from dual;
+
 /*Data for the table `manager` */
 
 insert /*+ ignore_row_on_dupkey_index(manager(manager_id)) */ into manager (manager_id, manager_name) 

@@ -41,6 +41,18 @@ insert  into `office`(`office_code`,`city`,`phone`,`address_line_first`,`address
 
 ('12','Tokyo','+81 33 224 3444','4-1 Kioicho',NULL,'Koil-Ku','Japan','101-6578','Japan') ON DUPLICATE KEY UPDATE office_code=office_code;
 
+*Data for the table `department` */
+
+insert into department(department_id,name,phone,code,office_code) values 
+
+('1','Lumber','-int 4782','1333','1'),
+
+('2','Sales','-int 41233','1441','1'),
+
+('3','Accounting','-int 8233','2311','2'),
+
+('4','Finance','-int 4421','3222','3') ON DUPLICATE KEY UPDATE department_id=department_id;
+
 /*Data for the table `manager` */
 
 insert into `manager` (`manager_id`, `manager_name`) values 
