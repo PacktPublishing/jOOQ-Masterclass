@@ -50,7 +50,7 @@ CREATE TABLE department (
   department_id serial NOT NULL,
   name varchar(50) NOT NULL,
   phone varchar(50) NOT NULL,
-  code smallint DEFAULT 1
+  code smallint DEFAULT 1,
   office_code varchar(10) NOT NULL,
   PRIMARY KEY (department_id)
 ,

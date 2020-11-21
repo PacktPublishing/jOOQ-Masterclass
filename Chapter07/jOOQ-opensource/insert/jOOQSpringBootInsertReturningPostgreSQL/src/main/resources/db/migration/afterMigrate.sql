@@ -39,6 +39,18 @@ insert  into office(office_code,city,phone,address_line_first,address_line_secon
 
 ('12','Tokyo','+81 33 224 3444','4-1 Kioicho',NULL,'Koil-Ku','Japan','101-6578','Japan') ON CONFLICT (office_code) DO NOTHING;
 
+/*Data for the table `department` */
+
+insert into department(department_id,name,phone,code,office_code) values 
+
+('1','Lumber','-int 4782','1A','1'),
+
+('2','Sales','-int 41233','2A','1'),
+
+('3','Accounting','-int 8233','1B','2'),
+
+('4','Finance','-int 4421','1C','3'), ON CONFLICT (department_id) DO NOTHING;
+
 /*Data for the table `manager` */
 
 insert into manager (manager_id, manager_name) values 
