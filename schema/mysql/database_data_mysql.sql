@@ -41,7 +41,7 @@ insert  into `office`(`office_code`,`city`,`phone`,`address_line_first`,`address
 
 ('12','Tokyo','+81 33 224 3444','4-1 Kioicho',NULL,'Koil-Ku','Japan','101-6578','Japan') ON DUPLICATE KEY UPDATE office_code=office_code;
 
-*Data for the table `department` */
+/* Data for the table `department` */
 
 insert into department(department_id,name,phone,code,office_code) values 
 

@@ -48,10 +48,10 @@ CREATE TABLE `department` (
   `phone` varchar(50) NOT NULL,
   `code` smallint DEFAULT 1,
   `office_code` varchar(10) NOT NULL,
-  PRIMARY KEY (department_id),
+  PRIMARY KEY (`department_id`),
   KEY `office_code` (`office_code`),
   CONSTRAINT `department_ibfk_1` FOREIGN KEY (`office_code`) REFERENCES `office` (`office_code`)
-) ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Table structure for table `employee` */
 
