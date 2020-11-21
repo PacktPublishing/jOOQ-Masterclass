@@ -21,5 +21,6 @@ public class ClassicModelsService {
         classicModelsRepository.insertAndReturnMultipleColsProductline();        // EXAMPLE 5
         classicModelsRepository.insertNewManagerReturningId();                   // EXAMPLE 6
         classicModelsRepository.insertAndReturnAllColsProductline();             // EXAMPLE 7
+        classicModelsRepository.insertReturningAndSerialInDepartment();          // EXAMPLE 8
     }
 }

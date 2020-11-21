@@ -1,8 +1,10 @@
 package com.classicmodels.repository;
 
+import static jooq.generated.Sequences.CUSTOMER_SEQ;
 import static jooq.generated.Sequences.MANAGER_SEQ;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
+import static jooq.generated.tables.Department.DEPARTMENT;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Manager.MANAGER;
 import static jooq.generated.tables.Productline.PRODUCTLINE;
@@ -80,7 +82,19 @@ public class ClassicModelsRepository {
      */
     public void insertReturningOfCustomerInCustomerDetail() {
 
-        System.out.println("EXAMPLE 3 (affected rows): "
+        ctx.insertInto(CUSTOMER,
+                CUSTOMER.CUSTOMER_NAME, CUSTOMER.CONTACT_FIRST_NAME,
+                CUSTOMER.CONTACT_LAST_NAME, CUSTOMER.PHONE)
+                .values("Ltd. AirRoads", "Kyle", "Doyle", "+ 44 321 321")
+                .execute();
+
+        System.out.println("EXAMPLE 3.1 (affected rows): "
+                + ctx.insertInto(CUSTOMERDETAIL)
+                        .values(CUSTOMER_SEQ.currval(),
+                                "No. 14 Avenue", null, "Los Angeles", null, null, "USA")
+                        .execute());
+        
+        System.out.println("EXAMPLE 3.2 (affected rows): "
                 + ctx.insertInto(CUSTOMERDETAIL)
                         .values(ctx.insertInto(CUSTOMER,
                                 CUSTOMER.CUSTOMER_NAME, CUSTOMER.CONTACT_FIRST_NAME,
@@ -89,7 +103,7 @@ public class ClassicModelsRepository {
                                 .returningResult(CUSTOMER.CUSTOMER_NUMBER).fetchOne().value1(),
                                 "No. 14 Avenue", null, "Los Angeles", null, null, "USA")
                         .execute()
-        );
+        );       
     }
 
     // EXAMPLE 4
@@ -131,7 +145,7 @@ public class ClassicModelsRepository {
     on conflict do nothing 
     returning "public"."productline"."product_line",
               "public"."productline"."created_on"
-    */
+     */
     public void insertNewManagerReturningId() {
 
         var inserted = ctx.insertInto(MANAGER, MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME)
@@ -150,7 +164,7 @@ public class ClassicModelsRepository {
       (nextval('"public"."manager_seq"'), ?) 
     returning 
       "public"."manager"."manager_id"
-    */
+     */
     public void insertAndReturnMultipleColsProductline() {
 
         // Result<Record2<String, LocalDate>>
@@ -177,7 +191,7 @@ public class ClassicModelsRepository {
       "public"."productline"."html_description",
       "public"."productline"."image",
       "public"."productline"."created_on"
-    */
+     */
     public void insertAndReturnAllColsProductline() {
 
         // Result<Record2<String, LocalDate>>
@@ -189,5 +203,26 @@ public class ClassicModelsRepository {
                 .fetch();
 
         System.out.println("EXAMPLE 7 (inserted ids and employee numbers): \n" + inserted);
+    }
+    
+    // EXAMPLE 8
+    /*
+    insert into "public"."department" 
+      ("name", "phone", "code", "office_code")
+    values
+      (?, ?, ?, ?) 
+    returning 
+      "public"."department"."department_id"
+    */
+    public void insertReturningAndSerialInDepartment() {
+        
+        // Record1<Integer>, DEPARTMENT_DEPARTMENT_ID_SEQ - this is the sequence created automatically 
+        var inserted = ctx.insertInto(DEPARTMENT, DEPARTMENT.NAME, 
+                DEPARTMENT.PHONE, DEPARTMENT.CODE, DEPARTMENT.OFFICE_CODE)
+                .values("Marketing", "+2 311 312", Short.valueOf("5432"), "5")
+                .returningResult(DEPARTMENT.DEPARTMENT_ID)
+                .fetchOne();
+        
+        System.out.println("EXAMPLE 8 (inserted id): \n" + inserted);
     }
 }

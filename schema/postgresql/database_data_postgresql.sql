@@ -43,13 +43,13 @@ insert  into office(office_code,city,phone,address_line_first,address_line_secon
 
 insert into department(department_id,name,phone,code,office_code) values 
 
-('1','Lumber','-int 4782','1A','1'),
+('1','Lumber','-int 4782','1333','1'),
 
-('2','Sales','-int 41233','2A','1'),
+('2','Sales','-int 41233','1441','1'),
 
-('3','Accounting','-int 8233','1B','2'),
+('3','Accounting','-int 8233','2311','2'),
 
-('4','Finance','-int 4421','1C','3'), ON CONFLICT (department_id) DO NOTHING;
+('4','Finance','-int 4421','3222','3') ON CONFLICT (department_id) DO NOTHING;
 
 /*Data for the table `manager` */
 

@@ -57,7 +57,8 @@ CREATE TABLE department (
   CONSTRAINT department_ibfk_1 FOREIGN KEY (office_code) REFERENCES office (office_code)
 ) ;
 
-CREATE INDEX office_code ON department (office_code);
+CREATE INDEX office_code_dep ON department (office_code);
+ALTER SEQUENCE department_department_id_seq RESTART WITH 10;
 
 /*Table structure for table `employee` */
 
