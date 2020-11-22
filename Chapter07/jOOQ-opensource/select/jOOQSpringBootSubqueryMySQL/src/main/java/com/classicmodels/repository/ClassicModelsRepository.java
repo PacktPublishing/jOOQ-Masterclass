@@ -10,6 +10,7 @@ import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
+import org.jooq.SelectQuery;
 import static org.jooq.impl.DSL.avg;
 import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.primaryKey;
@@ -54,17 +55,31 @@ public class ClassicModelsRepository {
           where
             `classicmodels`.`office`.`city` like ?
         )
-    */
+     */
     public void findlEmployeeInOfficeStartingS() {
 
-        System.out.println("EXAMPLE 1\n" +
-                ctx.selectFrom(EMPLOYEE)
+        System.out.println("EXAMPLE 1.1\n"
+                + ctx.selectFrom(EMPLOYEE)
                         .where(EMPLOYEE.OFFICE_CODE.in(
                                 select(OFFICE.OFFICE_CODE).from(OFFICE).where(OFFICE.CITY.like("S%"))))
                         .fetch()
         );
+
+        // same query expressed via SelectQuery API
+        SelectQuery sqInner = ctx.selectQuery();
+        sqInner.addSelect(OFFICE.OFFICE_CODE);
+        sqInner.addFrom(OFFICE);
+        sqInner.addConditions(OFFICE.CITY.like("S%"));
+
+        SelectQuery sqOuter = ctx.selectQuery();       
+        sqOuter.addFrom(EMPLOYEE);        
+        sqOuter.addConditions(EMPLOYEE.OFFICE_CODE.in(sqInner));
+
+        System.out.println("EXAMPLE 1.2\n"
+                + sqOuter.fetch()
+        );
     }
-    
+
     // EXAMPLE 2
     /*
     select
@@ -87,21 +102,21 @@ public class ClassicModelsRepository {
           where
             `classicmodels`.`office`.`state` <> ?
         )
-    */
+     */
     public void findEmployeeInOfficeNotMA() {
-        
-        System.out.println("EXAMPLE 2\n" +
-                ctx.select(count(), OFFICE.OFFICE_CODE, OFFICE.STATE)
+
+        System.out.println("EXAMPLE 2\n"
+                + ctx.select(count(), OFFICE.OFFICE_CODE, OFFICE.STATE)
                         .from(EMPLOYEE)
                         .join(OFFICE)
-                        .on(EMPLOYEE.OFFICE_CODE.eq(OFFICE.OFFICE_CODE))           
+                        .on(EMPLOYEE.OFFICE_CODE.eq(OFFICE.OFFICE_CODE))
                         .groupBy(EMPLOYEE.OFFICE_CODE)
                         .having(EMPLOYEE.OFFICE_CODE.in(
                                 select(OFFICE.OFFICE_CODE).from(OFFICE).where(OFFICE.STATE.ne("MA"))))
                         .fetch()
         );
     }
-                        
+
     // EXAMPLE 3
     /*
     select
@@ -123,7 +138,7 @@ public class ClassicModelsRepository {
         `classicmodels`.`sale`.`employee_number` = `saleTable`.`sen`
           and `classicmodels`.`sale`.`sale` < `saleTable`.`avgs`
       )
-    */
+     */
     public void findSaleLtAvg() {
 
         // Table<?> 
@@ -132,15 +147,15 @@ public class ClassicModelsRepository {
                 .groupBy(SALE.EMPLOYEE_NUMBER)
                 .asTable("saleTable"); // derived table
 
-        System.out.println("EXAMPLE 3\n" +
-                ctx.select(SALE.SALE_ID, SALE.SALE_)
+        System.out.println("EXAMPLE 3\n"
+                + ctx.select(SALE.SALE_ID, SALE.SALE_)
                         .from(SALE, saleTable)
                         .where(SALE.EMPLOYEE_NUMBER.eq(saleTable.field("sen").coerce(Long.class))
                                 .and(SALE.SALE_.lt(saleTable.field("avgs").coerce(Double.class))))
                         .fetch()
         );
     }
-    
+
     // EXAMPLE 4
     /*    
     select
@@ -164,19 +179,19 @@ public class ClassicModelsRepository {
        and `e1`.`salary` >= `e3`.`avgsal`
      )
      */
-    public void findEmployeesWithSalaryGeAvgPerOffice() {       
+    public void findEmployeesWithSalaryGeAvgPerOffice() {
 
-        Employee e1 = EMPLOYEE.as("e1");        
+        Employee e1 = EMPLOYEE.as("e1");
         Employee e2 = EMPLOYEE.as("e2");
-        
+
         // Table<?>
         var e3 = select(avg(e2.SALARY).as("avgsal"), e2.OFFICE_CODE)
-                .from(e2)                        
+                .from(e2)
                 .groupBy(e2.OFFICE_CODE)
                 .asTable("e3");
-        
-        System.out.println("EXAMPLE 4\n" +
-                ctx.select(e1.FIRST_NAME, e1.LAST_NAME, e1.OFFICE_CODE).from(e1, e3)
+
+        System.out.println("EXAMPLE 4\n"
+                + ctx.select(e1.FIRST_NAME, e1.LAST_NAME, e1.OFFICE_CODE).from(e1, e3)
                         .where(e1.OFFICE_CODE.eq(e3.field("office_code", String.class))
                                 .and(e1.SALARY.ge(e3.field("avgsal", Integer.class))))
                         .fetch()
@@ -201,7 +216,7 @@ public class ClassicModelsRepository {
       `classicmodels`.`employee`
     where
       `classicmodels`.`employee`.`employee_number` = `saleTable`.`sen`
-    */
+     */
     public void findEmployeeAndSale() {
 
         // Table<?>
@@ -209,8 +224,8 @@ public class ClassicModelsRepository {
                 .from(SALE)
                 .asTable("saleTable");
 
-        System.out.println("EXAMPLE 5\n" +
-                ctx.select(EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.FIRST_NAME,
+        System.out.println("EXAMPLE 5\n"
+                + ctx.select(EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.FIRST_NAME,
                         EMPLOYEE.LAST_NAME, saleTable.field("ss"))
                         .from(saleTable, EMPLOYEE)
                         .where(EMPLOYEE.EMPLOYEE_NUMBER
@@ -234,7 +249,7 @@ public class ClassicModelsRepository {
       ) as `saleTable`
     order by
       `saleTable`.`ss`
-    */
+     */
     public void findSale() {
 
         // Table<?>
@@ -242,8 +257,8 @@ public class ClassicModelsRepository {
                 .from(SALE)
                 .asTable("saleTable");
 
-        System.out.println("EXAMPLE 6\n" +
-                ctx.select(saleTable.fields())
+        System.out.println("EXAMPLE 6\n"
+                + ctx.select(saleTable.fields())
                         .from(saleTable)
                         .orderBy(saleTable.field("ss"))
                         .fetch()
@@ -270,7 +285,7 @@ public class ClassicModelsRepository {
        = `classicmodels`.`employee`.`employee_number`
     order by
       `saleTable`.`sales` desc
-    */
+     */
     public void employeesAndNumberOfSales() {
 
         // Table<?>
@@ -278,17 +293,17 @@ public class ClassicModelsRepository {
                 .from(SALE)
                 .groupBy(SALE.EMPLOYEE_NUMBER).asTable("saleTable");
 
-        System.out.println("EXAMPLE 7\n" +
-                ctx.select(salesTable.field("sen"), salesTable.field("sales"),
+        System.out.println("EXAMPLE 7\n"
+                + ctx.select(salesTable.field("sen"), salesTable.field("sales"),
                         EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
                         .from(salesTable)
                         .innerJoin(EMPLOYEE).on(salesTable.field("sen").coerce(Long.class)
-                                .eq(EMPLOYEE.EMPLOYEE_NUMBER))
+                        .eq(EMPLOYEE.EMPLOYEE_NUMBER))
                         .orderBy(salesTable.field("sales").desc())
                         .fetch()
         );
-    }        
-    
+    }
+
     // EXAMPLE 8    
     /*
     select
@@ -323,7 +338,7 @@ public class ClassicModelsRepository {
         `classicmodels`.`sale`.`employee_number` = `saleTable2`.`sen`
            and `classicmodels`.`sale`.`sale` < `saleTable2`.`avgs`
       )
-    */
+     */
     public void findSaleLtAvgAvg() {
 
         // Table<?>
@@ -339,15 +354,15 @@ public class ClassicModelsRepository {
                         .gt(select(avg(SALE.SALE_)).from(SALE)))
                 .asTable("saleTable2");
 
-        System.out.println("EXAMPLE 8\n" +
-                ctx.select(SALE.SALE_ID, SALE.SALE_)
+        System.out.println("EXAMPLE 8\n"
+                + ctx.select(SALE.SALE_ID, SALE.SALE_)
                         .from(SALE, saleTable2)
                         .where(SALE.EMPLOYEE_NUMBER.eq(saleTable2.field("sen").coerce(Long.class))
                                 .and(SALE.SALE_.lt(saleTable2.field("avgs").coerce(Double.class))))
                         .fetch()
         );
     }
-    
+
     // EXAMPLE 9
     /*
     create view `paymentView` as
@@ -368,7 +383,7 @@ public class ClassicModelsRepository {
          where
            `classicmodels`.`customer`.`customer_name` = 'Signal Gift Stores'
       )
-    */
+     */
     @Transactional
     public void findPaymentForCustomerSignalGiftStores() {
 
@@ -378,11 +393,11 @@ public class ClassicModelsRepository {
                                 .where(CUSTOMER.CUSTOMER_NAME.eq("Signal Gift Stores"))
                 ))).execute();
 
-        System.out.println("EXAMPLE 9\n" +
-                ctx.selectFrom(table("paymentView"))
+        System.out.println("EXAMPLE 9\n"
+                + ctx.selectFrom(table("paymentView"))
                         .fetch()
         );
-        
+
         // clean up
         ctx.dropView("paymentView").execute();
     }
@@ -407,26 +422,26 @@ public class ClassicModelsRepository {
       `classicmodels`.`order`.`status`
     from
       `classicmodels`.`order`
-    */
+     */
     @Transactional
     public void insertIntoOrder() {
-        
-        System.out.println("EXAMPLE 10 (rows affected):" +
-             ctx.insertInto(ORDER, ORDER.COMMENTS, ORDER.CUSTOMER_NUMBER, 
-                     ORDER.ORDER_DATE, ORDER.REQUIRED_DATE, ORDER.SHIPPED_DATE, ORDER.STATUS)
-                     .select(select(ORDER.COMMENTS, ORDER.CUSTOMER_NUMBER, 
-                             ORDER.ORDER_DATE, ORDER.REQUIRED_DATE, ORDER.SHIPPED_DATE, ORDER.STATUS)
-                             .from(ORDER)                             
-                             .limit(5)
-                     ).execute()
-        );                
+
+        System.out.println("EXAMPLE 10 (rows affected):"
+                + ctx.insertInto(ORDER, ORDER.COMMENTS, ORDER.CUSTOMER_NUMBER,
+                        ORDER.ORDER_DATE, ORDER.REQUIRED_DATE, ORDER.SHIPPED_DATE, ORDER.STATUS)
+                        .select(select(ORDER.COMMENTS, ORDER.CUSTOMER_NUMBER,
+                                ORDER.ORDER_DATE, ORDER.REQUIRED_DATE, ORDER.SHIPPED_DATE, ORDER.STATUS)
+                                .from(ORDER)
+                                .limit(5)
+                        ).execute()
+        );
     }
-    
+
     // EXAMPLE 11
     /*
     insert ignore into `classicmodels`.`manager` (`manager_id`, `manager_name`)
       select * from managerTemp
-    */
+     */
     @Transactional
     public void insertAnotherTableInManager() {
 
@@ -445,14 +460,14 @@ public class ClassicModelsRepository {
                 .execute();
 
         // insert into MANAGER the data from the temporary table via SELECT 
-        System.out.println("EXAMPLE 11 (rows affected):" +
-                ctx.insertInto(MANAGER)
+        System.out.println("EXAMPLE 11 (rows affected):"
+                + ctx.insertInto(MANAGER)
                         .select(select().from(table("managerTemp")))
                         .onDuplicateKeyIgnore()
                         .execute()
         );
     }
-    
+
     // EXAMPLE 12
     /*
     update
@@ -473,19 +488,19 @@ public class ClassicModelsRepository {
               `classicmodels`.`employee`.`job_title` like ?
           ) as `t`
       )
-    */
+     */
     @Transactional
     public void updateEmployeeSalaryByJobTitle() {
-        
-        System.out.println("EXAMPLE 12 (rows affected):" +
-                ctx.update(EMPLOYEE)
+
+        System.out.println("EXAMPLE 12 (rows affected):"
+                + ctx.update(EMPLOYEE)
                         .set(EMPLOYEE.SALARY, EMPLOYEE.SALARY.mul(0.25))
                         .where(EMPLOYEE.JOB_TITLE.in(select(EMPLOYEE.JOB_TITLE).from(EMPLOYEE)
                                 .where(EMPLOYEE.JOB_TITLE.like("Sale%"))))
                         .execute()
         );
     }
- 
+
     // EXAMPLE 13
     /*
     delete from
@@ -505,15 +520,15 @@ public class ClassicModelsRepository {
                `classicmodels`.`payment`.`caching_date` is not null
            ) as `t`
         )
-    */
+     */
     @Transactional
     public void deletePaymentWithCachingDateNotNull() {
-     
-        System.out.println("EXAMPLE 13 (rows affected):" +
-        ctx.deleteFrom(PAYMENT)
-                .where(PAYMENT.INVOICE_AMOUNT.in(select(PAYMENT.INVOICE_AMOUNT).from(PAYMENT)
-                .where(PAYMENT.CACHING_DATE.isNotNull())))
-                .execute()
+
+        System.out.println("EXAMPLE 13 (rows affected):"
+                + ctx.deleteFrom(PAYMENT)
+                        .where(PAYMENT.INVOICE_AMOUNT.in(select(PAYMENT.INVOICE_AMOUNT).from(PAYMENT)
+                                .where(PAYMENT.CACHING_DATE.isNotNull())))
+                        .execute()
         );
-    }        
+    }
 }
