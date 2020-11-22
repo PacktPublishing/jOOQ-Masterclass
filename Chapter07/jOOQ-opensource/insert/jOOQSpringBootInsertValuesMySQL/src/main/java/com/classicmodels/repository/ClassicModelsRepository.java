@@ -15,6 +15,7 @@ import static jooq.generated.tables.Sale.SALE;
 import jooq.generated.tables.pojos.Sale;
 import jooq.generated.tables.records.SaleRecord;
 import org.jooq.DSLContext;
+import org.jooq.InsertQuery;
 import static org.jooq.impl.DSL.rand;
 import static org.jooq.impl.DSL.round;
 import org.springframework.stereotype.Repository;
@@ -64,6 +65,19 @@ public class ClassicModelsRepository {
                         .values("New order inserted ...", LocalDate.of(2003, 2, 12),
                                 LocalDate.of(2003, 3, 1), LocalDate.of(2003, 2, 27), "Shipped", 363L)
                         .execute()
+        );
+
+        // example 1.3 expressed via InsertQuery API
+        InsertQuery iq = ctx.insertQuery(ORDER);
+        iq.addValue(ORDER.COMMENTS, "New order inserted ...");
+        iq.addValue(ORDER.ORDER_DATE, LocalDate.of(2003, 2, 12));
+        iq.addValue(ORDER.REQUIRED_DATE, LocalDate.of(2003, 3, 1));
+        iq.addValue(ORDER.SHIPPED_DATE, LocalDate.of(2003, 2, 27));
+        iq.addValue(ORDER.STATUS, "Shipped");
+        iq.addValue(ORDER.CUSTOMER_NUMBER, 363L);
+
+        System.out.println("EXAMPLE 1.4 (affected rows): "
+                + iq.execute()
         );
     }
 
