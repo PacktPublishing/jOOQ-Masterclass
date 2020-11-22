@@ -19,6 +19,7 @@ import jooq.generated.tables.records.SaleRecord;
 import static jooq.generated.udt.Locationtype.LOCATIONTYPE;
 import jooq.generated.udt.records.LocationtypeRecord;
 import org.jooq.DSLContext;
+import org.jooq.InsertQuery;
 import static org.jooq.impl.DSL.rand;
 import static org.jooq.impl.DSL.round;
 import org.springframework.stereotype.Repository;
@@ -79,6 +80,20 @@ public class ClassicModelsRepository {
                                 LocalDate.of(2003, 3, 1), LocalDate.of(2003, 2, 27), "Shipped", 363L)
                         .onDuplicateKeyIgnore()
                         .execute()
+        );
+        
+        // example 1.3 expressed via InsertQuery API
+        InsertQuery iq = ctx.insertQuery(ORDER);
+        iq.addValue(ORDER.COMMENTS, "New order inserted ...");
+        iq.addValue(ORDER.ORDER_DATE, LocalDate.of(2003, 2, 12));
+        iq.addValue(ORDER.REQUIRED_DATE, LocalDate.of(2003, 3, 1));
+        iq.addValue(ORDER.SHIPPED_DATE, LocalDate.of(2003, 2, 27));
+        iq.addValue(ORDER.STATUS, "Shipped");
+        iq.addValue(ORDER.CUSTOMER_NUMBER, 363L);
+        iq.onDuplicateKeyIgnore(true);
+
+        System.out.println("EXAMPLE 1.4 (affected rows): "
+                + iq.execute()
         );
     }
 

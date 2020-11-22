@@ -5,7 +5,6 @@ http://www.mysqltutorial.org
 Name: MySQL Sample Database classicmodels
 Link: http://www.mysqltutorial.org/mysql-sample-database.aspx
 *********************************************************************
-
 This is a modified version of the original schema
 */
 
