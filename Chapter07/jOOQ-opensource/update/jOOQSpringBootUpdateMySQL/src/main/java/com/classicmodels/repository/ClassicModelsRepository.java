@@ -51,7 +51,7 @@ public class ClassicModelsRepository {
         uq.addValue(OFFICE.COUNTRY, "Romania");
         uq.addConditions(OFFICE.OFFICE_CODE.eq("1"));
         // uq.execute();
-        System.out.println("EXAMPLE 1.2 (query): " + uq.getSQL());
+        System.out.println("EXAMPLE 1.2 (query): " + uq.getSQL());                
     }
 
     // EXAMPLE 2
@@ -155,7 +155,7 @@ public class ClassicModelsRepository {
         );
 
         /* approach 2 */
- /*
+        /*
         update
           `classicmodels`.`office`
         set
