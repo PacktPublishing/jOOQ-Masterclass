@@ -11,6 +11,7 @@ import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Sale.SALE;
 import jooq.generated.tables.records.OfficeRecord;
 import org.jooq.DSLContext;
+import org.jooq.UpdateQuery;
 import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.row;
@@ -41,13 +42,20 @@ public class ClassicModelsRepository {
      */
     public void updateOffice() {
 
-        System.out.println("EXAMPLE 1 (affected rows): "
+        System.out.println("EXAMPLE 1.1 (affected rows): "
                 + ctx.update(OFFICE)
                         .set(OFFICE.CITY, "Banesti")
                         .set(OFFICE.COUNTRY, "Romania")
                         .where(OFFICE.OFFICE_CODE.eq("1"))
                         .execute()
         );
+        
+        UpdateQuery uq = ctx.updateQuery(OFFICE);
+        uq.addValue(OFFICE.CITY, "Craiova");
+        uq.addValue(OFFICE.COUNTRY, "Romania");
+        uq.addConditions(OFFICE.OFFICE_CODE.eq("1"));
+        // uq.execute();
+        System.out.println("EXAMPLE 1.2 (query): " + uq.getSQL());
     }
 
     // EXAMPLE 2
