@@ -1,7 +1,10 @@
 package com.classicmodels;
 
+import com.classicmodels.pojo.CustomerAndOrder;
+import com.classicmodels.pojo.Order;
 import com.classicmodels.pojo.Office;
 import com.classicmodels.service.ClassicModelsService;
+import java.time.LocalDate;
 import java.util.List;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
@@ -28,6 +31,15 @@ public class MainApplication {
             System.out.println("Fetching offices from 'NA' territory:");
             List<Office> offices = classicModelsService.fetchOfficesInTerritory("NA");
             System.out.println(offices);
+
+            System.out.println("Fetching orders between 2002-01-01 and 2004-12-31:");
+            List<Order> orders = classicModelsService
+                    .fetchOrdersByRequiredDate(LocalDate.of(2002, 1, 1), LocalDate.of(2004, 12, 31));
+            System.out.println(orders);
+
+            System.out.println("Fetching customers and orders:");
+            List<CustomerAndOrder> custAndOrd = classicModelsService.fetchCustomersAndOrders();
+            System.out.println(custAndOrd);
         };
     }
 }
