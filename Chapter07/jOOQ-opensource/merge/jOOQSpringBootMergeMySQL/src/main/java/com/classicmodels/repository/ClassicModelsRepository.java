@@ -30,7 +30,7 @@ public class ClassicModelsRepository {
       `classicmodels`.`order`.`shipped_date` = ?,
       `classicmodels`.`order`.`status` = ?
      */
-    public void insertOtherwiseUpdate() {        
+    public void insertOrderOtherwiseUpdateIt() {        
 
         System.out.println("EXAMPLE 1.1 (affected rows): "
                 + ctx.insertInto(ORDER)
@@ -74,7 +74,7 @@ public class ClassicModelsRepository {
       `classicmodels`.`sale`.`sale` = ?,
       `classicmodels`.`sale`.`employee_number` = ?
     */
-    public void insertOtherwiseUpdateRecordSale() {
+    public void insertSaleRecordOnDuplicateKeyUpdateIt() {
 
         SaleRecord sr = new SaleRecord(1L, 2003, 123.32, 1370L);
 
