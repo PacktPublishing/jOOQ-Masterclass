@@ -30,9 +30,21 @@ public class ClassicModelsRepository {
       `classicmodels`.`order`.`shipped_date` = ?,
       `classicmodels`.`order`.`status` = ?
      */
-    public void insertOtherwiseUpdate() {
+    public void insertOtherwiseUpdate() {        
 
         System.out.println("EXAMPLE 1.1 (affected rows): "
+                + ctx.insertInto(ORDER)
+                        .values(10101L, LocalDate.of(2003, 2, 12), LocalDate.of(2003, 3, 1),
+                                LocalDate.of(2003, 2, 27), "Shipped", "New order inserted ...", 363L)
+                        .onDuplicateKeyUpdate()
+                        .set(ORDER.ORDER_DATE, LocalDate.of(2003, 2, 12))
+                        .set(ORDER.REQUIRED_DATE, LocalDate.of(2003, 3, 1))
+                        .set(ORDER.SHIPPED_DATE, LocalDate.of(2003, 2, 27))
+                        .set(ORDER.STATUS, "Shipped")
+                        .execute()
+        );
+        
+        System.out.println("EXAMPLE 1.2 (affected rows): "
                 + ctx.insertInto(ORDER)
                         .set(ORDER.ORDER_ID, 10101L)
                         .set(ORDER.ORDER_DATE, LocalDate.of(2003, 2, 12))
@@ -41,18 +53,6 @@ public class ClassicModelsRepository {
                         .set(ORDER.STATUS, "Shipped")
                         .set(ORDER.COMMENTS, "New order inserted ...")
                         .set(ORDER.CUSTOMER_NUMBER, 128L)
-                        .onDuplicateKeyUpdate()
-                        .set(ORDER.ORDER_DATE, LocalDate.of(2003, 2, 12))
-                        .set(ORDER.REQUIRED_DATE, LocalDate.of(2003, 3, 1))
-                        .set(ORDER.SHIPPED_DATE, LocalDate.of(2003, 2, 27))
-                        .set(ORDER.STATUS, "Shipped")
-                        .execute()
-        );
-
-        System.out.println("EXAMPLE 1.2 (affected rows): "
-                + ctx.insertInto(ORDER)
-                        .values(10101L, LocalDate.of(2003, 2, 12), LocalDate.of(2003, 3, 1),
-                                LocalDate.of(2003, 2, 27), "Shipped", "New order inserted ...", 363L)
                         .onDuplicateKeyUpdate()
                         .set(ORDER.ORDER_DATE, LocalDate.of(2003, 2, 12))
                         .set(ORDER.REQUIRED_DATE, LocalDate.of(2003, 3, 1))
