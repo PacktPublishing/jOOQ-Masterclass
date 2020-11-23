@@ -89,7 +89,7 @@ CREATE SEQUENCE sale_seq START 1000000;
 CREATE TABLE sale (
   sale_id bigint NOT NULL DEFAULT NEXTVAL ('sale_seq'),  
   fiscal_year int NOT NULL,  
-  sale float NOT NULL,  
+  sale float NOT NULL,    
   employee_number bigint DEFAULT NULL,  
   PRIMARY KEY (sale_id)
  ,  
@@ -224,10 +224,10 @@ CREATE INDEX product_id ON orderdetail (product_id);
 
 CREATE TABLE payment (
   customer_number bigint NOT NULL,
-  check_number varchar(50) NOT NULL,
+  check_number varchar(50) UNIQUE NOT NULL,
   payment_date timestamp NOT NULL,
   invoice_amount decimal(10,2) NOT NULL,
-  caching_date timestamp DEFAULT NULL,
+  caching_date timestamp DEFAULT NULL,  
   PRIMARY KEY (customer_number,check_number),
   CONSTRAINT payments_ibfk_1 FOREIGN KEY (customer_number) REFERENCES customer (customer_number)
 ) ;
