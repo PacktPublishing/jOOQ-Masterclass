@@ -203,7 +203,7 @@ CREATE TABLE `orderdetail` (
 
 CREATE TABLE `payment` (
   `customer_number` bigint NOT NULL,
-  `check_number` varchar(50) NOT NULL,
+  `check_number` varchar(50) UNIQUE NOT NULL,
   `payment_date` timestamp NOT NULL,
   `invoice_amount` decimal(10,2) NOT NULL,
   `caching_date` timestamp DEFAULT NULL,

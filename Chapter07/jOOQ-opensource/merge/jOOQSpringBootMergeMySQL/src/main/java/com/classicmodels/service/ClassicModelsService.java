@@ -13,7 +13,11 @@ public class ClassicModelsService {
     }
 
     public void callAll() {
-        classicModelsRepository.insertOrderOtherwiseUpdateIt();            // EXAMPLE 1
-        classicModelsRepository.insertSaleRecordOnDuplicateKeyUpdateIt();  // EXAMPLE 2
+        classicModelsRepository.insertPaymentOnDuplicateKeyIgnore();            // EXAMPLE 1
+        classicModelsRepository.insertPaymentOnConflictDoNothing();             // EXAMPLE 2
+        classicModelsRepository.insertOrderOtherwiseUpdateIt();                 // EXAMPLE 3
+        classicModelsRepository.insertPaymentOnConflictUpdateIt();              // EXAMPLE 4
+        classicModelsRepository.insertSaleRecordOnDuplicateKeyUpdateIt();       // EXAMPLE 5
+        classicModelsRepository.insertPaymentRecordOnConflictUpdateIt();        // EXAMPLE 6
     }
 }
