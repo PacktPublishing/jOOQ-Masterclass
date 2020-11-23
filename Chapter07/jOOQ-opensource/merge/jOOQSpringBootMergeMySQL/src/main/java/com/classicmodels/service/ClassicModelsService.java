@@ -13,6 +13,7 @@ public class ClassicModelsService {
     }
 
     public void callAll() {
-
+        classicModelsRepository.insertOtherwiseUpdate();            // EXAMPLE 1
+        classicModelsRepository.insertOtherwiseUpdateRecordSale();  // EXAMPLE 2
     }
 }

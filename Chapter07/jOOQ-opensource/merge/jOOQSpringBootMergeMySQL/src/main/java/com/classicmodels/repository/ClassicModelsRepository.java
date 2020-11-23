@@ -18,7 +18,7 @@ public class ClassicModelsRepository {
         this.ctx = ctx;
     }
 
-   // EXAMPLE 3
+   // EXAMPLE 1
     /*
     insert into `classicmodels`.`order` (
       `order_id`,`order_date`,`required_date`,`shipped_date`,`status`,`comments`,`customer_number`)
@@ -32,7 +32,7 @@ public class ClassicModelsRepository {
      */
     public void insertOtherwiseUpdate() {
 
-        System.out.println("EXAMPLE 3.1 (affected rows): "
+        System.out.println("EXAMPLE 1.1 (affected rows): "
                 + ctx.insertInto(ORDER)
                         .set(ORDER.ORDER_ID, 10101L)
                         .set(ORDER.ORDER_DATE, LocalDate.of(2003, 2, 12))
@@ -49,7 +49,7 @@ public class ClassicModelsRepository {
                         .execute()
         );
 
-        System.out.println("EXAMPLE 3.2 (affected rows): "
+        System.out.println("EXAMPLE 1.2 (affected rows): "
                 + ctx.insertInto(ORDER)
                         .values(10101L, LocalDate.of(2003, 2, 12), LocalDate.of(2003, 3, 1),
                                 LocalDate.of(2003, 2, 27), "Shipped", "New order inserted ...", 363L)
@@ -62,7 +62,7 @@ public class ClassicModelsRepository {
         );
     }
     
-    // EXAMPLE 5
+    // EXAMPLE 2
     /*
     insert into `classicmodels`.`sale` (
       `sale_id`,`fiscal_year`,`sale`,`employee_number`)
@@ -78,7 +78,7 @@ public class ClassicModelsRepository {
 
         SaleRecord sr = new SaleRecord(1L, 2003, 123.32, 1370L);
 
-        System.out.println("EXAMPLE 5 (affected rows): "
+        System.out.println("EXAMPLE 2 (affected rows): "
                 + ctx.insertInto(SALE)
                         .set(sr) // or, values(sr)                
                         .onDuplicateKeyUpdate()
