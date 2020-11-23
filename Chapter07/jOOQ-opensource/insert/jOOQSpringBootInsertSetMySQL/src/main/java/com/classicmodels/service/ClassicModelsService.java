@@ -15,9 +15,7 @@ public class ClassicModelsService {
     public void callAll() {
 
         classicModelsRepository.insertOneSale();                    // EXAMPLE 1
-        classicModelsRepository.insertTwoSale();                    // EXAMPLE 2
-        classicModelsRepository.insertOtherwiseUpdate();            // EXAMPLE 3
-        classicModelsRepository.insertRecordSale();                 // EXAMPLE 4
-        classicModelsRepository.insertOtherwiseUpdateRecordSale();  // EXAMPLE 5
+        classicModelsRepository.insertTwoSale();                    // EXAMPLE 2        
+        classicModelsRepository.insertRecordSale();                 // EXAMPLE 3        
     }
 }
