@@ -11,6 +11,9 @@ import org.jooq.SelectQuery;
 import static org.jooq.impl.DSL.asterisk;
 import org.springframework.stereotype.Repository;
 
+  Table table = select(nvl(PRODUCT.PRODUCT_NAME, "").as("n"), 
+                PRODUCT.asterisk().except(PRODUCT.PRODUCT_NAME))
+                .asTable("t");
 @Repository
 public class ClassicModelsRepository {
 
