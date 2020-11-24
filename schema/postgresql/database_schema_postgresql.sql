@@ -166,7 +166,7 @@ CREATE TABLE productline (
 
 /*Table structure for table `product` */
 
-CREATE SEQUENCE product_seq;
+CREATE SEQUENCE product_seq START 1000000;
 
 CREATE TABLE product (
   product_id bigint NOT NULL DEFAULT NEXTVAL ('product_seq'),

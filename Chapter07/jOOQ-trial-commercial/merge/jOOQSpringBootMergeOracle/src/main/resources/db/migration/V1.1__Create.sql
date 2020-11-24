@@ -133,7 +133,7 @@ CREATE TABLE sale (
   sale_id number(20) NOT NULL, 
   fiscal_year int NOT NULL, 
   sale float NOT NULL,  
-  employee_number number(20) DEFAULT NULL,  
+  employee_number number(10) DEFAULT NULL,  
   PRIMARY KEY (sale_id)
 ,  
   CONSTRAINT sales_ibfk_1 FOREIGN KEY (employee_number) REFERENCES employee (employee_number)

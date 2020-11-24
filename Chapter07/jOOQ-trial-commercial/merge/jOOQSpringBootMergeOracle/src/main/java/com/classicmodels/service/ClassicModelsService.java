@@ -13,7 +13,7 @@ public class ClassicModelsService {
     }
 
     public void callAll() {
-     /*   classicModelsRepository.insertPaymentOnDuplicateKeyIgnore();               // EXAMPLE 1
+        classicModelsRepository.insertPaymentOnDuplicateKeyIgnore();               // EXAMPLE 1
         classicModelsRepository.insertPaymentOnConflictDoNothing();                // EXAMPLE 2   
         classicModelsRepository.insertPaymentOnDuplicateCheckNumberDoNothing();    // EXAMPLE 3
         classicModelsRepository.insertPaymentOnConflictOnConstraintDoNothing();    // EXAMPLE 4
@@ -23,10 +23,13 @@ public class ClassicModelsService {
         classicModelsRepository.insertPaymentRecordOnConflictUpdateIt();           // EXAMPLE 8
         classicModelsRepository.updateProductNameElseInsertProduct();              // EXAMPLE 9
         classicModelsRepository.updateCustomerFirstNameElseInsertCustomer();       // EXAMPLE 10
-        classicModelsRepository.updateDepartmentPhoneElseInsertDepartment();       // EXAMPLE 11*/
-       // classicModelsRepository.deleteDepartmentElseInsertDepartment();            // EXAMPLE 12 
-        //classicModelsRepository.deleteDepartmentAccountingElseInsertDepartment();  // EXAMPLE 13
-        classicModelsRepository.deleteDepartmentElseUpdateElseInsert();            // EXAMPLE 14 
-        //classicModelsRepository.deleteParisDepartmentElseInsert();                 // EXAMPLE 15
+        classicModelsRepository.updateDepartmentPhoneElseInsertDepartment();       // EXAMPLE 11
+        classicModelsRepository.deleteDepartmentElseInsertDepartment();            // EXAMPLE 12 
+        classicModelsRepository.deleteDepartmentAccountingElseInsertDepartment();  // EXAMPLE 13
+        classicModelsRepository.deleteParisDepartmentElseInsert();                  // EXAMPLE 14
+        classicModelsRepository.updateSaleThenDeleteViaWhenMatchedAnd();            // EXAMPLE 15 
+        classicModelsRepository.updateSaleThenDeleteViaDeleteWhere();               // EXAMPLE 16
+        classicModelsRepository.updatePaymentBeforeDelete();                        // EXAMPLE 17
+        classicModelsRepository.deletePaymentBeforeUpdate();                        // EXAMPLE 18       
     }
 }
