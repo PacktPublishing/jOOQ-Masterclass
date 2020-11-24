@@ -1,21 +1,22 @@
 package com.classicmodels.repository;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import jooq.generated.Keys;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Department.DEPARTMENT;
-import jooq.generated.tables.Office;
 import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Product.PRODUCT;
+import static jooq.generated.tables.Sale.SALE;
 import jooq.generated.tables.records.PaymentRecord;
 import org.jooq.DSLContext;
 import org.jooq.Query;
 import org.jooq.Table;
-import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.selectFrom;
 import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
@@ -113,7 +114,7 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 3 (affected rows): "
                 + ctx.insertInto(PAYMENT)
-                        .values(103L, "HQ336336",
+                        .values(100L, "HQ336336",
                                 LocalDateTime.of(2005, 11, 9, 12, 10, 11), 123.32,
                                 LocalDateTime.of(2005, 11, 11, 14, 25, 21))
                         .onConflict(PAYMENT.CHECK_NUMBER)
@@ -143,8 +144,8 @@ public class ClassicModelsRepository {
                         .values(103L, "HQ336336",
                                 LocalDateTime.of(2005, 11, 9, 12, 10, 11), 123.32,
                                 LocalDateTime.of(2005, 11, 11, 14, 25, 21))
-                        .onConflictOnConstraint(name("unique_check_number")) // the auto UNIQUE constraint on CHECK_NUMBER
-                        .doNothing() // with the name specified by us as [unique_check_number]
+                        .onConflictOnConstraint(Keys.PAYMENT__UNIQUE_CHECK_NUMBER)
+                        .doNothing()
                         .execute()
         );
     }
@@ -518,6 +519,40 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 14
     /*
+    merge into [classicmodels].[dbo].[sale] using (
+      select 
+        1 [one]
+    ) t on [classicmodels].[dbo].[sale].[fiscal_year] = ? when matched 
+    and [classicmodels].[dbo].[sale].[sale] > ? then 
+    update 
+    set 
+      [classicmodels].[dbo].[sale].[sale] = (
+        [classicmodels].[dbo].[sale].[sale] * ?
+      ) when matched 
+      and (
+        not (
+          [classicmodels].[dbo].[sale].[sale] > ?
+        ) 
+        and [classicmodels].[dbo].[sale].[sale] < ?
+      ) then delete;
+    */
+    public void updateSaleThenDeleteViaWhenMatchedAnd() {
+
+        System.out.println("EXAMPLE 14 (affected rows): "
+                + ctx.mergeInto(SALE)
+                        .usingDual()
+                        .on(SALE.FISCAL_YEAR.eq(2003))
+                        .whenMatchedAnd(SALE.SALE_.gt(2000.0))
+                        .thenUpdate()
+                        .set(SALE.SALE_, SALE.SALE_.mul(0.50))
+                        .whenMatchedAnd(SALE.SALE_.lt(2000.0))
+                        .thenDelete()
+                        .execute()
+        );
+    }
+
+    // EXAMPLE 15
+    /*
     merge into [classicmodels].[dbo].[department] 
     using [classicmodels].[dbo].[office] 
     on [classicmodels].[dbo].[department].[office_code] = [classicmodels].[dbo].[office].[office_code]
@@ -541,7 +576,7 @@ public class ClassicModelsRepository {
      */
     public void deleteDepartmentElseUpdateElseInsert() {
 
-        System.out.println("EXAMPLE 14 (affected rows): "
+        System.out.println("EXAMPLE 15 (affected rows): "
                 + ctx.mergeInto(DEPARTMENT)
                         .using(OFFICE)
                         .on(DEPARTMENT.OFFICE_CODE.eq(OFFICE.OFFICE_CODE))
@@ -556,8 +591,8 @@ public class ClassicModelsRepository {
                         .execute()
         );
     }
-    
-    // EXAMPLE 15
+
+    // EXAMPLE 16
     /*
     merge into [classicmodels].[dbo].[department] 
     using (
@@ -587,22 +622,106 @@ public class ClassicModelsRepository {
     (
       ?, ?, [t].[office_code], [t].[phone]
     );
-    */
+     */
     public void deleteParisDepartmentElseInsert() {
 
         Table<?> table = selectFrom(OFFICE)
                 .where(OFFICE.CITY.eq("Paris")).asTable("t");
-                
-        System.out.println("EXAMPLE 15 (affected rows): "
+
+        System.out.println("EXAMPLE 16 (affected rows): "
                 + ctx.mergeInto(DEPARTMENT)
                         .using(table)
                         .on(DEPARTMENT.OFFICE_CODE.eq(table.field(OFFICE.OFFICE_CODE)))
                         .whenMatchedThenDelete()
                         .whenNotMatchedThenInsert(DEPARTMENT.NAME, DEPARTMENT.CODE,
                                 DEPARTMENT.OFFICE_CODE, DEPARTMENT.PHONE)
-                        .values(val("Management"), val((short) 34332), 
-                                table.field(OFFICE.OFFICE_CODE), 
+                        .values(val("Management"), val((short) 34332),
+                                table.field(OFFICE.OFFICE_CODE),
                                 table.field(OFFICE.PHONE))
+                        .execute()
+        );
+    }
+
+    // EXAMPLE 17
+    /*
+    merge into [classicmodels].[dbo].[sale] using (
+      select 
+        1 [one]
+    ) t on [classicmodels].[dbo].[sale].[fiscal_year] = ? when matched 
+    and [classicmodels].[dbo].[sale].[sale] < ? then delete when matched 
+    and not (
+      [classicmodels].[dbo].[sale].[sale] < ?
+    ) then 
+    update 
+    set 
+      [classicmodels].[dbo].[sale].[sale] = (
+        [classicmodels].[dbo].[sale].[sale] * ?
+      );
+    */
+    public void updateSaleThenDeleteViaDeleteWhere() {
+
+        System.out.println("EXAMPLE 17 (affected rows): "
+                + ctx.mergeInto(SALE)
+                        .usingDual()
+                        .on(SALE.FISCAL_YEAR.eq(2003))
+                        .whenMatchedThenUpdate()
+                        .set(SALE.SALE_, SALE.SALE_.mul(0.50))
+                        .deleteWhere(SALE.SALE_.lt(2000.0))
+                        .execute()
+        );
+    }
+
+    // EXAMPLE 18
+    /*
+    merge into [classicmodels].[dbo].[payment] using [classicmodels].[dbo].[customer] 
+    on [classicmodels].[dbo].[customer].[customer_number] = [classicmodels].[dbo].[payment].[customer_number] 
+    when matched 
+    and [classicmodels].[dbo].[payment].[invoice_amount] > ? then delete when matched 
+    and not (
+      [classicmodels].[dbo].[payment].[invoice_amount] > ?
+    ) then 
+    update 
+    set 
+      [classicmodels].[dbo].[payment].[invoice_amount] = (
+        [classicmodels].[dbo].[payment].[invoice_amount] + [classicmodels].[dbo].[customer].[credit_limit]
+      );
+    */
+    public void updatePaymentBeforeDelete() {
+
+        System.out.println("EXAMPLE 18 (affected rows): "
+                + ctx.mergeInto(PAYMENT)
+                        .using(CUSTOMER)
+                        .on(CUSTOMER.CUSTOMER_NUMBER.eq(PAYMENT.CUSTOMER_NUMBER))
+                        .whenMatchedThenUpdate()
+                        .set(PAYMENT.INVOICE_AMOUNT, PAYMENT.INVOICE_AMOUNT.plus(CUSTOMER.CREDIT_LIMIT))
+                        .deleteWhere(PAYMENT.INVOICE_AMOUNT.gt(BigDecimal.valueOf(100000)))
+                        .execute()
+        );
+    }
+
+    // EXAMPLE 19
+    /*
+    merge into [classicmodels].[dbo].[payment] using [classicmodels].[dbo].[customer] 
+    on [classicmodels].[dbo].[customer].[customer_number] = [classicmodels].[dbo].[payment].[customer_number] when matched 
+    and [classicmodels].[dbo].[customer].[credit_limit] > ? then delete when matched 
+    and not (
+      [classicmodels].[dbo].[customer].[credit_limit] > ?
+    ) then 
+    update 
+    set 
+      [classicmodels].[dbo].[payment].[invoice_amount] = (
+        [classicmodels].[dbo].[payment].[invoice_amount] + [classicmodels].[dbo].[customer].[credit_limit]
+      );
+    */
+    public void deletePaymentBeforeUpdate() {
+
+        System.out.println("EXAMPLE 19 (affected rows): "
+                + ctx.mergeInto(PAYMENT)
+                        .using(CUSTOMER)
+                        .on(CUSTOMER.CUSTOMER_NUMBER.eq(PAYMENT.CUSTOMER_NUMBER))
+                        .whenMatchedThenUpdate()
+                        .set(PAYMENT.INVOICE_AMOUNT, PAYMENT.INVOICE_AMOUNT.plus(CUSTOMER.CREDIT_LIMIT))
+                        .deleteWhere(CUSTOMER.CREDIT_LIMIT.gt(BigDecimal.valueOf(100000)))
                         .execute()
         );
     }
