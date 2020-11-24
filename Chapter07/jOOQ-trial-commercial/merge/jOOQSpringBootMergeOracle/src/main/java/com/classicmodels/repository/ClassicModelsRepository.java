@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 import jooq.generated.Keys;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Department.DEPARTMENT;
-import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Payment.PAYMENT;
@@ -36,24 +35,33 @@ public class ClassicModelsRepository {
     // EXAMPLE 1
     /*
     merge into "SYSTEM"."PAYMENT" using (
-    select 
-      1 "one" 
-    from 
-      dual
+      select 
+        1 "one" 
+      from 
+        dual
     ) on (
-     (
-       (
-         (
-           (
-             "SYSTEM"."PAYMENT"."CUSTOMER_NUMBER", 
-             1
-           ) = (
-            (?, 1)
-         ) 
-         or 1 = 0
-       ) 
-       and (
+      (
         (
+          (
+            (
+              "SYSTEM"."PAYMENT"."CUSTOMER_NUMBER", 
+              1
+            ) = (
+              (?, 1)
+            ) 
+            or 1 = 0
+          ) 
+          and (
+            (
+              "SYSTEM"."PAYMENT"."CHECK_NUMBER", 
+              1
+            ) = (
+              (?, 1)
+            ) 
+            or 1 = 0
+          )
+        ) 
+        or (
           "SYSTEM"."PAYMENT"."CHECK_NUMBER", 
           1
         ) = (
@@ -61,15 +69,6 @@ public class ClassicModelsRepository {
         ) 
         or 1 = 0
       )
-    ) 
-    or (
-      "SYSTEM"."PAYMENT"."CHECK_NUMBER", 
-      1
-    ) = (
-      (?, 1)
-    ) 
-    or 1 = 0
-    )
     ) when not matched then insert (
       "CUSTOMER_NUMBER", "CHECK_NUMBER", 
       "PAYMENT_DATE", "INVOICE_AMOUNT", 
@@ -82,7 +81,7 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 1 (affected rows): "
                 + ctx.insertInto(PAYMENT)
-                        .values(103L, "HQ336336x",
+                        .values(103L, "HQ336336",
                                 LocalDateTime.of(2005, 11, 9, 12, 10, 11), 123.32,
                                 LocalDateTime.of(2005, 11, 11, 14, 25, 21))
                         .onDuplicateKeyIgnore()
@@ -93,24 +92,33 @@ public class ClassicModelsRepository {
     // EXAMPLE 2
     /*
     merge into "SYSTEM"."PAYMENT" using (
-    select 
-      1 "one" 
-    from 
-      dual
+      select 
+        1 "one" 
+      from 
+        dual
     ) on (
-     (
-       (
-         (
-           (
-             "SYSTEM"."PAYMENT"."CUSTOMER_NUMBER", 
-             1
-           ) = (
-            (?, 1)
-         ) 
-         or 1 = 0
-       ) 
-       and (
+      (
         (
+          (
+            (
+              "SYSTEM"."PAYMENT"."CUSTOMER_NUMBER", 
+              1
+            ) = (
+              (?, 1)
+            ) 
+            or 1 = 0
+          ) 
+          and (
+            (
+              "SYSTEM"."PAYMENT"."CHECK_NUMBER", 
+              1
+            ) = (
+              (?, 1)
+            ) 
+            or 1 = 0
+          )
+        ) 
+        or (
           "SYSTEM"."PAYMENT"."CHECK_NUMBER", 
           1
         ) = (
@@ -118,15 +126,6 @@ public class ClassicModelsRepository {
         ) 
         or 1 = 0
       )
-    ) 
-    or (
-      "SYSTEM"."PAYMENT"."CHECK_NUMBER", 
-      1
-    ) = (
-      (?, 1)
-    ) 
-    or 1 = 0
-    )
     ) when not matched then insert (
       "CUSTOMER_NUMBER", "CHECK_NUMBER", 
       "PAYMENT_DATE", "INVOICE_AMOUNT", 
@@ -150,20 +149,20 @@ public class ClassicModelsRepository {
     // EXAMPLE 3
     /*
     merge into "SYSTEM"."PAYMENT" using (
-    select 
-      1 "one" 
-    from 
-      dual
+      select 
+        1 "one" 
+      from 
+        dual
     ) on (
-     (
-       (
-         "SYSTEM"."PAYMENT"."CHECK_NUMBER", 
-         1
-       ) = (
-        (?, 1)
-     ) 
-     or 1 = 0
-    )
+      (
+        (
+          "SYSTEM"."PAYMENT"."CHECK_NUMBER", 
+          1
+        ) = (
+          (?, 1)
+        ) 
+        or 1 = 0
+      )
     ) when not matched then insert (
       "CUSTOMER_NUMBER", "CHECK_NUMBER", 
       "PAYMENT_DATE", "INVOICE_AMOUNT", 
