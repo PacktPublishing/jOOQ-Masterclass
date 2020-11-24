@@ -27,5 +27,6 @@ public class ClassicModelsService {
         classicModelsRepository.deleteDepartmentElseInsertDepartment();            // EXAMPLE 12 
         classicModelsRepository.deleteDepartmentAccountingElseInsertDepartment();  // EXAMPLE 13
         classicModelsRepository.deleteDepartmentElseUpdateElseInsert();            // EXAMPLE 14 
+        classicModelsRepository.deleteParisDepartmentElseInsert();                 // EXAMPLE 15
     }
 }

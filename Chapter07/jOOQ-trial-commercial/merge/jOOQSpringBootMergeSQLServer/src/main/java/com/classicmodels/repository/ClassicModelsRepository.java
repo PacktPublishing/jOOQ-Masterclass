@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Department.DEPARTMENT;
+import jooq.generated.tables.Office;
 import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Payment.PAYMENT;
@@ -13,7 +14,9 @@ import static jooq.generated.tables.Product.PRODUCT;
 import jooq.generated.tables.records.PaymentRecord;
 import org.jooq.DSLContext;
 import org.jooq.Query;
+import org.jooq.Table;
 import static org.jooq.impl.DSL.name;
+import static org.jooq.impl.DSL.selectFrom;
 import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -357,27 +360,24 @@ public class ClassicModelsRepository {
 
     /* MERGE INTO EXAMPLES */
     // EXAMPLE 9
-    /*
+    /*    
     merge into [classicmodels].[dbo].[product] using (
-    select
+    select 
       1 [one]
-    ) as dummy_30260683([one]) 
-    on [classicmodels].[dbo].[product].[product_name] = ?
-    when matched then
-    update
-    set
-      [classicmodels].[dbo].[product].[product_name] = ?
-    when not matched then
-    insert
-      ([product_name])
-    values
+    ) t on [classicmodels].[dbo].[product].[product_name] = ? when matched then 
+    update 
+    set 
+      [classicmodels].[dbo].[product].[product_name] = ? 
+    when not matched then insert 
+      ([product_name]) 
+    values 
       (?);
      */
     public void updateProductNameElseInsertProduct() {
 
         System.out.println("EXAMPLE 9 (affected rows): "
                 + ctx.mergeInto(PRODUCT)
-                        .using(ctx.selectOne())
+                        .usingDual() // or, (ctx.selectOne())
                         .on(PRODUCT.PRODUCT_NAME.eq("1952 Alpine Renault 1300"))
                         .whenMatchedThenUpdate()
                         .set(PRODUCT.PRODUCT_NAME, "1952 Alpine Renault 1600")
@@ -390,30 +390,28 @@ public class ClassicModelsRepository {
     // EXAMPLE 10
     /*
     merge into [classicmodels].[dbo].[customer] using (
-    select
+    select 
       1 [one]
-    ) as dummy_30260683([one]) on (
-      [classicmodels].[dbo].[customer].[contact_first_name] = ?
+    ) t on (
+      [classicmodels].[dbo].[customer].[contact_first_name] = ? 
       and [classicmodels].[dbo].[customer].[contact_last_name] = ?
-    )
-    when matched then
-    update
-    set
-      [classicmodels].[dbo].[customer].[contact_first_name] = ?
-    when not matched then
-    insert
-      (
-        [customer_name], [contact_first_name], [contact_last_name], 
-        [phone], [sales_rep_employee_number], [credit_limit]
-      )
-    values
+    ) when matched then 
+    update 
+    set 
+      [classicmodels].[dbo].[customer].[contact_first_name] = ? 
+    when not matched then insert (
+      [customer_name], [contact_first_name], 
+      [contact_last_name], [phone], [sales_rep_employee_number], 
+      [credit_limit]
+    ) 
+    values 
       (?, ?, ?, ?, ?, ?);
      */
     public void updateCustomerFirstNameElseInsertCustomer() {
 
         System.out.println("EXAMPLE 10 (affected rows): "
                 + ctx.mergeInto(CUSTOMER)
-                        .using(ctx.selectOne())
+                        .usingDual() //or, using(ctx.selectOne())
                         .on(CUSTOMER.CONTACT_FIRST_NAME.eq("Alejandra")
                                 .and(CUSTOMER.CONTACT_LAST_NAME.eq("Camino")))
                         .whenMatchedThenUpdate()
@@ -555,6 +553,56 @@ public class ClassicModelsRepository {
                         .whenNotMatchedThenInsert(DEPARTMENT.NAME, DEPARTMENT.CODE,
                                 DEPARTMENT.OFFICE_CODE, DEPARTMENT.PHONE)
                         .values(val("Management"), val((short) 34332), OFFICE.OFFICE_CODE, OFFICE.PHONE)
+                        .execute()
+        );
+    }
+    
+    // EXAMPLE 15
+    /*
+    merge into [classicmodels].[dbo].[department] 
+    using (
+            (
+              select 
+                [classicmodels].[dbo].[office].[office_code], 
+                [classicmodels].[dbo].[office].[city], 
+                [classicmodels].[dbo].[office].[phone], 
+                [classicmodels].[dbo].[office].[address_line_first], 
+                [classicmodels].[dbo].[office].[address_line_second], 
+                [classicmodels].[dbo].[office].[state], 
+                [classicmodels].[dbo].[office].[country], 
+                [classicmodels].[dbo].[office].[postal_code], 
+                [classicmodels].[dbo].[office].[territory] 
+              from 
+                [classicmodels].[dbo].[office] 
+              where 
+                [classicmodels].[dbo].[office].[city] = ?
+            )
+          ) [t] 
+    on [classicmodels].[dbo].[department].[office_code] = [t].[office_code] 
+    when matched then delete 
+    when not matched then insert (
+      [name], [code], [office_code], [phone]
+    ) 
+    values 
+    (
+      ?, ?, [t].[office_code], [t].[phone]
+    );
+    */
+    public void deleteParisDepartmentElseInsert() {
+
+        Table<?> table = selectFrom(OFFICE)
+                .where(OFFICE.CITY.eq("Paris")).asTable("t");
+                
+        System.out.println("EXAMPLE 15 (affected rows): "
+                + ctx.mergeInto(DEPARTMENT)
+                        .using(table)
+                        .on(DEPARTMENT.OFFICE_CODE.eq(table.field(OFFICE.OFFICE_CODE)))
+                        .whenMatchedThenDelete()
+                        .whenNotMatchedThenInsert(DEPARTMENT.NAME, DEPARTMENT.CODE,
+                                DEPARTMENT.OFFICE_CODE, DEPARTMENT.PHONE)
+                        .values(val("Management"), val((short) 34332), 
+                                table.field(OFFICE.OFFICE_CODE), 
+                                table.field(OFFICE.PHONE))
                         .execute()
         );
     }
