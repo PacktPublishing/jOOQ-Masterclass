@@ -224,11 +224,12 @@ CREATE INDEX product_id ON orderdetail (product_id);
 
 CREATE TABLE payment (
   customer_number bigint NOT NULL,
-  check_number varchar(50) UNIQUE NOT NULL,
+  check_number varchar(50) NOT NULL,
   payment_date timestamp NOT NULL,
   invoice_amount decimal(10,2) NOT NULL,
   caching_date timestamp DEFAULT NULL,  
   PRIMARY KEY (customer_number,check_number),
+  CONSTRAINT unique_check_number UNIQUE(check_number),
   CONSTRAINT payments_ibfk_1 FOREIGN KEY (customer_number) REFERENCES customer (customer_number)
 ) ;
 

@@ -3,13 +3,13 @@ package com.classicmodels.repository;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import jooq.generated.Keys;
 import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Sale.SALE;
 import jooq.generated.tables.records.PaymentRecord;
 import jooq.generated.tables.records.SaleRecord;
 import org.jooq.DSLContext;
-import static org.jooq.impl.DSL.name;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -97,7 +97,7 @@ public class ClassicModelsRepository {
     )
     values
     (?, ?, cast(? as timestamp), ?, cast(? as timestamp)
-    ) on conflict on constraint "payment_check_number_key" do nothing
+    ) on conflict on constraint "unique_check_number" do nothing
      */
     public void insertPaymentOnConflictOnConstraintDoNothing() {
 
@@ -106,7 +106,7 @@ public class ClassicModelsRepository {
                         .values(103L, "HQ336336",
                                 LocalDateTime.of(2005, 11, 9, 12, 10, 11), 123.32,
                                 LocalDateTime.of(2005, 11, 11, 14, 25, 21))
-                        .onConflictOnConstraint(name("payment_check_number_key")) // th auto UNIQUE constraint on CHECK_NUMBER
+                        .onConflictOnConstraint(Keys.UNIQUE_CHECK_NUMBER) 
                         .doNothing()
                         .execute()
         );
