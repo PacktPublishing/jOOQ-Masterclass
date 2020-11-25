@@ -110,8 +110,8 @@ public class ClassicModelsRepository {
                         .from(EMPLOYEE)
                         .join(OFFICE)
                         .on(EMPLOYEE.OFFICE_CODE.eq(OFFICE.OFFICE_CODE))
-                        .groupBy(EMPLOYEE.OFFICE_CODE)
-                        .having(EMPLOYEE.OFFICE_CODE.in(
+                        .groupBy(OFFICE.OFFICE_CODE)
+                        .having(OFFICE.OFFICE_CODE.in(
                                 select(OFFICE.OFFICE_CODE).from(OFFICE).where(OFFICE.STATE.ne("MA"))))
                         .fetch()
         );
@@ -387,19 +387,19 @@ public class ClassicModelsRepository {
     @Transactional
     public void findPaymentForCustomerSignalGiftStores() {
 
-        ctx.createView("paymentView").as(ctx.selectFrom(PAYMENT)
+        ctx.createView("payment_view").as(ctx.selectFrom(PAYMENT)
                 .where(PAYMENT.CUSTOMER_NUMBER.eq(
                         select(CUSTOMER.CUSTOMER_NUMBER).from(CUSTOMER)
                                 .where(CUSTOMER.CUSTOMER_NAME.eq("Signal Gift Stores"))
                 ))).execute();
 
         System.out.println("EXAMPLE 9\n"
-                + ctx.selectFrom(table("paymentView"))
+                + ctx.selectFrom(table("payment_view"))
                         .fetch()
         );
 
         // clean up
-        ctx.dropView("paymentView").execute();
+        ctx.dropView("payment_view").execute();
     }
 
     // EXAMPLE 10
@@ -446,7 +446,7 @@ public class ClassicModelsRepository {
     public void insertAnotherTableInManager() {
 
         // create a temporary table identical to MANAGER 
-        ctx.createTemporaryTable("managerTemp")
+        ctx.createTemporaryTable("manager_temp")
                 .column("manager_id", BIGINT.nullable(false))
                 .column("manager_name", VARCHAR(50).nullable(false))
                 .constraints(
@@ -455,14 +455,14 @@ public class ClassicModelsRepository {
                 .execute();
 
         // insert some data into the temporary table 
-        ctx.insertInto(table("managerTemp"))
+        ctx.insertInto(table("manager_temp"))
                 .values(Math.random() * 1000, "John Malon")
                 .execute();
 
         // insert into MANAGER the data from the temporary table via SELECT 
         System.out.println("EXAMPLE 11 (rows affected):"
                 + ctx.insertInto(MANAGER)
-                        .select(select().from(table("managerTemp")))
+                        .select(select().from(table("manager_temp")))
                         .onDuplicateKeyIgnore()
                         .execute()
         );
