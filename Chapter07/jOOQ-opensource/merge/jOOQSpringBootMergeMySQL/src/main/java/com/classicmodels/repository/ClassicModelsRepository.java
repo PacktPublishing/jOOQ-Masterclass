@@ -125,8 +125,8 @@ public class ClassicModelsRepository {
                         .values(103L, "HQ336336",
                                 LocalDateTime.of(2005, 11, 9, 12, 10, 11), 123.32,
                                 LocalDateTime.of(2005, 11, 11, 14, 25, 21))
-                        .onConflict()
-                        .doUpdate()
+                        .onConflict() // -> .onConflictOnConstraint(Keys.KEY_PAYMENT_UNIQUE_CHECK_NUMBER) is ignored
+                        .doUpdate()   // -> .onConflict(PAYMENT.CHECK_NUMBER) is ignored
                         .set(PAYMENT.INVOICE_AMOUNT, BigDecimal.ZERO)
                         .setNull(PAYMENT.CACHING_DATE)
                         .execute()
