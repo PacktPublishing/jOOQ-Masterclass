@@ -33,28 +33,27 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 1
     /*
-    select
-      `classicmodels`.`employee`.`employee_number`,
-      `classicmodels`.`employee`.`last_name`,
-      `classicmodels`.`employee`.`first_name`,
-      `classicmodels`.`employee`.`extension`,
-      `classicmodels`.`employee`.`email`,
-      `classicmodels`.`employee`.`office_code`,
-      `classicmodels`.`employee`.`salary`,
-      `classicmodels`.`employee`.`reports_to`,
-      `classicmodels`.`employee`.`job_title`
-    from
-      `classicmodels`.`employee`
-    where
-      `classicmodels`.`employee`.`office_code` in 
-        (
-          select
-            `classicmodels`.`office`.`office_code`
-          from
-            `classicmodels`.`office`
-          where
-            `classicmodels`.`office`.`city` like ?
-        )
+    select 
+      "public"."employee"."employee_number", 
+      "public"."employee"."last_name", 
+      "public"."employee"."first_name", 
+      "public"."employee"."extension", 
+      "public"."employee"."email", 
+      "public"."employee"."office_code", 
+      "public"."employee"."salary", 
+      "public"."employee"."reports_to", 
+      "public"."employee"."job_title" 
+    from 
+      "public"."employee" 
+    where 
+      "public"."employee"."office_code" in (
+        select 
+          "public"."office"."office_code" 
+        from 
+          "public"."office" 
+        where 
+          "public"."office"."city" like ?
+      )
      */
     public void findlEmployeeInOfficeStartingS() {
 
@@ -82,26 +81,24 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 2
     /*
-    select
-      count(*),
-      `classicmodels`.`office`.`office_code`,
-      `classicmodels`.`office`.`state`
-    from
-      `classicmodels`.`employee`
-    join `classicmodels`.`office` on `classicmodels`.`employee`.`office_code` 
-            = `classicmodels`.`office`.`office_code`
-    group by
-      `classicmodels`.`employee`.`office_code`
-    having
-      `classicmodels`.`employee`.`office_code` in 
-        (
-          select
-            `classicmodels`.`office`.`office_code`
-          from
-            `classicmodels`.`office`
-          where
-            `classicmodels`.`office`.`state` <> ?
-        )
+    select 
+      count(*), 
+      "public"."office"."office_code", 
+      "public"."office"."state" 
+    from 
+      "public"."employee" 
+      join "public"."office" on "public"."employee"."office_code" = "public"."office"."office_code" 
+    group by 
+      "public"."office"."office_code" 
+    having 
+      "public"."office"."office_code" in (
+        select 
+          "public"."office"."office_code" 
+        from 
+          "public"."office" 
+        where 
+          "public"."office"."state" <> ?
+      )
      */
     public void findEmployeeInOfficeNotMA() {
 
@@ -119,24 +116,24 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 3
     /*
-    select
-      `classicmodels`.`sale`.`sale_id`,
-      `classicmodels`.`sale`.`sale`
-    from
-      `classicmodels`.`sale`,
-        (
-          select
-            avg(`classicmodels`.`sale`.`sale`) as `avgs`,
-           `classicmodels`.`sale`.`employee_number` as `sen`
-          from
-           `classicmodels`.`sale`
-          group by
-           `classicmodels`.`sale`.`employee_number`
-        ) as `saleTable`
-    where
-      ( 
-        `classicmodels`.`sale`.`employee_number` = `saleTable`.`sen`
-          and `classicmodels`.`sale`.`sale` < `saleTable`.`avgs`
+    select 
+      "public"."sale"."sale_id", 
+      "public"."sale"."sale" 
+    from 
+      "public"."sale", 
+      (
+        select 
+          avg("public"."sale"."sale") as "avgs", 
+          "public"."sale"."employee_number" as "sen" 
+        from 
+          "public"."sale" 
+        group by 
+          "public"."sale"."employee_number"
+      ) as "saleTable" 
+    where 
+      (
+        "public"."sale"."employee_number" = "saleTable"."sen" 
+        and "public"."sale"."sale" < "saleTable"."avgs"
       )
      */
     public void findSaleLtAvg() {
@@ -158,26 +155,26 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 4
     /*    
-    select
-      `e1`.`first_name`,
-      `e1`.`last_name`,
-      `e1`.`office_code`
-    from
-      `classicmodels`.`employee` as `e1`,
+    select 
+      "e1"."first_name", 
+      "e1"."last_name", 
+      "e1"."office_code" 
+    from 
+      "public"."employee" as "e1", 
       (
-        select
-          avg(`e2`.`salary`) as `avgsal`,
-          `e2`.`office_code`
-        from
-          `classicmodels`.`employee` as `e2`
-        group by
-          `e2`.`office_code`
-      ) as `e3`
-    where
-     (
-       `e1`.`office_code` = `e3`.`office_code`
-       and `e1`.`salary` >= `e3`.`avgsal`
-     )
+        select 
+          avg("e2"."salary") as "avgsal", 
+          "e2"."office_code" 
+        from 
+          "public"."employee" as "e2" 
+        group by 
+          "e2"."office_code"
+      ) as "e3" 
+    where 
+      (
+        "e1"."office_code" = "e3"."office_code" 
+        and "e1"."salary" >= "e3"."avgsal"
+      )
      */
     public void findEmployeesWithSalaryGeAvgPerOffice() {
 
@@ -200,22 +197,22 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 5
     /*
-    select
-      `classicmodels`.`employee`.`employee_number`,
-      `classicmodels`.`employee`.`first_name`,
-      `classicmodels`.`employee`.`last_name`,
-      `saleTable`.`ss`
-    from
-     (
-        select
-          `classicmodels`.`sale`.`employee_number` as `sen`,
-          `classicmodels`.`sale`.`sale` as `ss`
-        from
-          `classicmodels`.`sale`
-      ) as `saleTable`,
-      `classicmodels`.`employee`
-    where
-      `classicmodels`.`employee`.`employee_number` = `saleTable`.`sen`
+    select 
+      "public"."employee"."employee_number", 
+      "public"."employee"."first_name", 
+      "public"."employee"."last_name", 
+      "saleTable"."ss" 
+    from 
+      (
+        select 
+          "public"."sale"."employee_number" as "sen", 
+          "public"."sale"."sale" as "ss" 
+        from 
+          "public"."sale"
+      ) as "saleTable", 
+      "public"."employee" 
+    where 
+      "public"."employee"."employee_number" = "saleTable"."sen"
      */
     public void findEmployeeAndSale() {
 
@@ -236,19 +233,19 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 6
     /*
-    select
-      `saleTable`.`sen`,
-      `saleTable`.`ss`
-    from
+    select 
+      "saleTable"."sen", 
+      "saleTable"."ss" 
+    from 
       (
-        select
-          `classicmodels`.`sale`.`employee_number` as `sen`,
-          `classicmodels`.`sale`.`sale` as `ss`
-        from
-          `classicmodels`.`sale`
-      ) as `saleTable`
-    order by
-      `saleTable`.`ss`
+        select 
+          "public"."sale"."employee_number" as "sen", 
+          "public"."sale"."sale" as "ss" 
+        from 
+          "public"."sale"
+      ) as "saleTable" 
+    order by 
+      "saleTable"."ss"
      */
     public void findSale() {
 
@@ -267,24 +264,24 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 7
     /*
-    select
-      `saleTable`.`sen`,
-      `saleTable`.`sales`,
-      `classicmodels`.`employee`.`first_name`,
-      `classicmodels`.`employee`.`last_name`
-    from
-     (
-       select
-         `classicmodels`.`sale`.`employee_number` as `sen`, count(*) as `sales`
-       from
-         `classicmodels`.`sale`
-       group by
-         `classicmodels`.`sale`.`employee_number`
-     ) as `saleTable`
-    join `classicmodels`.`employee` on `saleTable`.`sen` 
-       = `classicmodels`.`employee`.`employee_number`
-    order by
-      `saleTable`.`sales` desc
+    select 
+      "saleTable"."sen", 
+      "saleTable"."sales", 
+      "public"."employee"."first_name", 
+      "public"."employee"."last_name" 
+    from 
+      (
+        select 
+          "public"."sale"."employee_number" as "sen", 
+          count(*) as "sales" 
+        from 
+          "public"."sale" 
+        group by 
+          "public"."sale"."employee_number"
+      ) as "saleTable" 
+      join "public"."employee" on "saleTable"."sen" = "public"."employee"."employee_number" 
+    order by 
+      "saleTable"."sales" desc
      */
     public void employeesAndNumberOfSales() {
 
@@ -306,37 +303,37 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 8    
     /*
-    select
-      `classicmodels`.`sale`.`sale_id`,
-      `classicmodels`.`sale`.`sale`
-    from
-      `classicmodels`.`sale`,
+    select 
+      "public"."sale"."sale_id", 
+      "public"."sale"."sale" 
+    from 
+      "public"."sale", 
       (
-        select
-          `saleTable`.`avgs`,
-          `saleTable`.`sen`
-        from
+        select 
+          "saleTable"."avgs", 
+          "saleTable"."sen" 
+        from 
           (
-            select
-              avg(`classicmodels`.`sale`.`sale`) as `avgs`,
-              `classicmodels`.`sale`.`employee_number` as `sen`
-            from
-              `classicmodels`.`sale`
-            group by
-              `classicmodels`.`sale`.`employee_number`
-          ) as `saleTable`
-        where
-          `saleTable`.`avgs` > (
-             select
-               avg(`classicmodels`.`sale`.`sale`)
-             from
-               `classicmodels`.`sale`
+            select 
+              avg("public"."sale"."sale") as "avgs", 
+              "public"."sale"."employee_number" as "sen" 
+            from 
+              "public"."sale" 
+            group by 
+              "public"."sale"."employee_number"
+          ) as "saleTable" 
+        where 
+          "saleTable"."avgs" > (
+            select 
+              avg("public"."sale"."sale") 
+            from 
+              "public"."sale"
           )
-       ) as `saleTable2`
-    where
+      ) as "saleTable2" 
+    where 
       (
-        `classicmodels`.`sale`.`employee_number` = `saleTable2`.`sen`
-           and `classicmodels`.`sale`.`sale` < `saleTable2`.`avgs`
+        "public"."sale"."employee_number" = "saleTable2"."sen" 
+        and "public"."sale"."sale" < "saleTable2"."avgs"
       )
      */
     public void findSaleLtAvgAvg() {
@@ -365,23 +362,23 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 9
     /*
-    create view `paymentView` as
-    select
-      `classicmodels`.`payment`.`customer_number`,
-      `classicmodels`.`payment`.`check_number`,
-      `classicmodels`.`payment`.`payment_date`,
-      `classicmodels`.`payment`.`invoice_amount`,
-      `classicmodels`.`payment`.`caching_date`
-    from
-      `classicmodels`.`payment`
-    where
-      `classicmodels`.`payment`.`customer_number` = (
-         select
-           `classicmodels`.`customer`.`customer_number`
-         from
-           `classicmodels`.`customer`
-         where
-           `classicmodels`.`customer`.`customer_name` = 'Signal Gift Stores'
+    create view "payment_view" as 
+    select 
+      "public"."payment"."customer_number", 
+      "public"."payment"."check_number", 
+      "public"."payment"."payment_date", 
+      "public"."payment"."invoice_amount", 
+      "public"."payment"."caching_date" 
+    from 
+      "public"."payment" 
+    where 
+      "public"."payment"."customer_number" = (
+        select 
+          "public"."customer"."customer_number" 
+        from 
+          "public"."customer" 
+        where 
+          "public"."customer"."customer_name" = 'Signal Gift Stores'
       )
      */
     @Transactional
@@ -404,24 +401,22 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 10
     /*
-    insert into
-      `classicmodels`.`order` (
-        `comments`,
-        `customer_number`,
-        `order_date`,
-        `required_date`,
-        `shipped_date`,
-        `status`
-      )
-    select
-      `classicmodels`.`order`.`comments`,
-      `classicmodels`.`order`.`customer_number`,
-      `classicmodels`.`order`.`order_date`,
-      `classicmodels`.`order`.`required_date`,
-      `classicmodels`.`order`.`shipped_date`,
-      `classicmodels`.`order`.`status`
-    from
-      `classicmodels`.`order`
+    insert into "public"."order" (
+      "comments", "customer_number", "order_date", 
+      "required_date", "shipped_date", 
+      "status"
+    ) 
+    select 
+      "public"."order"."comments", 
+      "public"."order"."customer_number", 
+      "public"."order"."order_date", 
+      "public"."order"."required_date", 
+      "public"."order"."shipped_date", 
+      "public"."order"."status" 
+    from 
+      "public"."order" 
+    limit 
+      ?
      */
     @Transactional
     public void insertIntoOrder() {
@@ -439,8 +434,11 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 11
     /*
-    insert ignore into `classicmodels`.`manager` (`manager_id`, `manager_name`)
-      select * from managerTemp
+    insert into "public"."manager" ("manager_id", "manager_name") 
+    select 
+      * 
+    from 
+      manager_temp on conflict do nothing
      */
     @Transactional
     public void insertAnotherTableInManager() {
@@ -470,23 +468,18 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 12
     /*
-    update
-      `classicmodels`.`employee`
-    set
-      `classicmodels`.`employee`.`salary` = (`classicmodels`.`employee`.`salary` * ?)
-    where
-      `classicmodels`.`employee`.`job_title` in (
-         select
-           *
-         from
-          (
-            select
-              `classicmodels`.`employee`.`job_title`
-            from
-              `classicmodels`.`employee`
-            where
-              `classicmodels`.`employee`.`job_title` like ?
-          ) as `t`
+    update 
+      "public"."employee" 
+    set 
+      "salary" = ("public"."employee"."salary" * ?) 
+    where 
+      "public"."employee"."job_title" in (
+        select 
+          "public"."employee"."job_title" 
+        from 
+          "public"."employee" 
+        where 
+          "public"."employee"."job_title" like ?
       )
      */
     @Transactional
@@ -503,23 +496,17 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 13
     /*
-    delete from
-      `classicmodels`.`payment`
-    where
-      `classicmodels`.`payment`.`invoice_amount` in 
-        (
-          select
-            *
-          from
-           (
-             select
-               `classicmodels`.`payment`.`invoice_amount`
-             from
-               `classicmodels`.`payment`
-             where
-               `classicmodels`.`payment`.`caching_date` is not null
-           ) as `t`
-        )
+    delete from 
+      "public"."payment" 
+    where 
+      "public"."payment"."invoice_amount" in (
+        select 
+          "public"."payment"."invoice_amount" 
+        from 
+          "public"."payment" 
+        where 
+          "public"."payment"."caching_date" is not null
+      )
      */
     @Transactional
     public void deletePaymentWithCachingDateNotNull() {
