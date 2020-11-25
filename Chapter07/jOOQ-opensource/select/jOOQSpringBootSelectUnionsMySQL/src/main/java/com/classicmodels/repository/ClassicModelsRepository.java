@@ -292,7 +292,7 @@ public class ClassicModelsRepository {
       from
         `classicmodels`.`orderdetail` as `R1`
       group by
-        `R1`.`product_id`
+        `R1`.`product_id`, `R1`.`order_id`
     */
     public void findMinMaxWorstBestPrice() {
         
@@ -313,7 +313,7 @@ public class ClassicModelsRepository {
                                                 .and(R3.PRICE_EACH.gt(R1.PRICE_EACH)))), 1)                      
                         ).as("best_price"))
                         .from(R1)
-                        .groupBy(R1.PRODUCT_ID)
+                        .groupBy(R1.PRODUCT_ID, R1.ORDER_ID)
                         .fetch()
         );                 
     }   
