@@ -30,17 +30,17 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 1
     /*
-    select
-      `classicmodels`.`employee`.`first_name`,
-      `classicmodels`.`employee`.`last_name`
-    from
-      `classicmodels`.`employee`
-    union
-    select
-      `classicmodels`.`customer`.`contact_first_name`,
-      `classicmodels`.`customer`.`contact_last_name`
-    from
-      `classicmodels`.`customer`
+    select 
+      "public"."employee"."first_name", 
+      "public"."employee"."last_name" 
+    from 
+      "public"."employee" 
+    union 
+    select 
+      "public"."customer"."contact_first_name", 
+      "public"."customer"."contact_last_name" 
+    from 
+      "public"."customer"
     */
     public void unionEmployeeAndCustomerNames() {
 
@@ -55,23 +55,19 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 2
     /*
-    select
-      concat(
-        `classicmodels`.`employee`.`first_name`,
-        ?,
-        `classicmodels`.`employee`.`last_name`
-      ) as `full_name`
-    from
-      `classicmodels`.`employee`
-    union
-    select
-      concat(
-        `classicmodels`.`customer`.`contact_first_name`,
-        ?,
-        `classicmodels`.`customer`.`contact_last_name`
-      )
-    from
-      `classicmodels`.`customer`
+    select 
+      (
+        "public"."employee"."first_name" || ? || "public"."employee"."last_name"
+      ) as "full_name" 
+    from 
+      "public"."employee" 
+    union 
+    select 
+      (
+        "public"."customer"."contact_first_name" || ? || "public"."customer"."contact_last_name"
+      ) 
+    from 
+      "public"."customer"    
     */
     public void unionEmployeeAndCustomerNamesConcatColumns() {
 
@@ -88,25 +84,21 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 3
     /*
-    select
-      concat(
-        `classicmodels`.`employee`.`first_name`,
-        ?,
-        `classicmodels`.`employee`.`last_name`
-      ) as `full_name`,
-      ? as `contactType`
-    from
-      `classicmodels`.`employee`
-    union
-    select
-      concat(
-        `classicmodels`.`customer`.`contact_first_name`,
-        ?,
-        `classicmodels`.`customer`.`contact_last_name`
-      ),
-      ? as `contactType`
-    from
-      `classicmodels`.`customer`
+    select 
+      (
+        "public"."employee"."first_name" || ? || "public"."employee"."last_name"
+      ) as "full_name", 
+      ? as "contactType" 
+    from 
+      "public"."employee" 
+    union 
+    select 
+      (
+        "public"."customer"."contact_first_name" || ? || "public"."customer"."contact_last_name"
+      ), 
+      ? as "contactType" 
+    from 
+      "public"."customer"
     */
     public void unionEmployeeAndCustomerNamesDifferentiate() {
 
@@ -127,24 +119,20 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 4
     /*
-    select
-      concat(
-        `classicmodels`.`employee`.`first_name`,
-        ?,
-        `classicmodels`.`employee`.`last_name`
-      ) as `full_name`
-    from
-      `classicmodels`.`employee`
-    union
-    select
-      concat(
-        `classicmodels`.`customer`.`contact_first_name`,
-        ?,
-        `classicmodels`.`customer`.`contact_last_name`
-      )
-    from
-      `classicmodels`.`customer`
-    order by
+    select 
+      (
+        "public"."employee"."first_name" || ? || "public"."employee"."last_name"
+      ) as "full_name" 
+    from 
+      "public"."employee" 
+    union 
+    select 
+      (
+        "public"."customer"."contact_first_name" || ? || "public"."customer"."contact_last_name"
+      ) 
+    from 
+      "public"."customer" 
+    order by 
       full_name
     */
     public void unionEmployeeAndCustomerNamesOrderBy() {
@@ -164,43 +152,44 @@ public class ClassicModelsRepository {
     // EXAMPLE 5
     /*
     (
-       select
-         `classicmodels`.`employee`.`employee_number`,
-         `classicmodels`.`employee`.`last_name`,
-         `classicmodels`.`employee`.`first_name`,
-         `classicmodels`.`employee`.`extension`,
-         `classicmodels`.`employee`.`email`,
-         `classicmodels`.`employee`.`office_code`,
-         `classicmodels`.`employee`.`salary`,
-         `classicmodels`.`employee`.`reports_to`,
-         `classicmodels`.`employee`.`job_title`
-       from
-         `classicmodels`.`employee`
-       order by
-         `classicmodels`.`employee`.`salary` asc
-       limit
-         ?
-    )
-    union
-      ( 
-        select
-          `classicmodels`.`employee`.`employee_number`,
-          `classicmodels`.`employee`.`last_name`,
-          `classicmodels`.`employee`.`first_name`,
-          `classicmodels`.`employee`.`extension`,
-          `classicmodels`.`employee`.`email`,
-          `classicmodels`.`employee`.`office_code`,
-          `classicmodels`.`employee`.`salary`,
-          `classicmodels`.`employee`.`reports_to`,
-          `classicmodels`.`employee`.`job_title`
-        from
-          `classicmodels`.`employee`
-        order by
-          `classicmodels`.`employee`.`salary` desc
-        limit
+      select 
+        "public"."employee"."employee_number", 
+        "public"."employee"."last_name", 
+        "public"."employee"."first_name", 
+        "public"."employee"."extension", 
+        "public"."employee"."email", 
+        "public"."employee"."office_code", 
+        "public"."employee"."salary", 
+        "public"."employee"."reports_to", 
+        "public"."employee"."job_title" 
+      from 
+        "public"."employee" 
+      order by 
+        "public"."employee"."salary" asc 
+      limit 
+        ?
+    ) 
+    union 
+      (
+        select 
+          "public"."employee"."employee_number", 
+          "public"."employee"."last_name", 
+          "public"."employee"."first_name", 
+          "public"."employee"."extension", 
+          "public"."employee"."email", 
+          "public"."employee"."office_code", 
+          "public"."employee"."salary", 
+          "public"."employee"."reports_to", 
+          "public"."employee"."job_title" 
+        from 
+          "public"."employee" 
+        order by 
+          "public"."employee"."salary" desc 
+        limit 
           ?
-      )
-    order by 1
+      ) 
+    order by 
+      1
     */
     public void unionEmployeeSmallestAndHighestSalary() {
 
@@ -217,20 +206,20 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 6
     /*
-    select
-      `classicmodels`.`office`.`city`,
-      `classicmodels`.`office`.`country`
-    from
-      `classicmodels`.`office`
-    union all
-    select
-      `classicmodels`.`customerdetail`.`city`,
-      `classicmodels`.`customerdetail`.`country`
-    from
-      `classicmodels`.`customerdetail`
-    order by
-      `city`,
-      `country`
+    select 
+      "public"."office"."city", 
+      "public"."office"."country" 
+    from 
+      "public"."office" 
+    union all 
+    select 
+      "public"."customerdetail"."city", 
+      "public"."customerdetail"."country" 
+    from 
+      "public"."customerdetail" 
+    order by 
+      "city", 
+      "country"
     */    
     public void unionAllOfficeCustomerCityAndCountry() {
 
@@ -246,53 +235,50 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 7
     /*
-    select
-      `R1`.`product_id`,
-      `R1`.`order_id`,
-      min(`R1`.`price_each`) as `min_price`,
+    select 
+      "R1"."product_id", 
+      "R1"."order_id", 
+      min("R1"."price_each") as "min_price", 
       count(
-        case
-         when not exists (
-           select
-             `R2`.`order_id`,
-             `R2`.`product_id`,
-             `R2`.`quantity_ordered`,
-             `R2`.`price_each`,
-             `R2`.`order_line_number`
-           from
-             `classicmodels`.`orderdetail` as `R2`
-           where
+        case when not exists (
+          select 
+            "R2"."order_id", 
+            "R2"."product_id", 
+            "R2"."quantity_ordered", 
+            "R2"."price_each", 
+            "R2"."order_line_number" 
+          from 
+            "public"."orderdetail" as "R2" 
+          where 
             (
-              `R2`.`product_id` = `R1`.`product_id`
-               and `R2`.`price_each` < `R1`.`price_each`
+              "R2"."product_id" = "R1"."product_id" 
+              and "R2"."price_each" < "R1"."price_each"
             )
-         ) then ?
-        end
-      ) as `worst_price`,
-      max(`R1`.`price_each`) as `max_price`,
+        ) then ? end
+      ) as "worst_price", 
+      max("R1"."price_each") as "max_price", 
       count(
-        case
-          when not exists (
-            select
-             `R3`.`order_id`,
-             `R3`.`product_id`,
-             `R3`.`quantity_ordered`,
-             `R3`.`price_each`,
-             `R3`.`order_line_number`
-            from
-             `classicmodels`.`orderdetail` as `R3`
-            where
-             (
-               `R3`.`product_id` = `R1`.`product_id`
-               and `R3`.`price_each` > `R1`.`price_each`
-             )
-         ) then ?
-        end
-      ) as `best_price`
-      from
-        `classicmodels`.`orderdetail` as `R1`
-      group by
-        `R1`.`product_id`
+        case when not exists (
+          select 
+            "R3"."order_id", 
+            "R3"."product_id", 
+            "R3"."quantity_ordered", 
+            "R3"."price_each", 
+            "R3"."order_line_number" 
+          from 
+            "public"."orderdetail" as "R3" 
+          where 
+            (
+              "R3"."product_id" = "R1"."product_id" 
+              and "R3"."price_each" > "R1"."price_each"
+            )
+        ) then ? end
+      ) as "best_price" 
+    from 
+      "public"."orderdetail" as "R1" 
+    group by 
+      "R1"."product_id", 
+      "R1"."order_id"
     */
     public void findMinMaxWorstBestPrice() {
         
