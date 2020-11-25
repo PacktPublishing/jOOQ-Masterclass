@@ -453,6 +453,10 @@ public class ClassicModelsRepository {
                         .values(srp.valuesRow().fields())
                         .execute()
         );
+
+        System.out.println("EXAMPLE 9.6 (affected rows): "
+                + ctx.executeInsert(srp)
+        );
     }
 
     // EXAMPLE 10
