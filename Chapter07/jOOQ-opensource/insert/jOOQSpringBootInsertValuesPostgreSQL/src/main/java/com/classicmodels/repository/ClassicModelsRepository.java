@@ -44,7 +44,7 @@ public class ClassicModelsRepository {
         values(
           nextval('"public"."order_seq"'), cast(? as date),cast(? as date),cast(? as date),?,?,?) 
         on conflict do nothing
-        */
+         */
         System.out.println("EXAMPLE 1.1 (affected rows): "
                 + ctx.insertInto(ORDER) // InsertSetStep<OrderRecord>
                         .values(ORDER_SEQ.nextval(), // primary key is auto-generated
@@ -61,7 +61,7 @@ public class ClassicModelsRepository {
         values(
           ?,cast(? as date),cast(? as date),cast(? as date),?,?) 
         on conflict do nothing
-        */
+         */
         System.out.println("EXAMPLE 1.2 (affected rows): "
                 + // InsertValuesStep6<OrderRecord, String, LocalDate, LocalDate, LocalDate, String, Long>
                 ctx.insertInto(ORDER, ORDER.COMMENTS, ORDER.ORDER_DATE, ORDER.REQUIRED_DATE,
@@ -81,7 +81,7 @@ public class ClassicModelsRepository {
                         .onDuplicateKeyIgnore()
                         .execute()
         );
-        
+
         // example 1.3 expressed via InsertQuery API
         InsertQuery iq = ctx.insertQuery(ORDER);
         iq.addValue(ORDER.COMMENTS, "New order inserted ...");
@@ -298,7 +298,7 @@ public class ClassicModelsRepository {
         values
           (?, ?, ?, ?) 
         on conflict do nothing
-        */
+         */
         System.out.println("EXAMPLE 6.1 (affected rows): "
                 + ctx.insertInto(SALE)
                         .values(
@@ -316,7 +316,7 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 6.2 (affected rows): "
                 + ctx.insertInto(SALE)
                         .values(new SaleRecord()
-                                .values(ctx.select(SALE_SEQ.nextval()).fetchOneInto(Long.class), 
+                                .values(ctx.select(SALE_SEQ.nextval()).fetchOneInto(Long.class),
                                         2004, 143.31, 1370L)
                                 .valuesRow().fields())
                         .onDuplicateKeyIgnore()
@@ -338,7 +338,7 @@ public class ClassicModelsRepository {
         values
           (?, ?, ?, ?) 
         on conflict do nothing
-        */
+         */
         System.out.println("EXAMPLE 6.3 (affected rows): "
                 + ctx.insertInto(SALE)
                         .values(sr.valuesRow().fields())
@@ -397,7 +397,7 @@ public class ClassicModelsRepository {
     on conflict do nothing
      */
     public void insertTwoSaleRecord() {
-        
+
         Long nextId1 = ctx.select(SALE_SEQ.nextval()).fetchOneInto(Long.class);
         Long nextId2 = ctx.select(SALE_SEQ.nextval()).fetchOneInto(Long.class);
 
@@ -479,8 +479,8 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 9.1 (affected rows): "
                 + ctx.newRecord(SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
-                        .values(2004, 1233.2, 1370L)                        
-                        .into(SALE)                                           
+                        .values(2004, 1233.2, 1370L)
+                        .into(SALE)
                         .insert()
         );
 
@@ -502,7 +502,7 @@ public class ClassicModelsRepository {
         // this is user-define SalePart POJO (it contains only a part of fields)
         SalePart salePart = new SalePart(5644.32, 1370L);
         System.out.println("EXAMPLE 9.4 (affected rows): "
-                + ctx.newRecord(SALE, SALE.fields())                        
+                + ctx.newRecord(SALE, SALE.fields())
                         .values(Math.round(Math.random() * 10000), 2004,
                                 salePart.getSale(), salePart.getEmployeeNumber())
                         .insert()
@@ -516,6 +516,11 @@ public class ClassicModelsRepository {
                 + ctx.insertInto(SALE)
                         .values(srp.valuesRow().fields())
                         .execute()
+        );
+
+        srp.reset(SALE.SALE_ID);
+        System.out.println("EXAMPLE 9.6 (affected rows): "
+                + ctx.executeInsert(srp)
         );
     }
 
@@ -572,7 +577,7 @@ public class ClassicModelsRepository {
         values
           ((random() * ?),?,"public"."get_avg_sale"("len_from": = ?, "len_to": = ?),?)
         on conflict do nothing
-        */
+         */
         System.out.println("EXAMPLE 11.2 (affected rows): "
                 + ctx.insertInto(SALE)
                         .values(rand().mul(1000), 2005, getAvgSale(1000, 5000), 1370)
