@@ -664,8 +664,7 @@ public class ClassicModelsRepository {
     
     // EXAMPLE 15    
     /*
-    select
-      `s`.`sale_id`,
+    select      
       `s`.`employee_number`
     from
       `classicmodels`.`sale` as `s`
@@ -693,7 +692,7 @@ public class ClassicModelsRepository {
         Sale sale = SALE.as("s");
         
         System.out.println("EXAMPLE 15\n" +
-        ctx.select(sale.SALE_ID, sale.EMPLOYEE_NUMBER)
+        ctx.select(sale.EMPLOYEE_NUMBER)
                 .from(sale)
                 .where(sale.FISCAL_YEAR.eq(2005))
                 .groupBy(sale.EMPLOYEE_NUMBER)
