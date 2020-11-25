@@ -82,26 +82,25 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 2
     /*
-    select
-      count(*),
-      `classicmodels`.`office`.`office_code`,
-      `classicmodels`.`office`.`state`
-    from
-      `classicmodels`.`employee`
-    join `classicmodels`.`office` on `classicmodels`.`employee`.`office_code` 
-            = `classicmodels`.`office`.`office_code`
-    group by
-      `classicmodels`.`employee`.`office_code`
-    having
-      `classicmodels`.`employee`.`office_code` in 
-        (
-          select
-            `classicmodels`.`office`.`office_code`
-          from
-            `classicmodels`.`office`
-          where
-            `classicmodels`.`office`.`state` <> ?
-        )
+    select 
+      count(*), 
+      `classicmodels`.`office`.`office_code`, 
+      `classicmodels`.`office`.`state` 
+    from 
+      `classicmodels`.`employee` 
+      join `classicmodels`.`office` 
+        on `classicmodels`.`employee`.`office_code` = `classicmodels`.`office`.`office_code` 
+    group by 
+      `classicmodels`.`office`.`office_code` 
+    having 
+      `classicmodels`.`office`.`office_code` in (
+        select 
+          `classicmodels`.`office`.`office_code` 
+        from 
+          `classicmodels`.`office` 
+        where 
+          `classicmodels`.`office`.`state` <> ?
+      )
      */
     public void findEmployeeInOfficeNotMA() {
 
@@ -365,23 +364,23 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 9
     /*
-    create view `paymentView` as
-    select
-      `classicmodels`.`payment`.`customer_number`,
-      `classicmodels`.`payment`.`check_number`,
-      `classicmodels`.`payment`.`payment_date`,
-      `classicmodels`.`payment`.`invoice_amount`,
-      `classicmodels`.`payment`.`caching_date`
-    from
-      `classicmodels`.`payment`
-    where
+    create view `payment_view` as 
+    select 
+      `classicmodels`.`payment`.`customer_number`, 
+      `classicmodels`.`payment`.`check_number`, 
+      `classicmodels`.`payment`.`payment_date`, 
+      `classicmodels`.`payment`.`invoice_amount`, 
+      `classicmodels`.`payment`.`caching_date` 
+    from 
+      `classicmodels`.`payment` 
+    where 
       `classicmodels`.`payment`.`customer_number` = (
-         select
-           `classicmodels`.`customer`.`customer_number`
-         from
-           `classicmodels`.`customer`
-         where
-           `classicmodels`.`customer`.`customer_name` = 'Signal Gift Stores'
+        select 
+          `classicmodels`.`customer`.`customer_number` 
+        from 
+          `classicmodels`.`customer` 
+        where 
+          `classicmodels`.`customer`.`customer_name` = 'Signal Gift Stores'
       )
      */
     @Transactional
@@ -440,7 +439,7 @@ public class ClassicModelsRepository {
     // EXAMPLE 11
     /*
     insert ignore into `classicmodels`.`manager` (`manager_id`, `manager_name`)
-      select * from managerTemp
+      select * from manager_temp
      */
     @Transactional
     public void insertAnotherTableInManager() {
