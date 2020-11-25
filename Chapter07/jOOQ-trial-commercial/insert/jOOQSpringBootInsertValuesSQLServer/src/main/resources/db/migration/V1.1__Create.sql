@@ -212,7 +212,7 @@ CREATE TABLE payment (
 /* END */
 
 /* USER-DEFINED FUNCTIONS */
-CREATE FUNCTION udfNetSale(
+CREATE FUNCTION netPriceEach(
     @quantity INT,
     @list_price DEC(10,2),
     @discount DEC(4,2)

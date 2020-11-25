@@ -455,6 +455,17 @@ public class ClassicModelsRepository {
                         .values(srp.getFiscalYear(), srp.getSale(), srp.getEmployeeNumber())
                         .execute()
         );
+        
+        /*
+        insert into [classicmodels].[dbo].[sale] (
+          [fiscal_year], [sale], [employee_number]
+        ) 
+        values 
+          (?, ?, ?)
+        */
+        System.out.println("EXAMPLE 9.6 (affected rows): "
+                + ctx.executeInsert(srp)
+        );
     }
 
     // EXAMPLE 10    
