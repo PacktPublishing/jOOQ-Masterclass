@@ -1,7 +1,7 @@
 plugins {
 	id 'org.springframework.boot' version '2.3.3.RELEASE'
 	id 'io.spring.dependency-management' version '1.0.10.RELEASE'    
-        id "org.flywaydb.flyway" version "7.2.0"
+        id 'org.flywaydb.flyway' version '7.2.0'
 	id 'java'
 }
 
@@ -16,9 +16,9 @@ repositories {
 
 dependencies {        
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-	implementation 'org.springframework.boot:spring-boot-starter-jooq'
-        implementation 'org.springframework.boot:spring-boot-starter-web'
-        implementation 'mysql:mysql-connector-java'
+	implementation 'org.springframework.boot:spring-boot-starter-jooq' // implementation 'org.jooq:jooq:3.14.4'        
+        implementation 'org.springframework.boot:spring-boot-starter-web'       
+        implementation 'mysql:mysql-connector-java'        
         implementation 'org.flywaydb:flyway-core'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
