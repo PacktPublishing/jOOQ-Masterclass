@@ -8,15 +8,12 @@ import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
-import org.jooq.impl.DSL;
 import static org.jooq.impl.DSL.all;
 import static org.jooq.impl.DSL.avg;
 import static org.jooq.impl.DSL.avgDistinct;
 import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.countDistinct;
 import static org.jooq.impl.DSL.field;
-import static org.jooq.impl.DSL.groupConcat;
-import static org.jooq.impl.DSL.groupConcatDistinct;
 import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.maxDistinct;
 import static org.jooq.impl.DSL.min;
@@ -43,16 +40,16 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 1
     /*
-    select distinct 
-      "public"."office"."city",
-      "public"."office"."country"
-    from
-      "public"."office"
-    where
-       (
-          "public"."office"."city",
-          "public"."office"."country"
-       ) is not null
+    select 
+      distinct [classicmodels].[dbo].[office].[city], 
+      [classicmodels].[dbo].[office].[country] 
+    from 
+      [classicmodels].[dbo].[office] 
+    where 
+      (
+        [classicmodels].[dbo].[office].[city] is not null 
+        and [classicmodels].[dbo].[office].[country] is not null
+      )    
     */
     public void findDistinctOfficesCityCountry() {
 
@@ -66,20 +63,28 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 2
     /*
-    select
-      "public"."office"."office_code",
-      "public"."office"."city",
-      "public"."office"."phone",
-      "public"."office"."address_line_first",
-      "public"."office"."address_line_second",
-      "public"."office"."state",
-      "public"."office"."country",
-      "public"."office"."postal_code",
-      "public"."office"."territory"
-    from
-      "public"."office"
-    where
-      "public"."office"."address_line_second" is distinct from ?
+    select 
+      [classicmodels].[dbo].[office].[office_code], 
+      [classicmodels].[dbo].[office].[city], 
+      [classicmodels].[dbo].[office].[phone], 
+      [classicmodels].[dbo].[office].[address_line_first], 
+      [classicmodels].[dbo].[office].[address_line_second], 
+      [classicmodels].[dbo].[office].[state], 
+      [classicmodels].[dbo].[office].[country], 
+      [classicmodels].[dbo].[office].[postal_code], 
+      [classicmodels].[dbo].[office].[territory] 
+    from 
+      [classicmodels].[dbo].[office] 
+    where 
+      not (
+        exists (
+          select 
+            [classicmodels].[dbo].[office].[address_line_second] [x] 
+          intersect 
+          select 
+            ? [x]
+        )
+      )    
     */
     public void findOfficeDistinctFromAddress() {
 
@@ -92,15 +97,25 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 3
     /*
-    select
-      "public"."payment"."invoice_amount",
-      "public"."payment"."payment_date"
-    from
-      "public"."payment"
-    where
-       cast("public"."payment"."payment_date" as date) 
-       is (not) distinct from
-       cast("public"."payment"."caching_date" as date)
+    select 
+      [classicmodels].[dbo].[payment].[invoice_amount], 
+      [classicmodels].[dbo].[payment].[payment_date] 
+    from 
+      [classicmodels].[dbo].[payment] 
+    where 
+      not (
+        exists (
+          select 
+            cast(
+              [classicmodels].[dbo].[payment].[payment_date] as date
+            ) [x] 
+          intersect 
+          select 
+            cast(
+              [classicmodels].[dbo].[payment].[caching_date] as date
+            ) [x]
+        )
+      )    
     */
     public void findDistinctAndNotDistinctPaymentDates() {
 
@@ -123,37 +138,38 @@ public class ClassicModelsRepository {
     
     // EXAMPLE 4
     /*
-    select
-      "public"."office"."office_code",
-      "public"."office"."city",
-      "public"."office"."phone",
-      "public"."office"."address_line_first",
-      "public"."office"."address_line_second",
-      "public"."office"."state",
-      "public"."office"."country",
-      "public"."office"."postal_code",
-      "public"."office"."territory",
-      "public"."customerdetail"."customer_number",
-      "public"."customerdetail"."address_line_first",
-      "public"."customerdetail"."address_line_second",
-      "public"."customerdetail"."city",
-      "public"."customerdetail"."state",
-      "public"."customerdetail"."postal_code",
-      "public"."customerdetail"."country"
-    from
-      "public"."office"
-    join "public"."customerdetail" on "public"."office"."postal_code" 
-      = "public"."customerdetail"."postal_code"
-    where
-      (
-        "public"."office"."city",
-        "public"."office"."country"
-      ) 
-    is distinct from
-      (
-        "public"."customerdetail"."city",
-        "public"."customerdetail"."country"
-      )
+    select 
+      [classicmodels].[dbo].[office].[office_code], 
+      [classicmodels].[dbo].[office].[city], 
+      [classicmodels].[dbo].[office].[phone], 
+      [classicmodels].[dbo].[office].[address_line_first], 
+      [classicmodels].[dbo].[office].[address_line_second], 
+      [classicmodels].[dbo].[office].[state], 
+      [classicmodels].[dbo].[office].[country], 
+      [classicmodels].[dbo].[office].[postal_code], 
+      [classicmodels].[dbo].[office].[territory], 
+      [classicmodels].[dbo].[customerdetail].[customer_number], 
+      [classicmodels].[dbo].[customerdetail].[address_line_first], 
+      [classicmodels].[dbo].[customerdetail].[address_line_second], 
+      [classicmodels].[dbo].[customerdetail].[city], 
+      [classicmodels].[dbo].[customerdetail].[state], 
+      [classicmodels].[dbo].[customerdetail].[postal_code], 
+      [classicmodels].[dbo].[customerdetail].[country] 
+    from 
+      [classicmodels].[dbo].[office] 
+      join [classicmodels].[dbo].[customerdetail] on [classicmodels].[dbo].[office].[postal_code] = [classicmodels].[dbo].[customerdetail].[postal_code] 
+    where 
+      not (
+        exists (
+          select 
+            [classicmodels].[dbo].[office].[city], 
+            [classicmodels].[dbo].[office].[country] 
+          intersect 
+          select 
+            [classicmodels].[dbo].[customerdetail].[city], 
+            [classicmodels].[dbo].[customerdetail].[country]
+        )
+      )    
     */
     public void findOfficeAndCustomerOfficePostalCodeDistinctCityCountry() {
 
@@ -170,12 +186,16 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 5
     /*
-    select
-      count(*) as "all",
-      count("public"."payment"."caching_date") as "all_caching_date",
-      count(distinct "public"."payment"."caching_date") as "distinct_cachcing_date"
-    from
-      "public"."payment"
+    select 
+      count(*) [all], 
+      count(
+        [classicmodels].[dbo].[payment].[caching_date]
+      ) [all_caching_date], 
+      count(
+        distinct [classicmodels].[dbo].[payment].[caching_date]
+      ) [distinct_cachcing_date] 
+    from 
+      [classicmodels].[dbo].[payment]    
     */
     public void countPaymentCachingDate() {
 
@@ -191,23 +211,26 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 6
     /*
-    select
-      "public"."product"."product_line",
-      count(*)
-    from
-      "public"."product"
-    group by
-      "public"."product"."product_line"
-    having
-      (count(*) + ?) > all 
-        (
-          select
-            count(distinct "product")
-          from
-            "public"."product"
-          group by
-            "public"."product"."product_line"
-        )
+    select 
+      [classicmodels].[dbo].[product].[product_line], 
+      count(*) 
+    from 
+      [classicmodels].[dbo].[product] 
+    group by 
+      [classicmodels].[dbo].[product].[product_line] 
+    having 
+      (
+        count(*) + ?
+      ) > all (
+        select 
+          count(
+            distinct [classicmodels].[dbo].[product].[product_id]
+          ) 
+        from 
+          [classicmodels].[dbo].[product] 
+        group by 
+          [classicmodels].[dbo].[product].[product_line]
+      )    
     */
     public void findProductLineHavingMaxNrOfProducts() {
 
@@ -225,17 +248,33 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 7
     /*
-    select
-      avg("public"."orderdetail"."price_each"),
-      avg(distinct "public"."orderdetail"."price_each"),
-      sum("public"."orderdetail"."price_each"),
-      sum(distinct "public"."orderdetail"."price_each"),
-      min("public"."orderdetail"."price_each"),
-      min(distinct "public"."orderdetail"."price_each"),
-      max("public"."orderdetail"."price_each"),
-      max(distinct "public"."orderdetail"."price_each")
-    from
-      "public"."orderdetail"
+    select 
+      avg(
+        [classicmodels].[dbo].[orderdetail].[price_each]
+      ), 
+      avg(
+        distinct [classicmodels].[dbo].[orderdetail].[price_each]
+      ), 
+      sum(
+        [classicmodels].[dbo].[orderdetail].[price_each]
+      ), 
+      sum(
+        distinct [classicmodels].[dbo].[orderdetail].[price_each]
+      ), 
+      min(
+        [classicmodels].[dbo].[orderdetail].[price_each]
+      ), 
+      min(
+        distinct [classicmodels].[dbo].[orderdetail].[price_each]
+      ), 
+      max(
+        [classicmodels].[dbo].[orderdetail].[price_each]
+      ), 
+      max(
+        distinct [classicmodels].[dbo].[orderdetail].[price_each]
+      ) 
+    from 
+      [classicmodels].[dbo].[orderdetail]    
     */
     public void avgSumMinMaxPriceEach() {
 
@@ -253,123 +292,44 @@ public class ClassicModelsRepository {
                         .fetch()
         );
     }
-
-    // EXAMPLE 8
-    /*
-    select
-      string_agg("public"."office"."country", ','),
-      string_agg(distinct "public"."office"."country", ',')
-    from
-      "public"."office"
-    */
-    public void groupConcatOfficeCountries() {
-
-        System.out.println("EXAMPLE 8\n" +
-                ctx.select(
-                        groupConcat(OFFICE.COUNTRY),
-                        groupConcatDistinct(OFFICE.COUNTRY)
-                ).from(OFFICE)
-                        .fetch()
-        );
-    }
-
-    /* PostgreSQL DISTINCT ON */
-    // EXAMPLE 9
-    /* The following statement sorts the result set by the product's vendor and scale, 
-       and then for each group of duplicates, it keeps the first row in the returned result set */    
-    /*
-    select distinct on (
-      "public"."product"."product_vendor",
-      "public"."product"."product_scale"
-    ) "public"."product"."product_id",
-      "public"."product"."product_name",
-      "public"."product"."product_line",
-      "public"."product"."product_scale",
-      "public"."product"."product_vendor",
-      "public"."product"."product_description",
-      "public"."product"."quantity_in_stock",
-      "public"."product"."buy_price",
-      "public"."product"."msrp"
-    from
-      "public"."product"
-    order by
-      "public"."product"."product_vendor",
-      "public"."product"."product_scale"
-    */
-    public void findProductsByVendorScale() {
-
-        System.out.println("EXAMPLE 9\n" +
-                ctx.selectDistinct()
-                        .on(PRODUCT.PRODUCT_VENDOR, PRODUCT.PRODUCT_SCALE)
-                        .from(PRODUCT)
-                        .orderBy(PRODUCT.PRODUCT_VENDOR, PRODUCT.PRODUCT_SCALE)
-                        .fetch()
-        );
-
-        /* or, like this */
-        /* 
-        System.out.println("EXAMPLE 10\n" +
-                ctx.select()
-                        .distinctOn(PRODUCT.PRODUCT_VENDOR, PRODUCT.PRODUCT_SCALE)
-                        .from(PRODUCT)
-                        .orderBy(PRODUCT.PRODUCT_VENDOR, PRODUCT.PRODUCT_SCALE)
-                        .fetch()
-        );
-        */
-    }
     
-    // EXAMPLE 10
-    /* What is the employee numbers of the max sales per fiscal years */        
+    // EXAMPLE 8
+    /* Emulating PostgreSQL DISTINCT ON */    
+    /* Sample: What is the employee numbers of the max sales per fiscal years 
+    ctx.select(SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR)
+         .distinctOn(SALE.FISCAL_YEAR)
+         .from(SALE)
+         .orderBy(SALE.FISCAL_YEAR, SALE.SALE_.desc())
+         .fetch()
+    */            
     public void findEmployeeNumberOfMaxSalePerFiscalYear() {
-
-        /*
-        select distinct on 
-          (
-            "public"."sale"."fiscal_year"
-          ) 
-          "public"."sale"."employee_number",
-          "public"."sale"."fiscal_year"
-        from
-         "public"."sale"
-        rder by
-         "public"."sale"."fiscal_year",
-         "public"."sale"."sale" desc
-        */
-        System.out.println("EXAMPLE 10.1\n" +
-                ctx.select(
-                        SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR)
-                        .distinctOn(SALE.FISCAL_YEAR)
-                        .from(SALE)
-                        .orderBy(SALE.FISCAL_YEAR, SALE.SALE_.desc())
-                        .fetch()
-        );
-
+    
         /* SQL alternative based on JOIN */
         /*
-        select
-          "public"."sale"."fiscal_year",
-          "public"."sale"."employee_number"
-        from
-          "public"."sale"
-        join 
-          (
-            select
-              "public"."sale"."fiscal_year" as "fy",
-              max("public"."sale"."sale") as "ms"
-            from
-              "public"."sale"
-            group by
-              "public"."sale"."fiscal_year"
-          ) as "alias_133128207" on 
-             (
-               "public"."sale"."fiscal_year" = fy
-               and "public"."sale"."sale" = ms
-             )
-        order by
-          "public"."sale"."fiscal_year"
-          "public"."sale"."sale" desc
+        select 
+          [classicmodels].[dbo].[sale].[fiscal_year], 
+          [classicmodels].[dbo].[sale].[employee_number] 
+        from 
+          [classicmodels].[dbo].[sale] 
+          join (
+            select 
+              [classicmodels].[dbo].[sale].[fiscal_year] [fy], 
+              max(
+                [classicmodels].[dbo].[sale].[sale]
+              ) [ms] 
+            from 
+              [classicmodels].[dbo].[sale] 
+            group by 
+              [classicmodels].[dbo].[sale].[fiscal_year]
+          ) [alias_39737657] on (
+            [classicmodels].[dbo].[sale].[fiscal_year] = fy 
+            and [classicmodels].[dbo].[sale].[sale] = ms
+          ) 
+        order by 
+          [classicmodels].[dbo].[sale].[fiscal_year], 
+          [classicmodels].[dbo].[sale].[sale] desc        
         */  
-        System.out.println("EXAMPLE 10.2\n" + 
+        System.out.println("EXAMPLE 8.1\n" + 
                 ctx.select(SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER)
                         .from(SALE)
                         .innerJoin(select(SALE.FISCAL_YEAR.as("fy"), max(SALE.SALE_).as("ms"))
@@ -383,27 +343,27 @@ public class ClassicModelsRepository {
         
         /* SQL alternative based on row_number() */        
         /*
-        select
-          "alias_103841836"."fiscal_year",
-          "alias_103841836"."employee_number"
-        from
-           (
-             select distinct 
-               "public"."sale"."fiscal_year",
-               "public"."sale"."employee_number",
-               row_number() over (
-                 partition by "public"."sale"."fiscal_year"
-                 order by
-                   "public"."sale"."fiscal_year",
-                   "public"."sale"."sale" desc
-               ) as "rn"   
-             from
-               "public"."sale"
-           ) as "alias_103841836"
-        where
-          "alias_103841836"."rn" = ?
-        order by
-          "alias_103841836"."fiscal_year"
+        select 
+          [alias_37493236].[fiscal_year], 
+          [alias_37493236].[employee_number] 
+        from 
+          (
+            select 
+              distinct [classicmodels].[dbo].[sale].[fiscal_year], 
+              [classicmodels].[dbo].[sale].[employee_number], 
+              row_number() over (
+                partition by [classicmodels].[dbo].[sale].[fiscal_year] 
+                order by 
+                  [classicmodels].[dbo].[sale].[fiscal_year], 
+                  [classicmodels].[dbo].[sale].[sale] desc
+              ) [rn] 
+            from 
+              [classicmodels].[dbo].[sale]
+          ) [alias_37493236] 
+        where 
+          [alias_37493236].[rn] = ? 
+        order by 
+          [alias_37493236].[fiscal_year]        
         */
         // Table<?>
         var t = selectDistinct(SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER,
@@ -411,12 +371,12 @@ public class ClassicModelsRepository {
                                         .orderBy(SALE.FISCAL_YEAR, SALE.SALE_.desc())).as("rn"))
                                         .from(SALE).asTable();
         
-        System.out.println("EXAMPLE 10.3\n" + 
+        System.out.println("EXAMPLE 8.2\n" + 
                 ctx.select(t.field("fiscal_year"), t.field("employee_number"))
                         .from(t)
                         .where(t.field("rn", Integer.class).eq(1))
                         .orderBy(t.field("fiscal_year"))
                         .fetch()                                                                
         );
-    }
+    }    
 }
