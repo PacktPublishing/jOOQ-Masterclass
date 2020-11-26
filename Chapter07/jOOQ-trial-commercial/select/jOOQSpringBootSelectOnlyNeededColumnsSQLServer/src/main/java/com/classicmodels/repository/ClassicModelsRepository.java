@@ -177,7 +177,18 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 6
     /*
-    
+    select 
+      [classicmodels].[dbo].[office].[city] [location], 
+      [classicmodels].[dbo].[office].[office_code], 
+      [classicmodels].[dbo].[office].[phone], 
+      [classicmodels].[dbo].[office].[address_line_first], 
+      [classicmodels].[dbo].[office].[address_line_second], 
+      [classicmodels].[dbo].[office].[state], 
+      [classicmodels].[dbo].[office].[country], 
+      [classicmodels].[dbo].[office].[postal_code], 
+      [classicmodels].[dbo].[office].[territory] 
+    from 
+      [classicmodels].[dbo].[office]    
     */
     public void findOfficeUseAliasForCity() {
 
@@ -191,7 +202,19 @@ public class ClassicModelsRepository {
     
     // EXAMPLE 7
     /*
-    
+    select 
+      case when [classicmodels].[dbo].[office].[city] is not null then 
+         [classicmodels].[dbo].[office].[city] else ? end, 
+      [classicmodels].[dbo].[office].[office_code], 
+      [classicmodels].[dbo].[office].[phone], 
+      [classicmodels].[dbo].[office].[address_line_first], 
+      [classicmodels].[dbo].[office].[address_line_second], 
+      [classicmodels].[dbo].[office].[state], 
+      [classicmodels].[dbo].[office].[country], 
+      [classicmodels].[dbo].[office].[postal_code], 
+      [classicmodels].[dbo].[office].[territory] 
+    from 
+      [classicmodels].[dbo].[office]    
     */
     public void findOfficeUseNvlForCity() {
 
