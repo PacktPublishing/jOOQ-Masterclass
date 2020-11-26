@@ -9,11 +9,9 @@ import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import org.jooq.SelectQuery;
 import static org.jooq.impl.DSL.asterisk;
+import static org.jooq.impl.DSL.nvl;
 import org.springframework.stereotype.Repository;
-
-  Table table = select(nvl(PRODUCT.PRODUCT_NAME, "").as("n"), 
-                PRODUCT.asterisk().except(PRODUCT.PRODUCT_NAME))
-                .asTable("t");
+ 
 @Repository
 public class ClassicModelsRepository {
 
@@ -179,6 +177,59 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 6
     /*
+    select 
+      `classicmodels`.`office`.`city` as `location`, 
+      `classicmodels`.`office`.`office_code`, 
+      `classicmodels`.`office`.`phone`, 
+      `classicmodels`.`office`.`address_line_first`, 
+      `classicmodels`.`office`.`address_line_second`, 
+      `classicmodels`.`office`.`state`, 
+      `classicmodels`.`office`.`country`, 
+      `classicmodels`.`office`.`postal_code`, 
+      `classicmodels`.`office`.`territory` 
+    from 
+      `classicmodels`.`office`    
+    */
+    public void findOfficeUseAliasForCity() {
+
+        System.out.println("EXAMPLE 6\n"
+                + ctx.select(OFFICE.CITY.as("location"),
+                        OFFICE.asterisk().except(OFFICE.CITY))
+                        .from(OFFICE)
+                        .fetch()
+        );
+    }
+    
+    // EXAMPLE 7
+    /*
+    select 
+      ifnull(
+        `classicmodels`.`office`.`city`, 
+        ?
+      ), 
+      `classicmodels`.`office`.`office_code`, 
+      `classicmodels`.`office`.`phone`, 
+      `classicmodels`.`office`.`address_line_first`, 
+      `classicmodels`.`office`.`address_line_second`, 
+      `classicmodels`.`office`.`state`, 
+      `classicmodels`.`office`.`country`, 
+      `classicmodels`.`office`.`postal_code`, 
+      `classicmodels`.`office`.`territory` 
+    from 
+      `classicmodels`.`office`    
+    */
+    public void findOfficeUseNvlForCity() {
+
+        System.out.println("EXAMPLE 7\n"
+                + ctx.select(nvl(OFFICE.CITY, "N/A"),
+                        OFFICE.asterisk().except(OFFICE.CITY))
+                        .from(OFFICE)
+                        .fetch()
+        );
+    } 
+    
+    // EXAMPLE 8
+    /*
     select
       `classicmodels`.`employee`.`first_name`,
       `classicmodels`.`employee`.`last_name`,
@@ -189,7 +240,7 @@ public class ClassicModelsRepository {
     */
     public void findEmployeeLimit() {
 
-        System.out.println("EXAMPLE 6\n" +
+        System.out.println("EXAMPLE 8\n" +
                 ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
                         .from(EMPLOYEE)
                         .limit(10)
@@ -197,7 +248,7 @@ public class ClassicModelsRepository {
         );
     }
     
-    // EXAMPLE 7
+    // EXAMPLE 9
     /*
     select
       `classicmodels`.`employee`.`first_name`,
@@ -210,7 +261,7 @@ public class ClassicModelsRepository {
     */
     public void findEmployeeLimitOffset() {
 
-        System.out.println("EXAMPLE 7\n" +
+        System.out.println("EXAMPLE 9\n" +
                 ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
                         .from(EMPLOYEE)
                         .limit(10)
@@ -219,7 +270,7 @@ public class ClassicModelsRepository {
         );
     }
     
-    // EXAMPLE 8
+    // EXAMPLE 10
     /*
     select
       `classicmodels`.`employee`.`first_name`,
@@ -232,7 +283,7 @@ public class ClassicModelsRepository {
     */
     public void findEmployeeLimitAndOffset() {
 
-        System.out.println("EXAMPLE 8\n" +
+        System.out.println("EXAMPLE 10\n" +
                 ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
                         .from(EMPLOYEE)
                         .limit(5, 10)                        
@@ -240,7 +291,7 @@ public class ClassicModelsRepository {
         );
     }
     
-    // EXAMPLE 9
+    // EXAMPLE 11
     /*
     select
       `classicmodels`.`office`.`city`,
@@ -274,12 +325,12 @@ public class ClassicModelsRepository {
         select.addSelect(CUSTOMER.asterisk().except(CUSTOMER.CONTACT_FIRST_NAME, CUSTOMER.CONTACT_LAST_NAME));
         select.addSelect(PAYMENT.fields());
         
-        System.out.println("EXAMPLE 9\n" +
+        System.out.println("EXAMPLE 11\n" +
                 select.fetch()
         );
     }
         
-    // EXAMPLE 10
+    // EXAMPLE 12
     /*    
     select
       `classicmodels`.`office`.`city`,
@@ -319,7 +370,7 @@ public class ClassicModelsRepository {
         select.addFrom(PAYMENT);
         select.addSelect(PAYMENT.fields());
         
-        System.out.println("EXAMPLE 10\n" +
+        System.out.println("EXAMPLE 12\n" +
                 select.fetch()
         );
     }    
