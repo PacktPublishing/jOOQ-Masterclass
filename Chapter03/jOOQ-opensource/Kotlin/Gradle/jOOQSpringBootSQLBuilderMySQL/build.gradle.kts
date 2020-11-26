@@ -17,6 +17,11 @@ repositories {
 	mavenCentral()
 }
 
+jooq {
+  version.set("3.14.4")  // if omitted, then the default is used
+  edition.set(nu.studer.gradle.jooq.JooqEdition.OSS)  // jOOQ Open-Source is the default (can be omitted)
+}
+
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter")
         implementation("org.springframework.boot:spring-boot-starter-jooq")
@@ -24,6 +29,7 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
         implementation("mysql:mysql-connector-java")
         implementation("org.flywaydb:flyway-core")
+        implementation ("com.sun.xml.bind:jaxb-impl:2.3.0")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
