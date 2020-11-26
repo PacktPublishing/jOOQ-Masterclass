@@ -466,7 +466,23 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 9
     /*
-    
+    select 
+      [classicmodels].[dbo].[product].[product_name], 
+      [classicmodels].[dbo].[product].[buy_price] 
+    from 
+      [classicmodels].[dbo].[product] 
+    where 
+      [classicmodels].[dbo].[product].[product_id] = any (
+        select 
+          [classicmodels].[dbo].[orderdetail].[product_id] 
+        from 
+          [classicmodels].[dbo].[orderdetail] 
+        where 
+          (
+            [classicmodels].[dbo].[product].[product_id] = [classicmodels].[dbo].[orderdetail].[product_id] 
+            and [classicmodels].[dbo].[orderdetail].[quantity_ordered] > ?
+          )
+      )    
     */
     public void findProductQuantityOrderedGt70() {
 
@@ -484,21 +500,20 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 10
     /*
-    select
-      `classicmodels`.`product`.`product_id`,
-      `classicmodels`.`product`.`product_name`
-    from
-      `classicmodels`.`product`
-    where
-      `classicmodels`.`product`.`msrp` > all 
-        (
-          select
-            `classicmodels`.`orderdetail`.`price_each`
-          from
-            `classicmodels`.`orderdetail`
-          where
-            `classicmodels`.`product`.`product_id` = `classicmodels`.`orderdetail`.`product_id`
-        )
+    select 
+      [classicmodels].[dbo].[product].[product_id], 
+      [classicmodels].[dbo].[product].[product_name] 
+    from 
+      [classicmodels].[dbo].[product] 
+    where 
+      [classicmodels].[dbo].[product].[msrp] > all (
+        select 
+          [classicmodels].[dbo].[orderdetail].[price_each] 
+        from 
+          [classicmodels].[dbo].[orderdetail] 
+        where 
+          [classicmodels].[dbo].[product].[product_id] = [classicmodels].[dbo].[orderdetail].[product_id]
+      )    
     */
     public void findProductWithMsrpGtSellPrice() {
 
@@ -514,25 +529,27 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 11
     /*
-    select
-      `classicmodels`.`product`.`product_id`,
-      `classicmodels`.`product`.`product_name`,
-      `classicmodels`.`product`.`buy_price`
-    from
-      `classicmodels`.`product`
-    where
+    select 
+      [classicmodels].[dbo].[product].[product_id], 
+      [classicmodels].[dbo].[product].[product_name], 
+      [classicmodels].[dbo].[product].[buy_price] 
+    from 
+      [classicmodels].[dbo].[product] 
+    where 
       (
-        select
-          avg(`classicmodels`.`product`.`buy_price`)
-        from
-          `classicmodels`.`product`
+        select 
+          avg(
+            [classicmodels].[dbo].[product].[buy_price]
+          ) 
+        from 
+          [classicmodels].[dbo].[product]
       ) > any (
-        select
-          `classicmodels`.`orderdetail`.`price_each`
-        from
-          `classicmodels`.`orderdetail`
-        where
-          `classicmodels`.`product`.`product_id` = `classicmodels`.`orderdetail`.`product_id`
+        select 
+          [classicmodels].[dbo].[orderdetail].[price_each] 
+        from 
+          [classicmodels].[dbo].[orderdetail] 
+        where 
+          [classicmodels].[dbo].[product].[product_id] = [classicmodels].[dbo].[orderdetail].[product_id]
       )
     */
     public void findProductWithAvgBuyPriceGtAnyPriceEach() {
@@ -549,26 +566,28 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 12
     /*
-    select
-      `classicmodels`.`product`.`product_id`,
-      `classicmodels`.`product`.`product_name`,
-      `classicmodels`.`product`.`buy_price`
-    from
-      `classicmodels`.`product`
-    where
+    select 
+      [classicmodels].[dbo].[product].[product_id], 
+      [classicmodels].[dbo].[product].[product_name], 
+      [classicmodels].[dbo].[product].[buy_price] 
+    from 
+      [classicmodels].[dbo].[product] 
+    where 
       (
-        select
-          avg(`classicmodels`.`product`.`buy_price`)
-        from
-          `classicmodels`.`product`
+        select 
+          avg(
+            [classicmodels].[dbo].[product].[buy_price]
+          ) 
+        from 
+          [classicmodels].[dbo].[product]
       ) > all (
-        select
-          `classicmodels`.`orderdetail`.`price_each`
-        from
-          `classicmodels`.`orderdetail`
-        where
-          `classicmodels`.`product`.`product_id` = `classicmodels`.`orderdetail`.`product_id`
-      )
+        select 
+          [classicmodels].[dbo].[orderdetail].[price_each] 
+        from 
+          [classicmodels].[dbo].[orderdetail] 
+        where 
+          [classicmodels].[dbo].[product].[product_id] = [classicmodels].[dbo].[orderdetail].[product_id]
+      )    
     */
     public void findProductWithAvgBuyPriceGtAllPriceEach() {
 
@@ -584,25 +603,22 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 13
     /*
-    select
-      `classicmodels`.`payment`.`invoice_amount`,
-      `classicmodels`.`payment`.`payment_date`,
-      `classicmodels`.`payment`.`caching_date`,
-      case
-        when `classicmodels`.`payment`.`caching_date` is null then (
-          select
-            `classicmodels`.`customer`.`credit_limit`
-          from
-            `classicmodels`.`customer`
-          where
-            `classicmodels`.`payment`.`customer_number` = `classicmodels`.`customer`.`customer_number`
-        )
-        else ?
-      end as `credit_limit`
-    from
-      `classicmodels`.`payment`
-    order by
-      `classicmodels`.`payment`.`caching_date`
+    select 
+      [classicmodels].[dbo].[payment].[invoice_amount], 
+      [classicmodels].[dbo].[payment].[payment_date], 
+      [classicmodels].[dbo].[payment].[caching_date], 
+      case when [classicmodels].[dbo].[payment].[caching_date] is null then (
+        select 
+          [classicmodels].[dbo].[customer].[credit_limit] 
+        from 
+          [classicmodels].[dbo].[customer] 
+        where 
+          [classicmodels].[dbo].[payment].[customer_number] = [classicmodels].[dbo].[customer].[customer_number]
+      ) else ? end [credit_limit] 
+    from 
+      [classicmodels].[dbo].[payment] 
+    order by 
+      [classicmodels].[dbo].[payment].[caching_date]    
     */    
     public void findUnprocessedPayments() {
 
@@ -623,28 +639,30 @@ public class ClassicModelsRepository {
     
     // EXAMPLE 14
     /*
-    select      
-      `s`.`employee_number`
-    from
-      `classicmodels`.`sale` as `s`
-    where
-      `s`.`fiscal_year` = ?
-    group by
-      `s`.`employee_number`
-    having
-      sum(`s`.`sale`) > (
-        select
-          sum(`classicmodels`.`sale`.`sale`)
-        from
-          `classicmodels`.`sale`
-        where
+    select 
+      [s].[employee_number] 
+    from 
+      [classicmodels].[dbo].[sale] [s] 
+    where 
+      [s].[fiscal_year] = ? 
+    group by 
+      [s].[employee_number] 
+    having 
+      sum([s].[sale]) > (
+        select 
+          sum(
+            [classicmodels].[dbo].[sale].[sale]
+          ) 
+        from 
+          [classicmodels].[dbo].[sale] 
+        where 
           (
-          `classicmodels`.`sale`.`fiscal_year` = ?
-              and `s`.`employee_number` = `classicmodels`.`sale`.`employee_number`
-          )
-        group by
-          `classicmodels`.`sale`.`employee_number`
-      )
+            [classicmodels].[dbo].[sale].[fiscal_year] = ? 
+            and [s].[employee_number] = [classicmodels].[dbo].[sale].[employee_number]
+          ) 
+        group by 
+          [classicmodels].[dbo].[sale].[employee_number]
+      )    
     */
     public void findEmployeeNumberWithMoreSalesIn2005Than2003() {
         
@@ -666,17 +684,19 @@ public class ClassicModelsRepository {
                  
     // EXAMPLE 15
     /*
-    update
-      `classicmodels`.`customer`
-    set
-      `classicmodels`.`customer`.`credit_limit` = (
-        select
-          sum(`classicmodels`.`payment`.`invoice_amount`)
-        from
-          `classicmodels`.`payment`
-        where
-          `classicmodels`.`payment`.`customer_number` = `classicmodels`.`customer`.`customer_number`
-      )
+    update 
+      [classicmodels].[dbo].[customer] 
+    set 
+      [classicmodels].[dbo].[customer].[credit_limit] = (
+        select 
+          sum(
+            [classicmodels].[dbo].[payment].[invoice_amount]
+          ) 
+        from 
+          [classicmodels].[dbo].[payment] 
+        where 
+          [classicmodels].[dbo].[payment].[customer_number] = [classicmodels].[dbo].[customer].[customer_number]
+      )   
      */
     @Transactional
     public void updateCustomerCreditLimit() {
@@ -692,20 +712,20 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 16
     /*
-    delete from
-      `classicmodels`.`payment`
-    where
-      `classicmodels`.`payment`.`customer_number` in (
-        select
-          `classicmodels`.`customer`.`customer_number`
-        from
-          `classicmodels`.`customer`
-        where
-         (
-           `classicmodels`.`payment`.`customer_number` = `classicmodels`.`customer`.`customer_number`
-              and `classicmodels`.`customer`.`credit_limit` > ?
-         )
-      )
+    delete from 
+      [classicmodels].[dbo].[payment] 
+    where 
+      [classicmodels].[dbo].[payment].[customer_number] in (
+        select 
+          [classicmodels].[dbo].[customer].[customer_number] 
+        from 
+          [classicmodels].[dbo].[customer] 
+        where 
+          (
+            [classicmodels].[dbo].[payment].[customer_number] = [classicmodels].[dbo].[customer].[customer_number] 
+            and [classicmodels].[dbo].[customer].[credit_limit] > ?
+          )
+      )    
     */
     @Transactional
     public void deletePaymentOfCustomerCreditLimitGt150000() {
@@ -722,25 +742,23 @@ public class ClassicModelsRepository {
     
     // EXAMPLE 17
     /*
-    insert into `classicmodels`.`order` (
-      `order_date`,
-      `required_date`,
-      `shipped_date`,
-      `status`,
-      `customer_number`
-    )
-      select distinct `classicmodels`.`payment`.`payment_date`,
-        `classicmodels`.`payment`.`payment_date`,
-        `classicmodels`.`payment`.`caching_date`,
-        ?,
-        `classicmodels`.`payment`.`customer_number`
-      from
-        `classicmodels`.`payment`,
-        `classicmodels`.`order`
-      where
-        `classicmodels`.`payment`.`payment_date` <> `classicmodels`.`order`.`order_date`
-      order by
-        `classicmodels`.`payment`.`payment_date`
+    insert into [classicmodels].[dbo].[order] (
+      [order_date], [required_date], [shipped_date], 
+      [status], [customer_number]
+    ) 
+    select 
+      distinct [classicmodels].[dbo].[payment].[payment_date], 
+      [classicmodels].[dbo].[payment].[payment_date], 
+      [classicmodels].[dbo].[payment].[caching_date], 
+      ?, 
+      [classicmodels].[dbo].[payment].[customer_number] 
+    from 
+      [classicmodels].[dbo].[payment], 
+      [classicmodels].[dbo].[order] 
+    where 
+      [classicmodels].[dbo].[payment].[payment_date] <> [classicmodels].[dbo].[order].[order_date] 
+    order by 
+      [classicmodels].[dbo].[payment].[payment_date]    
     */
     @Transactional
     public void insertPaymentInOrder() {
