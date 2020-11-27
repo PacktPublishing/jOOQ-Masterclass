@@ -1,1 +1,1 @@
-rootProject.name = "jOOQSpringBootSQLBuilderMySQL"
+rootProject.name = "jOOQSpringBootSQLBuilderOracle"

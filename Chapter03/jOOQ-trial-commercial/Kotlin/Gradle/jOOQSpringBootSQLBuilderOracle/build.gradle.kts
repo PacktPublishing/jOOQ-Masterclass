@@ -14,12 +14,13 @@ version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_14
 
 repositories {
-	mavenCentral()
+        mavenLocal()
+        mavenCentral()
 }
 
 jooq {
-  version.set("3.14.4")  // if omitted, then the default is used
-  edition.set(nu.studer.gradle.jooq.JooqEdition.OSS)  // jOOQ Open-Source is the default (can be omitted)
+  version.set("3.14.4")
+  edition.set(nu.studer.gradle.jooq.JooqEdition.TRIAL_JAVA_8)
 }
 
 dependencies {
@@ -27,7 +28,8 @@ dependencies {
         implementation("org.springframework.boot:spring-boot-starter-jooq")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-        implementation("mysql:mysql-connector-java")
+        implementation("com.oracle.database.jdbc:ojdbc8")
+        implementation("com.oracle.database.jdbc:ucp")
         implementation("org.flywaydb:flyway-core")
         implementation ("com.sun.xml.bind:jaxb-impl:2.3.0")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
