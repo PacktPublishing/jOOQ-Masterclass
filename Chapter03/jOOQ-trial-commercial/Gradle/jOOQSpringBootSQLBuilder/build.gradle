@@ -17,7 +17,7 @@ repositories {
 }
 
 jooq {
-  version = '3.14.3'
+  version = '3.14.4'
   edition = nu.studer.gradle.jooq.JooqEdition.TRIAL_JAVA_8
 }
 
