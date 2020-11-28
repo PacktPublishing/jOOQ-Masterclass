@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.app</groupId>
-    <artifactId>jOOQSpringBootDeletePostgreSQL</artifactId>
+    <artifactId>jOOQSpringBootRecordCRUDPostgreSQL</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQSpringBootDeletePostgreSQL</name>
+    <name>jOOQSpringBootRecordCRUDPostgreSQL</name>
     <description>jOOQ - Spring Boot app</description>    
 
     <parent>
@@ -178,26 +178,11 @@
                             Excludes match before includes, i.e. excludes have a higher priority -->
                             <excludes>flyway_schema_history</excludes>
                         </database>
-                        
-                        <!-- Rename the generated DAOs classes -->                      
-                        <strategy>
-                            <matchers>
-                                <tables>
-                                    <table>
-                                        <daoClass>                                                         
-                                            <expression>$0_Repository</expression>
-                                            <transform>PASCAL</transform>                                                                                      
-                                        </daoClass>
-                                    </table>
-                                </tables>
-                            </matchers>
-                        </strategy>
-                                
-                        <!-- jOOQ will generate POJOs and DAOs in your behalf -->
+                                               
+                        <!-- jOOQ will generate POJOs in your behalf -->
                         <generate>
-                            <daos>true</daos>                                   
+                            <pojos>true</pojos> 
                             <validationAnnotations>true</validationAnnotations>                            
-                            <springAnnotations>true</springAnnotations>   
                         </generate>
                         
                         <target>
