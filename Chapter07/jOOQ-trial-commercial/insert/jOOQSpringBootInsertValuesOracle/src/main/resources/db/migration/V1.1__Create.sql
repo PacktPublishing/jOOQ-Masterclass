@@ -89,6 +89,7 @@ EXCEPTION
    WHEN OTHERS THEN NULL;
 END;
 /
+
 /* Define a type using CREATE TYPE */
 BEGIN
    EXECUTE IMMEDIATE 'CREATE OR REPLACE TYPE locationType AS OBJECT (city varchar2(50), country varchar2(50), state varchar2(50))';
