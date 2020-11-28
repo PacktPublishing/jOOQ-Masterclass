@@ -9,15 +9,21 @@ import java.util.List;
 import java.util.Optional;
 import static jooq.generated.Routines.customerlevel;
 import static jooq.generated.tables.Customer.CUSTOMER;
+import static jooq.generated.tables.Department.DEPARTMENT;
 import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Sale.SALE;
+import jooq.generated.tables.pojos.Department;
 import jooq.generated.tables.pojos.Sale;
 import jooq.generated.tables.records.SaleRecord;
 import org.jooq.DSLContext;
 import org.jooq.InsertQuery;
+import static org.jooq.impl.DSL.choose;
+import static org.jooq.impl.DSL.coalesce;
+import static org.jooq.impl.DSL.inline;
 import static org.jooq.impl.DSL.rand;
 import static org.jooq.impl.DSL.round;
+import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -506,6 +512,47 @@ public class ClassicModelsRepository {
                         .values(1L, customerlevel(BigDecimal.valueOf(50000.00)), "Mark", "Farel",
                                 "+33 44 11223 32", 1370L, BigDecimal.valueOf(50000.00))
                         .onDuplicateKeyIgnore()
+                        .execute()
+        );
+    }
+
+    // EXAMPLE 12
+    /*
+    insert into `classicmodels`.`department` (
+      `department_id`, `name`, `phone`, 
+      `code`, `office_code`
+    ) 
+    values 
+      (
+        ?, 
+        ?, 
+        coalesce(
+          case when ? is null then '+40 080 000' else ? end, 
+          '+40 080 000'
+        ), 
+        ?, 
+        ?
+      )    
+     */
+    public void insertDepartment() {
+
+        Department department = new Department(); // jOOQ POJO
+        department.setName("IT");
+        department.setOfficeCode("2");
+        department.setCode((short) 44);
+
+        department.setPhone("+03 331 443");
+
+        System.out.println("EXAMPLE 12 (affected rows): "
+                + ctx.insertInto(DEPARTMENT)
+                        .values(null,
+                                department.getName(),
+                                coalesce(
+                                        choose().when(val(department.getPhone()).isNull(), inline("+40 080 000"))
+                                                .otherwise(department.getPhone()),
+                                        inline("+40 080 000")),
+                                department.getCode(), department.getOfficeCode()
+                        )
                         .execute()
         );
     }
