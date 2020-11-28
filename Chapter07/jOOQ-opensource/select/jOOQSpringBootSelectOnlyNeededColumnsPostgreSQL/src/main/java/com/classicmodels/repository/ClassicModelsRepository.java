@@ -79,7 +79,20 @@ public class ClassicModelsRepository {
         );
         
         /*
-        
+        select 
+          "public"."order"."order_id", 
+          "public"."order"."order_date", 
+          "public"."order"."required_date", 
+          "public"."order"."shipped_date", 
+          "public"."order"."status", 
+          "public"."order"."comments", 
+          "public"."order"."customer_number", 
+          "public"."orderdetail"."quantity_ordered" 
+        from 
+          "public"."order" 
+          join "public"."orderdetail" on "public"."order"."order_id" = "public"."orderdetail"."order_id" 
+        where 
+          "public"."order"."order_id" = ?        
         */
         System.out.println("EXAMPLE 1.5\n"
                 + ctx.select(ORDER.fields())
