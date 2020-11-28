@@ -22,6 +22,7 @@ public class ClassicModelsService {
         classicModelsRepository.findProductLineHavingMaxNrOfProducts();                      // EXAMPLE 6
         classicModelsRepository.findDistinctCustomerCityCountryWithNoNullAddress();          // EXAMPLE 7 
         classicModelsRepository.avgSumMinMaxPriceEach();                                     // EXAMPLE 8
-        classicModelsRepository.groupConcatOfficeCountries();                                // EXAMPLE 9        
+        classicModelsRepository.groupConcatOfficeCountries();                                // EXAMPLE 9                
+        classicModelsRepository.countDistinctSalesByEmployeeNumber();                        // EXAMPLE 10
     }
 }

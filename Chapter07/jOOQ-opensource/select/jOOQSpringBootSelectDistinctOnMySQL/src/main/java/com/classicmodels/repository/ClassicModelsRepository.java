@@ -6,6 +6,7 @@ import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Product.PRODUCT;
+import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.all;
 import static org.jooq.impl.DSL.avg;
@@ -47,7 +48,7 @@ public class ClassicModelsRepository {
         `classicmodels`.`office`.`city` is not null 
         and `classicmodels`.`office`.`country` is not null
       )
-    */
+     */
     public void findDistinctOfficesCityCountry() {
 
         System.out.println("EXAMPLE 1\n"
@@ -78,7 +79,7 @@ public class ClassicModelsRepository {
           `classicmodels`.`office`.`address_line_second` <=> ?
         )
       )    
-    */
+     */
     public void findOfficeDistinctFromAddress() {
 
         System.out.println("EXAMPLE 2\n"
@@ -105,26 +106,26 @@ public class ClassicModelsRepository {
           )
         )
       )
-    */
+     */
     public void findDistinctAndNotDistinctPaymentDates() {
 
-        System.out.println("EXAMPLE 3.1\n" +
-                ctx.select(PAYMENT.INVOICE_AMOUNT, PAYMENT.PAYMENT_DATE)
+        System.out.println("EXAMPLE 3.1\n"
+                + ctx.select(PAYMENT.INVOICE_AMOUNT, PAYMENT.PAYMENT_DATE)
                         .from(PAYMENT)
                         .where(PAYMENT.PAYMENT_DATE.cast(LocalDate.class).isDistinctFrom(
                                 PAYMENT.CACHING_DATE.cast(LocalDate.class)))
                         .fetch()
         );
-        
-        System.out.println("EXAMPLE 3.2\n" +
-                ctx.select(PAYMENT.INVOICE_AMOUNT, PAYMENT.PAYMENT_DATE)
+
+        System.out.println("EXAMPLE 3.2\n"
+                + ctx.select(PAYMENT.INVOICE_AMOUNT, PAYMENT.PAYMENT_DATE)
                         .from(PAYMENT)
                         .where(PAYMENT.PAYMENT_DATE.cast(LocalDate.class).isNotDistinctFrom(
                                 PAYMENT.CACHING_DATE.cast(LocalDate.class)))
                         .fetch()
         );
     }
-    
+
     // EXAMPLE 4
     /*
     select 
@@ -159,11 +160,11 @@ public class ClassicModelsRepository {
           )
         )
       )
-    */
+     */
     public void findOfficeAndCustomerOfficePostalCodeDistinctCityCountry() {
 
-        System.out.println("EXAMPLE 4\n" +
-                ctx.select()
+        System.out.println("EXAMPLE 4\n"
+                + ctx.select()
                         .from(OFFICE)
                         .innerJoin(CUSTOMERDETAIL)
                         .on(OFFICE.POSTAL_CODE.eq(CUSTOMERDETAIL.POSTAL_CODE))
@@ -185,11 +186,11 @@ public class ClassicModelsRepository {
       ) as `distinct_cachcing_date` 
     from 
       `classicmodels`.`payment`
-    */
+     */
     public void countPaymentCachingDate() {
 
-        System.out.println("EXAMPLE 5\n" +
-                ctx.select(
+        System.out.println("EXAMPLE 5\n"
+                + ctx.select(
                         count().as("all"),
                         count(PAYMENT.CACHING_DATE).as("all_caching_date"),
                         countDistinct(PAYMENT.CACHING_DATE).as("distinct_cachcing_date"))
@@ -220,11 +221,11 @@ public class ClassicModelsRepository {
         group by 
           `classicmodels`.`product`.`product_line`
       )
-    */
+     */
     public void findProductLineHavingMaxNrOfProducts() {
 
-        System.out.println("EXAMPLE 6\n" +
-                ctx.select(PRODUCT.PRODUCT_LINE, count())
+        System.out.println("EXAMPLE 6\n"
+                + ctx.select(PRODUCT.PRODUCT_LINE, count())
                         .from(PRODUCT)
                         .groupBy(PRODUCT.PRODUCT_LINE)
                         .having(count().plus(1)
@@ -252,7 +253,7 @@ public class ClassicModelsRepository {
         where 
           `classicmodels`.`customerdetail`.`address_line_second` is not null
       ) as `alias_37460252`
-    */
+     */
     public void findDistinctCustomerCityCountryWithNoNullAddress() {
 
         // Table<?>
@@ -261,8 +262,8 @@ public class ClassicModelsRepository {
                 .where(CUSTOMERDETAIL.ADDRESS_LINE_SECOND.isNotNull())
                 .asTable();
 
-        System.out.println("EXAMPLE 7\n" +
-                ctx.select(
+        System.out.println("EXAMPLE 7\n"
+                + ctx.select(
                         (countDistinct(t.fields())))
                         .from(t)
                         .fetch()
@@ -298,11 +299,11 @@ public class ClassicModelsRepository {
       ) 
     from 
       `classicmodels`.`orderdetail`
-    */
+     */
     public void avgSumMinMaxPriceEach() {
 
-        System.out.println("EXAMPLE 8\n" +
-                ctx.select(
+        System.out.println("EXAMPLE 8\n"
+                + ctx.select(
                         avg(ORDERDETAIL.PRICE_EACH),
                         avgDistinct(ORDERDETAIL.PRICE_EACH),
                         sum(ORDERDETAIL.PRICE_EACH),
@@ -327,15 +328,25 @@ public class ClassicModelsRepository {
       ) 
     from 
       `classicmodels`.`office`
-    */
+     */
     public void groupConcatOfficeCountries() {
 
-        System.out.println("EXAMPLE 9\n" +
-                ctx.select(
+        System.out.println("EXAMPLE 9\n"
+                + ctx.select(
                         groupConcat(OFFICE.COUNTRY),
                         groupConcatDistinct(OFFICE.COUNTRY)
                 ).from(OFFICE)
                         .fetch()
+        );
+    }
+
+    public void countDistinctSalesByEmployeeNumber() {
+
+        System.out.println("EXAMPLE 10 (count result): "
+                + ctx.selectDistinct(count().over().as("sales"))
+                        .from(SALE)
+                        .groupBy(SALE.EMPLOYEE_NUMBER)
+                        .fetchOneInto(int.class)
         );
     }
 }
