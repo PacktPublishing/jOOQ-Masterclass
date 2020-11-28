@@ -8,6 +8,8 @@ import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.inline;
+import static org.jooq.impl.DSL.max;
+import static org.jooq.impl.DSL.rownum;
 import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -81,6 +83,14 @@ public class ClassicModelsRepository {
         // select 1 "one" from dual
         System.out.println("EXAMPLE 3.4\n"
                 + DSL.using(SQLDialect.ORACLE).selectOne().getSQL()
+        );
+    }
+
+    // EXAMPLE 4
+    // getting: ROWNUM/(MAX(ROWNUM) OVER())
+    public void rownumDivMaxRownumOver() {
+        System.out.println("EXAMPLE 4 \n"
+                + rownum().div(max(DSL.rownum()).over())
         );
     }
 }
