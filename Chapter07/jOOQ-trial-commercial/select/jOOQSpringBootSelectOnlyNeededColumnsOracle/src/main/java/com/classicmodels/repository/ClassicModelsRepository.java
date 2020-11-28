@@ -4,6 +4,7 @@ import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Order.ORDER;
+import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
@@ -24,7 +25,8 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 1
     // if all you need is a sub-set of columns then 
-    // avoid these approach since they fetches too much data (all columns)
+    // avoid (or, at least pay attention to) these approaches 
+    // since they (may) fetches too much data (all columns)
     public void findOrderAllFields() {
 
         /*
@@ -72,6 +74,32 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 1.4\n" +
                 ctx.select(asterisk())
                         .from(ORDER)
+                        .where(ORDER.ORDER_ID.eq(10101L))
+                        .fetch()
+        );
+        
+        /*
+        select 
+          "SYSTEM"."ORDER"."ORDER_ID", 
+          "SYSTEM"."ORDER"."ORDER_DATE", 
+          "SYSTEM"."ORDER"."REQUIRED_DATE", 
+          "SYSTEM"."ORDER"."SHIPPED_DATE", 
+          "SYSTEM"."ORDER"."STATUS", 
+          "SYSTEM"."ORDER"."COMMENTS", 
+          "SYSTEM"."ORDER"."CUSTOMER_NUMBER", 
+          "SYSTEM"."ORDERDETAIL"."QUANTITY_ORDERED" 
+        from 
+          "SYSTEM"."ORDER" 
+          join "SYSTEM"."ORDERDETAIL" on "SYSTEM"."ORDER"."ORDER_ID" = "SYSTEM"."ORDERDETAIL"."ORDER_ID" 
+        where 
+          "SYSTEM"."ORDER"."ORDER_ID" = ?        
+        */
+        System.out.println("EXAMPLE 1.5\n"
+                + ctx.select(ORDER.fields())
+                        .select(ORDERDETAIL.QUANTITY_ORDERED)
+                        .from(ORDER)
+                        .innerJoin(ORDERDETAIL)
+                        .on(ORDER.ORDER_ID.eq(ORDERDETAIL.ORDER_ID))
                         .where(ORDER.ORDER_ID.eq(10101L))
                         .fetch()
         );
