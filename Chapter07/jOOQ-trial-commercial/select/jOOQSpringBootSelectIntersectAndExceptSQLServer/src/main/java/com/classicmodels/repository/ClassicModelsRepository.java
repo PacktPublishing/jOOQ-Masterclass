@@ -129,9 +129,44 @@ public class ClassicModelsRepository {
         );
     }
     
+    // EXAMPLE 5
+    /*
+    select 
+      [p].[city], 
+      [p].[country] 
+    from 
+      (
+        values 
+          (?, ?), 
+          (?, ?), 
+          (?, ?), 
+          (?, ?), 
+          (?, ?), 
+          (?, ?)
+      ) [p] ([city], [country]) 
+    except 
+    select 
+      [classicmodels].[dbo].[office].[city], 
+      [classicmodels].[dbo].[office].[country] 
+    from 
+      [classicmodels].[dbo].[office]    
+    */
+    public void findCitiesWithNoOffices() {
+
+        Row2[] rows = {row("Paris", "France"), row("Lion", "France"), row("Nisa", "France"),
+            row("Boston", "USA"), row("Los Angeles", "USA"), row("Sydney", "Australia")};
+        
+        System.out.println("EXAMPLE 5\n"
+                + ctx.select().from(values(rows
+                ).as("p", OFFICE.CITY.getName(), OFFICE.COUNTRY.getName()))
+                        .except(select(OFFICE.CITY, OFFICE.COUNTRY).from(OFFICE))
+                        .fetch(OFFICE.CITY)
+        );
+    }
+    
     /* Emulating INTERSECT(ALL)/EXCEPT(ALL) for databases that don't support them (e.g., MySQL) */                    
     
-    // EXAMPLE 5    
+    // EXAMPLE 6    
     // Emulate INTERSECT via IN (useful when no duplicates and NULLs are present)
     // Emulate INTERSECT via WHERE EXISTS (useful when duplicates and/or NULLs are present)     
     public void emulateIntersectOfficeCustomerCityAndCountry() {
@@ -162,7 +197,7 @@ public class ClassicModelsRepository {
               )
           )        
         */
-        System.out.println("EXAMPLE 5.1\n" +
+        System.out.println("EXAMPLE 6.1\n" +
                 //ctx.select for duplicates an no NULLs are present
                 ctx.selectDistinct(OFFICE.CITY, OFFICE.COUNTRY) 
                         .from(OFFICE)
@@ -209,7 +244,7 @@ public class ClassicModelsRepository {
               )
           )        
         */
-        System.out.println("EXAMPLE 5.2\n +"+
+        System.out.println("EXAMPLE 6.2\n +"+
                 ctx.select(OFFICE.CITY, OFFICE.COUNTRY)
                         .from(OFFICE)
                         .whereExists(select().from(CUSTOMERDETAIL)
@@ -219,44 +254,9 @@ public class ClassicModelsRepository {
                                                 .or(OFFICE.COUNTRY.isNull().and(CUSTOMERDETAIL.COUNTRY.isNull())))))
                         .fetch()
         );        
-    }     
+    }             
     
-     // EXAMPLE 5
-    /*
-    select 
-      [p].[city], 
-      [p].[country] 
-    from 
-      (
-        values 
-          (?, ?), 
-          (?, ?), 
-          (?, ?), 
-          (?, ?), 
-          (?, ?), 
-          (?, ?)
-      ) [p] ([city], [country]) 
-    except 
-    select 
-      [classicmodels].[dbo].[office].[city], 
-      [classicmodels].[dbo].[office].[country] 
-    from 
-      [classicmodels].[dbo].[office]    
-    */
-    public void findCitiesWithNoOffices() {
-
-        Row2[] rows = {row("Paris", "France"), row("Lion", "France"), row("Nisa", "France"),
-            row("Boston", "USA"), row("Los Angeles", "USA"), row("Sydney", "Australia")};
-        
-        System.out.println("EXAMPLE 5\n"
-                + ctx.select().from(values(rows
-                ).as("p", OFFICE.CITY.getName(), OFFICE.COUNTRY.getName()))
-                        .except(select(OFFICE.CITY, OFFICE.COUNTRY).from(OFFICE))
-                        .fetch(OFFICE.CITY)
-        );
-    }
-    
-    // EXAMPLE 6
+    // EXAMPLE 7
     // Emulate EXCEPT via LEFT OUTER JOIN (useful when NULLs are present)
     // Emulate EXCEPT via WHERE NOT EXISTS (useful when duplicates and/or NULLs are present)     
     public void emulateExceptOfficeCustomerCityAndCountry() {
@@ -274,7 +274,7 @@ public class ClassicModelsRepository {
         where 
           [classicmodels].[dbo].[customerdetail].[city] is null        
         */
-        System.out.println("EXAMPLE 6.1\n" + 
+        System.out.println("EXAMPLE 7.1\n" + 
                 //ctx.select for duplicates an no NULLs are present
                 ctx.selectDistinct(OFFICE.CITY, OFFICE.COUNTRY)
                         .from(OFFICE)
@@ -324,7 +324,7 @@ public class ClassicModelsRepository {
             )
           )        
         */
-        System.out.println("EXAMPLE 6.2\n" +
+        System.out.println("EXAMPLE 7.2\n" +
                  ctx.select(OFFICE.CITY, OFFICE.COUNTRY)
                          .from(OFFICE)
                          .whereNotExists(select().from(CUSTOMERDETAIL)
