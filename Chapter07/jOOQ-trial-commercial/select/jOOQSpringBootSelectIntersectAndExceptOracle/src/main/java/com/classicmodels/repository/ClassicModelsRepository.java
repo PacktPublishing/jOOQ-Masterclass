@@ -5,8 +5,10 @@ import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import static jooq.generated.tables.Product.PRODUCT;
 import org.jooq.DSLContext;
+import org.jooq.Row2;
 import static org.jooq.impl.DSL.row;
 import static org.jooq.impl.DSL.select;
+import static org.jooq.impl.DSL.values;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -176,9 +178,71 @@ public class ClassicModelsRepository {
         */
     }
     
+     // EXAMPLE 5
+    /*
+    select 
+      "p"."CITY", 
+      "p"."COUNTRY" 
+    from 
+      (
+        select 
+          ? "CITY", 
+          ? "COUNTRY" 
+        from 
+          dual 
+        union all 
+        select 
+          ?, 
+          ? 
+        from 
+          dual 
+        union all 
+        select 
+          ?, 
+          ? 
+        from 
+          dual 
+        union all 
+        select 
+          ?, 
+          ? 
+        from 
+          dual 
+        union all 
+        select 
+          ?, 
+          ? 
+        from 
+          dual 
+        union all 
+        select 
+          ?, 
+          ? 
+        from 
+          dual
+      ) "p" minus 
+    select 
+      "SYSTEM"."OFFICE"."CITY", 
+      "SYSTEM"."OFFICE"."COUNTRY" 
+    from 
+      "SYSTEM"."OFFICE"       
+    */
+    public void findCitiesWithNoOffices() {
+
+        Row2[] rows = {row("Paris", "France"), row("Lion", "France"), row("Nisa", "France"),
+            row("Boston", "USA"), row("Los Angeles", "USA"), row("Sydney", "Australia")};
+        
+        System.out.println("EXAMPLE 5\n"
+                + ctx.select().from(values(rows
+                ).as("p", OFFICE.CITY.getName(), OFFICE.COUNTRY.getName()))
+                        .except(select(OFFICE.CITY, OFFICE.COUNTRY).from(OFFICE))
+                        .fetch(OFFICE.CITY)
+        );
+    }
+    
     /* Emulating INTERSECT(ALL)/EXCEPT(ALL) for databases that don't support them (e.g., MySQL) */                    
     
-    // EXAMPLE 5    
+    // EXAMPLE 6    
     // Emulate INTERSECT via IN (useful when no duplicates and NULLs are present)
     // Emulate INTERSECT via WHERE EXISTS (useful when duplicates and/or NULLs are present)     
     public void emulateIntersectOfficeCustomerCityAndCountry() {
@@ -202,7 +266,7 @@ public class ClassicModelsRepository {
             )
           )        
         */
-        System.out.println("EXAMPLE 5.1\n" +
+        System.out.println("EXAMPLE 6.1\n" +
                 //ctx.select for duplicates an no NULLs are present
                 ctx.selectDistinct(OFFICE.CITY, OFFICE.COUNTRY) 
                         .from(OFFICE)
@@ -249,7 +313,7 @@ public class ClassicModelsRepository {
               )
           )        
         */
-        System.out.println("EXAMPLE 5.2\n +"+
+        System.out.println("EXAMPLE 6.2\n +"+
                 ctx.select(OFFICE.CITY, OFFICE.COUNTRY)
                         .from(OFFICE)
                         .whereExists(select().from(CUSTOMERDETAIL)
@@ -261,7 +325,7 @@ public class ClassicModelsRepository {
         );        
     }     
     
-    // EXAMPLE 6
+    // EXAMPLE 7
     // Emulate EXCEPT via LEFT OUTER JOIN (useful when NULLs are present)
     // Emulate EXCEPT via WHERE NOT EXISTS (useful when duplicates and/or NULLs are present)     
     public void emulateExceptOfficeCustomerCityAndCountry() {
@@ -279,7 +343,7 @@ public class ClassicModelsRepository {
         where 
           "SYSTEM"."CUSTOMERDETAIL"."CITY" is null        
         */
-        System.out.println("EXAMPLE 6.1\n" + 
+        System.out.println("EXAMPLE 7.1\n" + 
                 //ctx.select for duplicates an no NULLs are present
                 ctx.selectDistinct(OFFICE.CITY, OFFICE.COUNTRY)
                         .from(OFFICE)
@@ -329,7 +393,7 @@ public class ClassicModelsRepository {
             )
           )       
         */
-        System.out.println("EXAMPLE 6.2\n" +
+        System.out.println("EXAMPLE 7.2\n" +
                  ctx.select(OFFICE.CITY, OFFICE.COUNTRY)
                          .from(OFFICE)
                          .whereNotExists(select().from(CUSTOMERDETAIL)
