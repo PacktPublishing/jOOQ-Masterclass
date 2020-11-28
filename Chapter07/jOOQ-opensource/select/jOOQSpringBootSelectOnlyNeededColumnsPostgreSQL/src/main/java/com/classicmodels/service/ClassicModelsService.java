@@ -20,10 +20,12 @@ public class ClassicModelsService {
         classicModelsRepository.findOrderExceptAndSale();       // EXAMPLE 5
         classicModelsRepository.findOfficeUseAliasForCity();    // EXAMPLE 6
         classicModelsRepository.findOfficeUseNvlForCity();      // EXAMPLE 7
-        classicModelsRepository.findEmployeeLimit();            // EXAMPLE 8
-        classicModelsRepository.findEmployeeLimitOffset();      // EXAMPLE 9
-        classicModelsRepository.findEmployeeLimitAndOffset();   // EXAMPLE 10                
-        classicModelsRepository.decomposeSelect();              // EXAMPLE 11
-        classicModelsRepository.decomposeSelectAndFrom();       // EXAMPLE 12
+        classicModelsRepository.findSaleGt5000();               // EXAMPLE 8
+        classicModelsRepository.findSaleMul025();               // EXAMPLE 9
+        classicModelsRepository.findEmployeeLimit();            // EXAMPLE 10
+        classicModelsRepository.findEmployeeLimitOffset();      // EXAMPLE 11
+        classicModelsRepository.findEmployeeLimitAndOffset();   // EXAMPLE 12                
+        classicModelsRepository.decomposeSelect();              // EXAMPLE 13
+        classicModelsRepository.decomposeSelectAndFrom();       // EXAMPLE 14
     }
 }
