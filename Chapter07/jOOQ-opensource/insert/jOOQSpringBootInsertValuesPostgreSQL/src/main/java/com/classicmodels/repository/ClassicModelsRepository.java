@@ -10,18 +10,24 @@ import java.util.Optional;
 import static jooq.generated.Routines.getAvgSale;
 import static jooq.generated.Sequences.ORDER_SEQ;
 import static jooq.generated.Sequences.SALE_SEQ;
+import static jooq.generated.tables.Department.DEPARTMENT;
 import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Sale.SALE;
+import jooq.generated.tables.pojos.Department;
 import jooq.generated.tables.pojos.Sale;
 import jooq.generated.tables.records.SaleRecord;
 import static jooq.generated.udt.Locationtype.LOCATIONTYPE;
 import jooq.generated.udt.records.LocationtypeRecord;
 import org.jooq.DSLContext;
 import org.jooq.InsertQuery;
+import static org.jooq.impl.DSL.choose;
+import static org.jooq.impl.DSL.coalesce;
+import static org.jooq.impl.DSL.inline;
 import static org.jooq.impl.DSL.rand;
 import static org.jooq.impl.DSL.round;
+import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -589,6 +595,45 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 12
     /*
+    insert into "public"."department" (
+      "name", "phone", "code", "office_code"
+    ) 
+    values 
+      (
+        ?, 
+        coalesce(
+          case when ? is null then '+40 080 000' else ? end, 
+          '+40 080 000'
+        ), 
+        ?, 
+        ?
+      )    
+     */
+    public void insertDepartment() {
+
+        Department department = new Department(); // jOOQ POJO
+        department.setName("IT");
+        department.setOfficeCode("2");
+        department.setCode((short) 44);
+
+        department.setPhone("+03 331 443");
+
+        System.out.println("EXAMPLE 12 (affected rows): "
+                + ctx.insertInto(DEPARTMENT, DEPARTMENT.NAME,
+                        DEPARTMENT.PHONE, DEPARTMENT.CODE, DEPARTMENT.OFFICE_CODE)
+                        .values(val(department.getName()),
+                                coalesce(
+                                        choose().when(val(department.getPhone()).isNull(), inline("+40 080 000"))
+                                                .otherwise(department.getPhone()),
+                                        inline("+40 080 000")),
+                                val(department.getCode()), val(department.getOfficeCode())
+                        )
+                        .execute()
+        );
+    }
+
+    // EXAMPLE 13
+    /*
     insert into "public"."office" (
       "office_code","location","phone","address_line_first","address_line_second","postal_code","territory")
     values
@@ -598,7 +643,7 @@ public class ClassicModelsRepository {
     public void insertAndUDTRecord() {
 
         LocationtypeRecord locationtypeRecord = new LocationtypeRecord("Boston", "USA", "EA");
-        System.out.println("EXAMPLE 12 (affected rows): "
+        System.out.println("EXAMPLE 13 (affected rows): "
                 + ctx.insertInto(OFFICE)
                         .values(Math.round(Math.random() * 10000) + "PK",
                                 locationtypeRecord, "+33 223 12", "addr1", "addr2", "659422", "MA")

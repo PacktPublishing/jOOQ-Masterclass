@@ -25,6 +25,7 @@ public class ClassicModelsService {
         classicModelsRepository.insertNewRecord();                      // EXAMPLE 9
         classicModelsRepository.insertRecordAfterResettingPK();         // EXAMPLE 10
         classicModelsRepository.usingFunctionsInInsert();               // EXAMPLE 11        
-        classicModelsRepository.insertAndUDTRecord();                   // EXAMPLE 12
+        classicModelsRepository.insertDepartment();                     // EXAMPLE 12
+        classicModelsRepository.insertAndUDTRecord();                   // EXAMPLE 13
     }
 }
