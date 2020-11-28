@@ -5,8 +5,10 @@ import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import static jooq.generated.tables.Product.PRODUCT;
 import org.jooq.DSLContext;
+import org.jooq.Row2;
 import static org.jooq.impl.DSL.row;
 import static org.jooq.impl.DSL.select;
+import static org.jooq.impl.DSL.values;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -218,6 +220,41 @@ public class ClassicModelsRepository {
                         .fetch()
         );        
     }     
+    
+     // EXAMPLE 5
+    /*
+    select 
+      [p].[city], 
+      [p].[country] 
+    from 
+      (
+        values 
+          (?, ?), 
+          (?, ?), 
+          (?, ?), 
+          (?, ?), 
+          (?, ?), 
+          (?, ?)
+      ) [p] ([city], [country]) 
+    except 
+    select 
+      [classicmodels].[dbo].[office].[city], 
+      [classicmodels].[dbo].[office].[country] 
+    from 
+      [classicmodels].[dbo].[office]    
+    */
+    public void findCitiesWithNoOffices() {
+
+        Row2[] rows = {row("Paris", "France"), row("Lion", "France"), row("Nisa", "France"),
+            row("Boston", "USA"), row("Los Angeles", "USA"), row("Sydney", "Australia")};
+        
+        System.out.println("EXAMPLE 5\n"
+                + ctx.select().from(values(rows
+                ).as("p", OFFICE.CITY.getName(), OFFICE.COUNTRY.getName()))
+                        .except(select(OFFICE.CITY, OFFICE.COUNTRY).from(OFFICE))
+                        .fetch(OFFICE.CITY)
+        );
+    }
     
     // EXAMPLE 6
     // Emulate EXCEPT via LEFT OUTER JOIN (useful when NULLs are present)
