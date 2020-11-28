@@ -379,4 +379,23 @@ public class ClassicModelsRepository {
                         .fetch()                                                                
         );
     }    
+    
+    // EXAMPLE 9
+    /*
+    select 
+      distinct count(*) over () [sales] 
+    from 
+      [classicmodels].[dbo].[sale] 
+    group by 
+      [classicmodels].[dbo].[sale].[employee_number]    
+    */
+    public void countDistinctSalesByEmployeeNumber() {
+
+        System.out.println("EXAMPLE 9 (count result): "
+                + ctx.selectDistinct(count().over().as("sales"))
+                        .from(SALE)
+                        .groupBy(SALE.EMPLOYEE_NUMBER)
+                        .fetchOneInto(int.class)
+        );
+    }
 }

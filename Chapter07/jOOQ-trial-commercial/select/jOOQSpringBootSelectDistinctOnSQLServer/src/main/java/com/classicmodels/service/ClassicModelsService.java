@@ -22,5 +22,6 @@ public class ClassicModelsService {
         classicModelsRepository.findProductLineHavingMaxNrOfProducts();                      // EXAMPLE 6 
         classicModelsRepository.avgSumMinMaxPriceEach();                                     // EXAMPLE 7               
         classicModelsRepository.findEmployeeNumberOfMaxSalePerFiscalYear();                  // EXAMPLE 8
+        classicModelsRepository.countDistinctSalesByEmployeeNumber();                        // EXAMPLE 9
     }
 }
