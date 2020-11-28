@@ -304,6 +304,18 @@ public class ClassicModelsRepository {
     }
 
     // EXAMPLE 10
+    /*
+    select 
+      `classicmodels`.`office`.`city`, 
+      `classicmodels`.`office`.`country`, 
+      `classicmodels`.`office`.`office_code` 
+    from 
+      `classicmodels`.`office` 
+    where 
+      `classicmodels`.`office`.`city` in (?, ?, ?) 
+    order by 
+      case `classicmodels`.`office`.`city` when ? then 0 when ? then 1 when ? then 2 end asc    
+    */
     // Consider reading: https://blog.jooq.org/2014/05/07/how-to-implement-sort-indirection-in-sql/
     public void findOfficeInCityByCertainSort() {
 
@@ -323,8 +335,7 @@ public class ClassicModelsRepository {
                         .where(OFFICE.CITY.in(citiesMap.keySet()))
                         .orderBy(OFFICE.CITY.sort(citiesMap)) 
                         .fetch()
-        );
-        
+        );      
     }
 
     // EXAMPLE 11

@@ -25,7 +25,7 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 1    
     // if all you need is a sub-set of columns then 
-    // avoid (or, at least pay attention to) these approach 
+    // avoid (or, at least pay attention to) these approaches 
     // since they (may) fetches too much data (all columns)
     public void findOrderAllFields() {
 
