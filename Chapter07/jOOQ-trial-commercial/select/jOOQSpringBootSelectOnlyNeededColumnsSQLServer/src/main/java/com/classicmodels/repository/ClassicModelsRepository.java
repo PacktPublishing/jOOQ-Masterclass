@@ -4,6 +4,7 @@ import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Order.ORDER;
+import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
@@ -22,9 +23,10 @@ public class ClassicModelsRepository {
         this.ctx = ctx;
     }
 
-    // EXAMPLE 1
+    // EXAMPLE 1    
     // if all you need is a sub-set of columns then 
-    // avoid these approach since they fetches too much data (all columns)
+    // avoid (or, at least pay attention to) these approach 
+    // since they (may) fetches too much data (all columns)
     public void findOrderAllFields() {
 
         /*
@@ -72,6 +74,33 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 1.4\n"
                 + ctx.select(asterisk())
                         .from(ORDER)
+                        .where(ORDER.ORDER_ID.eq(10101L))
+                        .fetch()
+        );
+        
+        /*
+        select 
+          [classicmodels].[dbo].[order].[order_id], 
+          [classicmodels].[dbo].[order].[order_date], 
+          [classicmodels].[dbo].[order].[required_date], 
+          [classicmodels].[dbo].[order].[shipped_date], 
+          [classicmodels].[dbo].[order].[status], 
+          [classicmodels].[dbo].[order].[comments], 
+          [classicmodels].[dbo].[order].[customer_number], 
+          [classicmodels].[dbo].[orderdetail].[quantity_ordered] 
+        from 
+          [classicmodels].[dbo].[order] 
+          join [classicmodels].[dbo].[orderdetail] 
+            on [classicmodels].[dbo].[order].[order_id] = [classicmodels].[dbo].[orderdetail].[order_id] 
+        where 
+          [classicmodels].[dbo].[order].[order_id] = ?        
+        */
+        System.out.println("EXAMPLE 1.5\n"
+                + ctx.select(ORDER.fields())
+                        .select(ORDERDETAIL.QUANTITY_ORDERED)
+                        .from(ORDER)
+                        .innerJoin(ORDERDETAIL)
+                        .on(ORDER.ORDER_ID.eq(ORDERDETAIL.ORDER_ID))
                         .where(ORDER.ORDER_ID.eq(10101L))
                         .fetch()
         );
