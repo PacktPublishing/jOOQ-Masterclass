@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.app</groupId>
-    <artifactId>jOOQSpringBootSelectDistinctOnMySQL</artifactId>
+    <artifactId>jOOQSpringBootSelectDistinctOnPostgreSQL</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQSpringBootSelectDistinctOnMySQL</name>
+    <name>jOOQSpringBootSelectDistinctOnPostgreSQL</name>
     <description>jOOQ - Spring Boot app</description>    
 
     <parent>
