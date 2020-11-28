@@ -33,6 +33,8 @@ IF OBJECT_ID('sale', 'U') IS NOT NULL
   DROP TABLE sale;
 IF OBJECT_ID('employee', 'U') IS NOT NULL 
   DROP TABLE employee;
+  IF OBJECT_ID('department', 'U') IS NOT NULL 
+  DROP TABLE department;
 IF OBJECT_ID('office', 'U') IS NOT NULL 
   DROP TABLE office;
 
@@ -72,6 +74,21 @@ CREATE TABLE employee (
 CREATE INDEX [reports_to] ON employee ([reports_to]);
 CREATE INDEX [office_code] ON employee ([office_code]);
 
+/*Table structure for table `department` */
+
+CREATE TABLE department (
+  [department_id] bigint NOT NULL IDENTITY,  
+  [name] varchar(50) NOT NULL,
+  [phone] varchar(50) NOT NULL,
+  [code] smallint DEFAULT 1,
+  [office_code] varchar(10) NOT NULL,
+  PRIMARY KEY ([department_id])
+,
+  CONSTRAINT [department_ibfk_1] FOREIGN KEY ([office_code]) REFERENCES office ([office_code])
+) ;
+
+CREATE INDEX [department_id] ON department ([department_id]);
+
 /*Table structure for table `sale` */
 CREATE TABLE sale (
   [sale_id] bigint NOT NULL IDENTITY,  
@@ -85,11 +102,10 @@ CREATE TABLE sale (
 
 CREATE INDEX [employee_number] ON sale ([employee_number]);
 
-
 /*Table structure for table `customer` */
 
 CREATE TABLE customer (
-  [customer_number] bigint NOT NULL,
+  [customer_number] bigint NOT NULL IDENTITY,
   [customer_name] varchar(50) NOT NULL,
   [contact_last_name] varchar(50) NOT NULL,
   [contact_first_name] varchar(50) NOT NULL,
@@ -142,6 +158,7 @@ CREATE TABLE productline (
   [text_description] varchar(4000) DEFAULT NULL,
   [html_description] varchar(max),
   [image] varbinary(max),
+  [created_on] date DEFAULT GETDATE(),
   PRIMARY KEY ([product_line])
 ) ;
 
@@ -149,14 +166,14 @@ CREATE TABLE productline (
 
 CREATE TABLE product (
   [product_id] bigint NOT NULL IDENTITY,
-  [product_name] varchar(70) NOT NULL,
-  [product_line] varchar(50) NOT NULL,
-  [product_scale] varchar(10) NOT NULL,
-  [product_vendor] varchar(50) NOT NULL,
-  [product_description] varchar(max) NOT NULL,
-  [quantity_in_stock] smallint NOT NULL,
-  [buy_price] decimal(10,2) NOT NULL,
-  [msrp] decimal(10,2) NOT NULL,
+  [product_name] varchar(70) DEFAULT NULL,
+  [product_line] varchar(50) DEFAULT NULL,
+  [product_scale] varchar(10) DEFAULT NULL,
+  [product_vendor] varchar(50) DEFAULT NULL,
+  [product_description] varchar(max) DEFAULT NULL,
+  [quantity_in_stock] smallint DEFAULT 0,
+  [buy_price] decimal(10,2) DEFAULT 0.0,
+  [msrp] decimal(10,2) DEFAULT 0.0,
   PRIMARY KEY ([product_id])
  ,
   CONSTRAINT [products_ibfk_1] FOREIGN KEY ([product_line]) REFERENCES productline ([product_line])
@@ -206,12 +223,12 @@ CREATE TABLE payment (
   [invoice_amount] decimal(10,2) NOT NULL,
   [caching_date] datetime DEFAULT NULL,
   PRIMARY KEY ([customer_number],[check_number]),
+  CONSTRAINT [unique_check_number] UNIQUE([check_number]),
   CONSTRAINT [payments_ibfk_1] FOREIGN KEY ([customer_number]) REFERENCES customer ([customer_number])
 ) ;
 
-/* END */
-
 /* USER-DEFINED FUNCTIONS */
+
 CREATE FUNCTION netPriceEach(
     @quantity INT,
     @list_price DEC(10,2),
@@ -222,3 +239,4 @@ AS
 BEGIN
     RETURN @quantity * @list_price * (1 - @discount);
 END;
+/* END */
