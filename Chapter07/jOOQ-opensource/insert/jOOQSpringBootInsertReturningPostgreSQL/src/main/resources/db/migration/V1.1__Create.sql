@@ -166,7 +166,7 @@ CREATE TABLE productline (
 
 /*Table structure for table `product` */
 
-CREATE SEQUENCE product_seq;
+CREATE SEQUENCE product_seq START 1000000;
 
 CREATE TABLE product (
   product_id bigint NOT NULL DEFAULT NEXTVAL ('product_seq'),
@@ -229,7 +229,23 @@ CREATE TABLE payment (
   invoice_amount decimal(10,2) NOT NULL,
   caching_date timestamp DEFAULT NULL,
   PRIMARY KEY (customer_number,check_number),
+  CONSTRAINT unique_check_number UNIQUE(check_number),
   CONSTRAINT payments_ibfk_1 FOREIGN KEY (customer_number) REFERENCES customer (customer_number)
 ) ;
+
+/* USER-DEFINED FUNCTIONS */
+
+CREATE FUNCTION get_avg_sale(len_from int, len_to int) 
+  returns int language plpgsql AS $$ 
+DECLARE avg_count integer; 
+begin 
+  SELECT avg(sale.sale) 
+  INTO   avg_count 
+  FROM   sale 
+  WHERE  sale.sale BETWEEN len_from AND len_to; 
+   
+  return avg_count; 
+end; 
+$$;
 
 /* END */
