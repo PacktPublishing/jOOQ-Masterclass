@@ -448,4 +448,14 @@ public class ClassicModelsRepository {
                         .fetch()                                                                
         );
     }
+    
+    public void countDistinctSalesByEmployeeNumber() {
+
+        System.out.println("EXAMPLE 12 (count result): "
+                + ctx.selectDistinct(count().over().as("sales"))
+                        .from(SALE)
+                        .groupBy(SALE.EMPLOYEE_NUMBER)
+                        .fetchOneInto(int.class)
+        );
+    }
 }
