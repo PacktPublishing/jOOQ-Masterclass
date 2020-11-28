@@ -13,8 +13,9 @@ public class ClassicModelsService {
     }
 
     public void callAll() {
-       classicModelsRepository.insertProductViajOOQDao();
-       classicModelsRepository.updateProductViajOOQDao();
-       classicModelsRepository.deleteProductViajOOQDao();
+        classicModelsRepository.insertProductViajOOQDao();
+        classicModelsRepository.updateProductViajOOQDao();
+        classicModelsRepository.mergeProductViajOOQDao();
+        classicModelsRepository.deleteProductViajOOQDao();
     }
 }

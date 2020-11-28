@@ -1,8 +1,9 @@
 package com.classicmodels.repository;
 
-import static jooq.generated.tables.Product.PRODUCT;
-import jooq.generated.tables.records.ProductRecord;
-import org.jooq.DSLContext;
+import com.classicmodels.pojo.ProductPart;
+import java.math.BigDecimal;
+import jooq.generated.tables.daos.ProductRepository;
+import jooq.generated.tables.pojos.JooqProduct;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,52 +11,60 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class ClassicModelsRepository {
 
-    private final DSLContext ctx;
-    private ProductRecord pr = new ProductRecord();
-
-    public ClassicModelsRepository(DSLContext ctx) {
-        this.ctx = ctx;
-
-        // attaching the record to the current configuration
-        pr.attach(ctx.configuration());
+    private final ProductRepository productRepository;
+    
+    private final JooqProduct jooqProduct = new JooqProduct();         // jOOQ generated POJO
+    private final ProductPart productPart = new ProductPart();         // user-defined POJO
+        
+    public ClassicModelsRepository(ProductRepository productRepository) {        
+        this.productRepository = productRepository;
     }
 
     @Transactional
     public void insertProductViajOOQDao() {
-
-        System.out.println("EXAMPLE 1.1 (rows affected): "
-                + pr.insert()
-        );
-
-        pr.setProductName("Kia 88 Plane");
-        pr.setProductScale("1:10");
-        pr.setProductDescription("This is an amazing plane");
-        pr.setProductLine("Planes");
-        System.out.println("EXAMPLE 1.2 (rows affected): "
-                + pr.insert(PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_SCALE)
-        );
+        
+        // insert jOOQ POJO        
+        jooqProduct.setProductName("Giant Motor XP");
+        productRepository.insert(jooqProduct);                    
+        
+        // insert user-defined POJO
+        productPart.setProductName("2010 797B");
+        productPart.setProductScale("1:20");
+        productPart.setProductConsumption("30 kWh/100 mi"); // transient field
+        productPart.setProductStatus("available");          // transient field
+        productRepository.insert(productPart);
     }
-
+    
     @Transactional
     public void updateProductViajOOQDao() {
-
-        System.out.println("EXAMPLE 2.1 (rows affected): "
-                + pr.update()
-        );
+     
+        // update jOOQ POJO        
+        jooqProduct.setProductVendor("USA Labs B1");
+        productRepository.update(jooqProduct);
         
-        pr.setProductScale("1:18");
-        System.out.println("EXAMPLE 2.2 (rows affected): "
-                + pr.update(PRODUCT.PRODUCT_SCALE)
-        );
+        // update user-defined POJO
+        productPart.setBuyPrice(BigDecimal.valueOf(243.22));
+        productRepository.update(productPart);        
+    }
+    
+    @Transactional
+    public void mergeProductViajOOQDao() {
+        
+        // merge jOOQ POJO        
+        jooqProduct.setProductVendor("USA Laboratory B1");
+        productRepository.merge(jooqProduct);
+        
+        // update user-defined POJO
+        productRepository.merge(productPart);
     }
     
     @Transactional
     public void deleteProductViajOOQDao() {
         
-        System.out.println("EXAMPLE 3 (rows affected): "
-                + pr.delete()
-        );
+        // delete jOOQ POJO
+        productRepository.delete(jooqProduct);
         
-        pr.detach();
+        // delete user-defined POJO
+        productRepository.delete(productPart);
     }
 }
