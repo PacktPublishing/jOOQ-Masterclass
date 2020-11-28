@@ -1,5 +1,6 @@
 package com.classicmodels.repository;
 
+import java.util.Map;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Office.OFFICE;
@@ -294,6 +295,41 @@ public class ClassicModelsRepository {
     
     // EXAMPLE 10
     /*
+    select 
+      "public"."office"."city", 
+      "public"."office"."country", 
+      "public"."office"."office_code" 
+    from 
+      "public"."office" 
+    where 
+      "public"."office"."city" in (?, ?, ?) 
+    order by 
+      case "public"."office"."city" when ? then 0 when ? then 1 when ? then 2 end asc    
+    */
+    // Consider reading: https://blog.jooq.org/2014/05/07/how-to-implement-sort-indirection-in-sql/
+    public void findOfficeInCityByCertainSort() {
+
+        String[] citiesArr = {"Paris", "Tokyo", "Boston"};
+        System.out.println("EXAMPLE 10.1\n"
+                + ctx.select(OFFICE.CITY, OFFICE.COUNTRY, OFFICE.OFFICE_CODE)
+                        .from(OFFICE)
+                        .where(OFFICE.CITY.in(citiesArr))
+                        .orderBy(OFFICE.CITY.sortAsc(citiesArr)) 
+                        .fetch()
+        );
+        
+        Map<String, Integer> citiesMap = Map.of("Paris", 1, "Tokyo", 3, "Boston", 2);
+        System.out.println("EXAMPLE 10.2\n"
+                + ctx.select(OFFICE.CITY, OFFICE.COUNTRY, OFFICE.OFFICE_CODE)
+                        .from(OFFICE)
+                        .where(OFFICE.CITY.in(citiesMap.keySet()))
+                        .orderBy(OFFICE.CITY.sort(citiesMap)) 
+                        .fetch()
+        );      
+    }
+    
+    // EXAMPLE 11
+    /*
     select
       "public"."employee"."first_name",
       "public"."employee"."last_name",
@@ -304,32 +340,10 @@ public class ClassicModelsRepository {
      */
     public void findEmployeeLimit() {
 
-        System.out.println("EXAMPLE 10\n"
-                + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
-                        .from(EMPLOYEE)
-                        .limit(10)
-                        .fetch()
-        );
-    }
-
-    // EXAMPLE 11
-    /*
-    select
-      "public"."employee"."first_name",
-      "public"."employee"."last_name",
-      "public"."employee"."salary"
-    from
-      "public"."employee"
-    limit
-      ? offset ?
-     */
-    public void findEmployeeLimitOffset() {
-
         System.out.println("EXAMPLE 11\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
                         .from(EMPLOYEE)
                         .limit(10)
-                        .offset(5)
                         .fetch()
         );
     }
@@ -345,9 +359,31 @@ public class ClassicModelsRepository {
     limit
       ? offset ?
      */
-    public void findEmployeeLimitAndOffset() {
+    public void findEmployeeLimitOffset() {
 
         System.out.println("EXAMPLE 12\n"
+                + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
+                        .from(EMPLOYEE)
+                        .limit(10)
+                        .offset(5)
+                        .fetch()
+        );
+    }
+
+    // EXAMPLE 13
+    /*
+    select
+      "public"."employee"."first_name",
+      "public"."employee"."last_name",
+      "public"."employee"."salary"
+    from
+      "public"."employee"
+    limit
+      ? offset ?
+     */
+    public void findEmployeeLimitAndOffset() {
+
+        System.out.println("EXAMPLE 13\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
                         .from(EMPLOYEE)
                         .limit(5, 10)
@@ -355,7 +391,7 @@ public class ClassicModelsRepository {
         );
     }
 
-    // EXAMPLE 13
+    // EXAMPLE 14
     /*
     select
       "public"."office"."city",
@@ -388,12 +424,12 @@ public class ClassicModelsRepository {
         select.addSelect(CUSTOMER.asterisk().except(CUSTOMER.CONTACT_FIRST_NAME, CUSTOMER.CONTACT_LAST_NAME));
         select.addSelect(PAYMENT.fields());
 
-        System.out.println("EXAMPLE 13\n"
+        System.out.println("EXAMPLE 14\n"
                 + select.fetch()
         );
     }
 
-    // EXAMPLE 14
+    // EXAMPLE 15
     /*    
     select
       "public"."office"."city",
@@ -432,7 +468,7 @@ public class ClassicModelsRepository {
         select.addFrom(PAYMENT);
         select.addSelect(PAYMENT.fields());
 
-        System.out.println("EXAMPLE 14\n"
+        System.out.println("EXAMPLE 15\n"
                 + select.fetch()
         );
     }
