@@ -23,5 +23,6 @@ public class ClassicModelsService {
         classicModelsRepository.avgSumMinMaxPriceEach();                                     // EXAMPLE 7        
         classicModelsRepository.findProductsByVendorScale();                                 // EXAMPLE 8
         classicModelsRepository.findEmployeeNumberOfMaxSalePerFiscalYear();                  // EXAMPLE 9
+        classicModelsRepository.countDistinctSalesByEmployeeNumber();                        // EXAMPLE 10
     }
 }
