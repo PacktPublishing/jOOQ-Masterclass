@@ -13,19 +13,20 @@ public class ClassicModelsService {
     }
 
     public void callAll() {
-        classicModelsRepository.findOrderAllFields();           // EXAMPLE 1
-        classicModelsRepository.findOrderExplicitFields();      // EXAMPLE 2
-        classicModelsRepository.findOrderAsteriskExcept();      // EXAMPLE 3
-        classicModelsRepository.findOrderAndSale();             // EXAMPLE 4
-        classicModelsRepository.findOrderExceptAndSale();       // EXAMPLE 5
-        classicModelsRepository.findOfficeUseAliasForCity();    // EXAMPLE 6
-        classicModelsRepository.findOfficeUseNvlForCity();      // EXAMPLE 7
-        classicModelsRepository.findSaleGt5000();               // EXAMPLE 8
-        classicModelsRepository.findSaleMul025();               // EXAMPLE 8
-        classicModelsRepository.findEmployeeLimit();            // EXAMPLE 10
-        classicModelsRepository.findEmployeeLimitOffset();      // EXAMPLE 11
-        classicModelsRepository.findEmployeeLimitAndOffset();   // EXAMPLE 12                
-        classicModelsRepository.decomposeSelect();              // EXAMPLE 13
-        classicModelsRepository.decomposeSelectAndFrom();       // EXAMPLE 14               
+        classicModelsRepository.findOrderAllFields();             // EXAMPLE 1
+        classicModelsRepository.findOrderExplicitFields();        // EXAMPLE 2
+        classicModelsRepository.findOrderAsteriskExcept();        // EXAMPLE 3
+        classicModelsRepository.findOrderAndSale();               // EXAMPLE 4
+        classicModelsRepository.findOrderExceptAndSale();         // EXAMPLE 5
+        classicModelsRepository.findOfficeUseAliasForCity();      // EXAMPLE 6
+        classicModelsRepository.findOfficeUseNvlForCity();        // EXAMPLE 7
+        classicModelsRepository.findSaleGt5000();                 // EXAMPLE 8
+        classicModelsRepository.findSaleMul025();                 // EXAMPLE 9
+        classicModelsRepository.findOfficeInCityByCertainSort();  // EXAMPLE 10
+        classicModelsRepository.findEmployeeLimit();              // EXAMPLE 11
+        classicModelsRepository.findEmployeeLimitOffset();        // EXAMPLE 12
+        classicModelsRepository.findEmployeeLimitAndOffset();     // EXAMPLE 13                
+        classicModelsRepository.decomposeSelect();                // EXAMPLE 14
+        classicModelsRepository.decomposeSelectAndFrom();         // EXAMPLE 15                
     }
 }

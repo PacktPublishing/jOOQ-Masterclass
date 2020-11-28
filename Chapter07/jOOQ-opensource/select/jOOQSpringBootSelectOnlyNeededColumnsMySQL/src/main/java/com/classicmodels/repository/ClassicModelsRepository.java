@@ -1,5 +1,6 @@
 package com.classicmodels.repository;
 
+import java.util.Map;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Office.OFFICE;
@@ -16,16 +17,16 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class ClassicModelsRepository {
-    
+
     private final DSLContext ctx;
-    
+
     public ClassicModelsRepository(DSLContext ctx) {
         this.ctx = ctx;
     }
 
     // EXAMPLE 1
     // if all you need is a sub-set of columns then 
-    // avoid (or, at least pay attention to) these approach 
+    // avoid (or, at least pay attention to) these approaches 
     // since they (may) fetches too much data (all columns)
     public void findOrderAllFields() {
 
@@ -49,19 +50,19 @@ public class ClassicModelsRepository {
                         .where(ORDER.ORDER_ID.eq(10101L))
                         .fetch()
         );
-        
+
         System.out.println("EXAMPLE 1.2\n"
                 + ctx.selectFrom(ORDER)
                         .where(ORDER.ORDER_ID.eq(10101L))
                         .fetch()
-        );        
-        
+        );
+
         System.out.println("EXAMPLE 1.3\n"
                 + ctx.select(ORDER.fields())
                         .from(ORDER)
                         .where(ORDER.ORDER_ID.eq(10101L))
                         .fetch()
-        );                
+        );
 
         /*
         select
@@ -77,7 +78,7 @@ public class ClassicModelsRepository {
                         .where(ORDER.ORDER_ID.eq(10101L))
                         .fetch()
         );
-        
+
         /*
         select 
           `classicmodels`.`order`.`order_id`, 
@@ -94,7 +95,7 @@ public class ClassicModelsRepository {
              = `classicmodels`.`orderdetail`.`order_id` 
         where 
           `classicmodels`.`order`.`order_id` = ?        
-        */
+         */
         System.out.println("EXAMPLE 1.5\n"
                 + ctx.select(ORDER.fields())
                         .select(ORDERDETAIL.QUANTITY_ORDERED)
@@ -121,7 +122,7 @@ public class ClassicModelsRepository {
       `classicmodels`.`order`.`order_id` = ?
      */
     public void findOrderExplicitFields() {
-        
+
         System.out.println("EXAMPLE 2\n"
                 + ctx.select(ORDER.ORDER_ID, ORDER.ORDER_DATE,
                         ORDER.REQUIRED_DATE, ORDER.SHIPPED_DATE, ORDER.CUSTOMER_NUMBER)
@@ -146,7 +147,7 @@ public class ClassicModelsRepository {
       `classicmodels`.`order`.`order_id` = ?
      */
     public void findOrderAsteriskExcept() {
-        
+
         System.out.println("EXAMPLE 3\n"
                 + ctx.select(asterisk().except(ORDER.COMMENTS, ORDER.STATUS))
                         .from(ORDER)
@@ -167,7 +168,7 @@ public class ClassicModelsRepository {
        = `classicmodels`.`sale`.`employee_number`
      */
     public void findOrderAndSale() {
-        
+
         System.out.println("EXAMPLE 4\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, SALE.asterisk())
                         .from(EMPLOYEE)
@@ -194,7 +195,7 @@ public class ClassicModelsRepository {
        = `classicmodels`.`sale`.`employee_number`
      */
     public void findOrderExceptAndSale() {
-        
+
         System.out.println("EXAMPLE 5\n"
                 + ctx.select(EMPLOYEE.asterisk().except(EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.OFFICE_CODE),
                         SALE.asterisk())
@@ -221,7 +222,7 @@ public class ClassicModelsRepository {
       `classicmodels`.`office`    
      */
     public void findOfficeUseAliasForCity() {
-        
+
         System.out.println("EXAMPLE 6\n"
                 + ctx.select(OFFICE.CITY.as("location"),
                         OFFICE.asterisk().except(OFFICE.CITY))
@@ -249,7 +250,7 @@ public class ClassicModelsRepository {
       `classicmodels`.`office`    
      */
     public void findOfficeUseNvlForCity() {
-        
+
         System.out.println("EXAMPLE 7\n"
                 + ctx.select(nvl(OFFICE.CITY, "N/A"),
                         OFFICE.asterisk().except(OFFICE.CITY))
@@ -271,7 +272,7 @@ public class ClassicModelsRepository {
       `classicmodels`.`sale`    
      */
     public void findSaleGt5000() {
-        
+
         System.out.println("EXAMPLE 8\n"
                 + ctx.select(field(SALE.SALE_.gt(5000.0)).as("saleGt5000"),
                         SALE.asterisk().except(SALE.SALE_))
@@ -293,7 +294,7 @@ public class ClassicModelsRepository {
       `classicmodels`.`sale`    
      */
     public void findSaleMul025() {
-        
+
         System.out.println("EXAMPLE 9\n"
                 + ctx.select(field(SALE.SALE_.mul(0.25)).as("saleMul025"),
                         SALE.asterisk().except(SALE.SALE_))
@@ -303,23 +304,27 @@ public class ClassicModelsRepository {
     }
 
     // EXAMPLE 10
-    /*
-    select
-      `classicmodels`.`employee`.`first_name`,
-      `classicmodels`.`employee`.`last_name`,
-      `classicmodels`.`employee`.`salary`
-    from
-      `classicmodels`.`employee`
-    limit 10
-     */
-    public void findEmployeeLimit() {
-        
-        System.out.println("EXAMPLE 10\n"
-                + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
-                        .from(EMPLOYEE)
-                        .limit(10)
+    // Consider reading: https://blog.jooq.org/2014/05/07/how-to-implement-sort-indirection-in-sql/
+    public void findOfficeInCityByCertainSort() {
+
+        String[] citiesArr = {"Paris", "Tokyo", "Boston"};
+        System.out.println("EXAMPLE 10.1\n"
+                + ctx.select(OFFICE.CITY, OFFICE.COUNTRY, OFFICE.OFFICE_CODE)
+                        .from(OFFICE)
+                        .where(OFFICE.CITY.in(citiesArr))
+                        .orderBy(OFFICE.CITY.sortAsc(citiesArr)) 
                         .fetch()
         );
+        
+        Map<String, Integer> citiesMap = Map.of("Paris", 1, "Tokyo", 3, "Boston", 2);
+        System.out.println("EXAMPLE 10.2\n"
+                + ctx.select(OFFICE.CITY, OFFICE.COUNTRY, OFFICE.OFFICE_CODE)
+                        .from(OFFICE)
+                        .where(OFFICE.CITY.in(citiesMap.keySet()))
+                        .orderBy(OFFICE.CITY.sort(citiesMap)) 
+                        .fetch()
+        );
+        
     }
 
     // EXAMPLE 11
@@ -330,16 +335,14 @@ public class ClassicModelsRepository {
       `classicmodels`.`employee`.`salary`
     from
       `classicmodels`.`employee`
-    limit 10 
-    offset 5
+    limit 10
      */
-    public void findEmployeeLimitOffset() {
-        
+    public void findEmployeeLimit() {
+
         System.out.println("EXAMPLE 11\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
                         .from(EMPLOYEE)
                         .limit(10)
-                        .offset(5)
                         .fetch()
         );
     }
@@ -355,9 +358,31 @@ public class ClassicModelsRepository {
     limit 10 
     offset 5
      */
-    public void findEmployeeLimitAndOffset() {
-        
+    public void findEmployeeLimitOffset() {
+
         System.out.println("EXAMPLE 12\n"
+                + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
+                        .from(EMPLOYEE)
+                        .limit(10)
+                        .offset(5)
+                        .fetch()
+        );
+    }
+
+    // EXAMPLE 13
+    /*
+    select
+      `classicmodels`.`employee`.`first_name`,
+      `classicmodels`.`employee`.`last_name`,
+      `classicmodels`.`employee`.`salary`
+    from
+      `classicmodels`.`employee`
+    limit 10 
+    offset 5
+     */
+    public void findEmployeeLimitAndOffset() {
+
+        System.out.println("EXAMPLE 13\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
                         .from(EMPLOYEE)
                         .limit(5, 10)
@@ -365,7 +390,7 @@ public class ClassicModelsRepository {
         );
     }
 
-    // EXAMPLE 13
+    // EXAMPLE 14
     /*
     select
       `classicmodels`.`office`.`city`,
@@ -390,21 +415,21 @@ public class ClassicModelsRepository {
       ?
      */
     public void decomposeSelect() {
-        
+
         SelectQuery select = ctx.select()
                 .from(OFFICE, EMPLOYEE, CUSTOMER, PAYMENT).limit(100).getQuery();
-        
+
         select.addSelect(OFFICE.CITY, OFFICE.COUNTRY);
         select.addSelect(EMPLOYEE.JOB_TITLE);
         select.addSelect(CUSTOMER.asterisk().except(CUSTOMER.CONTACT_FIRST_NAME, CUSTOMER.CONTACT_LAST_NAME));
         select.addSelect(PAYMENT.fields());
-        
-        System.out.println("EXAMPLE 13\n"
+
+        System.out.println("EXAMPLE 14\n"
                 + select.fetch()
         );
     }
 
-    // EXAMPLE 14
+    // EXAMPLE 15
     /*    
     select
       `classicmodels`.`office`.`city`,
@@ -427,25 +452,25 @@ public class ClassicModelsRepository {
       `classicmodels`.`payment`
     limit
       ?
-     */    
+     */
     public void decomposeSelectAndFrom() {
-        
+
         SelectQuery select = ctx.select().limit(100).getQuery();
-        
-        select.addFrom(OFFICE);        
+
+        select.addFrom(OFFICE);
         select.addSelect(OFFICE.CITY, OFFICE.COUNTRY);
-        
+
         select.addFrom(EMPLOYEE);
         select.addSelect(EMPLOYEE.JOB_TITLE);
-        
+
         select.addFrom(CUSTOMER);
         select.addSelect(CUSTOMER.asterisk().except(CUSTOMER.CONTACT_FIRST_NAME, CUSTOMER.CONTACT_LAST_NAME));
-        
+
         select.addFrom(PAYMENT);
         select.addSelect(PAYMENT.fields());
-        
-        System.out.println("EXAMPLE 14\n"
+
+        System.out.println("EXAMPLE 15\n"
                 + select.fetch()
         );
-    }    
+    }
 }
