@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.app</groupId>
-    <artifactId>jOOQSpringBootDaoQueryMySQL</artifactId>
+    <artifactId>jOOQSpringBootRecordCRUDMySQL</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQSpringBootDaoQueryMySQL</name>
+    <name>jOOQSpringBootRecordCRUDMySQL</name>
     <description>jOOQ - Spring Boot app</description>    
 
     <parent>
@@ -181,27 +181,12 @@
                                     <!-- Give enough time to jOOQ to trigger the queries needed for generating sources 
                                     (default is 5 seconds) -->
                                     <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>
-                                </database>
+                                </database>                                                                
                                 
-                                <!-- Rename the generated DAOs classes -->                      
-                                <strategy>
-                                    <matchers>
-                                        <tables>
-                                            <table>
-                                                <daoClass>                                                         
-                                                    <expression>$0_Repository</expression>
-                                                    <transform>PASCAL</transform>                                                                                      
-                                                </daoClass>
-                                            </table>
-                                        </tables>
-                                    </matchers>
-                                </strategy>
-                                
-                                <!-- jOOQ will generate POJOs and DAOs in your behalf -->
+                               <!-- jOOQ will generate POJOs in your behalf -->
                                 <generate>
-                                    <daos>true</daos>                                   
+                                    <pojos>true</pojos> 
                                     <validationAnnotations>true</validationAnnotations>                            
-                                    <springAnnotations>true</springAnnotations>   
                                 </generate>
                                 
                                 <target>
