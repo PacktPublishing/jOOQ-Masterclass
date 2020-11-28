@@ -449,6 +449,15 @@ public class ClassicModelsRepository {
         );
     }
     
+    // EXAMPLE 12
+    /*
+    select 
+      distinct count(*) over () as "sales" 
+    from 
+      "public"."sale" 
+    group by 
+      "public"."sale"."employee_number"    
+    */
     public void countDistinctSalesByEmployeeNumber() {
 
         System.out.println("EXAMPLE 12 (count result): "
