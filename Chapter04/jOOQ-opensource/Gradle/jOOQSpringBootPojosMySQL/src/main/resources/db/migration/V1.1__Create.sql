@@ -79,6 +79,7 @@ CREATE TABLE `sale` (
   `fiscal_year` int NOT NULL,  
   `sale` float NOT NULL,  
   `employee_number` bigint DEFAULT NULL,  
+  `hot` boolean DEFAULT FALSE,  
   PRIMARY KEY (`sale_id`),  
   KEY `employee_number` (`employee_number`),  
   CONSTRAINT `sales_ibfk_1` FOREIGN KEY (`employee_number`) REFERENCES `employee` (`employee_number`)
@@ -208,6 +209,7 @@ CREATE TABLE `payment` (
   `invoice_amount` decimal(10,2) NOT NULL,
   `caching_date` timestamp DEFAULT NULL,
   PRIMARY KEY (`customer_number`,`check_number`),
+  CONSTRAINT unique_check_number UNIQUE(check_number),
   CONSTRAINT `payments_ibfk_1` FOREIGN KEY (`customer_number`) REFERENCES `customer` (`customer_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 

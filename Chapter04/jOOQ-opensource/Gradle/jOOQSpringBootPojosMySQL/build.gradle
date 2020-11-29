@@ -22,7 +22,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'mysql:mysql-connector-java'
-    implementation 'org.flywaydb:flyway-core'    
+    implementation 'org.flywaydb:flyway-core'   
+    implementation 'com.sun.xml.bind:jaxb-impl:2.3.0'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
@@ -46,7 +47,7 @@ flyway{
 }
 
 jooq {
-    version = '3.13.5'
+    version = '3.14.4'
     edition = nu.studer.gradle.jooq.JooqEdition.OSS
 
     configurations {
