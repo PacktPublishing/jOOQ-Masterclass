@@ -1,9 +1,9 @@
 plugins {
-    id 'org.springframework.boot' version '2.3.3.RELEASE'
-    id 'io.spring.dependency-management' version '1.0.10.RELEASE'   
-    id "org.flywaydb.flyway" version "7.2.0"
-    id 'nu.studer.jooq' version '5.2'
-    id 'java'
+	id 'org.springframework.boot' version '2.3.3.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.10.RELEASE'    
+        id 'org.flywaydb.flyway' version '7.2.0'        
+        id 'nu.studer.jooq' version '5.2'
+	id 'java'
 }
 
 group = 'com.classicmodels'
@@ -12,7 +12,7 @@ sourceCompatibility = '14'
 targetCompatibility = '14'
 
 repositories {
-    mavenCentral()
+	mavenCentral()
 }
 
 dependencies {        
@@ -22,6 +22,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'mysql:mysql-connector-java'
     implementation 'org.flywaydb:flyway-core'
+    implementation 'com.sun.xml.bind:jaxb-impl:2.3.0'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
@@ -45,7 +46,7 @@ flyway{
 }
 
 jooq {
-    version = '3.13.5'
+    version = '3.14.4'
     edition = nu.studer.gradle.jooq.JooqEdition.OSS
 
     configurations {
