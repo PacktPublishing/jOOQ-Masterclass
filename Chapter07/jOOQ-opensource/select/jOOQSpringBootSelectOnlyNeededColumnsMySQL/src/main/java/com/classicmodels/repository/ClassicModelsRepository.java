@@ -8,11 +8,13 @@ import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Sale.SALE;
+import org.jooq.Comparator;
 import org.jooq.DSLContext;
 import org.jooq.SelectQuery;
 import static org.jooq.impl.DSL.asterisk;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.nvl;
+import static org.jooq.impl.DSL.select;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -315,7 +317,7 @@ public class ClassicModelsRepository {
       `classicmodels`.`office`.`city` in (?, ?, ?) 
     order by 
       case `classicmodels`.`office`.`city` when ? then 0 when ? then 1 when ? then 2 end asc    
-    */
+     */
     // Consider reading: https://blog.jooq.org/2014/05/07/how-to-implement-sort-indirection-in-sql/
     public void findOfficeInCityByCertainSort() {
 
@@ -324,36 +326,54 @@ public class ClassicModelsRepository {
                 + ctx.select(OFFICE.CITY, OFFICE.COUNTRY, OFFICE.OFFICE_CODE)
                         .from(OFFICE)
                         .where(OFFICE.CITY.in(citiesArr))
-                        .orderBy(OFFICE.CITY.sortAsc(citiesArr)) 
+                        .orderBy(OFFICE.CITY.sortAsc(citiesArr))
                         .fetch()
         );
-        
+
         Map<String, Integer> citiesMap = Map.of("Paris", 1, "Tokyo", 3, "Boston", 2);
         System.out.println("EXAMPLE 10.2\n"
                 + ctx.select(OFFICE.CITY, OFFICE.COUNTRY, OFFICE.OFFICE_CODE)
                         .from(OFFICE)
                         .where(OFFICE.CITY.in(citiesMap.keySet()))
-                        .orderBy(OFFICE.CITY.sort(citiesMap)) 
+                        .orderBy(OFFICE.CITY.sort(citiesMap))
                         .fetch()
-        );      
+        );
     }
 
     // EXAMPLE 11
     /*
-    select
-      `classicmodels`.`employee`.`first_name`,
-      `classicmodels`.`employee`.`last_name`,
-      `classicmodels`.`employee`.`salary`
-    from
-      `classicmodels`.`employee`
-    limit 10
+    select 
+      `classicmodels`.`employee`.`employee_number`, 
+      `classicmodels`.`employee`.`last_name`, 
+      `classicmodels`.`employee`.`first_name`, 
+      `classicmodels`.`employee`.`extension`, 
+      `classicmodels`.`employee`.`email`, 
+      `classicmodels`.`employee`.`office_code`, 
+      `classicmodels`.`employee`.`salary`, 
+      `classicmodels`.`employee`.`reports_to`, 
+      `classicmodels`.`employee`.`job_title` 
+    from 
+      `classicmodels`.`employee` 
+    where 
+      `classicmodels`.`employee`.`salary` in (
+        select 
+          `classicmodels`.`employee`.`salary` 
+        from 
+          `classicmodels`.`employee` 
+        where 
+          `classicmodels`.`employee`.`salary` < ?
+      ) 
+    order by 
+      `classicmodels`.`employee`.`salary`    
      */
-    public void findEmployeeLimit() {
+    public void findEmployeeSalary60000(boolean isSaleRep) {
 
         System.out.println("EXAMPLE 11\n"
-                + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
+                + ctx.select()
                         .from(EMPLOYEE)
-                        .limit(10)
+                        .where(EMPLOYEE.SALARY.compare(isSaleRep ? Comparator.IN : Comparator.NOT_IN,
+                                select(EMPLOYEE.SALARY).from(EMPLOYEE).where(EMPLOYEE.SALARY.lt(60000))))
+                        .orderBy(EMPLOYEE.SALARY)
                         .fetch()
         );
     }
@@ -366,16 +386,14 @@ public class ClassicModelsRepository {
       `classicmodels`.`employee`.`salary`
     from
       `classicmodels`.`employee`
-    limit 10 
-    offset 5
+    limit 10
      */
-    public void findEmployeeLimitOffset() {
+    public void findEmployeeLimit() {
 
         System.out.println("EXAMPLE 12\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
                         .from(EMPLOYEE)
                         .limit(10)
-                        .offset(5)
                         .fetch()
         );
     }
@@ -391,9 +409,31 @@ public class ClassicModelsRepository {
     limit 10 
     offset 5
      */
-    public void findEmployeeLimitAndOffset() {
+    public void findEmployeeLimitOffset() {
 
         System.out.println("EXAMPLE 13\n"
+                + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
+                        .from(EMPLOYEE)
+                        .limit(10)
+                        .offset(5)
+                        .fetch()
+        );
+    }
+
+    // EXAMPLE 14
+    /*
+    select
+      `classicmodels`.`employee`.`first_name`,
+      `classicmodels`.`employee`.`last_name`,
+      `classicmodels`.`employee`.`salary`
+    from
+      `classicmodels`.`employee`
+    limit 10 
+    offset 5
+     */
+    public void findEmployeeLimitAndOffset() {
+
+        System.out.println("EXAMPLE 14\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
                         .from(EMPLOYEE)
                         .limit(5, 10)
@@ -401,7 +441,7 @@ public class ClassicModelsRepository {
         );
     }
 
-    // EXAMPLE 14
+    // EXAMPLE 15
     /*
     select
       `classicmodels`.`office`.`city`,
@@ -435,12 +475,12 @@ public class ClassicModelsRepository {
         select.addSelect(CUSTOMER.asterisk().except(CUSTOMER.CONTACT_FIRST_NAME, CUSTOMER.CONTACT_LAST_NAME));
         select.addSelect(PAYMENT.fields());
 
-        System.out.println("EXAMPLE 14\n"
+        System.out.println("EXAMPLE 15\n"
                 + select.fetch()
         );
     }
 
-    // EXAMPLE 15
+    // EXAMPLE 16
     /*    
     select
       `classicmodels`.`office`.`city`,
@@ -480,7 +520,7 @@ public class ClassicModelsRepository {
         select.addFrom(PAYMENT);
         select.addSelect(PAYMENT.fields());
 
-        System.out.println("EXAMPLE 15\n"
+        System.out.println("EXAMPLE 16\n"
                 + select.fetch()
         );
     }
