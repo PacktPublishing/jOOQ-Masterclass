@@ -22,5 +22,6 @@ public class ClassicModelsService {
         classicModelsRepository.updateProductBuyPriceWithFirstPriceEach();                         // EXAMPLE 7
         classicModelsRepository.updateOfficeReturning();                                           // EXAMPLE 8
         classicModelsRepository.updateEmployeeSalaryAsAvgSaleAndCustomersCreditAsDoubleSalary();   // EXAMPLE 9
+        classicModelsRepository.updateSaleHot();                                                   // EXAMPLE 10
     }
 }

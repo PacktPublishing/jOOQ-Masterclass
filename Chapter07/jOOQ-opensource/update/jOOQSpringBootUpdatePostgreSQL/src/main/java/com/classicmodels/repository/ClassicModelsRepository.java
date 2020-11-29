@@ -18,6 +18,7 @@ import static org.jooq.impl.DSL.row;
 import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.val;
 import static org.jooq.impl.DSL.avg;
+import static org.jooq.impl.DSL.field;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -320,6 +321,27 @@ public class ClassicModelsRepository {
                                         .returningResult(EMPLOYEE.SALARY.coerce(BigDecimal.class))
                                         .fetchOne().value1().multiply(BigDecimal.valueOf(2))))
                         .where(CUSTOMER.SALES_REP_EMPLOYEE_NUMBER.eq(1504L))
+                        .execute()
+        );
+    }
+    
+    // EXAMPLE 10
+    /*
+    update 
+      "public"."sale" 
+    set 
+      "hot" = (
+        "public"."sale"."fiscal_year" > ?
+      ) 
+    where 
+      "public"."sale"."employee_number" = ?    
+    */
+    public void updateSaleHot() {
+
+        System.out.println("EXAMPLE 10 (affected rows): "
+                + ctx.update(SALE)
+                        .set(SALE.HOT.coerce(Boolean.class), field(SALE.FISCAL_YEAR.gt(2004)))
+                        .where(SALE.EMPLOYEE_NUMBER.eq(1370L))
                         .execute()
         );
     }
