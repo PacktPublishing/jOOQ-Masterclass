@@ -26,5 +26,6 @@ public class ClassicModelsService {
         classicModelsRepository.insertRecordAfterResettingPK();         // EXAMPLE 10
         classicModelsRepository.usingFunctionsInInsert();               // EXAMPLE 11   
         classicModelsRepository.insertDepartment();                     // EXAMPLE 12
+        classicModelsRepository.insertOrderBetweenDates();              // EXAMPLE 13
     }
 }

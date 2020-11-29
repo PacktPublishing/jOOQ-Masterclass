@@ -10,6 +10,7 @@ import java.util.Optional;
 import static jooq.generated.Routines.netpriceeach;
 import static jooq.generated.tables.Department.DEPARTMENT;
 import static jooq.generated.tables.Office.OFFICE;
+import jooq.generated.tables.Order;
 import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import static jooq.generated.tables.Payment.PAYMENT;
@@ -24,6 +25,8 @@ import static org.jooq.impl.DSL.choose;
 import static org.jooq.impl.DSL.coalesce;
 import static org.jooq.impl.DSL.inline;
 import static org.jooq.impl.DSL.lower;
+import static org.jooq.impl.DSL.select;
+import static org.jooq.impl.DSL.selectFrom;
 import static org.jooq.impl.DSL.upper;
 import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
@@ -597,6 +600,67 @@ public class ClassicModelsRepository {
                                                 .otherwise(department.getPhone()),
                                         inline("+40 080 000")),
                                 val(department.getCode()), val(department.getOfficeCode())
+                        )
+                        .execute()
+        );
+    }
+    
+    // EXAMPLE 13
+    /*
+    insert into [classicmodels].[dbo].[order] (
+      [order_date], [required_date], [shipped_date], 
+      [status], [comments], [customer_number]
+    ) 
+    select 
+      ?, 
+      ?, 
+      ?, 
+      ?, 
+      ?, 
+      ? 
+    where 
+      not (
+        exists (
+          select 
+            [classicmodels].[dbo].[order].[order_id], 
+            [classicmodels].[dbo].[order].[order_date], 
+            [classicmodels].[dbo].[order].[required_date], 
+            [classicmodels].[dbo].[order].[shipped_date], 
+            [classicmodels].[dbo].[order].[status], 
+            [classicmodels].[dbo].[order].[comments], 
+            [classicmodels].[dbo].[order].[customer_number] 
+          from 
+            [classicmodels].[dbo].[order] 
+          where 
+            (
+              (
+                ? between [classicmodels].[dbo].[order].[order_date] 
+                and [classicmodels].[dbo].[order].[shipped_date] 
+                or ? between [classicmodels].[dbo].[order].[order_date] 
+                and [classicmodels].[dbo].[order].[shipped_date]
+              ) 
+              and ? = [classicmodels].[dbo].[order].[customer_number]
+            )
+        )
+      )
+     */
+    public void insertOrderBetweenDates() {
+
+        Order o = ORDER;
+
+        System.out.println("EXAMPLE 13 (affected rows): "
+                + ctx.insertInto(o)
+                        .columns(o.ORDER_DATE, o.REQUIRED_DATE, o.SHIPPED_DATE,
+                                o.STATUS, o.COMMENTS, o.CUSTOMER_NUMBER)
+                        .select(
+                                select(val(LocalDate.of(2010, 10, 10)), val(LocalDate.of(2010, 11, 1)),
+                                        val(LocalDate.of(2010, 11, 5)), val("Shipped"), val(""), val(100L))
+                                        .whereNotExists(
+                                                selectFrom(o)
+                                                        .where(val(LocalDate.of(2010, 10, 10)).between(o.ORDER_DATE).and(o.SHIPPED_DATE)
+                                                                .or(val(LocalDate.of(2010, 11, 5)).between(o.ORDER_DATE).and(o.SHIPPED_DATE)))
+                                                        .and(val(100L).eq(o.CUSTOMER_NUMBER))
+                                        )
                         )
                         .execute()
         );
