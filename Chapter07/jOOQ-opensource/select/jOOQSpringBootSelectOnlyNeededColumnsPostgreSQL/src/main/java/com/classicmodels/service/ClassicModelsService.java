@@ -23,10 +23,11 @@ public class ClassicModelsService {
         classicModelsRepository.findSaleGt5000();                 // EXAMPLE 8
         classicModelsRepository.findSaleMul025();                 // EXAMPLE 9
         classicModelsRepository.findOfficeInCityByCertainSort();  // EXAMPLE 10    
-        classicModelsRepository.findEmployeeLimit();              // EXAMPLE 11
-        classicModelsRepository.findEmployeeLimitOffset();        // EXAMPLE 12
-        classicModelsRepository.findEmployeeLimitAndOffset();     // EXAMPLE 13                
-        classicModelsRepository.decomposeSelect();                // EXAMPLE 14
-        classicModelsRepository.decomposeSelectAndFrom();         // EXAMPLE 15
+        classicModelsRepository.findEmployeeSalary60000(true);    // EXAMPLE 11
+        classicModelsRepository.findEmployeeLimit();              // EXAMPLE 12
+        classicModelsRepository.findEmployeeLimitOffset();        // EXAMPLE 13
+        classicModelsRepository.findEmployeeLimitAndOffset();     // EXAMPLE 14                
+        classicModelsRepository.decomposeSelect();                // EXAMPLE 15
+        classicModelsRepository.decomposeSelectAndFrom();         // EXAMPLE 16
     }
 }

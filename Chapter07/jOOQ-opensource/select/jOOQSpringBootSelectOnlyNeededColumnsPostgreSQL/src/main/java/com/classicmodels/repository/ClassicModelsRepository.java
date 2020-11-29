@@ -8,11 +8,13 @@ import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Sale.SALE;
+import org.jooq.Comparator;
 import org.jooq.DSLContext;
 import org.jooq.SelectQuery;
 import static org.jooq.impl.DSL.asterisk;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.nvl;
+import static org.jooq.impl.DSL.select;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -330,6 +332,44 @@ public class ClassicModelsRepository {
     
     // EXAMPLE 11
     /*
+    select 
+      "public"."employee"."employee_number", 
+      "public"."employee"."last_name", 
+      "public"."employee"."first_name", 
+      "public"."employee"."extension", 
+      "public"."employee"."email", 
+      "public"."employee"."office_code", 
+      "public"."employee"."salary", 
+      "public"."employee"."reports_to", 
+      "public"."employee"."job_title" 
+    from 
+      "public"."employee" 
+    where 
+      "public"."employee"."salary" in (
+        select 
+          "public"."employee"."salary" 
+        from 
+          "public"."employee" 
+        where 
+          "public"."employee"."salary" < ?
+      ) 
+    order by 
+      "public"."employee"."salary"    
+     */
+    public void findEmployeeSalary60000(boolean isSaleRep) {
+
+        System.out.println("EXAMPLE 11\n"
+                + ctx.select()
+                        .from(EMPLOYEE)
+                        .where(EMPLOYEE.SALARY.compare(isSaleRep ? Comparator.IN : Comparator.NOT_IN,
+                                select(EMPLOYEE.SALARY).from(EMPLOYEE).where(EMPLOYEE.SALARY.lt(60000))))
+                        .orderBy(EMPLOYEE.SALARY)
+                        .fetch()
+        );
+    }
+    
+    // EXAMPLE 12
+    /*
     select
       "public"."employee"."first_name",
       "public"."employee"."last_name",
@@ -340,32 +380,10 @@ public class ClassicModelsRepository {
      */
     public void findEmployeeLimit() {
 
-        System.out.println("EXAMPLE 11\n"
-                + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
-                        .from(EMPLOYEE)
-                        .limit(10)
-                        .fetch()
-        );
-    }
-
-    // EXAMPLE 12
-    /*
-    select
-      "public"."employee"."first_name",
-      "public"."employee"."last_name",
-      "public"."employee"."salary"
-    from
-      "public"."employee"
-    limit
-      ? offset ?
-     */
-    public void findEmployeeLimitOffset() {
-
         System.out.println("EXAMPLE 12\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
                         .from(EMPLOYEE)
                         .limit(10)
-                        .offset(5)
                         .fetch()
         );
     }
@@ -381,9 +399,31 @@ public class ClassicModelsRepository {
     limit
       ? offset ?
      */
-    public void findEmployeeLimitAndOffset() {
+    public void findEmployeeLimitOffset() {
 
         System.out.println("EXAMPLE 13\n"
+                + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
+                        .from(EMPLOYEE)
+                        .limit(10)
+                        .offset(5)
+                        .fetch()
+        );
+    }
+
+    // EXAMPLE 14
+    /*
+    select
+      "public"."employee"."first_name",
+      "public"."employee"."last_name",
+      "public"."employee"."salary"
+    from
+      "public"."employee"
+    limit
+      ? offset ?
+     */
+    public void findEmployeeLimitAndOffset() {
+
+        System.out.println("EXAMPLE 14\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
                         .from(EMPLOYEE)
                         .limit(5, 10)
@@ -391,7 +431,7 @@ public class ClassicModelsRepository {
         );
     }
 
-    // EXAMPLE 14
+    // EXAMPLE 15
     /*
     select
       "public"."office"."city",
@@ -424,12 +464,12 @@ public class ClassicModelsRepository {
         select.addSelect(CUSTOMER.asterisk().except(CUSTOMER.CONTACT_FIRST_NAME, CUSTOMER.CONTACT_LAST_NAME));
         select.addSelect(PAYMENT.fields());
 
-        System.out.println("EXAMPLE 14\n"
+        System.out.println("EXAMPLE 15\n"
                 + select.fetch()
         );
     }
 
-    // EXAMPLE 15
+    // EXAMPLE 16
     /*    
     select
       "public"."office"."city",
@@ -468,7 +508,7 @@ public class ClassicModelsRepository {
         select.addFrom(PAYMENT);
         select.addSelect(PAYMENT.fields());
 
-        System.out.println("EXAMPLE 15\n"
+        System.out.println("EXAMPLE 16\n"
                 + select.fetch()
         );
     }
