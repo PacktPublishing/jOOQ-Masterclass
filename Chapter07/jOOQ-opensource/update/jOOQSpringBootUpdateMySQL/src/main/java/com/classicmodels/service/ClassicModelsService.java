@@ -18,6 +18,7 @@ public class ClassicModelsService {
         classicModelsRepository.updateRowOffice();                                // EXAMPLE 2              
         classicModelsRepository.updateCustomerCreditLimitAsMaxPaymentInvoice();   // EXAMPLE 3
         classicModelsRepository.updateEmployeeSalaryBySaleCount();                // EXAMPLE 4
-        classicModelsRepository.updateNewRecordOffice();                          // EXAMPLE 5
+        classicModelsRepository.updateSaleHot();                                  // EXAMPLE 5
+        classicModelsRepository.updateNewRecordOffice();                          // EXAMPLE 6                
     }
 }

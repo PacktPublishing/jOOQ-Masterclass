@@ -11,6 +11,7 @@ import jooq.generated.tables.records.OfficeRecord;
 import org.jooq.DSLContext;
 import org.jooq.UpdateQuery;
 import static org.jooq.impl.DSL.count;
+import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.row;
 import static org.jooq.impl.DSL.select;
@@ -45,13 +46,13 @@ public class ClassicModelsRepository {
                         .where(OFFICE.OFFICE_CODE.eq("1"))
                         .execute()
         );
-        
+
         UpdateQuery uq = ctx.updateQuery(OFFICE);
         uq.addValue(OFFICE.CITY, "Craiova");
         uq.addValue(OFFICE.COUNTRY, "Romania");
         uq.addConditions(OFFICE.OFFICE_CODE.eq("1"));
         // uq.execute();
-        System.out.println("EXAMPLE 1.2 (query): " + uq.getSQL());                
+        System.out.println("EXAMPLE 1.2 (query): " + uq.getSQL());
     }
 
     // EXAMPLE 2
@@ -130,7 +131,28 @@ public class ClassicModelsRepository {
         );
     }
 
-    // EXAMPLE 5    
+    // EXAMPLE 5
+    /*
+    update 
+      `classicmodels`.`sale` 
+    set 
+      `classicmodels`.`sale`.`hot` = (
+        `classicmodels`.`sale`.`fiscal_year` > ?
+      ) 
+    where 
+      `classicmodels`.`sale`.`employee_number` = ?    
+    */
+    public void updateSaleHot() {
+
+        System.out.println("EXAMPLE 5 (affected rows): "
+                + ctx.update(SALE)
+                        .set(SALE.HOT.coerce(Boolean.class), field(SALE.FISCAL_YEAR.gt(2004)))
+                        .where(SALE.EMPLOYEE_NUMBER.eq(1370L))
+                        .execute()
+        );
+    }
+
+    // EXAMPLE 6
     public void updateNewRecordOffice() {
 
         /* approach 1 */
@@ -147,7 +169,7 @@ public class ClassicModelsRepository {
         where
           `classicmodels`.`office`.`office_code` = ?
          */
-        System.out.println("EXAMPLE 5.1 (affected rows): "
+        System.out.println("EXAMPLE 6.1 (affected rows): "
                 + ctx.update(OFFICE)
                         .set(or)
                         .where(OFFICE.OFFICE_CODE.eq("1"))
@@ -165,7 +187,7 @@ public class ClassicModelsRepository {
         where
           `classicmodels`.`office`.`office_code` = ?
          */
-        System.out.println("EXAMPLE 5.2 (affected rows): "
+        System.out.println("EXAMPLE 6.2 (affected rows): "
                 + ctx.newRecord(OFFICE)
                         .value1("1") // the ID is present in the WHERE clause
                         .value2("Parma")
@@ -188,11 +210,11 @@ public class ClassicModelsRepository {
         where
           `classicmodels`.`office`.`office_code` = ?
          */
-        System.out.println("EXAMPLE 5.3 (affected rows): "
+        System.out.println("EXAMPLE 6.3 (affected rows): "
                 + ctx.update(OFFICE)
                         .set(orFromOp)
                         .where(OFFICE.OFFICE_CODE.eq("1"))
                         .execute()
         );
-    }        
+    }
 }

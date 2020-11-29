@@ -79,6 +79,7 @@ CREATE TABLE `sale` (
   `fiscal_year` int NOT NULL,  
   `sale` float NOT NULL,  
   `employee_number` bigint DEFAULT NULL,  
+  `hot` boolean DEFAULT FALSE,  
   PRIMARY KEY (`sale_id`),  
   KEY `employee_number` (`employee_number`),  
   CONSTRAINT `sales_ibfk_1` FOREIGN KEY (`employee_number`) REFERENCES `employee` (`employee_number`)
