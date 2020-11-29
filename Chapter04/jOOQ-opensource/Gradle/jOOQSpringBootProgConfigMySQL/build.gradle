@@ -1,0 +1,35 @@
+plugins {
+	id 'org.springframework.boot' version '2.3.3.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.10.RELEASE'    
+        id 'org.flywaydb.flyway' version '7.2.0'        
+        id 'nu.studer.jooq' version '5.2'
+	id 'java'
+}
+
+group = 'com.classicmodels'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '14'
+targetCompatibility = '14'
+
+repositories {
+	mavenCentral()
+}
+
+jooq {
+  version = '3.14.4'  // if omiited, then the default is used
+  edition = nu.studer.gradle.jooq.JooqEdition.OSS  // jOOQ Open-Source is the default (can be omitted)
+}
+
+dependencies {        
+	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+	implementation 'org.springframework.boot:spring-boot-starter-jooq' 
+        implementation 'org.springframework.boot:spring-boot-starter-web' 
+        implementation 'org.jooq:jooq-codegen:3.14.4'
+        implementation 'mysql:mysql-connector-java'        
+        implementation 'org.flywaydb:flyway-core'   
+        implementation 'org.hibernate.validator:hibernate-validator'
+        implementation "com.sun.xml.bind:jaxb-impl:2.3.0"
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+}
