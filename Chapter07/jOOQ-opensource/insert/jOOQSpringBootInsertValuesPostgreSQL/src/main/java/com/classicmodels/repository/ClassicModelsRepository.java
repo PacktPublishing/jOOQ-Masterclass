@@ -12,6 +12,7 @@ import static jooq.generated.Sequences.ORDER_SEQ;
 import static jooq.generated.Sequences.SALE_SEQ;
 import static jooq.generated.tables.Department.DEPARTMENT;
 import static jooq.generated.tables.Office.OFFICE;
+import jooq.generated.tables.Order;
 import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Sale.SALE;
@@ -27,6 +28,8 @@ import static org.jooq.impl.DSL.coalesce;
 import static org.jooq.impl.DSL.inline;
 import static org.jooq.impl.DSL.rand;
 import static org.jooq.impl.DSL.round;
+import static org.jooq.impl.DSL.select;
+import static org.jooq.impl.DSL.selectFrom;
 import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -631,8 +634,67 @@ public class ClassicModelsRepository {
                         .execute()
         );
     }
-
+    
     // EXAMPLE 13
+    /*
+    insert into "public"."order" (
+      "order_date", "required_date", "shipped_date", 
+      "status", "comments", "customer_number"
+    ) 
+    select 
+      cast(? as date), 
+      cast(? as date), 
+      cast(? as date), 
+      ?, 
+      ?, 
+      ? 
+    where 
+      not exists (
+        select 
+          "public"."order"."order_id", 
+          "public"."order"."order_date", 
+          "public"."order"."required_date", 
+          "public"."order"."shipped_date", 
+          "public"."order"."status", 
+          "public"."order"."comments", 
+          "public"."order"."customer_number" 
+        from 
+          "public"."order" 
+        where 
+          (
+            (
+              cast(? as date) between "public"."order"."order_date" 
+              and "public"."order"."shipped_date" 
+              or cast(? as date) between "public"."order"."order_date" 
+              and "public"."order"."shipped_date"
+            ) 
+            and ? = "public"."order"."customer_number"
+          )
+      )
+     */
+    public void insertOrderBetweenDates() {
+
+        Order o = ORDER;
+
+        System.out.println("EXAMPLE 13 (affected rows): "
+                + ctx.insertInto(o)
+                        .columns(o.ORDER_DATE, o.REQUIRED_DATE, o.SHIPPED_DATE,
+                                o.STATUS, o.COMMENTS, o.CUSTOMER_NUMBER)
+                        .select(
+                                select(val(LocalDate.of(2010, 10, 10)), val(LocalDate.of(2010, 11, 1)),
+                                        val(LocalDate.of(2010, 11, 5)), val("Shipped"), val(""), val(103L))
+                                        .whereNotExists(
+                                                selectFrom(o)
+                                                        .where(val(LocalDate.of(2010, 10, 10)).between(o.ORDER_DATE).and(o.SHIPPED_DATE)
+                                                                .or(val(LocalDate.of(2010, 11, 5)).between(o.ORDER_DATE).and(o.SHIPPED_DATE)))
+                                                        .and(val(103L).eq(o.CUSTOMER_NUMBER))
+                                        )
+                        )
+                        .execute()
+        );
+    }
+
+    // EXAMPLE 14
     /*
     insert into "public"."office" (
       "office_code","location","phone","address_line_first","address_line_second","postal_code","territory")
@@ -643,7 +705,7 @@ public class ClassicModelsRepository {
     public void insertAndUDTRecord() {
 
         LocationtypeRecord locationtypeRecord = new LocationtypeRecord("Boston", "USA", "EA");
-        System.out.println("EXAMPLE 13 (affected rows): "
+        System.out.println("EXAMPLE 14 (affected rows): "
                 + ctx.insertInto(OFFICE)
                         .values(Math.round(Math.random() * 10000) + "PK",
                                 locationtypeRecord, "+33 223 12", "addr1", "addr2", "659422", "MA")
