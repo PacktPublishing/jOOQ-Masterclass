@@ -95,6 +95,7 @@ CREATE TABLE sale (
   [fiscal_year] int NOT NULL,  
   [sale] float NOT NULL,  
   [employee_number] bigint DEFAULT NULL,  
+  [hot] bit DEFAULT 0,
   PRIMARY KEY ([sale_id])
 ,    
   CONSTRAINT [sales_ibfk_1] FOREIGN KEY ([employee_number]) REFERENCES employee ([employee_number])

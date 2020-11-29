@@ -16,8 +16,8 @@ import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.row;
 import static org.jooq.impl.DSL.select;
-import static org.jooq.impl.DSL.val;
 import static org.jooq.impl.DSL.avg;
+import static org.jooq.impl.DSL.field;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -342,6 +342,28 @@ public class ClassicModelsRepository {
                                         .returningResult(EMPLOYEE.SALARY.coerce(BigDecimal.class))
                                         .fetchOne().value1().multiply(BigDecimal.valueOf(2))))
                         .where(CUSTOMER.SALES_REP_EMPLOYEE_NUMBER.eq(1504L))
+                        .execute()
+        );
+    }
+    
+    // EXAMPLE 9
+    /*
+    update 
+      [classicmodels].[dbo].[sale] 
+    set 
+      [classicmodels].[dbo].[sale].[hot] = case when [classicmodels].[dbo].[sale].[fiscal_year] > ? 
+      then 1 when not (
+        [classicmodels].[dbo].[sale].[fiscal_year] > ?
+      ) then 0 end 
+    where 
+      [classicmodels].[dbo].[sale].[employee_number] = ?    
+    */
+    public void updateSaleHot() {
+
+        System.out.println("EXAMPLE 9 (affected rows): "
+                + ctx.update(SALE)
+                        .set(SALE.HOT.coerce(Boolean.class), field(SALE.FISCAL_YEAR.gt(2004)))
+                        .where(SALE.EMPLOYEE_NUMBER.eq(1370L))
                         .execute()
         );
     }
