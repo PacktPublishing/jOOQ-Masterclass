@@ -9,7 +9,6 @@ import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
-import org.jooq.Field;
 import org.jooq.SelectQuery;
 import static org.jooq.impl.DSL.avg;
 import static org.jooq.impl.DSL.count;
@@ -143,7 +142,7 @@ public class ClassicModelsRepository {
                 .groupBy(SALE.EMPLOYEE_NUMBER)
                 .asTable("saleTable"); // derived table
 
-        System.out.println("EXAMPLE 3.1\n"
+        System.out.println("EXAMPLE 3\n"
                 + ctx.select(SALE.SALE_ID, SALE.SALE_)
                         .from(SALE, saleTable)
                         .where(SALE.EMPLOYEE_NUMBER.eq(saleTable.field("sen").coerce(Long.class))
@@ -320,7 +319,7 @@ public class ClassicModelsRepository {
     public void employeesAndNumberOfSales() {
 
         // Table<?>
-        var salesTable = ctx.select(SALE.EMPLOYEE_NUMBER.as("sen"), count().as("sales"))
+        var salesTable = select(SALE.EMPLOYEE_NUMBER.as("sen"), count().as("sales"))
                 .from(SALE)
                 .groupBy(SALE.EMPLOYEE_NUMBER).asTable("saleTable");
 
@@ -377,13 +376,13 @@ public class ClassicModelsRepository {
     public void findSaleLtAvgAvg() {
 
         // Table<?>
-        var saleTable = ctx.select(avg(SALE.SALE_).as("avgs"), SALE.EMPLOYEE_NUMBER.as("sen"))
+        var saleTable = select(avg(SALE.SALE_).as("avgs"), SALE.EMPLOYEE_NUMBER.as("sen"))
                 .from(SALE)
                 .groupBy(SALE.EMPLOYEE_NUMBER)
                 .asTable("saleTable");
 
         // Table<?>
-        var saleTable2 = ctx.select()
+        var saleTable2 = select()
                 .from(saleTable)
                 .where(saleTable.field("avgs").coerce(BigDecimal.class)
                         .gt(select(avg(SALE.SALE_)).from(SALE)))
