@@ -58,6 +58,12 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 2.3\n"
                 + ctx.select(val(1)).fetch()
         );
+        
+        // select 1 as `A`, 'John' as `B`, 4333 as `C`, false as `D` from dual
+        System.out.println("EXAMPLE 2.4\n"
+                + ctx.select(val(1).as("A"), val("John").as("B"), 
+                        val(4333).as("C"), val(false).as("D")).fetch()
+        );
     }
 
     // EXAMPLE 3
