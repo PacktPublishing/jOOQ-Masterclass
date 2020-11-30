@@ -144,10 +144,7 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 3\n"
                 + ctx.select(SALE.SALE_ID, SALE.SALE_)
-                        .from(SALE, select(avg(SALE.SALE_).as("avgs"), SALE.EMPLOYEE_NUMBER.as("sen"))
-                                .from(SALE)
-                                .groupBy(SALE.EMPLOYEE_NUMBER)
-                                .asTable("saleTable"))
+                        .from(SALE, saleTable)
                         .where(SALE.EMPLOYEE_NUMBER.eq(saleTable.field("sen").coerce(Long.class))
                                 .and(SALE.SALE_.lt(saleTable.field("avgs").coerce(Double.class))))
                         .fetch()
