@@ -179,7 +179,7 @@ public class ClassicModelsRepository {
         Employee e1 = EMPLOYEE.as("e1");
         Employee e2 = EMPLOYEE.as("e2");
 
-        // Table<?>
+        // Table<Record2<BigDecimal, String>>
         var e3 = select(avg(e2.SALARY).as("avgsal"), e2.OFFICE_CODE)
                 .from(e2)
                 .groupBy(e2.OFFICE_CODE)
