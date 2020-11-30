@@ -21,12 +21,14 @@ DROP TABLE IF EXISTS customer CASCADE;
 DROP TABLE IF EXISTS customerdetail CASCADE;
 DROP TABLE IF EXISTS sale CASCADE;
 DROP TABLE IF EXISTS employee CASCADE;
+DROP TABLE IF EXISTS department CASCADE;
 DROP TABLE IF EXISTS office CASCADE;
 
 DROP SEQUENCE IF EXISTS manager_seq;
 DROP SEQUENCE IF EXISTS product_seq;
 DROP SEQUENCE IF EXISTS order_seq;
 DROP SEQUENCE IF EXISTS sale_seq;
+DROP SEQUENCE IF EXISTS customer_seq;
 
 /*Table structure for table `office` */
 
@@ -42,6 +44,22 @@ CREATE TABLE office (
   territory varchar(10) NOT NULL,
   PRIMARY KEY (office_code)
 ) ;
+
+/*Table structure for table `department` */
+
+CREATE TABLE department (
+  department_id serial NOT NULL,
+  name varchar(50) NOT NULL,
+  phone varchar(50) NOT NULL,
+  code smallint DEFAULT 1,
+  office_code varchar(10) NOT NULL,
+  PRIMARY KEY (department_id)
+,
+  CONSTRAINT department_ibfk_1 FOREIGN KEY (office_code) REFERENCES office (office_code)
+) ;
+
+CREATE INDEX office_code_dep ON department (office_code);
+ALTER SEQUENCE department_department_id_seq RESTART WITH 10;
 
 /*Table structure for table `employee` */
 
@@ -73,6 +91,7 @@ CREATE TABLE sale (
   fiscal_year int NOT NULL,  
   sale float NOT NULL,  
   employee_number bigint DEFAULT NULL,  
+  hot boolean DEFAULT FALSE,
   PRIMARY KEY (sale_id)
  ,  
   CONSTRAINT sales_ibfk_1 FOREIGN KEY (employee_number) REFERENCES employee (employee_number)
@@ -82,8 +101,10 @@ CREATE INDEX employee_number ON sale (employee_number);
 
 /*Table structure for table `customer` */
 
+CREATE SEQUENCE customer_seq START 1000000;
+
 CREATE TABLE customer (
-  customer_number bigint NOT NULL,
+  customer_number bigint NOT NULL DEFAULT NEXTVAL ('customer_seq'),
   customer_name varchar(50) NOT NULL,
   contact_last_name varchar(50) NOT NULL,
   contact_first_name varchar(50) NOT NULL,
@@ -114,7 +135,7 @@ CREATE TABLE customerdetail (
 
 /*Table structure for table `manager` */
 
-CREATE SEQUENCE manager_seq;
+CREATE SEQUENCE manager_seq START 1000000;
 
 CREATE TABLE manager (
   manager_id bigint NOT NULL DEFAULT NEXTVAL ('manager_seq'),
@@ -140,23 +161,24 @@ CREATE TABLE productline (
   text_description varchar(4000) DEFAULT NULL,
   html_description text,
   image bytea,
+  created_on date NOT NULL DEFAULT NOW(),
   PRIMARY KEY (product_line)
 ) ;
 
 /*Table structure for table `product` */
 
-CREATE SEQUENCE product_seq;
+CREATE SEQUENCE product_seq START 1000000;
 
 CREATE TABLE product (
   product_id bigint NOT NULL DEFAULT NEXTVAL ('product_seq'),
-  product_name varchar(70) NOT NULL,
-  product_line varchar(50) NOT NULL,
-  product_scale varchar(10) NOT NULL,
-  product_vendor varchar(50) NOT NULL,
-  product_description text NOT NULL,
-  quantity_in_stock smallint NOT NULL,
-  buy_price decimal(10,2) NOT NULL,
-  msrp decimal(10,2) NOT NULL,
+  product_name varchar(70) DEFAULT NULL,
+  product_line varchar(50) DEFAULT NULL,
+  product_scale varchar(10) DEFAULT NULL,
+  product_vendor varchar(50) DEFAULT NULL,
+  product_description text DEFAULT NULL,
+  quantity_in_stock smallint DEFAULT 0,
+  buy_price decimal(10,2) DEFAULT 0.0,
+  msrp decimal(10,2) DEFAULT 0.0,
   PRIMARY KEY (product_id)
  ,
   CONSTRAINT products_ibfk_1 FOREIGN KEY (product_line) REFERENCES productline (product_line)
@@ -208,7 +230,23 @@ CREATE TABLE payment (
   invoice_amount decimal(10,2) NOT NULL,
   caching_date timestamp DEFAULT NULL,
   PRIMARY KEY (customer_number,check_number),
+  CONSTRAINT unique_check_number UNIQUE(check_number),
   CONSTRAINT payments_ibfk_1 FOREIGN KEY (customer_number) REFERENCES customer (customer_number)
 ) ;
+
+/* USER-DEFINED FUNCTIONS */
+
+CREATE FUNCTION get_avg_sale(len_from int, len_to int) 
+  returns int language plpgsql AS $$ 
+DECLARE avg_count integer; 
+begin 
+  SELECT avg(sale.sale) 
+  INTO   avg_count 
+  FROM   sale 
+  WHERE  sale.sale BETWEEN len_from AND len_to; 
+   
+  return avg_count; 
+end; 
+$$;
 
 /* END */
