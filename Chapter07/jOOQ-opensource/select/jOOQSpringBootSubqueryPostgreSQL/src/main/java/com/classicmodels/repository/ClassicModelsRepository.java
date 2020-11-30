@@ -138,8 +138,8 @@ public class ClassicModelsRepository {
      */
     public void findSaleLtAvg() {
 
-        // Table<?> 
-        var saleTable = ctx.select(avg(SALE.SALE_).as("avgs"), SALE.EMPLOYEE_NUMBER.as("sen"))
+        // Table<Record2<BigDecimal, Long>>
+        var saleTable = select(avg(SALE.SALE_).as("avgs"), SALE.EMPLOYEE_NUMBER.as("sen"))
                 .from(SALE)
                 .groupBy(SALE.EMPLOYEE_NUMBER)
                 .asTable("saleTable"); // derived table
@@ -151,6 +151,40 @@ public class ClassicModelsRepository {
                                 .and(SALE.SALE_.lt(saleTable.field("avgs").coerce(Double.class))))
                         .fetch()
         );
+
+        /* same query with fields extracted as local variables
+        Field<BigDecimal> avgs = avg(SALE.SALE_).as("avgs");
+        Field<Long> sen = SALE.EMPLOYEE_NUMBER.as("sen");
+
+        // Table<Record2<BigDecimal, Long>>
+        var saleTable = select(avgs, sen)
+                .from(SALE)
+                .groupBy(SALE.EMPLOYEE_NUMBER)
+                .asTable("saleTable"); // derived table
+
+        System.out.println("EXAMPLE 3\n"
+                + ctx.select(SALE.SALE_ID, SALE.SALE_)
+                        .from(SALE, saleTable)
+                        .where(SALE.EMPLOYEE_NUMBER.eq(sen)
+                                .and(SALE.SALE_.lt(avgs.coerce(Double.class))))
+                        .fetch()
+        );
+         */
+        
+        /* same query with fields extracted as local variables and no derived table
+        Field<BigDecimal> avgs = avg(SALE.SALE_).as("avgs");
+        Field<Long> sen = SALE.EMPLOYEE_NUMBER.as("sen");
+
+        System.out.println("EXAMPLE 3\n"
+                + ctx.select(SALE.SALE_ID, SALE.SALE_)
+                        .from(SALE, select(avgs, sen)
+                                .from(SALE)
+                                .groupBy(SALE.EMPLOYEE_NUMBER))
+                        .where(SALE.EMPLOYEE_NUMBER.eq(sen)
+                                .and(SALE.SALE_.lt(avgs.coerce(Double.class))))
+                        .fetch()
+        );
+         */
     }
 
     // EXAMPLE 4
@@ -286,7 +320,7 @@ public class ClassicModelsRepository {
     public void employeesAndNumberOfSales() {
 
         // Table<?>
-        var salesTable = ctx.select(SALE.EMPLOYEE_NUMBER.as("sen"), count().as("sales"))
+        var salesTable = select(SALE.EMPLOYEE_NUMBER.as("sen"), count().as("sales"))
                 .from(SALE)
                 .groupBy(SALE.EMPLOYEE_NUMBER).asTable("saleTable");
 
@@ -339,13 +373,13 @@ public class ClassicModelsRepository {
     public void findSaleLtAvgAvg() {
 
         // Table<?>
-        var saleTable = ctx.select(avg(SALE.SALE_).as("avgs"), SALE.EMPLOYEE_NUMBER.as("sen"))
+        var saleTable = select(avg(SALE.SALE_).as("avgs"), SALE.EMPLOYEE_NUMBER.as("sen"))
                 .from(SALE)
                 .groupBy(SALE.EMPLOYEE_NUMBER)
                 .asTable("saleTable");
 
         // Table<?>
-        var saleTable2 = ctx.select()
+        var saleTable2 = select()
                 .from(saleTable)
                 .where(saleTable.field("avgs").coerce(BigDecimal.class)
                         .gt(select(avg(SALE.SALE_)).from(SALE)))
