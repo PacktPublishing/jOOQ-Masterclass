@@ -9,6 +9,7 @@ import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
+import org.jooq.Field;
 import org.jooq.SelectQuery;
 import static org.jooq.impl.DSL.avg;
 import static org.jooq.impl.DSL.count;
@@ -142,13 +143,47 @@ public class ClassicModelsRepository {
                 .groupBy(SALE.EMPLOYEE_NUMBER)
                 .asTable("saleTable"); // derived table
 
-        System.out.println("EXAMPLE 3\n"
+        System.out.println("EXAMPLE 3.1\n"
                 + ctx.select(SALE.SALE_ID, SALE.SALE_)
                         .from(SALE, saleTable)
                         .where(SALE.EMPLOYEE_NUMBER.eq(saleTable.field("sen").coerce(Long.class))
                                 .and(SALE.SALE_.lt(saleTable.field("avgs").coerce(Double.class))))
                         .fetch()
         );
+
+        /* same query with fields extracted as local variables
+        Field<BigDecimal> avgs = avg(SALE.SALE_).as("avgs");
+        Field<Long> sen = SALE.EMPLOYEE_NUMBER.as("sen");
+
+        // Table<Record2<BigDecimal, Long>>
+        var saleTable = select(avgs, sen)
+                .from(SALE)
+                .groupBy(SALE.EMPLOYEE_NUMBER)
+                .asTable("saleTable"); // derived table
+
+        System.out.println("EXAMPLE 3\n"
+                + ctx.select(SALE.SALE_ID, SALE.SALE_)
+                        .from(SALE, saleTable)
+                        .where(SALE.EMPLOYEE_NUMBER.eq(sen)
+                                .and(SALE.SALE_.lt(avgs.coerce(Double.class))))
+                        .fetch()
+        );
+         */
+        
+        /* same query with fields extracted as local variables and no derived table
+        Field<BigDecimal> avgs = avg(SALE.SALE_).as("avgs");
+        Field<Long> sen = SALE.EMPLOYEE_NUMBER.as("sen");
+
+        System.out.println("EXAMPLE 3\n"
+                + ctx.select(SALE.SALE_ID, SALE.SALE_)
+                        .from(SALE, select(avgs, sen)
+                                .from(SALE)
+                                .groupBy(SALE.EMPLOYEE_NUMBER))
+                        .where(SALE.EMPLOYEE_NUMBER.eq(sen)
+                                .and(SALE.SALE_.lt(avgs.coerce(Double.class))))
+                        .fetch()
+        );
+         */
     }
 
     // EXAMPLE 4
