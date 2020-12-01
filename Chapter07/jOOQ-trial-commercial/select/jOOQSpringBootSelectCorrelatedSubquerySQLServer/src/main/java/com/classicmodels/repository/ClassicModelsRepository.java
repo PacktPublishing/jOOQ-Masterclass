@@ -9,7 +9,6 @@ import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import static jooq.generated.tables.Payment.PAYMENT;
-import jooq.generated.tables.Product;
 import static jooq.generated.tables.Product.PRODUCT;
 import jooq.generated.tables.Sale;
 import static jooq.generated.tables.Sale.SALE;
