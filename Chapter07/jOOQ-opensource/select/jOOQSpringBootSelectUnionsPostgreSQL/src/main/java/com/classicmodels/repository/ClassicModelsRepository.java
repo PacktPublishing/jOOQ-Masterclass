@@ -41,11 +41,11 @@ public class ClassicModelsRepository {
       "public"."customer"."contact_last_name" 
     from 
       "public"."customer"
-    */
+     */
     public void unionEmployeeAndCustomerNames() {
 
-        System.out.println("EXAMPLE 1\n" +
-                ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
+        System.out.println("EXAMPLE 1\n"
+                + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
                         .from(EMPLOYEE)
                         .union(select(CUSTOMER.CONTACT_FIRST_NAME, CUSTOMER.CONTACT_LAST_NAME)
                                 .from(CUSTOMER))
@@ -68,11 +68,11 @@ public class ClassicModelsRepository {
       ) 
     from 
       "public"."customer"    
-    */
+     */
     public void unionEmployeeAndCustomerNamesConcatColumns() {
 
-        System.out.println("EXAMPLE 2\n" +
-                ctx.select(
+        System.out.println("EXAMPLE 2\n"
+                + ctx.select(
                         concat(EMPLOYEE.FIRST_NAME, val(" "), EMPLOYEE.LAST_NAME).as("full_name"))
                         .from(EMPLOYEE)
                         .union(select(
@@ -99,11 +99,11 @@ public class ClassicModelsRepository {
       ? as "contactType" 
     from 
       "public"."customer"
-    */
+     */
     public void unionEmployeeAndCustomerNamesDifferentiate() {
 
-        System.out.println("EXAMPLE 3\n" +
-                ctx.select(
+        System.out.println("EXAMPLE 3\n"
+                + ctx.select(
                         concat(EMPLOYEE.FIRST_NAME, val(" "),
                                 EMPLOYEE.LAST_NAME).as("full_name"),
                         val("Employee").as("contactType"))
@@ -134,11 +134,11 @@ public class ClassicModelsRepository {
       "public"."customer" 
     order by 
       full_name
-    */
+     */
     public void unionEmployeeAndCustomerNamesOrderBy() {
 
-        System.out.println("EXAMPLE 4\n" +
-                ctx.select(
+        System.out.println("EXAMPLE 4\n"
+                + ctx.select(
                         concat(EMPLOYEE.FIRST_NAME, val(" "), EMPLOYEE.LAST_NAME).as("full_name"))
                         .from(EMPLOYEE)
                         .union(select(
@@ -190,11 +190,11 @@ public class ClassicModelsRepository {
       ) 
     order by 
       1
-    */
+     */
     public void unionEmployeeSmallestAndHighestSalary() {
 
-        System.out.println("EXAMPLE 5\n" +
-                ctx.selectFrom(EMPLOYEE)
+        System.out.println("EXAMPLE 5\n"
+                + ctx.selectFrom(EMPLOYEE)
                         .orderBy(EMPLOYEE.SALARY.asc()).limit(1)
                         .union(
                                 selectFrom(EMPLOYEE)
@@ -220,11 +220,11 @@ public class ClassicModelsRepository {
     order by 
       "city", 
       "country"
-    */    
+     */
     public void unionAllOfficeCustomerCityAndCountry() {
 
-        System.out.println("EXAMPLE 6\n" +
-                ctx.select(OFFICE.CITY, OFFICE.COUNTRY)
+        System.out.println("EXAMPLE 6\n"
+                + ctx.select(OFFICE.CITY, OFFICE.COUNTRY)
                         .from(OFFICE)
                         .unionAll(select(CUSTOMERDETAIL.CITY, CUSTOMERDETAIL.COUNTRY)
                                 .from(CUSTOMERDETAIL))
@@ -279,28 +279,69 @@ public class ClassicModelsRepository {
     group by 
       "R1"."product_id", 
       "R1"."order_id"
-    */
+     */
     public void findMinMaxWorstBestPrice() {
-        
+
         Orderdetail R1 = ORDERDETAIL.as("R1");
         Orderdetail R2 = ORDERDETAIL.as("R2");
         Orderdetail R3 = ORDERDETAIL.as("R3");
-        
-        System.out.println("EXAMPLE 7\n" +
-                ctx.select(R1.PRODUCT_ID, R1.ORDER_ID, min(R1.PRICE_EACH).as("min_price"),
+
+        System.out.println("EXAMPLE 7\n"
+                + ctx.select(R1.PRODUCT_ID, R1.ORDER_ID, min(R1.PRICE_EACH).as("min_price"),
                         count(case_()
                                 .when(notExists(select().from(R2)
                                         .where(R2.PRODUCT_ID.eq(R1.PRODUCT_ID)
-                                                .and(R2.PRICE_EACH.lt(R1.PRICE_EACH)))), 1)                      
+                                                .and(R2.PRICE_EACH.lt(R1.PRICE_EACH)))), 1)
                         ).as("worst_price"), max(R1.PRICE_EACH).as("max_price"),
                         count(case_()
                                 .when(notExists(select().from(R3)
                                         .where(R3.PRODUCT_ID.eq(R1.PRODUCT_ID)
-                                                .and(R3.PRICE_EACH.gt(R1.PRICE_EACH)))), 1)                      
+                                                .and(R3.PRICE_EACH.gt(R1.PRICE_EACH)))), 1)
                         ).as("best_price"))
                         .from(R1)
                         .groupBy(R1.PRODUCT_ID, R1.ORDER_ID)
                         .fetch()
-        );                 
-    }   
+        );
+    }
+
+    // EXAMPLE 8
+    /*
+    select "alias_119017455"."order_id",
+           "alias_119017455"."price_each",
+           "alias_119017455"."quantity_ordered"
+    from (
+            (select "public"."orderdetail"."order_id",
+                    "public"."orderdetail"."price_each",
+                    "public"."orderdetail"."quantity_ordered"
+             from "public"."orderdetail"
+             where "public"."orderdetail"."quantity_ordered" <= ?
+             order by "public"."orderdetail"."price_each"
+             limit ?)
+          union
+            (select "public"."orderdetail"."order_id",
+                    "public"."orderdetail"."price_each",
+                    "public"."orderdetail"."quantity_ordered"
+             from "public"."orderdetail"
+             where "public"."orderdetail"."quantity_ordered" >= ?
+             order by "public"."orderdetail"."price_each"
+             limit ?)) as "alias_119017455"    
+     */
+    public void findTop5OrdersHavingQuantityOrderedLe20AndGe60OrderedByPrice() {
+
+        System.out.println("EXAMPLE 8\n"
+                + ctx.select().from(
+                        select(ORDERDETAIL.ORDER_ID, ORDERDETAIL.PRICE_EACH, ORDERDETAIL.QUANTITY_ORDERED)
+                                .from(ORDERDETAIL)
+                                .where(ORDERDETAIL.QUANTITY_ORDERED.le(20))
+                                .orderBy(ORDERDETAIL.PRICE_EACH).limit(5)
+                                .union(
+                                        select(ORDERDETAIL.ORDER_ID, ORDERDETAIL.PRICE_EACH, ORDERDETAIL.QUANTITY_ORDERED)
+                                                .from(ORDERDETAIL)
+                                                .where(ORDERDETAIL.QUANTITY_ORDERED.ge(60))
+                                                .orderBy(ORDERDETAIL.PRICE_EACH).limit(5)
+                                )
+                )
+                        .fetch()
+        );
+    }
 }
