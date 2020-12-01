@@ -363,14 +363,14 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 9
     /*
-    CREATE TABLE product_stock AS
-    SELECT `classicmodels`.`product`.`product_name`
-    FROM `classicmodels`.`product`
-    WHERE `classicmodels`.`product`.`quantity_in_stock` < ?
-    UNION
-    SELECT `classicmodels`.`product`.`product_name`
-    FROM `classicmodels`.`product`
-    WHERE `classicmodels`.`product`.`quantity_in_stock` >= ?    
+    create table product_stock AS
+    select `classicmodels`.`product`.`product_name`
+    from `classicmodels`.`product`
+    where `classicmodels`.`product`.`quantity_in_stock` < ?
+    union
+    select `classicmodels`.`product`.`product_name`
+    from `classicmodels`.`product`
+    where `classicmodels`.`product`.`quantity_in_stock` >= ?    
      */
     public void findProductStockLt500Gt9500() {
 
