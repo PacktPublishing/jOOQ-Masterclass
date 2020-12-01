@@ -34,17 +34,15 @@ public class ClassicModelsRepository {
 
         /*
         select
-          `classicmodels`.`order`.`order_id`,
-          `classicmodels`.`order`.`order_date`,
-          `classicmodels`.`order`.`required_date`,
-          `classicmodels`.`order`.`shipped_date`,
-          `classicmodels`.`order`.`status`,
-          `classicmodels`.`order`.`comments`,
-          `classicmodels`.`order`.`customer_number`
-        from
-          `classicmodels`.`order`
-        where
-          `classicmodels`.`order`.`order_id` = ?
+          [classicmodels].[dbo].[order].[order_id],
+          [classicmodels].[dbo].[order].[order_date],
+          [classicmodels].[dbo].[order].[required_date],
+          [classicmodels].[dbo].[order].[shipped_date],
+          [classicmodels].[dbo].[order].[status],
+          [classicmodels].[dbo].[order].[comments],
+          [classicmodels].[dbo].[order].[customer_number]
+        from [classicmodels].[dbo].[order]
+        where [classicmodels].[dbo].[order].[order_id] = ?        
          */
         System.out.println("EXAMPLE 1.1\n"
                 + ctx.select()
@@ -69,10 +67,8 @@ public class ClassicModelsRepository {
         /*
         select
           *
-        from
-          `classicmodels`.`order`
-        where
-          `classicmodels`.`order`.`order_id` = ?
+        from [classicmodels].[dbo].[order]
+        where [classicmodels].[dbo].[order].[order_id] = ?        
          */
         System.out.println("EXAMPLE 1.4\n"
                 + ctx.select(asterisk())
@@ -113,15 +109,13 @@ public class ClassicModelsRepository {
     // list only the columns (fields) that are needed
     /*
     select
-      `classicmodels`.`order`.`order_id`,
-      `classicmodels`.`order`.`order_date`,
-      `classicmodels`.`order`.`required_date`,
-      `classicmodels`.`order`.`shipped_date`,
-      `classicmodels`.`order`.`customer_number`
-    from
-      `classicmodels`.`order`
-    where
-      `classicmodels`.`order`.`order_id` = ?
+      [classicmodels].[dbo].[order].[order_id],
+      [classicmodels].[dbo].[order].[order_date],
+      [classicmodels].[dbo].[order].[required_date],
+      [classicmodels].[dbo].[order].[shipped_date],
+      [classicmodels].[dbo].[order].[customer_number]
+    from [classicmodels].[dbo].[order]
+    where [classicmodels].[dbo].[order].[order_id] = ?    
      */
     public void findOrderExplicitFields() {
 
@@ -138,15 +132,13 @@ public class ClassicModelsRepository {
     // list the columns (fields) that should be skipped
     /*
     select
-      `classicmodels`.`order`.`order_id`,
-      `classicmodels`.`order`.`order_date`,
-      `classicmodels`.`order`.`required_date`,
-      `classicmodels`.`order`.`shipped_date`,
-      `classicmodels`.`order`.`customer_number`
-    from
-      `classicmodels`.`order`
-    where
-      `classicmodels`.`order`.`order_id` = ?
+      [classicmodels].[dbo].[order].[order_id],
+      [classicmodels].[dbo].[order].[order_date],
+      [classicmodels].[dbo].[order].[required_date],
+      [classicmodels].[dbo].[order].[shipped_date],
+      [classicmodels].[dbo].[order].[customer_number]
+    from [classicmodels].[dbo].[order]
+    where [classicmodels].[dbo].[order].[order_id] = ?    
      */
     public void findOrderAsteriskExcept() {
 
@@ -161,13 +153,13 @@ public class ClassicModelsRepository {
     // EXAMPLE 4
     /*
     select
-      `classicmodels`.`employee`.`first_name`,
-      `classicmodels`.`employee`.`last_name`,
-      `classicmodels`.`sale`.*
-    from
-      `classicmodels`.`employee`
-    join `classicmodels`.`sale` on `classicmodels`.`employee`.`employee_number` 
-       = `classicmodels`.`sale`.`employee_number`
+      [classicmodels].[dbo].[employee].[first_name],
+      [classicmodels].[dbo].[employee].[last_name],
+      [classicmodels].[dbo].[sale].*
+    from [classicmodels].[dbo].[employee]
+    join [classicmodels].[dbo].[sale]
+      on [classicmodels].[dbo].[employee].[employee_number] 
+           = [classicmodels].[dbo].[sale].[employee_number]    
      */
     public void findOrderAndSale() {
 
@@ -183,18 +175,18 @@ public class ClassicModelsRepository {
     // EXAMPLE 5
     /*
     select
-      `classicmodels`.`employee`.`last_name`,
-      `classicmodels`.`employee`.`first_name`,
-      `classicmodels`.`employee`.`extension`,
-      `classicmodels`.`employee`.`email`,
-      `classicmodels`.`employee`.`salary`,
-      `classicmodels`.`employee`.`reports_to`,
-      `classicmodels`.`employee`.`job_title`,
-      `classicmodels`.`sale`.*
-    from
-      `classicmodels`.`employee`
-    join `classicmodels`.`sale` on `classicmodels`.`employee`.`employee_number` 
-       = `classicmodels`.`sale`.`employee_number`
+      [classicmodels].[dbo].[employee].[last_name],
+      [classicmodels].[dbo].[employee].[first_name],
+      [classicmodels].[dbo].[employee].[extension],
+      [classicmodels].[dbo].[employee].[email],
+      [classicmodels].[dbo].[employee].[salary],
+      [classicmodels].[dbo].[employee].[reports_to],
+      [classicmodels].[dbo].[employee].[job_title],
+      [classicmodels].[dbo].[sale].*
+    from [classicmodels].[dbo].[employee]
+    join [classicmodels].[dbo].[sale]
+      on [classicmodels].[dbo].[employee].[employee_number] 
+           = [classicmodels].[dbo].[sale].[employee_number]    
      */
     public void findOrderExceptAndSale() {
 
@@ -378,13 +370,12 @@ public class ClassicModelsRepository {
     
     // EXAMPLE 12
     /*
-    select
-      `classicmodels`.`employee`.`first_name`,
-      `classicmodels`.`employee`.`last_name`,
-      `classicmodels`.`employee`.`salary`
-    from
-      `classicmodels`.`employee`
-    limit 10
+    select top 10
+      [classicmodels].[dbo].[employee].[first_name],
+      [classicmodels].[dbo].[employee].[last_name],
+      [classicmodels].[dbo].[employee].[salary]
+    from [classicmodels].[dbo].[employee]
+    order by (select 0)    
      */
     public void findEmployeeLimit() {
 
@@ -399,13 +390,12 @@ public class ClassicModelsRepository {
     // EXAMPLE 13
     /*
     select
-      `classicmodels`.`employee`.`first_name`,
-      `classicmodels`.`employee`.`last_name`,
-      `classicmodels`.`employee`.`salary`
-    from
-      `classicmodels`.`employee`
-    limit 10 
-    offset 5
+      [classicmodels].[dbo].[employee].[first_name],
+      [classicmodels].[dbo].[employee].[last_name],
+      [classicmodels].[dbo].[employee].[salary]
+    from [classicmodels].[dbo].[employee]
+    order by (select 0)
+    offset ? rows fetch next ? rows only
      */
     public void findEmployeeLimitOffset() {
 
@@ -421,13 +411,12 @@ public class ClassicModelsRepository {
     // EXAMPLE 14
     /*
     select
-      `classicmodels`.`employee`.`first_name`,
-      `classicmodels`.`employee`.`last_name`,
-      `classicmodels`.`employee`.`salary`
-    from
-      `classicmodels`.`employee`
-    limit 10 
-    offset 5
+      [classicmodels].[dbo].[employee].[first_name],
+      [classicmodels].[dbo].[employee].[last_name],
+      [classicmodels].[dbo].[employee].[salary]
+    from [classicmodels].[dbo].[employee]
+    order by (select 0)    
+    offset ? rows fetch next ? rows only
      */
     public void findEmployeeLimitAndOffset() {
 
@@ -441,27 +430,25 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 15
     /*
-    select
-      `classicmodels`.`office`.`city`,
-      `classicmodels`.`office`.`country`,
-      `classicmodels`.`employee`.`job_title`,
-      `classicmodels`.`customer`.`customer_number`,
-      `classicmodels`.`customer`.`customer_name`,
-      `classicmodels`.`customer`.`phone`,
-      `classicmodels`.`customer`.`sales_rep_employee_number`,
-      `classicmodels`.`customer`.`credit_limit`,
-      `classicmodels`.`payment`.`customer_number`,
-      `classicmodels`.`payment`.`check_number`,
-      `classicmodels`.`payment`.`payment_date`,
-      `classicmodels`.`payment`.`invoice_amount`,
-      `classicmodels`.`payment`.`caching_date`
-    from
-      `classicmodels`.`office`,
-      `classicmodels`.`employee`,
-      `classicmodels`.`customer`,
-      `classicmodels`.`payment`
-    limit
-      ?
+    select top 100
+      [classicmodels].[dbo].[office].[city],
+      [classicmodels].[dbo].[office].[country],
+      [classicmodels].[dbo].[employee].[job_title],
+      [classicmodels].[dbo].[customer].[customer_number],
+      [classicmodels].[dbo].[customer].[customer_name],
+      [classicmodels].[dbo].[customer].[phone],
+      [classicmodels].[dbo].[customer].[sales_rep_employee_number],
+      [classicmodels].[dbo].[customer].[credit_limit],
+      [classicmodels].[dbo].[payment].[customer_number],
+      [classicmodels].[dbo].[payment].[check_number],
+      [classicmodels].[dbo].[payment].[payment_date],
+      [classicmodels].[dbo].[payment].[invoice_amount],
+      [classicmodels].[dbo].[payment].[caching_date]
+    from [classicmodels].[dbo].[office],
+         [classicmodels].[dbo].[employee],
+         [classicmodels].[dbo].[customer],
+         [classicmodels].[dbo].[payment]
+    order by (select 0)
      */
     public void decomposeSelect() {
 
@@ -480,27 +467,25 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 16
     /*    
-    select
-      `classicmodels`.`office`.`city`,
-      `classicmodels`.`office`.`country`,
-      `classicmodels`.`employee`.`job_title`,
-      `classicmodels`.`customer`.`customer_number`,
-      `classicmodels`.`customer`.`customer_name`,
-      `classicmodels`.`customer`.`phone`,
-      `classicmodels`.`customer`.`sales_rep_employee_number`,
-      `classicmodels`.`customer`.`credit_limit`,
-      `classicmodels`.`payment`.`customer_number`,
-      `classicmodels`.`payment`.`check_number`,
-      `classicmodels`.`payment`.`payment_date`,
-      `classicmodels`.`payment`.`invoice_amount`,
-      `classicmodels`.`payment`.`caching_date`
-    from
-      `classicmodels`.`office`,
-      `classicmodels`.`employee`,
-      `classicmodels`.`customer`,
-      `classicmodels`.`payment`
-    limit
-      ?
+    select top 100
+      [classicmodels].[dbo].[office].[city],
+      [classicmodels].[dbo].[office].[country],
+      [classicmodels].[dbo].[employee].[job_title],
+      [classicmodels].[dbo].[customer].[customer_number],
+      [classicmodels].[dbo].[customer].[customer_name],
+      [classicmodels].[dbo].[customer].[phone],
+      [classicmodels].[dbo].[customer].[sales_rep_employee_number],
+      [classicmodels].[dbo].[customer].[credit_limit],
+      [classicmodels].[dbo].[payment].[customer_number],
+      [classicmodels].[dbo].[payment].[check_number],
+      [classicmodels].[dbo].[payment].[payment_date],
+      [classicmodels].[dbo].[payment].[invoice_amount],
+      [classicmodels].[dbo].[payment].[caching_date]
+    from [classicmodels].[dbo].[office],
+         [classicmodels].[dbo].[employee],
+         [classicmodels].[dbo].[customer],
+         [classicmodels].[dbo].[payment]
+    order by (select 0)
      */
     public void decomposeSelectAndFrom() {
 
