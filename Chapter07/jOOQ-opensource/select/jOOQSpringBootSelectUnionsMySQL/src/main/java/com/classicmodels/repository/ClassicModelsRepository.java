@@ -6,6 +6,7 @@ import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Office.OFFICE;
 import jooq.generated.tables.Orderdetail;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
+import static jooq.generated.tables.Product.PRODUCT;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.case_;
 import static org.jooq.impl.DSL.concat;
@@ -16,6 +17,7 @@ import static org.jooq.impl.DSL.min;
 import static org.jooq.impl.DSL.notExists;
 import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.selectFrom;
+import static org.jooq.impl.DSL.table;
 import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 
@@ -41,11 +43,11 @@ public class ClassicModelsRepository {
       `classicmodels`.`customer`.`contact_last_name`
     from
       `classicmodels`.`customer`
-    */
+     */
     public void unionEmployeeAndCustomerNames() {
 
-        System.out.println("EXAMPLE 1\n" +
-                ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
+        System.out.println("EXAMPLE 1\n"
+                + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
                         .from(EMPLOYEE)
                         .union(select(CUSTOMER.CONTACT_FIRST_NAME, CUSTOMER.CONTACT_LAST_NAME)
                                 .from(CUSTOMER))
@@ -72,11 +74,11 @@ public class ClassicModelsRepository {
       )
     from
       `classicmodels`.`customer`
-    */
+     */
     public void unionEmployeeAndCustomerNamesConcatColumns() {
 
-        System.out.println("EXAMPLE 2\n" +
-                ctx.select(
+        System.out.println("EXAMPLE 2\n"
+                + ctx.select(
                         concat(EMPLOYEE.FIRST_NAME, val(" "), EMPLOYEE.LAST_NAME).as("full_name"))
                         .from(EMPLOYEE)
                         .union(select(
@@ -107,11 +109,11 @@ public class ClassicModelsRepository {
       ? as `contactType`
     from
       `classicmodels`.`customer`
-    */
+     */
     public void unionEmployeeAndCustomerNamesDifferentiate() {
 
-        System.out.println("EXAMPLE 3\n" +
-                ctx.select(
+        System.out.println("EXAMPLE 3\n"
+                + ctx.select(
                         concat(EMPLOYEE.FIRST_NAME, val(" "),
                                 EMPLOYEE.LAST_NAME).as("full_name"),
                         val("Employee").as("contactType"))
@@ -146,11 +148,11 @@ public class ClassicModelsRepository {
       `classicmodels`.`customer`
     order by
       full_name
-    */
+     */
     public void unionEmployeeAndCustomerNamesOrderBy() {
 
-        System.out.println("EXAMPLE 4\n" +
-                ctx.select(
+        System.out.println("EXAMPLE 4\n"
+                + ctx.select(
                         concat(EMPLOYEE.FIRST_NAME, val(" "), EMPLOYEE.LAST_NAME).as("full_name"))
                         .from(EMPLOYEE)
                         .union(select(
@@ -201,11 +203,11 @@ public class ClassicModelsRepository {
           ?
       )
     order by 1
-    */
+     */
     public void unionEmployeeSmallestAndHighestSalary() {
 
-        System.out.println("EXAMPLE 5\n" +
-                ctx.selectFrom(EMPLOYEE)
+        System.out.println("EXAMPLE 5\n"
+                + ctx.selectFrom(EMPLOYEE)
                         .orderBy(EMPLOYEE.SALARY.asc()).limit(1)
                         .union(
                                 selectFrom(EMPLOYEE)
@@ -231,11 +233,11 @@ public class ClassicModelsRepository {
     order by
       `city`,
       `country`
-    */    
+     */
     public void unionAllOfficeCustomerCityAndCountry() {
 
-        System.out.println("EXAMPLE 6\n" +
-                ctx.select(OFFICE.CITY, OFFICE.COUNTRY)
+        System.out.println("EXAMPLE 6\n"
+                + ctx.select(OFFICE.CITY, OFFICE.COUNTRY)
                         .from(OFFICE)
                         .unionAll(select(CUSTOMERDETAIL.CITY, CUSTOMERDETAIL.COUNTRY)
                                 .from(CUSTOMERDETAIL))
@@ -293,31 +295,31 @@ public class ClassicModelsRepository {
         `classicmodels`.`orderdetail` as `R1`
       group by
         `R1`.`product_id`, `R1`.`order_id`
-    */
+     */
     public void findMinMaxWorstBestPrice() {
-        
+
         Orderdetail R1 = ORDERDETAIL.as("R1");
         Orderdetail R2 = ORDERDETAIL.as("R2");
         Orderdetail R3 = ORDERDETAIL.as("R3");
-        
-        System.out.println("EXAMPLE 7\n" +
-                ctx.select(R1.PRODUCT_ID, R1.ORDER_ID, min(R1.PRICE_EACH).as("min_price"),
+
+        System.out.println("EXAMPLE 7\n"
+                + ctx.select(R1.PRODUCT_ID, R1.ORDER_ID, min(R1.PRICE_EACH).as("min_price"),
                         count(case_()
                                 .when(notExists(select().from(R2)
                                         .where(R2.PRODUCT_ID.eq(R1.PRODUCT_ID)
-                                                .and(R2.PRICE_EACH.lt(R1.PRICE_EACH)))), 1)                      
+                                                .and(R2.PRICE_EACH.lt(R1.PRICE_EACH)))), 1)
                         ).as("worst_price"), max(R1.PRICE_EACH).as("max_price"),
                         count(case_()
                                 .when(notExists(select().from(R3)
                                         .where(R3.PRODUCT_ID.eq(R1.PRODUCT_ID)
-                                                .and(R3.PRICE_EACH.gt(R1.PRICE_EACH)))), 1)                      
+                                                .and(R3.PRICE_EACH.gt(R1.PRICE_EACH)))), 1)
                         ).as("best_price"))
                         .from(R1)
                         .groupBy(R1.PRODUCT_ID, R1.ORDER_ID)
                         .fetch()
-        );                 
-    }   
-    
+        );
+    }
+
     // EXAMPLE 8
     /*
     select `alias_55017331`.`order_id`,
@@ -339,7 +341,7 @@ public class ClassicModelsRepository {
              where `classicmodels`.`orderdetail`.`quantity_ordered` >= ?
              order by `classicmodels`.`orderdetail`.`price_each`
              limit ?)) as `alias_55017331`    
-    */
+     */
     public void findTop5OrdersHavingQuantityOrderedLe20AndGe60OrderedByPrice() {
 
         System.out.println("EXAMPLE 8\n"
@@ -356,6 +358,36 @@ public class ClassicModelsRepository {
                                 )
                 )
                         .fetch()
+        );
+    }
+
+    // EXAMPLE 9
+    /*
+    CREATE TABLE product_stock AS
+    SELECT `classicmodels`.`product`.`product_name`
+    FROM `classicmodels`.`product`
+    WHERE `classicmodels`.`product`.`quantity_in_stock` < ?
+    UNION
+    SELECT `classicmodels`.`product`.`product_name`
+    FROM `classicmodels`.`product`
+    WHERE `classicmodels`.`product`.`quantity_in_stock` >= ?    
+     */
+    public void findProductStockLt500Gt9500() {
+
+        ctx.dropTableIfExists("product_stock").execute();
+
+        ctx.select(PRODUCT.PRODUCT_NAME)
+                .into(table("product_stock"))
+                .from(PRODUCT)
+                .where(PRODUCT.QUANTITY_IN_STOCK.lt(Short.valueOf("500")))
+                .union(
+                        select(PRODUCT.PRODUCT_NAME)
+                                .from(PRODUCT)
+                                .where(PRODUCT.QUANTITY_IN_STOCK.ge(Short.valueOf("9500")))
+                ).fetch();
+
+        System.out.println("EXAMPLE 9\n"
+                + ctx.selectFrom(table("product_stock")).fetch()
         );
     }
 }

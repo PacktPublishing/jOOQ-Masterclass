@@ -21,5 +21,6 @@ public class ClassicModelsService {
         classicModelsRepository.unionAllOfficeCustomerCityAndCountry();                           // EXAMPLE 6
         classicModelsRepository.findMinMaxWorstBestPrice();                                       // EXAMPLE 7
         classicModelsRepository.findTop5OrdersHavingQuantityOrderedLe20AndGe60OrderedByPrice();   // EXAMPLE 8
+        classicModelsRepository.findProductStockLt500Gt9500();                                    // EXAMPLE 9
     }
 }
