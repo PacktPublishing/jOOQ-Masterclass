@@ -21,7 +21,7 @@ public class ClassicModelsService {
         classicModelsRepository.findEmployeeWithAvgSaleLtSumSales();                   // EXAMPLE 6
         classicModelsRepository.findOfficeAndEmployeeMaxAndAvgSalary();                // EXAMPLE 7
         classicModelsRepository.findCustomerWithMoreThan10Sales();                     // EXAMPLE 8
-        classicModelsRepository.findOrderdetailWithQuantityInStockLtQuantityOrdered(); // EXAMPLE 9
+        classicModelsRepository.findOrderdetailWithQuantityInStockGtQuantityOrdered(); // EXAMPLE 9
         classicModelsRepository.findProductQuantityOrderedGt70();                      // EXAMPLE 10 
         classicModelsRepository.findProductWithMsrpGtSellPrice();                      // EXAMPLE 11 
         classicModelsRepository.findProductWithAvgBuyPriceGtAnyPriceEach();            // EXAMPLE 12

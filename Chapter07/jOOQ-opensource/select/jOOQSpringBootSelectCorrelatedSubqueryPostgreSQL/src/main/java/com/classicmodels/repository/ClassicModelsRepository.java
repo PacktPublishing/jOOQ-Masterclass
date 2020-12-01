@@ -142,20 +142,6 @@ public class ClassicModelsRepository {
                         .orderBy(sumSales.asc())
                         .fetch()
         );
-
-        // same query in one piece of fluent code
-        /*
-        System.out.println("EXAMPLE 2\n" +
-                ctx.select(EMPLOYEE.EMPLOYEE_NUMBER,
-                        EMPLOYEE.FIRST_NAME, EMPLOYEE.JOB_TITLE, sumSales)
-                        .from(EMPLOYEE)
-                        .orderBy(select(sum(SALE.SALE_))
-                                .from(SALE)
-                                .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(SALE.EMPLOYEE_NUMBER))
-                                .asField("sumSales").asc())
-                        .fetch()
-        );
-         */
     }
 
     // EXAMPLE 3
@@ -472,7 +458,7 @@ public class ClassicModelsRepository {
     order by 
       "public"."orderdetail"."quantity_ordered"
      */
-    public void findOrderdetailWithQuantityInStockLtQuantityOrdered() {
+    public void findOrderdetailWithQuantityInStockGtQuantityOrdered() {
 
         System.out.println("EXAMPLE 9\n"
                 + ctx.selectFrom(ORDERDETAIL)
