@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.app</groupId>
-    <artifactId>jOOQSpringBootSelectOnlyNeededColumnsSQLServer</artifactId>
+    <artifactId>jOOQSpringBootSelectOnlyNeededDataSQLServer</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQSpringBootSelectOnlyNeededColumnsSQLServer</name>
+    <name>jOOQSpringBootSelectOnlyNeededDataSQLServer</name>
     <description>jOOQ - Spring Boot app</description>    
 
     <parent>
