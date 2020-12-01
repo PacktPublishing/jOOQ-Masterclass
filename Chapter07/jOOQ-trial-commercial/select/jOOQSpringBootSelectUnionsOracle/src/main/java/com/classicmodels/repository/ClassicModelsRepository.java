@@ -304,4 +304,43 @@ public class ClassicModelsRepository {
                         .fetch()
         );                 
     }   
+    
+    // EXAMPLE 8
+    /*
+    select "alias_79896943"."ORDER_ID",
+           "alias_79896943"."PRICE_EACH",
+           "alias_79896943"."QUANTITY_ORDERED"
+    from (
+            (select "SYSTEM"."ORDERDETAIL"."ORDER_ID",
+                    "SYSTEM"."ORDERDETAIL"."PRICE_EACH",
+                    "SYSTEM"."ORDERDETAIL"."QUANTITY_ORDERED"
+             from "SYSTEM"."ORDERDETAIL"
+             where "SYSTEM"."ORDERDETAIL"."QUANTITY_ORDERED" <= ?
+             order by "SYSTEM"."ORDERDETAIL"."PRICE_EACH" FETCH NEXT ? ROWS ONLY)
+          union
+            (select "SYSTEM"."ORDERDETAIL"."ORDER_ID",
+                    "SYSTEM"."ORDERDETAIL"."PRICE_EACH",
+                    "SYSTEM"."ORDERDETAIL"."QUANTITY_ORDERED"
+             from "SYSTEM"."ORDERDETAIL"
+             where "SYSTEM"."ORDERDETAIL"."QUANTITY_ORDERED" >= ?
+             order by "SYSTEM"."ORDERDETAIL"."PRICE_EACH" FETCH NEXT ? ROWS ONLY)) "alias_79896943"    
+    */
+    public void findTop5OrdersHavingQuantityOrderedLe20AndGe60OrderedByPrice() {
+
+        System.out.println("EXAMPLE 8\n"
+                + ctx.select().from(
+                        select(ORDERDETAIL.ORDER_ID, ORDERDETAIL.PRICE_EACH, ORDERDETAIL.QUANTITY_ORDERED)
+                                .from(ORDERDETAIL)
+                                .where(ORDERDETAIL.QUANTITY_ORDERED.le(20L))
+                                .orderBy(ORDERDETAIL.PRICE_EACH).limit(5)
+                                .union(
+                                        select(ORDERDETAIL.ORDER_ID, ORDERDETAIL.PRICE_EACH, ORDERDETAIL.QUANTITY_ORDERED)
+                                                .from(ORDERDETAIL)
+                                                .where(ORDERDETAIL.QUANTITY_ORDERED.ge(60L))
+                                                .orderBy(ORDERDETAIL.PRICE_EACH).limit(5)
+                                )
+                )
+                        .fetch()
+        );
+    }
 }
