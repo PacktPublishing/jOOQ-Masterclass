@@ -13,10 +13,11 @@ public class ClassicModelsService {
     }
 
     public void callAll() {
-        classicModelsRepository.unionEmployeeAndCustomerNames();                 // EXAMPLE 1
-        classicModelsRepository.unionEmployeeAndCustomerNamesConcatColumns();    // EXAMPLE 2   
-        classicModelsRepository.unionEmployeeAndCustomerNamesDifferentiate();    // EXAMPLE 3
-        classicModelsRepository.unionEmployeeAndCustomerNamesOrderBy();          // EXAMPLE 4        
-        classicModelsRepository.unionAllOfficeCustomerCityAndCountry();          // EXAMPLE 5        
+        classicModelsRepository.unionEmployeeAndCustomerNames();                                 // EXAMPLE 1
+        classicModelsRepository.unionEmployeeAndCustomerNamesConcatColumns();                    // EXAMPLE 2   
+        classicModelsRepository.unionEmployeeAndCustomerNamesDifferentiate();                    // EXAMPLE 3
+        classicModelsRepository.unionEmployeeAndCustomerNamesOrderBy();                          // EXAMPLE 4        
+        classicModelsRepository.unionAllOfficeCustomerCityAndCountry();                          // EXAMPLE 5        
+        classicModelsRepository.findAllOrdersHavingQuantityOrderedLe20AndGe60();                 // EXAMPLE 6
     }
 }

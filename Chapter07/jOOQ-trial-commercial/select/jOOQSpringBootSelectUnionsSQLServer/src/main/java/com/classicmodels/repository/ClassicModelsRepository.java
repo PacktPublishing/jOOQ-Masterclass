@@ -4,6 +4,7 @@ import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Office.OFFICE;
+import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.concat;
 import static org.jooq.impl.DSL.field;
@@ -171,6 +172,40 @@ public class ClassicModelsRepository {
                         .unionAll(select(CUSTOMERDETAIL.CITY, CUSTOMERDETAIL.COUNTRY)
                                 .from(CUSTOMERDETAIL))
                         .orderBy(OFFICE.CITY, OFFICE.COUNTRY)
+                        .fetch()
+        );
+    }
+    
+    // EXAMPLE 6
+    /*
+    select [alias_34165135].[order_id],
+           [alias_34165135].[price_each],
+           [alias_34165135].[quantity_ordered]
+    from
+      (select [classicmodels].[dbo].[orderdetail].[order_id],
+              [classicmodels].[dbo].[orderdetail].[price_each],
+              [classicmodels].[dbo].[orderdetail].[quantity_ordered]
+       from [classicmodels].[dbo].[orderdetail]
+       where [classicmodels].[dbo].[orderdetail].[quantity_ordered] <= ?
+       union select [classicmodels].[dbo].[orderdetail].[order_id],
+                    [classicmodels].[dbo].[orderdetail].[price_each],
+                    [classicmodels].[dbo].[orderdetail].[quantity_ordered]
+       from [classicmodels].[dbo].[orderdetail]
+       where [classicmodels].[dbo].[orderdetail].[quantity_ordered] >= ?) [alias_34165135]    
+    */
+    public void findAllOrdersHavingQuantityOrderedLe20AndGe60() {
+
+        System.out.println("EXAMPLE 6\n"
+                + ctx.select().from(
+                        select(ORDERDETAIL.ORDER_ID, ORDERDETAIL.PRICE_EACH, ORDERDETAIL.QUANTITY_ORDERED)
+                                .from(ORDERDETAIL)
+                                .where(ORDERDETAIL.QUANTITY_ORDERED.le(20))                                
+                                .union(
+                                        select(ORDERDETAIL.ORDER_ID, ORDERDETAIL.PRICE_EACH, ORDERDETAIL.QUANTITY_ORDERED)
+                                                .from(ORDERDETAIL)
+                                                .where(ORDERDETAIL.QUANTITY_ORDERED.ge(60))                                               
+                                )
+                )
                         .fetch()
         );
     }
