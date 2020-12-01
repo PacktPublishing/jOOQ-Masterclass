@@ -42,28 +42,18 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 1
     /*
-    select 
-      "p1"."product_id", 
-      "p1"."product_name", 
-      "p1"."product_line", 
-      "p1"."product_vendor", 
-      "p1"."buy_price" 
-    from 
-      "public"."product" as "p1" 
-    where 
-      "p1"."buy_price" in (
-        select 
-          max("p2"."buy_price") 
-        from 
-          "public"."product" as "p2" 
-        where 
-          "p2"."product_line" = "p1"."product_line" 
-        group by 
-          "p2"."product_line"
-      ) 
-    order by 
-      "p1"."product_line", 
-      "p1"."buy_price"
+    select "p1"."product_id",
+           "p1"."product_name",
+           "p1"."product_line",
+           "p1"."product_vendor",
+           "p1"."buy_price"
+    from "public"."product" AS "p1"
+    where "p1"."buy_price" =
+        (select max("p2"."buy_price")
+         from "public"."product" AS "p2"
+         where "p2"."product_line" = "p1"."product_line")
+    order by "p1"."product_line",
+             "p1"."buy_price"  
      */
     public void findProductMaxBuyPriceByProductionLine() {
 
@@ -73,14 +63,13 @@ public class ClassicModelsRepository {
         // Select<Record1<BigDecimal>>
         var maxBuyPrice = select(max(p2.BUY_PRICE))
                 .from(p2)
-                .where(p2.PRODUCT_LINE.eq(p1.PRODUCT_LINE))
-                .groupBy(p2.PRODUCT_LINE);
+                .where(p2.PRODUCT_LINE.eq(p1.PRODUCT_LINE));
 
-        System.out.println("EXAMPLE 1\n"
-                + ctx.select(p1.PRODUCT_ID, p1.PRODUCT_NAME,
+        System.out.println("EXAMPLE 1\n" +
+                ctx.select(p1.PRODUCT_ID, p1.PRODUCT_NAME,
                         p1.PRODUCT_LINE, p1.PRODUCT_VENDOR, p1.BUY_PRICE)
                         .from(p1)
-                        .where(p1.BUY_PRICE.in(maxBuyPrice))
+                        .where(p1.BUY_PRICE.eq(maxBuyPrice))
                         .orderBy(p1.PRODUCT_LINE, p1.BUY_PRICE)
                         .fetch()
         );
@@ -91,10 +80,9 @@ public class ClassicModelsRepository {
                 ctx.select(p1.PRODUCT_ID, p1.PRODUCT_NAME,
                         p1.PRODUCT_LINE, p1.PRODUCT_VENDOR, p1.BUY_PRICE)
                         .from(p1)
-                        .where(p1.BUY_PRICE.in(select(max(p2.BUY_PRICE))
+                        .where(p1.BUY_PRICE.eq(select(max(p2.BUY_PRICE))
                                 .from(p2)
-                                .where(p2.PRODUCT_LINE.eq(p1.PRODUCT_LINE))
-                                .groupBy(p2.PRODUCT_LINE)))
+                                .where(p2.PRODUCT_LINE.eq(p1.PRODUCT_LINE))))
                         .orderBy(p1.PRODUCT_LINE, p1.BUY_PRICE)
                         .fetch()
         );
