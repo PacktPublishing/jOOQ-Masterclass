@@ -43,28 +43,18 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 1
     /*
-    select 
-      "p1"."PRODUCT_ID", 
-      "p1"."PRODUCT_NAME", 
-      "p1"."PRODUCT_LINE", 
-      "p1"."PRODUCT_VENDOR", 
-      "p1"."BUY_PRICE" 
-    from 
-      "SYSTEM"."PRODUCT" "p1" 
-    where 
-      "p1"."BUY_PRICE" in (
-        select 
-          max("p2"."BUY_PRICE") 
-        from 
-          "SYSTEM"."PRODUCT" "p2" 
-        where 
-          "p2"."PRODUCT_LINE" = "p1"."PRODUCT_LINE" 
-        group by 
-          "p2"."PRODUCT_LINE"
-      ) 
-    order by 
-      "p1"."PRODUCT_LINE", 
-      "p1"."BUY_PRICE"    
+    select
+      "p1"."PRODUCT_ID",
+      "p1"."PRODUCT_NAME",
+      "p1"."PRODUCT_LINE",
+      "p1"."PRODUCT_VENDOR",
+      "p1"."BUY_PRICE"
+    from "SYSTEM"."PRODUCT" "p1"
+    where "p1"."BUY_PRICE" = (SELECT
+      max("p2"."BUY_PRICE")
+    from "SYSTEM"."PRODUCT" "p2"
+    where "p2"."PRODUCT_LINE" = "p1"."PRODUCT_LINE")
+    order by "p1"."PRODUCT_LINE", "p1"."BUY_PRICE"    
     */
     public void findProductMaxBuyPriceByProductionLine() {
 
@@ -74,14 +64,13 @@ public class ClassicModelsRepository {
         // Select<Record1<BigDecimal>>
         var maxBuyPrice = select(max(p2.BUY_PRICE))
                 .from(p2)
-                .where(p2.PRODUCT_LINE.eq(p1.PRODUCT_LINE))
-                .groupBy(p2.PRODUCT_LINE);
+                .where(p2.PRODUCT_LINE.eq(p1.PRODUCT_LINE));
 
         System.out.println("EXAMPLE 1\n" +
                 ctx.select(p1.PRODUCT_ID, p1.PRODUCT_NAME,
                         p1.PRODUCT_LINE, p1.PRODUCT_VENDOR, p1.BUY_PRICE)
                         .from(p1)
-                        .where(p1.BUY_PRICE.in(maxBuyPrice))
+                        .where(p1.BUY_PRICE.eq(maxBuyPrice))
                         .orderBy(p1.PRODUCT_LINE, p1.BUY_PRICE)
                         .fetch()
         );
@@ -92,14 +81,13 @@ public class ClassicModelsRepository {
                 ctx.select(p1.PRODUCT_ID, p1.PRODUCT_NAME,
                         p1.PRODUCT_LINE, p1.PRODUCT_VENDOR, p1.BUY_PRICE)
                         .from(p1)
-                        .where(p1.BUY_PRICE.in(select(max(p2.BUY_PRICE))
+                        .where(p1.BUY_PRICE.eq(select(max(p2.BUY_PRICE))
                                 .from(p2)
-                                .where(p2.PRODUCT_LINE.eq(p1.PRODUCT_LINE))
-                                .groupBy(p2.PRODUCT_LINE)))
+                                .where(p2.PRODUCT_LINE.eq(p1.PRODUCT_LINE))))
                         .orderBy(p1.PRODUCT_LINE, p1.BUY_PRICE)
                         .fetch()
         );
-        */
+         */
     }
 
     // EXAMPLE 2
