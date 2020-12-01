@@ -6,17 +6,20 @@ import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Office.OFFICE;
 import jooq.generated.tables.Orderdetail;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
+import static jooq.generated.tables.Product.PRODUCT;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.case_;
 import static org.jooq.impl.DSL.concat;
 import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.field;
+import static org.jooq.impl.DSL.inline;
 import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.min;
 import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.notExists;
 import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.selectFrom;
+import static org.jooq.impl.DSL.table;
 import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 
@@ -341,6 +344,36 @@ public class ClassicModelsRepository {
                                 )
                 )
                         .fetch()
+        );
+    }
+    
+    // EXAMPLE 9
+    /*
+    create table "product_stock" AS
+    select "SYSTEM"."PRODUCT"."PRODUCT_NAME"
+    from "SYSTEM"."PRODUCT"
+    where "SYSTEM"."PRODUCT"."QUANTITY_IN_STOCK" < 500
+    union
+    select "SYSTEM"."PRODUCT"."PRODUCT_NAME"
+    from "SYSTEM"."PRODUCT"
+    where "SYSTEM"."PRODUCT"."QUANTITY_IN_STOCK" >= 9500    
+    */
+    public void findProductStockLt500Gt9500() {
+
+        ctx.dropTableIfExists(name("product_stock")).execute();
+
+        ctx.select(PRODUCT.PRODUCT_NAME)
+                .into(table(name("product_stock")))
+                .from(PRODUCT)
+                .where(PRODUCT.QUANTITY_IN_STOCK.lt(inline(500)))
+                .union(
+                        select(PRODUCT.PRODUCT_NAME)
+                                .from(PRODUCT)
+                                .where(PRODUCT.QUANTITY_IN_STOCK.ge(inline(9500)))
+                ).fetch();
+
+        System.out.println("EXAMPLE 9\n"
+                + ctx.selectFrom(table(name("product_stock"))).fetch()
         );
     }
 }
