@@ -317,4 +317,45 @@ public class ClassicModelsRepository {
                         .fetch()
         );                 
     }   
+    
+    // EXAMPLE 8
+    /*
+    select `alias_55017331`.`order_id`,
+           `alias_55017331`.`price_each`,
+           `alias_55017331`.`quantity_ordered`
+    from (
+            (select `classicmodels`.`orderdetail`.`order_id`,
+                    `classicmodels`.`orderdetail`.`price_each`,
+                    `classicmodels`.`orderdetail`.`quantity_ordered`
+             from `classicmodels`.`orderdetail`
+             where `classicmodels`.`orderdetail`.`quantity_ordered` <= ?
+             order by `classicmodels`.`orderdetail`.`price_each`
+             limit ?)
+          union
+            (select `classicmodels`.`orderdetail`.`order_id`,
+                    `classicmodels`.`orderdetail`.`price_each`,
+                    `classicmodels`.`orderdetail`.`quantity_ordered`
+             from `classicmodels`.`orderdetail`
+             where `classicmodels`.`orderdetail`.`quantity_ordered` >= ?
+             order by `classicmodels`.`orderdetail`.`price_each`
+             limit ?)) as `alias_55017331`    
+    */
+    public void findTop5OrdersHavingQuantityOrderedLe20AndGe60OrderedByPrice() {
+
+        System.out.println("EXAMPLE 8\n"
+                + ctx.select().from(
+                        select(ORDERDETAIL.ORDER_ID, ORDERDETAIL.PRICE_EACH, ORDERDETAIL.QUANTITY_ORDERED)
+                                .from(ORDERDETAIL)
+                                .where(ORDERDETAIL.QUANTITY_ORDERED.le(20))
+                                .orderBy(ORDERDETAIL.PRICE_EACH).limit(5)
+                                .union(
+                                        select(ORDERDETAIL.ORDER_ID, ORDERDETAIL.PRICE_EACH, ORDERDETAIL.QUANTITY_ORDERED)
+                                                .from(ORDERDETAIL)
+                                                .where(ORDERDETAIL.QUANTITY_ORDERED.ge(60))
+                                                .orderBy(ORDERDETAIL.PRICE_EACH).limit(5)
+                                )
+                )
+                        .fetch()
+        );
+    }
 }
