@@ -6,6 +6,7 @@ import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Office.OFFICE;
 import jooq.generated.tables.Orderdetail;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
+import static jooq.generated.tables.Product.PRODUCT;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.case_;
 import static org.jooq.impl.DSL.concat;
@@ -16,6 +17,7 @@ import static org.jooq.impl.DSL.min;
 import static org.jooq.impl.DSL.notExists;
 import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.selectFrom;
+import static org.jooq.impl.DSL.table;
 import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 
@@ -342,6 +344,36 @@ public class ClassicModelsRepository {
                                 )
                 )
                         .fetch()
+        );
+    }
+    
+    // EXAMPLE 9
+    /*
+    create table product_stock AS
+    select "public"."product"."product_name"
+    from "public"."product"
+    where "public"."product"."quantity_in_stock" < ?
+    union
+    select "public"."product"."product_name"
+    from "public"."product"
+    where "public"."product"."quantity_in_stock" >= ?    
+    */
+    public void findProductStockLt500Gt9500() {
+
+        ctx.dropTableIfExists("product_stock").execute();
+
+        ctx.select(PRODUCT.PRODUCT_NAME)
+                .into(table("product_stock"))
+                .from(PRODUCT)
+                .where(PRODUCT.QUANTITY_IN_STOCK.lt(Short.valueOf("500")))
+                .union(
+                        select(PRODUCT.PRODUCT_NAME)
+                                .from(PRODUCT)
+                                .where(PRODUCT.QUANTITY_IN_STOCK.ge(Short.valueOf("9500")))
+                ).fetch();
+
+        System.out.println("EXAMPLE 9\n"
+                + ctx.selectFrom(table("product_stock")).fetch()
         );
     }
 }
