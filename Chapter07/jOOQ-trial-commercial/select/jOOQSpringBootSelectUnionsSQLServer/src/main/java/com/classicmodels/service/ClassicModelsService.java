@@ -19,5 +19,6 @@ public class ClassicModelsService {
         classicModelsRepository.unionEmployeeAndCustomerNamesOrderBy();                          // EXAMPLE 4        
         classicModelsRepository.unionAllOfficeCustomerCityAndCountry();                          // EXAMPLE 5        
         classicModelsRepository.findAllOrdersHavingQuantityOrderedLe20AndGe60();                 // EXAMPLE 6
+        classicModelsRepository.findSilverGoldPlatinumCustomers();                               // EXAMPLE 7
     }
 }

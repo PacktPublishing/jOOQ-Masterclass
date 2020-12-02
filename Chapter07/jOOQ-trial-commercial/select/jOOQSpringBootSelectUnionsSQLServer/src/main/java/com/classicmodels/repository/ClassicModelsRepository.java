@@ -5,8 +5,10 @@ import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
+import static jooq.generated.tables.Payment.PAYMENT;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.concat;
+import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.val;
@@ -206,6 +208,77 @@ public class ClassicModelsRepository {
                                                 .where(ORDERDETAIL.QUANTITY_ORDERED.ge(60))                                               
                                 )
                 )
+                        .fetch()
+        );
+    }
+    
+    // EXAMPLE 7
+    /*
+    select 
+      [classicmodels].[dbo].[customer].[customer_number], 
+      count(*) [silver], 
+      ? [gold], 
+      ? [platinum] 
+    from 
+      [classicmodels].[dbo].[customer] 
+      join [classicmodels].[dbo].[payment] on [classicmodels].[dbo].[customer].[customer_number] 
+        = [classicmodels].[dbo].[payment].[customer_number] 
+    group by 
+      [classicmodels].[dbo].[customer].[customer_number] 
+    having 
+      count(*) < ? 
+    union 
+    select 
+      [classicmodels].[dbo].[customer].[customer_number], 
+      ?, 
+      count(*), 
+      ? 
+    from 
+      [classicmodels].[dbo].[customer] 
+      join [classicmodels].[dbo].[payment] on [classicmodels].[dbo].[customer].[customer_number] 
+        = [classicmodels].[dbo].[payment].[customer_number] 
+    group by 
+      [classicmodels].[dbo].[customer].[customer_number] 
+    having 
+      count(*) = ? 
+    union 
+    select 
+      [classicmodels].[dbo].[customer].[customer_number], 
+      ?, 
+      ?, 
+      count(*) 
+    from 
+      [classicmodels].[dbo].[customer] 
+      join [classicmodels].[dbo].[payment] on [classicmodels].[dbo].[customer].[customer_number] 
+        = [classicmodels].[dbo].[payment].[customer_number] 
+    group by 
+      [classicmodels].[dbo].[customer].[customer_number] 
+    having 
+      count(*) > ?    
+    */
+    public void findSilverGoldPlatinumCustomers() {
+        System.out.println("EXAMPLE 7\n"
+                + ctx.select(CUSTOMER.CUSTOMER_NUMBER, count().as("silver"), val(0).as("gold"), val(0).as("platinum"))
+                        .from(CUSTOMER)
+                        .join(PAYMENT)
+                        .on(CUSTOMER.CUSTOMER_NUMBER.eq(PAYMENT.CUSTOMER_NUMBER))
+                        .groupBy(CUSTOMER.CUSTOMER_NUMBER)
+                        .having(count().lt(2))
+                        .union(
+                                select(CUSTOMER.CUSTOMER_NUMBER, val(0), count(), val(0))
+                                        .from(CUSTOMER)
+                                        .join(PAYMENT)
+                                        .on(CUSTOMER.CUSTOMER_NUMBER.eq(PAYMENT.CUSTOMER_NUMBER))
+                                        .groupBy(CUSTOMER.CUSTOMER_NUMBER)
+                                        .having(count().eq(2))
+                        ).union(
+                                select(CUSTOMER.CUSTOMER_NUMBER, val(0), val(0), count())
+                                        .from(CUSTOMER)
+                                        .join(PAYMENT)
+                                        .on(CUSTOMER.CUSTOMER_NUMBER.eq(PAYMENT.CUSTOMER_NUMBER))
+                                        .groupBy(CUSTOMER.CUSTOMER_NUMBER)
+                                        .having(count().gt(2))
+                        )
                         .fetch()
         );
     }
