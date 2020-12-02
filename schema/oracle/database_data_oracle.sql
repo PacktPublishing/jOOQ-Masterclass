@@ -38,8 +38,8 @@ insert /*+ ignore_row_on_dupkey_index(office(office_code)) */ into office(office
  select '9','Bucharest','+44 20 1827 21411','22 DN1','Level 12',NULL,NULL,'EC2N 1HN','NA' from dual union all
 
  select '10',NULL,'+44 20 1827 21411','12 Home','Level 22',NULL,NULL,'EC2N 1HN','NA' from dual union all
-
- select '11','Paris','+32 12 713 4304','43 Rue 2',NULL,NULL,'France','25017','EMEA' from dual union all
+ 
+ select '11','Paris','+32 12 713 4304','43 Rue 2',NULL,NULL,'France','97562','EMEA' from dual union all
 
  select '12','Tokyo','+81 33 224 3444','4-1 Kioicho',NULL,'Koil-Ku','Japan','101-6578','Japan' from dual;
 
@@ -403,7 +403,7 @@ insert /*+ ignore_row_on_dupkey_index(customerdetail(customer_number)) */ into c
 
  select 103,'54, rue Royale',NULL,'Nantes',NULL,'44000','France' from dual union all
 
- select 112,'8489 Strong St.',NULL,'Las Vegas','NV','83030','USA' from dual union all
+ select 112,'8489 Strong St.',NULL,'Las Vegas','NV','75017','USA' from dual union all
 
  select 114,'636 St Kilda Road','Level 3','Melbourne','Victoria','3004','Australia' from dual union all
 

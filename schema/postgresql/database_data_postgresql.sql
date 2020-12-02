@@ -35,7 +35,7 @@ insert  into office(office_code,city,phone,address_line_first,address_line_secon
 
 ('10',NULL,'+44 20 1827 21411','12 Home','Level 22',NULL,NULL,'EC2N 1HN','NA'), 
 
-('11','Paris','+32 12 713 4304','43 Rue 2',NULL,NULL,'France','25017','EMEA'),
+('11','Paris','+32 12 713 4304','43 Rue 2',NULL,NULL,'France','97562','EMEA'),
 
 ('12','Tokyo','+81 33 224 3444','4-1 Kioicho',NULL,'Koil-Ku','Japan','101-6578','Japan') ON CONFLICT (office_code) DO NOTHING;
 
@@ -399,7 +399,7 @@ insert  into customerdetail(customer_number,address_line_first,address_line_seco
 
 (103,'54, rue Royale',NULL,'Nantes',NULL,'44000','France'),
 
-(112,'8489 Strong St.',NULL,'Las Vegas','NV','83030','USA'),
+(112,'8489 Strong St.',NULL,'Las Vegas','NV','75017','USA'),
 
 (114,'636 St Kilda Road','Level 3','Melbourne','Victoria','3004','Australia'),
 
