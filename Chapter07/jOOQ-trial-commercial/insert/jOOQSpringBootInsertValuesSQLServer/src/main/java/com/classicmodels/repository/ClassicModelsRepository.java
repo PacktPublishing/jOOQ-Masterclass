@@ -44,16 +44,31 @@ public class ClassicModelsRepository {
         this.ctx = ctx;
     }
 
-    // EXAMPLE 1
-    /*
-    insert into [classicmodels].[dbo].[order] (
-      [comments],[order_date],[required_date],[shipped_date],[status],[customer_number])
-    values
-      (?, ?, ?, ?, ?, ?)
-     */
+    // EXAMPLE 1   
     public void insertOrderAutoGenKey() {
-
+        
         // Consider visiting: https://github.com/jOOQ/jOOQ/issues/1818
+        /*
+        SET IDENTITY_INSERT [order] ON
+        
+        insert into [classicmodels].[dbo].[order] (
+          [order_id], [order_date], [required_date], 
+          [shipped_date], [status], [comments], 
+          [customer_number]
+        ) 
+        values 
+          (
+            9103555, 
+            cast('2003-02-12' as date), 
+            cast('2003-03-01' as date), 
+            cast('2003-02-27' as date), 
+            'Shipped', 
+            'New order inserted ...', 
+            363
+          )
+
+        SET IDENTITY_INSERT [order] OFF
+        */
         Query q1 = ctx.query("SET IDENTITY_INSERT [order] ON");
         Query q2 = ctx.insertInto(ORDER) // InsertSetStep<OrderRecord>
                 .values(Math.random() * 10000000, // explicit random primary key
@@ -65,7 +80,13 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 1.1 (affected rows): "
                 + Arrays.toString(ctx.batch(q1, q2, q3).execute())
         );
-
+        
+       /*
+       insert into [classicmodels].[dbo].[order] (
+         [comments],[order_date],[required_date],[shipped_date],[status],[customer_number])
+       values
+         (?, ?, ?, ?, ?, ?)
+        */
         System.out.println("EXAMPLE 1.2 (affected rows): "
                 + // InsertValuesStep6<OrderRecord, String, LocalDate, LocalDate, LocalDate, String, Long>
                 ctx.insertInto(ORDER, ORDER.COMMENTS, ORDER.ORDER_DATE, ORDER.REQUIRED_DATE,
