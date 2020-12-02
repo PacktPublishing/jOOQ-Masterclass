@@ -4,9 +4,11 @@ import com.classicmodels.pojo.SalePart;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import static jooq.generated.Keys.OFFICE__PK__OFFICE__2165C1FC94027ECC;
 import static jooq.generated.Routines.netpriceeach;
 import static jooq.generated.tables.Department.DEPARTMENT;
 import static jooq.generated.tables.Office.OFFICE;
@@ -21,6 +23,7 @@ import jooq.generated.tables.pojos.Sale;
 import jooq.generated.tables.records.OfficeRecord;
 import jooq.generated.tables.records.SaleRecord;
 import org.jooq.DSLContext;
+import org.jooq.Query;
 import static org.jooq.impl.DSL.choose;
 import static org.jooq.impl.DSL.coalesce;
 import static org.jooq.impl.DSL.inline;
@@ -52,7 +55,19 @@ public class ClassicModelsRepository {
     public void insertOrderAutoGenKey() {
 
         // Consider visiting: https://github.com/jOOQ/jOOQ/issues/1818
+        Query q1 = ctx.query("SET IDENTITY_INSERT [order] ON");
+        Query q2 = ctx.insertInto(ORDER) // InsertSetStep<OrderRecord>
+                .values(Math.random() * 10000000, // explicit random primary key
+                        LocalDate.of(2003, 2, 12), LocalDate.of(2003, 3, 1),
+                        LocalDate.of(2003, 2, 27), "Shipped",
+                        "New order inserted ...", 363L);
+        Query q3 = ctx.query("SET IDENTITY_INSERT [order] OFF");
+
         System.out.println("EXAMPLE 1.1 (affected rows): "
+                + Arrays.toString(ctx.batch(q1, q2, q3).execute())
+        );
+
+        System.out.println("EXAMPLE 1.2 (affected rows): "
                 + // InsertValuesStep6<OrderRecord, String, LocalDate, LocalDate, LocalDate, String, Long>
                 ctx.insertInto(ORDER, ORDER.COMMENTS, ORDER.ORDER_DATE, ORDER.REQUIRED_DATE,
                         ORDER.SHIPPED_DATE, ORDER.STATUS, ORDER.CUSTOMER_NUMBER)
@@ -61,7 +76,7 @@ public class ClassicModelsRepository {
                         .execute()
         );
 
-        System.out.println("EXAMPLE 1.2 (affected rows): "
+        System.out.println("EXAMPLE 1.3 (affected rows): "
                 + ctx.insertInto(ORDER) // InsertSetStep<OrderRecord>
                         .columns(ORDER.COMMENTS, ORDER.ORDER_DATE, ORDER.REQUIRED_DATE,
                                 ORDER.SHIPPED_DATE, ORDER.STATUS, ORDER.CUSTOMER_NUMBER)
@@ -604,7 +619,7 @@ public class ClassicModelsRepository {
                         .execute()
         );
     }
-    
+
     // EXAMPLE 13
     /*
     insert into [classicmodels].[dbo].[order] (
