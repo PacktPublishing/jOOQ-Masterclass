@@ -394,7 +394,47 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 10
     /*
-    
+    select 
+      `classicmodels`.`customer`.`customer_number`, 
+      count(*) as `silver`, 
+      ?, 
+      ? 
+    from 
+      `classicmodels`.`customer` 
+      join `classicmodels`.`payment` on `classicmodels`.`customer`.`customer_number` 
+        = `classicmodels`.`payment`.`customer_number` 
+    group by 
+      `classicmodels`.`customer`.`customer_number` 
+    having 
+      count(*) < ? 
+    union 
+    select 
+      `classicmodels`.`customer`.`customer_number`, 
+      ?, 
+      count(*) as `gold`, 
+      ? 
+    from 
+      `classicmodels`.`customer` 
+      join `classicmodels`.`payment` on `classicmodels`.`customer`.`customer_number` 
+        = `classicmodels`.`payment`.`customer_number` 
+    group by 
+      `classicmodels`.`customer`.`customer_number` 
+    having 
+      count(*) = ? 
+    union 
+    select 
+      `classicmodels`.`customer`.`customer_number`, 
+      ?, 
+      ?, 
+      count(*) as `platinum` 
+    from 
+      `classicmodels`.`customer` 
+      join `classicmodels`.`payment` on `classicmodels`.`customer`.`customer_number` 
+        = `classicmodels`.`payment`.`customer_number` 
+    group by 
+      `classicmodels`.`customer`.`customer_number` 
+    having 
+      count(*) > ?    
      */
     public void findSilverGoldPlatinumCustomers() {
         System.out.println("EXAMPLE 10\n"
