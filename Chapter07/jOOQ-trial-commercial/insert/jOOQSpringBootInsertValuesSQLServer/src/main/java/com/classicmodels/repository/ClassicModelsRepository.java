@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import static jooq.generated.Keys.OFFICE__PK__OFFICE__2165C1FC94027ECC;
 import static jooq.generated.Routines.netpriceeach;
 import static jooq.generated.tables.Department.DEPARTMENT;
 import static jooq.generated.tables.Office.OFFICE;
