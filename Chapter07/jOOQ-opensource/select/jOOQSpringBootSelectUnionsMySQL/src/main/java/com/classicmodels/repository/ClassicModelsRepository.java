@@ -392,31 +392,34 @@ public class ClassicModelsRepository {
         );
     }
 
-    public void q() {
-System.out.println(
-        ctx.select(CUSTOMER.CUSTOMER_NUMBER, count().as("poor"), val(0), val(0))
-                .from(CUSTOMER)
-                .join(PAYMENT)
-                .on(CUSTOMER.CUSTOMER_NUMBER.eq(PAYMENT.CUSTOMER_NUMBER))
-                .groupBy(CUSTOMER.CUSTOMER_NUMBER)
-                .having(count().lt(2))
-                .union(
-                 select(CUSTOMER.CUSTOMER_NUMBER, val(0), count().as("good"), val(0))
-                .from(CUSTOMER)
-                .join(PAYMENT)
-                .on(CUSTOMER.CUSTOMER_NUMBER.eq(PAYMENT.CUSTOMER_NUMBER))
-                .groupBy(CUSTOMER.CUSTOMER_NUMBER)
-                .having(count().eq(2))       
-                ).union(
-                 select(CUSTOMER.CUSTOMER_NUMBER, val(0), val(0), count().as("exceee"))
-                .from(CUSTOMER)
-                .join(PAYMENT)
-                .on(CUSTOMER.CUSTOMER_NUMBER.eq(PAYMENT.CUSTOMER_NUMBER))
-                .groupBy(CUSTOMER.CUSTOMER_NUMBER)
-                .having(count().gt(2))       
-                )
-                
-                .fetch()
-);
+    // EXAMPLE 10
+    /*
+    
+     */
+    public void findSilverGoldPlatinumCustomers() {
+        System.out.println("EXAMPLE 10\n"
+                + ctx.select(CUSTOMER.CUSTOMER_NUMBER, count().as("silver"), val(0), val(0))
+                        .from(CUSTOMER)
+                        .join(PAYMENT)
+                        .on(CUSTOMER.CUSTOMER_NUMBER.eq(PAYMENT.CUSTOMER_NUMBER))
+                        .groupBy(CUSTOMER.CUSTOMER_NUMBER)
+                        .having(count().lt(2))
+                        .union(
+                                select(CUSTOMER.CUSTOMER_NUMBER, val(0), count().as("gold"), val(0))
+                                        .from(CUSTOMER)
+                                        .join(PAYMENT)
+                                        .on(CUSTOMER.CUSTOMER_NUMBER.eq(PAYMENT.CUSTOMER_NUMBER))
+                                        .groupBy(CUSTOMER.CUSTOMER_NUMBER)
+                                        .having(count().eq(2))
+                        ).union(
+                                select(CUSTOMER.CUSTOMER_NUMBER, val(0), val(0), count().as("platinum"))
+                                        .from(CUSTOMER)
+                                        .join(PAYMENT)
+                                        .on(CUSTOMER.CUSTOMER_NUMBER.eq(PAYMENT.CUSTOMER_NUMBER))
+                                        .groupBy(CUSTOMER.CUSTOMER_NUMBER)
+                                        .having(count().gt(2))
+                        )
+                        .fetch()
+        );
     }
 }
