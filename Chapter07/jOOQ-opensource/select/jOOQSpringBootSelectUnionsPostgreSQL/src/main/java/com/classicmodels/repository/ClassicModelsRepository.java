@@ -6,6 +6,7 @@ import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Office.OFFICE;
 import jooq.generated.tables.Orderdetail;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
+import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Product.PRODUCT;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.case_;
@@ -346,7 +347,7 @@ public class ClassicModelsRepository {
                         .fetch()
         );
     }
-    
+
     // EXAMPLE 9
     /*
     create table product_stock AS
@@ -357,7 +358,7 @@ public class ClassicModelsRepository {
     select "public"."product"."product_name"
     from "public"."product"
     where "public"."product"."quantity_in_stock" >= ?    
-    */
+     */
     public void findProductStockLt500Gt9500() {
 
         ctx.dropTableIfExists("product_stock").execute();
@@ -374,6 +375,37 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 9\n"
                 + ctx.selectFrom(table("product_stock")).fetch()
+        );
+    }
+
+    // EXAMPLE 10
+    /*
+    
+     */
+    public void findSilverGoldPlatinumCustomers() {
+        System.out.println("EXAMPLE 10\n"
+                + ctx.select(CUSTOMER.CUSTOMER_NUMBER, count().as("silver"), val(0).as("gold"), val(0).as("platinum"))
+                        .from(CUSTOMER)
+                        .join(PAYMENT)
+                        .on(CUSTOMER.CUSTOMER_NUMBER.eq(PAYMENT.CUSTOMER_NUMBER))
+                        .groupBy(CUSTOMER.CUSTOMER_NUMBER)
+                        .having(count().lt(2))
+                        .union(
+                                select(CUSTOMER.CUSTOMER_NUMBER, val(0), count(), val(0))
+                                        .from(CUSTOMER)
+                                        .join(PAYMENT)
+                                        .on(CUSTOMER.CUSTOMER_NUMBER.eq(PAYMENT.CUSTOMER_NUMBER))
+                                        .groupBy(CUSTOMER.CUSTOMER_NUMBER)
+                                        .having(count().eq(2))
+                        ).union(
+                                select(CUSTOMER.CUSTOMER_NUMBER, val(0), val(0), count())
+                                        .from(CUSTOMER)
+                                        .join(PAYMENT)
+                                        .on(CUSTOMER.CUSTOMER_NUMBER.eq(PAYMENT.CUSTOMER_NUMBER))
+                                        .groupBy(CUSTOMER.CUSTOMER_NUMBER)
+                                        .having(count().gt(2))
+                        )
+                        .fetch()
         );
     }
 }
