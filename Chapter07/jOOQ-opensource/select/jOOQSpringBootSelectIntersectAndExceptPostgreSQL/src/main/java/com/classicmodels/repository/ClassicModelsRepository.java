@@ -64,6 +64,7 @@ public class ClassicModelsRepository {
         "public"."orderdetail"."price_each"
       from
         "public"."orderdetail"
+    order by "city", "country"
      */
     public void exceptBuyPriceFromPriceEach() {
 
