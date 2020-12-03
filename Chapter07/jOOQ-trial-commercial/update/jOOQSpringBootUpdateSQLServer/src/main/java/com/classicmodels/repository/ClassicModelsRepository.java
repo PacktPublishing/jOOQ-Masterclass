@@ -168,8 +168,13 @@ public class ClassicModelsRepository {
                         .where(OFFICE.OFFICE_CODE.eq("1"))
                         .execute()
         );
-
+        
         /* approach 2 */
+        System.out.println("EXAMPLE 5.2 (affected rows): "
+                + ctx.executeUpdate(or, OFFICE.OFFICE_CODE.eq("1"))
+        );
+
+        /* approach 3 */
         /*
         update 
           [classicmodels].[dbo].[office] 
@@ -180,7 +185,7 @@ public class ClassicModelsRepository {
         where 
           [classicmodels].[dbo].[office].[office_code] = ?        
          */
-        System.out.println("EXAMPLE 5.2 (affected rows): "
+        System.out.println("EXAMPLE 5.3 (affected rows): "
                 + ctx.newRecord(OFFICE)
                         .value1("1") // the ID is present in the WHERE clause
                         .value2("Parma")
@@ -188,7 +193,7 @@ public class ClassicModelsRepository {
                         .update()
         );
 
-        /* approach 3 */
+        /* approach 4 */
         OfficePart op = new OfficePart("Madrid", "Spain");
         OfficeRecord orFromOp = new OfficeRecord();
 
@@ -203,7 +208,7 @@ public class ClassicModelsRepository {
         where 
           [classicmodels].[dbo].[office].[office_code] = ?        
          */
-        System.out.println("EXAMPLE 5.3 (affected rows): "
+        System.out.println("EXAMPLE 5.4 (affected rows): "
                 + ctx.update(OFFICE)
                         .set(orFromOp)
                         .where(OFFICE.OFFICE_CODE.eq("1"))
