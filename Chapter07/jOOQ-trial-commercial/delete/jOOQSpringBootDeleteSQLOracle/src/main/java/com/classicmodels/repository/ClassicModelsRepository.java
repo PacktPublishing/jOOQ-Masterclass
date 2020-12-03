@@ -555,22 +555,4 @@ public class ClassicModelsRepository {
                         .execute()
         );
     }
-    
-    // EXAMPLE 13
-    public void throwExceptionForUpdateWithoutWhereClause() {
-
-        try {
-            ctx.configuration().set(new Settings()
-                    .withExecuteUpdateWithoutWhere(ExecuteWithoutWhere.THROW)) // check other options beside THROW
-                    .dsl()
-                    .update(OFFICE)
-                    .set(OFFICE.CITY, "Banesti")
-                    .set(OFFICE.COUNTRY, "Romania")                  
-                    .execute();
-
-            // in production, don't "swallow" the exception as here!
-        } catch (org.jooq.exception.DataAccessException e) {
-            System.out.println("Execute UPDATE without WHERE!");
-        }
-    }
 }
