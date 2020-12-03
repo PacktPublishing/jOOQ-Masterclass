@@ -21,5 +21,6 @@ public class ClassicModelsService {
         classicModelsRepository.updateOfficeAddressAsPresidentName();                              // EXAMPLE 6        
         classicModelsRepository.updateOfficeReturning();                                           // EXAMPLE 7
         classicModelsRepository.updateEmployeeSalaryAsAvgSaleAndCustomersCreditAsDoubleSalary();   // EXAMPLE 8
+        classicModelsRepository.throwExceptionForUpdateWithoutWhereClause();                       // EXAMPLE 9 
     }
 }
