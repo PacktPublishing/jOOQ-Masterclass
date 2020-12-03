@@ -20,8 +20,8 @@ DROP TABLE IF EXISTS `product`;
 DROP TABLE IF EXISTS `productline`;
 DROP TABLE IF EXISTS `office_has_manager`;
 DROP TABLE IF EXISTS `manager`;
-DROP TABLE IF EXISTS `customer`;
 DROP TABLE IF EXISTS `customerdetail`;
+DROP TABLE IF EXISTS `customer`;
 DROP TABLE IF EXISTS `sale`;
 DROP TABLE IF EXISTS `employee`;
 DROP TABLE IF EXISTS `department`;
@@ -209,7 +209,7 @@ CREATE TABLE `payment` (
   `invoice_amount` decimal(10,2) NOT NULL,
   `caching_date` timestamp DEFAULT NULL,
   PRIMARY KEY (`customer_number`,`check_number`),
-  CONSTRAINT unique_check_number UNIQUE(check_number),
+  CONSTRAINT `unique_check_number` UNIQUE (`check_number`),
   CONSTRAINT `payments_ibfk_1` FOREIGN KEY (`customer_number`) REFERENCES `customer` (`customer_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 

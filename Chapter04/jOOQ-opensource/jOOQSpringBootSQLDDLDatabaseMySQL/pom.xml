@@ -27,6 +27,8 @@
         <maven.compiler.target>14</maven.compiler.target>
         
         <jooq.version>3.14.4</jooq.version>
+        <javax.xml.bind.version>2.3.1</javax.xml.bind.version>
+        <org.glassfish.jaxb.version>2.3.1</org.glassfish.jaxb.version>
         <mysql.connector.java.version>8.0.20</mysql.connector.java.version>                
         <codehaus.mojo.version>1.0.0</codehaus.mojo.version>      
         <maven.compiler.plugin.version>3.3</maven.compiler.plugin.version>          
@@ -54,7 +56,17 @@
         <dependency>
             <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>            
-        </dependency>  
+        </dependency>
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>            
+            <version>${javax.xml.bind.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>            
+            <version>${org.glassfish.jaxb.version}</version>
+        </dependency>        
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
