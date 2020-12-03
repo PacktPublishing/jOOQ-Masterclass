@@ -78,7 +78,7 @@ public class ClassicModelsRepository {
                                 PRODUCT.PRODUCT_DESCRIPTION, PRODUCT.QUANTITY_IN_STOCK,
                                 PRODUCT.BUY_PRICE, PRODUCT.MSRP)
                         .values(val("Ultra Jet X1"),
-                                val("Planes"),
+                                val("1:18"),
                                 defaultValue(PRODUCT.PRODUCT_SCALE),
                                 val("Motor City Art Classics"),
                                 defaultValue(PRODUCT.PRODUCT_DESCRIPTION),
@@ -106,7 +106,7 @@ public class ClassicModelsRepository {
                                 PRODUCT.PRODUCT_DESCRIPTION, PRODUCT.QUANTITY_IN_STOCK,
                                 PRODUCT.BUY_PRICE, PRODUCT.MSRP)
                         .values(val("Ultra Jet X1"),
-                                val("Planes"),
+                                val("1:18"),
                                 defaultValue(String.class), // or, defaultValue(VARCHAR(10))
                                 val("Motor City Art Classics"),
                                 defaultValue(String.class), // or, defaultValue(LONGVARCHAR(1000))
