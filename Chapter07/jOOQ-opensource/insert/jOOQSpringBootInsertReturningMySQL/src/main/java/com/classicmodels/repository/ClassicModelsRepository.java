@@ -37,7 +37,7 @@ public class ClassicModelsRepository {
                 .returningResult(SALE.SALE_ID)
                 .fetchOne();
 
-        System.out.println("EXAMPLE 1 (inserted id): " + insertedId); // as Long, insertedId.value1()
+        System.out.println("EXAMPLE 1 (inserted id):\n" + insertedId); // as Long, insertedId.value1()
     }
 
     // EXAMPLE 2
@@ -57,7 +57,7 @@ public class ClassicModelsRepository {
                 .returningResult(SALE.SALE_ID)
                 .fetch();
 
-        System.out.println("EXAMPLE 2 (inserted ids): " + insertedIds);
+        System.out.println("EXAMPLE 2 (inserted ids):\n" + insertedIds);
     }
 
     // EXAMPLE 3
@@ -115,6 +115,6 @@ public class ClassicModelsRepository {
                 .returningResult(MANAGER.MANAGER_ID)
                 .fetch();
         
-        System.out.println("EXAMPLE 4 (inserted ids): " + inserted);
+        System.out.println("EXAMPLE 4 (inserted ids):\n" + inserted);
     }
 }
