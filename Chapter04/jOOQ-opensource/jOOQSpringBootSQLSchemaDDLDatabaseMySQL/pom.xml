@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.app</groupId>
-    <artifactId>jOOQSpringBootSQLDDLDatabaseMySQL</artifactId>
+    <artifactId>jOOQSpringBootSQLSchemaDDLDatabaseMySQL</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQSpringBootSQLDDLDatabaseMySQL</name>
+    <name>jOOQSpringBootSQLSchemaDDLDatabaseMySQL</name>
     <description>jOOQ - Spring Boot app</description>    
 
     <parent>
