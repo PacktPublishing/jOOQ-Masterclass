@@ -222,20 +222,4 @@ BEGIN
 END$$
 DELIMITER ;
 
-/* USER-DEFINED TRIGGERS */
-DELIMITER $$
-
-CREATE TRIGGER ProductQuantityInStockTrigger
-BEFORE INSERT
-ON product FOR EACH ROW
-BEGIN 
- IF (NEW.product_vendor IS NULL) THEN
-   SET NEW.quantity_in_stock = -1;
-   SET NEW.buy_price = -1;
-   SET NEW.msrp = -1;
- END IF;
-END $$
-
-DELIMITER ;
-
 /* END */
