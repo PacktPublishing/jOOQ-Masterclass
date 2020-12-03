@@ -6,6 +6,7 @@ import java.math.BigInteger;
 import java.time.LocalDateTime;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
+import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import static jooq.generated.tables.Payment.PAYMENT;
@@ -553,5 +554,23 @@ public class ClassicModelsRepository {
                                         .returningResult(CUSTOMERDETAIL.CUSTOMER_NUMBER).fetchOne().value1()))
                         .execute()
         );
+    }
+    
+    // EXAMPLE 13
+    public void throwExceptionForUpdateWithoutWhereClause() {
+
+        try {
+            ctx.configuration().set(new Settings()
+                    .withExecuteUpdateWithoutWhere(ExecuteWithoutWhere.THROW)) // check other options beside THROW
+                    .dsl()
+                    .update(OFFICE)
+                    .set(OFFICE.CITY, "Banesti")
+                    .set(OFFICE.COUNTRY, "Romania")                  
+                    .execute();
+
+            // in production, don't "swallow" the exception as here!
+        } catch (org.jooq.exception.DataAccessException e) {
+            System.out.println("Execute UPDATE without WHERE!");
+        }
     }
 }
