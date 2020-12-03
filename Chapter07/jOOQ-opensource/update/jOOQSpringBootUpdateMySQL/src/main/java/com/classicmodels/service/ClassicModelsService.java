@@ -20,5 +20,6 @@ public class ClassicModelsService {
         classicModelsRepository.updateEmployeeSalaryBySaleCount();                // EXAMPLE 4
         classicModelsRepository.updateSaleHot();                                  // EXAMPLE 5
         classicModelsRepository.updateNewRecordOffice();                          // EXAMPLE 6                
+        classicModelsRepository.throwExceptionForUpdateWithoutWhereClause();      // EXAMPLE 7
     }
 }

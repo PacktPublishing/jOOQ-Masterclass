@@ -10,6 +10,8 @@ import static jooq.generated.tables.Sale.SALE;
 import jooq.generated.tables.records.OfficeRecord;
 import org.jooq.DSLContext;
 import org.jooq.UpdateQuery;
+import org.jooq.conf.ExecuteWithoutWhere;
+import org.jooq.conf.Settings;
 import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.max;
@@ -216,5 +218,23 @@ public class ClassicModelsRepository {
                         .where(OFFICE.OFFICE_CODE.eq("1"))
                         .execute()
         );
+    }
+    
+    // EXAMPLE 7
+    public void throwExceptionForUpdateWithoutWhereClause() {
+
+        try {
+            ctx.configuration().set(new Settings()
+                    .withExecuteUpdateWithoutWhere(ExecuteWithoutWhere.THROW)) // check other options beside THROW
+                    .dsl()
+                    .update(OFFICE)
+                    .set(OFFICE.CITY, "Banesti")
+                    .set(OFFICE.COUNTRY, "Romania")                  
+                    .execute();
+
+            // in production, don't "swallow" the exception as here!
+        } catch (org.jooq.exception.DataAccessException e) {
+            System.out.println("Execute UPDATE without WHERE!");
+        }
     }
 }
