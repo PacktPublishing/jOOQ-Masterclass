@@ -52,6 +52,10 @@
             <version>${jooq.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>            
+        </dependency>  
+        <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>        
@@ -92,6 +96,12 @@
                             <generator>
                                 <database>
                                     <name>org.jooq.meta.extensions.ddl.DDLDatabase</name>
+                                    
+                                    <!-- The database schema (or in the absence of schema support, in your RDBMS this
+                                    can be the owner, user, database name) to be generated. This cannot be combined with the <schemata/> element.                                     
+                                    If <inputSchema/> is missing then all schemas will be considered. -->
+                                    <inputSchema>PUBLIC</inputSchema>  
+                                    
                                     <properties>
             
                                         <!-- Specify the location of your SQL script.
@@ -103,7 +113,7 @@
                                         - ? matches a single character in a directory / file name -->
                                         <property>
                                             <key>scripts</key>
-                                            <value>src/main/resources/db/migration</value>
+                                            <value>src/main/resources/schema-mysql.sql</value>
                                         </property>
         
                                         <!-- The sort order of the scripts within a directory, where:
@@ -114,7 +124,7 @@
                                         - none: doesn't sort directory contents after fetching them from the directory -->
                                         <property>
                                             <key>sort</key>
-                                            <value>semantic</value>
+                                            <value>none</value>
                                         </property>
         
                                         <!-- The default schema for unqualified objects:
@@ -139,6 +149,22 @@
                                         </property>
                                     </properties>
                                 </database>
+                                <!-- jOOQ will generate POJOs in your behalf -->
+                                <generate>
+                                    <pojos>true</pojos> 
+                                    <validationAnnotations>true</validationAnnotations>                            
+                                </generate>
+                                
+                                <target>
+                                    <!-- The destination package of your generated classes (within the destination directory).
+                                    jOOQ may append the schema name to this package if generating multiple schemas,
+                                    e.g. org.jooq.your.packagename.schema1
+                                    org.jooq.your.packagename.schema2 -->
+                                    <packageName>jooq.generated</packageName>
+            
+                                    <!-- The destination directory of your generated classes. Using Maven directory layout here. -->
+                                    <directory>target/generated-sources/jooq</directory>
+                                </target>
                             </generator>
                         </configuration>
                     </execution>

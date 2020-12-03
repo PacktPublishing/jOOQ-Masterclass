@@ -1,4 +1,6 @@
-USE classicmodels;
+-- [jooq ignore start]
+USE `classicmodels`;
+-- [jooq ignore stop]
 
 DROP TABLE IF EXISTS `payment`;
 DROP TABLE IF EXISTS `orderdetail`;
@@ -7,8 +9,8 @@ DROP TABLE IF EXISTS `product`;
 DROP TABLE IF EXISTS `productline`;
 DROP TABLE IF EXISTS `office_has_manager`;
 DROP TABLE IF EXISTS `manager`;
-DROP TABLE IF EXISTS `customer`;
 DROP TABLE IF EXISTS `customerdetail`;
+DROP TABLE IF EXISTS `customer`;
 DROP TABLE IF EXISTS `sale`;
 DROP TABLE IF EXISTS `employee`;
 DROP TABLE IF EXISTS `office`;
@@ -97,18 +99,16 @@ CREATE TABLE `office_has_manager` (
   `offices_office_code` varchar(10) NOT NULL,
   `managers_manager_id` bigint NOT NULL,
   PRIMARY KEY (`offices_office_code`, `managers_manager_id`),
-  INDEX `fk_offices_has_managers_managers1_idx` (`managers_manager_id` ASC),
-  INDEX `fk_offices_has_managers_offices_idx` (`offices_office_code` ASC),
-  CONSTRAINT `fk_offices_has_managers_offices` FOREIGN KEY (`offices_office_code`) REFERENCES `office` (`office_code`),
-    -- [jooq ignore start]
+  -- [jooq ignore start]
+  INDEX `fk_offices_has_managers_managers1_idx` (`managers_manager_id` ASC) VISIBLE,
+  INDEX `fk_offices_has_managers_offices_idx` (`offices_office_code` ASC) VISIBLE,
+  -- [jooq ignore stop]
+  CONSTRAINT `fk_offices_has_managers_offices` FOREIGN KEY (`offices_office_code`) REFERENCES `office` (`office_code`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-    -- [jooq ignore stop]
-  CONSTRAINT `fk_offices_has_managers_managers1` FOREIGN KEY (`managers_manager_id`) REFERENCES `manager` (`manager_id`)
-    -- [jooq ignore start]
+    ON UPDATE NO ACTION,    
+  CONSTRAINT `fk_offices_has_managers_managers1` FOREIGN KEY (`managers_manager_id`) REFERENCES `manager` (`manager_id`)    
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION
-    -- [jooq ignore stop]
+    ON UPDATE NO ACTION    
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `productline` (

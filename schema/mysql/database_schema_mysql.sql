@@ -11,7 +11,7 @@ This is a modified version of the original schema for MySQL
 
 /* START */
 
-USE classicmodels;
+USE `classicmodels`;
 
 DROP TABLE IF EXISTS `payment`;
 DROP TABLE IF EXISTS `orderdetail`;
