@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
+import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import static jooq.generated.tables.Payment.PAYMENT;
@@ -78,27 +79,60 @@ public class ClassicModelsRepository {
         );
     }
 
-    // EXAMPLE 3
-    /*
-    delete from 
-      [classicmodels].[dbo].[customerdetail] 
-    where 
-      not (
-        (
-          (
-            [classicmodels].[dbo].[customerdetail].[city] = ? 
-            and [classicmodels].[dbo].[customerdetail].[country] = ?
-          ) 
-          or (
-            [classicmodels].[dbo].[customerdetail].[city] = ? 
-            and [classicmodels].[dbo].[customerdetail].[country] = ?
-          )
-        )
-      )    
-     */
+    // EXAMPLE 3    
     public void deleteCustomerDetailViaNotIn() {
 
-        System.out.println("EXAMPLE 3 (affected rows): "
+        /*
+        delete from 
+          [classicmodels].[dbo].[customerdetail] 
+        where 
+          exists (
+            select 
+              [alias_1].[v0], 
+              [alias_1].[v1] 
+            from 
+              (
+                select 
+                  [classicmodels].[dbo].[office].[postal_code] [v0], 
+                  [classicmodels].[dbo].[office].[state] [v1] 
+                from 
+                  [classicmodels].[dbo].[office] 
+                where 
+                  [classicmodels].[dbo].[office].[country] = ?
+              ) [alias_1] 
+            where 
+              (
+                [classicmodels].[dbo].[customerdetail].[postal_code] = [alias_1].[v0] 
+                and [classicmodels].[dbo].[customerdetail].[state] = [alias_1].[v1]
+              )
+          )        
+         */
+        System.out.println("EXAMPLE 3.1 (affected rows): "
+                + ctx.deleteFrom(CUSTOMERDETAIL)
+                        .where(row(CUSTOMERDETAIL.POSTAL_CODE, CUSTOMERDETAIL.STATE).in(
+                                select(OFFICE.POSTAL_CODE, OFFICE.STATE)
+                                        .from(OFFICE).where(OFFICE.COUNTRY.eq("USA"))
+                        )).execute()
+        );
+
+        /*
+        delete from 
+          [classicmodels].[dbo].[customerdetail] 
+        where 
+          not (
+            (
+              (
+                [classicmodels].[dbo].[customerdetail].[city] = ? 
+                and [classicmodels].[dbo].[customerdetail].[country] = ?
+              ) 
+              or (
+                [classicmodels].[dbo].[customerdetail].[city] = ? 
+                and [classicmodels].[dbo].[customerdetail].[country] = ?
+              )
+            )
+          )        
+         */
+        System.out.println("EXAMPLE 3.2 (affected rows): "
                 + ctx.deleteFrom(CUSTOMERDETAIL)
                         .where(row(CUSTOMERDETAIL.CITY, CUSTOMERDETAIL.COUNTRY).notIn(
                                 row("Paris", "France"),
