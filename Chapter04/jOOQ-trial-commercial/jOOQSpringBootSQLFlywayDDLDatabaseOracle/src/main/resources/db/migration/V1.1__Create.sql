@@ -1,4 +1,4 @@
-﻿/*
+/*
 *********************************************************************
 http://www.mysqltutorial.org
 *********************************************************************
@@ -11,6 +11,7 @@ This is a modified version of the original schema for Oracle
 
 /* START */
 
+-- [jooq ignore start]
 BEGIN
    EXECUTE IMMEDIATE 'DROP TABLE "PAYMENT" CASCADE CONSTRAINTS';
 EXCEPTION
@@ -89,7 +90,14 @@ EXCEPTION
    WHEN OTHERS THEN NULL;
 END;
 /
+BEGIN
+   EXECUTE IMMEDIATE 'DROP TABLE "flyway_schema_history" CASCADE CONSTRAINTS';
+EXCEPTION
+   WHEN OTHERS THEN NULL;
+END;
+/
 COMMIT;
+-- [jooq ignore stop]
 
 /*Table structure for table `office` */
 
@@ -132,7 +140,7 @@ CREATE INDEX office_code ON employee (office_code);
 CREATE TABLE sale (
   sale_id number(20) NOT NULL, 
   fiscal_year int NOT NULL, 
-  sale float NOT NULL,    
+  sale float NOT NULL,  
   employee_number number(10) DEFAULT NULL,  
   hot number(1,0) DEFAULT 0,
   PRIMARY KEY (sale_id)
@@ -143,6 +151,7 @@ CREATE TABLE sale (
 CREATE INDEX employee_number ON sale (employee_number);
 
 -- Generate ID using sequence and trigger
+-- [jooq ignore start]
 BEGIN
    EXECUTE IMMEDIATE 'DROP SEQUENCE "SALE_SEQ"';
 EXCEPTION
@@ -159,6 +168,7 @@ BEGIN
  SELECT sale_seq.NEXTVAL INTO :NEW.sale_id FROM DUAL;
 END;
 /
+-- [jooq ignore stop]
 
 /*Table structure for table `customer` */
 
@@ -176,6 +186,7 @@ CREATE TABLE customer (
 ) ;
 
 -- Generate ID using sequence and trigger
+-- [jooq ignore start]
 BEGIN
    EXECUTE IMMEDIATE 'DROP SEQUENCE "CUSTOMER_SEQ"';
 EXCEPTION
@@ -192,6 +203,7 @@ BEGIN
  SELECT customer_seq.NEXTVAL INTO :NEW.customer_number FROM DUAL;
 END;
 /
+-- [jooq ignore stop]
 
 CREATE INDEX sales_rep_employee_number ON customer (sales_rep_employee_number);
 
@@ -224,6 +236,7 @@ CREATE TABLE department (
 ) ;
 
 -- Generate ID using sequence and trigger
+-- [jooq ignore start]
 BEGIN
    EXECUTE IMMEDIATE 'DROP SEQUENCE "DEPARTMENT_SEQ"';
 EXCEPTION
@@ -240,6 +253,7 @@ BEGIN
  SELECT department_seq.NEXTVAL INTO :NEW.department_id FROM DUAL;
 END;
 /
+-- [jooq ignore stop]
 
 /*Table structure for table `manager` */
 
@@ -250,6 +264,7 @@ CREATE TABLE manager (
 ) ;
 
 -- Generate ID using sequence and trigger
+-- [jooq ignore start]
 BEGIN
    EXECUTE IMMEDIATE 'DROP SEQUENCE "MANAGER_SEQ"';
 EXCEPTION
@@ -266,6 +281,7 @@ BEGIN
  SELECT manager_seq.NEXTVAL INTO :NEW.manager_id FROM DUAL;
 END;
 /
+-- [jooq ignore stop]
 
 /*Table structure for table `office_has_manager` */
 
@@ -284,7 +300,9 @@ CREATE TABLE productline (
   text_description varchar2(4000) DEFAULT NULL,
   html_description clob,
   image blob,
+  -- [jooq ignore start]
   created_on date DEFAULT SYSDATE NOT NULL,
+  -- [jooq ignore stop]   
   PRIMARY KEY (product_line)
 ) ;
 
@@ -306,6 +324,7 @@ CREATE TABLE product (
 ) ;
 
 -- Generate ID using sequence and trigger
+-- [jooq ignore start]
 BEGIN
    EXECUTE IMMEDIATE 'DROP SEQUENCE "PRODUCT_SEQ"';
 EXCEPTION
@@ -322,6 +341,7 @@ BEGIN
  SELECT product_seq.NEXTVAL INTO :NEW.product_id FROM DUAL;
 END;
 /
+-- [jooq ignore stop]
 
 CREATE INDEX product_line ON product (product_line);
 
@@ -341,6 +361,7 @@ CREATE TABLE "ORDER" (
 ) ;
 
 -- Generate ID using sequence and trigger
+-- [jooq ignore start]
 BEGIN
    EXECUTE IMMEDIATE 'DROP SEQUENCE "ORDER_SEQ"';
 EXCEPTION
@@ -357,6 +378,7 @@ BEGIN
  SELECT order_seq.NEXTVAL INTO :NEW.order_id FROM DUAL;
 END;
 /
+-- [jooq ignore stop]
 
 CREATE INDEX customer_number ON "ORDER" (customer_number);
 
@@ -388,28 +410,8 @@ CREATE TABLE payment (
   CONSTRAINT payments_ibfk_1 FOREIGN KEY (customer_number) REFERENCES customer (customer_number)
 ) ;
 
+-- [jooq ignore start]
 COMMIT;
-
-/* USER-DEFINED FUNCTIONS */
-
-CREATE OR REPLACE FUNCTION get_total_sales(
-    in_year PLS_INTEGER
-) 
-RETURN NUMBER
-IS
-    l_total_sales NUMBER := 0;
-BEGIN
-    -- get total sales
-    SELECT SUM(PRICE_EACH * QUANTITY_ORDERED)
-    INTO l_total_sales
-    FROM ORDERDETAIL
-    INNER JOIN "ORDER" USING (ORDER_ID)
-    WHERE STATUS = 'Shipped'
-    GROUP BY EXTRACT(YEAR FROM ORDER_DATE)
-    HAVING EXTRACT(YEAR FROM ORDER_DATE) = in_year;
-    
-    -- return the total sales
-    RETURN l_total_sales;
-END;
+-- [jooq ignore stop]
 
 /* END */
