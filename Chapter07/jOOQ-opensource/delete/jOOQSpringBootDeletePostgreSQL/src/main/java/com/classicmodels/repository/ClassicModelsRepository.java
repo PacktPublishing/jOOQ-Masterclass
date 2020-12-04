@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
+import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import static jooq.generated.tables.Payment.PAYMENT;
@@ -78,19 +79,47 @@ public class ClassicModelsRepository {
         );
     }
 
-    // EXAMPLE 3
-    /*
-    delete from
-      "public"."customerdetail"
-    where
-    (
-      "public"."customerdetail"."city",
-      "public"."customerdetail"."country"
-    ) not in ((?, ?), (?, ?))
-     */
+    // EXAMPLE 3    
     public void deleteCustomerDetailViaNotIn() {
 
-        System.out.println("EXAMPLE 3 (affected rows): "
+        /*
+        delete from 
+          "public"."customerdetail" 
+        where 
+          (
+            "public"."customerdetail"."postal_code", 
+            "public"."customerdetail"."state"
+          ) in (
+            select 
+              "public"."office"."postal_code", 
+              "public"."office"."state" 
+            from 
+              "public"."office" 
+            where 
+              "public"."office"."country" = ?
+          )     
+         */
+        System.out.println("EXAMPLE 3.1 (affected rows): "
+                + ctx.deleteFrom(CUSTOMERDETAIL)
+                        .where(row(CUSTOMERDETAIL.POSTAL_CODE, CUSTOMERDETAIL.STATE).in(
+                                select(OFFICE.POSTAL_CODE, OFFICE.STATE)
+                                        .from(OFFICE).where(OFFICE.COUNTRY.eq("USA"))
+                        )).execute()
+        );
+
+        /*
+        delete from 
+          "public"."customerdetail" 
+        where 
+          (
+            "public"."customerdetail"."city", 
+            "public"."customerdetail"."country"
+          ) not in (
+            (?, ?), 
+            (?, ?)
+          )     
+         */
+        System.out.println("EXAMPLE 3.2 (affected rows): "
                 + ctx.deleteFrom(CUSTOMERDETAIL)
                         .where(row(CUSTOMERDETAIL.CITY, CUSTOMERDETAIL.COUNTRY).notIn(
                                 row("Paris", "France"),
@@ -211,7 +240,6 @@ public class ClassicModelsRepository {
         // PaymentRecord pr = new PaymentRecord(
         //        114L, "GG31455", LocalDateTime.of(2003,5,20,8,10,45),
         //        BigDecimal.valueOf(45864.03), LocalDateTime.of(2003,5,20,8,30,9));
-        
         /*
         delete from
           "public"."payment"
