@@ -258,6 +258,16 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 6.1 (affected rows): "
                 + ctx.executeDelete(pr)
         );
+        
+        /*
+        delete from 
+          "SYSTEM"."PAYMENT" 
+        where 
+          "SYSTEM"."PAYMENT"."INVOICE_AMOUNT" = ?       
+         */
+        System.out.println("EXAMPLE 6.2 (affected rows): "
+                + ctx.executeDelete(pr, PAYMENT.INVOICE_AMOUNT.eq(BigDecimal.ZERO))
+        );
 
         // user-defined POJO
         /*
@@ -267,7 +277,7 @@ public class ClassicModelsRepository {
           "SYSTEM"."SALE"."SALE_ID" = ?       
          */
         SalePart sp = new SalePart(14L, BigDecimal.valueOf(1607.76));
-        System.out.println("EXAMPLE 6.2 (affected rows): "
+        System.out.println("EXAMPLE 6.3 (affected rows): "
                 + ctx.executeDelete(ctx.newRecord(SALE, sp))
         );
     }
