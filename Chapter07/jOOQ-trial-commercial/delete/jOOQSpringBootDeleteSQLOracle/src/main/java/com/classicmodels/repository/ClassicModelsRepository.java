@@ -82,22 +82,49 @@ public class ClassicModelsRepository {
         );
     }
 
-    // EXAMPLE 3
-    /*
-    delete from 
-      "SYSTEM"."CUSTOMERDETAIL" 
-    where 
-      (
-        "SYSTEM"."CUSTOMERDETAIL"."CITY", 
-        "SYSTEM"."CUSTOMERDETAIL"."COUNTRY"
-      ) not in (
-        (?, ?), 
-        (?, ?)
-      )    
-     */
+    // EXAMPLE 3    
     public void deleteCustomerDetailViaNotIn() {
 
-        System.out.println("EXAMPLE 3 (affected rows): "
+        /*
+        delete from 
+          "SYSTEM"."CUSTOMERDETAIL" 
+        where 
+          (
+            "SYSTEM"."CUSTOMERDETAIL"."POSTAL_CODE", 
+            "SYSTEM"."CUSTOMERDETAIL"."STATE"
+          ) in (
+            (
+              select 
+                "SYSTEM"."OFFICE"."POSTAL_CODE", 
+                "SYSTEM"."OFFICE"."STATE" 
+              from 
+                "SYSTEM"."OFFICE" 
+              where 
+                "SYSTEM"."OFFICE"."COUNTRY" = ?
+            )
+          )     
+         */
+        System.out.println("EXAMPLE 3.1 (affected rows): "
+                + ctx.deleteFrom(CUSTOMERDETAIL)
+                        .where(row(CUSTOMERDETAIL.POSTAL_CODE, CUSTOMERDETAIL.STATE).in(
+                                select(OFFICE.POSTAL_CODE, OFFICE.STATE)
+                                        .from(OFFICE).where(OFFICE.COUNTRY.eq("USA"))
+                        )).execute()
+        );
+
+        /*
+        delete from 
+          "SYSTEM"."CUSTOMERDETAIL" 
+        where 
+          (
+            "SYSTEM"."CUSTOMERDETAIL"."CITY", 
+            "SYSTEM"."CUSTOMERDETAIL"."COUNTRY"
+          ) not in (
+            (?, ?), 
+            (?, ?)
+          )     
+         */
+        System.out.println("EXAMPLE 3.2 (affected rows): "
                 + ctx.deleteFrom(CUSTOMERDETAIL)
                         .where(row(CUSTOMERDETAIL.CITY, CUSTOMERDETAIL.COUNTRY).notIn(
                                 row("Paris", "France"),
