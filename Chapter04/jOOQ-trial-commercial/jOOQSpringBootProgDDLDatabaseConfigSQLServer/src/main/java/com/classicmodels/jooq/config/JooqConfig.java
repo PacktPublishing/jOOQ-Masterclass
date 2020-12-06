@@ -48,7 +48,7 @@ public class JooqConfig {
 
         return Flyway.configure()
                 .dataSource(ds)
-                .locations("classpath:/db/migration, classpath:/db/aftermigration")
+                .locations("classpath:/db/migration", "classpath:/db/aftermigration")
                 .load();
     }
 
