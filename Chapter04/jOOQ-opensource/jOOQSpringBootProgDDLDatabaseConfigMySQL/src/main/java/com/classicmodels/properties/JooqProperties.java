@@ -9,15 +9,17 @@ import org.springframework.validation.annotation.Validated;
 public class JooqProperties {
 
     @NotEmpty
-    private String withName;
+    private String withName;    
     @NotEmpty
-    private String withSchemaVersionProvider;
+    private String withInputSchema;    
     @NotEmpty
-    private String withIncludes;
+    private String withScripts;
     @NotEmpty
-    private String withExcludes;
+    private String withSort;
     @NotEmpty
-    private String withInputSchema;
+    private String withUnqualifiedSchema;
+    @NotEmpty
+    private String withDefaultNameCase;
     @NotEmpty
     private String withPackageName;
     @NotEmpty
@@ -31,28 +33,44 @@ public class JooqProperties {
         this.withName = withName;
     }
 
-    public String getWithSchemaVersionProvider() {
-        return withSchemaVersionProvider;
+    public String getWithInputSchema() {
+        return withInputSchema;
     }
 
-    public void setWithSchemaVersionProvider(String withSchemaVersionProvider) {
-        this.withSchemaVersionProvider = withSchemaVersionProvider;
+    public void setWithInputSchema(String withInputSchema) {
+        this.withInputSchema = withInputSchema;
     }
 
-    public String getWithIncludes() {
-        return withIncludes;
+    public String getWithScripts() {
+        return withScripts;
     }
 
-    public void setWithIncludes(String withIncludes) {
-        this.withIncludes = withIncludes;
+    public void setWithScripts(String withScripts) {
+        this.withScripts = withScripts;
     }
 
-    public String getWithExcludes() {
-        return withExcludes;
+    public String getWithSort() {
+        return withSort;
     }
 
-    public void setWithExcludes(String withExcludes) {
-        this.withExcludes = withExcludes;
+    public void setWithSort(String withSort) {
+        this.withSort = withSort;
+    }
+
+    public String getWithUnqualifiedSchema() {
+        return withUnqualifiedSchema;
+    }
+
+    public void setWithUnqualifiedSchema(String withUnqualifiedSchema) {
+        this.withUnqualifiedSchema = withUnqualifiedSchema;
+    }
+
+    public String getWithDefaultNameCase() {
+        return withDefaultNameCase;
+    }
+
+    public void setWithDefaultNameCase(String withDefaultNameCase) {
+        this.withDefaultNameCase = withDefaultNameCase;
     }
 
     public String getWithPackageName() {
@@ -69,14 +87,5 @@ public class JooqProperties {
 
     public void setWithDirectory(String withDirectory) {
         this.withDirectory = withDirectory;
-    }
-
-    public String getWithInputSchema() {
-        return withInputSchema;
-    }
-
-    public void setWithInputSchema(String withInputSchema) {
-        this.withInputSchema = withInputSchema;
-    }
-
+    }   
 }

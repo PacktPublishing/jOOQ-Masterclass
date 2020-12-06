@@ -10,11 +10,11 @@ import org.jooq.meta.jaxb.Configuration;
 import org.jooq.meta.jaxb.Database;
 import org.jooq.meta.jaxb.Generate;
 import org.jooq.meta.jaxb.Generator;
-import org.jooq.meta.jaxb.Jdbc;
 import org.jooq.meta.jaxb.MatcherRule;
 import org.jooq.meta.jaxb.MatcherTransformType;
 import org.jooq.meta.jaxb.Matchers;
 import org.jooq.meta.jaxb.MatchersTableType;
+import org.jooq.meta.jaxb.Property;
 import org.jooq.meta.jaxb.Strategy;
 import org.jooq.meta.jaxb.Target;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -48,6 +48,7 @@ public class JooqConfig {
 
         return Flyway.configure()
                 .dataSource(ds)
+                .locations("classpath:/db/migration, classpath:/db/aftermigration")
                 .load();
     }
 
@@ -65,18 +66,14 @@ public class JooqConfig {
             @Qualifier("jooqProperties") JooqProperties jooqProperties) throws Exception {
 
         Configuration configuration = new Configuration()
-                .withJdbc(new Jdbc()
-                        .withDriver(dsProperties.getDriverClassName())
-                        .withUrl(dsProperties.getUrl())
-                        .withUser(dsProperties.getUsername())
-                        .withPassword(dsProperties.getPassword()))
                 .withGenerator(new Generator()
                         .withDatabase(new Database()
                                 .withName(jooqProperties.getWithName())
-                                .withSchemaVersionProvider(jooqProperties.getWithSchemaVersionProvider())
-                                .withIncludes(jooqProperties.getWithIncludes())
-                                .withExcludes(jooqProperties.getWithExcludes())
-                                .withInputSchema(jooqProperties.getWithInputSchema()))
+                                .withInputSchema(jooqProperties.getWithInputSchema())
+                                .withProperties(new Property().withKey("scripts").withValue(jooqProperties.getWithScripts()),
+                                        new Property().withKey("sort").withValue(jooqProperties.getWithSort()),
+                                        new Property().withKey("unqualifiedSchema").withValue(jooqProperties.getWithUnqualifiedSchema()),
+                                        new Property().withKey("defaultNameCase").withValue(jooqProperties.getWithDefaultNameCase())))
                         .withGenerate(new Generate()
                                 .withDaos(true)
                                 .withValidationAnnotations(Boolean.TRUE)
@@ -100,5 +97,4 @@ public class JooqConfig {
 
         return configuration;
     }
-
 }

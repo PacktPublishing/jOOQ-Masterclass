@@ -187,7 +187,7 @@ insert  into `customer`(`customer_number`,`customer_name`,`contact_last_name`,`c
 
 (169,'Porto Imports Co.','de Castro','Isabel ','(1) 356-5555',NULL,'0.00'),
 
-(171,'Daedalus Designs Imports','Rancé','Martine ','20.16.1555',1370,'82900.00'),
+(171,'Daedalus Designs Imports','RancÃ©','Martine ','20.16.1555',1370,'82900.00'),
 
 (172,'La Corne D\'abondance, Co.','Bertrand','Marie','(1) 42.34.2555',1337,'84300.00'),
 
@@ -217,7 +217,7 @@ insert  into `customer`(`customer_number`,`customer_name`,`contact_last_name`,`c
 
 (206,'Asian Shopping Network, Co','Walker','Brydey','+612 9411 1555',NULL,'0.00'),
 
-(209,'Mini Caravy','Citeaux','Frédérique ','88.60.1555',1370,'53800.00'),
+(209,'Mini Caravy','Citeaux','FrÃ©dÃ©rique ','88.60.1555',1370,'53800.00'),
 
 (211,'King Kong Collectables, Co.','Gao','Mike','+852 2251 1555',1621,'58600.00'),
 
@@ -225,11 +225,11 @@ insert  into `customer`(`customer_number`,`customer_name`,`contact_last_name`,`c
 
 (219,'Boards & Toys Co.','Young','Mary','3105552373',1166,'11000.00'),
 
-(223,'Natürlich Autos','Kloss','Horst ','0372-555188',NULL,'0.00'),
+(223,'NatÃ¼rlich Autos','Kloss','Horst ','0372-555188',NULL,'0.00'),
 
 (227,'Heintze Collectables','Ibsen','Palle','86 21 3555',1401,'120800.00'),
 
-(233,'Québec Home Shopping Network','Fresnière','Jean ','(514) 555-8054',1286,'48700.00'),
+(233,'QuÃ©bec Home Shopping Network','FresniÃ¨re','Jean ','(514) 555-8054',1286,'48700.00'),
 
 (237,'ANG Resellers','Camino','Alejandra ','(91) 745 6555',NULL,'0.00'),
 
@@ -245,9 +245,9 @@ insert  into `customer`(`customer_number`,`customer_name`,`contact_last_name`,`c
 
 (250,'Lyon Souveniers','Da Silva','Daniel','+33 1 46 62 7555',1337,'68100.00'),
 
-(256,'Auto Associés & Cie.','Tonini','Daniel ','30.59.8555',1370,'77900.00'),
+(256,'Auto AssociÃ©s & Cie.','Tonini','Daniel ','30.59.8555',1370,'77900.00'),
 
-(259,'Toms Spezialitäten, Ltd','Pfalzheim','Henriette ','0221-5554327',1504,'120400.00'),
+(259,'Toms SpezialitÃ¤ten, Ltd','Pfalzheim','Henriette ','0221-5554327',1504,'120400.00'),
 
 (260,'Royal Canadian Collectables, Ltd.','Lincoln','Elizabeth ','(604) 555-4555',1323,'89600.00'),
 
@@ -291,7 +291,7 @@ insert  into `customer`(`customer_number`,`customer_name`,`contact_last_name`,`c
 
 (334,'Suominen Souveniers','Suominen','Kalle','+358 9 8045 555',1501,'98800.00'),
 
-(335,'Cramer Spezialitäten, Ltd','Cramer','Philip ','0555-09555',NULL,'0.00'),
+(335,'Cramer SpezialitÃ¤ten, Ltd','Cramer','Philip ','0555-09555',NULL,'0.00'),
 
 (339,'Classic Gift Ideas, Inc','Cervantes','Francisca','2155554695',1188,'81100.00'),
 
@@ -333,7 +333,7 @@ insert  into `customer`(`customer_number`,`customer_name`,`contact_last_name`,`c
 
 (406,'Auto Canal+ Petit','Perrier','Dominique','(1) 47.55.6555',1337,'95000.00'),
 
-(409,'Stuttgart Collectable Exchange','Müller','Rita ','0711-555361',NULL,'0.00'),
+(409,'Stuttgart Collectable Exchange','MÃ¼ller','Rita ','0711-555361',NULL,'0.00'),
 
 (412,'Extreme Desk Decorations, Ltd','McRoy','Sarah','04 499 9555',1612,'86800.00'),
 
@@ -355,7 +355,7 @@ insert  into `customer`(`customer_number`,`customer_name`,`contact_last_name`,`c
 
 (456,'Microscale Inc.','Choi','Yu','2125551957',1286,'39800.00'),
 
-(458,'Corrida Auto Replicas, Ltd','Sommer','Martín ','(91) 555 22 82',1702,'104600.00'),
+(458,'Corrida Auto Replicas, Ltd','Sommer','MartÃ­n ','(91) 555 22 82',1702,'104600.00'),
 
 (459,'Warburg Exchange','Ottlieb','Sven ','0241-039123',NULL,'0.00'),
 
@@ -369,13 +369,13 @@ insert  into `customer`(`customer_number`,`customer_name`,`contact_last_name`,`c
 
 (475,'West Coast Collectables Co.','Thompson','Steve','3105553722',1166,'55400.00'),
 
-(477,'Mit Vergnügen & Co.','Moos','Hanna ','0621-08555',NULL,'0.00'),
+(477,'Mit VergnÃ¼gen & Co.','Moos','Hanna ','0621-08555',NULL,'0.00'),
 
 (480,'Kremlin Collectables, Co.','Semenov','Alexander ','+7 812 293 0521',NULL,'0.00'),
 
 (481,'Raanan Stores, Inc','Altagar,G M','Raanan','+ 972 9 959 8555',NULL,'0.00'),
 
-(484,'Iberia Gift Imports, Corp.','Roel','José Pedro ','(95) 555 82 82',1702,'65700.00'),
+(484,'Iberia Gift Imports, Corp.','Roel','JosÃ© Pedro ','(95) 555 82 82',1702,'65700.00'),
 
 (486,'Motor Mint Distributors Inc.','Salazar','Rosa','2155559857',1323,'72600.00'),
 
@@ -419,9 +419,9 @@ insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_li
 
 (141,'C/ Moralzarzal, 86',NULL,'Madrid',NULL,'28034','Spain'),
 
-(144,'Berguvsvägen  8',NULL,'Luleå',NULL,'S-958 22','Sweden'),
+(144,'BerguvsvÃ¤gen  8',NULL,'LuleÃ¥',NULL,'S-958 22','Sweden'),
 
-(145,'Vinbæltet 34',NULL,'Kobenhavn',NULL,'1734','Denmark'),
+(145,'VinbÃ¦ltet 34',NULL,'Kobenhavn',NULL,'1734','Denmark'),
 
 (146,'2, rue du Commerce',NULL,'Lyon',NULL,'69004','France'),
 
@@ -439,9 +439,9 @@ insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_li
 
 (168,'149 Spinnaker Dr.','Suite 101','New Haven','CT','97823','USA'),
 
-(169,'Estrada da saúde n. 58',NULL,'Lisboa',NULL,'1756','Portugal'),
+(169,'Estrada da saÃºde n. 58',NULL,'Lisboa',NULL,'1756','Portugal'),
 
-(171,'184, chaussée de Tournai',NULL,'Lille',NULL,'59000','France'),
+(171,'184, chaussÃ©e de Tournai',NULL,'Lille',NULL,'59000','France'),
 
 (172,'265, boulevard Charonne',NULL,'Paris',NULL,'75012','France'),
 
@@ -471,21 +471,21 @@ insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_li
 
 (206,'Suntec Tower Three','8 Temasek','Singapore',NULL,'038988','Singapore'),
 
-(209,'24, place Kléber',NULL,'Strasbourg',NULL,'67000','France'),
+(209,'24, place KlÃ©ber',NULL,'Strasbourg',NULL,'67000','France'),
 
 (211,'Bank of China Tower','1 Garden Road','Central Hong Kong',NULL,NULL,'Hong Kong'),
 
-(216,'Rambla de Cataluña, 23',NULL,'Barcelona',NULL,'08022','Spain'),
+(216,'Rambla de CataluÃ±a, 23',NULL,'Barcelona',NULL,'08022','Spain'),
 
 (219,'4097 Douglas Av.',NULL,'Glendale','CA','92561','USA'),
 
-(223,'Taucherstraße 10',NULL,'Cunewalde',NULL,'01307','Germany'),
+(223,'TaucherstraÃŸe 10',NULL,'Cunewalde',NULL,'01307','Germany'),
 
-(227,'Smagsloget 45',NULL,'Århus',NULL,'8200','Denmark'),
+(227,'Smagsloget 45',NULL,'Ã…rhus',NULL,'8200','Denmark'),
 
-(233,'43 rue St. Laurent',NULL,'Montréal','Québec','H1J 1C3','Canada'),
+(233,'43 rue St. Laurent',NULL,'MontrÃ©al','QuÃ©bec','H1J 1C3','Canada'),
 
-(237,'Gran Vía, 1',NULL,'Madrid',NULL,'28001','Spain'),
+(237,'Gran VÃ­a, 1',NULL,'Madrid',NULL,'28001','Spain'),
 
 (239,'361 Furth Circle',NULL,'San Diego','CA','91217','USA'),
 
@@ -501,11 +501,11 @@ insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_li
 
 (256,'67, avenue de l\'Europe',NULL,'Versailles',NULL,'78000','France'),
 
-(259,'Mehrheimerstr. 369',NULL,'Köln',NULL,'50739','Germany'),
+(259,'Mehrheimerstr. 369',NULL,'KÃ¶ln',NULL,'50739','Germany'),
 
 (260,'23 Tsawassen Blvd.',NULL,'Tsawassen','BC','T2F 8M4','Canada'),
 
-(273,'Berliner Platz 43',NULL,'München',NULL,'80805','Germany'),
+(273,'Berliner Platz 43',NULL,'MÃ¼nchen',NULL,'80805','Germany'),
 
 (276,'201 Miller Street','Level 15','North Sydney','NSW','2060','Australia'),
 
@@ -517,7 +517,7 @@ insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_li
 
 (293,'Rte des Arsenaux 41 ',NULL,'Fribourg',NULL,'1700','Switzerland'),
 
-(298,'Grenzacherweg 237',NULL,'Genève',NULL,'1203','Switzerland'),
+(298,'Grenzacherweg 237',NULL,'GenÃ¨ve',NULL,'1203','Switzerland'),
 
 (299,'Drammensveien 126A','PB 211 Sentrum','Oslo',NULL,'N 0106','Norway  '),
 
@@ -563,7 +563,7 @@ insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_li
 
 (357,'199 Great North Road',NULL,'Auckland',NULL,NULL,'New Zealand'),
 
-(361,'Luisenstr. 48',NULL,'Münster',NULL,'44087','Germany'),
+(361,'Luisenstr. 48',NULL,'MÃ¼nster',NULL,'44087','Germany'),
 
 (362,'8616 Spinnaker Dr.',NULL,'Boston','MA','51003','USA'),
 
@@ -599,7 +599,7 @@ insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_li
 
 (447,'2440 Pompton St.',NULL,'Glendale','CT','97561','USA'),
 
-(448,'Åkergatan 24',NULL,'Bräcke',NULL,'S-844 67','Sweden'),
+(448,'Ã…kergatan 24',NULL,'BrÃ¤cke',NULL,'S-844 67','Sweden'),
 
 (450,'3086 Ingle Ln.',NULL,'San Jose','CA','94217','USA'),
 
@@ -831,7 +831,7 @@ insert  into `product`(`product_id`,`product_name`,`product_line`,`product_scale
 
 (84,'1961 Chevrolet Impala','Classic Cars','1:18','Classic Metal Creations','This 1:18 scale precision die-cast reproduction of the 1961 Chevrolet Impala has all the features-doors, hood and trunk that open; detailed 409 cubic-inch engine; chrome dashboard and stick shift, two-tone interior; working steering system; all topped of with a factory baked-enamel finish.',7869,'32.33','80.84'),
 
-(85,'1980’s GM Manhattan Express','Trucks and Buses','1:32','Motor City Art Classics','This 1980’s era new look Manhattan express is still active, running from the Bronx to mid-town Manhattan. Has 35 opeining windows and working lights. Needs a battery.',5099,'53.93','96.31'),
+(85,'1980â€™s GM Manhattan Express','Trucks and Buses','1:32','Motor City Art Classics','This 1980â€™s era new look Manhattan express is still active, running from the Bronx to mid-town Manhattan. Has 35 opeining windows and working lights. Needs a battery.',5099,'53.93','96.31'),
 
 (86,'1997 BMW F650 ST','Motorcycles','1:32','Exoto Designs','Features official die-struck logos and baked enamel finish. Comes with stand.',178,'66.92','99.89'),
 

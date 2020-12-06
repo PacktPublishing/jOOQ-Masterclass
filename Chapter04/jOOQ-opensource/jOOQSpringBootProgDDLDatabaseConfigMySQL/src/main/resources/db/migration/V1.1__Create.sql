@@ -5,13 +5,14 @@ http://www.mysqltutorial.org
 Name: MySQL Sample Database classicmodels
 Link: http://www.mysqltutorial.org/mysql-sample-database.aspx
 *********************************************************************
-
 This is a modified version of the original schema for MySQL
 */
 
 /* START */
 
+-- [jooq ignore start]
 USE `classicmodels`;
+-- [jooq ignore stop]
 
 DROP TABLE IF EXISTS `payment`;
 DROP TABLE IF EXISTS `orderdetail`;
@@ -27,7 +28,7 @@ DROP TABLE IF EXISTS `employee`;
 DROP TABLE IF EXISTS `department`;
 DROP TABLE IF EXISTS `office`;
 
-/*Table structure for table `office` */
+/* Table structure for table `office` */
 
 CREATE TABLE `office` (
   `office_code` varchar(10) NOT NULL,
@@ -49,7 +50,9 @@ CREATE TABLE `department` (
   `code` smallint DEFAULT 1,
   `office_code` varchar(10) NOT NULL,
   PRIMARY KEY (`department_id`),
+  -- [jooq ignore start]
   KEY `office_code` (`office_code`),
+  -- [jooq ignore stop]
   CONSTRAINT `department_ibfk_1` FOREIGN KEY (`office_code`) REFERENCES `office` (`office_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -66,8 +69,10 @@ CREATE TABLE `employee` (
   `reports_to` bigint DEFAULT NULL,
   `job_title` varchar(50) NOT NULL,
   PRIMARY KEY (`employee_number`),
+  -- [jooq ignore start]
   KEY `reports_to` (`reports_to`),
   KEY `office_code` (`office_code`),
+  -- [jooq ignore stop]
   CONSTRAINT `employees_ibfk_1` FOREIGN KEY (`reports_to`) REFERENCES `employee` (`employee_number`),
   CONSTRAINT `employees_ibfk_2` FOREIGN KEY (`office_code`) REFERENCES `office` (`office_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -81,7 +86,9 @@ CREATE TABLE `sale` (
   `employee_number` bigint DEFAULT NULL,  
   `hot` boolean DEFAULT FALSE,  
   PRIMARY KEY (`sale_id`),  
+  -- [jooq ignore start]
   KEY `employee_number` (`employee_number`),  
+  -- [jooq ignore stop]
   CONSTRAINT `sales_ibfk_1` FOREIGN KEY (`employee_number`) REFERENCES `employee` (`employee_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -96,7 +103,9 @@ CREATE TABLE `customer` (
   `sales_rep_employee_number` bigint DEFAULT NULL,
   `credit_limit` decimal(10,2) DEFAULT NULL,
   PRIMARY KEY (`customer_number`),
+  -- [jooq ignore start]
   KEY `sales_rep_employee_number` (`sales_rep_employee_number`),
+  -- [jooq ignore stop]
   CONSTRAINT `customers_ibfk_1` FOREIGN KEY (`sales_rep_employee_number`) REFERENCES `employee` (`employee_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -111,7 +120,9 @@ CREATE TABLE `customerdetail` (
   `postal_code` varchar(15) DEFAULT NULL,
   `country` varchar(50),
   PRIMARY KEY (`customer_number`),
+  -- [jooq ignore start]
   KEY `customer_number` (`customer_number`),
+  -- [jooq ignore stop]
   CONSTRAINT `customers_details_ibfk_1` FOREIGN KEY (`customer_number`) REFERENCES `customer` (`customer_number`)  
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -129,8 +140,10 @@ CREATE TABLE `office_has_manager` (
   `offices_office_code` varchar(10) NOT NULL,
   `managers_manager_id` bigint NOT NULL,
   PRIMARY KEY (`offices_office_code`, `managers_manager_id`),
+  -- [jooq ignore start]
   INDEX `fk_offices_has_managers_managers1_idx` (`managers_manager_id` ASC) VISIBLE,
   INDEX `fk_offices_has_managers_offices_idx` (`offices_office_code` ASC) VISIBLE,
+  -- [jooq ignore stop]
   CONSTRAINT `fk_offices_has_managers_offices`
     FOREIGN KEY (`offices_office_code`)
     REFERENCES `office` (`office_code`)
@@ -167,7 +180,9 @@ CREATE TABLE `product` (
   `buy_price` decimal(10,2) DEFAULT 0.0,
   `msrp` decimal(10,2) DEFAULT 0.0,
   PRIMARY KEY (`product_id`),
+  -- [jooq ignore start]
   KEY `product_line` (`product_line`),
+  -- [jooq ignore stop]
   CONSTRAINT `products_ibfk_1` FOREIGN KEY (`product_line`) REFERENCES `productline` (`product_line`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -182,7 +197,9 @@ CREATE TABLE `order` (
   `comments` text,
   `customer_number` bigint NOT NULL,
   PRIMARY KEY (`order_id`),
+  -- [jooq ignore start]
   KEY `customer_number` (`customer_number`),
+  -- [jooq ignore stop]
   CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`customer_number`) REFERENCES `customer` (`customer_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -195,7 +212,9 @@ CREATE TABLE `orderdetail` (
   `price_each` decimal(10,2) NOT NULL,
   `order_line_number` smallint NOT NULL,
   PRIMARY KEY (`order_id`,`product_id`),
+  -- [jooq ignore start]
   KEY `product_id` (`product_id`),
+  -- [jooq ignore stop]
   CONSTRAINT `orderdetails_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `order` (`order_id`),
   CONSTRAINT `orderdetails_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -212,29 +231,5 @@ CREATE TABLE `payment` (
   CONSTRAINT `unique_check_number` UNIQUE (`check_number`),
   CONSTRAINT `payments_ibfk_1` FOREIGN KEY (`customer_number`) REFERENCES `customer` (`customer_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-/* USER-DEFINED FUNCTIONS */
-DELIMITER $$
-
-CREATE FUNCTION CustomerLevel(
-	credit DECIMAL(10,2)
-) 
-RETURNS VARCHAR(20)
-DETERMINISTIC
-BEGIN
-    DECLARE customerLevel VARCHAR(20);
-
-    IF credit > 50000 THEN
-		SET customerLevel = 'PLATINUM';
-    ELSEIF (credit >= 50000 AND 
-			credit <= 100000) THEN
-        SET customerLevel = 'GOLD';
-    ELSEIF credit < 10000 THEN
-        SET customerLevel = 'SILVER';
-    END IF;
-	-- return the customer level
-	RETURN (customerLevel);
-END$$
-DELIMITER ;
 
 /* END */
