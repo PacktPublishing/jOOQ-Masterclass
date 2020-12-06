@@ -57,7 +57,7 @@ public class JooqConfig {
     public Settings jooqSettings() {
         return new Settings()
                 .withRenderCatalog(Boolean.FALSE)
-                .withRenderSchema(Boolean.TRUE);
+                .withRenderSchema(Boolean.FALSE);
     }
 
     @Bean
