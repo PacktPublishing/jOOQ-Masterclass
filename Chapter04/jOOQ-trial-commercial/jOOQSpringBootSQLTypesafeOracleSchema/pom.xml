@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.app</groupId>
-    <artifactId>jOOQSpringBootSQLTypesafeOracle</artifactId>
+    <artifactId>jOOQSpringBootSQLTypesafeOracleSchema</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQSpringBootSQLTypesafeOracle</name>
+    <name>jOOQSpringBootSQLTypesafeOracleSchema</name>
     <description>jOOQ - Spring Boot app</description>    
 
     <parent>
