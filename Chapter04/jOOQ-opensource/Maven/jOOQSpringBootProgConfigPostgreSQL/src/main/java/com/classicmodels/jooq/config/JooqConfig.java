@@ -21,9 +21,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.flyway.FlywayDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.DependsOn;
-import org.springframework.stereotype.Component;
 
-@Component
+@org.springframework.context.annotation.Configuration
 public class JooqConfig {
 
     private final DataSource ds;
