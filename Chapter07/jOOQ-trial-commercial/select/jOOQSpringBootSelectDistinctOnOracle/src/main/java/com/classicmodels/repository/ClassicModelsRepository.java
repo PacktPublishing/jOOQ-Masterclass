@@ -292,8 +292,27 @@ public class ClassicModelsRepository {
         );
     }
 
-    /* PostgreSQL DISTINCT ON */
     // EXAMPLE 8
+    /*
+    select 
+      distinct count(*) over () "sales" 
+    from 
+      "SYSTEM"."SALE" 
+    group by 
+      "SYSTEM"."SALE"."EMPLOYEE_NUMBER"    
+    */
+    public void countDistinctSalesByEmployeeNumber() {
+
+        System.out.println("EXAMPLE 8 (count result): "
+                + ctx.selectDistinct(count().over().as("sales"))
+                        .from(SALE)
+                        .groupBy(SALE.EMPLOYEE_NUMBER)
+                        .fetchOneInto(int.class)
+        );
+    }
+    
+    /* PostgreSQL DISTINCT ON */
+    // EXAMPLE 9
     /* The following statement sorts the result set by the product's vendor and scale, 
        and then for each group of duplicates, it keeps the first row in the returned result set */    
     /*
@@ -323,7 +342,7 @@ public class ClassicModelsRepository {
     */
     public void findProductsByVendorScale() {
 
-        System.out.println("EXAMPLE 8\n" +
+        System.out.println("EXAMPLE 9\n" +
                 ctx.selectDistinct(PRODUCT.PRODUCT_VENDOR, PRODUCT.PRODUCT_SCALE)
                         .on(PRODUCT.PRODUCT_VENDOR, PRODUCT.PRODUCT_SCALE)
                         .from(PRODUCT)         
@@ -333,7 +352,7 @@ public class ClassicModelsRepository {
 
         /* or, like this */        
         /*
-        System.out.println("EXAMPLE 8\n" +
+        System.out.println("EXAMPLE 9\n" +
                 ctx.select(PRODUCT.PRODUCT_VENDOR, PRODUCT.PRODUCT_SCALE)
                         .distinctOn(PRODUCT.PRODUCT_VENDOR, PRODUCT.PRODUCT_SCALE)
                         .from(PRODUCT) 
@@ -343,7 +362,7 @@ public class ClassicModelsRepository {
         */        
     }
     
-    // EXAMPLE 9
+    // EXAMPLE 10
     /* What is the employee numbers of the max sales per fiscal years */        
     public void findEmployeeNumberOfMaxSalePerFiscalYear() {
 
@@ -373,7 +392,7 @@ public class ClassicModelsRepository {
           "FISCAL_YEAR", 
           "SALE" desc        
         */
-        System.out.println("EXAMPLE 9.1\n" +
+        System.out.println("EXAMPLE 10.1\n" +
                 ctx.select(
                         SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR, SALE.SALE_)
                         .distinctOn(SALE.FISCAL_YEAR)
@@ -406,7 +425,7 @@ public class ClassicModelsRepository {
           "SYSTEM"."SALE"."FISCAL_YEAR", 
           "SYSTEM"."SALE"."SALE" desc        
         */  
-        System.out.println("EXAMPLE 9.2\n" + 
+        System.out.println("EXAMPLE 10.2\n" + 
                 ctx.select(SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR, SALE.SALE_)
                         .from(SALE)
                         .innerJoin(select(SALE.FISCAL_YEAR.as(name("fy")), max(SALE.SALE_).as(name("ms")))
@@ -452,33 +471,14 @@ public class ClassicModelsRepository {
                                         .orderBy(SALE.FISCAL_YEAR, SALE.SALE_.desc())).as(name("rn")))
                                         .from(SALE).asTable();
         
-        System.out.println("EXAMPLE 9.3\n" + 
-                ctx.select(t.field(name("fiscal_year")), 
-                        t.field(name("employee_number")),
+        System.out.println("EXAMPLE 10.3\n" + 
+                ctx.select(t.field(name("employee_number")),
+                         t.field(name("fiscal_year")),                         
                          t.field(name("sale")))
                         .from(t)
                         .where(t.field(name("rn"), Integer.class).eq(1))
                         .orderBy(t.field(name("fiscal_year")))
                         .fetch()                                                                
         );
-    }
-    
-    // EXAMPLE 10
-    /*
-    select 
-      distinct count(*) over () "sales" 
-    from 
-      "SYSTEM"."SALE" 
-    group by 
-      "SYSTEM"."SALE"."EMPLOYEE_NUMBER"    
-    */
-    public void countDistinctSalesByEmployeeNumber() {
-
-        System.out.println("EXAMPLE 10 (count result): "
-                + ctx.selectDistinct(count().over().as("sales"))
-                        .from(SALE)
-                        .groupBy(SALE.EMPLOYEE_NUMBER)
-                        .fetchOneInto(int.class)
-        );
-    }
+    }        
 }
