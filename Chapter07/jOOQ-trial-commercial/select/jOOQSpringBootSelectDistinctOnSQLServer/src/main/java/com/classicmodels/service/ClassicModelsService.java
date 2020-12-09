@@ -20,10 +20,10 @@ public class ClassicModelsService {
         classicModelsRepository.findOfficeAndCustomerOfficePostalCodeDistinctCityCountry();  // EXAMPLE 4
         classicModelsRepository.countPaymentCachingDate();                                   // EXAMPLE 5
         classicModelsRepository.findProductLineHavingMaxNrOfProducts();                      // EXAMPLE 6 
-        classicModelsRepository.avgSumMinMaxPriceEach();                                     // EXAMPLE 7               
-        classicModelsRepository.findProductsByVendorScale();                                 // EXAMPLE 8    
-        classicModelsRepository.findEmployeeNumberOfMaxSalePerFiscalYear();                  // EXAMPLE 9        
-        classicModelsRepository.countDistinctSalesByEmployeeNumber();                        // EXAMPLE 10
+        classicModelsRepository.avgSumMinMaxPriceEach();                                     // EXAMPLE 7        
+        classicModelsRepository.countDistinctSalesByEmployeeNumber();                        // EXAMPLE 8
+        classicModelsRepository.findProductsByVendorScale();                                 // EXAMPLE 9    
+        classicModelsRepository.findEmployeeNumberOfMaxSalePerFiscalYear();                  // EXAMPLE 10                
                 
     }
 }
