@@ -13,14 +13,18 @@ import static org.jooq.impl.DSL.avg;
 import static org.jooq.impl.DSL.avgDistinct;
 import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.countDistinct;
+import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.groupConcat;
 import static org.jooq.impl.DSL.groupConcatDistinct;
 import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.maxDistinct;
 import static org.jooq.impl.DSL.min;
 import static org.jooq.impl.DSL.minDistinct;
+import static org.jooq.impl.DSL.partitionBy;
 import static org.jooq.impl.DSL.row;
+import static org.jooq.impl.DSL.rowNumber;
 import static org.jooq.impl.DSL.select;
+import static org.jooq.impl.DSL.selectDistinct;
 import static org.jooq.impl.DSL.sum;
 import static org.jooq.impl.DSL.sumDistinct;
 import org.springframework.stereotype.Repository;
@@ -357,5 +361,87 @@ public class ClassicModelsRepository {
                         .groupBy(SALE.EMPLOYEE_NUMBER)
                         .fetchOneInto(int.class)
         );
+    }
+    
+    /* Emulate PostgreSQL DISTINCT ON */
+    // EXAMPLE 11
+    /* What is the employee numbers of the max sales per fiscal years */        
+    public void findEmployeeNumberOfMaxSalePerFiscalYear() {
+
+        /* SQL alternative based on JOIN */
+        /*
+        select 
+          `classicmodels`.`sale`.`employee_number`, 
+          `classicmodels`.`sale`.`fiscal_year`, 
+          `classicmodels`.`sale`.`sale` 
+        from 
+          `classicmodels`.`sale` 
+          join (
+            select 
+              `classicmodels`.`sale`.`fiscal_year` as `fy`, 
+              max(`classicmodels`.`sale`.`sale`) as `ms` 
+            from 
+              `classicmodels`.`sale` 
+            group by 
+              `classicmodels`.`sale`.`fiscal_year`
+          ) as `alias_51404515` on (
+            `classicmodels`.`sale`.`fiscal_year` = fy 
+            and `classicmodels`.`sale`.`sale` = ms
+          ) 
+        order by 
+          `classicmodels`.`sale`.`fiscal_year`, 
+          `classicmodels`.`sale`.`sale` desc        
+         */
+        System.out.println("EXAMPLE 11.1\n"
+                + ctx.select(SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR, SALE.SALE_)
+                        .from(SALE)
+                        .innerJoin(select(SALE.FISCAL_YEAR.as("fy"), max(SALE.SALE_).as("ms"))
+                                .from(SALE)
+                                .groupBy(SALE.FISCAL_YEAR))
+                        .on(SALE.FISCAL_YEAR.eq(field("fy", Integer.class))
+                                .and(SALE.SALE_.eq(field("ms", Double.class))))
+                        .orderBy(SALE.FISCAL_YEAR, SALE.SALE_.desc())
+                        .fetch()
+        );
+
+        /* SQL alternative based on row_number() */
+        /*
+        select 
+          `alias_41473466`.`employee_number`, 
+          `alias_41473466`.`fiscal_year`, 
+          `alias_41473466`.`sale` 
+        from 
+          (
+            select 
+              distinct `classicmodels`.`sale`.`employee_number`, 
+              `classicmodels`.`sale`.`fiscal_year`, 
+              `classicmodels`.`sale`.`sale`, 
+              row_number() over (
+                partition by `classicmodels`.`sale`.`fiscal_year` 
+                order by 
+                  `classicmodels`.`sale`.`fiscal_year`, 
+                  `classicmodels`.`sale`.`sale` desc
+              ) as `rn` 
+            from 
+              `classicmodels`.`sale`
+          ) as `alias_41473466` 
+        where 
+          `alias_41473466`.`rn` = ? 
+        order by 
+          `alias_41473466`.`fiscal_year`        
+         */
+        // Table<?>
+        var t = selectDistinct(SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR, SALE.SALE_,
+                rowNumber().over(partitionBy(SALE.FISCAL_YEAR)
+                        .orderBy(SALE.FISCAL_YEAR, SALE.SALE_.desc())).as("rn"))
+                .from(SALE).asTable();
+
+        System.out.println("EXAMPLE 11.2\n"
+                + ctx.select(t.field("employee_number"), t.field("fiscal_year"), t.field("sale"))
+                        .from(t)
+                        .where(t.field("rn", Integer.class).eq(1))
+                        .orderBy(t.field("fiscal_year"))
+                        .fetch()
+        );    
     }
 }
