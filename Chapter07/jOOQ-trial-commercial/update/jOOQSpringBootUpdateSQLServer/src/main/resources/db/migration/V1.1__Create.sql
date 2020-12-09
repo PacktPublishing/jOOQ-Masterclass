@@ -11,6 +11,21 @@ This is a modified version of the original schema for Microsoft Server SQL
 
 /* START */
 
+/* USER-DEFINED FUNCTIONS */
+
+CREATE FUNCTION netPriceEach(
+    @quantity INT,
+    @list_price DEC(10,2),
+    @discount DEC(4,2)
+)
+RETURNS DEC(10,2)
+AS 
+BEGIN
+    RETURN @quantity * @list_price * (1 - @discount);
+END;
+
+GO
+
 IF OBJECT_ID('payment', 'U') IS NOT NULL 
   DROP TABLE payment;
 IF OBJECT_ID('orderdetail', 'U') IS NOT NULL 
@@ -211,15 +226,3 @@ CREATE TABLE payment (
 ) ;
 
 /* END */
-
-/* USER-DEFINED FUNCTIONS */
-CREATE FUNCTION netPriceEach(
-    @quantity INT,
-    @list_price DEC(10,2),
-    @discount DEC(4,2)
-)
-RETURNS DEC(10,2)
-AS 
-BEGIN
-    RETURN @quantity * @list_price * (1 - @discount);
-END;
