@@ -385,8 +385,9 @@ public class ClassicModelsRepository {
         /* SQL alternative based on JOIN */
         /*
         select 
+          "SYSTEM"."SALE"."EMPLOYEE_NUMBER", 
           "SYSTEM"."SALE"."FISCAL_YEAR", 
-          "SYSTEM"."SALE"."EMPLOYEE_NUMBER" 
+          "SYSTEM"."SALE"."SALE" 
         from 
           "SYSTEM"."SALE" 
           join (
@@ -406,7 +407,7 @@ public class ClassicModelsRepository {
           "SYSTEM"."SALE"."SALE" desc        
         */  
         System.out.println("EXAMPLE 9.2\n" + 
-                ctx.select(SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER)
+                ctx.select(SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR, SALE.SALE_)
                         .from(SALE)
                         .innerJoin(select(SALE.FISCAL_YEAR.as(name("fy")), max(SALE.SALE_).as(name("ms")))
                                 .from(SALE)
@@ -420,35 +421,41 @@ public class ClassicModelsRepository {
         /* SQL alternative based on row_number() */        
         /*
         select 
-          "alias_35975566"."fiscal_year", 
-          "alias_35975566"."employee_number" 
+          "alias_10775484"."fiscal_year", 
+          "alias_10775484"."employee_number", 
+          "alias_10775484"."sale" 
         from 
           (
             select 
               distinct "SYSTEM"."SALE"."FISCAL_YEAR" "fiscal_year", 
               "SYSTEM"."SALE"."EMPLOYEE_NUMBER" "employee_number", 
+              "SYSTEM"."SALE"."SALE" "sale", 
               row_number() over (
                 partition by "SYSTEM"."SALE"."FISCAL_YEAR" 
                 order by 
-                  "SYSTEM"."SALE"."FISCAL_YEAR"
+                  "SYSTEM"."SALE"."FISCAL_YEAR", 
+                  "SYSTEM"."SALE"."SALE" desc
               ) "rn" 
             from 
               "SYSTEM"."SALE"
-          ) "alias_35975566" 
+          ) "alias_10775484" 
         where 
-          "alias_35975566"."rn" = ? 
+          "alias_10775484"."rn" = ? 
         order by 
-          "alias_35975566"."fiscal_year"        
+          "alias_10775484"."fiscal_year"        
         */
         // Table<?>
         var t = selectDistinct(SALE.FISCAL_YEAR.as(name("fiscal_year")), 
                 SALE.EMPLOYEE_NUMBER.as(name("employee_number")),
+                SALE.SALE_.as(name("sale")),
                                 rowNumber().over(partitionBy(SALE.FISCAL_YEAR)
-                                        .orderBy(SALE.FISCAL_YEAR)).as(name("rn")))
+                                        .orderBy(SALE.FISCAL_YEAR, SALE.SALE_.desc())).as(name("rn")))
                                         .from(SALE).asTable();
         
         System.out.println("EXAMPLE 9.3\n" + 
-                ctx.select(t.field(name("fiscal_year")), t.field(name("employee_number")))
+                ctx.select(t.field(name("fiscal_year")), 
+                        t.field(name("employee_number")),
+                         t.field(name("sale")))
                         .from(t)
                         .where(t.field(name("rn"), Integer.class).eq(1))
                         .orderBy(t.field(name("fiscal_year")))
