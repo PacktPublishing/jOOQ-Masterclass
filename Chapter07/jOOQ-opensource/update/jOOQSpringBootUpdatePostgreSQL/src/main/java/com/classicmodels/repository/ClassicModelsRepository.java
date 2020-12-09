@@ -11,6 +11,7 @@ import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Sale.SALE;
 import jooq.generated.tables.records.OfficeRecord;
 import org.jooq.DSLContext;
+import org.jooq.Row2;
 import org.jooq.UpdateQuery;
 import org.jooq.conf.ExecuteWithoutWhere;
 import org.jooq.conf.Settings;
@@ -36,12 +37,13 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 1
     /*
-    update `classicmodels`.`office`
-    set
-      `classicmodels`.`office`.`city` = ?,
-      `classicmodels`.`office`.`country` = ?
-    where
-      `classicmodels`.`office`.`office_code` = ?
+    update 
+      "public"."office" 
+    set 
+      "city" = ?, 
+      "country" = ? 
+    where 
+      "public"."office"."office_code" = ?    
      */
     public void updateOffice() {
 
@@ -61,42 +63,63 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 1.2 (query): " + uq.getSQL());
     }
 
-    // EXAMPLE 2
-    /*
-    update
-      `classicmodels`.`office`
-    set
-      `classicmodels`.`office`.`city` = ?,
-      `classicmodels`.`office`.`country` = ?
-    where
-      `classicmodels`.`office`.`office_code` = ?
-     */
+    // EXAMPLE 2    
     public void updateRowOffice() {
 
-        System.out.println("EXAMPLE 2 (affected rows): "
+        /*
+        update 
+          "public"."office" 
+        set 
+          ("city", "country") = row (?, ?) 
+        where 
+          "public"."office"."office_code" = ?    
+        */
+        System.out.println("EXAMPLE 2.1 (affected rows): "
                 + ctx.update(OFFICE)
                         .set(row(OFFICE.CITY, OFFICE.COUNTRY),
                                 row("Hamburg", "Germany"))
                         .where(OFFICE.OFFICE_CODE.eq("1"))
                         .execute()
         );
+        
+        /*
+        update 
+          "public"."office" 
+        set 
+          ("city", "country") = row (?, ?) 
+        where 
+          (
+            "public"."office"."city", "public"."office"."country"
+          ) is null        
+        */
+        Row2<String, String> r1 = row(OFFICE.CITY, OFFICE.COUNTRY);
+        Row2<String, String> r2 = row("Hamburg", "Germany");
+
+        System.out.println("EXAMPLE 2.2 (affected rows): "
+                + ctx.update(OFFICE)
+                        .set(r1, r2)
+                        .where(r1.isNull())
+                        .execute()
+        );
     }
 
     // EXAMPLE 3
     /*
-    update `classicmodels`.`customer`
-    set
-      `classicmodels`.`customer`.`credit_limit` = 
-        (
-          select
-            max(`classicmodels`.`payment`.`invoice_amount`)
-          from
-            `classicmodels`.`payment`
-          where
-            `classicmodels`.`customer`.`customer_number` = `classicmodels`.`payment`.`customer_number`
-        )
-    where
-      `classicmodels`.`customer`.`credit_limit` > ?
+    update 
+      "public"."customer" 
+    set 
+      "credit_limit" = (
+        select 
+          max(
+            "public"."payment"."invoice_amount"
+          ) 
+        from 
+          "public"."payment" 
+        where 
+          "public"."customer"."customer_number" = "public"."payment"."customer_number"
+      ) 
+    where 
+      "public"."customer"."credit_limit" > ?    
      */
     public void updateCustomerCreditLimitAsMaxPaymentInvoice() {
 
@@ -112,19 +135,21 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 4
     /*
-    update
-     `classicmodels`.`employee`
-    set
-     `classicmodels`.`employee`.`salary` = (
-     `classicmodels`.`employee`.`salary` + (
-       select
-         (count(`classicmodels`.`sale`.`sale`) * ?)
-       from
-         `classicmodels`.`sale`
-       where
-         `classicmodels`.`employee`.`employee_number` = `classicmodels`.`sale`.`employee_number`
-       )
-    )
+    update 
+      "public"."employee" 
+    set 
+      "salary" = (
+        "public"."employee"."salary" + (
+          select 
+            (
+              count("public"."sale"."sale") * ?
+            ) 
+          from 
+            "public"."sale" 
+          where 
+            "public"."employee"."employee_number" = "public"."sale"."employee_number"
+        )
+      )    
      */
     public void updateEmployeeSalaryBySaleCount() {
 
@@ -146,13 +171,13 @@ public class ClassicModelsRepository {
         or.setCountry("Romania");
 
         /*
-        update
-          `classicmodels`.`office`
-        set
-          `classicmodels`.`office`.`city` = ?,
-          `classicmodels`.`office`.`country` = ?
-        where
-          `classicmodels`.`office`.`office_code` = ?
+        update 
+          "public"."office" 
+        set 
+          "city" = ?, 
+          "country" = ? 
+        where 
+          "public"."office"."office_code" = ?        
          */
         System.out.println("EXAMPLE 5.1 (affected rows): "
                 + ctx.update(OFFICE)
@@ -168,14 +193,14 @@ public class ClassicModelsRepository {
         
         /* approach 3 */
         /*
-        update
-          `classicmodels`.`office`
-        set
-          `classicmodels`.`office`.`office_code` = ?,
-          `classicmodels`.`office`.`city` = ?,
-          `classicmodels`.`office`.`country` = ?
-        where
-          `classicmodels`.`office`.`office_code` = ?
+        update 
+          "public"."office" 
+        set 
+          "office_code" = ?, 
+          "city" = ?, 
+          "country" = ? 
+        where 
+          "public"."office"."office_code" = ?        
          */
         System.out.println("EXAMPLE 5.3 (affected rows): "
                 + ctx.newRecord(OFFICE)
@@ -192,13 +217,13 @@ public class ClassicModelsRepository {
         orFromOp.from(op);
 
         /*
-        update
-          `classicmodels`.`office`
-        set
-          `classicmodels`.`office`.`city` = ?,
-          `classicmodels`.`office`.`country` = ?
-        where
-          `classicmodels`.`office`.`office_code` = ?
+        update 
+          "public"."office" 
+        set 
+          "city" = ?, 
+          "country" = ? 
+        where 
+          "public"."office"."office_code" = ?        
          */
         System.out.println("EXAMPLE 5.4 (affected rows): "
                 + ctx.update(OFFICE)
