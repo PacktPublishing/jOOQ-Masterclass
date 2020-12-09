@@ -97,7 +97,7 @@ public class ClassicModelsRepository {
     // EXAMPLE 7 - FULL OUTER JOIN
     public void fetchOfficeCustomerdetailFullOuterJoinExclusive() {
 
-        System.out.println("EXAMPLE 6 (FULL OUTER JOIN (EXCLUSIVE))\n"
+        System.out.println("EXAMPLE 7 (FULL OUTER JOIN (EXCLUSIVE))\n"
                 + ctx.select(OFFICE.CITY, OFFICE.COUNTRY, OFFICE.OFFICE_CODE,
                         CUSTOMERDETAIL.CITY, CUSTOMERDETAIL.COUNTRY, CUSTOMERDETAIL.CUSTOMER_NUMBER)
                         .from(OFFICE)
