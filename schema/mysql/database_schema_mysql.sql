@@ -213,6 +213,18 @@ CREATE TABLE `payment` (
   CONSTRAINT `payments_ibfk_1` FOREIGN KEY (`customer_number`) REFERENCES `customer` (`customer_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+/*Table structure for table `payment` */
+
+CREATE TABLE `paymentdetail` (
+  `customer_number` bigint NOT NULL,
+  `check_number` varchar(50) NOT NULL,
+  `bank_name` varchar(20) NOT NULL,
+  `bank_iban` varchar(100) NOT NULL,
+  `transaction_type` int DEFAULT 0,
+  PRIMARY KEY (`customer_number`,`check_number`),  
+  CONSTRAINT `paymentdetail_ibfk_1` FOREIGN KEY (`customer_number`,`check_number`) REFERENCES `payment` (`customer_number`,`check_number`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 /* USER-DEFINED FUNCTIONS */
 DELIMITER $$
 
