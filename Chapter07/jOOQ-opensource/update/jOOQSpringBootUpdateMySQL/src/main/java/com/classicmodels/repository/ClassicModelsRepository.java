@@ -9,6 +9,7 @@ import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Sale.SALE;
 import jooq.generated.tables.records.OfficeRecord;
 import org.jooq.DSLContext;
+import org.jooq.Row2;
 import org.jooq.UpdateQuery;
 import org.jooq.conf.ExecuteWithoutWhere;
 import org.jooq.conf.Settings;
@@ -57,23 +58,45 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 1.2 (query): " + uq.getSQL());
     }
 
-    // EXAMPLE 2
-    /*
-    update
-      `classicmodels`.`office`
-    set
-      `classicmodels`.`office`.`city` = ?,
-      `classicmodels`.`office`.`country` = ?
-    where
-      `classicmodels`.`office`.`office_code` = ?
-     */
+    // EXAMPLE 2    
     public void updateRowOffice() {
 
-        System.out.println("EXAMPLE 2 (affected rows): "
+        /*
+        update
+          `classicmodels`.`office`
+        set
+          `classicmodels`.`office`.`city` = ?,
+          `classicmodels`.`office`.`country` = ?
+        where
+          `classicmodels`.`office`.`office_code` = ?
+         */
+        System.out.println("EXAMPLE 2.1 (affected rows): "
                 + ctx.update(OFFICE)
                         .set(row(OFFICE.CITY, OFFICE.COUNTRY),
                                 row("Hamburg", "Germany"))
                         .where(OFFICE.OFFICE_CODE.eq("1"))
+                        .execute()
+        );
+        
+        /*
+        update 
+          `classicmodels`.`office` 
+        set 
+          `classicmodels`.`office`.`city` = ?, 
+          `classicmodels`.`office`.`country` = ? 
+        where 
+          (
+            `classicmodels`.`office`.`city` is null 
+            and `classicmodels`.`office`.`country` is null
+          )        
+        */
+        Row2<String, String> r1 = row(OFFICE.CITY, OFFICE.COUNTRY);
+        Row2<String, String> r2 = row("Hamburg", "Germany");
+
+        System.out.println("EXAMPLE 2.2 (affected rows): "
+                + ctx.update(OFFICE)
+                        .set(r1, r2)
+                        .where(r1.isNull())
                         .execute()
         );
     }
