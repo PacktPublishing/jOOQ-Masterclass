@@ -81,6 +81,7 @@ public class ClassicModelsRepository {
         );
     }
 
+    /* MySQL doesn't support FULL JOIN */
     // EXAMPLE 6 - emulate FULL OUTER JOIN via UNION    
     public void fetchOfficeCustomerdetailFullOuterJoinViaUnion() {
 
