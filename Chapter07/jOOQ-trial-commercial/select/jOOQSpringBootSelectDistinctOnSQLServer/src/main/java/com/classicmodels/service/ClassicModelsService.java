@@ -21,7 +21,9 @@ public class ClassicModelsService {
         classicModelsRepository.countPaymentCachingDate();                                   // EXAMPLE 5
         classicModelsRepository.findProductLineHavingMaxNrOfProducts();                      // EXAMPLE 6 
         classicModelsRepository.avgSumMinMaxPriceEach();                                     // EXAMPLE 7               
-        classicModelsRepository.findEmployeeNumberOfMaxSalePerFiscalYear();                  // EXAMPLE 8
-        classicModelsRepository.countDistinctSalesByEmployeeNumber();                        // EXAMPLE 9
+        classicModelsRepository.findProductsByVendorScale();                                 // EXAMPLE 8    
+        classicModelsRepository.findEmployeeNumberOfMaxSalePerFiscalYear();                  // EXAMPLE 9        
+        classicModelsRepository.countDistinctSalesByEmployeeNumber();                        // EXAMPLE 10
+                
     }
 }

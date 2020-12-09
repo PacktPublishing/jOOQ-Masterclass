@@ -50,7 +50,7 @@ public class ClassicModelsRepository {
         [classicmodels].[dbo].[office].[city] is not null 
         and [classicmodels].[dbo].[office].[country] is not null
       )    
-    */
+     */
     public void findDistinctOfficesCityCountry() {
 
         System.out.println("EXAMPLE 1\n"
@@ -85,7 +85,7 @@ public class ClassicModelsRepository {
             ? [x]
         )
       )    
-    */
+     */
     public void findOfficeDistinctFromAddress() {
 
         System.out.println("EXAMPLE 2\n"
@@ -116,26 +116,26 @@ public class ClassicModelsRepository {
             ) [x]
         )
       )    
-    */
+     */
     public void findDistinctAndNotDistinctPaymentDates() {
 
-        System.out.println("EXAMPLE 3.1\n" +
-                ctx.select(PAYMENT.INVOICE_AMOUNT, PAYMENT.PAYMENT_DATE)
+        System.out.println("EXAMPLE 3.1\n"
+                + ctx.select(PAYMENT.INVOICE_AMOUNT, PAYMENT.PAYMENT_DATE)
                         .from(PAYMENT)
                         .where(PAYMENT.PAYMENT_DATE.cast(LocalDate.class).isDistinctFrom(
                                 PAYMENT.CACHING_DATE.cast(LocalDate.class)))
                         .fetch()
         );
-        
-        System.out.println("EXAMPLE 3.2\n" +
-                ctx.select(PAYMENT.INVOICE_AMOUNT, PAYMENT.PAYMENT_DATE)
+
+        System.out.println("EXAMPLE 3.2\n"
+                + ctx.select(PAYMENT.INVOICE_AMOUNT, PAYMENT.PAYMENT_DATE)
                         .from(PAYMENT)
                         .where(PAYMENT.PAYMENT_DATE.cast(LocalDate.class).isNotDistinctFrom(
                                 PAYMENT.CACHING_DATE.cast(LocalDate.class)))
                         .fetch()
         );
     }
-    
+
     // EXAMPLE 4
     /*
     select 
@@ -170,11 +170,11 @@ public class ClassicModelsRepository {
             [classicmodels].[dbo].[customerdetail].[country]
         )
       )    
-    */
+     */
     public void findOfficeAndCustomerOfficePostalCodeDistinctCityCountry() {
 
-        System.out.println("EXAMPLE 4\n" +
-                ctx.select()
+        System.out.println("EXAMPLE 4\n"
+                + ctx.select()
                         .from(OFFICE)
                         .innerJoin(CUSTOMERDETAIL)
                         .on(OFFICE.POSTAL_CODE.eq(CUSTOMERDETAIL.POSTAL_CODE))
@@ -196,11 +196,11 @@ public class ClassicModelsRepository {
       ) [distinct_cachcing_date] 
     from 
       [classicmodels].[dbo].[payment]    
-    */
+     */
     public void countPaymentCachingDate() {
 
-        System.out.println("EXAMPLE 5\n" +
-                ctx.select(
+        System.out.println("EXAMPLE 5\n"
+                + ctx.select(
                         count().as("all"),
                         count(PAYMENT.CACHING_DATE).as("all_caching_date"),
                         countDistinct(PAYMENT.CACHING_DATE).as("distinct_cachcing_date"))
@@ -231,11 +231,11 @@ public class ClassicModelsRepository {
         group by 
           [classicmodels].[dbo].[product].[product_line]
       )    
-    */
+     */
     public void findProductLineHavingMaxNrOfProducts() {
 
-        System.out.println("EXAMPLE 6\n" +
-                ctx.select(PRODUCT.PRODUCT_LINE, count())
+        System.out.println("EXAMPLE 6\n"
+                + ctx.select(PRODUCT.PRODUCT_LINE, count())
                         .from(PRODUCT)
                         .groupBy(PRODUCT.PRODUCT_LINE)
                         .having(count().plus(1)
@@ -275,11 +275,11 @@ public class ClassicModelsRepository {
       ) 
     from 
       [classicmodels].[dbo].[orderdetail]    
-    */
+     */
     public void avgSumMinMaxPriceEach() {
 
-        System.out.println("EXAMPLE 7\n" +
-                ctx.select(
+        System.out.println("EXAMPLE 7\n"
+                + ctx.select(
                         avg(ORDERDETAIL.PRICE_EACH),
                         avgDistinct(ORDERDETAIL.PRICE_EACH),
                         sum(ORDERDETAIL.PRICE_EACH),
@@ -292,23 +292,103 @@ public class ClassicModelsRepository {
                         .fetch()
         );
     }
-    
+
+    /* PostgreSQL DISTINCT ON */
     // EXAMPLE 8
-    /* Emulating PostgreSQL DISTINCT ON */    
-    /* Sample: What is the employee numbers of the max sales per fiscal years 
-    ctx.select(SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR)
-         .distinctOn(SALE.FISCAL_YEAR)
-         .from(SALE)
-         .orderBy(SALE.FISCAL_YEAR, SALE.SALE_.desc())
-         .fetch()
-    */            
-    public void findEmployeeNumberOfMaxSalePerFiscalYear() {
+    /* The following statement sorts the result set by the product's vendor and scale, 
+       and then for each group of duplicates, it keeps the first row in the returned result set */    
+    /*
+    select 
+      [t].[product_vendor], 
+      [t].[product_scale] 
+    from 
+      (
+        select 
+          distinct [classicmodels].[dbo].[product].[product_vendor], 
+          [classicmodels].[dbo].[product].[product_scale], 
+          row_number() over (
+            partition by [classicmodels].[dbo].[product].[product_vendor], 
+            [classicmodels].[dbo].[product].[product_scale] 
+            order by 
+              [classicmodels].[dbo].[product].[product_vendor], 
+              [classicmodels].[dbo].[product].[product_scale]
+          ) [rn] 
+        from 
+          [classicmodels].[dbo].[product]
+      ) [t] 
+    where 
+      [rn] = 1 
+    order by 
+      [product_vendor], 
+      [product_scale]    
+    */
+    public void findProductsByVendorScale() {
+
+        System.out.println("EXAMPLE 8\n" +
+                ctx.selectDistinct(PRODUCT.PRODUCT_VENDOR, PRODUCT.PRODUCT_SCALE)
+                        .on(PRODUCT.PRODUCT_VENDOR, PRODUCT.PRODUCT_SCALE)
+                        .from(PRODUCT)         
+                        .orderBy(PRODUCT.PRODUCT_VENDOR, PRODUCT.PRODUCT_SCALE)
+                        .fetch()
+        );
+        
+        /* or, like this */        
+        /*
+        System.out.println("EXAMPLE 8\n" +
+                ctx.select(PRODUCT.PRODUCT_VENDOR, PRODUCT.PRODUCT_SCALE)
+                        .distinctOn(PRODUCT.PRODUCT_VENDOR, PRODUCT.PRODUCT_SCALE)
+                        .from(PRODUCT) 
+                        .orderBy(PRODUCT.PRODUCT_VENDOR, PRODUCT.PRODUCT_SCALE)
+                        .fetch()
+        );
+        */
+    }
     
+    // EXAMPLE 9
+    /* What is the employee numbers of the max sales per fiscal years */        
+    public void findEmployeeNumberOfMaxSalePerFiscalYear() {
+
+        /*
+        select 
+          [t].[employee_number], 
+          [t].[fiscal_year], 
+          [t].[sale] 
+        from 
+          (
+            select 
+              [classicmodels].[dbo].[sale].[employee_number], 
+              [classicmodels].[dbo].[sale].[fiscal_year], 
+              [classicmodels].[dbo].[sale].[sale], 
+              row_number() over (
+                partition by [classicmodels].[dbo].[sale].[fiscal_year] 
+                order by 
+                  [classicmodels].[dbo].[sale].[fiscal_year], 
+                  [classicmodels].[dbo].[sale].[sale] desc
+              ) [rn] 
+            from 
+              [classicmodels].[dbo].[sale]
+          ) [t] 
+        where 
+          [rn] = 1 
+        order by 
+          [fiscal_year], 
+          [sale] desc     
+        */
+        System.out.println("EXAMPLE 9.1\n" +
+                ctx.select(
+                        SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR, SALE.SALE_)
+                        .distinctOn(SALE.FISCAL_YEAR)
+                        .from(SALE)
+                        .orderBy(SALE.FISCAL_YEAR, SALE.SALE_.desc())
+                        .fetch()
+        );
+        
         /* SQL alternative based on JOIN */
         /*
         select 
+          [classicmodels].[dbo].[sale].[employee_number], 
           [classicmodels].[dbo].[sale].[fiscal_year], 
-          [classicmodels].[dbo].[sale].[employee_number] 
+          [classicmodels].[dbo].[sale].[sale] 
         from 
           [classicmodels].[dbo].[sale] 
           join (
@@ -328,9 +408,9 @@ public class ClassicModelsRepository {
         order by 
           [classicmodels].[dbo].[sale].[fiscal_year], 
           [classicmodels].[dbo].[sale].[sale] desc        
-        */  
-        System.out.println("EXAMPLE 8.1\n" + 
-                ctx.select(SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER)
+         */
+        System.out.println("EXAMPLE 9.2\n"
+                + ctx.select(SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR, SALE.SALE_)
                         .from(SALE)
                         .innerJoin(select(SALE.FISCAL_YEAR.as("fy"), max(SALE.SALE_).as("ms"))
                                 .from(SALE)
@@ -339,18 +419,20 @@ public class ClassicModelsRepository {
                                 .and(SALE.SALE_.eq(field("ms", Double.class))))
                         .orderBy(SALE.FISCAL_YEAR, SALE.SALE_.desc())
                         .fetch()
-        );        
-        
-        /* SQL alternative based on row_number() */        
+        );
+
+        /* SQL alternative based on row_number() */
         /*
         select 
-          [alias_37493236].[fiscal_year], 
-          [alias_37493236].[employee_number] 
+          [alias_2194997].[fiscal_year], 
+          [alias_2194997].[employee_number], 
+          [alias_2194997].[sale] 
         from 
           (
             select 
-              distinct [classicmodels].[dbo].[sale].[fiscal_year], 
-              [classicmodels].[dbo].[sale].[employee_number], 
+              distinct [classicmodels].[dbo].[sale].[employee_number], 
+              [classicmodels].[dbo].[sale].[fiscal_year], 
+              [classicmodels].[dbo].[sale].[sale], 
               row_number() over (
                 partition by [classicmodels].[dbo].[sale].[fiscal_year] 
                 order by 
@@ -359,28 +441,28 @@ public class ClassicModelsRepository {
               ) [rn] 
             from 
               [classicmodels].[dbo].[sale]
-          ) [alias_37493236] 
+          ) [alias_2194997] 
         where 
-          [alias_37493236].[rn] = ? 
+          [alias_2194997].[rn] = ? 
         order by 
-          [alias_37493236].[fiscal_year]        
-        */
+          [alias_2194997].[fiscal_year]        
+         */
         // Table<?>
-        var t = selectDistinct(SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER,
-                                rowNumber().over(partitionBy(SALE.FISCAL_YEAR)
-                                        .orderBy(SALE.FISCAL_YEAR, SALE.SALE_.desc())).as("rn"))
-                                        .from(SALE).asTable();
-        
-        System.out.println("EXAMPLE 8.2\n" + 
-                ctx.select(t.field("fiscal_year"), t.field("employee_number"))
+        var t = selectDistinct(SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR, SALE.SALE_,
+                rowNumber().over(partitionBy(SALE.FISCAL_YEAR)
+                        .orderBy(SALE.FISCAL_YEAR, SALE.SALE_.desc())).as("rn"))
+                .from(SALE).asTable();
+
+        System.out.println("EXAMPLE 9.3\n"
+                + ctx.select(t.field("fiscal_year"), t.field("employee_number"), t.field("sale"))
                         .from(t)
                         .where(t.field("rn", Integer.class).eq(1))
                         .orderBy(t.field("fiscal_year"))
-                        .fetch()                                                                
+                        .fetch()
         );
-    }    
-    
-    // EXAMPLE 9
+    }
+        
+    // EXAMPLE 10
     /*
     select 
       distinct count(*) over () [sales] 
@@ -388,14 +470,14 @@ public class ClassicModelsRepository {
       [classicmodels].[dbo].[sale] 
     group by 
       [classicmodels].[dbo].[sale].[employee_number]    
-    */
+     */
     public void countDistinctSalesByEmployeeNumber() {
 
-        System.out.println("EXAMPLE 9 (count result): "
+        System.out.println("EXAMPLE 10 (count result): "
                 + ctx.selectDistinct(count().over().as("sales"))
                         .from(SALE)
                         .groupBy(SALE.EMPLOYEE_NUMBER)
                         .fetchOneInto(int.class)
         );
-    }
+    }   
 }
