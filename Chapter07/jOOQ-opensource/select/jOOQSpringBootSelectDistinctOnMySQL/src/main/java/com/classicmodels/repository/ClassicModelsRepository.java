@@ -365,9 +365,72 @@ public class ClassicModelsRepository {
     
     /* Emulate PostgreSQL DISTINCT ON */
     // EXAMPLE 11
+    /* The following statement sorts the result set by the product's vendor and scale, 
+       and then for each group of duplicates, it keeps the first row in the returned result set */    
+    /* 
+    
+    */    
+    public void findProductsByVendorScale() {
+
+        System.out.println("EXAMPLE 11\n" +
+                ctx.selectDistinct(PRODUCT.PRODUCT_VENDOR, PRODUCT.PRODUCT_SCALE)
+                        .on(PRODUCT.PRODUCT_VENDOR, PRODUCT.PRODUCT_SCALE)
+                        .from(PRODUCT)         
+                        .orderBy(PRODUCT.PRODUCT_VENDOR, PRODUCT.PRODUCT_SCALE)
+                        .fetch()
+        );
+        
+        /* or, like this */        
+        /*
+        System.out.println("EXAMPLE 11\n" +
+                ctx.select(PRODUCT.PRODUCT_VENDOR, PRODUCT.PRODUCT_SCALE)
+                        .distinctOn(PRODUCT.PRODUCT_VENDOR, PRODUCT.PRODUCT_SCALE)
+                        .from(PRODUCT) 
+                        .orderBy(PRODUCT.PRODUCT_VENDOR, PRODUCT.PRODUCT_SCALE)
+                        .fetch()
+        );
+        */
+    }
+    
+    // EXAMPLE 12
     /* What is the employee numbers of the max sales per fiscal years */        
     public void findEmployeeNumberOfMaxSalePerFiscalYear() {
 
+        /*
+        select 
+          `t`.`employee_number`, 
+          `t`.`fiscal_year`, 
+          `t`.`sale` 
+        from 
+          (
+            select 
+              `classicmodels`.`sale`.`employee_number`, 
+              `classicmodels`.`sale`.`fiscal_year`, 
+              `classicmodels`.`sale`.`sale`, 
+              row_number() over (
+                partition by `classicmodels`.`sale`.`fiscal_year` 
+                order by 
+                  `classicmodels`.`sale`.`fiscal_year`, 
+                  `classicmodels`.`sale`.`sale` desc
+              ) as `rn` 
+            from 
+              `classicmodels`.`sale`
+          ) as `t` 
+        where 
+          `rn` = 1 
+        order by 
+          `fiscal_year`, 
+          `sale` desc        
+        */
+        System.out.println("EXAMPLE 12.1\n" +
+                ctx.select(
+                        SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR, SALE.SALE_)
+                        .distinctOn(SALE.FISCAL_YEAR)
+                        .from(SALE)
+                        .orderBy(SALE.FISCAL_YEAR, SALE.SALE_.desc())
+                        .fetch()
+        );
+        
         /* SQL alternative based on JOIN */
         /*
         select 
@@ -392,8 +455,8 @@ public class ClassicModelsRepository {
           `classicmodels`.`sale`.`fiscal_year`, 
           `classicmodels`.`sale`.`sale` desc        
          */
-        System.out.println("EXAMPLE 11.1\n"
-                + ctx.select(SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR, SALE.SALE_)
+        System.out.println("EXAMPLE 12.2\n"
+                + ctx.select(SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR, SALE.SALE_)                       
                         .from(SALE)
                         .innerJoin(select(SALE.FISCAL_YEAR.as("fy"), max(SALE.SALE_).as("ms"))
                                 .from(SALE)
@@ -436,12 +499,12 @@ public class ClassicModelsRepository {
                         .orderBy(SALE.FISCAL_YEAR, SALE.SALE_.desc())).as("rn"))
                 .from(SALE).asTable();
 
-        System.out.println("EXAMPLE 11.2\n"
+        System.out.println("EXAMPLE 12.3\n"
                 + ctx.select(t.field("employee_number"), t.field("fiscal_year"), t.field("sale"))
                         .from(t)
                         .where(t.field("rn", Integer.class).eq(1))
                         .orderBy(t.field("fiscal_year"))
                         .fetch()
         );    
-    }
+    }          
 }
