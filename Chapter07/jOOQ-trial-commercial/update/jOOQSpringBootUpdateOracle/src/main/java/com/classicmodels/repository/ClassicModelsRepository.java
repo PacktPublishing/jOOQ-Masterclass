@@ -9,6 +9,7 @@ import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Sale.SALE;
 import jooq.generated.tables.records.OfficeRecord;
 import org.jooq.DSLContext;
+import org.jooq.Row2;
 import org.jooq.UpdateQuery;
 import org.jooq.conf.ExecuteWithoutWhere;
 import org.jooq.conf.Settings;
@@ -59,28 +60,55 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 1.2 (query): " + uq.getSQL());
     }
 
-    // EXAMPLE 2
-    /*
-    update 
-      "SYSTEM"."OFFICE" 
-    set 
-      ("CITY", "COUNTRY") = (
-        select 
-          ?, 
-          ? 
-        from 
-          dual
-      ) 
-    where 
-      "SYSTEM"."OFFICE"."OFFICE_CODE" = ?   
-     */
+    // EXAMPLE 2    
     public void updateRowOffice() {
 
-        System.out.println("EXAMPLE 2 (affected rows): "
+        /*
+        update 
+          "SYSTEM"."OFFICE" 
+        set 
+          ("CITY", "COUNTRY") = (
+            select 
+              ?, 
+              ? 
+            from 
+              dual
+          ) 
+        where 
+          "SYSTEM"."OFFICE"."OFFICE_CODE" = ?   
+        */
+        System.out.println("EXAMPLE 2.1 (affected rows): "
                 + ctx.update(OFFICE)
                         .set(row(OFFICE.CITY, OFFICE.COUNTRY),
                                 row("Hamburg", "Germany"))
                         .where(OFFICE.OFFICE_CODE.eq("1"))
+                        .execute()
+        );
+        
+        /*
+        update 
+          "SYSTEM"."OFFICE" 
+        set 
+          ("CITY", "COUNTRY") = (
+            select 
+              ?, 
+              ? 
+            from 
+              dual
+          ) 
+        where 
+          (
+            "SYSTEM"."OFFICE"."CITY" is null 
+            and "SYSTEM"."OFFICE"."COUNTRY" is null
+          )        
+        */
+        Row2<String, String> r1 = row(OFFICE.CITY, OFFICE.COUNTRY);
+        Row2<String, String> r2 = row("Hamburg", "Germany");
+
+        System.out.println("EXAMPLE 2.2 (affected rows): "
+                + ctx.update(OFFICE)
+                        .set(r1, r2)
+                        .where(r1.isNull())
                         .execute()
         );
     }
