@@ -16,11 +16,11 @@ repositories {
 }
 
 dependencies {        
-    jooqGenerator 'mysql:mysql-connector-java' 
+    jooqGenerator 'org.postgresql:postgresql' 
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-jooq'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'mysql:mysql-connector-java'
+    implementation 'org.postgresql:postgresql'
     implementation 'org.flywaydb:flyway-core'
     implementation 'javax.xml.bind:jaxb-api:2.3.1'
     implementation 'org.glassfish.jaxb:jaxb-runtime:2.3.1'
@@ -65,8 +65,8 @@ jooq {
                 generator {
                     name = 'org.jooq.codegen.JavaGenerator'                    
                     database {
-                        name = 'org.jooq.meta.mysql.MySQLDatabase'                        
-                        inputSchema = 'classicmodels'
+                        name = 'org.jooq.meta.postgres.PostgresDatabase'                        
+                        inputSchema = 'public'
                         includes = '.*'
                         // schemaVersionProvider = 'SELECT MAX(version) FROM flyway_schema_history'
                         excludes = 'flyway_schema_history'
