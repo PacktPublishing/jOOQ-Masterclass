@@ -8126,4 +8126,32 @@ insert into sale(sale_id,fiscal_year,sale,employee_number) values
 
 (19, 2004, 5241.44, 1504) ON CONFLICT (sale_id) DO NOTHING;
 
+/* Data for the table `paymentdetail` */
+
+insert  into paymentdetail(customer_number,check_number,bank_name,bank_iban,transaction_type) values 
+
+(103,'HQ336336','Transilvania Bank', '2203-20223RO0-22X', 5),
+
+(103,'JM555205','BCR Bank', '1223-4423BLG0-2222Q', 3),
+
+(103,'OM314933','Home Bank', '44KMR-44NRE4-4D', 2),
+
+(112,'BO864823','Lion Bank', 'DK4K4J-3J2-3N2', 1),
+
+(112,'HQ55022','BCR Bank', '4333K334-3J434-34434M', 1),
+
+(112,'ND748579','Transilvania Bank', 'AK33K-2322-23M32', 3),
+
+(114,'GG31455','BRDO Bank', 'SDKSDS0E-43M-ER-SD', 1),
+
+(114,'MA765515','KZ Bank', 'DSDD-344334K-DD-43', 4),
+
+(114,'NP603840','BCR Bank', 'SDDK02323-223D-4D', 3),
+
+(114,'NR27552','KZa Bank', '4L4L23-232KDS-SDS', 2),
+
+(119,'DB933704','Transilvania Bank', 'DS-D32-2SDS', 1),
+
+(496,'MN89921','Transilvania Bank', 'SDK2-223-23D', 2) ON CONFLICT (customer_number,check_number) DO NOTHING;
+
 /* END */

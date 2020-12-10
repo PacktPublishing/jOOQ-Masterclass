@@ -213,7 +213,7 @@ CREATE TABLE `payment` (
   CONSTRAINT `payments_ibfk_1` FOREIGN KEY (`customer_number`) REFERENCES `customer` (`customer_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-/*Table structure for table `payment` */
+/*Table structure for table `paymentdetail` */
 
 CREATE TABLE `paymentdetail` (
   `customer_number` bigint NOT NULL,
