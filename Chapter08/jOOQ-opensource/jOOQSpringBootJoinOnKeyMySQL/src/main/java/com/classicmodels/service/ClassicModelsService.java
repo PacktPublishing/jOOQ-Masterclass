@@ -13,10 +13,10 @@ public class ClassicModelsService {
     }
 
     public void callAll() {
-        
-        classicModelsRepository.joinPaymentPaymentdetailViaOn();            // EXAMPLE 1
-        classicModelsRepository.joinPaymentPaymentdetailViaOnRow();         // EXAMPLE 2
-        classicModelsRepository.joinPaymentPaymentdetailViaOnKey();         // EXAMPLE 3
-        classicModelsRepository.joinPaymentPaymentdetailViaOnKeyFK();       // EXAMPLE 4
+
+        classicModelsRepository.joinProductlineProductlinedetailViaOn();            // EXAMPLE 1
+        classicModelsRepository.joinProductlineProductlinedetailViaOnRow();         // EXAMPLE 2
+        classicModelsRepository.joinProductlineProductlinedetailViaOnKey();         // EXAMPLE 3
+        classicModelsRepository.joinProductlineProductlinedetailViaOnKeyFK();       // EXAMPLE 4
     }
 }
