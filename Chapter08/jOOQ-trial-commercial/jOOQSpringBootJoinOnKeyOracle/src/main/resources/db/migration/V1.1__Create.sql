@@ -18,12 +18,6 @@ EXCEPTION
 END;
 /
 BEGIN
-   EXECUTE IMMEDIATE 'DROP TABLE "PAYMENTDETAIL" CASCADE CONSTRAINTS';
-EXCEPTION
-   WHEN OTHERS THEN NULL;
-END;
-/
-BEGIN
    EXECUTE IMMEDIATE 'DROP TABLE "ORDERDETAIL" CASCADE CONSTRAINTS';
 EXCEPTION
    WHEN OTHERS THEN NULL;
@@ -43,6 +37,12 @@ END;
 /
 BEGIN
    EXECUTE IMMEDIATE 'DROP TABLE "PRODUCTLINE" CASCADE CONSTRAINTS';
+EXCEPTION
+   WHEN OTHERS THEN NULL;
+END;
+/
+BEGIN
+   EXECUTE IMMEDIATE 'DROP TABLE "PRODUCTLINEDETAIL" CASCADE CONSTRAINTS';
 EXCEPTION
    WHEN OTHERS THEN NULL;
 END;
@@ -287,11 +287,25 @@ CREATE INDEX idx_offices_has_managers_id ON office_has_manager(managers_manager_
 
 CREATE TABLE productline (
   product_line varchar2(50) NOT NULL,
+  code number(10) NOT NULL,
   text_description varchar2(4000) DEFAULT NULL,
   html_description clob,
   image blob,
   created_on date DEFAULT SYSDATE NOT NULL,
-  PRIMARY KEY (product_line)
+  PRIMARY KEY (product_line, code),
+  CONSTRAINT unique_product_line UNIQUE(product_line)
+) ;
+
+/*Table structure for table `productdetail` */
+
+CREATE TABLE productlinedetail (
+  product_line varchar2(50) NOT NULL,
+  code number(10) NOT NULL,
+  line_capacity varchar2(20) NOT NULL,
+  line_type number(1) DEFAULT 0,
+  PRIMARY KEY (product_line,code),  
+  CONSTRAINT unique_product_line_detail UNIQUE(product_line),
+  CONSTRAINT productlinedetail_ibfk_1 FOREIGN KEY (product_line,code) REFERENCES productline (product_line,code)
 ) ;
 
 /*Table structure for table `product` */
@@ -391,19 +405,8 @@ CREATE TABLE payment (
   invoice_amount number(10,2) NOT NULL,
   caching_date timestamp DEFAULT NULL,
   PRIMARY KEY (customer_number,check_number),
+  CONSTRAINT unique_check_number UNIQUE (check_number),
   CONSTRAINT payments_ibfk_1 FOREIGN KEY (customer_number) REFERENCES customer (customer_number)
-) ;
-
-/*Table structure for table `paymentdetail` */
-
-CREATE TABLE paymentdetail (
-  customer_number number(10) NOT NULL,
-  check_number varchar2(50) NOT NULL,
-  bank_name varchar2(20) NOT NULL,
-  bank_iban varchar2(100) NOT NULL,
-  transaction_type number(1) DEFAULT 0,
-  PRIMARY KEY (customer_number,check_number),  
-  CONSTRAINT paymentdetail_ibfk_1 FOREIGN KEY (customer_number,check_number) REFERENCES payment (customer_number,check_number)
 ) ;
 
 COMMIT;
