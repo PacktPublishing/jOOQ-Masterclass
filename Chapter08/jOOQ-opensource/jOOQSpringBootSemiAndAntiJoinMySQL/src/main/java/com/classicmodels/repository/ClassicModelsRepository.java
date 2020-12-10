@@ -135,10 +135,10 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 7\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
-                        .from(EMPLOYEE)                       
+                        .from(EMPLOYEE)
                         .leftAntiJoin(CUSTOMER)
                         .on(EMPLOYEE.EMPLOYEE_NUMBER.eq(CUSTOMER.SALES_REP_EMPLOYEE_NUMBER))
                         .fetch()
         );
-    }   
+    }
 }
