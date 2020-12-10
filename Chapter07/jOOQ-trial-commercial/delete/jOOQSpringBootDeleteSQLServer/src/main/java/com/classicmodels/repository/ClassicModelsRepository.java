@@ -470,7 +470,7 @@ public class ClassicModelsRepository {
                                                                                         .where(PRODUCT.PRODUCT_LINE.eq("Motorcycles"))))
                                                                         .returningResult(ORDERDETAIL.PRODUCT_ID).fetch()))
                                                         .returningResult(PRODUCT.PRODUCT_LINE).fetch().get(0).value1()))
-                                        .returningResult(PRODUCTLINEDETAIL.PRODUCT_LINE).fetch().get(0).value1()))
+                                        .returningResult(PRODUCTLINEDETAIL.PRODUCT_LINE).fetchOne().value1()))
                         .execute()
         );
     }
