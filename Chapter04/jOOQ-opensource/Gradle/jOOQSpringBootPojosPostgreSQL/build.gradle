@@ -1,0 +1,125 @@
+plugins {
+    id 'org.springframework.boot' version '2.3.3.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.10.RELEASE'    
+    id 'org.flywaydb.flyway' version '7.2.0'        
+    id 'nu.studer.jooq' version '5.2'
+    id 'java'
+}
+
+group = 'com.classicmodels'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '14'
+targetCompatibility = '14'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {        
+    jooqGenerator 'org.postgresql:postgresql' 
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-jooq'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.postgresql:postgresql'
+    implementation 'org.flywaydb:flyway-core'
+    implementation 'javax.xml.bind:jaxb-api:2.3.1'
+    implementation 'org.glassfish.jaxb:jaxb-runtime:2.3.1'
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+}
+
+processResources {
+    filesMatching("**/application.properties") {
+        expand( project.properties )
+    }
+}
+
+configurations {
+    flywayMigrate
+}
+
+flyway{
+    driver = project.properties['driverClassName']
+    url = project.properties['url']
+    user = project.properties['username']
+    password = project.properties['password']                    
+}
+
+jooq {
+    version = '3.14.4'
+    edition = nu.studer.gradle.jooq.JooqEdition.OSS
+
+    configurations {
+        main {
+            generateSchemaSourceOnCompilation = true  // default (can be omitted)
+            
+            generationTool {
+                logging = org.jooq.meta.jaxb.Logging.WARN
+                jdbc {
+                    driver = project.properties['driverClassName']
+                    url = project.properties['url']
+                    user = project.properties['username']
+                    password = project.properties['password']                    
+                }
+                generator {
+                    name = 'org.jooq.codegen.JavaGenerator'                    
+                    database {
+                        name = 'org.jooq.meta.postgres.PostgresDatabase'                        
+                        inputSchema = 'public'
+                        includes = '.*'
+                        // schemaVersionProvider = 'SELECT MAX(version) FROM flyway_schema_history'
+                        excludes = 'flyway_schema_history'
+                        logSlowQueriesAfterSeconds = 20
+                    }
+                    
+                    strategy {
+                        matchers {
+                            tables {
+                                table {
+                                    pojoClass{
+                                        expression = 'JOOQ_$0'
+                                        transform = 'PASCAL'
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                    generate {  
+                        pojos = true
+                        validationAnnotations = true
+                    }
+                    
+                    target {
+                        packageName = 'jooq.generated'
+                        directory = 'target/generated-sources/jooq'
+                    }
+                    strategy.name = "org.jooq.codegen.DefaultGeneratorStrategy"
+                }
+            }
+        }
+    }
+}
+
+// Configure jOOQ task such that it only executes when something has changed 
+// that potentially affects the generated JOOQ sources:
+// - the jOOQ configuration has changed (Jdbc, Generator, Strategy, etc.)
+// - the classpath used to execute the jOOQ generation tool has changed 
+//   (jOOQ library, database driver, strategy classes, etc.)
+// - the schema files from which the schema is generated and which is 
+//   used by jOOQ to generate the sources have changed (scripts added, modified, etc.)
+tasks.named('generateJooq').configure {
+    // ensure database schema has been prepared by Flyway before generating the jOOQ sources
+    dependsOn tasks.named('flywayMigrate')
+
+    // declare Flyway migration scripts as inputs on the jOOQ task
+    inputs.files(fileTree('src/main/resources/db/migration'))
+    .withPropertyName('migrations')
+    .withPathSensitivity(PathSensitivity.RELATIVE)
+
+    // make jOOQ task participate in incremental builds and build caching
+    allInputsDeclared = true
+    outputs.cacheIf { true }
+}
