@@ -11,17 +11,18 @@ This is a modified version of the original schema for MySQL
 
 /* START */
 
-USE classicmodels;
+USE `classicmodels`;
 
 DROP TABLE IF EXISTS `payment`;
 DROP TABLE IF EXISTS `orderdetail`;
 DROP TABLE IF EXISTS `order`;
 DROP TABLE IF EXISTS `product`;
 DROP TABLE IF EXISTS `productline`;
+DROP TABLE IF EXISTS `productlinedetail`;
 DROP TABLE IF EXISTS `office_has_manager`;
 DROP TABLE IF EXISTS `manager`;
-DROP TABLE IF EXISTS `customer`;
 DROP TABLE IF EXISTS `customerdetail`;
+DROP TABLE IF EXISTS `customer`;
 DROP TABLE IF EXISTS `sale`;
 DROP TABLE IF EXISTS `employee`;
 DROP TABLE IF EXISTS `department`;
@@ -79,6 +80,7 @@ CREATE TABLE `sale` (
   `fiscal_year` int NOT NULL,  
   `sale` float NOT NULL,  
   `employee_number` bigint DEFAULT NULL,  
+  `hot` boolean DEFAULT FALSE,  
   PRIMARY KEY (`sale_id`),  
   KEY `employee_number` (`employee_number`),  
   CONSTRAINT `sales_ibfk_1` FOREIGN KEY (`employee_number`) REFERENCES `employee` (`employee_number`)
@@ -146,12 +148,25 @@ CREATE TABLE `office_has_manager` (
 
 CREATE TABLE `productline` (
   `product_line` varchar(50) NOT NULL,
+  `code` bigint NOT NULL,
   `text_description` varchar(4000) DEFAULT NULL,
   `html_description` mediumtext DEFAULT NULL,
   `image` mediumblob DEFAULT NULL,
   `created_on` date DEFAULT (CURRENT_DATE),
-  PRIMARY KEY (`product_line`)
+  PRIMARY KEY (`product_line`,`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Table structure for table `paymentdetail` */
+
+CREATE TABLE `productlinedetail` (
+  `product_line` varchar(50) NOT NULL,
+  `code` bigint NOT NULL,
+  `line_capacity` varchar(20) NOT NULL,
+  `line_type` int DEFAULT 0,
+  PRIMARY KEY (`product_line`,`code`),  
+  CONSTRAINT `productlinedetail_ibfk_1` FOREIGN KEY (`product_line`,`code`) REFERENCES `productline` (`product_line`,`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 
 /*Table structure for table `product` */
 
@@ -208,6 +223,7 @@ CREATE TABLE `payment` (
   `invoice_amount` decimal(10,2) NOT NULL,
   `caching_date` timestamp DEFAULT NULL,
   PRIMARY KEY (`customer_number`,`check_number`),
+  CONSTRAINT `unique_check_number` UNIQUE (`check_number`),
   CONSTRAINT `payments_ibfk_1` FOREIGN KEY (`customer_number`) REFERENCES `customer` (`customer_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 

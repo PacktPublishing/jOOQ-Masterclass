@@ -14,11 +14,11 @@ This is a modified version of the original schema for MySQL
 USE `classicmodels`;
 
 DROP TABLE IF EXISTS `payment`;
-DROP TABLE IF EXISTS `paymentdetail`;
 DROP TABLE IF EXISTS `orderdetail`;
 DROP TABLE IF EXISTS `order`;
 DROP TABLE IF EXISTS `product`;
 DROP TABLE IF EXISTS `productline`;
+DROP TABLE IF EXISTS `productlinedetail`;
 DROP TABLE IF EXISTS `office_has_manager`;
 DROP TABLE IF EXISTS `manager`;
 DROP TABLE IF EXISTS `customerdetail`;
@@ -148,12 +148,25 @@ CREATE TABLE `office_has_manager` (
 
 CREATE TABLE `productline` (
   `product_line` varchar(50) NOT NULL,
+  `code` bigint NOT NULL,
   `text_description` varchar(4000) DEFAULT NULL,
   `html_description` mediumtext DEFAULT NULL,
   `image` mediumblob DEFAULT NULL,
   `created_on` date DEFAULT (CURRENT_DATE),
-  PRIMARY KEY (`product_line`)
+  PRIMARY KEY (`product_line`,`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Table structure for table `paymentdetail` */
+
+CREATE TABLE `productlinedetail` (
+  `product_line` varchar(50) NOT NULL,
+  `code` bigint NOT NULL,
+  `line_capacity` varchar(20) NOT NULL,
+  `line_type` int DEFAULT 0,
+  PRIMARY KEY (`product_line`,`code`),  
+  CONSTRAINT `productlinedetail_ibfk_1` FOREIGN KEY (`product_line`,`code`) REFERENCES `productline` (`product_line`,`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 
 /*Table structure for table `product` */
 
@@ -212,18 +225,6 @@ CREATE TABLE `payment` (
   PRIMARY KEY (`customer_number`,`check_number`),
   CONSTRAINT `unique_check_number` UNIQUE (`check_number`),
   CONSTRAINT `payments_ibfk_1` FOREIGN KEY (`customer_number`) REFERENCES `customer` (`customer_number`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-/*Table structure for table `paymentdetail` */
-
-CREATE TABLE `paymentdetail` (
-  `customer_number` bigint NOT NULL,
-  `check_number` varchar(50) NOT NULL,
-  `bank_name` varchar(20) NOT NULL,
-  `bank_iban` varchar(100) NOT NULL,
-  `transaction_type` int DEFAULT 0,
-  PRIMARY KEY (`customer_number`,`check_number`),  
-  CONSTRAINT `paymentdetail_ibfk_1` FOREIGN KEY (`customer_number`,`check_number`) REFERENCES `payment` (`customer_number`,`check_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /* USER-DEFINED FUNCTIONS */
