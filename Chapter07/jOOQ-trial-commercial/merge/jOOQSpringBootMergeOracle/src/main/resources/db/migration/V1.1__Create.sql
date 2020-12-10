@@ -18,6 +18,12 @@ EXCEPTION
 END;
 /
 BEGIN
+   EXECUTE IMMEDIATE 'DROP TABLE "PAYMENTDETAIL" CASCADE CONSTRAINTS';
+EXCEPTION
+   WHEN OTHERS THEN NULL;
+END;
+/
+BEGIN
    EXECUTE IMMEDIATE 'DROP TABLE "ORDERDETAIL" CASCADE CONSTRAINTS';
 EXCEPTION
    WHEN OTHERS THEN NULL;
@@ -132,8 +138,9 @@ CREATE INDEX office_code ON employee (office_code);
 CREATE TABLE sale (
   sale_id number(20) NOT NULL, 
   fiscal_year int NOT NULL, 
-  sale float NOT NULL,  
+  sale float NOT NULL,    
   employee_number number(10) DEFAULT NULL,  
+  hot number(1,0) DEFAULT 0,
   PRIMARY KEY (sale_id)
 ,  
   CONSTRAINT sales_ibfk_1 FOREIGN KEY (employee_number) REFERENCES employee (employee_number)
@@ -388,5 +395,40 @@ CREATE TABLE payment (
   CONSTRAINT payments_ibfk_1 FOREIGN KEY (customer_number) REFERENCES customer (customer_number)
 ) ;
 
+/*Table structure for table `paymentdetail` */
+
+CREATE TABLE paymentdetail (
+  customer_number number(10) NOT NULL,
+  check_number varchar2(50) NOT NULL,
+  bank_name varchar2(20) NOT NULL,
+  bank_iban varchar2(100) NOT NULL,
+  transaction_type number(1) DEFAULT 0,
+  PRIMARY KEY (customer_number,check_number),  
+  CONSTRAINT paymentdetail_ibfk_1 FOREIGN KEY (customer_number,check_number) REFERENCES payment (customer_number,check_number)
+) ;
+
 COMMIT;
+
+/* USER-DEFINED FUNCTIONS */
+
+CREATE OR REPLACE FUNCTION get_total_sales(
+    in_year PLS_INTEGER
+) 
+RETURN NUMBER
+IS
+    l_total_sales NUMBER := 0;
+BEGIN
+    -- get total sales
+    SELECT SUM(PRICE_EACH * QUANTITY_ORDERED)
+    INTO l_total_sales
+    FROM ORDERDETAIL
+    INNER JOIN "ORDER" USING (ORDER_ID)
+    WHERE STATUS = 'Shipped'
+    GROUP BY EXTRACT(YEAR FROM ORDER_DATE)
+    HAVING EXTRACT(YEAR FROM ORDER_DATE) = in_year;
+    
+    -- return the total sales
+    RETURN l_total_sales;
+END;
+
 /* END */

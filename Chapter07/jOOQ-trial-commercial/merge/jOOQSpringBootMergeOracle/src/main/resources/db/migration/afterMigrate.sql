@@ -38,8 +38,8 @@ insert /*+ ignore_row_on_dupkey_index(office(office_code)) */ into office(office
  select '9','Bucharest','+44 20 1827 21411','22 DN1','Level 12',NULL,NULL,'EC2N 1HN','NA' from dual union all
 
  select '10',NULL,'+44 20 1827 21411','12 Home','Level 22',NULL,NULL,'EC2N 1HN','NA' from dual union all
-
- select '11','Paris','+32 12 713 4304','43 Rue 2',NULL,NULL,'France','25017','EMEA' from dual union all
+ 
+ select '11','Paris','+32 12 713 4304','43 Rue 2',NULL,NULL,'France','97562','EMEA' from dual union all
 
  select '12','Tokyo','+81 33 224 3444','4-1 Kioicho',NULL,'Koil-Ku','Japan','101-6578','Japan' from dual;
 
@@ -403,7 +403,7 @@ insert /*+ ignore_row_on_dupkey_index(customerdetail(customer_number)) */ into c
 
  select 103,'54, rue Royale',NULL,'Nantes',NULL,'44000','France' from dual union all
 
- select 112,'8489 Strong St.',NULL,'Las Vegas','NV','83030','USA' from dual union all
+ select 112,'8489 Strong St.',NULL,'Las Vegas','NV','75017','USA' from dual union all
 
  select 114,'636 St Kilda Road','Level 3','Melbourne','Victoria','3004','Australia' from dual union all
 
@@ -8136,5 +8136,33 @@ select 17, 2003, 1491.38, 1504 from dual union all
 select 18, 2004, 3884.34, 1504 from dual union all 
 
 select 19, 2004, 5241.44, 1504 from dual;
+
+/* Data for the table `paymentdetail` */
+
+insert /*+ ignore_row_on_dupkey_index(paymentdetail(customer_number,check_number)) */ into paymentdetail(customer_number,check_number,bank_name,bank_iban,transaction_type)
+
+select 103,'HQ336336','Transilvania Bank', '2203-20223RO0-22X', 5 from dual union all
+
+select 103,'JM555205','BCR Bank', '1223-4423BLG0-2222Q', 3 from dual union all
+
+select 103,'OM314933','Home Bank', '44KMR-44NRE4-4D', 2 from dual union all
+
+select 112,'BO864823','Lion Bank', 'DK4K4J-3J2-3N2', 1 from dual union all
+
+select 112,'HQ55022','BCR Bank', '4333K334-3J434-34434M', 1 from dual union all
+
+select 112,'ND748579','Transilvania Bank', 'AK33K-2322-23M32', 3 from dual union all
+
+select 114,'GG31455','BRDO Bank', 'SDKSDS0E-43M-ER-SD', 1 from dual union all
+
+select 114,'MA765515','KZ Bank', 'DSDD-344334K-DD-43', 4 from dual union all 
+
+select 114,'NP603840','BCR Bank', 'SDDK02323-223D-4D', 3 from dual union all
+
+select 114,'NR27552','KZa Bank', '4L4L23-232KDS-SDS', 2 from dual union all
+
+select 119,'DB933704','Transilvania Bank', 'DS-D32-2SDS', 1 from dual union all
+
+select 496,'MN89921','Transilvania Bank', 'SDK2-223-23D', 2 from dual;
 
 /* END */
