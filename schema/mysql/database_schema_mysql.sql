@@ -14,6 +14,7 @@ This is a modified version of the original schema for MySQL
 USE `classicmodels`;
 
 DROP TABLE IF EXISTS `payment`;
+DROP TABLE IF EXISTS `paymentdetail`;
 DROP TABLE IF EXISTS `orderdetail`;
 DROP TABLE IF EXISTS `order`;
 DROP TABLE IF EXISTS `product`;
