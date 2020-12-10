@@ -28,6 +28,8 @@ GO
 
 IF OBJECT_ID('payment', 'U') IS NOT NULL 
   DROP TABLE payment;
+IF OBJECT_ID('paymentdetail', 'U') IS NOT NULL 
+  DROP TABLE paymentdetail;
 IF OBJECT_ID('orderdetail', 'U') IS NOT NULL 
   DROP TABLE orderdetail;
 IF OBJECT_ID('order', 'U') IS NOT NULL 
