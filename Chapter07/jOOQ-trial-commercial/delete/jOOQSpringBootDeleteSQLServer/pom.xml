@@ -105,7 +105,7 @@
                 <artifactId>flyway-maven-plugin</artifactId>                                 
                 <executions>
                     <execution>
-                        <phase>none</phase>
+                        <phase>generate-sources</phase>
                         <goals>
                             <goal>migrate</goal>
                         </goals>

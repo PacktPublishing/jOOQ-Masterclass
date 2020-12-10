@@ -11,6 +11,7 @@ import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Productline.PRODUCTLINE;
+import static jooq.generated.tables.Productlinedetail.PRODUCTLINEDETAIL;
 import static jooq.generated.tables.Sale.SALE;
 import jooq.generated.tables.records.PaymentRecord;
 import org.jooq.DSLContext;
@@ -431,7 +432,19 @@ public class ClassicModelsRepository {
     delete from 
       [classicmodels].[dbo].[product] output [deleted].[product_line] into @result 
     where 
-      [classicmodels].[dbo].[product].[product_id] in (?, ?, ?, ..., ?);
+      [classicmodels].[dbo].[product].[product_id] in (?, ?, ?, ...);
+    select 
+      [r].[product_line] 
+    from 
+      @result [r];
+    
+    declare @result table (
+      [product_line] varchar(50)
+    );
+    delete from 
+      [classicmodels].[dbo].[productlinedetail] output [deleted].[product_line] into @result 
+    where 
+      [classicmodels].[dbo].[productlinedetail].[product_line] = ?;
     select 
       [r].[product_line] 
     from 
@@ -447,14 +460,17 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 11 (affected rows): "
                 + ctx.delete(PRODUCTLINE)
                         .where(PRODUCTLINE.PRODUCT_LINE.eq(
-                                ctx.delete(PRODUCT)
-                                        .where(PRODUCT.PRODUCT_ID.in(
-                                                ctx.delete(ORDERDETAIL)
-                                                        .where(ORDERDETAIL.PRODUCT_ID.in(
-                                                                select(PRODUCT.PRODUCT_ID).from(PRODUCT)
-                                                                        .where(PRODUCT.PRODUCT_LINE.eq("Motorcycles"))))
-                                                        .returningResult(ORDERDETAIL.PRODUCT_ID).fetch()))
-                                        .returningResult(PRODUCT.PRODUCT_LINE).fetch().get(0).value1()))
+                                ctx.delete(PRODUCTLINEDETAIL)
+                                        .where(PRODUCTLINEDETAIL.PRODUCT_LINE.eq(
+                                                ctx.delete(PRODUCT)
+                                                        .where(PRODUCT.PRODUCT_ID.in(
+                                                                ctx.delete(ORDERDETAIL)
+                                                                        .where(ORDERDETAIL.PRODUCT_ID.in(
+                                                                                select(PRODUCT.PRODUCT_ID).from(PRODUCT)
+                                                                                        .where(PRODUCT.PRODUCT_LINE.eq("Motorcycles"))))
+                                                                        .returningResult(ORDERDETAIL.PRODUCT_ID).fetch()))
+                                                        .returningResult(PRODUCT.PRODUCT_LINE).fetch().get(0).value1()))
+                                        .returningResult(PRODUCTLINEDETAIL.PRODUCT_LINE).fetch().get(0).value1()))
                         .execute()
         );
     }

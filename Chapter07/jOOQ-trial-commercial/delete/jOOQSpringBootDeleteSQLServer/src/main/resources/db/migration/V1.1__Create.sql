@@ -11,6 +11,21 @@ This is a modified version of the original schema for Microsoft Server SQL
 
 /* START */
 
+/* USER-DEFINED FUNCTIONS */
+
+CREATE FUNCTION netPriceEach(
+    @quantity INT,
+    @list_price DEC(10,2),
+    @discount DEC(4,2)
+)
+RETURNS DEC(10,2)
+AS 
+BEGIN
+    RETURN @quantity * @list_price * (1 - @discount);
+END;
+
+GO
+
 IF OBJECT_ID('payment', 'U') IS NOT NULL 
   DROP TABLE payment;
 IF OBJECT_ID('orderdetail', 'U') IS NOT NULL 
@@ -21,6 +36,8 @@ IF OBJECT_ID('product', 'U') IS NOT NULL
   DROP TABLE product;
 IF OBJECT_ID('productline', 'U') IS NOT NULL 
   DROP TABLE productline;
+IF OBJECT_ID('productlinedetail', 'U') IS NOT NULL 
+  DROP TABLE productlinedetail;
 IF OBJECT_ID('office_has_manager', 'U') IS NOT NULL 
   DROP TABLE office_has_manager;
 IF OBJECT_ID('manager', 'U') IS NOT NULL 
@@ -33,6 +50,8 @@ IF OBJECT_ID('sale', 'U') IS NOT NULL
   DROP TABLE sale;
 IF OBJECT_ID('employee', 'U') IS NOT NULL 
   DROP TABLE employee;
+  IF OBJECT_ID('department', 'U') IS NOT NULL 
+  DROP TABLE department;
 IF OBJECT_ID('office', 'U') IS NOT NULL 
   DROP TABLE office;
 
@@ -72,12 +91,28 @@ CREATE TABLE employee (
 CREATE INDEX [reports_to] ON employee ([reports_to]);
 CREATE INDEX [office_code] ON employee ([office_code]);
 
+/*Table structure for table `department` */
+
+CREATE TABLE department (
+  [department_id] bigint NOT NULL IDENTITY,  
+  [name] varchar(50) NOT NULL,
+  [phone] varchar(50) NOT NULL,
+  [code] smallint DEFAULT 1,
+  [office_code] varchar(10) NOT NULL,
+  PRIMARY KEY ([department_id])
+,
+  CONSTRAINT [department_ibfk_1] FOREIGN KEY ([office_code]) REFERENCES office ([office_code])
+) ;
+
+CREATE INDEX [department_id] ON department ([department_id]);
+
 /*Table structure for table `sale` */
 CREATE TABLE sale (
   [sale_id] bigint NOT NULL IDENTITY,  
   [fiscal_year] int NOT NULL,  
   [sale] float NOT NULL,  
   [employee_number] bigint DEFAULT NULL,  
+  [hot] bit DEFAULT 0,
   PRIMARY KEY ([sale_id])
 ,    
   CONSTRAINT [sales_ibfk_1] FOREIGN KEY ([employee_number]) REFERENCES employee ([employee_number])
@@ -85,11 +120,10 @@ CREATE TABLE sale (
 
 CREATE INDEX [employee_number] ON sale ([employee_number]);
 
-
 /*Table structure for table `customer` */
 
 CREATE TABLE customer (
-  [customer_number] bigint NOT NULL,
+  [customer_number] bigint NOT NULL IDENTITY,
   [customer_name] varchar(50) NOT NULL,
   [contact_last_name] varchar(50) NOT NULL,
   [contact_first_name] varchar(50) NOT NULL,
@@ -139,24 +173,39 @@ CREATE INDEX [idx_offices_has_managers_id] ON office_has_manager([managers_manag
 
 CREATE TABLE productline (
   [product_line] varchar(50) NOT NULL,
+  [code] bigint NOT NULL,
   [text_description] varchar(4000) DEFAULT NULL,
   [html_description] varchar(max),
   [image] varbinary(max),
-  PRIMARY KEY ([product_line])
-) ;
+  [created_on] date DEFAULT GETDATE(),
+  PRIMARY KEY ([product_line],[code]),
+  CONSTRAINT [unique_product_line] UNIQUE([product_line])
+);
+
+/*Table structure for table `productdetail` */
+
+CREATE TABLE productlinedetail (
+  [product_line] varchar(50) NOT NULL,
+  [code] bigint NOT NULL,
+  [line_capacity] varchar(20) NOT NULL,
+  [line_type] int DEFAULT 0,
+  PRIMARY KEY ([product_line],[code]),  
+  CONSTRAINT [unique_product_line_detail] UNIQUE([product_line]),
+  CONSTRAINT [productlinedetail_ibfk_1] FOREIGN KEY ([product_line],[code]) REFERENCES productline ([product_line],[code])
+);
 
 /*Table structure for table `product` */
 
 CREATE TABLE product (
   [product_id] bigint NOT NULL IDENTITY,
-  [product_name] varchar(70) NOT NULL,
-  [product_line] varchar(50) NOT NULL,
-  [product_scale] varchar(10) NOT NULL,
-  [product_vendor] varchar(50) NOT NULL,
-  [product_description] varchar(max) NOT NULL,
-  [quantity_in_stock] smallint NOT NULL,
-  [buy_price] decimal(10,2) NOT NULL,
-  [msrp] decimal(10,2) NOT NULL,
+  [product_name] varchar(70) DEFAULT NULL,
+  [product_line] varchar(50) DEFAULT NULL,
+  [product_scale] varchar(10) DEFAULT NULL,
+  [product_vendor] varchar(50) DEFAULT NULL,
+  [product_description] varchar(max) DEFAULT NULL,
+  [quantity_in_stock] smallint DEFAULT 0,
+  [buy_price] decimal(10,2) DEFAULT 0.0,
+  [msrp] decimal(10,2) DEFAULT 0.0,
   PRIMARY KEY ([product_id])
  ,
   CONSTRAINT [products_ibfk_1] FOREIGN KEY ([product_line]) REFERENCES productline ([product_line])
@@ -206,19 +255,8 @@ CREATE TABLE payment (
   [invoice_amount] decimal(10,2) NOT NULL,
   [caching_date] datetime DEFAULT NULL,
   PRIMARY KEY ([customer_number],[check_number]),
+  CONSTRAINT [unique_check_number] UNIQUE([check_number]),
   CONSTRAINT [payments_ibfk_1] FOREIGN KEY ([customer_number]) REFERENCES customer ([customer_number])
 ) ;
 
 /* END */
-
-/* USER-DEFINED FUNCTIONS */
-CREATE FUNCTION netPriceEach(
-    @quantity INT,
-    @list_price DEC(10,2),
-    @discount DEC(4,2)
-)
-RETURNS DEC(10,2)
-AS 
-BEGIN
-    RETURN @quantity * @list_price * (1 - @discount);
-END;
