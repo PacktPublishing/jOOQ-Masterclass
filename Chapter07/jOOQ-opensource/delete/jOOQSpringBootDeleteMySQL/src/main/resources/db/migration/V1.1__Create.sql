@@ -153,10 +153,11 @@ CREATE TABLE `productline` (
   `html_description` mediumtext DEFAULT NULL,
   `image` mediumblob DEFAULT NULL,
   `created_on` date DEFAULT (CURRENT_DATE),
-  PRIMARY KEY (`product_line`,`code`)
+  PRIMARY KEY (`product_line`,`code`),
+  CONSTRAINT unique_product_line UNIQUE(product_line)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-/*Table structure for table `paymentdetail` */
+/*Table structure for table `productdetail` */
 
 CREATE TABLE `productlinedetail` (
   `product_line` varchar(50) NOT NULL,
@@ -164,6 +165,7 @@ CREATE TABLE `productlinedetail` (
   `line_capacity` varchar(20) NOT NULL,
   `line_type` int DEFAULT 0,
   PRIMARY KEY (`product_line`,`code`),  
+  CONSTRAINT unique_product_line_detail UNIQUE(product_line),
   CONSTRAINT `productlinedetail_ibfk_1` FOREIGN KEY (`product_line`,`code`) REFERENCES `productline` (`product_line`,`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
