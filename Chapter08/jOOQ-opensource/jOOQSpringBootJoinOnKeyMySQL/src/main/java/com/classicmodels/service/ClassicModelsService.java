@@ -14,12 +14,9 @@ public class ClassicModelsService {
 
     public void callAll() {
         
-        classicModelsRepository.fetchEmployeeNameOfficeCityInnerJoin();                       // EXAMPLE 1
-        classicModelsRepository.fetchEmployeeNameSaleLeftOuterJoin();                         // EXAMPLE 2
-        classicModelsRepository.fetchEmployeeNameSaleLeftOuterJoinExclusive();                // EXAMPLE 3
-        classicModelsRepository.fetchEmployeeNameSaleRightOuterJoin();                        // EXAMPLE 4
-        classicModelsRepository.fetchEmployeeNameSaleRightOuterJoinExclusive();               // EXAMPLE 5
-        classicModelsRepository.fetchOfficeCustomerdetailFullOuterJoinViaUnion();             // EXAMPLE 6
-        classicModelsRepository.fetchOfficeCustomerdetailFullOuterJoinExclusiveViaUnion();    // EXAMPLE 7
+        classicModelsRepository.joinPaymentPaymentdetailViaOn();            // EXAMPLE 1
+        classicModelsRepository.joinPaymentPaymentdetailViaOnRow();         // EXAMPLE 2
+        classicModelsRepository.joinPaymentPaymentdetailViaOnKey();         // EXAMPLE 3
+        classicModelsRepository.joinPaymentPaymentdetailViaOnKeyFK();       // EXAMPLE 4
     }
 }
