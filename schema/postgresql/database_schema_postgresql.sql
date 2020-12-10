@@ -11,11 +11,11 @@ This is a modified version of the original schema for PostgreSQL
 
 /* START */
 DROP TABLE IF EXISTS payment CASCADE;
-DROP TABLE IF EXISTS paymentdetail CASCADE;
 DROP TABLE IF EXISTS orderdetail CASCADE;
 DROP TABLE IF EXISTS "order" CASCADE;
 DROP TABLE IF EXISTS product CASCADE;
 DROP TABLE IF EXISTS productline CASCADE;
+DROP TABLE IF EXISTS productlinedetail CASCADE;
 DROP TABLE IF EXISTS office_has_manager CASCADE;
 DROP TABLE IF EXISTS manager CASCADE;
 DROP TABLE IF EXISTS customer CASCADE;
@@ -159,11 +159,25 @@ CREATE INDEX fk_offices_has_managers_offices_idx ON office_has_manager (offices_
 
 CREATE TABLE productline (
   product_line varchar(50) NOT NULL,
+  code bigint NOT NULL,
   text_description varchar(4000) DEFAULT NULL,
   html_description text,
   image bytea,
   created_on date NOT NULL DEFAULT NOW(),
-  PRIMARY KEY (product_line)
+  PRIMARY KEY (product_line, code),
+  CONSTRAINT unique_product_line UNIQUE(product_line)
+) ;
+
+/*Table structure for table `productdetail` */
+
+CREATE TABLE productlinedetail (
+  product_line varchar(50) NOT NULL,
+  code bigint NOT NULL,
+  line_capacity varchar(20) NOT NULL,
+  line_type int DEFAULT 0,
+  PRIMARY KEY (product_line,code),  
+  CONSTRAINT unique_product_line_detail UNIQUE(product_line),
+  CONSTRAINT productlinedetail_ibfk_1 FOREIGN KEY (product_line,code) REFERENCES productline (product_line,code)
 ) ;
 
 /*Table structure for table `product` */
@@ -233,18 +247,6 @@ CREATE TABLE payment (
   PRIMARY KEY (customer_number,check_number),
   CONSTRAINT unique_check_number UNIQUE(check_number),
   CONSTRAINT payments_ibfk_1 FOREIGN KEY (customer_number) REFERENCES customer (customer_number)
-) ;
-
-/*Table structure for table `paymentdetail` */
-
-CREATE TABLE paymentdetail (
-  customer_number bigint NOT NULL,
-  check_number varchar(50) NOT NULL,
-  bank_name varchar(20) NOT NULL,
-  bank_iban varchar(100) NOT NULL,
-  transaction_type int DEFAULT 0,
-  PRIMARY KEY (customer_number,check_number),  
-  CONSTRAINT paymentdetail_ibfk_1 FOREIGN KEY (customer_number,check_number) REFERENCES payment (customer_number,check_number)
 ) ;
 
 /* USER-DEFINED FUNCTIONS */

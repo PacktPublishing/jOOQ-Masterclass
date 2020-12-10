@@ -156,7 +156,7 @@ CREATE TABLE `productline` (
   PRIMARY KEY (`product_line`,`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-/*Table structure for table `paymentdetail` */
+/*Table structure for table `productdetail` */
 
 CREATE TABLE `productlinedetail` (
   `product_line` varchar(50) NOT NULL,

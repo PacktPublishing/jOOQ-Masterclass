@@ -11,6 +11,7 @@ import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Productline.PRODUCTLINE;
+import static jooq.generated.tables.Productlinedetail.PRODUCTLINEDETAIL;
 import static jooq.generated.tables.Sale.SALE;
 import jooq.generated.tables.records.PaymentRecord;
 import org.jooq.DSLContext;
@@ -252,7 +253,7 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 6.1 (affected rows): "
                 + ctx.executeDelete(pr)
         );
-        
+
         /*
         delete from 
           "public"."payment" 
@@ -368,31 +369,31 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 11
     /*
-    delete from
-      "public"."orderdetail"
-    where
-      "public"."orderdetail"."product_id" in 
-      (
-        select
-          "public"."product"."product_id"
-        from
-          "public"."product"
-        where
+    delete from 
+      "public"."orderdetail" 
+    where 
+      "public"."orderdetail"."product_id" in (
+        select 
+          "public"."product"."product_id" 
+        from 
+          "public"."product" 
+        where 
           "public"."product"."product_line" = ?
-      ) 
-        returning 
-          "public"."orderdetail"."product_id"
+      ) returning "public"."orderdetail"."product_id"
     
-    delete from
-      "public"."product"
-    where
-      "public"."product"."product_id" in (?, ?, ?, ...,?) 
-    returning 
-      "public"."product"."product_line"
+    delete from 
+      "public"."product" 
+    where 
+      "public"."product"."product_id" in (?, ?, ?, ...) returning "public"."product"."product_line"    
     
-    delete from
-      "public"."productline"
-    where
+    delete from 
+      "public"."productlinedetail" 
+    where 
+      "public"."productlinedetail"."product_line" = ? returning "public"."productlinedetail"."product_line"
+
+    delete from 
+      "public"."productline" 
+    where 
       "public"."productline"."product_line" = ?
      */
     public void deleteCascadeReturningProductLineMotorcycles() {
@@ -400,14 +401,17 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 11 (affected rows): "
                 + ctx.delete(PRODUCTLINE)
                         .where(PRODUCTLINE.PRODUCT_LINE.eq(
-                                ctx.delete(PRODUCT)
-                                        .where(PRODUCT.PRODUCT_ID.in(
-                                                ctx.delete(ORDERDETAIL)
-                                                        .where(ORDERDETAIL.PRODUCT_ID.in(
-                                                                select(PRODUCT.PRODUCT_ID).from(PRODUCT)
-                                                                        .where(PRODUCT.PRODUCT_LINE.eq("Motorcycles"))))
-                                                        .returningResult(ORDERDETAIL.PRODUCT_ID).fetch()))
-                                        .returningResult(PRODUCT.PRODUCT_LINE).fetch().get(0).value1()))
+                                ctx.delete(PRODUCTLINEDETAIL)
+                                        .where(PRODUCTLINEDETAIL.PRODUCT_LINE.eq(
+                                                ctx.delete(PRODUCT)
+                                                        .where(PRODUCT.PRODUCT_ID.in(
+                                                                ctx.delete(ORDERDETAIL)
+                                                                        .where(ORDERDETAIL.PRODUCT_ID.in(
+                                                                                select(PRODUCT.PRODUCT_ID).from(PRODUCT)
+                                                                                        .where(PRODUCT.PRODUCT_LINE.eq("Motorcycles"))))
+                                                                        .returningResult(ORDERDETAIL.PRODUCT_ID).fetch()))
+                                                        .returningResult(PRODUCT.PRODUCT_LINE).fetch().get(0).value1()))
+                                        .returningResult(PRODUCTLINEDETAIL.PRODUCT_LINE).fetch().get(0).value1()))
                         .execute()
         );
     }

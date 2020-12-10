@@ -15,6 +15,7 @@ DROP TABLE IF EXISTS orderdetail CASCADE;
 DROP TABLE IF EXISTS "order" CASCADE;
 DROP TABLE IF EXISTS product CASCADE;
 DROP TABLE IF EXISTS productline CASCADE;
+DROP TABLE IF EXISTS productlinedetail CASCADE;
 DROP TABLE IF EXISTS office_has_manager CASCADE;
 DROP TABLE IF EXISTS manager CASCADE;
 DROP TABLE IF EXISTS customer CASCADE;
@@ -91,6 +92,7 @@ CREATE TABLE sale (
   fiscal_year int NOT NULL,  
   sale float NOT NULL,  
   employee_number bigint DEFAULT NULL,  
+  hot boolean DEFAULT FALSE,
   PRIMARY KEY (sale_id)
  ,  
   CONSTRAINT sales_ibfk_1 FOREIGN KEY (employee_number) REFERENCES employee (employee_number)
@@ -157,16 +159,30 @@ CREATE INDEX fk_offices_has_managers_offices_idx ON office_has_manager (offices_
 
 CREATE TABLE productline (
   product_line varchar(50) NOT NULL,
+  code bigint NOT NULL,
   text_description varchar(4000) DEFAULT NULL,
   html_description text,
   image bytea,
   created_on date NOT NULL DEFAULT NOW(),
-  PRIMARY KEY (product_line)
+  PRIMARY KEY (product_line, code),
+  CONSTRAINT unique_product_line UNIQUE(product_line)
+) ;
+
+/*Table structure for table `productdetail` */
+
+CREATE TABLE productlinedetail (
+  product_line varchar(50) NOT NULL,
+  code bigint NOT NULL,
+  line_capacity varchar(20) NOT NULL,
+  line_type int DEFAULT 0,
+  PRIMARY KEY (product_line,code),  
+  CONSTRAINT unique_product_line_detail UNIQUE(product_line),
+  CONSTRAINT productlinedetail_ibfk_1 FOREIGN KEY (product_line,code) REFERENCES productline (product_line,code)
 ) ;
 
 /*Table structure for table `product` */
 
-CREATE SEQUENCE product_seq;
+CREATE SEQUENCE product_seq START 1000000;
 
 CREATE TABLE product (
   product_id bigint NOT NULL DEFAULT NEXTVAL ('product_seq'),
@@ -229,7 +245,23 @@ CREATE TABLE payment (
   invoice_amount decimal(10,2) NOT NULL,
   caching_date timestamp DEFAULT NULL,
   PRIMARY KEY (customer_number,check_number),
+  CONSTRAINT unique_check_number UNIQUE(check_number),
   CONSTRAINT payments_ibfk_1 FOREIGN KEY (customer_number) REFERENCES customer (customer_number)
 ) ;
+
+/* USER-DEFINED FUNCTIONS */
+
+CREATE FUNCTION get_avg_sale(len_from int, len_to int) 
+  returns int language plpgsql AS $$ 
+DECLARE avg_count integer; 
+begin 
+  SELECT avg(sale.sale) 
+  INTO   avg_count 
+  FROM   sale 
+  WHERE  sale.sale BETWEEN len_from AND len_to; 
+   
+  return avg_count; 
+end; 
+$$;
 
 /* END */
