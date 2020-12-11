@@ -305,7 +305,8 @@ CREATE TABLE productlinedetail (
   line_type number(1) DEFAULT 0,
   PRIMARY KEY (product_line,code),  
   CONSTRAINT unique_product_line_detail UNIQUE(product_line),
-  CONSTRAINT productlinedetail_ibfk_1 FOREIGN KEY (product_line,code) REFERENCES productline (product_line,code)
+  CONSTRAINT productlinedetail_ibfk_1 FOREIGN KEY (product_line,code) REFERENCES productline (product_line,code),
+  CONSTRAINT productlinedetail_ibfk_2 FOREIGN KEY (product_line) REFERENCES productline (product_line)
 ) ;
 
 /*Table structure for table `product` */
