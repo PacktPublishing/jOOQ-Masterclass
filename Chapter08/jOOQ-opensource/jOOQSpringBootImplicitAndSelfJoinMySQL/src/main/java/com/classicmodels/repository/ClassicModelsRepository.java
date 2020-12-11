@@ -16,9 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional(readOnly = true)
 public class ClassicModelsRepository {
-    
+
     private final DSLContext ctx;
-    
+
     public ClassicModelsRepository(DSLContext ctx) {
         this.ctx = ctx;
     }
@@ -26,7 +26,7 @@ public class ClassicModelsRepository {
     /* Implicit JOIN */
     // EXAMPLE 1
     public void implicitJoinOfficeEmployeeViaWhere() {
-        
+
         System.out.println("EXAMPLE 1\n"
                 + ctx.select(OFFICE.OFFICE_CODE, EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
                         .from(OFFICE, EMPLOYEE)
@@ -38,7 +38,7 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 2
     public void implicitJoinOfficeEmployeeViaNavigationMethod() {
-        
+
         System.out.println("EXAMPLE 2\n"
                 + ctx.select(EMPLOYEE.office().OFFICE_CODE, EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
                         .from(EMPLOYEE)
@@ -49,7 +49,7 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 3
     public void implicitJoinPaymentCustomerViaNavigationMethod() {
-        
+
         System.out.println("EXAMPLE 3 (composite key) \n"
                 + ctx.select(PAYMENT.customer().CUSTOMER_NAME, sum(PAYMENT.INVOICE_AMOUNT))
                         .from(PAYMENT)
@@ -61,7 +61,7 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 4
     public void implicitJoinOrderCustomerEmployeeViaNavigationMethod() {
-        
+
         System.out.println("EXAMPLE 4 \n"
                 + ctx.select(
                         ORDERDETAIL.order().customer().employee().OFFICE_CODE,
@@ -76,14 +76,14 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 5
     public void implicitJoinProductlinedetailProdcutLineViaFK() {
-        
+
         System.out.println("EXAMPLE 5.1 \n"
                 + ctx.select(PRODUCTLINEDETAIL.productlinedetailIbfk_1().CREATED_ON,
                         PRODUCTLINEDETAIL.LINE_CAPACITY)
                         .from(PRODUCTLINEDETAIL)
                         .fetch()
         );
-        
+
         System.out.println("EXAMPLE 5.2 \n"
                 + ctx.select(PRODUCTLINEDETAIL.productlinedetailIbfk_2().CREATED_ON,
                         PRODUCTLINEDETAIL.LINE_CAPACITY)
@@ -95,10 +95,10 @@ public class ClassicModelsRepository {
     /* Self JOIN */
     // EXAMPLE 6
     public void selfJoinEmployee() {
-        
+
         Employee a = EMPLOYEE.as("a");
         Employee b = EMPLOYEE.as("b");
-        
+
         System.out.println("EXAMPLE 6\n"
                 + ctx.select(concat(a.FIRST_NAME, val(" "), a.LAST_NAME).as("employee"),
                         concat(b.FIRST_NAME, val(" "), b.LAST_NAME).as("reports_to"))
@@ -108,14 +108,14 @@ public class ClassicModelsRepository {
                         .fetch()
         );
     }
-    
+
     // EXAMPLE 7
     public void selfJoinEmployeeViaNavigationMethod() {
-               
+
         System.out.println("EXAMPLE 7\n"
                 + ctx.select(concat(EMPLOYEE.FIRST_NAME, val(" "), EMPLOYEE.LAST_NAME).as("employee"),
                         concat(EMPLOYEE.employee().FIRST_NAME, val(" "), EMPLOYEE.employee().LAST_NAME).as("reports_to"))
-                        .from(EMPLOYEE)                        
+                        .from(EMPLOYEE)
                         .fetch()
         );
     }
