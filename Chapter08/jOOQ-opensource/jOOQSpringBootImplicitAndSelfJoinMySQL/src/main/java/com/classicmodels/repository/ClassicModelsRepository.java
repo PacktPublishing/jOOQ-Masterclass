@@ -119,4 +119,16 @@ public class ClassicModelsRepository {
                         .fetch()
         );
     }
+
+    // EXAMPLE 8
+    public void selfJoinComparingEmployeeViaNavigationMethod() {
+
+        System.out.println("EXAMPLE 8\n"
+                + ctx.select(concat(EMPLOYEE.FIRST_NAME, val(" "), EMPLOYEE.LAST_NAME).as("employee"),
+                        concat(EMPLOYEE.employee().FIRST_NAME, val(" "), EMPLOYEE.employee().LAST_NAME).as("reports_to"))
+                        .from(EMPLOYEE)
+                        .where(EMPLOYEE.JOB_TITLE.eq(EMPLOYEE.employee().JOB_TITLE))
+                        .fetch()
+        );
+    }
 }
