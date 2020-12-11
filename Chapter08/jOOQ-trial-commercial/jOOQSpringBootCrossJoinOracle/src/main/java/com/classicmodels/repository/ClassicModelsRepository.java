@@ -106,38 +106,38 @@ public class ClassicModelsRepository {
     // EXAMPLE 7
     /*
     select 
-      [c].[customer_number], 
-      [p].[product_id], 
-      case when sales is not null then sales else ? end 
+      "c"."CUSTOMER_NUMBER", 
+      "p"."PRODUCT_ID", 
+      nvl("sales", 0) 
     from 
-      [classicmodels].[dbo].[customer] [c] cross 
-      join [classicmodels].[dbo].[product] [p] 
+      "SYSTEM"."CUSTOMER" "c" cross 
+      join "SYSTEM"."PRODUCT" "p" 
       left outer join (
         select 
-          [c].[customer_number] [cn], 
-          [p].[product_id] [pi], 
+          "c"."CUSTOMER_NUMBER" "cn", 
+          "p"."PRODUCT_ID" "pi", 
           sum(
             (
-              [i].[quantity_ordered] * [i].[price_each]
+              "i"."QUANTITY_ORDERED" * "i"."PRICE_EACH"
             )
-          ) [sales] 
+          ) "sales" 
         from 
-          [classicmodels].[dbo].[order] [o] 
-          join [classicmodels].[dbo].[orderdetail] [i] on [i].[order_id] = [o].[order_id] 
-          join [classicmodels].[dbo].[customer] [c] on [c].[customer_number] = [o].[customer_number] 
-          join [classicmodels].[dbo].[product] [p] on [p].[product_id] = [i].[product_id] 
+          "SYSTEM"."ORDER" "o" 
+          join "SYSTEM"."ORDERDETAIL" "i" on "i"."ORDER_ID" = "o"."ORDER_ID" 
+          join "SYSTEM"."CUSTOMER" "c" on "c"."CUSTOMER_NUMBER" = "o"."CUSTOMER_NUMBER" 
+          join "SYSTEM"."PRODUCT" "p" on "p"."PRODUCT_ID" = "i"."PRODUCT_ID" 
         group by 
-          [c].[customer_number], 
-          [p].[product_id]
-      ) [alias_6219633] on (
-        cn = [c].[customer_number] 
-        and pi = [p].[product_id]
+          "c"."CUSTOMER_NUMBER", 
+          "p"."PRODUCT_ID"
+      ) "alias_95246217" on (
+        "cn" = "c"."CUSTOMER_NUMBER" 
+        and "pi" = "p"."PRODUCT_ID"
       ) 
     where 
-      sales is null 
+      "sales" is null 
     order by 
-      [p].[product_id], 
-      [c].[customer_number]    
+      "p"."PRODUCT_ID", 
+      "c"."CUSTOMER_NUMBER"    
     */
     public void findProductsNoSalesAcrossCustomers() {
 
