@@ -119,7 +119,7 @@ public class ClassicModelsRepository {
                         .fetch()
         );
     }
-
+    
     // EXAMPLE 8
     public void selfJoinComparingEmployeeViaNavigationMethod() {
 
