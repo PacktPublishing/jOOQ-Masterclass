@@ -1,12 +1,15 @@
 package com.classicmodels.repository;
 
+import jooq.generated.tables.Employee;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Productlinedetail.PRODUCTLINEDETAIL;
 import org.jooq.DSLContext;
+import static org.jooq.impl.DSL.concat;
 import static org.jooq.impl.DSL.sum;
+import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +23,7 @@ public class ClassicModelsRepository {
         this.ctx = ctx;
     }
 
+    /* Implicit JOIN */
     // EXAMPLE 1
     public void implicitJoinOfficeEmployeeViaWhere() {
 
@@ -84,6 +88,34 @@ public class ClassicModelsRepository {
                 + ctx.select(PRODUCTLINEDETAIL.productlinedetailIbfk_2().CREATED_ON,
                         PRODUCTLINEDETAIL.LINE_CAPACITY)
                         .from(PRODUCTLINEDETAIL)
+                        .fetch()
+        );
+    }
+
+    /* Self JOIN */
+    // EXAMPLE 6
+    public void selfJoinEmployee() {
+
+        Employee a = EMPLOYEE.as("a");
+        Employee b = EMPLOYEE.as("b");
+
+        System.out.println("EXAMPLE 6\n"
+                + ctx.select(concat(a.FIRST_NAME, val(" "), a.LAST_NAME).as("employee"),
+                        concat(b.FIRST_NAME, val(" "), b.LAST_NAME).as("reports_to"))
+                        .from(a)
+                        .leftJoin(b)
+                        .on(b.EMPLOYEE_NUMBER.eq(a.REPORTS_TO))
+                        .fetch()
+        );
+    }
+
+    // EXAMPLE 7
+    public void selfJoinEmployeeViaNavigationMethod() {
+
+        System.out.println("EXAMPLE 7\n"
+                + ctx.select(concat(EMPLOYEE.FIRST_NAME, val(" "), EMPLOYEE.LAST_NAME).as("employee"),
+                        concat(EMPLOYEE.employee().FIRST_NAME, val(" "), EMPLOYEE.employee().LAST_NAME).as("reports_to"))
+                        .from(EMPLOYEE)
                         .fetch()
         );
     }
