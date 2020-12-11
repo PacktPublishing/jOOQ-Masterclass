@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.app</groupId>
-    <artifactId>jOOQSpringBootImplicitJoinSQLServer</artifactId>
+    <artifactId>jOOQSpringBootImplicitAndSelfJoinSQLServer</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQSpringBootImplicitJoinSQLServer</name>
+    <name>jOOQSpringBootImplicitAndSelfJoinSQLServer</name>
     <description>jOOQ - Spring Boot app</description>    
 
     <parent>
