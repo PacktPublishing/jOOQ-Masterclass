@@ -19,5 +19,7 @@ public class ClassicModelsService {
         classicModelsRepository.implicitJoinPaymentCustomerViaNavigationMethod();       // EXAMPLE 3
         classicModelsRepository.implicitJoinOrderCustomerEmployeeViaNavigationMethod(); // EXAMPLE 4
         classicModelsRepository.implicitJoinProductlinedetailProdcutLineViaFK();        // EXAMPLE 5        
+        classicModelsRepository.selfJoinEmployee();                                     // EXAMPLE 6
+        classicModelsRepository.selfJoinEmployeeViaNavigationMethod();                  // EXAMPLE 7
     }
 }
