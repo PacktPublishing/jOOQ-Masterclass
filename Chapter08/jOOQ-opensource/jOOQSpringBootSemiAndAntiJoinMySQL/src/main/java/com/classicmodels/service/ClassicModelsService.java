@@ -14,12 +14,15 @@ public class ClassicModelsService {
 
     public void callAll() {
 
-        classicModelsRepository.joinOfficeDepartmentViaLeftJoin();           // EXAMPLE 1
-        classicModelsRepository.joinOfficeDepartmentViaExists();             // EXAMPLE 2
-        classicModelsRepository.joinOfficeDepartmentViaIn();                 // EXAMPLE 3
-        classicModelsRepository.joinOfficeDepartmentViaLeftSemiJoin();       // EXAMPLE 4
-        classicModelsRepository.joinOfficeDepartmentViaNotExists();          // EXAMPLE 5
-        classicModelsRepository.joinOfficeDepartmentViaNotIn();              // EXAMPLE 6
-        classicModelsRepository.joinOfficeDepartmentViaAntiJoin();           // EXAMPLE 7        
+        classicModelsRepository.joinEmployeeCustomerViaLeftJoin();           // EXAMPLE 1
+        classicModelsRepository.joinEmployeeCustomerViaExists();             // EXAMPLE 2
+        classicModelsRepository.joinEmployeeCustomerViaIn();                 // EXAMPLE 3
+        classicModelsRepository.joinEmployeeCustomerViaLeftSemiJoin();       // EXAMPLE 4
+        classicModelsRepository.joinEmployeeCustomerSaleViaLeftSemiJoin();   // EXAMPLE 5
+        classicModelsRepository.joinEmployeeCustomerViaNotExists();          // EXAMPLE 6
+        classicModelsRepository.joinEmployeeCustomerViaNotIn();              // EXAMPLE 7
+        classicModelsRepository.joinEmployeeCustomerViaAntiJoin();           // EXAMPLE 8        
+        classicModelsRepository.joinEmployeeCustomerSaleViaAntiJoin();       // EXAMPLE 9  
+                
     }
 }

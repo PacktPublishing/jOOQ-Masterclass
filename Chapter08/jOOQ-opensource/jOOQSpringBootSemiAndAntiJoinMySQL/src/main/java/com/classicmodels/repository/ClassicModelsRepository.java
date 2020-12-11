@@ -2,6 +2,7 @@ package com.classicmodels.repository;
 
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Employee.EMPLOYEE;
+import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.nvl;
 import static org.jooq.impl.DSL.select;
@@ -21,7 +22,7 @@ public class ClassicModelsRepository {
 
     /* SEMI JOIN */
     // EXAMPLE 1
-    public void joinOfficeDepartmentViaLeftJoin() {
+    public void joinEmployeeCustomerViaLeftJoin() {
 
         System.out.println("EXAMPLE 1\n"
                 + ctx.selectDistinct(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
@@ -34,7 +35,7 @@ public class ClassicModelsRepository {
     }
 
     // EXAMPLE 2
-    public void joinOfficeDepartmentViaExists() {
+    public void joinEmployeeCustomerViaExists() {
 
         System.out.println("EXAMPLE 2\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
@@ -46,7 +47,7 @@ public class ClassicModelsRepository {
     }
 
     // EXAMPLE 3
-    public void joinOfficeDepartmentViaIn() {
+    public void joinEmployeeCustomerViaIn() {
 
         System.out.println("EXAMPLE 3\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
@@ -75,7 +76,7 @@ public class ClassicModelsRepository {
              = `classicmodels`.`customer`.`sales_rep_employee_number`
       )    
      */
-    public void joinOfficeDepartmentViaLeftSemiJoin() {
+    public void joinEmployeeCustomerViaLeftSemiJoin() {
 
         System.out.println("EXAMPLE 4\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
@@ -85,12 +86,54 @@ public class ClassicModelsRepository {
                         .fetch()
         );
     }
+    
+    // EXAMPLE 5
+    /*
+    select 
+      `classicmodels`.`employee`.`first_name`, 
+      `classicmodels`.`employee`.`last_name` 
+    from 
+      `classicmodels`.`employee` 
+    where 
+      (
+        exists (
+          select 
+            1 as `one` 
+          from 
+            `classicmodels`.`customer` 
+          where 
+            `classicmodels`.`employee`.`employee_number` 
+               = `classicmodels`.`customer`.`sales_rep_employee_number`
+        ) 
+        and exists (
+          select 
+            1 as `one` 
+          from 
+            `classicmodels`.`sale` 
+          where 
+            `classicmodels`.`employee`.`employee_number` 
+               = `classicmodels`.`sale`.`employee_number`
+        )
+      )    
+    */
+    public void joinEmployeeCustomerSaleViaLeftSemiJoin() {
+
+        System.out.println("EXAMPLE 5\n"
+                + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
+                        .from(EMPLOYEE)
+                        .leftSemiJoin(CUSTOMER)                        
+                        .on(EMPLOYEE.EMPLOYEE_NUMBER.eq(CUSTOMER.SALES_REP_EMPLOYEE_NUMBER))
+                        .leftSemiJoin(SALE)
+                        .on(EMPLOYEE.EMPLOYEE_NUMBER.eq(SALE.EMPLOYEE_NUMBER))
+                        .fetch()
+        );
+    }
 
     /* ANTI JOIN */
-    // EXAMPLE 5
-    public void joinOfficeDepartmentViaNotExists() {
+    // EXAMPLE 6
+    public void joinEmployeeCustomerViaNotExists() {
 
-        System.out.println("EXAMPLE 2\n"
+        System.out.println("EXAMPLE 6\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
                         .from(EMPLOYEE)
                         .whereNotExists(selectOne().from(CUSTOMER)
@@ -99,10 +142,10 @@ public class ClassicModelsRepository {
         );
     }
 
-    // EXAMPLE 6
-    public void joinOfficeDepartmentViaNotIn() {
+    // EXAMPLE 7
+    public void joinEmployeeCustomerViaNotIn() {
 
-        System.out.println("EXAMPLE 6\n"
+        System.out.println("EXAMPLE 7\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
                         .from(EMPLOYEE)
                         .where(EMPLOYEE.EMPLOYEE_NUMBER.notIn(
@@ -111,7 +154,7 @@ public class ClassicModelsRepository {
         );
     }
 
-    // EXAMPLE 7
+    // EXAMPLE 8
     /*
     select 
       `classicmodels`.`employee`.`first_name`, 
@@ -131,9 +174,9 @@ public class ClassicModelsRepository {
         )
       )    
      */
-    public void joinOfficeDepartmentViaAntiJoin() {
+    public void joinEmployeeCustomerViaAntiJoin() {
 
-        System.out.println("EXAMPLE 7\n"
+        System.out.println("EXAMPLE 8\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
                         .from(EMPLOYEE)
                         .leftAntiJoin(CUSTOMER)
@@ -141,4 +184,50 @@ public class ClassicModelsRepository {
                         .fetch()
         );
     }
+    
+    // EXAMPLE 9
+    /*
+    select 
+      `classicmodels`.`employee`.`first_name`, 
+      `classicmodels`.`employee`.`last_name` 
+    from 
+      `classicmodels`.`employee` 
+    where 
+      (
+        not (
+          exists (
+            select 
+              1 as `one` 
+            from 
+              `classicmodels`.`customer` 
+            where 
+              `classicmodels`.`employee`.`employee_number` 
+                 = `classicmodels`.`customer`.`sales_rep_employee_number`
+          )
+        ) 
+        and not (
+          exists (
+            select 
+              1 as `one` 
+            from 
+              `classicmodels`.`sale` 
+            where 
+              `classicmodels`.`employee`.`employee_number` 
+                 = `classicmodels`.`sale`.`employee_number`
+          )
+        )
+      )    
+    */
+    public void joinEmployeeCustomerSaleViaAntiJoin() {
+
+        System.out.println("EXAMPLE 9\n"
+                + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
+                        .from(EMPLOYEE)
+                        .leftAntiJoin(CUSTOMER)
+                        .on(EMPLOYEE.EMPLOYEE_NUMBER.eq(CUSTOMER.SALES_REP_EMPLOYEE_NUMBER))
+                        .leftAntiJoin(SALE)
+                        .on(EMPLOYEE.EMPLOYEE_NUMBER.eq(SALE.EMPLOYEE_NUMBER))
+                        .fetch()
+        );
+    }            
 }
