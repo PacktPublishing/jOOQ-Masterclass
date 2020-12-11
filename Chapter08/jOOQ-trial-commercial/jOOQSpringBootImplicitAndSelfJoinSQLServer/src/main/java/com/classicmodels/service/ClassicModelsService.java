@@ -21,5 +21,6 @@ public class ClassicModelsService {
         classicModelsRepository.implicitJoinProductlinedetailProdcutLineViaFK();        // EXAMPLE 5        
         classicModelsRepository.selfJoinEmployee();                                     // EXAMPLE 6
         classicModelsRepository.selfJoinEmployeeViaNavigationMethod();                  // EXAMPLE 7
+        classicModelsRepository.selfJoinComparingEmployeeViaNavigationMethod();         // EXAMPLE 8
     }
 }
