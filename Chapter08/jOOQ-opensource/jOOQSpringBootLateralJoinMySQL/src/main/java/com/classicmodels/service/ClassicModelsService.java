@@ -18,5 +18,6 @@ public class ClassicModelsService {
         classicModelsRepository.leftOuterJoinLateralOfficeHasDepartments();        // EXAMPLE 2 
         classicModelsRepository.lateralEmployeeAvgSales();                         // EXAMPLE 3
         classicModelsRepository.lateralOfficeCityCountryHasDepartments();          // EXAMPLE 4         
+        classicModelsRepository.lateralDepartmentUnnest();                         // EXAMPLE 5
     }
 }

@@ -43,15 +43,15 @@ insert  into `office`(`office_code`,`city`,`phone`,`address_line_first`,`address
 
 /*Data for the table `department` */
 
-insert into `department`(`department_id`,`name`,`phone`,`code`,`office_code`) values 
+insert into `department`(`department_id`,`name`,`phone`,`code`,`office_code`,`topic`) values 
 
-('1','Lumber','-int 4782','1333','1'),
+('1','Advertising','-int 4782','1333','1',JSON_OBJECT("Advertising", JSON_ARRAY('publicity', 'promotion'))),
 
-('2','Sales','-int 41233','1441','1'),
+('2','Sales','-int 41233','1441','1', JSON_OBJECT("Sales", JSON_ARRAY('commerce', 'trade', 'sellout', 'transaction'))),
 
-('3','Accounting','-int 8233','2311','2'),
+('3','Accounting','-int 8233','2311','2', JSON_OBJECT("Accounting", JSON_ARRAY('monetary', 'business'))),
 
-('4','Finance','-int 4421','3222','3') ON DUPLICATE KEY UPDATE department_id=department_id;
+('4','Finance','-int 4421','3222','3', JSON_OBJECT("Finance", JSON_ARRAY('commerce', 'fiscal', 'monetary', 'business'))) ON DUPLICATE KEY UPDATE department_id=department_id;
 
 /*Data for the table `manager` */
 
@@ -8104,44 +8104,44 @@ insert  into `payment`(`customer_number`,`check_number`,`payment_date`,`invoice_
 
 (496,'MN89921','2004-12-31 09:02:11','52166.00', '2004-12-31 09:02:11') ON DUPLICATE KEY UPDATE customer_number=customer_number;
 
-insert into `sale`(`sale_id`,`fiscal_year`,`sale`,`employee_number`,`detail`) values 
+insert into sale(sale_id,fiscal_year,sale,employee_number) values 
 
-(1, 2003, 5282.64, 1370, '{ "vat": 282.3, "discount": "8%", "tax": { "unit": 30, "all": 230 } }'),
+(1, 2003, 5282.64, 1370),
 
-(2, 2004, 1938.24, 1370, '{ "vat": 182.2, "discount": "0%", "tax": { "unit": 10, "all": 330 } }'),
+(2, 2004, 1938.24, 1370),
 
-(3, 2004, 1676.14, 1370, '{ "vat": 453.3, "discount": "10%", "tax": { "unit": 11, "all": 440 } }'),
+(3, 2004, 1676.14, 1370),
 
-(4, 2003, 3213, 1166, '{ "vat": 213.6, "discount": "45%", "tax": { "unit": 11, "all": 130 } }'),
+(4, 2003, 3213, 1166),
 
-(5, 2004, 2121.35, 1166, '{ "vat": 129.3, "discount": "18%", "tax": { "unit": 12, "all": 430 } }'),
+(5, 2004, 2121.35, 1166),
 
-(6, 2004, 3711.12, 1166, '{ "vat": 351.7, "discount": "4%", "tax": { "unit": 10, "all": 150 } }'),
+(6, 2004, 3711.12, 1166),
 
-(7, 2003, 3449.26, 1611, '{ "vat": 213.6, "discount": "7%", "tax": { "unit": 16, "all": 190 } }'),
+(7, 2003, 3449.26, 1611),
 
-(8, 2003, 4704.92, 1611, '{ "vat": 231.9, "discount": "9%", "tax": { "unit": 17, "all": 120 } }'),
+(8, 2003, 4704.92, 1611),
 
-(9, 2004, 2974.43, 1611, '{ "vat": 123.5, "discount": "1%", "tax": { "unit": 21, "all": 160 } }'),
+(9, 2004, 2974.43, 1611),
 
-(10, 2004, 4755.6, 1611, '{ "vat": 156.3, "discount": "2%", "tax": { "unit": 11, "all": 430 } }'),
+(10, 2004, 4755.6, 1611),
 
-(11, 2004, 5657.4, 1611, '{ "vat": 242.9, "discount": "3%", "tax": { "unit": 27, "all": 310 } }'),
+(11, 2004, 5657.4, 1611),
 
-(12, 2004, 3660.75, 1370, '{ "vat": 182.5, "discount": "5%", "tax": { "unit": 18, "all": 270 } }'),
+(12, 2004, 3660.75, 1370),
 
-(13, 2004, 2812.32, 1370, '{ "vat": 112.4, "discount": "7%", "tax": { "unit": 22, "all": 410 } }'),
+(13, 2004, 2812.32, 1370),
 
-(14, 2005, 1607.76, 1370, '{ "vat": 225.1, "discount": "3%", "tax": { "unit": 25, "all": 170 } }'),
+(14, 2005, 1607.76, 1370),
 
-(15, 2005, 4996.62, 1370, '{ "vat": 181.2, "discount": "2%", "tax": { "unit": 18, "all": 320 } }'),
+(15, 2005, 4996.62, 1370),
 
-(16, 2003, 5571.8, 1504, '{ "vat": 174.3, "discount": "3%", "tax": { "unit": 16, "all": 240 } }'),
+(16, 2003, 5571.8, 1504),
 
-(17, 2003, 1491.38, 1504, '{ "vat": 187.4, "discount": "8%", "tax": { "unit": 26, "all": 110 } }'),
+(17, 2003, 1491.38, 1504),
 
-(18, 2004, 3884.34, 1504, '{ "vat": 145.7, "discount": "9%", "tax": { "unit": 22, "all": 140 } }'),
+(18, 2004, 3884.34, 1504),
 
-(19, 2004, 5241.44, 1504, '{ "vat": 167.5, "discount": "2%", "tax": { "unit": 21, "all": 260 } }') ON DUPLICATE KEY UPDATE sale_id=sale_id;
+(19, 2004, 5241.44, 1504) ON DUPLICATE KEY UPDATE sale_id=sale_id;
 
 /* END */

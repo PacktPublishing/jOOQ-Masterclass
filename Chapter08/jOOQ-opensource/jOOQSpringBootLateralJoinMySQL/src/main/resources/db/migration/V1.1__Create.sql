@@ -49,6 +49,7 @@ CREATE TABLE `department` (
   `phone` varchar(50) NOT NULL,
   `code` smallint DEFAULT 1,
   `office_code` varchar(10) NOT NULL,
+  `topic` json NOT NULL,
   PRIMARY KEY (`department_id`),
   KEY `office_code` (`office_code`),
   CONSTRAINT `department_ibfk_1` FOREIGN KEY (`office_code`) REFERENCES `office` (`office_code`)
@@ -81,7 +82,6 @@ CREATE TABLE `sale` (
   `sale` float NOT NULL,  
   `employee_number` bigint DEFAULT NULL,  
   `hot` boolean DEFAULT FALSE,  
-  `detail` json NOT NULL,
   PRIMARY KEY (`sale_id`),  
   KEY `employee_number` (`employee_number`),  
   CONSTRAINT `sales_ibfk_1` FOREIGN KEY (`employee_number`) REFERENCES `employee` (`employee_number`)

@@ -11,6 +11,7 @@ import static org.jooq.impl.DSL.lateral;
 import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.table;
+import static org.jooq.impl.DSL.unnest;
 import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -90,6 +91,17 @@ public class ClassicModelsRepository {
                         .from(OFFICE, lateral(select().from(DEPARTMENT)
                                 .where(OFFICE.OFFICE_CODE.eq(DEPARTMENT.OFFICE_CODE)))
                                 .as("departments"))
+                        .fetch()
+        );
+    }
+
+    // EXAMPLE 5
+    public void lateralDepartmentUnnest() {
+
+        System.out.println("EXAMPLE 5\n"
+                + ctx.select()
+                        .from(DEPARTMENT, lateral(select().from(
+                                unnest(new Object[]{"one", "two", "three"}))).as("t", "nr"))                        
                         .fetch()
         );
     }
