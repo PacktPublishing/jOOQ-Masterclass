@@ -49,7 +49,7 @@ SET IDENTITY_INSERT [department] ON
 begin try
 insert into [department] ([department_id],[name],[phone],[code],[office_code]) values 
 
-('1','Lumber','-int 4782','1333','1'),
+('1','Advertising','-int 4782','1333','1'),
 
 ('2','Sales','-int 41233','1441','1'),
 

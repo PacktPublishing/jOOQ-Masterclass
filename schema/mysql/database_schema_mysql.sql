@@ -81,7 +81,6 @@ CREATE TABLE `sale` (
   `sale` float NOT NULL,  
   `employee_number` bigint DEFAULT NULL,  
   `hot` boolean DEFAULT FALSE,  
-  `detail` json NOT NULL,
   PRIMARY KEY (`sale_id`),  
   KEY `employee_number` (`employee_number`),  
   CONSTRAINT `sales_ibfk_1` FOREIGN KEY (`employee_number`) REFERENCES `employee` (`employee_number`)

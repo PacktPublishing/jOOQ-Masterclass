@@ -47,7 +47,7 @@ insert /*+ ignore_row_on_dupkey_index(office(office_code)) */ into office(office
 
 insert /*+ ignore_row_on_dupkey_index(department(department_id)) */ into department(department_id,name,phone,code,office_code) 
 
-select '1','Lumber','-int 4782','1333','1' from dual union all
+select '1','Advertising','-int 4782','1333','1' from dual union all
 
 select '2','Sales','-int 41233','1441','1' from dual union all
 
