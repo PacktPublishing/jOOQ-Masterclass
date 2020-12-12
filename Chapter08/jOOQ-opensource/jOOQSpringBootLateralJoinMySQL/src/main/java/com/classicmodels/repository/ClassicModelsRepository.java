@@ -98,10 +98,11 @@ public class ClassicModelsRepository {
     // EXAMPLE 5
     public void lateralDepartmentUnnest() {
 
+        // unnest an ad-hoc anonymously typed array
         System.out.println("EXAMPLE 5\n"
                 + ctx.select()
                         .from(DEPARTMENT, lateral(select().from(
-                                unnest(new Object[]{"one", "two", "three"}))).as("t", "nr"))                        
+                                unnest(new String[]{"one", "two", "three"}))).as("t", "nr"))                        
                         .fetch()
         );
     }
