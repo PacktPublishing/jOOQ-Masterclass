@@ -1,10 +1,10 @@
 package com.classicmodels.repository;
 
+import java.time.LocalDate;
 import static jooq.generated.tables.Department.DEPARTMENT;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Order.ORDER;
-import jooq.generated.tables.Orderdetail;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Sale.SALE;
@@ -128,14 +128,15 @@ public class ClassicModelsRepository {
     }
 
     // EXAMPLE 7
-    public void q() {
-        
+    public void findTop3OrderedProductsIn2003() {
+
         System.out.println("EXAMPLE 7\n"
-                + ctx.select(PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME, field("qo"))
-                        .from(PRODUCT, lateral(select(ORDERDETAIL.QUANTITY_ORDERED.as("qo")).from(ORDERDETAIL)
-                                //.innerJoin(t)
-                                //.on(ORDER.ORDER_ID.eq(t.ORDER_ID))
-                                        //.and(ORDER.STATUS.eq("Shipped")))
+                + ctx.select(PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME, field("od"), field("qo"))
+                        .from(PRODUCT, lateral(select(ORDER.ORDER_DATE.as("od"), ORDERDETAIL.QUANTITY_ORDERED.as("qo"))
+                                .from(ORDER)
+                                .innerJoin(ORDERDETAIL)
+                                .on(ORDER.ORDER_ID.eq(ORDERDETAIL.ORDER_ID)
+                                        .and(ORDER.ORDER_DATE.between(LocalDate.of(2003, 1, 1), LocalDate.of(2003, 12, 31))))
                                 .where(PRODUCT.PRODUCT_ID.eq(ORDERDETAIL.PRODUCT_ID))
                                 .orderBy(ORDERDETAIL.QUANTITY_ORDERED.desc())
                                 .limit(3))
