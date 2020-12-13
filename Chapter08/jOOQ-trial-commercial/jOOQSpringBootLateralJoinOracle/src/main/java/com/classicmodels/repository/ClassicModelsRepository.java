@@ -133,7 +133,7 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 7\n"
                 + ctx.select(EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.FIRST_NAME,
                         EMPLOYEE.LAST_NAME, field(name("sales")))
-                        .from(EMPLOYEE.crossApply(select(SALE.SALE_.as(name("sales"))).from(SALE)
+                        .from(EMPLOYEE, lateral(select(SALE.SALE_.as(name("sales"))).from(SALE)
                                 .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(SALE.EMPLOYEE_NUMBER))
                                 .orderBy(SALE.SALE_.desc())
                                 .limit(3))
