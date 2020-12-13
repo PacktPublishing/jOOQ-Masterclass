@@ -253,17 +253,33 @@ CREATE TABLE payment (
 
 /* USER-DEFINED FUNCTIONS */
 
-CREATE FUNCTION get_avg_sale(len_from int, len_to int) 
-  returns int language plpgsql AS $$ 
+CREATE OR REPLACE FUNCTION get_avg_sale(len_from int, len_to int) 
+  RETURNS int LANGUAGE plpgsql AS $$ 
 DECLARE avg_count integer; 
-begin 
+BEGIN 
   SELECT avg(sale.sale) 
   INTO   avg_count 
   FROM   sale 
   WHERE  sale.sale BETWEEN len_from AND len_to; 
    
-  return avg_count; 
-end; 
+  RETURN avg_count; 
+END; 
+$$;
+
+CREATE OR REPLACE FUNCTION top_three_sales_per_employee(employeeNr bigint)
+  RETURNS TABLE(sales float) LANGUAGE plpgsql AS $$ 
+BEGIN
+    RETURN QUERY
+    SELECT 
+      "public"."sale"."sale" AS "sales" 
+    FROM 
+      "public"."sale" 
+    WHERE 
+      employeeNr = "public"."sale"."employee_number" 
+    ORDER BY
+      "public"."sale"."sale" DESC
+    LIMIT 3;     
+END; 
 $$;
 
 /* END */
