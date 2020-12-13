@@ -133,7 +133,7 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 7\n"
                 + ctx.select(EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.FIRST_NAME,
                         EMPLOYEE.LAST_NAME, field("sales"))
-                        .from(EMPLOYEE.crossApply(select(SALE.SALE_.as("sales")).from(SALE)
+                        .from(EMPLOYEE, lateral(select(SALE.SALE_.as("sales")).from(SALE)
                                 .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(SALE.EMPLOYEE_NUMBER))
                                 .orderBy(SALE.SALE_.desc())
                                 .limit(3))
@@ -148,7 +148,7 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 8\n"
                 + ctx.select(PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME, field("od"), field("qo"))
-                        .from(PRODUCT, lateral(select(ORDER.ORDER_DATE.as("od"), ORDERDETAIL.QUANTITY_ORDERED.as(name("qo")))
+                        .from(PRODUCT, lateral(select(ORDER.ORDER_DATE.as("od"), ORDERDETAIL.QUANTITY_ORDERED.as("qo"))
                                 .from(ORDER)
                                 .innerJoin(ORDERDETAIL)
                                 .on(ORDER.ORDER_ID.eq(ORDERDETAIL.ORDER_ID)
