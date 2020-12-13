@@ -3,6 +3,8 @@ package com.classicmodels.repository;
 import static jooq.generated.tables.Department.DEPARTMENT;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Office.OFFICE;
+import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
+import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
@@ -120,6 +122,40 @@ public class ClassicModelsRepository {
                                 .from(unnest(DEPARTMENT.TOPIC).as("t", "topic"))
                                 .where(field("topic").in("commerce", "business"))
                         ))
+                        .fetch()
+        );
+    }
+    
+    // EXAMPLE 6
+    public void findTop3SalesPerEmployee() {
+
+        System.out.println("EXAMPLE 6\n"
+                + ctx.select(EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.FIRST_NAME,
+                        EMPLOYEE.LAST_NAME, field("sales"))
+                        .from(EMPLOYEE.crossApply(select(SALE.SALE_.as("sales")).from(SALE)
+                                .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(SALE.EMPLOYEE_NUMBER))
+                                .orderBy(SALE.SALE_.desc())
+                                .limit(3))
+                        )
+                        .orderBy(EMPLOYEE.EMPLOYEE_NUMBER)
+                        .fetch()
+        );
+    }
+
+    // EXAMPLE 7
+    public void q() {
+        
+        System.out.println("EXAMPLE 7\n"
+                + ctx.select(PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME, field("qo"))
+                        .from(PRODUCT.crossApply(select(ORDERDETAIL.QUANTITY_ORDERED.as("qo")).from(ORDERDETAIL)
+                                //.innerJoin(t)
+                                //.on(ORDER.ORDER_ID.eq(t.ORDER_ID))
+                                        //.and(ORDER.STATUS.eq("Shipped")))
+                                .where(PRODUCT.PRODUCT_ID.eq(ORDERDETAIL.PRODUCT_ID))
+                                .orderBy(ORDERDETAIL.QUANTITY_ORDERED.desc())
+                                .limit(3))
+                        )
+                        .orderBy(PRODUCT.PRODUCT_ID)
                         .fetch()
         );
     }

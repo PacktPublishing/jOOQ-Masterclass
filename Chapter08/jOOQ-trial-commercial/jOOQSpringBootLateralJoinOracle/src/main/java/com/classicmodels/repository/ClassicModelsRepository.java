@@ -1,8 +1,12 @@
 package com.classicmodels.repository;
 
+import java.time.LocalDate;
 import static jooq.generated.tables.Department.DEPARTMENT;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Office.OFFICE;
+import static jooq.generated.tables.Order.ORDER;
+import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
+import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.avg;
@@ -119,6 +123,41 @@ public class ClassicModelsRepository {
                                 .from(table(DEPARTMENT.TOPIC))
                                 .where(field("COLUMN_VALUE").in("commerce", "business"))
                         ))
+                        .fetch()
+        );
+    }
+
+    // EXAMPLE 7
+    public void findTop3SalesPerEmployee() {
+
+        System.out.println("EXAMPLE 7\n"
+                + ctx.select(EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.FIRST_NAME,
+                        EMPLOYEE.LAST_NAME, field(name("sales")))
+                        .from(EMPLOYEE.crossApply(select(SALE.SALE_.as(name("sales"))).from(SALE)
+                                .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(SALE.EMPLOYEE_NUMBER))
+                                .orderBy(SALE.SALE_.desc())
+                                .limit(3))
+                        )
+                        .orderBy(EMPLOYEE.EMPLOYEE_NUMBER)
+                        .fetch()
+        );
+    }
+
+    // EXAMPLE 8
+    public void findTop3OrderedProductsIn2003() {
+
+        System.out.println("EXAMPLE 8\n"
+                + ctx.select(PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME, field(name("od")), field(name("qo")))
+                        .from(PRODUCT, lateral(select(ORDER.ORDER_DATE.as(name("od")), ORDERDETAIL.QUANTITY_ORDERED.as(name("qo")))
+                                .from(ORDER)
+                                .innerJoin(ORDERDETAIL)
+                                .on(ORDER.ORDER_ID.eq(ORDERDETAIL.ORDER_ID)
+                                        .and(ORDER.ORDER_DATE.between(LocalDate.of(2003, 1, 1), LocalDate.of(2003, 12, 31))))
+                                .where(PRODUCT.PRODUCT_ID.eq(ORDERDETAIL.PRODUCT_ID))
+                                .orderBy(ORDERDETAIL.QUANTITY_ORDERED.desc())
+                                .limit(3))
+                        )
+                        .orderBy(PRODUCT.PRODUCT_ID)
                         .fetch()
         );
     }
