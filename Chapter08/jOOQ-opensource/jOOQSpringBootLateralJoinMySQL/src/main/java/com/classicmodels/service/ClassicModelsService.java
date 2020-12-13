@@ -19,5 +19,7 @@ public class ClassicModelsService {
         classicModelsRepository.lateralEmployeeAvgSales();                         // EXAMPLE 3
         classicModelsRepository.lateralOfficeCityCountryHasDepartments();          // EXAMPLE 4         
         classicModelsRepository.lateralDepartmentUnnest();                         // EXAMPLE 5
+        classicModelsRepository.findTop3SalesPerEmployee();                        // EXAMPLE 6
+        classicModelsRepository.q();
     }
 }

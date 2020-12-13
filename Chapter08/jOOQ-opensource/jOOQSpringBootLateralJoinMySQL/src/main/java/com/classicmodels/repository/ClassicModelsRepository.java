@@ -3,6 +3,10 @@ package com.classicmodels.repository;
 import static jooq.generated.tables.Department.DEPARTMENT;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Office.OFFICE;
+import static jooq.generated.tables.Order.ORDER;
+import jooq.generated.tables.Orderdetail;
+import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
+import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.avg;
@@ -36,7 +40,7 @@ public class ClassicModelsRepository {
                         .fetch()
         );
 
-        // the above query is equivalent to the following queries
+        // the above query is equivalent in results to the following queries
         /*
         System.out.println("EXAMPLE 1\n"
                 + ctx.select()
@@ -102,7 +106,41 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 5\n"
                 + ctx.select()
                         .from(DEPARTMENT, lateral(select().from(
-                                unnest(new String[]{"one", "two", "three"}))).as("t", "nr"))                        
+                                unnest(new String[]{"one", "two", "three"}))).as("t", "nr"))
+                        .fetch()
+        );
+    }
+
+    // EXAMPLE 6
+    public void findTop3SalesPerEmployee() {
+
+        System.out.println("EXAMPLE 6\n"
+                + ctx.select(EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.FIRST_NAME,
+                        EMPLOYEE.LAST_NAME, field("sales"))
+                        .from(EMPLOYEE, lateral(select(SALE.SALE_.as("sales")).from(SALE)
+                                .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(SALE.EMPLOYEE_NUMBER))
+                                .orderBy(SALE.SALE_.desc())
+                                .limit(3))
+                        )
+                        .orderBy(EMPLOYEE.EMPLOYEE_NUMBER)
+                        .fetch()
+        );
+    }
+
+    // EXAMPLE 7
+    public void q() {
+        
+        System.out.println("EXAMPLE 7\n"
+                + ctx.select(PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME, field("qo"))
+                        .from(PRODUCT, lateral(select(ORDERDETAIL.QUANTITY_ORDERED.as("qo")).from(ORDERDETAIL)
+                                //.innerJoin(t)
+                                //.on(ORDER.ORDER_ID.eq(t.ORDER_ID))
+                                        //.and(ORDER.STATUS.eq("Shipped")))
+                                .where(PRODUCT.PRODUCT_ID.eq(ORDERDETAIL.PRODUCT_ID))
+                                .orderBy(ORDERDETAIL.QUANTITY_ORDERED.desc())
+                                .limit(3))
+                        )
+                        .orderBy(PRODUCT.PRODUCT_ID)
                         .fetch()
         );
     }
