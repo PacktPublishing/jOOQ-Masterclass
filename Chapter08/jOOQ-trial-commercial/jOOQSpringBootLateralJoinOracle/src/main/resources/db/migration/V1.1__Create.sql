@@ -218,7 +218,11 @@ CREATE TABLE customerdetail (
 
 /* Table structure for table `department` */
 
-CREATE TYPE topicArr AS VARRAY(100) OF VARCHAR2(100 CHAR);
+BEGIN
+   EXECUTE IMMEDIATE 'CREATE TYPE topicArr AS VARRAY(100) OF VARCHAR2(100 CHAR);';
+EXCEPTION
+   WHEN OTHERS THEN NULL;
+END;
 /
 
 CREATE TABLE department (
@@ -437,5 +441,44 @@ BEGIN
     -- return the total sales
     RETURN l_total_sales;
 END;
+/
 
+-- Create Object of your table
+BEGIN
+   EXECUTE IMMEDIATE 'CREATE TYPE TABLE_RES_OBJ AS OBJECT (SALES float);';
+EXCEPTION
+   WHEN OTHERS THEN NULL;
+END;
+/
+
+--Create a type of your object 
+BEGIN
+   EXECUTE IMMEDIATE 'CREATE TYPE TABLE_RES AS TABLE OF TABLE_RES_OBJ;';
+EXCEPTION
+   WHEN OTHERS THEN NULL;
+END;
+/
+
+create or replace NONEDITIONABLE FUNCTION top_three_sales_per_employee(employee_nr IN NUMBER) 
+RETURN TABLE_RES  
+  IS
+      R SYS_REFCURSOR;
+      v_result TABLE_RES;    
+    BEGIN
+     OPEN R FOR '(SELECT 
+        TABLE_RES_OBJ("SYSTEM"."SALE"."SALE") "sales" 
+      FROM
+        "SYSTEM"."SALE" 
+      WHERE ' || employee_nr || ' = "SYSTEM"."SALE"."EMPLOYEE_NUMBER" 
+      ORDER BY 
+        "SYSTEM"."SALE"."SALE" DESC FETCH NEXT 3 ROWS ONLY)';
+        LOOP
+       FETCH R BULK COLLECT INTO v_result;
+
+         EXIT WHEN R%NOTFOUND;         
+       END LOOP;
+       
+       RETURN v_result;
+   END;
+/
 /* END */

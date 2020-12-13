@@ -266,7 +266,7 @@ BEGIN
 END; 
 $$;
 
-CREATE OR REPLACE FUNCTION top_three_sales_per_employee(employeeNr bigint)
+CREATE OR REPLACE FUNCTION top_three_sales_per_employee(employee_nr bigint)
   RETURNS TABLE(sales float) LANGUAGE plpgsql AS $$ 
 BEGIN
     RETURN QUERY
@@ -275,7 +275,7 @@ BEGIN
     FROM 
       "public"."sale" 
     WHERE 
-      employeeNr = "public"."sale"."employee_number" 
+      employee_nr = "public"."sale"."employee_number" 
     ORDER BY
       "public"."sale"."sale" DESC
     LIMIT 3;     

@@ -185,6 +185,9 @@
                                     <!-- Give enough time to jOOQ to trigger the queries needed for generating sources 
                                     (default is 5 seconds) -->
                                     <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>
+                                    
+                                    <!-- allow the usage of routine as TVF -->
+                                    <tableValuedFunctions>true</tableValuedFunctions>
                                 </database>
                                 
                                 <!-- jOOQ will generate POJOs in your behalf -->

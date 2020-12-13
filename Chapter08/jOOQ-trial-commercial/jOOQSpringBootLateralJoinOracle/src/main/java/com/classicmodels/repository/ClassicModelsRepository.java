@@ -1,6 +1,7 @@
 package com.classicmodels.repository;
 
 import java.time.LocalDate;
+import static jooq.generated.Tables.TOP_THREE_SALES_PER_EMPLOYEE;
 import static jooq.generated.tables.Department.DEPARTMENT;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Office.OFFICE;
@@ -161,4 +162,19 @@ public class ClassicModelsRepository {
                         .fetch()
         );
     }
+    
+    // EXAMPLE 9
+    public void findTop3SalesPerEmployeeViaTableValuedFunction() {       
+        
+        System.out.println("EXAMPLE 9\n"
+                + ctx.select(EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.FIRST_NAME,
+                        EMPLOYEE.LAST_NAME, field(name("SALES")))
+                        .from(EMPLOYEE, lateral(select().from(
+                                TOP_THREE_SALES_PER_EMPLOYEE
+                                        .call(EMPLOYEE.EMPLOYEE_NUMBER))))
+                        .orderBy(EMPLOYEE.EMPLOYEE_NUMBER)
+                        .fetch()
+        );
+    }
+
 }
