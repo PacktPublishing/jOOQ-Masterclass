@@ -459,26 +459,24 @@ EXCEPTION
 END;
 /
 
-create or replace NONEDITIONABLE FUNCTION top_three_sales_per_employee(employee_nr IN NUMBER) 
-RETURN TABLE_RES  
-  IS
-      R SYS_REFCURSOR;
-      v_result TABLE_RES;    
-    BEGIN
-     OPEN R FOR '(SELECT 
-        TABLE_RES_OBJ("SYSTEM"."SALE"."SALE") "sales" 
-      FROM
-        "SYSTEM"."SALE" 
-      WHERE ' || employee_nr || ' = "SYSTEM"."SALE"."EMPLOYEE_NUMBER" 
-      ORDER BY 
-        "SYSTEM"."SALE"."SALE" DESC FETCH NEXT 3 ROWS ONLY)';
-        LOOP
-       FETCH R BULK COLLECT INTO v_result;
+CREATE OR REPLACE NONEDITIONABLE FUNCTION top_three_sales_per_employee (
+    employee_nr IN NUMBER
+) RETURN TABLE_RES IS
+    table_result TABLE_RES;
+BEGIN
+    SELECT
+        TABLE_RES_OBJ("SYSTEM"."SALE"."SALE") "sales"
+    BULK COLLECT
+    INTO table_result
+    FROM
+        "SYSTEM"."SALE"
+    WHERE
+        employee_nr = "SYSTEM"."SALE"."EMPLOYEE_NUMBER"
+    ORDER BY
+        "SYSTEM"."SALE"."SALE" DESC
+    FETCH NEXT 3 ROWS ONLY;
 
-         EXIT WHEN R%NOTFOUND;         
-       END LOOP;
-       
-       RETURN v_result;
-   END;
+    RETURN table_result;
+END;
 /
 /* END */
