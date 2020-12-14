@@ -18,5 +18,6 @@ public class ClassicModelsService {
         classicModelsRepository.naturalLeftOuterJoinOfficeCustomerdetail();    // EXAMPLE 2
         classicModelsRepository.naturalRightOuterJoinOfficeCustomerdetail();   // EXAMPLE 3        
         classicModelsRepository.naturalFullOuterJoinOfficeCustomerdetail();    // EXAMPLE 4
+        classicModelsRepository.naturalJoinOrderCustomerPayment();             // EXAMPLE 5
     }
 }

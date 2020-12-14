@@ -34,8 +34,7 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 2.1\n"
                 + ctx.select()
-                        .from(OFFICE.naturalLeftOuterJoin(CUSTOMERDETAIL))
-                        .where(OFFICE.CITY.isNotNull())
+                        .from(OFFICE.naturalLeftOuterJoin(CUSTOMERDETAIL))           
                         .fetch()
         );
 

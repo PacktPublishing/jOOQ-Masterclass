@@ -1,6 +1,7 @@
 package com.classicmodels.repository;
 
 import org.jooq.DSLContext;
+import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.table;
 import org.springframework.stereotype.Repository;
@@ -29,9 +30,16 @@ public class ClassicModelsRepository {
     // EXAMPLE 2
     public void naturalLeftOuterJoinOfficeCustomerdetail() {
 
-        System.out.println("EXAMPLE 2\n"
+        System.out.println("EXAMPLE 2.1\n"
                 + ctx.select()
                         .from(table(name("OFFICE")).naturalLeftOuterJoin(table(name("CUSTOMERDETAIL"))))
+                        .fetch()
+        );
+        
+        System.out.println("EXAMPLE 2.2\n"
+                + ctx.select()
+                        .from(table(name("OFFICE")).naturalLeftOuterJoin(table(name("CUSTOMERDETAIL"))))
+                        .where(field(name("CITY")).isNotNull())
                         .fetch()
         );
     }
@@ -52,6 +60,18 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 4\n"
                 + ctx.select()
                         .from(table(name("OFFICE")).naturalFullOuterJoin(table(name("CUSTOMERDETAIL"))))
+                        .fetch()
+        );
+    }
+    
+    // EXAMPLE 5
+    public void naturalJoinOrderCustomerPayment() {
+
+        System.out.println("EXAMPLE 5\n"
+                + ctx.select()
+                        .from(table(name("ORDER"))
+                                .naturalJoin(table(name("CUSTOMER"))
+                                        .naturalJoin(table(name("PAYMENT")))))
                         .fetch()
         );
     }
