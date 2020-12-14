@@ -21,6 +21,6 @@ public class ClassicModelsService {
         classicModelsRepository.crossApplyDepartmentUnnest();                                  // EXAMPLE 5
         classicModelsRepository.findTop3SalesPerEmployee();                                    // EXAMPLE 6
         classicModelsRepository.findTop3OrderedProductsIn2003();                               // EXAMPLE 7
-        classicModelsRepository.findTop3SalesPerEmployeeViaTableValuedFunctionAndCrossApply(); // EXAMPLE 8
+        classicModelsRepository.findTop3SalesPerEmployeeViaTableValuedFunctionAndCrossApply(); // EXAMPLE 8                
     }
 }

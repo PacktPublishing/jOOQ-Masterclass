@@ -11,6 +11,7 @@ import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Sale.SALE;
 import static org.jooq.impl.DSL.select;
 import org.jooq.DSLContext;
+import org.jooq.Table;
 import static org.jooq.impl.DSL.avg;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.unnest;
@@ -65,6 +66,15 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 4
     public void crossApplyOfficeCityCountryHasDepartments() {
+        
+        Table<?> t = select().from(DEPARTMENT)
+                                .where(OFFICE.OFFICE_CODE.eq(DEPARTMENT.OFFICE_CODE)).asTable("t");
+        
+        System.out.println("EXAMPLE 4\n"
+                + ctx.select(OFFICE.CITY, OFFICE.COUNTRY, t.asterisk())
+                        .from(OFFICE.crossApply(t))                        
+                        .fetch()
+        );
     }
 
     // EXAMPLE 5
