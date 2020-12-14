@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.app</groupId>
-    <artifactId>jOOQSpringBootLateralJoinSQLServer</artifactId>
+    <artifactId>jOOQSpringBootNaturalJoinSQLServer</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQSpringBootLateralJoinSQLServer</name>
+    <name>jOOQSpringBootNaturalJoinSQLServer</name>
     <description>jOOQ - Spring Boot app</description>    
 
     <parent>
