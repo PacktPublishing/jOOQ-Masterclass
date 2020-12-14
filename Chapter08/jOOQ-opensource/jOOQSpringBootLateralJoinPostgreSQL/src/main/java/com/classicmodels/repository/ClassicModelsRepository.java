@@ -10,13 +10,12 @@ import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
+import org.jooq.Table;
 import static org.jooq.impl.DSL.avg;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.lateral;
-import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.rowNumber;
 import static org.jooq.impl.DSL.select;
-import static org.jooq.impl.DSL.table;
 import static org.jooq.impl.DSL.unnest;
 import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
@@ -91,12 +90,13 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 4
     public void lateralOfficeCityCountryHasDepartments() {
-
+        
+        Table<?> t = select().from(DEPARTMENT)
+                                .where(OFFICE.OFFICE_CODE.eq(DEPARTMENT.OFFICE_CODE)).asTable("t");
+        
         System.out.println("EXAMPLE 4\n"
-                + ctx.select(OFFICE.CITY, OFFICE.COUNTRY, table(name("departments")).asterisk())
-                        .from(OFFICE, lateral(select().from(DEPARTMENT)
-                                .where(OFFICE.OFFICE_CODE.eq(DEPARTMENT.OFFICE_CODE)))
-                                .as("departments"))
+                + ctx.select(OFFICE.CITY, OFFICE.COUNTRY, t.asterisk())
+                        .from(OFFICE, lateral(t))                        
                         .fetch()
         );
     }
