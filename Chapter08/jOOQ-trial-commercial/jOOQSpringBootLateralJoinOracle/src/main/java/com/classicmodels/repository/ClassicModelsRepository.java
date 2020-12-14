@@ -177,4 +177,38 @@ public class ClassicModelsRepository {
         );
     }
 
+    // EXAMPLE 10 (CROSS APPLY)
+    public void crossApplyOfficeHasDepartments() {
+
+        System.out.println("EXAMPLE 10\n"
+                + ctx.select()
+                        .from(OFFICE.crossApply(select().from(DEPARTMENT)
+                                .where(OFFICE.OFFICE_CODE.eq(DEPARTMENT.OFFICE_CODE))))
+                        .fetch()
+        );
+    }
+    
+    // EXAMPLE 11
+    public void findTop3SalesPerEmployeeViaTableValuedFunctionAndCrossApply() {
+
+        System.out.println("EXAMPLE 11\n"
+                + ctx.select(EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.FIRST_NAME,
+                        EMPLOYEE.LAST_NAME, field("sales"))
+                        .from(EMPLOYEE.crossApply(TOP_THREE_SALES_PER_EMPLOYEE.call(EMPLOYEE.EMPLOYEE_NUMBER)))
+                        .orderBy(EMPLOYEE.EMPLOYEE_NUMBER)
+                        .fetch()
+        );
+    }
+
+    // EXAMPLE 12 (OUTER APPLY)    
+    public void outerApplyOfficeHasDepartments() {
+
+        System.out.println("EXAMPLE 12\n"
+                + ctx.select()
+                        .from(OFFICE)
+                        .outerApply(select().from(DEPARTMENT)
+                                .where(OFFICE.OFFICE_CODE.eq(DEPARTMENT.OFFICE_CODE)))
+                        .fetch()
+        );
+    }
 }
