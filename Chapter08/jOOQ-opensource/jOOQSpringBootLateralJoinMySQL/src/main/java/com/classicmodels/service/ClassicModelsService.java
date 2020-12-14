@@ -20,6 +20,6 @@ public class ClassicModelsService {
         classicModelsRepository.lateralOfficeCityCountryHasDepartments();          // EXAMPLE 4         
         classicModelsRepository.lateralDepartmentUnnest();                         // EXAMPLE 5
         classicModelsRepository.findTop3SalesPerEmployee();                        // EXAMPLE 6
-        classicModelsRepository.findTop3OrderedProductsIn2003();                   // EXAMPLE 7
+        classicModelsRepository.findTop3OrderedProductsIn2003();                   // EXAMPLE 7        
     }
 }
