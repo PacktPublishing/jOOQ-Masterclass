@@ -32,9 +32,17 @@ public class ClassicModelsRepository {
     // EXAMPLE 2
     public void naturalLeftOuterJoinOfficeCustomerdetail() {
 
-        System.out.println("EXAMPLE 2\n"
+        System.out.println("EXAMPLE 2.1\n"
                 + ctx.select()
                         .from(OFFICE.naturalLeftOuterJoin(CUSTOMERDETAIL))
+                        .where(OFFICE.CITY.isNotNull())
+                        .fetch()
+        );
+
+        System.out.println("EXAMPLE 2.2\n"
+                + ctx.select()
+                        .from(OFFICE.naturalLeftOuterJoin(CUSTOMERDETAIL))
+                        .where(OFFICE.CITY.isNotNull())
                         .fetch()
         );
     }
@@ -48,7 +56,7 @@ public class ClassicModelsRepository {
                         .fetch()
         );
     }
-    
+
     // EXAMPLE 4
     public void naturalJoinOrderCustomerPayment() {
 
@@ -57,5 +65,5 @@ public class ClassicModelsRepository {
                         .from(ORDER.naturalJoin(CUSTOMER).naturalJoin(PAYMENT))
                         .fetch()
         );
-    }
+    }    
 }
