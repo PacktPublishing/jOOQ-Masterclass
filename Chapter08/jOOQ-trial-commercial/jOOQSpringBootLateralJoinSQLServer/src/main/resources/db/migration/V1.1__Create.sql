@@ -13,7 +13,7 @@ This is a modified version of the original schema for Microsoft Server SQL
 
 /* USER-DEFINED FUNCTIONS */
 
-CREATE FUNCTION netPriceEach(
+CREATE OR ALTER FUNCTION netPriceEach(
     @quantity INT,
     @list_price DEC(10,2),
     @discount DEC(4,2)
@@ -23,7 +23,24 @@ AS
 BEGIN
     RETURN @quantity * @list_price * (1 - @discount);
 END;
+GO
 
+CREATE OR ALTER FUNCTION top_three_sales_per_employee(@employee_nr BIGINT)
+RETURNS @out_table TABLE (
+  sales FLOAT
+)
+AS BEGIN
+  INSERT @out_table
+  SELECT 
+      TOP 3 [classicmodels].[dbo].[sale].[sale] [sales] 
+    FROM 
+      [classicmodels].[dbo].[sale] 
+    WHERE 
+      @employee_nr = [classicmodels].[dbo].[sale].[employee_number] 
+    ORDER BY 
+      [classicmodels].[dbo].[sale].[sale] DESC
+    RETURN
+END;	
 GO
 
 IF OBJECT_ID('payment', 'U') IS NOT NULL 

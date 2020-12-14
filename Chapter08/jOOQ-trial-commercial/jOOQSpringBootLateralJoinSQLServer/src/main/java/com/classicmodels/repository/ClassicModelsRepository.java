@@ -1,6 +1,7 @@
 package com.classicmodels.repository;
 
 import java.time.LocalDate;
+import static jooq.generated.Tables.TOP_THREE_SALES_PER_EMPLOYEE;
 import static jooq.generated.tables.Department.DEPARTMENT;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Office.OFFICE;
@@ -12,7 +13,6 @@ import static org.jooq.impl.DSL.select;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.avg;
 import static org.jooq.impl.DSL.field;
-import static org.jooq.impl.DSL.lateral;
 import static org.jooq.impl.DSL.unnest;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -94,7 +94,7 @@ public class ClassicModelsRepository {
                         .fetch()
         );
     }
-    
+
     // EXAMPLE 7
     public void findTop3OrderedProductsIn2003() {
 
@@ -113,6 +113,16 @@ public class ClassicModelsRepository {
                         .fetch()
         );
     }
-    
-    
+
+    // EXAMPLE 8
+    public void findTop3SalesPerEmployeeViaTableValuedFunctionAndCrossApply() {
+
+        System.out.println("EXAMPLE 8\n"
+                + ctx.select(EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.FIRST_NAME,
+                        EMPLOYEE.LAST_NAME, field("sales"))
+                        .from(EMPLOYEE.crossApply(TOP_THREE_SALES_PER_EMPLOYEE.call(EMPLOYEE.EMPLOYEE_NUMBER)))
+                        .orderBy(EMPLOYEE.EMPLOYEE_NUMBER)
+                        .fetch()
+        );
+    }
 }
