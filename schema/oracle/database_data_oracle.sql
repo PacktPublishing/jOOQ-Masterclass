@@ -31,7 +31,7 @@ insert /*+ ignore_row_on_dupkey_index(office(office_code)) */ into office(office
 
  select '6','Sydney','+61 2 9264 2451','5-11 Wentworth Avenue','Floor --2',NULL,'Australia','NSW 2010','APAC' from dual union all 
 
- select '7','London','+44 20 7877 2041','25 Old Broad Street','Level 7',NULL,'UK','EC2N 1HN','EMEA' from dual union all
+ select '7','London','+44 20 7877 2041','25 Old Broad Street','Level 7','N/A','UK','EC2N 1HN','EMEA' from dual union all 
  
  select '8',NULL,'+44 20 1827 21411','25 Hum Street','Level 2',NULL,'USA','EC2N 1HN','EMEA' from dual union all 
 
@@ -393,7 +393,7 @@ insert /*+ ignore_row_on_dupkey_index(customer(customer_number)) */ into custome
 
 insert /*+ ignore_row_on_dupkey_index(customerdetail(customer_number)) */ into customerdetail(customer_number,address_line_first,address_line_second,city,state,postal_code,country) 
 
- select 99,'32, Avenue 90',NULL, 'Paris' ,NULL,'43000','France' from dual union all
+ select 99,'43 Rue 2',NULL, 'Paris' ,NULL,'25017','France' from dual union all
 
  select 100,'51, Avenue 3',NULL, NULL ,NULL,'43000',NULL from dual union all
 
@@ -541,7 +541,7 @@ insert /*+ ignore_row_on_dupkey_index(customerdetail(customer_number)) */ into c
 
  select 323,'162-164 Grafton Road','Level 2','Auckland  ',NULL,NULL,'New Zealand' from dual union all
 
- select 324,'35 King George',NULL,'London',NULL,'WX3 6FW','UK' from dual union all
+ select 324,'25 Old Broad Street','Level 7','London','N/A','EC2N 1HN','UK' from dual union all
 
  select 328,'7476 Moss Rd.',NULL,'Newark','NJ','94019','USA' from dual union all
 
