@@ -99,6 +99,7 @@ CREATE TABLE employee (
   [salary] int NOT NULL,
   [reports_to] bigint DEFAULT NULL,
   [job_title] varchar(50) NOT NULL,
+  [employee_of_year] varchar(50) DEFAULT NULL,
   PRIMARY KEY ([employee_number])
 ,
   CONSTRAINT [employees_ibfk_1] FOREIGN KEY ([reports_to]) REFERENCES employee ([employee_number]),

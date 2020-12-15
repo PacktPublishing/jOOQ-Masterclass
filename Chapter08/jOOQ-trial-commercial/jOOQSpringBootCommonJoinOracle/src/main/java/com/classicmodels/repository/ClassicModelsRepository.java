@@ -145,5 +145,5 @@ public class ClassicModelsRepository {
                                 .where(OFFICE.CITY.isNull()))
                         .fetch()
         );
-    }        
+    }                
 }

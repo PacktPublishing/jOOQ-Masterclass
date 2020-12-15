@@ -85,53 +85,53 @@ insert /*+ ignore_row_on_dupkey_index(office_has_manager(offices_office_code, ma
 
 /*Data for the table `employee` */
 
-insert /*+ ignore_row_on_dupkey_index(employee(employee_number)) */ into employee(employee_number,last_name,first_name,extension,email,office_code,salary,reports_to,job_title) 
+insert /*+ ignore_row_on_dupkey_index(employee(employee_number)) */ into employee(employee_number,last_name,first_name,extension,email,office_code,salary,reports_to,job_title,employee_of_year) 
 
- select 1002,'Murphy','Diane','x5800','dmurphy@classicmodelcars.com','1',120000,NULL,'President' from dual union all 
+ select 1002,'Murphy','Diane','x5800','dmurphy@classicmodelcars.com','1',120000,NULL,'President',NULL from dual union all 
 
- select 1056,'Patterson','Mary','x4611','mpatterso@classicmodelcars.com','1',100000,1002,'VP Sales' from dual union all 
+ select 1056,'Patterson','Mary','x4611','mpatterso@classicmodelcars.com','1',100000,1002,'VP Sales',NULL from dual union all 
 
- select 1076,'Firrelli','Jeff','x9273','jfirrelli@classicmodelcars.com','1',100000,1002,'VP Marketing' from dual union all 
+ select 1076,'Firrelli','Jeff','x9273','jfirrelli@classicmodelcars.com','1',100000,1002,'VP Marketing',NULL from dual union all 
 
- select 1088,'Patterson','William','x4871','wpatterson@classicmodelcars.com','6',80000,1056,'Sales Manager (APAC)' from dual union all 
+ select 1088,'Patterson','William','x4871','wpatterson@classicmodelcars.com','6',80000,1056,'Sales Manager (APAC)',NULL from dual union all 
 
- select 1102,'Bondur','Gerard','x5408','gbondur@classicmodelcars.com','4',80000,1056,'Sale Manager (EMEA)' from dual union all 
+ select 1102,'Bondur','Gerard','x5408','gbondur@classicmodelcars.com','4',80000,1056,'Sale Manager (EMEA)',NULL from dual union all 
 
- select 1143,'Bow','Anthony','x5428','abow@classicmodelcars.com','1',75000,1056,'Sales Manager (NA)' from dual union all 
+ select 1143,'Bow','Anthony','x5428','abow@classicmodelcars.com','1',75000,1056,'Sales Manager (NA)',NULL from dual union all 
 
- select 1165,'Jennings','Leslie','x3291','ljennings@classicmodelcars.com','1',60000,1143,'Sales Rep' from dual union all 
+ select 1165,'Jennings','Leslie','x3291','ljennings@classicmodelcars.com','1',60000,1143,'Sales Rep',employeeOfYearArr(2003, 2004) from dual union all 
 
- select 1166,'Thompson','Leslie','x4065','lthompson@classicmodelcars.com','1',60000,1143,'Sales Rep' from dual union all 
+ select 1166,'Thompson','Leslie','x4065','lthompson@classicmodelcars.com','1',60000,1143,'Sales Rep',employeeOfYearArr(2003, 2005) from dual union all 
 
- select 1188,'Firrelli','Julie','x2173','jfirrelli@classicmodelcars.com','2',60000,1143,'Sales Rep' from dual union all 
+ select 1188,'Firrelli','Julie','x2173','jfirrelli@classicmodelcars.com','2',60000,1143,'Sales Rep',employeeOfYearArr(2004, 2005) from dual union all 
 
- select 1216,'Patterson','Steve','x4334','spatterson@classicmodelcars.com','2',55000,1143,'Sales Rep' from dual union all 
+ select 1216,'Patterson','Steve','x4334','spatterson@classicmodelcars.com','2',55000,1143,'Sales Rep',employeeOfYearArr(2005, 2006) from dual union all 
 
- select 1286,'Tseng','Foon Yue','x2248','ftseng@classicmodelcars.com','3',55000,1143,'Sales Rep' from dual union all 
+ select 1286,'Tseng','Foon Yue','x2248','ftseng@classicmodelcars.com','3',55000,1143,'Sales Rep',employeeOfYearArr(2002, 2003, 2004) from dual union all 
 
- select 1323,'Vanauf','George','x4102','gvanauf@classicmodelcars.com','3',55000,1143,'Sales Rep' from dual union all 
+ select 1323,'Vanauf','George','x4102','gvanauf@classicmodelcars.com','3',55000,1143,'Sales Rep',employeeOfYearArr(2000, 2001, 2005) from dual union all 
 
- select 1337,'Bondur','Loui','x6493','lbondur@classicmodelcars.com','4',60000,1102,'Sales Rep' from dual union all 
+ select 1337,'Bondur','Loui','x6493','lbondur@classicmodelcars.com','4',60000,1102,'Sales Rep',employeeOfYearArr(2004, 2007) from dual union all 
 
- select 1370,'Hernandez','Gerard','x2028','ghernande@classicmodelcars.com','4',65000,1102,'Sales Rep' from dual union all 
+ select 1370,'Hernandez','Gerard','x2028','ghernande@classicmodelcars.com','4',65000,1102,'Sales Rep',employeeOfYearArr(2000, 2001) from dual union all 
 
- select 1401,'Castillo','Pamela','x2759','pcastillo@classicmodelcars.com','4',55000,1102,'Sales Rep' from dual union all 
+ select 1401,'Castillo','Pamela','x2759','pcastillo@classicmodelcars.com','4',55000,1102,'Sales Rep',employeeOfYearArr(2000, 2001, 2003, 2005) from dual union all 
 
- select 1501,'Bott','Larry','x2311','lbott@classicmodelcars.com','7',50000,1102,'Sales Rep' from dual union all 
+ select 1501,'Bott','Larry','x2311','lbott@classicmodelcars.com','7',50000,1102,'Sales Rep',employeeOfYearArr(2004, 2008) from dual union all 
 
- select 1504,'Jones','Barry','x102','bjones@classicmodelcars.com','7',50000,1102,'Sales Rep' from dual union all 
+ select 1504,'Jones','Barry','x102','bjones@classicmodelcars.com','7',50000,1102,'Sales Rep',employeeOfYearArr(2002, 2003, 2005) from dual union all 
 
- select 1611,'Fixter','Andy','x101','afixter@classicmodelcars.com','6',50000,1088,'Sales Rep' from dual union all 
+ select 1611,'Fixter','Andy','x101','afixter@classicmodelcars.com','6',50000,1088,'Sales Rep',employeeOfYearArr(2002, 2005) from dual union all 
 
- select 1612,'Marsh','Peter','x102','pmarsh@classicmodelcars.com','6',55000,1088,'Sales Rep' from dual union all 
+ select 1612,'Marsh','Peter','x102','pmarsh@classicmodelcars.com','6',55000,1088,'Sales Rep',employeeOfYearArr(2003, 2005, 2006, 2007) from dual union all 
 
- select 1619,'King','Tom','x103','tking@classicmodelcars.com','6',60000,1088,'Sales Rep' from dual union all 
+ select 1619,'King','Tom','x103','tking@classicmodelcars.com','6',60000,1088,'Sales Rep',employeeOfYearArr(2002, 2004) from dual union all 
 
- select 1621,'Nishi','Mami','x101','mnishi@classicmodelcars.com','5',55000,1056,'Sales Rep' from dual union all 
+ select 1621,'Nishi','Mami','x101','mnishi@classicmodelcars.com','5',55000,1056,'Sales Rep',employeeOfYearArr(2003, 2005) from dual union all 
 
- select 1625,'Kato','Yoshimi','x102','ykato@classicmodelcars.com','5',60000,1621,'Sales Rep' from dual union all 
+ select 1625,'Kato','Yoshimi','x102','ykato@classicmodelcars.com','5',60000,1621,'Sales Rep',employeeOfYearArr(2004, 2005, 2006) from dual union all 
 
- select 1702,'Gerard','Martin','x2312','mgerard@classicmodelcars.com','4',50000,1102,'Sales Rep' from dual;
+ select 1702,'Gerard','Martin','x2312','mgerard@classicmodelcars.com','4',50000,1102,'Sales Rep',employeeOfYearArr(2005, 2007) from dual;
 
 /*Data for the table `customer` */
 

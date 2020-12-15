@@ -114,6 +114,13 @@ CREATE TABLE office (
 
 /*Table structure for table `employee` */
 
+BEGIN
+   EXECUTE IMMEDIATE 'CREATE TYPE employeeOfYearArr AS VARRAY(100) OF INTEGER;';
+EXCEPTION
+   WHEN OTHERS THEN NULL;
+END;
+/
+
 CREATE TABLE employee (
   employee_number number(10) NOT NULL,
   last_name varchar2(50) NOT NULL,
@@ -124,6 +131,7 @@ CREATE TABLE employee (
   salary int NOT NULL,
   reports_to number(10) DEFAULT NULL,
   job_title varchar2(50) NOT NULL,
+  employee_of_year employeeOfYearArr DEFAULT NULL,
   PRIMARY KEY (employee_number)
  ,
   CONSTRAINT employees_ibfk_1 FOREIGN KEY (reports_to) REFERENCES employee (employee_number),
