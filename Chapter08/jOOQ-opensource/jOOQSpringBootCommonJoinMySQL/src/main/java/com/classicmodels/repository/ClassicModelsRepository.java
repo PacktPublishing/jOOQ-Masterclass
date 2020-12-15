@@ -151,17 +151,21 @@ public class ClassicModelsRepository {
         );
     }
 
-    // EXAMPLE 10   
+    // EXAMPLE 10
     public void innerJoinFirst5EmployeeFirst5Office() {
 
         System.out.println("EXAMPLE 10\n"
                 + ctx.select()
                         .from(
                                 select(EMPLOYEE.OFFICE_CODE.as("a"), 
-                                        EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME).from(EMPLOYEE).limit(5)
+                                        EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME).from(EMPLOYEE)
+                                        .orderBy(EMPLOYEE.SALARY)
+                                        .limit(5)
                                         .asTable("at")
                                         .innerJoin(select(OFFICE.OFFICE_CODE.as("b"), 
-                                                OFFICE.CITY, OFFICE.COUNTRY).from(OFFICE).limit(5).asTable("bt"))
+                                                OFFICE.CITY, OFFICE.COUNTRY).from(OFFICE)
+                                                .orderBy(OFFICE.COUNTRY)
+                                                .limit(5).asTable("bt"))
                                         .on(field("a").eq(field("b")))
                         )
                         .fetch()
