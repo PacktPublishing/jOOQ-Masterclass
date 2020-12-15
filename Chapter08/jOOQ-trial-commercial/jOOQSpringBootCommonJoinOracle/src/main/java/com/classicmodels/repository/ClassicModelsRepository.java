@@ -10,7 +10,9 @@ import static org.jooq.impl.DSL.any;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.select;
+import static org.jooq.impl.DSL.selectDistinct;
 import static org.jooq.impl.DSL.table;
+import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -199,6 +201,25 @@ public class ClassicModelsRepository {
                                         .on(field(name("a")).eq(field(name("b"))))
                         )
                         .fetch()
+        );
+    }
+    
+    // EXAMPLE 13
+    @Transactional
+    public void insertOfficesInEachCountryOfCustomer() {
+
+        System.out.println("EXAMPLE 13\n"
+                + ctx.insertInto(OFFICE)
+                        .select(selectDistinct(CUSTOMERDETAIL.CUSTOMER_NUMBER.coerce(String.class),
+                                CUSTOMERDETAIL.CITY, val("N/A"),
+                                CUSTOMERDETAIL.ADDRESS_LINE_FIRST, CUSTOMERDETAIL.ADDRESS_LINE_SECOND,
+                                CUSTOMERDETAIL.STATE, CUSTOMERDETAIL.COUNTRY,
+                                val("N/A"), val("N/A")).from(CUSTOMERDETAIL)
+                                .leftOuterJoin(OFFICE)
+                                .on(CUSTOMERDETAIL.COUNTRY.eq(OFFICE.COUNTRY))
+                                .where(OFFICE.COUNTRY.isNull()))
+                        .onDuplicateKeyIgnore()
+                        .execute()
         );
     }
 }
