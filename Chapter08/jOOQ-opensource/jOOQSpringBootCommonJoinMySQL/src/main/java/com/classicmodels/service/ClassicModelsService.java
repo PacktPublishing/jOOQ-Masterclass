@@ -13,7 +13,7 @@ public class ClassicModelsService {
     }
 
     public void callAll() {
-        
+
         classicModelsRepository.fetchEmployeeNameOfficeCityInnerJoin();                       // EXAMPLE 1
         classicModelsRepository.fetchEmployeeNameSaleLeftOuterJoin();                         // EXAMPLE 2
         classicModelsRepository.fetchEmployeeNameSaleLeftOuterJoinExclusive();                // EXAMPLE 3
@@ -21,5 +21,6 @@ public class ClassicModelsService {
         classicModelsRepository.fetchEmployeeNameSaleRightOuterJoinExclusive();               // EXAMPLE 5
         classicModelsRepository.fetchOfficeCustomerdetailFullOuterJoinViaUnion();             // EXAMPLE 6
         classicModelsRepository.fetchOfficeCustomerdetailFullOuterJoinExclusiveViaUnion();    // EXAMPLE 7        
+        classicModelsRepository.updateEmployeeOfficeInnerJoin();                              // EXAMPLE 8        
     }
 }

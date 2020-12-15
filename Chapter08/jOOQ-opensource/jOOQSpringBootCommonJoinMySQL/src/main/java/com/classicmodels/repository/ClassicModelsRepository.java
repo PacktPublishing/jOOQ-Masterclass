@@ -5,7 +5,6 @@ import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
-import static org.jooq.impl.DSL.any;
 import static org.jooq.impl.DSL.select;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -120,5 +119,20 @@ public class ClassicModelsRepository {
                                 .where(OFFICE.CITY.isNull()))
                         .fetch()
         );
-    }   
+    }
+
+    // EXAMPLE 8
+    @Transactional
+    public void updateEmployeeOfficeInnerJoin() {
+
+        System.out.println("EXAMPLE 8 (UPDATE & JOIN)\n"
+                + ctx.update(EMPLOYEE
+                        .innerJoin(OFFICE)
+                        .on(EMPLOYEE.OFFICE_CODE.eq(OFFICE.OFFICE_CODE)))
+                        .set(EMPLOYEE.EXTENSION, "xParis")
+                        .set(OFFICE.STATE, "N/A")
+                        .where(OFFICE.CITY.eq("Paris"))
+                        .execute()
+        );
+    }
 }
