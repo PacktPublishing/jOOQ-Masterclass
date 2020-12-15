@@ -152,8 +152,8 @@ public class ClassicModelsRepository {
     public void fetchEmployeeSaleByYear() {
 
         System.out.println("EXAMPLE 10\n"
-                + ctx.selectDistinct(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.JOB_TITLE, 
-                        SALE.FISCAL_YEAR, EMPLOYEE.EMPLOYEE_OF_YEAR)
+                + ctx.selectDistinct(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, 
+                        EMPLOYEE.JOB_TITLE, SALE.FISCAL_YEAR)
                         .from(EMPLOYEE)
                         .innerJoin(SALE)
                         .on(SALE.FISCAL_YEAR.eq(any(EMPLOYEE.EMPLOYEE_OF_YEAR)))
