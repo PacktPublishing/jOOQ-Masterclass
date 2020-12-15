@@ -5,6 +5,7 @@ import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
+import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.select;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -143,6 +144,41 @@ public class ClassicModelsRepository {
                                 .rightOuterJoin(CUSTOMERDETAIL)
                                 .on(OFFICE.CITY.eq(CUSTOMERDETAIL.CITY))
                                 .where(OFFICE.CITY.isNull()))
+                        .fetch()
+        );
+    }
+    
+    // EXAMPLE 10
+    public void crossJoinFirst2EmployeeFirst2Office() {
+
+        System.out.println("EXAMPLE 10\n"
+                + ctx.select()
+                        .from(
+                                select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME).from(EMPLOYEE)
+                                        .limit(2)
+                                        .asTable().crossJoin(select().from(OFFICE).limit(2))
+                        )
+                        .fetch()
+        );
+    }
+
+    // EXAMPLE 11
+    public void innerJoinFirst5EmployeeFirst5Office() {
+
+        System.out.println("EXAMPLE 11\n"
+                + ctx.select()
+                        .from(
+                                select(EMPLOYEE.OFFICE_CODE.as("a"), 
+                                        EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME).from(EMPLOYEE)
+                                        .orderBy(EMPLOYEE.SALARY)
+                                        .limit(5)
+                                        .asTable("at")
+                                        .innerJoin(select(OFFICE.OFFICE_CODE.as("b"), 
+                                                OFFICE.CITY, OFFICE.COUNTRY).from(OFFICE)
+                                                .orderBy(OFFICE.COUNTRY)
+                                                .limit(5).asTable("bt"))
+                                        .on(field("a").eq(field("b")))
+                        )
                         .fetch()
         );
     }
