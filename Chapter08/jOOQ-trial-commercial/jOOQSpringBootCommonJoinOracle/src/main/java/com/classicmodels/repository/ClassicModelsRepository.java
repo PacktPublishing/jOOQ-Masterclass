@@ -1,11 +1,15 @@
 package com.classicmodels.repository;
 
+import java.math.BigInteger;
 import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
+import static org.jooq.impl.DSL.any;
+import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.select;
+import static org.jooq.impl.DSL.table;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -146,4 +150,20 @@ public class ClassicModelsRepository {
                         .fetch()
         );
     }                
+    
+    // EXAMPLE 10
+    public void fetchEmployeeSaleByYear() {      
+        
+        System.out.println("EXAMPLE 10\n"
+                + ctx.selectDistinct(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, 
+                        EMPLOYEE.JOB_TITLE, SALE.FISCAL_YEAR)
+                        .from(EMPLOYEE)
+                        .innerJoin(SALE)
+                        .on(SALE.FISCAL_YEAR.eq(any(select(field("COLUMN_VALUE", BigInteger.class))
+                                .from(table(EMPLOYEE.EMPLOYEE_OF_YEAR)))))
+                        .orderBy(SALE.FISCAL_YEAR)
+                        .fetch()
+        );
+    }
+
 }
