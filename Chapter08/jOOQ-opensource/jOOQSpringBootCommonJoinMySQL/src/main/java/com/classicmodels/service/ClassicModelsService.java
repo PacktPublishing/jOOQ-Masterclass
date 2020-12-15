@@ -20,6 +20,6 @@ public class ClassicModelsService {
         classicModelsRepository.fetchEmployeeNameSaleRightOuterJoin();                        // EXAMPLE 4
         classicModelsRepository.fetchEmployeeNameSaleRightOuterJoinExclusive();               // EXAMPLE 5
         classicModelsRepository.fetchOfficeCustomerdetailFullOuterJoinViaUnion();             // EXAMPLE 6
-        classicModelsRepository.fetchOfficeCustomerdetailFullOuterJoinExclusiveViaUnion();    // EXAMPLE 7
+        classicModelsRepository.fetchOfficeCustomerdetailFullOuterJoinExclusiveViaUnion();    // EXAMPLE 7        
     }
 }

@@ -29,7 +29,7 @@ insert  into `office`(`office_code`,`city`,`phone`,`address_line_first`,`address
 
 ('6','Sydney','+61 2 9264 2451','5-11 Wentworth Avenue','Floor #2',NULL,'Australia','NSW 2010','APAC'),
 
-('7','London','+44 20 7877 2041','25 Old Broad Street','Level 7',NULL,'UK','EC2N 1HN','EMEA'),
+('7','London','+44 20 7877 2041','25 Old Broad Street','Level 7','N/A','UK','EC2N 1HN','EMEA'),
 
 ('8',NULL,'+44 20 1827 21411','25 Hum Street','Level 2',NULL,'USA','EC2N 1HN','EMEA'), 
 
@@ -40,6 +40,18 @@ insert  into `office`(`office_code`,`city`,`phone`,`address_line_first`,`address
 ('11','Paris','+32 12 713 4304','43 Rue 2',NULL,NULL,'France','25017','EMEA'),
 
 ('12','Tokyo','+81 33 224 3444','4-1 Kioicho',NULL,'Koil-Ku','Japan','101-6578','Japan') ON DUPLICATE KEY UPDATE office_code=office_code;
+
+/*Data for the table `department` */
+
+insert into `department`(`department_id`,`name`,`phone`,`code`,`office_code`,`topic`) values 
+
+('1','Advertising','-int 4782','1333','1',JSON_OBJECT("Advertising", JSON_ARRAY('publicity', 'promotion'))),
+
+('2','Sales','-int 41233','1441','1', JSON_OBJECT("Sales", JSON_ARRAY('commerce', 'trade', 'sellout', 'transaction'))),
+
+('3','Accounting','-int 8233','2311','2', JSON_OBJECT("Accounting", JSON_ARRAY('monetary', 'business'))),
+
+('4','Finance','-int 4421','3222','3', JSON_OBJECT("Finance", JSON_ARRAY('commerce', 'fiscal', 'monetary', 'business'))) ON DUPLICATE KEY UPDATE department_id=department_id;
 
 /*Data for the table `manager` */
 
@@ -377,7 +389,7 @@ insert  into `customer`(`customer_number`,`customer_name`,`contact_last_name`,`c
 
 insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_line_second`,`city`,`state`,`postal_code`,`country`) values 
 
-(99,'32, Avenue 90',NULL, 'Paris' ,NULL,'43000','France'),
+(99,'43 Rue 2',NULL, 'Paris' ,NULL,'25017','France'),
 
 (100,'51, Avenue 3',NULL, NULL ,NULL,'43000',NULL),
 
@@ -525,7 +537,7 @@ insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_li
 
 (323,'162-164 Grafton Road','Level 2','Auckland  ',NULL,NULL,'New Zealand'),
 
-(324,'35 King George',NULL,'London',NULL,'WX3 6FW','UK'),
+(324,'25 Old Broad Street','Level 7','London','N/A','EC2N 1HN','UK'),
 
 (328,'7476 Moss Rd.',NULL,'Newark','NJ','94019','USA'),
 
@@ -631,21 +643,40 @@ insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_li
 
 /*Data for the table `productline` */
 
-insert  into `productline`(`product_line`,`text_description`,`html_description`,`image`) values 
+insert  into `productline`(`product_line`,`code`,`text_description`,`html_description`,`image`) values 
 
-('Classic Cars','Attention car enthusiasts: Make your wildest car ownership dreams come true. Whether you are looking for classic muscle cars, dream sports cars or movie-inspired miniatures, you will find great choices in this category. These replicas feature superb attention to detail and craftsmanship and offer features such as working steering system, opening forward compartment, opening rear trunk with removable spare wheel, 4-wheel independent spring suspension, and so on. The models range in size from 1:10 to 1:24 scale and include numerous limited edition and several out-of-production vehicles. All models include a certificate of authenticity from their manufacturers and come fully assembled and ready for display in the home or office.',NULL,NULL),
+('Classic Cars',599302, 'Attention car enthusiasts: Make your wildest car ownership dreams come true. Whether you are looking for classic muscle cars, dream sports cars or movie-inspired miniatures, you will find great choices in this category. These replicas feature superb attention to detail and craftsmanship and offer features such as working steering system, opening forward compartment, opening rear trunk with removable spare wheel, 4-wheel independent spring suspension, and so on. The models range in size from 1:10 to 1:24 scale and include numerous limited edition and several out-of-production vehicles. All models include a certificate of authenticity from their manufacturers and come fully assembled and ready for display in the home or office.',NULL,NULL),
 
-('Motorcycles','Our motorcycles are state of the art replicas of classic as well as contemporary motorcycle legends such as Harley Davidson, Ducati and Vespa. Models contain stunning details such as official logos, rotating wheels, working kickstand, front suspension, gear-shift lever, footbrake lever, and drive chain. Materials used include diecast and plastic. The models range in size from 1:10 to 1:50 scale and include numerous limited edition and several out-of-production vehicles. All models come fully assembled and ready for display in the home or office. Most include a certificate of authenticity.',NULL,NULL),
+('Motorcycles',599302,'Our motorcycles are state of the art replicas of classic as well as contemporary motorcycle legends such as Harley Davidson, Ducati and Vespa. Models contain stunning details such as official logos, rotating wheels, working kickstand, front suspension, gear-shift lever, footbrake lever, and drive chain. Materials used include diecast and plastic. The models range in size from 1:10 to 1:50 scale and include numerous limited edition and several out-of-production vehicles. All models come fully assembled and ready for display in the home or office. Most include a certificate of authenticity.',NULL,NULL),
 
-('Planes','Unique, diecast airplane and helicopter replicas suitable for collections, as well as home, office or classroom decorations. Models contain stunning details such as official logos and insignias, rotating jet engines and propellers, retractable wheels, and so on. Most come fully assembled and with a certificate of authenticity from their manufacturers.',NULL,NULL),
+('Planes',433823,'Unique, diecast airplane and helicopter replicas suitable for collections, as well as home, office or classroom decorations. Models contain stunning details such as official logos and insignias, rotating jet engines and propellers, retractable wheels, and so on. Most come fully assembled and with a certificate of authenticity from their manufacturers.',NULL,NULL),
 
-('Ships','The perfect holiday or anniversary gift for executives, clients, friends, and family. These handcrafted model ships are unique, stunning works of art that will be treasured for generations! They come fully assembled and ready for display in the home or office. We guarantee the highest quality, and best value.',NULL,NULL),
+('Ships',433823,'The perfect holiday or anniversary gift for executives, clients, friends, and family. These handcrafted model ships are unique, stunning works of art that will be treasured for generations! They come fully assembled and ready for display in the home or office. We guarantee the highest quality, and best value.',NULL,NULL),
 
-('Trains','Model trains are a rewarding hobby for enthusiasts of all ages. Whether you\'re looking for collectible wooden trains, electric streetcars or locomotives, you\'ll find a number of great choices for any budget within this category. The interactive aspect of trains makes toy trains perfect for young children. The wooden train sets are ideal for children under the age of 5.',NULL,NULL),
+('Trains',123333,'Model trains are a rewarding hobby for enthusiasts of all ages. Whether you\'re looking for collectible wooden trains, electric streetcars or locomotives, you\'ll find a number of great choices for any budget within this category. The interactive aspect of trains makes toy trains perfect for young children. The wooden train sets are ideal for children under the age of 5.',NULL,NULL),
 
-('Trucks and Buses','The Truck and Bus models are realistic replicas of buses and specialized trucks produced from the early 1920s to present. The models range in size from 1:12 to 1:50 scale and include numerous limited edition and several out-of-production vehicles. Materials used include tin, diecast and plastic. All models include a certificate of authenticity from their manufacturers and are a perfect ornament for the home and office.',NULL,NULL),
+('Trucks and Buses',569331,'The Truck and Bus models are realistic replicas of buses and specialized trucks produced from the early 1920s to present. The models range in size from 1:12 to 1:50 scale and include numerous limited edition and several out-of-production vehicles. Materials used include tin, diecast and plastic. All models include a certificate of authenticity from their manufacturers and are a perfect ornament for the home and office.',NULL,NULL),
 
-('Vintage Cars','Our Vintage Car models realistically portray automobiles produced from the early 1900s through the 1940s. Materials used include Bakelite, diecast, plastic and wood. Most of the replicas are in the 1:18 and 1:24 scale sizes, which provide the optimum in detail and accuracy. Prices range from $30.00 up to $180.00 for some special limited edition replicas. All models include a certificate of authenticity from their manufacturers and come fully assembled and ready for display in the home or office.',NULL,NULL) ON DUPLICATE KEY UPDATE product_line=product_line;
+('Vintage Cars',223113,'Our Vintage Car models realistically portray automobiles produced from the early 1900s through the 1940s. Materials used include Bakelite, diecast, plastic and wood. Most of the replicas are in the 1:18 and 1:24 scale sizes, which provide the optimum in detail and accuracy. Prices range from $30.00 up to $180.00 for some special limited edition replicas. All models include a certificate of authenticity from their manufacturers and come fully assembled and ready for display in the home or office.',NULL,NULL) ON DUPLICATE KEY UPDATE product_line=product_line;
+
+/*Data for the table `productlinedetail` */
+
+insert  into `productlinedetail`(`product_line`,`code`,`line_capacity`,`line_type`) values 
+
+('Classic Cars',599302,'200A', 1),
+
+('Motorcycles',599302,'150B', 1),
+
+('Planes',433823,'450C',2),
+
+('Ships',433823,'100A',3),
+
+('Trains',123333,'150A',2),
+
+('Trucks and Buses',569331,'566C',2),
+
+('Vintage Cars',223113,'1000A', 3) ON DUPLICATE KEY UPDATE product_line=product_line;
+
 
 /*Data for the table `product` */
 
@@ -7523,7 +7554,7 @@ insert  into `orderdetail`(`order_id`,`product_id`,`quantity_ordered`,`price_eac
 
 (10425,94,18,'94.92',2) ON DUPLICATE KEY UPDATE order_id=order_id;
 
-/*Data for the table `payment` */
+/* Data for the table `payment` */
 
 insert  into `payment`(`customer_number`,`check_number`,`payment_date`,`invoice_amount`, `caching_date`) values 
 

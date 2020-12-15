@@ -5,6 +5,7 @@ import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
+import static org.jooq.impl.DSL.any;
 import static org.jooq.impl.DSL.select;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -90,7 +91,7 @@ public class ClassicModelsRepository {
                         CUSTOMERDETAIL.CITY, CUSTOMERDETAIL.COUNTRY, CUSTOMERDETAIL.CUSTOMER_NUMBER)
                         .from(OFFICE)
                         .leftOuterJoin(CUSTOMERDETAIL)
-                        .on(OFFICE.CITY.eq(CUSTOMERDETAIL.CITY))                        
+                        .on(OFFICE.CITY.eq(CUSTOMERDETAIL.CITY))
                         .union(select(OFFICE.CITY, OFFICE.COUNTRY, OFFICE.OFFICE_CODE,
                                 CUSTOMERDETAIL.CITY, CUSTOMERDETAIL.COUNTRY, CUSTOMERDETAIL.CUSTOMER_NUMBER)
                                 .from(OFFICE)
@@ -119,5 +120,5 @@ public class ClassicModelsRepository {
                                 .where(OFFICE.CITY.isNull()))
                         .fetch()
         );
-    }
+    }   
 }
