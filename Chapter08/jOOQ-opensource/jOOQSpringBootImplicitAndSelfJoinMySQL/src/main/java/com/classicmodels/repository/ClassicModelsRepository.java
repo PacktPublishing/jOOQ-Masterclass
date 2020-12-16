@@ -6,6 +6,8 @@ import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Productlinedetail.PRODUCTLINEDETAIL;
+import jooq.generated.tables.Sale;
+import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.concat;
 import static org.jooq.impl.DSL.sum;
@@ -119,7 +121,7 @@ public class ClassicModelsRepository {
                         .fetch()
         );
     }
-    
+
     // EXAMPLE 8
     public void selfJoinComparingEmployeeViaNavigationMethod() {
 
@@ -128,6 +130,29 @@ public class ClassicModelsRepository {
                         concat(EMPLOYEE.employee().FIRST_NAME, val(" "), EMPLOYEE.employee().LAST_NAME).as("reports_to"))
                         .from(EMPLOYEE)
                         .where(EMPLOYEE.JOB_TITLE.eq(EMPLOYEE.employee().JOB_TITLE))
+                        .fetch()
+        );
+    }
+
+    // EXAMPLE 9
+    public void selfJoinThreeTimes() {
+
+        Sale s1 = SALE.as("s1");
+        Sale s2 = SALE.as("s2");
+
+        System.out.println("EXAMPLE 9\n"
+                + ctx.selectDistinct(SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR.as("2003"),
+                        s1.FISCAL_YEAR.as("2004"), s2.FISCAL_YEAR.as("2005"))
+                        .from(SALE)
+                        .innerJoin(s1)
+                        .on(SALE.EMPLOYEE_NUMBER.eq(s1.EMPLOYEE_NUMBER)
+                                .and(SALE.FISCAL_YEAR.eq(2003)
+                                        .and(s1.FISCAL_YEAR.eq(SALE.FISCAL_YEAR.plus(1)))))
+                        .innerJoin(s2)
+                        .on(s2.EMPLOYEE_NUMBER.eq(s1.EMPLOYEE_NUMBER)
+                                .and(s1.FISCAL_YEAR.eq(SALE.FISCAL_YEAR.plus(1))
+                                        .and(s2.FISCAL_YEAR.eq(SALE.FISCAL_YEAR.plus(2)))))
+                        .orderBy(SALE.EMPLOYEE_NUMBER)
                         .fetch()
         );
     }
