@@ -16,7 +16,10 @@ public class ClassicModelsService {
 
         classicModelsRepository.joinProductlineProductlinedetailViaOn();            // EXAMPLE 1
         classicModelsRepository.joinProductlineProductlinedetailViaOnRow();         // EXAMPLE 2
-        classicModelsRepository.joinProductlineProductlinedetailViaOnKey();         // EXAMPLE 3
-        classicModelsRepository.joinProductlineProductlinedetailViaOnKeyFK();       // EXAMPLE 4
+        //classicModelsRepository.joinProductlineProductlinedetailViaOnKey();         // EXAMPLE 3
+        classicModelsRepository.joinProductlineProductlinedetailViaOnKeyTF();       // EXAMPLE 4
+        classicModelsRepository.joinProductlineProductlinedetailViaOnKeyFK();       // EXAMPLE 5        
+        
+        classicModelsRepository.joinProductlineProductlinedetailViaOnKeyTF1();
     }
 }
