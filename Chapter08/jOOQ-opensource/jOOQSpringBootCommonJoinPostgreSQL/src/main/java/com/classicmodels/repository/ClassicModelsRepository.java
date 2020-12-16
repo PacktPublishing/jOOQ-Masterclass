@@ -45,7 +45,7 @@ public class ClassicModelsRepository {
                 + ctx.select()
                         .from(MANAGER)
                         .innerJoin(OFFICE_HAS_MANAGER)
-                        .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID))
+                        .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID))                        
                         .innerJoin(OFFICE)
                         .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))
                         .fetch()
@@ -58,7 +58,7 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 2 (LEFT OUTER JOIN)\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, SALE.SALE_)
                         .from(EMPLOYEE)
-                        .leftOuterJoin(SALE)
+                        .leftOuterJoin(SALE)                        
                         .on(EMPLOYEE.EMPLOYEE_NUMBER.eq(SALE.EMPLOYEE_NUMBER))
                         .fetch()
         );
@@ -115,14 +115,14 @@ public class ClassicModelsRepository {
         );
     }
 
-    // EXAMPLE 7 - FULL OUTER JOIN
+    // EXAMPLE 7 - FULL OUTER JOIN (EXCLUSIVE)
     public void fetchOfficeCustomerdetailFullOuterJoinExclusive() {
 
         System.out.println("EXAMPLE 7 (FULL OUTER JOIN (EXCLUSIVE))\n"
                 + ctx.select(OFFICE.CITY, OFFICE.COUNTRY, OFFICE.OFFICE_CODE,
                         CUSTOMERDETAIL.CITY, CUSTOMERDETAIL.COUNTRY, CUSTOMERDETAIL.CUSTOMER_NUMBER)
                         .from(OFFICE)
-                        .fullOuterJoin(CUSTOMERDETAIL)
+                        .fullOuterJoin(CUSTOMERDETAIL)                        
                         .on(OFFICE.CITY.eq(CUSTOMERDETAIL.CITY))
                         .where(OFFICE.CITY.isNull().or(CUSTOMERDETAIL.CITY.isNull()))
                         .fetch()
