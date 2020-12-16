@@ -117,7 +117,7 @@ public class ClassicModelsRepository {
         );
     }
     
-    // EXAMPLE 7 - FULL OUTER JOIN
+    // EXAMPLE 7 - FULL OUTER JOIN (EXCLUSIVE)
     public void fetchOfficeCustomerdetailFullOuterJoinExclusive() {
 
         System.out.println("EXAMPLE 7 (FULL OUTER JOIN (EXCLUSIVE))\n"
