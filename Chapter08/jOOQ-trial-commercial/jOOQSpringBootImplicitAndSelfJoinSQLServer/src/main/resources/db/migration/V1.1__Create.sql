@@ -13,7 +13,7 @@ This is a modified version of the original schema for Microsoft Server SQL
 
 /* USER-DEFINED FUNCTIONS */
 
-CREATE FUNCTION netPriceEach(
+CREATE OR ALTER FUNCTION netPriceEach(
     @quantity INT,
     @list_price DEC(10,2),
     @discount DEC(4,2)
@@ -23,7 +23,24 @@ AS
 BEGIN
     RETURN @quantity * @list_price * (1 - @discount);
 END;
+GO
 
+CREATE OR ALTER FUNCTION top_three_sales_per_employee(@employee_nr BIGINT)
+RETURNS @out_table TABLE (
+  sales FLOAT
+)
+AS BEGIN
+  INSERT @out_table
+  SELECT 
+      TOP 3 [classicmodels].[dbo].[sale].[sale] [sales] 
+    FROM 
+      [classicmodels].[dbo].[sale] 
+    WHERE 
+      @employee_nr = [classicmodels].[dbo].[sale].[employee_number] 
+    ORDER BY 
+      [classicmodels].[dbo].[sale].[sale] DESC
+    RETURN
+END;	
 GO
 
 IF OBJECT_ID('payment', 'U') IS NOT NULL 
@@ -82,6 +99,7 @@ CREATE TABLE employee (
   [salary] int NOT NULL,
   [reports_to] bigint DEFAULT NULL,
   [job_title] varchar(50) NOT NULL,
+  [employee_of_year] varchar(50) DEFAULT NULL,
   PRIMARY KEY ([employee_number])
 ,
   CONSTRAINT [employees_ibfk_1] FOREIGN KEY ([reports_to]) REFERENCES employee ([employee_number]),
@@ -99,6 +117,7 @@ CREATE TABLE department (
   [phone] varchar(50) NOT NULL,
   [code] smallint DEFAULT 1,
   [office_code] varchar(10) NOT NULL,
+  [topic] varchar(100) NOT NULL,
   PRIMARY KEY ([department_id])
 ,
   CONSTRAINT [department_ibfk_1] FOREIGN KEY ([office_code]) REFERENCES office ([office_code])
