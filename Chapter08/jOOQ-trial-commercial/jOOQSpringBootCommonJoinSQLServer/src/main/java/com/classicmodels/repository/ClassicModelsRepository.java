@@ -2,7 +2,9 @@ package com.classicmodels.repository;
 
 import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
 import static jooq.generated.tables.Employee.EMPLOYEE;
+import static jooq.generated.tables.Manager.MANAGER;
 import static jooq.generated.tables.Office.OFFICE;
+import static jooq.generated.tables.OfficeHasManager.OFFICE_HAS_MANAGER;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Sale.SALE;
@@ -29,11 +31,22 @@ public class ClassicModelsRepository {
     // EXAMPLE 1 - typical INNER JOIN
     public void fetchEmployeeNameOfficeCityInnerJoin() {
 
-        System.out.println("EXAMPLE 1 (INNER JOIN)\n"
+        System.out.println("EXAMPLE 1.1 (INNER JOIN)\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, OFFICE.CITY)
                         .from(EMPLOYEE)
                         .innerJoin(OFFICE)
                         .on(EMPLOYEE.OFFICE_CODE.eq(OFFICE.OFFICE_CODE))
+                        .fetch()
+        );
+        
+        // EQUI JOIN (JOIN by primary key / foreign key relationship)
+        System.out.println("EXAMPLE 1.2 (EQUI JOIN)\n"
+                + ctx.select()
+                        .from(MANAGER)
+                        .innerJoin(OFFICE_HAS_MANAGER)
+                        .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID))
+                        .innerJoin(OFFICE)
+                        .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))
                         .fetch()
         );
     }
