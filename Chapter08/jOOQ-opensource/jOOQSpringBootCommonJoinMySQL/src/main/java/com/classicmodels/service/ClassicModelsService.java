@@ -25,5 +25,6 @@ public class ClassicModelsService {
         classicModelsRepository.crossJoinFirst2EmployeeFirst2Office();                        // EXAMPLE 9
         classicModelsRepository.innerJoinFirst5EmployeeFirst5Office();                        // EXAMPLE 10
         classicModelsRepository.insertOfficesInEachCountryOfCustomer();                       // EXAMPLE 11
+        classicModelsRepository.fetchOrderContainingAtLeastCertainProducts();                 // EXAMPLE 12
     }
 }
