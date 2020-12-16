@@ -3,11 +3,16 @@ package com.classicmodels.repository;
 import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Office.OFFICE;
+import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
+import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.any;
+import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.field;
+import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.select;
+import static org.jooq.impl.DSL.selectCount;
 import static org.jooq.impl.DSL.selectDistinct;
 import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
@@ -97,7 +102,7 @@ public class ClassicModelsRepository {
                         .fetch()
         );
     }
-    
+
     // EXAMPLE 7 - FULL OUTER JOIN
     public void fetchOfficeCustomerdetailFullOuterJoinExclusive() {
 
@@ -111,7 +116,7 @@ public class ClassicModelsRepository {
                         .fetch()
         );
     }
-    
+
     // EXAMPLE 8 - emulate FULL OUTER JOIN via UNION    
     public void fetchOfficeCustomerdetailFullOuterJoinViaUnion() {
 
@@ -120,7 +125,7 @@ public class ClassicModelsRepository {
                         CUSTOMERDETAIL.CITY, CUSTOMERDETAIL.COUNTRY, CUSTOMERDETAIL.CUSTOMER_NUMBER)
                         .from(OFFICE)
                         .leftOuterJoin(CUSTOMERDETAIL)
-                        .on(OFFICE.CITY.eq(CUSTOMERDETAIL.CITY))                        
+                        .on(OFFICE.CITY.eq(CUSTOMERDETAIL.CITY))
                         .union(select(OFFICE.CITY, OFFICE.COUNTRY, OFFICE.OFFICE_CODE,
                                 CUSTOMERDETAIL.CITY, CUSTOMERDETAIL.COUNTRY, CUSTOMERDETAIL.CUSTOMER_NUMBER)
                                 .from(OFFICE)
@@ -150,12 +155,12 @@ public class ClassicModelsRepository {
                         .fetch()
         );
     }
-    
+
     // EXAMPLE 10
     public void fetchEmployeeSaleByYear() {
 
         System.out.println("EXAMPLE 10\n"
-                + ctx.selectDistinct(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, 
+                + ctx.selectDistinct(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME,
                         EMPLOYEE.JOB_TITLE, SALE.FISCAL_YEAR)
                         .from(EMPLOYEE)
                         .innerJoin(SALE)
@@ -164,7 +169,7 @@ public class ClassicModelsRepository {
                         .fetch()
         );
     }
-    
+
     // EXAMPLE 11    
     public void crossJoinFirst2EmployeeFirst2Office() {
 
@@ -185,12 +190,12 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 12\n"
                 + ctx.select()
                         .from(
-                                select(EMPLOYEE.OFFICE_CODE.as("a"), 
+                                select(EMPLOYEE.OFFICE_CODE.as("a"),
                                         EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME).from(EMPLOYEE)
                                         .orderBy(EMPLOYEE.SALARY)
                                         .limit(5)
                                         .asTable("at")
-                                        .innerJoin(select(OFFICE.OFFICE_CODE.as("b"), 
+                                        .innerJoin(select(OFFICE.OFFICE_CODE.as("b"),
                                                 OFFICE.CITY, OFFICE.COUNTRY).from(OFFICE)
                                                 .orderBy(OFFICE.COUNTRY)
                                                 .limit(5).asTable("bt"))
@@ -199,7 +204,7 @@ public class ClassicModelsRepository {
                         .fetch()
         );
     }
-    
+
     // EXAMPLE 13
     @Transactional
     public void insertOfficesInEachCountryOfCustomer() {
@@ -216,6 +221,26 @@ public class ClassicModelsRepository {
                                 .where(OFFICE.COUNTRY.isNull()))
                         .onDuplicateKeyIgnore()
                         .execute()
+        );
+    }
+
+    // EXAMPLE 14 (Division via JOIN - find all orders containing at least the products from the given order (e.g., 10100))
+    public void fetchOrderContainingAtLeastCertainProducts() {
+
+        System.out.println("EXAMPLE 14\n"
+                + ctx.select(field(name("OID")))
+                        .from(
+                                select(PRODUCT.PRODUCT_ID.as(name("P1"))).from(PRODUCT).asTable("T1")
+                                        .innerJoin(select(ORDERDETAIL.ORDER_ID.as(name("OID")),
+                                                ORDERDETAIL.PRODUCT_ID.as(name("P2"))).from(ORDERDETAIL).asTable("T2"))
+                                        .on(field(name("P1")).eq(field(name("P2"))))
+                                        .innerJoin(select(ORDERDETAIL.PRODUCT_ID.as("P3"))
+                                                .from(ORDERDETAIL).where(ORDERDETAIL.ORDER_ID.eq(10100L)))
+                                        .on(field(name("P1")).eq(field(name("P3")))))
+                        .groupBy(field(name("OID")))
+                        .having(count().eq(selectCount()
+                                .from(ORDERDETAIL).where(ORDERDETAIL.ORDER_ID.eq(10100L))))
+                        .fetch()
         );
     }
 }
