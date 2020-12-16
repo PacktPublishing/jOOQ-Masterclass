@@ -42,9 +42,8 @@ public class ClassicModelsRepository {
                         .on(EMPLOYEE.OFFICE_CODE.eq(OFFICE.OFFICE_CODE))
                         .fetch()
         );
-        
-        // EQUI JOIN (JOIN by primary key / foreign key relationship)
-        System.out.println("EXAMPLE 1.2 (EQUI JOIN)\n"
+             
+        System.out.println("EXAMPLE 1.2\n"
                 + ctx.select()
                         .from(MANAGER)
                         .innerJoin(OFFICE_HAS_MANAGER)
