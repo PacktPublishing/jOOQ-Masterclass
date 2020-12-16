@@ -1,8 +1,6 @@
 package com.classicmodels.repository;
 
 import static jooq.generated.Keys.PRODUCTLINEDETAIL_IBFK_2;
-import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
-import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Productline.PRODUCTLINE;
 import static jooq.generated.tables.Productlinedetail.PRODUCTLINEDETAIL;
 import org.jooq.DSLContext;
@@ -83,7 +81,7 @@ public class ClassicModelsRepository {
                         PRODUCTLINEDETAIL.LINE_CAPACITY, PRODUCTLINEDETAIL.LINE_TYPE)
                         .from(PRODUCTLINE)
                         .innerJoin(PRODUCTLINEDETAIL)
-                        .onKey(PRODUCTLINEDETAIL_IBFK_2)
+                        .onKey(PRODUCTLINEDETAIL_IBFK_2) // use only PRODUCTLINEDETAIL.PRODUCT_LINE
                         .fetch()
         );
     }    
