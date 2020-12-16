@@ -114,6 +114,13 @@ CREATE TABLE office (
 
 /*Table structure for table `employee` */
 
+BEGIN
+   EXECUTE IMMEDIATE 'CREATE TYPE employeeOfYearArr AS VARRAY(100) OF INTEGER;';
+EXCEPTION
+   WHEN OTHERS THEN NULL;
+END;
+/
+
 CREATE TABLE employee (
   employee_number number(10) NOT NULL,
   last_name varchar2(50) NOT NULL,
@@ -124,6 +131,7 @@ CREATE TABLE employee (
   salary int NOT NULL,
   reports_to number(10) DEFAULT NULL,
   job_title varchar2(50) NOT NULL,
+  employee_of_year employeeOfYearArr DEFAULT NULL,
   PRIMARY KEY (employee_number)
  ,
   CONSTRAINT employees_ibfk_1 FOREIGN KEY (reports_to) REFERENCES employee (employee_number),
@@ -218,12 +226,20 @@ CREATE TABLE customerdetail (
 
 /* Table structure for table `department` */
 
+BEGIN
+   EXECUTE IMMEDIATE 'CREATE TYPE topicArr AS VARRAY(100) OF VARCHAR2(100 CHAR);';
+EXCEPTION
+   WHEN OTHERS THEN NULL;
+END;
+/
+
 CREATE TABLE department (
   department_id number(10) NOT NULL,
   name varchar(50) NOT NULL,
   phone varchar(50) NOT NULL,
   code number(5) DEFAULT 1,
   office_code varchar(10) NOT NULL,
+  topic topicArr NOT NULL,
   PRIMARY KEY (department_id)
 ,
   CONSTRAINT department_ibfk_1 FOREIGN KEY (office_code) REFERENCES office (office_code)
@@ -433,5 +449,42 @@ BEGIN
     -- return the total sales
     RETURN l_total_sales;
 END;
+/
 
+-- Create Object of your table
+BEGIN
+   EXECUTE IMMEDIATE 'CREATE TYPE TABLE_RES_OBJ AS OBJECT (SALES float);';
+EXCEPTION
+   WHEN OTHERS THEN NULL;
+END;
+/
+
+--Create a type of your object 
+BEGIN
+   EXECUTE IMMEDIATE 'CREATE TYPE TABLE_RES AS TABLE OF TABLE_RES_OBJ;';
+EXCEPTION
+   WHEN OTHERS THEN NULL;
+END;
+/
+
+CREATE OR REPLACE NONEDITIONABLE FUNCTION top_three_sales_per_employee (
+    employee_nr IN NUMBER
+) RETURN TABLE_RES IS
+    table_result TABLE_RES;
+BEGIN
+    SELECT
+        TABLE_RES_OBJ("SYSTEM"."SALE"."SALE") "sales"
+    BULK COLLECT
+    INTO table_result
+    FROM
+        "SYSTEM"."SALE"
+    WHERE
+        employee_nr = "SYSTEM"."SALE"."EMPLOYEE_NUMBER"
+    ORDER BY
+        "SYSTEM"."SALE"."SALE" DESC
+    FETCH NEXT 3 ROWS ONLY;
+
+    RETURN table_result;
+END;
+/
 /* END */
