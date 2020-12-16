@@ -54,6 +54,7 @@ CREATE TABLE department (
   phone varchar(50) NOT NULL,
   code smallint DEFAULT 1,
   office_code varchar(10) NOT NULL,
+  topic text[] NOT NULL,
   PRIMARY KEY (department_id)
 ,
   CONSTRAINT department_ibfk_1 FOREIGN KEY (office_code) REFERENCES office (office_code)
@@ -74,6 +75,7 @@ CREATE TABLE employee (
   salary int NOT NULL,
   reports_to bigint DEFAULT NULL,
   job_title varchar(50) NOT NULL,
+  employee_of_year int[] DEFAULT NULL,
   PRIMARY KEY (employee_number)
  ,
   CONSTRAINT employees_ibfk_1 FOREIGN KEY (reports_to) REFERENCES employee (employee_number),
@@ -252,17 +254,33 @@ CREATE TABLE payment (
 
 /* USER-DEFINED FUNCTIONS */
 
-CREATE FUNCTION get_avg_sale(len_from int, len_to int) 
-  returns int language plpgsql AS $$ 
+CREATE OR REPLACE FUNCTION get_avg_sale(len_from int, len_to int) 
+  RETURNS int LANGUAGE plpgsql AS $$ 
 DECLARE avg_count integer; 
-begin 
+BEGIN 
   SELECT avg(sale.sale) 
   INTO   avg_count 
   FROM   sale 
   WHERE  sale.sale BETWEEN len_from AND len_to; 
    
-  return avg_count; 
-end; 
+  RETURN avg_count; 
+END; 
+$$;
+
+CREATE OR REPLACE FUNCTION top_three_sales_per_employee(employee_nr bigint)
+  RETURNS TABLE(sales float) LANGUAGE plpgsql AS $$ 
+BEGIN
+    RETURN QUERY
+    SELECT 
+      "public"."sale"."sale" AS "sales" 
+    FROM 
+      "public"."sale" 
+    WHERE 
+      employee_nr = "public"."sale"."employee_number" 
+    ORDER BY
+      "public"."sale"."sale" DESC
+    LIMIT 3;     
+END; 
 $$;
 
 /* END */
