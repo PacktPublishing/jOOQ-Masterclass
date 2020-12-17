@@ -18,6 +18,12 @@ EXCEPTION
 END;
 /
 BEGIN
+   EXECUTE IMMEDIATE 'DROP TABLE "BANK_TRANSACTION" CASCADE CONSTRAINTS';
+EXCEPTION
+   WHEN OTHERS THEN NULL;
+END;
+/
+BEGIN
    EXECUTE IMMEDIATE 'DROP TABLE "ORDERDETAIL" CASCADE CONSTRAINTS';
 EXCEPTION
    WHEN OTHERS THEN NULL;
@@ -114,6 +120,13 @@ CREATE TABLE office (
 
 /*Table structure for table `employee` */
 
+BEGIN
+   EXECUTE IMMEDIATE 'CREATE TYPE employeeOfYearArr AS VARRAY(100) OF INTEGER;';
+EXCEPTION
+   WHEN OTHERS THEN NULL;
+END;
+/
+
 CREATE TABLE employee (
   employee_number number(10) NOT NULL,
   last_name varchar2(50) NOT NULL,
@@ -124,6 +137,7 @@ CREATE TABLE employee (
   salary int NOT NULL,
   reports_to number(10) DEFAULT NULL,
   job_title varchar2(50) NOT NULL,
+  employee_of_year employeeOfYearArr DEFAULT NULL,
   PRIMARY KEY (employee_number)
  ,
   CONSTRAINT employees_ibfk_1 FOREIGN KEY (reports_to) REFERENCES employee (employee_number),
@@ -218,12 +232,20 @@ CREATE TABLE customerdetail (
 
 /* Table structure for table `department` */
 
+BEGIN
+   EXECUTE IMMEDIATE 'CREATE TYPE topicArr AS VARRAY(100) OF VARCHAR2(100 CHAR);';
+EXCEPTION
+   WHEN OTHERS THEN NULL;
+END;
+/
+
 CREATE TABLE department (
   department_id number(10) NOT NULL,
   name varchar(50) NOT NULL,
   phone varchar(50) NOT NULL,
   code number(5) DEFAULT 1,
   office_code varchar(10) NOT NULL,
+  topic topicArr NOT NULL,
   PRIMARY KEY (department_id)
 ,
   CONSTRAINT department_ibfk_1 FOREIGN KEY (office_code) REFERENCES office (office_code)
@@ -305,7 +327,8 @@ CREATE TABLE productlinedetail (
   line_type number(1) DEFAULT 0,
   PRIMARY KEY (product_line,code),  
   CONSTRAINT unique_product_line_detail UNIQUE(product_line),
-  CONSTRAINT productlinedetail_ibfk_1 FOREIGN KEY (product_line,code) REFERENCES productline (product_line,code)
+  CONSTRAINT productlinedetail_ibfk_1 FOREIGN KEY (product_line,code) REFERENCES productline (product_line,code),
+  CONSTRAINT productlinedetail_ibfk_2 FOREIGN KEY (product_line) REFERENCES productline (product_line)
 ) ;
 
 /*Table structure for table `product` */
@@ -409,6 +432,38 @@ CREATE TABLE payment (
   CONSTRAINT payments_ibfk_1 FOREIGN KEY (customer_number) REFERENCES customer (customer_number)
 ) ;
 
+/* Table structure for table 'bank_transaction' */
+
+CREATE TABLE bank_transaction (
+  transaction_id number(10) NOT NULL,
+  bank_name varchar2(50) NOT NULL,
+  bank_iban varchar2(50) NOT NULL,  
+  transfer_amount number(10,2) NOT NULL,
+  caching_date timestamp DEFAULT SYSTIMESTAMP,
+  customer_number number(10) NOT NULL,
+  check_number varchar2(50) NOT NULL, 
+  PRIMARY KEY (transaction_id),  
+  CONSTRAINT bank_transaction_ibfk_1 FOREIGN KEY (customer_number,check_number) REFERENCES payment (customer_number,check_number)
+) ;
+
+-- Generate ID using sequence and trigger
+BEGIN
+   EXECUTE IMMEDIATE 'DROP SEQUENCE "BANK_TRANSACTION_SEQ"';
+EXCEPTION
+   WHEN OTHERS THEN NULL;
+END;
+/
+
+CREATE SEQUENCE bank_transaction_seq START WITH 10 INCREMENT BY 1;
+
+CREATE OR REPLACE TRIGGER bank_transaction_seq_tr
+ BEFORE INSERT ON bank_transaction FOR EACH ROW
+ WHEN (NEW.transaction_id IS NULL)
+BEGIN
+ SELECT bank_transaction_seq.NEXTVAL INTO :NEW.transaction_id FROM DUAL;
+END;
+/
+
 COMMIT;
 
 /* USER-DEFINED FUNCTIONS */
@@ -432,5 +487,42 @@ BEGIN
     -- return the total sales
     RETURN l_total_sales;
 END;
+/
 
+-- Create Object of your table
+BEGIN
+   EXECUTE IMMEDIATE 'CREATE TYPE TABLE_RES_OBJ AS OBJECT (SALES float);';
+EXCEPTION
+   WHEN OTHERS THEN NULL;
+END;
+/
+
+--Create a type of your object 
+BEGIN
+   EXECUTE IMMEDIATE 'CREATE TYPE TABLE_RES AS TABLE OF TABLE_RES_OBJ;';
+EXCEPTION
+   WHEN OTHERS THEN NULL;
+END;
+/
+
+CREATE OR REPLACE NONEDITIONABLE FUNCTION top_three_sales_per_employee (
+    employee_nr IN NUMBER
+) RETURN TABLE_RES IS
+    table_result TABLE_RES;
+BEGIN
+    SELECT
+        TABLE_RES_OBJ("SYSTEM"."SALE"."SALE") "sales"
+    BULK COLLECT
+    INTO table_result
+    FROM
+        "SYSTEM"."SALE"
+    WHERE
+        employee_nr = "SYSTEM"."SALE"."EMPLOYEE_NUMBER"
+    ORDER BY
+        "SYSTEM"."SALE"."SALE" DESC
+    FETCH NEXT 3 ROWS ONLY;
+
+    RETURN table_result;
+END;
+/
 /* END */
