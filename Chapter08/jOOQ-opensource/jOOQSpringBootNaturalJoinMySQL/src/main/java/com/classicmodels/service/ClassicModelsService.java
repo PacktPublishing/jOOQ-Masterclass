@@ -13,10 +13,13 @@ public class ClassicModelsService {
     }
 
     public void callAll() {
-
-        classicModelsRepository.naturalJoinOfficeCustomerdetail();             // EXAMPLE 1
-        classicModelsRepository.naturalLeftOuterJoinOfficeCustomerdetail();    // EXAMPLE 2
-        classicModelsRepository.naturalRightOuterJoinOfficeCustomerdetail();   // EXAMPLE 3        
+        
+        classicModelsRepository.naturalJoinCustomerPayment();                  // EXAMPLE 1
+        classicModelsRepository.naturalLeftOuterJoinCustomerPayment();         // EXAMPLE 2        
+        classicModelsRepository.naturalRightOuterJoinCustomerPayment();        // EXAMPLE 3
         classicModelsRepository.naturalJoinOrderCustomerPayment();             // EXAMPLE 4
+        classicModelsRepository.naturalJoinOfficeCustomerdetail();             // EXAMPLE 5
+        classicModelsRepository.naturalJoinPaymentBankTransaction();           // EXAMPLE 6
+        
     }
 }
