@@ -1,12 +1,13 @@
 package com.classicmodels.repository;
 
 import static jooq.generated.tables.BankTransaction.BANK_TRANSACTION;
-import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
 import static jooq.generated.tables.Office.OFFICE;
-import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Payment.PAYMENT;
 import org.jooq.DSLContext;
+import static org.jooq.impl.DSL.field;
+import static org.jooq.impl.DSL.name;
+import static org.jooq.impl.DSL.table;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +26,7 @@ public class ClassicModelsRepository {
         
         System.out.println("EXAMPLE 1\n"
                 + ctx.select()
-                        .from(CUSTOMER).naturalJoin(PAYMENT)
+                        .from(table("CUSTOMER")).naturalJoin(table("PAYMENT"))
                         .fetch()
         );
     }
@@ -35,14 +36,14 @@ public class ClassicModelsRepository {
         
         System.out.println("EXAMPLE 2.1\n"
                 + ctx.select()
-                        .from(CUSTOMER.naturalLeftOuterJoin(PAYMENT))
+                        .from(table("CUSTOMER").naturalLeftOuterJoin(table("PAYMENT")))
                         .fetch()
         );
         
         System.out.println("EXAMPLE 2.2\n"
                 + ctx.select()
-                        .from(CUSTOMER.naturalLeftOuterJoin(PAYMENT))
-                        .where(CUSTOMER.SALES_REP_EMPLOYEE_NUMBER.isNotNull())
+                        .from(table("CUSTOMER").naturalLeftOuterJoin(table("PAYMENT")))
+                        .where(field("SALES_REP_EMPLOYEE_NUMBER").isNotNull())
                         .fetch()
         );
     }
@@ -52,14 +53,14 @@ public class ClassicModelsRepository {
         
         System.out.println("EXAMPLE 3.1\n"
                 + ctx.select()
-                        .from(CUSTOMER.naturalRightOuterJoin(PAYMENT))
+                        .from(table("CUSTOMER").naturalRightOuterJoin(table("PAYMENT")))
                         .fetch()
         );
         
         System.out.println("EXAMPLE 3.2\n"
                 + ctx.select()
-                        .from(CUSTOMER.naturalRightOuterJoin(PAYMENT))
-                        .where(PAYMENT.CACHING_DATE.isNotNull())
+                        .from(table("CUSTOMER").naturalRightOuterJoin(table("PAYMENT")))
+                        .where(field("CACHING_DATE").isNotNull())
                         .fetch()
         );
     }
@@ -69,7 +70,7 @@ public class ClassicModelsRepository {
         
         System.out.println("EXAMPLE 4\n"
                 + ctx.select()
-                        .from(ORDER.naturalJoin(CUSTOMER).naturalJoin(PAYMENT))
+                        .from(table(name("ORDER")).naturalJoin(table("CUSTOMER")).naturalJoin(table("PAYMENT")))
                         .fetch()
         );
     }
@@ -79,7 +80,7 @@ public class ClassicModelsRepository {
         
         System.out.println("EXAMPLE 5\n"
                 + ctx.select()
-                        .from(OFFICE.naturalJoin(CUSTOMERDETAIL))
+                        .from(table("OFFICE").naturalJoin(table("CUSTOMERDETAIL")))
                         .fetch()
         );
     }
@@ -92,7 +93,7 @@ public class ClassicModelsRepository {
         // column is present in both tables
         System.out.println("EXAMPLE 6.1\n"
                 + ctx.select()
-                        .from(PAYMENT.naturalJoin(BANK_TRANSACTION))
+                        .from(table("PAYMENT").naturalJoin(table("BANK_TRANSACTION")))
                         .fetch()
         );
         
@@ -119,7 +120,7 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 6.4\n"
                 + ctx.select()
                         .from(PAYMENT.innerJoin(BANK_TRANSACTION)
-                                .using(PAYMENT.CACHING_DATE))
+                                .using(field("CACHING_DATE")))
                                 //.on(PAYMENT.CACHING_DATE.eq(BANK_TRANSACTION.CACHING_DATE)))
                         .fetch()
         );
