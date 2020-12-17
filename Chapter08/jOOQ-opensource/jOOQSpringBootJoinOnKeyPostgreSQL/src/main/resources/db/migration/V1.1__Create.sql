@@ -54,6 +54,7 @@ CREATE TABLE department (
   phone varchar(50) NOT NULL,
   code smallint DEFAULT 1,
   office_code varchar(10) NOT NULL,
+  topic text[] NOT NULL,
   PRIMARY KEY (department_id)
 ,
   CONSTRAINT department_ibfk_1 FOREIGN KEY (office_code) REFERENCES office (office_code)
@@ -74,6 +75,7 @@ CREATE TABLE employee (
   salary int NOT NULL,
   reports_to bigint DEFAULT NULL,
   job_title varchar(50) NOT NULL,
+  employee_of_year int[] DEFAULT NULL,
   PRIMARY KEY (employee_number)
  ,
   CONSTRAINT employees_ibfk_1 FOREIGN KEY (reports_to) REFERENCES employee (employee_number),
@@ -177,7 +179,8 @@ CREATE TABLE productlinedetail (
   line_type int DEFAULT 0,
   PRIMARY KEY (product_line,code),  
   CONSTRAINT unique_product_line_detail UNIQUE(product_line),
-  CONSTRAINT productlinedetail_ibfk_1 FOREIGN KEY (product_line,code) REFERENCES productline (product_line,code)
+  CONSTRAINT productlinedetail_ibfk_1 FOREIGN KEY (product_line,code) REFERENCES productline (product_line,code),
+  CONSTRAINT productlinedetail_ibfk_2 FOREIGN KEY (product_line) REFERENCES productline (product_line)
 ) ;
 
 /*Table structure for table `product` */
@@ -249,19 +252,49 @@ CREATE TABLE payment (
   CONSTRAINT payments_ibfk_1 FOREIGN KEY (customer_number) REFERENCES customer (customer_number)
 ) ;
 
+/* Table structure for table 'bank_transaction' */
+
+CREATE TABLE bank_transaction (
+  transaction_id serial NOT NULL,
+  bank_name varchar(50) NOT NULL,
+  bank_iban varchar(50) NOT NULL,  
+  transfer_amount decimal(10,2) NOT NULL,
+  caching_date timestamp NOT NULL DEFAULT NOW(),
+  customer_number bigint NOT NULL,
+  check_number varchar(50) NOT NULL, 
+  PRIMARY KEY (transaction_id),  
+  CONSTRAINT bank_transaction_ibfk_1 FOREIGN KEY (customer_number,check_number) REFERENCES payment (customer_number,check_number)
+) ;
+
 /* USER-DEFINED FUNCTIONS */
 
-CREATE FUNCTION get_avg_sale(len_from int, len_to int) 
-  returns int language plpgsql AS $$ 
+CREATE OR REPLACE FUNCTION get_avg_sale(len_from int, len_to int) 
+  RETURNS int LANGUAGE plpgsql AS $$ 
 DECLARE avg_count integer; 
-begin 
+BEGIN 
   SELECT avg(sale.sale) 
   INTO   avg_count 
   FROM   sale 
   WHERE  sale.sale BETWEEN len_from AND len_to; 
    
-  return avg_count; 
-end; 
+  RETURN avg_count; 
+END; 
+$$;
+
+CREATE OR REPLACE FUNCTION top_three_sales_per_employee(employee_nr bigint)
+  RETURNS TABLE(sales float) LANGUAGE plpgsql AS $$ 
+BEGIN
+    RETURN QUERY
+    SELECT 
+      "public"."sale"."sale" AS "sales" 
+    FROM 
+      "public"."sale" 
+    WHERE 
+      employee_nr = "public"."sale"."employee_number" 
+    ORDER BY
+      "public"."sale"."sale" DESC
+    LIMIT 3;     
+END; 
 $$;
 
 /* END */
