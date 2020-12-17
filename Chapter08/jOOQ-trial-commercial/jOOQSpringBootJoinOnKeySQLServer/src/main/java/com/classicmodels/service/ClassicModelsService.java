@@ -14,9 +14,12 @@ public class ClassicModelsService {
 
     public void callAll() {
 
-        classicModelsRepository.joinProductlineProductlinedetailViaOn();            // EXAMPLE 1
-        classicModelsRepository.joinProductlineProductlinedetailViaOnRow();         // EXAMPLE 2
-        classicModelsRepository.joinProductlineProductlinedetailViaOnKey();         // EXAMPLE 3
-        classicModelsRepository.joinProductlineProductlinedetailViaOnKeyFK();       // EXAMPLE 4
+        classicModelsRepository.joinPaymentBankTransactionViaOn();                    // EXAMPLE 1
+        classicModelsRepository.joinPaymentBankTransactionViaOnRow();                 // EXAMPLE 2
+        classicModelsRepository.joinPaymentBankTransactionViaOnKey();                 // EXAMPLE 3
+        classicModelsRepository.joinProductlineProductlinedetailViaOnKeyTF();         // EXAMPLE 4
+        classicModelsRepository.joinProductlineProductlinedetailViaOnKeyFK();         // EXAMPLE 5                
+        classicModelsRepository.joinProductlineProductlinedetailViaOnKeyTF1();        // EXAMPLE 6
+        classicModelsRepository.joinProductlineProductlinedetailViaOnKey();           // EXAMPLE 7
     }
 }
