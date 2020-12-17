@@ -14,6 +14,7 @@ This is a modified version of the original schema for MySQL
 USE `classicmodels`;
 
 DROP TABLE IF EXISTS `payment`;
+DROP TABLE IF EXISTS `bank_transaction`;
 DROP TABLE IF EXISTS `orderdetail`;
 DROP TABLE IF EXISTS `order`;
 DROP TABLE IF EXISTS `product`;
@@ -49,6 +50,7 @@ CREATE TABLE `department` (
   `phone` varchar(50) NOT NULL,
   `code` smallint DEFAULT 1,
   `office_code` varchar(10) NOT NULL,
+  `topic` json NOT NULL,
   PRIMARY KEY (`department_id`),
   KEY `office_code` (`office_code`),
   CONSTRAINT `department_ibfk_1` FOREIGN KEY (`office_code`) REFERENCES `office` (`office_code`)
@@ -66,6 +68,7 @@ CREATE TABLE `employee` (
   `salary` int NOT NULL,
   `reports_to` bigint DEFAULT NULL,
   `job_title` varchar(50) NOT NULL,
+  `employee_of_year` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`employee_number`),
   KEY `reports_to` (`reports_to`),
   KEY `office_code` (`office_code`),
@@ -166,7 +169,8 @@ CREATE TABLE `productlinedetail` (
   `line_type` int DEFAULT 0,
   PRIMARY KEY (`product_line`,`code`),  
   CONSTRAINT unique_product_line_detail UNIQUE(product_line),
-  CONSTRAINT `productlinedetail_ibfk_1` FOREIGN KEY (`product_line`,`code`) REFERENCES `productline` (`product_line`,`code`)
+  CONSTRAINT `productlinedetail_ibfk_1` FOREIGN KEY (`product_line`,`code`) REFERENCES `productline` (`product_line`,`code`),
+  CONSTRAINT `productlinedetail_ibfk_2` FOREIGN KEY (`product_line`) REFERENCES `productline` (`product_line`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
@@ -223,10 +227,24 @@ CREATE TABLE `payment` (
   `check_number` varchar(50) NOT NULL,
   `payment_date` timestamp NOT NULL,
   `invoice_amount` decimal(10,2) NOT NULL,
-  `caching_date` timestamp DEFAULT NULL,
+  `caching_date` timestamp DEFAULT NULL,  
   PRIMARY KEY (`customer_number`,`check_number`),
   CONSTRAINT `unique_check_number` UNIQUE (`check_number`),
   CONSTRAINT `payments_ibfk_1` FOREIGN KEY (`customer_number`) REFERENCES `customer` (`customer_number`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Table structure for table `bank_transaction` */
+
+CREATE TABLE `bank_transaction` (
+  `transaction_id` bigint NOT NULL AUTO_INCREMENT,
+  `bank_name` varchar(50) NOT NULL,
+  `bank_iban` varchar(50) NOT NULL,  
+  `transfer_amount` decimal(10,2) NOT NULL,
+  `caching_date` timestamp NOT NULL DEFAULT NOW(),
+  `customer_number` bigint NOT NULL,
+  `check_number` varchar(50) NOT NULL, 
+  PRIMARY KEY (`transaction_id`),  
+  CONSTRAINT `bank_transaction_ibfk_1` FOREIGN KEY (`customer_number`,`check_number`) REFERENCES `payment` (`customer_number`,`check_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /* USER-DEFINED FUNCTIONS */
