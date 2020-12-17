@@ -8106,13 +8106,37 @@ select 489,'PO860906','2004-01-31 05:20:15','7310.42', '2004-01-31 07:30:25'  fr
 
 select 495,'BH167026','2003-12-26 13:33:13','59265.14', '2003-12-26 15:38:09'  from dual union all
 
-select 495,'FN155234','2004-05-14 12:37:35','6276.60', '2004-05-14 12:39:25'  from dual union all
+select 495,'FN155234','2004-05-14 12:37:35','6276.60', '2004-05-14 12:39:25' from dual union all
 
-select 496,'EU531600','2005-05-25 02:47:35','30253.75', '2005-05-25 03:30:15'  from dual union all
+select 496,'EU531600','2005-05-25 02:47:35','30253.75', '2005-05-25 03:30:15' from dual union all
 
-select 496,'MB342426','2003-07-16 21:10:15','32077.44', '2003-07-16 23:04:15'  from dual union all
+select 496,'MB342426','2003-07-16 21:10:15','32077.44', '2003-07-16 23:04:15' from dual union all
 
 select 496,'MN89921','2004-12-31 09:02:11','52166.00', '2004-12-31 09:02:11'  from dual;
+
+/*Data for the table `bank_transaction` */
+
+insert /*+ ignore_row_on_dupkey_index(bank_transaction(transaction_id)) */ into bank_transaction(transaction_id,bank_name,bank_iban,transfer_amount,customer_number,check_number,caching_date)
+
+select 1,'Bank Ltd. US','DN44398834N34','6631.36',447,'AO757239','2003-09-15 18:22:54' from dual union all
+
+select 2,'Bank Ltd. US','348398H3493HG93','26304.13',447,'OU516561','2004-12-17 16:45:22' from dual union all
+
+select 3,'Transilvania Bank','8TVN598N454VN84T','9977.85',462,'GC60330','2003-11-08 18:57:25' from dual union all
+
+select 4,'5 Stars Bank','8VN8UNT5U45T8','48355.87',462,'PE176846', '2004-11-27 14:30:22' from dual union all
+
+select 5,'5 Stars Bank','TVU58NU58U84N4YUG','33967.73',398,'AJ478695','2005-02-14 12:09:15' from dual union all
+
+select 6,'Optimus Bank','8V34VN5U435334','4588.36',333,'NF959653','2005-03-01 12:12:00' from dual union all
+
+select 7,'Optimus Bank','8V34VN5U435334','8987.36',333,'NF959653','2005-03-01 14:00:00' from dual union all
+
+select 8,'Optimus Bank','8V34VN5U435334','2544.36',333,'NF959653','2005-03-01 18:20:10' from dual union all
+
+select 9,'Optimus Bank','8V34VN5U435334','5312.23',333,'NF959653','2005-03-01 19:32:56' from dual union all
+
+select 10,'BRT Bank','TVNU343T38TUNU3T','52151.81',278,'GP636783', '2003-03-02 12:32:00' from dual;
 
 insert /*+ ignore_row_on_dupkey_index(sale(sale_id)) */ into sale(sale_id,fiscal_year,sale,employee_number)
 
