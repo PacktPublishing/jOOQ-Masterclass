@@ -31,6 +31,7 @@ public class ClassicModelsRepository {
     // EXAMPLE 1 - typical INNER JOIN
     public void fetchEmployeeNameOfficeCityInnerJoin() {
 
+        // 1.1 and 1.2 render the same SQL
         System.out.println("EXAMPLE 1.1 (INNER JOIN)\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, OFFICE.CITY)
                         .from(EMPLOYEE)
@@ -38,8 +39,17 @@ public class ClassicModelsRepository {
                         .on(EMPLOYEE.OFFICE_CODE.eq(OFFICE.OFFICE_CODE))
                         .fetch()
         );
-            
-        System.out.println("EXAMPLE 1.2\n"
+
+        System.out.println("EXAMPLE 1.2 (INNER JOIN)\n"
+                + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, OFFICE.CITY)
+                        .from(EMPLOYEE
+                                .innerJoin(OFFICE)
+                                .on(EMPLOYEE.OFFICE_CODE.eq(OFFICE.OFFICE_CODE)))
+                        .fetch()
+        );
+
+        // 1.3 and 1.4 render the same SQL
+        System.out.println("EXAMPLE 1.3\n"
                 + ctx.select()
                         .from(MANAGER)
                         .innerJoin(OFFICE_HAS_MANAGER)
@@ -48,8 +58,18 @@ public class ClassicModelsRepository {
                         .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))
                         .fetch()
         );
+
+        System.out.println("EXAMPLE 1.4\n"
+                + ctx.select()
+                        .from(MANAGER
+                                .innerJoin(OFFICE_HAS_MANAGER
+                                        .innerJoin(OFFICE)
+                                        .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE)))
+                                .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID)))
+                        .fetch()
+        );
     }
-        
+
     // EXAMPLE 2 - typical LEFT OUTER JOIN
     public void fetchEmployeeNameSaleLeftOuterJoin() {
 
