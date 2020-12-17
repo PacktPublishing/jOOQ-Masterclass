@@ -1,6 +1,8 @@
 package com.classicmodels.repository;
 
 import static jooq.generated.Keys.PRODUCTLINEDETAIL_IBFK_2;
+import static jooq.generated.tables.BankTransaction.BANK_TRANSACTION;
+import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Productline.PRODUCTLINE;
 import static jooq.generated.tables.Productlinedetail.PRODUCTLINEDETAIL;
 import org.jooq.DSLContext;
@@ -18,43 +20,43 @@ public class ClassicModelsRepository {
         this.ctx = ctx;
     }
 
-    // EXAMPLE 1
-    public void joinProductlineProductlinedetailViaOn() {
+    // EXAMPLE 1 (classic ON)
+    public void joinPaymentBankTransactionViaOn() {
 
         System.out.println("EXAMPLE 1\n"
-                + ctx.select(PRODUCTLINE.TEXT_DESCRIPTION, PRODUCTLINE.CREATED_ON,
-                        PRODUCTLINEDETAIL.LINE_CAPACITY, PRODUCTLINEDETAIL.LINE_TYPE)
-                        .from(PRODUCTLINE)
-                        .innerJoin(PRODUCTLINEDETAIL)
-                        .on(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCTLINEDETAIL.PRODUCT_LINE)
-                                .and(PRODUCTLINE.CODE.eq(PRODUCTLINEDETAIL.CODE)))
+                + ctx.select(BANK_TRANSACTION.BANK_NAME, BANK_TRANSACTION.BANK_IBAN,
+                        BANK_TRANSACTION.TRANSFER_AMOUNT, PAYMENT.INVOICE_AMOUNT)
+                        .from(PAYMENT)
+                        .innerJoin(BANK_TRANSACTION)
+                        .on(PAYMENT.CUSTOMER_NUMBER.eq(BANK_TRANSACTION.CUSTOMER_NUMBER)
+                                .and(PAYMENT.CHECK_NUMBER.eq(BANK_TRANSACTION.CHECK_NUMBER)))
                         .fetch()
         );
     }
 
-    // EXAMPLE 2
-    public void joinProductlineProductlinedetailViaOnRow() {
+    // EXAMPLE 2 (using row)
+    public void joinPaymentBankTransactionViaOnRow() {
 
         System.out.println("EXAMPLE 2\n"
-                + ctx.select(PRODUCTLINE.TEXT_DESCRIPTION, PRODUCTLINE.CREATED_ON,
-                        PRODUCTLINEDETAIL.LINE_CAPACITY, PRODUCTLINEDETAIL.LINE_TYPE)
-                        .from(PRODUCTLINE)
-                        .innerJoin(PRODUCTLINEDETAIL)
-                        .on(row(PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.CODE).eq(
-                                row(PRODUCTLINEDETAIL.PRODUCT_LINE, PRODUCTLINEDETAIL.CODE)))
+                + ctx.select(BANK_TRANSACTION.BANK_NAME, BANK_TRANSACTION.BANK_IBAN,
+                        BANK_TRANSACTION.TRANSFER_AMOUNT, PAYMENT.INVOICE_AMOUNT)
+                        .from(PAYMENT)
+                        .innerJoin(BANK_TRANSACTION)
+                        .on(row(PAYMENT.CUSTOMER_NUMBER, PAYMENT.CHECK_NUMBER)
+                                .eq(row(BANK_TRANSACTION.CUSTOMER_NUMBER, BANK_TRANSACTION.CHECK_NUMBER)))
                         .fetch()
         );
     }
 
-    // EXAMPLE 3
-    public void joinProductlineProductlinedetailViaOnKey() {
+    // EXAMPLE 3 (using jOOQ onKey())
+    public void joinPaymentBankTransactionViaOnKey() {
 
         System.out.println("EXAMPLE 3\n"
-                + ctx.select(PRODUCTLINE.TEXT_DESCRIPTION, PRODUCTLINE.CREATED_ON,
-                        PRODUCTLINEDETAIL.LINE_CAPACITY, PRODUCTLINEDETAIL.LINE_TYPE)
-                        .from(PRODUCTLINE)
-                        .innerJoin(PRODUCTLINEDETAIL)
-                        .onKey() // ambiguous foreign key relationship
+                + ctx.select(BANK_TRANSACTION.BANK_NAME, BANK_TRANSACTION.BANK_IBAN,
+                        BANK_TRANSACTION.TRANSFER_AMOUNT, PAYMENT.INVOICE_AMOUNT)
+                        .from(PAYMENT)
+                        .innerJoin(BANK_TRANSACTION)
+                        .onKey()
                         .fetch()
         );
     }
@@ -72,7 +74,7 @@ public class ClassicModelsRepository {
                         .fetch()
         );
     }
-    
+
     // EXAMPLE 5
     public void joinProductlineProductlinedetailViaOnKeyFK() {
 
@@ -84,8 +86,8 @@ public class ClassicModelsRepository {
                         .onKey(PRODUCTLINEDETAIL_IBFK_2) // use only PRODUCTLINEDETAIL.PRODUCT_LINE
                         .fetch()
         );
-    }    
-    
+    }
+
     // EXAMPLE 6
     public void joinProductlineProductlinedetailViaOnKeyTF1() {
 
@@ -98,4 +100,21 @@ public class ClassicModelsRepository {
                         .fetch()
         );
     }
+
+    // EXAMPLE 7 - Causes: DataAccessException: Key ambiguous between tables
+    // ["classicmodels"."productline"] and ["classicmodels"."productlinedetail"]
+    public void joinProductlineProductlinedetailViaOnKey() {
+
+        System.out.println("EXAMPLE 7 (Uncomment to practice) \n"
+                /*
+                + ctx.select(PRODUCTLINE.TEXT_DESCRIPTION, PRODUCTLINE.CREATED_ON,
+                        PRODUCTLINEDETAIL.LINE_CAPACITY, PRODUCTLINEDETAIL.LINE_TYPE)
+                        .from(PRODUCTLINE)
+                        .innerJoin(PRODUCTLINEDETAIL)
+                        .onKey() // ambiguous foreign key relationship
+                        .fetch()
+                */
+        );
+    }
+
 }
