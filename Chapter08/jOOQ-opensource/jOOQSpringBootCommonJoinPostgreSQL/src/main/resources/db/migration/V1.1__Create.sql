@@ -11,6 +11,7 @@ This is a modified version of the original schema for PostgreSQL
 
 /* START */
 DROP TABLE IF EXISTS payment CASCADE;
+DROP TABLE IF EXISTS bank_transaction CASCADE;
 DROP TABLE IF EXISTS orderdetail CASCADE;
 DROP TABLE IF EXISTS "order" CASCADE;
 DROP TABLE IF EXISTS product CASCADE;
@@ -250,6 +251,20 @@ CREATE TABLE payment (
   PRIMARY KEY (customer_number,check_number),
   CONSTRAINT unique_check_number UNIQUE(check_number),
   CONSTRAINT payments_ibfk_1 FOREIGN KEY (customer_number) REFERENCES customer (customer_number)
+) ;
+
+/* Table structure for table 'bank_transaction' */
+
+CREATE TABLE bank_transaction (
+  transaction_id serial NOT NULL,
+  bank_name varchar(50) NOT NULL,
+  bank_iban varchar(50) NOT NULL,  
+  transfer_amount decimal(10,2) NOT NULL,
+  caching_date timestamp NOT NULL DEFAULT NOW(),
+  customer_number bigint NOT NULL,
+  check_number varchar(50) NOT NULL, 
+  PRIMARY KEY (transaction_id),  
+  CONSTRAINT bank_transaction_ibfk_1 FOREIGN KEY (customer_number,check_number) REFERENCES payment (customer_number,check_number)
 ) ;
 
 /* USER-DEFINED FUNCTIONS */
