@@ -1,8 +1,6 @@
 package com.classicmodels.repository;
 
 import static jooq.generated.tables.BankTransaction.BANK_TRANSACTION;
-import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
-import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Payment.PAYMENT;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.field;
@@ -115,13 +113,11 @@ public class ClassicModelsRepository {
                         .fetch()
         );
         
-        // But, if we actually want to join only on CACHING_DATE
-        // then use ON or USING
+        // But, if we actually want to join only on CACHING_DATE then use ON
         System.out.println("EXAMPLE 6.4\n"
                 + ctx.select()
-                        .from(PAYMENT.innerJoin(BANK_TRANSACTION)
-                                .using(field("CACHING_DATE")))
-                                //.on(PAYMENT.CACHING_DATE.eq(BANK_TRANSACTION.CACHING_DATE)))
+                        .from(PAYMENT.innerJoin(BANK_TRANSACTION)                                
+                                .on(PAYMENT.CACHING_DATE.eq(BANK_TRANSACTION.CACHING_DATE)))
                         .fetch()
         );
     }    
