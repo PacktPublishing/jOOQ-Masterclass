@@ -20,24 +20,12 @@ public class ClassicModelsRepository {
         this.ctx = ctx;
     }
 
-    /* SEMI JOIN */
-    // EXAMPLE 1
-    public void joinEmployeeCustomerViaLeftJoin() {
+    /* SEMI JOIN */    
 
-        System.out.println("EXAMPLE 1\n"
-                + ctx.selectDistinct(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
-                        .from(EMPLOYEE)
-                        .leftOuterJoin(CUSTOMER)
-                        .on(EMPLOYEE.EMPLOYEE_NUMBER.eq(CUSTOMER.SALES_REP_EMPLOYEE_NUMBER))
-                        .where(CUSTOMER.SALES_REP_EMPLOYEE_NUMBER.isNotNull())
-                        .fetch()
-        );
-    }
-
-    // EXAMPLE 2
+    // EXAMPLE 1 - SEMI JOIN via EXISTS
     public void joinEmployeeCustomerViaExists() {
 
-        System.out.println("EXAMPLE 2\n"
+        System.out.println("EXAMPLE 1\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
                         .from(EMPLOYEE)
                         .whereExists(selectOne().from(CUSTOMER)
@@ -46,14 +34,27 @@ public class ClassicModelsRepository {
         );
     }
 
-    // EXAMPLE 3
+    // EXAMPLE 2 - SEMI JOIN via IN
     public void joinEmployeeCustomerViaIn() {
 
-        System.out.println("EXAMPLE 3\n"
+        System.out.println("EXAMPLE 2\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
                         .from(EMPLOYEE)
                         .where(EMPLOYEE.EMPLOYEE_NUMBER.in(
                                 select(CUSTOMER.SALES_REP_EMPLOYEE_NUMBER).from(CUSTOMER)))
+                        .fetch()
+        );
+    }
+    
+    // EXAMPLE 3 - SEMI JOIN via LEFT JOIN (but, DON'T do this since this is actually a JOIN)
+    public void badEmployeeCustomerViaLeftJoinAndIsNotNull() {
+
+        System.out.println("EXAMPLE 3\n"
+                + ctx.selectDistinct(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
+                        .from(EMPLOYEE)
+                        .leftOuterJoin(CUSTOMER)
+                        .on(EMPLOYEE.EMPLOYEE_NUMBER.eq(CUSTOMER.SALES_REP_EMPLOYEE_NUMBER))
+                        .where(CUSTOMER.SALES_REP_EMPLOYEE_NUMBER.isNotNull())
                         .fetch()
         );
     }
@@ -73,7 +74,7 @@ public class ClassicModelsRepository {
           "public"."customer" 
         where 
           "public"."employee"."employee_number" = "public"."customer"."sales_rep_employee_number"
-      ) 
+      )    
      */
     public void joinEmployeeCustomerViaLeftSemiJoin() {
 
@@ -101,8 +102,7 @@ public class ClassicModelsRepository {
           from 
             "public"."customer" 
           where 
-            "public"."employee"."employee_number" 
-              = "public"."customer"."sales_rep_employee_number"
+            "public"."employee"."employee_number" = "public"."customer"."sales_rep_employee_number"
         ) 
         and exists (
           select 
@@ -110,8 +110,7 @@ public class ClassicModelsRepository {
           from 
             "public"."sale" 
           where 
-            "public"."employee"."employee_number" 
-              = "public"."sale"."employee_number"
+            "public"."employee"."employee_number" = "public"."sale"."employee_number"
         )
       )    
     */
@@ -152,8 +151,21 @@ public class ClassicModelsRepository {
                         .fetch()
         );
     }
+    
+    // EXAMPLE 8 - ANTI JOIN via LEFT JOIN (but, DON'T do this since this is actually a JOIN)
+    public void badEmployeeCustomerViaLeftJoinAndIsNull() {
 
-    // EXAMPLE 8
+        System.out.println("EXAMPLE 8\n"
+                + ctx.selectDistinct(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
+                        .from(EMPLOYEE)
+                        .leftOuterJoin(CUSTOMER)
+                        .on(EMPLOYEE.EMPLOYEE_NUMBER.eq(CUSTOMER.SALES_REP_EMPLOYEE_NUMBER))
+                        .where(CUSTOMER.SALES_REP_EMPLOYEE_NUMBER.isNull())
+                        .fetch()
+        );
+    }
+
+    // EXAMPLE 9
     /*
     select 
       "public"."employee"."first_name", 
@@ -168,14 +180,13 @@ public class ClassicModelsRepository {
           from 
             "public"."customer" 
           where 
-            "public"."employee"."employee_number" 
-              = "public"."customer"."sales_rep_employee_number"
+            "public"."employee"."employee_number" = "public"."customer"."sales_rep_employee_number"
         )
-      )   
+      )    
      */
     public void joinEmployeeCustomerViaAntiJoin() {
 
-        System.out.println("EXAMPLE 8\n"
+        System.out.println("EXAMPLE 9\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
                         .from(EMPLOYEE)
                         .leftAntiJoin(CUSTOMER)
@@ -184,7 +195,7 @@ public class ClassicModelsRepository {
         );
     }
     
-    // EXAMPLE 9
+    // EXAMPLE 10
     /*
     select 
       "public"."employee"."first_name", 
@@ -200,8 +211,7 @@ public class ClassicModelsRepository {
             from 
               "public"."customer" 
             where 
-              "public"."employee"."employee_number" 
-                = "public"."customer"."sales_rep_employee_number"
+              "public"."employee"."employee_number" = "public"."customer"."sales_rep_employee_number"
           )
         ) 
         and not (
@@ -211,15 +221,14 @@ public class ClassicModelsRepository {
             from 
               "public"."sale" 
             where 
-              "public"."employee"."employee_number" 
-                = "public"."sale"."employee_number"
+              "public"."employee"."employee_number" = "public"."sale"."employee_number"
           )
         )
       )    
     */
     public void joinEmployeeCustomerSaleViaAntiJoin() {
 
-        System.out.println("EXAMPLE 9\n"
+        System.out.println("EXAMPLE 10\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
                         .from(EMPLOYEE)
                         .leftAntiJoin(CUSTOMER)
