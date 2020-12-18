@@ -14,12 +14,12 @@ public class ClassicModelsService {
 
     public void callAll() {
         
-        classicModelsRepository.naturalJoinCustomerPayment();                  // EXAMPLE 1
-        classicModelsRepository.naturalLeftOuterJoinCustomerPayment();         // EXAMPLE 2        
-        classicModelsRepository.naturalRightOuterJoinCustomerPayment();        // EXAMPLE 3
-        classicModelsRepository.naturalJoinOrderCustomerPayment();             // EXAMPLE 4
-        classicModelsRepository.naturalJoinOfficeCustomerdetail();             // EXAMPLE 5
-        classicModelsRepository.naturalJoinPaymentBankTransaction();           // EXAMPLE 6
-        
+        classicModelsRepository.naturalJoinEmployeeSale();                  // EXAMPLE 1
+        classicModelsRepository.naturalLeftOuterJoinEmployeeSale();         // EXAMPLE 2        
+        classicModelsRepository.naturalRightOuterJoinEmployeeSale();        // EXAMPLE 3
+        classicModelsRepository.naturalFullOuterJoinEmployeeSale();         // EXAMPLE 4
+        classicModelsRepository.naturalJoinOrderCustomerPayment();          // EXAMPLE 5
+        classicModelsRepository.naturalJoinOfficeCustomerdetail();          // EXAMPLE 6
+        classicModelsRepository.naturalJoinPaymentBankTransaction();        // EXAMPLE 7        
     }
 }
