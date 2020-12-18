@@ -1,12 +1,8 @@
 package com.classicmodels.repository;
 
 import static jooq.generated.tables.BankTransaction.BANK_TRANSACTION;
-import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Payment.PAYMENT;
-import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
-import org.jooq.Field;
-import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.table;
 import org.springframework.stereotype.Repository;
