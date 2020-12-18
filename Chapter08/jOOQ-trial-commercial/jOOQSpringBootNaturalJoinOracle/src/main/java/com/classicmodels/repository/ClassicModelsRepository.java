@@ -1,11 +1,7 @@
 package com.classicmodels.repository;
 
 import static jooq.generated.tables.BankTransaction.BANK_TRANSACTION;
-import static jooq.generated.tables.Customer.CUSTOMER;
-import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
 import static jooq.generated.tables.Employee.EMPLOYEE;
-import static jooq.generated.tables.Office.OFFICE;
-import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
