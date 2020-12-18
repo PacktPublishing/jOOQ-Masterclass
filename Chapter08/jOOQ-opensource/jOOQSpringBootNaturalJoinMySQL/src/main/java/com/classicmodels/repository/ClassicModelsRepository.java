@@ -3,9 +3,11 @@ package com.classicmodels.repository;
 import static jooq.generated.tables.BankTransaction.BANK_TRANSACTION;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
+import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Payment.PAYMENT;
+import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,48 +23,48 @@ public class ClassicModelsRepository {
     }
     
     // EXAMPLE 1
-    public void naturalJoinCustomerPayment() {
+    public void naturalJoinEmployeeSale() {
         
         System.out.println("EXAMPLE 1\n"
                 + ctx.select()
-                        .from(CUSTOMER).naturalJoin(PAYMENT)
+                        .from(EMPLOYEE).naturalJoin(SALE)
                         .fetch()
         );
     }
 
     // EXAMPLE 2
-    public void naturalLeftOuterJoinCustomerPayment() {
+    public void naturalLeftOuterJoinEmployeeSale() {
         
         System.out.println("EXAMPLE 2.1\n"
                 + ctx.select()
-                        .from(CUSTOMER.naturalLeftOuterJoin(PAYMENT))
+                        .from(EMPLOYEE.naturalLeftOuterJoin(SALE))
                         .fetch()
         );
         
-        System.out.println("EXAMPLE 2.2\n"
+        System.out.println("EXAMPLE 2.2 (EXCLUSIVE) \n"
                 + ctx.select()
-                        .from(CUSTOMER.naturalLeftOuterJoin(PAYMENT))
-                        .where(CUSTOMER.SALES_REP_EMPLOYEE_NUMBER.isNotNull())
+                        .from(EMPLOYEE.naturalLeftOuterJoin(SALE))
+                        .where(SALE.EMPLOYEE_NUMBER.isNull())
                         .fetch()
         );
     }
 
     // EXAMPLE 3
-    public void naturalRightOuterJoinCustomerPayment() {
+    public void naturalRightOuterJoinEmployeeSale() {
         
         System.out.println("EXAMPLE 3.1\n"
                 + ctx.select()
-                        .from(CUSTOMER.naturalRightOuterJoin(PAYMENT))
+                        .from(EMPLOYEE.naturalRightOuterJoin(SALE))
                         .fetch()
         );
         
-        System.out.println("EXAMPLE 3.2\n"
+        System.out.println("EXAMPLE 3.2 (EXCLUSIVE) \n"
                 + ctx.select()
-                        .from(CUSTOMER.naturalRightOuterJoin(PAYMENT))
-                        .where(PAYMENT.CACHING_DATE.isNotNull())
+                        .from(EMPLOYEE.naturalRightOuterJoin(SALE))
+                        .where(EMPLOYEE.EMPLOYEE_NUMBER.isNull())
                         .fetch()
         );
-    }
+    }            
 
     // EXAMPLE 4
     public void naturalJoinOrderCustomerPayment() {
