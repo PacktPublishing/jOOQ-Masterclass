@@ -16,7 +16,6 @@ This is a modified version of the original schema for Oracle
 /*Data for the table `office` */
 
 alter session set nls_date_format = 'yyyy-MM-dd';
-alter session set nls_timestamp_format = 'yyyy-MM-dd HH:MI:SS';
 
 insert /*+ ignore_row_on_dupkey_index(office(office_code)) */ into office(office_code,city,phone,address_line_first,address_line_second,state,country,postal_code,territory) 
 
