@@ -55,6 +55,8 @@ IF OBJECT_ID('product', 'U') IS NOT NULL
   DROP TABLE product;
 IF OBJECT_ID('productline', 'U') IS NOT NULL 
   DROP TABLE productline;
+IF OBJECT_ID('top3product', 'U') IS NOT NULL 
+  DROP TABLE top3product;
 IF OBJECT_ID('productlinedetail', 'U') IS NOT NULL 
   DROP TABLE productlinedetail;
 IF OBJECT_ID('office_has_manager', 'U') IS NOT NULL 
