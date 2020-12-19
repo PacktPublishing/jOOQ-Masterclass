@@ -19,10 +19,11 @@ public class ClassicModelsService {
         classicModelsRepository.badEmployeeCustomerViaLeftJoinAndIsNotNull();  // EXAMPLE 3
         classicModelsRepository.joinEmployeeCustomerViaLeftSemiJoin();         // EXAMPLE 4
         classicModelsRepository.joinEmployeeCustomerSaleViaLeftSemiJoin();     // EXAMPLE 5
-        classicModelsRepository.joinEmployeeCustomerViaNotExists();            // EXAMPLE 6
-        classicModelsRepository.joinEmployeeCustomerViaNotIn();                // EXAMPLE 7
-        classicModelsRepository.badEmployeeCustomerViaLeftJoinAndIsNull();     // EXAMPLE 8
-        classicModelsRepository.joinEmployeeCustomerViaAntiJoin();             // EXAMPLE 9        
-        classicModelsRepository.joinEmployeeCustomerSaleViaAntiJoin();         // EXAMPLE 10                  
+        classicModelsRepository.joinEmployeeCustomerPaymentViaLeftSemiJoin();  // EXAMPLE 6
+        classicModelsRepository.joinEmployeeCustomerViaNotExists();            // EXAMPLE 7
+        classicModelsRepository.joinEmployeeCustomerViaNotIn();                // EXAMPLE 8
+        classicModelsRepository.badEmployeeCustomerViaLeftJoinAndIsNull();     // EXAMPLE 9
+        classicModelsRepository.joinEmployeeCustomerViaAntiJoin();             // EXAMPLE 10        
+        classicModelsRepository.joinEmployeeCustomerSaleViaAntiJoin();         // EXAMPLE 11                  
     }
 }
