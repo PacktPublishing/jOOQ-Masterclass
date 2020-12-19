@@ -100,10 +100,29 @@ public class ClassicModelsRepository {
          */
         System.out.println("EXAMPLE 1.5\n"
                 + ctx.select(ORDER.fields())
-                        .select(ORDERDETAIL.QUANTITY_ORDERED)
+                        .select(ORDERDETAIL.QUANTITY_ORDERED)                        
                         .from(ORDER)
                         .innerJoin(ORDERDETAIL)
                         .on(ORDER.ORDER_ID.eq(ORDERDETAIL.ORDER_ID))
+                        .where(ORDER.ORDER_ID.eq(10101L))
+                        .fetch()
+        );
+        
+        /*
+        select 
+          `alias_94178018`.* 
+        from 
+          (
+            `classicmodels`.`order` 
+            left outer join `classicmodels`.`customer` as `alias_94178018` 
+              on `classicmodels`.`order`.`customer_number` = `alias_94178018`.`customer_number`
+          ) 
+        where 
+          `classicmodels`.`order`.`order_id` = 10101        
+        */
+        System.out.println("EXAMPLE 1.6\n"
+                + ctx.select(ORDER.customer().asterisk())                        
+                        .from(ORDER)
                         .where(ORDER.ORDER_ID.eq(10101L))
                         .fetch()
         );
