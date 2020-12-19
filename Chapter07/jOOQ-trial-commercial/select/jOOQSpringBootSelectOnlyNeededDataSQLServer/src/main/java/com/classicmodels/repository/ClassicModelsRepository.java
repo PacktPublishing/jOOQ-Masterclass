@@ -103,6 +103,25 @@ public class ClassicModelsRepository {
                         .where(ORDER.ORDER_ID.eq(10101L))
                         .fetch()
         );
+        
+        /*
+        select 
+          [alias_94178018].* 
+        from 
+          (
+            [classicmodels].[dbo].[order] 
+            join [classicmodels].[dbo].[customer] [alias_94178018] 
+             on [classicmodels].[dbo].[order].[customer_number] = [alias_94178018].[customer_number]
+          ) 
+        where 
+          [classicmodels].[dbo].[order].[order_id] = ?        
+        */
+        System.out.println("EXAMPLE 1.6\n"
+                + ctx.select(ORDER.customer().asterisk())                        
+                        .from(ORDER)
+                        .where(ORDER.ORDER_ID.eq(10101L))
+                        .fetch()
+        );
     }
 
     // EXAMPLE 2    
