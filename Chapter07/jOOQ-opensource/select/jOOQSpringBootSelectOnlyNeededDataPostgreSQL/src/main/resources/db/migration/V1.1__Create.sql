@@ -11,10 +11,13 @@ This is a modified version of the original schema for PostgreSQL
 
 /* START */
 DROP TABLE IF EXISTS payment CASCADE;
+DROP TABLE IF EXISTS bank_transaction CASCADE;
 DROP TABLE IF EXISTS orderdetail CASCADE;
 DROP TABLE IF EXISTS "order" CASCADE;
 DROP TABLE IF EXISTS product CASCADE;
 DROP TABLE IF EXISTS productline CASCADE;
+DROP TABLE IF EXISTS top3product CASCADE;
+DROP TABLE IF EXISTS productlinedetail CASCADE;
 DROP TABLE IF EXISTS office_has_manager CASCADE;
 DROP TABLE IF EXISTS manager CASCADE;
 DROP TABLE IF EXISTS customer CASCADE;
@@ -53,6 +56,7 @@ CREATE TABLE department (
   phone varchar(50) NOT NULL,
   code smallint DEFAULT 1,
   office_code varchar(10) NOT NULL,
+  topic text[] NOT NULL,
   PRIMARY KEY (department_id)
 ,
   CONSTRAINT department_ibfk_1 FOREIGN KEY (office_code) REFERENCES office (office_code)
@@ -73,6 +77,7 @@ CREATE TABLE employee (
   salary int NOT NULL,
   reports_to bigint DEFAULT NULL,
   job_title varchar(50) NOT NULL,
+  employee_of_year int[] DEFAULT NULL,
   PRIMARY KEY (employee_number)
  ,
   CONSTRAINT employees_ibfk_1 FOREIGN KEY (reports_to) REFERENCES employee (employee_number),
@@ -91,6 +96,7 @@ CREATE TABLE sale (
   fiscal_year int NOT NULL,  
   sale float NOT NULL,  
   employee_number bigint DEFAULT NULL,  
+  hot boolean DEFAULT FALSE,
   PRIMARY KEY (sale_id)
  ,  
   CONSTRAINT sales_ibfk_1 FOREIGN KEY (employee_number) REFERENCES employee (employee_number)
@@ -157,11 +163,26 @@ CREATE INDEX fk_offices_has_managers_offices_idx ON office_has_manager (offices_
 
 CREATE TABLE productline (
   product_line varchar(50) NOT NULL,
+  code bigint NOT NULL,
   text_description varchar(4000) DEFAULT NULL,
   html_description text,
   image bytea,
   created_on date NOT NULL DEFAULT NOW(),
-  PRIMARY KEY (product_line)
+  PRIMARY KEY (product_line, code),
+  CONSTRAINT unique_product_line UNIQUE(product_line)
+) ;
+
+/*Table structure for table `productdetail` */
+
+CREATE TABLE productlinedetail (
+  product_line varchar(50) NOT NULL,
+  code bigint NOT NULL,
+  line_capacity varchar(20) NOT NULL,
+  line_type int DEFAULT 0,
+  PRIMARY KEY (product_line,code),  
+  CONSTRAINT unique_product_line_detail UNIQUE(product_line),
+  CONSTRAINT productlinedetail_ibfk_1 FOREIGN KEY (product_line,code) REFERENCES productline (product_line,code),
+  CONSTRAINT productlinedetail_ibfk_2 FOREIGN KEY (product_line) REFERENCES productline (product_line)
 ) ;
 
 /*Table structure for table `product` */
@@ -220,6 +241,15 @@ CREATE TABLE orderdetail (
 
 CREATE INDEX product_id ON orderdetail (product_id);
 
+/*Table structure for table `top3product` */
+
+CREATE TABLE top3product (  
+  product_id bigint NOT NULL,
+  product_name varchar(70) DEFAULT NULL,  
+  PRIMARY KEY (product_id),  
+  CONSTRAINT top3product_ibfk_1 FOREIGN KEY (product_id) REFERENCES product (product_id)
+) ;
+
 /*Table structure for table `payment` */
 
 CREATE TABLE payment (
@@ -233,19 +263,49 @@ CREATE TABLE payment (
   CONSTRAINT payments_ibfk_1 FOREIGN KEY (customer_number) REFERENCES customer (customer_number)
 ) ;
 
+/* Table structure for table 'bank_transaction' */
+
+CREATE TABLE bank_transaction (
+  transaction_id serial NOT NULL,
+  bank_name varchar(50) NOT NULL,
+  bank_iban varchar(50) NOT NULL,  
+  transfer_amount decimal(10,2) NOT NULL,
+  caching_date timestamp NOT NULL DEFAULT NOW(),
+  customer_number bigint NOT NULL,
+  check_number varchar(50) NOT NULL, 
+  PRIMARY KEY (transaction_id),  
+  CONSTRAINT bank_transaction_ibfk_1 FOREIGN KEY (customer_number,check_number) REFERENCES payment (customer_number,check_number)
+) ;
+
 /* USER-DEFINED FUNCTIONS */
 
-CREATE FUNCTION get_avg_sale(len_from int, len_to int) 
-  returns int language plpgsql AS $$ 
+CREATE OR REPLACE FUNCTION get_avg_sale(len_from int, len_to int) 
+  RETURNS int LANGUAGE plpgsql AS $$ 
 DECLARE avg_count integer; 
-begin 
+BEGIN 
   SELECT avg(sale.sale) 
   INTO   avg_count 
   FROM   sale 
   WHERE  sale.sale BETWEEN len_from AND len_to; 
    
-  return avg_count; 
-end; 
+  RETURN avg_count; 
+END; 
+$$;
+
+CREATE OR REPLACE FUNCTION top_three_sales_per_employee(employee_nr bigint)
+  RETURNS TABLE(sales float) LANGUAGE plpgsql AS $$ 
+BEGIN
+    RETURN QUERY
+    SELECT 
+      "public"."sale"."sale" AS "sales" 
+    FROM 
+      "public"."sale" 
+    WHERE 
+      employee_nr = "public"."sale"."employee_number" 
+    ORDER BY
+      "public"."sale"."sale" DESC
+    LIMIT 3;     
+END; 
 $$;
 
 /* END */
