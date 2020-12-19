@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.app</groupId>
-    <artifactId>jOOQSpringBootJoinUsingPostgreSQL</artifactId>
+    <artifactId>jOOQSpringBootSemiAndAntiJoinPostgreSQL</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQSpringBootJoinUsingPostgreSQL</name>
+    <name>jOOQSpringBootSemiAndAntiJoinPostgreSQL</name>
     <description>jOOQ - Spring Boot app</description>    
 
     <parent>
