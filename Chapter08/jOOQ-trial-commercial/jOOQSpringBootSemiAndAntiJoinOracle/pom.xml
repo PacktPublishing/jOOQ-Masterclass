@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.app</groupId>
-    <artifactId>jOOQSpringBootJoinUsingOracle</artifactId>
+    <artifactId>jOOQSpringBootSemiAndAntiJoinOracle</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQSpringBootJoinUsingOracle</name>
+    <name>jOOQSpringBootSemiAndAntiJoinOracle</name>
     <description>jOOQ - Spring Boot app</description>    
 
     <parent>
