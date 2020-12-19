@@ -227,7 +227,7 @@ CREATE TABLE `top3product` (
   `product_name` varchar(70) DEFAULT NULL,  
   PRIMARY KEY (`product_id`),
   KEY `product_id` (`product_id`),
-  CONSTRAINT `top3product_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `orderdetail` (`product_id`)
+  CONSTRAINT `top3product_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Table structure for table `payment` */
