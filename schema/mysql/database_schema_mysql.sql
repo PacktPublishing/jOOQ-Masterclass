@@ -220,7 +220,7 @@ CREATE TABLE `orderdetail` (
   CONSTRAINT `orderdetails_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-/*Table structure for table `top5product` */
+/*Table structure for table `top3product` */
 
 CREATE TABLE `top3product` (  
   `product_id` bigint NOT NULL,

@@ -8169,7 +8169,7 @@ insert into sale(sale_id,fiscal_year,sale,employee_number) values
 
 (19, 2004, 5241.44, 1504) ON DUPLICATE KEY UPDATE sale_id=sale_id;
 
-/*Data for the table `top5product` */
+/*Data for the table `top3product` */
 
 insert into `top3product`(`product_id`,`product_name`) values 
 
