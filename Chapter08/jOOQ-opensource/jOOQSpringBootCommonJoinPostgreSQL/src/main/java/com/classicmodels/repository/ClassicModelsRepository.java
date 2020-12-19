@@ -5,16 +5,11 @@ import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Manager.MANAGER;
 import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.OfficeHasManager.OFFICE_HAS_MANAGER;
-import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
-import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.any;
-import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.field;
-import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.select;
-import static org.jooq.impl.DSL.selectCount;
 import static org.jooq.impl.DSL.selectDistinct;
 import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
@@ -253,26 +248,6 @@ public class ClassicModelsRepository {
                                 .where(OFFICE.COUNTRY.isNull()))
                         .onDuplicateKeyIgnore()
                         .execute()
-        );
-    }
-
-    // EXAMPLE 14 (Division via JOIN - find all orders containing at least the products from the given order (e.g., 10100))
-    public void fetchOrderContainingAtLeastCertainProducts() {
-
-        System.out.println("EXAMPLE 14\n"
-                + ctx.select(field(name("OID")))
-                        .from(
-                                select(PRODUCT.PRODUCT_ID.as(name("P1"))).from(PRODUCT).asTable("T1")
-                                        .innerJoin(select(ORDERDETAIL.ORDER_ID.as(name("OID")),
-                                                ORDERDETAIL.PRODUCT_ID.as(name("P2"))).from(ORDERDETAIL).asTable("T2"))
-                                        .on(field(name("P1")).eq(field(name("P2"))))
-                                        .innerJoin(select(ORDERDETAIL.PRODUCT_ID.as("P3"))
-                                                .from(ORDERDETAIL).where(ORDERDETAIL.ORDER_ID.eq(10100L)))
-                                        .on(field(name("P1")).eq(field(name("P3")))))
-                        .groupBy(field(name("OID")))
-                        .having(count().eq(selectCount()
-                                .from(ORDERDETAIL).where(ORDERDETAIL.ORDER_ID.eq(10100L))))
-                        .fetch()
         );
     }
 }
