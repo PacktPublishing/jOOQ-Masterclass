@@ -107,6 +107,25 @@ public class ClassicModelsRepository {
                         .where(ORDER.ORDER_ID.eq(10101L))
                         .fetch()
         );
+        
+        /*
+        select 
+          "alias_3062530".* 
+        from 
+          (
+            "SYSTEM"."ORDER" 
+            join "SYSTEM"."CUSTOMER" "alias_3062530" 
+             on "SYSTEM"."ORDER"."CUSTOMER_NUMBER" = "alias_3062530"."CUSTOMER_NUMBER"
+          ) 
+        where 
+          "SYSTEM"."ORDER"."ORDER_ID" = ?        
+        */
+        System.out.println("EXAMPLE 1.6\n"
+                + ctx.select(ORDER.customer().asterisk())                        
+                        .from(ORDER)
+                        .where(ORDER.ORDER_ID.eq(10101L))
+                        .fetch()
+        );
     }
 
     // EXAMPLE 2    
