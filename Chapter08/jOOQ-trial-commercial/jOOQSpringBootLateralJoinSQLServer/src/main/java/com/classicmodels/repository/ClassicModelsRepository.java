@@ -34,7 +34,7 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 1\n"
                 + ctx.select()
                         .from(OFFICE.crossApply(select().from(DEPARTMENT)
-                                .where(OFFICE.OFFICE_CODE.eq(DEPARTMENT.OFFICE_CODE))))
+                                .where(OFFICE.OFFICE_CODE.eq(DEPARTMENT.OFFICE_CODE))).as("t"))
                         .fetch()
         );
     }

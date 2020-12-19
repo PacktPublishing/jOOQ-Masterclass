@@ -4765,9 +4765,9 @@ insert  into `orderdetail`(`order_id`,`product_id`,`quantity_ordered`,`price_eac
 
 (10275,1,45,'81.35',1),
 
-(10275,3,22,'115.37',4),
+(10275,2,22,'115.37',4),
 
-(10275,4,36,'154.93',3),
+(10275,40,36,'154.93',3),
 
 (10275,31,35,'70.12',9),
 
@@ -5663,9 +5663,9 @@ insert  into `orderdetail`(`order_id`,`product_id`,`quantity_ordered`,`price_eac
 
 (10318,1,46,'84.22',1),
 
-(10318,3,45,'102.29',4),
+(10318,2,45,'102.29',4),
 
-(10318,4,37,'189.79',3),
+(10318,40,37,'189.79',3),
 
 (10318,31,31,'81.95',9),
 
@@ -8127,6 +8127,8 @@ insert  into `bank_transaction`(`transaction_id`,`bank_name`,`bank_iban`,`transf
 
 (10,'BRT Bank','TVNU343T38TUNU3T','52151.81',278,'GP636783', '2003-03-02 12:32:00') ON DUPLICATE KEY UPDATE transaction_id=transaction_id;
 
+/*Data for the table `sale` */
+
 insert into sale(sale_id,fiscal_year,sale,employee_number) values 
 
 (1, 2003, 5282.64, 1370),
@@ -8166,5 +8168,15 @@ insert into sale(sale_id,fiscal_year,sale,employee_number) values
 (18, 2004, 3884.34, 1504),
 
 (19, 2004, 5241.44, 1504) ON DUPLICATE KEY UPDATE sale_id=sale_id;
+
+/*Data for the table `top3product` */
+
+insert into `top3product`(`product_id`,`product_name`) values 
+
+(40, '1992 Ferrari 360 Spider red'),
+
+(1, '1969 Harley Davidson Ultimate Chopper'),
+
+(2, '1952 Alpine Renault 1300') ON DUPLICATE KEY UPDATE product_id=product_id;
 
 /* END */

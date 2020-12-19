@@ -22,20 +22,20 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional(readOnly = true)
 public class ClassicModelsRepository {
-
+    
     private final DSLContext ctx;
-
+    
     public ClassicModelsRepository(DSLContext ctx) {
         this.ctx = ctx;
     }
 
     // EXAMPLE 1 (CROSS JOIN LATERAL)   
     public void lateralOfficeHasDepartments() {
-
+        
         System.out.println("EXAMPLE 1\n"
                 + ctx.select()
                         .from(OFFICE, lateral(select().from(DEPARTMENT)
-                                .where(OFFICE.OFFICE_CODE.eq(DEPARTMENT.OFFICE_CODE))))
+                                .where(OFFICE.OFFICE_CODE.eq(DEPARTMENT.OFFICE_CODE))).as("t"))
                         .fetch()
         );
 
@@ -62,7 +62,7 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 2 (LEFT OUTER JOIN LATERAL)    
     public void leftOuterJoinLateralOfficeHasDepartments() {
-
+        
         System.out.println("EXAMPLE 2\n"
                 + ctx.select()
                         .from(OFFICE)
@@ -75,7 +75,7 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 3
     public void lateralEmployeeAvgSales() {
-
+        
         System.out.println("EXAMPLE 3\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, field("avg_sale"))
                         .from(EMPLOYEE, lateral(select(
@@ -90,11 +90,11 @@ public class ClassicModelsRepository {
     public void lateralOfficeCityCountryHasDepartments() {
         
         Table<?> t = select().from(DEPARTMENT)
-                                .where(OFFICE.OFFICE_CODE.eq(DEPARTMENT.OFFICE_CODE)).asTable("t");
+                .where(OFFICE.OFFICE_CODE.eq(DEPARTMENT.OFFICE_CODE)).asTable("t");
         
         System.out.println("EXAMPLE 4\n"
                 + ctx.select(OFFICE.CITY, OFFICE.COUNTRY, t.asterisk())
-                        .from(OFFICE, lateral(t))                        
+                        .from(OFFICE, lateral(t))
                         .fetch()
         );
     }
@@ -113,7 +113,7 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 6
     public void findTop3SalesPerEmployee() {
-
+        
         System.out.println("EXAMPLE 6\n"
                 + ctx.select(EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.FIRST_NAME,
                         EMPLOYEE.LAST_NAME, field("sales"))
@@ -129,7 +129,7 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 7
     public void findTop3OrderedProductsIn2003() {
-
+        
         System.out.println("EXAMPLE 7\n"
                 + ctx.select(PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME, field("od"), field("qo"))
                         .from(PRODUCT, lateral(select(ORDER.ORDER_DATE.as("od"), ORDERDETAIL.QUANTITY_ORDERED.as("qo"))

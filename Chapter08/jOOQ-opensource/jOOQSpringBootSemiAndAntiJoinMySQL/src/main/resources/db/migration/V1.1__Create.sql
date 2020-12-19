@@ -19,6 +19,7 @@ DROP TABLE IF EXISTS `orderdetail`;
 DROP TABLE IF EXISTS `order`;
 DROP TABLE IF EXISTS `product`;
 DROP TABLE IF EXISTS `productline`;
+DROP TABLE IF EXISTS `top3product`;
 DROP TABLE IF EXISTS `productlinedetail`;
 DROP TABLE IF EXISTS `office_has_manager`;
 DROP TABLE IF EXISTS `manager`;
@@ -218,6 +219,16 @@ CREATE TABLE `orderdetail` (
   KEY `product_id` (`product_id`),
   CONSTRAINT `orderdetails_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `order` (`order_id`),
   CONSTRAINT `orderdetails_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Table structure for table `top3product` */
+
+CREATE TABLE `top3product` (  
+  `product_id` bigint NOT NULL,
+  `product_name` varchar(70) DEFAULT NULL,  
+  PRIMARY KEY (`product_id`),
+  KEY `product_id` (`product_id`),
+  CONSTRAINT `top3product_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Table structure for table `payment` */

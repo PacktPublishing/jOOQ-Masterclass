@@ -18,6 +18,12 @@ EXCEPTION
 END;
 /
 BEGIN
+   EXECUTE IMMEDIATE 'DROP TABLE "BANK_TRANSACTION" CASCADE CONSTRAINTS';
+EXCEPTION
+   WHEN OTHERS THEN NULL;
+END;
+/
+BEGIN
    EXECUTE IMMEDIATE 'DROP TABLE "ORDERDETAIL" CASCADE CONSTRAINTS';
 EXCEPTION
    WHEN OTHERS THEN NULL;
@@ -37,6 +43,12 @@ END;
 /
 BEGIN
    EXECUTE IMMEDIATE 'DROP TABLE "PRODUCTLINE" CASCADE CONSTRAINTS';
+EXCEPTION
+   WHEN OTHERS THEN NULL;
+END;
+/
+BEGIN
+   EXECUTE IMMEDIATE 'DROP TABLE "TOP3PRODUCT" CASCADE CONSTRAINTS';
 EXCEPTION
    WHEN OTHERS THEN NULL;
 END;
@@ -114,6 +126,13 @@ CREATE TABLE office (
 
 /*Table structure for table `employee` */
 
+BEGIN
+   EXECUTE IMMEDIATE 'CREATE TYPE employeeOfYearArr AS VARRAY(100) OF INTEGER;';
+EXCEPTION
+   WHEN OTHERS THEN NULL;
+END;
+/
+
 CREATE TABLE employee (
   employee_number number(10) NOT NULL,
   last_name varchar2(50) NOT NULL,
@@ -124,6 +143,7 @@ CREATE TABLE employee (
   salary int NOT NULL,
   reports_to number(10) DEFAULT NULL,
   job_title varchar2(50) NOT NULL,
+  employee_of_year employeeOfYearArr DEFAULT NULL,
   PRIMARY KEY (employee_number)
  ,
   CONSTRAINT employees_ibfk_1 FOREIGN KEY (reports_to) REFERENCES employee (employee_number),
@@ -405,6 +425,15 @@ CREATE TABLE orderdetail (
 
 CREATE INDEX product_id ON orderdetail (product_id);
 
+/*Table structure for table `top3product` */
+
+CREATE TABLE top3product (  
+  product_id number(10) NOT NULL,
+  product_name varchar2(70) DEFAULT NULL,  
+  PRIMARY KEY (product_id),  
+  CONSTRAINT top3product_ibfk_1 FOREIGN KEY (product_id) REFERENCES product (product_id)
+) ;
+
 /*Table structure for table `payment` */
 
 CREATE TABLE payment (
@@ -417,6 +446,38 @@ CREATE TABLE payment (
   CONSTRAINT unique_check_number UNIQUE (check_number),
   CONSTRAINT payments_ibfk_1 FOREIGN KEY (customer_number) REFERENCES customer (customer_number)
 ) ;
+
+/* Table structure for table 'bank_transaction' */
+
+CREATE TABLE bank_transaction (
+  transaction_id number(10) NOT NULL,
+  bank_name varchar2(50) NOT NULL,
+  bank_iban varchar2(50) NOT NULL,  
+  transfer_amount number(10,2) NOT NULL,
+  caching_date timestamp DEFAULT SYSTIMESTAMP,
+  customer_number number(10) NOT NULL,
+  check_number varchar2(50) NOT NULL, 
+  PRIMARY KEY (transaction_id),  
+  CONSTRAINT bank_transaction_ibfk_1 FOREIGN KEY (customer_number,check_number) REFERENCES payment (customer_number,check_number)
+) ;
+
+-- Generate ID using sequence and trigger
+BEGIN
+   EXECUTE IMMEDIATE 'DROP SEQUENCE "BANK_TRANSACTION_SEQ"';
+EXCEPTION
+   WHEN OTHERS THEN NULL;
+END;
+/
+
+CREATE SEQUENCE bank_transaction_seq START WITH 10 INCREMENT BY 1;
+
+CREATE OR REPLACE TRIGGER bank_transaction_seq_tr
+ BEFORE INSERT ON bank_transaction FOR EACH ROW
+ WHEN (NEW.transaction_id IS NULL)
+BEGIN
+ SELECT bank_transaction_seq.NEXTVAL INTO :NEW.transaction_id FROM DUAL;
+END;
+/
 
 COMMIT;
 
