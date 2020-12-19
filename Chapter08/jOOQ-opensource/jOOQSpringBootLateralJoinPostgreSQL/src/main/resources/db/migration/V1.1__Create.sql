@@ -11,10 +11,12 @@ This is a modified version of the original schema for PostgreSQL
 
 /* START */
 DROP TABLE IF EXISTS payment CASCADE;
+DROP TABLE IF EXISTS bank_transaction CASCADE;
 DROP TABLE IF EXISTS orderdetail CASCADE;
 DROP TABLE IF EXISTS "order" CASCADE;
 DROP TABLE IF EXISTS product CASCADE;
 DROP TABLE IF EXISTS productline CASCADE;
+DROP TABLE IF EXISTS top3product CASCADE;
 DROP TABLE IF EXISTS productlinedetail CASCADE;
 DROP TABLE IF EXISTS office_has_manager CASCADE;
 DROP TABLE IF EXISTS manager CASCADE;
@@ -75,6 +77,7 @@ CREATE TABLE employee (
   salary int NOT NULL,
   reports_to bigint DEFAULT NULL,
   job_title varchar(50) NOT NULL,
+  employee_of_year int[] DEFAULT NULL,
   PRIMARY KEY (employee_number)
  ,
   CONSTRAINT employees_ibfk_1 FOREIGN KEY (reports_to) REFERENCES employee (employee_number),
@@ -238,6 +241,15 @@ CREATE TABLE orderdetail (
 
 CREATE INDEX product_id ON orderdetail (product_id);
 
+/*Table structure for table `top3product` */
+
+CREATE TABLE top3product (  
+  product_id bigint NOT NULL,
+  product_name varchar(70) DEFAULT NULL,  
+  PRIMARY KEY (product_id),  
+  CONSTRAINT top3product_ibfk_1 FOREIGN KEY (product_id) REFERENCES product (product_id)
+) ;
+
 /*Table structure for table `payment` */
 
 CREATE TABLE payment (
@@ -249,6 +261,20 @@ CREATE TABLE payment (
   PRIMARY KEY (customer_number,check_number),
   CONSTRAINT unique_check_number UNIQUE(check_number),
   CONSTRAINT payments_ibfk_1 FOREIGN KEY (customer_number) REFERENCES customer (customer_number)
+) ;
+
+/* Table structure for table 'bank_transaction' */
+
+CREATE TABLE bank_transaction (
+  transaction_id serial NOT NULL,
+  bank_name varchar(50) NOT NULL,
+  bank_iban varchar(50) NOT NULL,  
+  transfer_amount decimal(10,2) NOT NULL,
+  caching_date timestamp NOT NULL DEFAULT NOW(),
+  customer_number bigint NOT NULL,
+  check_number varchar(50) NOT NULL, 
+  PRIMARY KEY (transaction_id),  
+  CONSTRAINT bank_transaction_ibfk_1 FOREIGN KEY (customer_number,check_number) REFERENCES payment (customer_number,check_number)
 ) ;
 
 /* USER-DEFINED FUNCTIONS */
@@ -266,7 +292,7 @@ BEGIN
 END; 
 $$;
 
-CREATE OR REPLACE FUNCTION top_three_sales_per_employee(employeeNr bigint)
+CREATE OR REPLACE FUNCTION top_three_sales_per_employee(employee_nr bigint)
   RETURNS TABLE(sales float) LANGUAGE plpgsql AS $$ 
 BEGIN
     RETURN QUERY
@@ -275,7 +301,7 @@ BEGIN
     FROM 
       "public"."sale" 
     WHERE 
-      employeeNr = "public"."sale"."employee_number" 
+      employee_nr = "public"."sale"."employee_number" 
     ORDER BY
       "public"."sale"."sale" DESC
     LIMIT 3;     

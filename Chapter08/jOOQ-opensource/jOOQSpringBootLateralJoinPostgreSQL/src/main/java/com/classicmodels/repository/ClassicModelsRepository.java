@@ -109,7 +109,7 @@ public class ClassicModelsRepository {
                         .from(DEPARTMENT, lateral(select(field("topic"))
                                 .from(unnest(DEPARTMENT.TOPIC).as("t", "topic"))
                                 .where(field("topic").in("commerce", "business"))
-                        ))
+                        ).as("r"))
                         .fetch()
         );
     }
@@ -123,7 +123,7 @@ public class ClassicModelsRepository {
                                 rowNumber().over().orderBy(field("null"))) // orderBy(field("null") render ORDER BY NULL
                                 .from(unnest(DEPARTMENT.TOPIC).as("t", "topic"))
                                 .where(field("topic").in("commerce", "business"))
-                        ))
+                        ).as("r"))
                         .fetch()
         );
     }

@@ -27,7 +27,7 @@ insert  into office(office_code,city,phone,address_line_first,address_line_secon
 
 ('6','Sydney','+61 2 9264 2451','5-11 Wentworth Avenue','Floor --2',NULL,'Australia','NSW 2010','APAC'),
 
-('7','London','+44 20 7877 2041','25 Old Broad Street','Level 7',NULL,'UK','EC2N 1HN','EMEA'),
+('7','London','+44 20 7877 2041','25 Old Broad Street','Level 7','N/A','UK','EC2N 1HN','EMEA'),
 
 ('8',NULL,'+44 20 1827 21411','25 Hum Street','Level 2',NULL,'USA','EC2N 1HN','EMEA'), 
 
@@ -81,53 +81,53 @@ insert into office_has_manager (offices_office_code, managers_manager_id) values
 
 /*Data for the table `employee` */
 
-insert  into employee(employee_number,last_name,first_name,extension,email,office_code,salary,reports_to,job_title) values 
+insert  into employee(employee_number,last_name,first_name,extension,email,office_code,salary,reports_to,job_title,employee_of_year) values 
 
-(1002,'Murphy','Diane','x5800','dmurphy@classicmodelcars.com','1',120000,NULL,'President'),
+(1002,'Murphy','Diane','x5800','dmurphy@classicmodelcars.com','1',120000,NULL,'President',NULL),
 
-(1056,'Patterson','Mary','x4611','mpatterso@classicmodelcars.com','1',100000,1002,'VP Sales'),
+(1056,'Patterson','Mary','x4611','mpatterso@classicmodelcars.com','1',100000,1002,'VP Sales', NULL),
 
-(1076,'Firrelli','Jeff','x9273','jfirrelli@classicmodelcars.com','1',100000,1002,'VP Marketing'),
+(1076,'Firrelli','Jeff','x9273','jfirrelli@classicmodelcars.com','1',100000,1002,'VP Marketing', NULL),
 
-(1088,'Patterson','William','x4871','wpatterson@classicmodelcars.com','6',80000,1056,'Sales Manager (APAC)'),
+(1088,'Patterson','William','x4871','wpatterson@classicmodelcars.com','6',80000,1056,'Sales Manager (APAC)', NULL),
 
-(1102,'Bondur','Gerard','x5408','gbondur@classicmodelcars.com','4',80000,1056,'Sale Manager (EMEA)'),
+(1102,'Bondur','Gerard','x5408','gbondur@classicmodelcars.com','4',80000,1056,'Sale Manager (EMEA)', NULL),
 
-(1143,'Bow','Anthony','x5428','abow@classicmodelcars.com','1',75000,1056,'Sales Manager (NA)'),
+(1143,'Bow','Anthony','x5428','abow@classicmodelcars.com','1',75000,1056,'Sales Manager (NA)',NULL),
 
-(1165,'Jennings','Leslie','x3291','ljennings@classicmodelcars.com','1',60000,1143,'Sales Rep'),
+(1165,'Jennings','Leslie','x3291','ljennings@classicmodelcars.com','1',60000,1143,'Sales Rep',ARRAY[2003, 2004]),
 
-(1166,'Thompson','Leslie','x4065','lthompson@classicmodelcars.com','1',60000,1143,'Sales Rep'),
+(1166,'Thompson','Leslie','x4065','lthompson@classicmodelcars.com','1',60000,1143,'Sales Rep',ARRAY[2003, 2005]),
 
-(1188,'Firrelli','Julie','x2173','jfirrelli@classicmodelcars.com','2',60000,1143,'Sales Rep'),
+(1188,'Firrelli','Julie','x2173','jfirrelli@classicmodelcars.com','2',60000,1143,'Sales Rep',ARRAY[2004, 2005]),
 
-(1216,'Patterson','Steve','x4334','spatterson@classicmodelcars.com','2',55000,1143,'Sales Rep'),
+(1216,'Patterson','Steve','x4334','spatterson@classicmodelcars.com','2',55000,1143,'Sales Rep',ARRAY[2005, 2006]),
 
-(1286,'Tseng','Foon Yue','x2248','ftseng@classicmodelcars.com','3',55000,1143,'Sales Rep'),
+(1286,'Tseng','Foon Yue','x2248','ftseng@classicmodelcars.com','3',55000,1143,'Sales Rep',ARRAY[2002, 2003, 2004]),
 
-(1323,'Vanauf','George','x4102','gvanauf@classicmodelcars.com','3',55000,1143,'Sales Rep'),
+(1323,'Vanauf','George','x4102','gvanauf@classicmodelcars.com','3',55000,1143,'Sales Rep',ARRAY[2000, 2001, 2005]),
 
-(1337,'Bondur','Loui','x6493','lbondur@classicmodelcars.com','4',60000,1102,'Sales Rep'),
+(1337,'Bondur','Loui','x6493','lbondur@classicmodelcars.com','4',60000,1102,'Sales Rep',ARRAY[2004, 2007]),
 
-(1370,'Hernandez','Gerard','x2028','ghernande@classicmodelcars.com','4',65000,1102,'Sales Rep'),
+(1370,'Hernandez','Gerard','x2028','ghernande@classicmodelcars.com','4',65000,1102,'Sales Rep',ARRAY[2000, 2001]),
 
-(1401,'Castillo','Pamela','x2759','pcastillo@classicmodelcars.com','4',55000,1102,'Sales Rep'),
+(1401,'Castillo','Pamela','x2759','pcastillo@classicmodelcars.com','4',55000,1102,'Sales Rep',ARRAY[2000, 2001, 2003, 2005]),
 
-(1501,'Bott','Larry','x2311','lbott@classicmodelcars.com','7',50000,1102,'Sales Rep'),
+(1501,'Bott','Larry','x2311','lbott@classicmodelcars.com','7',50000,1102,'Sales Rep',ARRAY[2004, 2008]),
 
-(1504,'Jones','Barry','x102','bjones@classicmodelcars.com','7',50000,1102,'Sales Rep'),
+(1504,'Jones','Barry','x102','bjones@classicmodelcars.com','7',50000,1102,'Sales Rep',ARRAY[2002, 2003, 2005]),
 
-(1611,'Fixter','Andy','x101','afixter@classicmodelcars.com','6',50000,1088,'Sales Rep'),
+(1611,'Fixter','Andy','x101','afixter@classicmodelcars.com','6',50000,1088,'Sales Rep',ARRAY[2002, 2005]),
 
-(1612,'Marsh','Peter','x102','pmarsh@classicmodelcars.com','6',55000,1088,'Sales Rep'),
+(1612,'Marsh','Peter','x102','pmarsh@classicmodelcars.com','6',55000,1088,'Sales Rep',ARRAY[2003, 2005, 2006, 2007]),
 
-(1619,'King','Tom','x103','tking@classicmodelcars.com','6',60000,1088,'Sales Rep'),
+(1619,'King','Tom','x103','tking@classicmodelcars.com','6',60000,1088,'Sales Rep',ARRAY[2002, 2004]),
 
-(1621,'Nishi','Mami','x101','mnishi@classicmodelcars.com','5',55000,1056,'Sales Rep'),
+(1621,'Nishi','Mami','x101','mnishi@classicmodelcars.com','5',55000,1056,'Sales Rep',ARRAY[2003, 2005]),
 
-(1625,'Kato','Yoshimi','x102','ykato@classicmodelcars.com','5',60000,1621,'Sales Rep'),
+(1625,'Kato','Yoshimi','x102','ykato@classicmodelcars.com','5',60000,1621,'Sales Rep',ARRAY[2004, 2005, 2006]),
 
-(1702,'Gerard','Martin','x2312','mgerard@classicmodelcars.com','4',50000,1102,'Sales Rep') ON CONFLICT (employee_number) DO NOTHING;;
+(1702,'Gerard','Martin','x2312','mgerard@classicmodelcars.com','4',50000,1102,'Sales Rep',ARRAY[2005, 2007]) ON CONFLICT (employee_number) DO NOTHING;;
 
 /*Data for the table `customer` */
 
@@ -389,7 +389,7 @@ insert  into customer(customer_number,customer_name,contact_last_name,contact_fi
 
 insert  into customerdetail(customer_number,address_line_first,address_line_second,city,state,postal_code,country) values 
 
-(99,'32, Avenue 90',NULL, 'Paris' ,NULL,'43000','France'),
+(99,'43 Rue 2',NULL, 'Paris' ,NULL,'25017','France'),
 
 (100,'51, Avenue 3',NULL, NULL ,NULL,'43000',NULL),
 
@@ -537,7 +537,7 @@ insert  into customerdetail(customer_number,address_line_first,address_line_seco
 
 (323,'162-164 Grafton Road','Level 2','Auckland  ',NULL,NULL,'New Zealand'),
 
-(324,'35 King George',NULL,'London',NULL,'WX3 6FW','UK'),
+(324,'25 Old Broad Street','Level 7','London','N/A','EC2N 1HN','UK'),
 
 (328,'7476 Moss Rd.',NULL,'Newark','NJ','94019','USA'),
 
@@ -4765,9 +4765,9 @@ insert  into orderdetail(order_id,product_id,quantity_ordered,price_each,order_l
 
 (10275,1,45,'81.35',1),
 
-(10275,3,22,'115.37',4),
+(10275,2,22,'115.37',4),
 
-(10275,4,36,'154.93',3),
+(10275,40,36,'154.93',3),
 
 (10275,31,35,'70.12',9),
 
@@ -5663,9 +5663,9 @@ insert  into orderdetail(order_id,product_id,quantity_ordered,price_each,order_l
 
 (10318,1,46,'84.22',1),
 
-(10318,3,45,'102.29',4),
+(10318,2,45,'102.29',4),
 
-(10318,4,37,'189.79',3),
+(10318,40,37,'189.79',3),
 
 (10318,31,31,'81.95',9),
 
@@ -8104,6 +8104,30 @@ insert into payment(customer_number,check_number,payment_date,invoice_amount,cac
 
 (496,'MN89921','2004-12-31 09:02:11','52166.00', '2004-12-31 09:02:11') ON CONFLICT (customer_number,check_number) DO NOTHING;
 
+/*Data for the table `bank_transaction` */
+
+insert into bank_transaction(transaction_id,bank_name,bank_iban,transfer_amount,customer_number,check_number,caching_date) values 
+
+(1,'Bank Ltd. US','DN44398834N34','6631.36',447,'AO757239','2003-09-15 18:22:54'),
+
+(2,'Bank Ltd. US','348398H3493HG93','26304.13',447,'OU516561','2004-12-17 16:45:22'),
+
+(3,'Transilvania Bank','8TVN598N454VN84T','9977.85',462,'GC60330','2003-11-08 18:57:25'),
+
+(4,'5 Stars Bank','8VN8UNT5U45T8','48355.87',462,'PE176846', '2004-11-27 14:30:22'),
+
+(5,'5 Stars Bank','TVU58NU58U84N4YUG','33967.73',398,'AJ478695','2005-02-14 12:09:15'),
+
+(6,'Optimus Bank','8V34VN5U435334','4588.36',333,'NF959653','2005-03-01 12:12:00'),
+
+(7,'Optimus Bank','8V34VN5U435334','8987.36',333,'NF959653','2005-03-01 14:00:00'),
+
+(8,'Optimus Bank','8V34VN5U435334','2544.36',333,'NF959653','2005-03-01 18:20:10'),
+
+(9,'Optimus Bank','8V34VN5U435334','5312.23',333,'NF959653','2005-03-01 19:32:56'),
+
+(10,'BRT Bank','TVNU343T38TUNU3T','52151.81',278,'GP636783', '2003-03-02 12:32:00') ON CONFLICT (transaction_id) DO NOTHING;
+
 insert into sale(sale_id,fiscal_year,sale,employee_number) values 
 
 (1, 2003, 5282.64, 1370),
@@ -8143,5 +8167,15 @@ insert into sale(sale_id,fiscal_year,sale,employee_number) values
 (18, 2004, 3884.34, 1504),
 
 (19, 2004, 5241.44, 1504) ON CONFLICT (sale_id) DO NOTHING;
+
+/*Data for the table `top3product` */
+
+insert into top3product(product_id,product_name) values 
+
+(40, '1992 Ferrari 360 Spider red'),
+
+(1, '1969 Harley Davidson Ultimate Chopper'),
+
+(2, '1952 Alpine Renault 1300') ON CONFLICT (product_id) DO NOTHING;
 
 /* END */
