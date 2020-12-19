@@ -1,9 +1,12 @@
 package com.classicmodels.repository;
 
+import java.math.BigDecimal;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Employee.EMPLOYEE;
+import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
+import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.nvl;
 import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.selectOne;
@@ -126,12 +129,73 @@ public class ClassicModelsRepository {
                         .fetch()
         );
     }
-
-    /* ANTI JOIN */
+    
+    /*
+    select 
+      "public"."employee"."first_name", 
+      "public"."employee"."last_name", 
+      "public"."employee"."salary" 
+    from 
+      "public"."employee" 
+    where 
+      exists (
+        select 
+          1 as "one" 
+        from 
+          (
+            select 
+              "public"."customer"."customer_number", 
+              "public"."customer"."sales_rep_employee_number" as "a" 
+            from 
+              "public"."customer" 
+            where 
+              (
+                exists (
+                  select 
+                    1 as "one" 
+                  from 
+                    (
+                      select 
+                        "public"."payment"."customer_number" as "b" 
+                      from 
+                        "public"."payment" 
+                      where 
+                        "public"."payment"."invoice_amount" > ?
+                    ) as "alias_44102231" 
+                  where 
+                    b = "public"."customer"."customer_number"
+                ) 
+                and "public"."customer"."credit_limit" > ?
+              )
+          ) as "alias_100818952" 
+        where 
+          a = "public"."employee"."employee_number"
+      )    
+    */
     // EXAMPLE 6
-    public void joinEmployeeCustomerViaNotExists() {
+    public void joinEmployeeCustomerPaymentViaLeftSemiJoin() {
 
         System.out.println("EXAMPLE 6\n"
+                + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
+                        .from(EMPLOYEE)
+                        .leftSemiJoin(select(CUSTOMER.CUSTOMER_NUMBER,
+                                CUSTOMER.SALES_REP_EMPLOYEE_NUMBER.as("a"))
+                                .from(CUSTOMER)
+                                .leftSemiJoin(select(PAYMENT.CUSTOMER_NUMBER.as("b"))
+                                        .from(PAYMENT)
+                                        .where(PAYMENT.INVOICE_AMOUNT.gt(BigDecimal.valueOf(100000))))
+                                .on(field("b").eq(CUSTOMER.CUSTOMER_NUMBER))
+                                .where(CUSTOMER.CREDIT_LIMIT.gt(BigDecimal.ZERO))
+                        ).on(field("a").eq(EMPLOYEE.EMPLOYEE_NUMBER))
+                        .fetch()
+        );
+    }
+
+    /* ANTI JOIN */
+    // EXAMPLE 7
+    public void joinEmployeeCustomerViaNotExists() {
+
+        System.out.println("EXAMPLE 7\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
                         .from(EMPLOYEE)
                         .whereNotExists(selectOne().from(CUSTOMER)
@@ -140,10 +204,10 @@ public class ClassicModelsRepository {
         );
     }
 
-    // EXAMPLE 7
+    // EXAMPLE 8
     public void joinEmployeeCustomerViaNotIn() {
 
-        System.out.println("EXAMPLE 7\n"
+        System.out.println("EXAMPLE 8\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
                         .from(EMPLOYEE)
                         .where(EMPLOYEE.EMPLOYEE_NUMBER.notIn(
@@ -152,10 +216,10 @@ public class ClassicModelsRepository {
         );
     }
     
-    // EXAMPLE 8 - ANTI JOIN via LEFT JOIN (but, DON'T do this since this is actually a JOIN)
+    // EXAMPLE 9 - ANTI JOIN via LEFT JOIN (but, DON'T do this since this is actually a JOIN)
     public void badEmployeeCustomerViaLeftJoinAndIsNull() {
 
-        System.out.println("EXAMPLE 8\n"
+        System.out.println("EXAMPLE 9\n"
                 + ctx.selectDistinct(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
                         .from(EMPLOYEE)
                         .leftOuterJoin(CUSTOMER)
@@ -165,7 +229,7 @@ public class ClassicModelsRepository {
         );
     }
 
-    // EXAMPLE 9
+    // EXAMPLE 10
     /*
     select 
       "public"."employee"."first_name", 
@@ -186,7 +250,7 @@ public class ClassicModelsRepository {
      */
     public void joinEmployeeCustomerViaAntiJoin() {
 
-        System.out.println("EXAMPLE 9\n"
+        System.out.println("EXAMPLE 10\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
                         .from(EMPLOYEE)
                         .leftAntiJoin(CUSTOMER)
@@ -195,7 +259,7 @@ public class ClassicModelsRepository {
         );
     }
     
-    // EXAMPLE 10
+    // EXAMPLE 11
     /*
     select 
       "public"."employee"."first_name", 
@@ -228,7 +292,7 @@ public class ClassicModelsRepository {
     */
     public void joinEmployeeCustomerSaleViaAntiJoin() {
 
-        System.out.println("EXAMPLE 10\n"
+        System.out.println("EXAMPLE 11\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
                         .from(EMPLOYEE)
                         .leftAntiJoin(CUSTOMER)
