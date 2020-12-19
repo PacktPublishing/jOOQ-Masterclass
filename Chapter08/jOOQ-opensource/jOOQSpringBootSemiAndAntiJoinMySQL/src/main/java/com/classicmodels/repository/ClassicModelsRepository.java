@@ -132,6 +132,48 @@ public class ClassicModelsRepository {
         );
     }
 
+    /*
+    select 
+      `classicmodels`.`employee`.`first_name`, 
+      `classicmodels`.`employee`.`last_name`, 
+      `classicmodels`.`employee`.`salary` 
+    from 
+      `classicmodels`.`employee` 
+    where 
+      exists (
+        select 
+          1 as `one` 
+        from 
+          (
+            select 
+              `classicmodels`.`customer`.`customer_number`, 
+              `classicmodels`.`customer`.`sales_rep_employee_number` as `a` 
+            from 
+              `classicmodels`.`customer` 
+            where 
+              (
+                exists (
+                  select 
+                    1 as `one` 
+                  from 
+                    (
+                      select 
+                        `classicmodels`.`payment`.`customer_number` as `b` 
+                      from 
+                        `classicmodels`.`payment` 
+                      where 
+                        `classicmodels`.`payment`.`invoice_amount` > ?
+                    ) as `alias_98331170` 
+                  where 
+                    b = `classicmodels`.`customer`.`customer_number`
+                ) 
+                and `classicmodels`.`customer`.`credit_limit` > ?
+              )
+          ) as `alias_120312265` 
+        where 
+          a = `classicmodels`.`employee`.`employee_number`
+      )    
+    */
     // EXAMPLE 6
     public void joinEmployeeCustomerPaymentViaLeftSemiJoin() {
 
