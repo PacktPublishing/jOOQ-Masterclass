@@ -50,6 +50,7 @@ public class ClassicModelsRepository {
     }
     
     // EXAMPLE 3 - SEMI JOIN via LEFT JOIN (but, DON'T do this since this is actually a JOIN)
+    // It just doesn’t communicate the intent of an Anti Join at all
     public void badEmployeeCustomerViaLeftJoinAndIsNotNull() {
 
         System.out.println("EXAMPLE 3\n"
@@ -217,6 +218,7 @@ public class ClassicModelsRepository {
     }
     
     // EXAMPLE 9 - ANTI JOIN via LEFT JOIN (but, DON'T do this since this is actually a JOIN)
+    // It just doesn’t communicate the intent of an Anti Join at all
     public void badEmployeeCustomerViaLeftJoinAndIsNull() {
 
         System.out.println("EXAMPLE 9\n"
