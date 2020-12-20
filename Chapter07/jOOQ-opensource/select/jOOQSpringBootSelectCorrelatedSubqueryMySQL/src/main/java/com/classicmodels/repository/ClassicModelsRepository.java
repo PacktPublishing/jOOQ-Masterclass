@@ -733,8 +733,7 @@ public class ClassicModelsRepository {
                                 .leftOuterJoin(BANK_TRANSACTION)
                                 .on(row(PAYMENT.CUSTOMER_NUMBER, PAYMENT.CHECK_NUMBER)
                                         .eq(row(BANK_TRANSACTION.CUSTOMER_NUMBER, BANK_TRANSACTION.CHECK_NUMBER)))
-                                .where(row(BANK_TRANSACTION.CUSTOMER_NUMBER, BANK_TRANSACTION.CHECK_NUMBER).isNull())
-                                .orderBy(PAYMENT.CACHING_DATE))
+                                .where(row(BANK_TRANSACTION.CUSTOMER_NUMBER, BANK_TRANSACTION.CHECK_NUMBER).isNull()))
                         .execute()
         );
     }
