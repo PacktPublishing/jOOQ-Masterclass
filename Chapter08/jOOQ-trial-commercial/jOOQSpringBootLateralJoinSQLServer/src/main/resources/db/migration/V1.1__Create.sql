@@ -44,7 +44,9 @@ END;
 GO
 
 IF OBJECT_ID('payment', 'U') IS NOT NULL 
-  DROP TABLE payment;
+  DROP TABLE payment;  
+IF OBJECT_ID('bank_transaction', 'U') IS NOT NULL 
+  DROP TABLE bank_transaction;  
 IF OBJECT_ID('orderdetail', 'U') IS NOT NULL 
   DROP TABLE orderdetail;
 IF OBJECT_ID('order', 'U') IS NOT NULL 
@@ -53,6 +55,8 @@ IF OBJECT_ID('product', 'U') IS NOT NULL
   DROP TABLE product;
 IF OBJECT_ID('productline', 'U') IS NOT NULL 
   DROP TABLE productline;
+IF OBJECT_ID('top3product', 'U') IS NOT NULL 
+  DROP TABLE top3product;
 IF OBJECT_ID('productlinedetail', 'U') IS NOT NULL 
   DROP TABLE productlinedetail;
 IF OBJECT_ID('office_has_manager', 'U') IS NOT NULL 
@@ -99,6 +103,7 @@ CREATE TABLE employee (
   [salary] int NOT NULL,
   [reports_to] bigint DEFAULT NULL,
   [job_title] varchar(50) NOT NULL,
+  [employee_of_year] varchar(50) DEFAULT NULL,
   PRIMARY KEY ([employee_number])
 ,
   CONSTRAINT [employees_ibfk_1] FOREIGN KEY ([reports_to]) REFERENCES employee ([employee_number]),
@@ -265,6 +270,15 @@ CREATE TABLE orderdetail (
 
 CREATE INDEX [product_id] ON orderdetail ([product_id]);
 
+/*Table structure for table `top3product` */
+
+CREATE TABLE top3product (  
+  product_id bigint NOT NULL,
+  product_name varchar(70) DEFAULT NULL,  
+  PRIMARY KEY (product_id),  
+  CONSTRAINT top3product_ibfk_1 FOREIGN KEY (product_id) REFERENCES product (product_id)
+) ;
+
 /*Table structure for table `payment` */
 
 CREATE TABLE payment (
@@ -276,6 +290,20 @@ CREATE TABLE payment (
   PRIMARY KEY ([customer_number],[check_number]),
   CONSTRAINT [unique_check_number] UNIQUE([check_number]),
   CONSTRAINT [payments_ibfk_1] FOREIGN KEY ([customer_number]) REFERENCES customer ([customer_number])
+) ;
+
+/* Table structure for table 'bank_transaction' */
+
+CREATE TABLE bank_transaction (
+  [transaction_id] bigint NOT NULL IDENTITY,
+  [bank_name] varchar(50) NOT NULL,
+  [bank_iban] varchar(50) NOT NULL,  
+  [transfer_amount] decimal(10,2) NOT NULL,
+  [caching_date] datetime DEFAULT GETDATE(),
+  [customer_number] bigint NOT NULL,
+  [check_number] varchar(50) NOT NULL, 
+  PRIMARY KEY ([transaction_id]),  
+  CONSTRAINT [bank_transaction_ibfk_1] FOREIGN KEY ([customer_number],[check_number]) REFERENCES payment ([customer_number],[check_number])
 ) ;
 
 /* END */

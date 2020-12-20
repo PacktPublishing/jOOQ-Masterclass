@@ -14,6 +14,7 @@ import org.jooq.DSLContext;
 import org.jooq.Table;
 import static org.jooq.impl.DSL.avg;
 import static org.jooq.impl.DSL.field;
+import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.unnest;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,7 +35,7 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 1\n"
                 + ctx.select()
                         .from(OFFICE.crossApply(select().from(DEPARTMENT)
-                                .where(OFFICE.OFFICE_CODE.eq(DEPARTMENT.OFFICE_CODE))).as("t"))
+                                .where(OFFICE.OFFICE_CODE.eq(DEPARTMENT.OFFICE_CODE))))
                         .fetch()
         );
     }
