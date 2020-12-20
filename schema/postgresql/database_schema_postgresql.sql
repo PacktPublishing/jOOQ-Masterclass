@@ -277,6 +277,8 @@ CREATE TABLE bank_transaction (
   CONSTRAINT bank_transaction_ibfk_1 FOREIGN KEY (customer_number,check_number) REFERENCES payment (customer_number,check_number)
 ) ;
 
+ALTER SEQUENCE bank_transaction_transaction_id_seq RESTART WITH 100;
+
 /* USER-DEFINED FUNCTIONS */
 
 CREATE OR REPLACE FUNCTION get_avg_sale(len_from int, len_to int) 
