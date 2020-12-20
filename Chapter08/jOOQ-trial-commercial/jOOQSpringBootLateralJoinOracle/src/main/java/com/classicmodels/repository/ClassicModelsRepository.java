@@ -48,7 +48,7 @@ public class ClassicModelsRepository {
                 + ctx.select()
                         .from(OFFICE)
                         .crossJoin(lateral(select().from(DEPARTMENT)
-                                .where(OFFICE.OFFICE_CODE.eq(DEPARTMENT.OFFICE_CODE))))
+                                .where(OFFICE.OFFICE_CODE.eq(DEPARTMENT.OFFICE_CODE))).as("t"))
                         .fetch()
         );
         
@@ -56,11 +56,11 @@ public class ClassicModelsRepository {
                 + ctx.select()
                         .from(OFFICE)
                         .innerJoin(lateral(select().from(DEPARTMENT)
-                                .where(OFFICE.OFFICE_CODE.eq(DEPARTMENT.OFFICE_CODE))
-                        )).on(val(1).eq(val(1))) // Dummy predicate for INNER JOIN
+                                .where(OFFICE.OFFICE_CODE.eq(DEPARTMENT.OFFICE_CODE))).as("t"))
+                        .on(val(1).eq(val(1))) // Dummy predicate for INNER JOIN
                         .fetch()
         );
-         */
+        */  
     }
 
     // EXAMPLE 2 (LEFT OUTER JOIN LATERAL)    
@@ -70,8 +70,8 @@ public class ClassicModelsRepository {
                 + ctx.select()
                         .from(OFFICE)
                         .leftOuterJoin(lateral(select().from(DEPARTMENT)
-                                .where(OFFICE.OFFICE_CODE.eq(DEPARTMENT.OFFICE_CODE))
-                        )).on(val(1).eq(val(1))) // Dummy predicate for LEFT JOIN
+                                .where(OFFICE.OFFICE_CODE.eq(DEPARTMENT.OFFICE_CODE))).as("t")
+                        ).on(val(1).eq(val(1))) // Dummy predicate for LEFT JOIN
                         .fetch()
         );
     }
