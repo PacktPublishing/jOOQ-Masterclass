@@ -688,25 +688,37 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 17
     /*
-    insert into `classicmodels`.`order` (
-      `order_date`,
-      `required_date`,
-      `shipped_date`,
-      `status`,
-      `customer_number`
-    )
-      select distinct `classicmodels`.`payment`.`payment_date`,
-        `classicmodels`.`payment`.`payment_date`,
-        `classicmodels`.`payment`.`caching_date`,
-        ?,
-        `classicmodels`.`payment`.`customer_number`
-      from
-        `classicmodels`.`payment`,
-        `classicmodels`.`order`
-      where
-        `classicmodels`.`payment`.`payment_date` <> `classicmodels`.`order`.`order_date`
-      order by
+    insert into `classicmodels`.`bank_transaction` (
+      `bank_name`, `bank_iban`, `transfer_amount`, 
+      `caching_date`, `customer_number`, 
+      `check_number`
+    ) 
+    select 
+      distinct ?, 
+      ?, 
+      `classicmodels`.`payment`.`invoice_amount`, 
+      ifnull(
+        `classicmodels`.`payment`.`caching_date`, 
         `classicmodels`.`payment`.`payment_date`
+      ), 
+      `classicmodels`.`payment`.`customer_number`, 
+      `classicmodels`.`payment`.`check_number` 
+    from 
+      `classicmodels`.`payment` 
+      left outer join `classicmodels`.`bank_transaction` on (
+        `classicmodels`.`payment`.`customer_number`, 
+        `classicmodels`.`payment`.`check_number`
+      ) = (
+        `classicmodels`.`bank_transaction`.`customer_number`, 
+        `classicmodels`.`bank_transaction`.`check_number`
+      ) 
+    where 
+      (
+        `classicmodels`.`bank_transaction`.`customer_number` is null 
+        and `classicmodels`.`bank_transaction`.`check_number` is null
+      ) 
+    order by 
+      `classicmodels`.`payment`.`caching_date`    
      */
     @Transactional
     public void insertPaymentInBankTransaction() {
