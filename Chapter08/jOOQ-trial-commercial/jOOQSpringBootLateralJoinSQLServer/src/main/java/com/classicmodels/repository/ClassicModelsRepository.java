@@ -14,7 +14,6 @@ import org.jooq.DSLContext;
 import org.jooq.Table;
 import static org.jooq.impl.DSL.avg;
 import static org.jooq.impl.DSL.field;
-import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.unnest;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
