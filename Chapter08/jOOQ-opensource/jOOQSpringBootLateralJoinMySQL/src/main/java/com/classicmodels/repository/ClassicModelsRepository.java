@@ -29,7 +29,7 @@ public class ClassicModelsRepository {
         this.ctx = ctx;
     }
 
-    // EXAMPLE 1 (CROSS JOIN LATERAL)   
+    // EXAMPLE 1 
     public void lateralOfficeHasDepartments() {
         
         System.out.println("EXAMPLE 1\n"
