@@ -1,7 +1,6 @@
 package com.classicmodels.repository;
 
 import java.time.LocalDate;
-import static jooq.generated.Tables.TOP_THREE_SALES_PER_EMPLOYEE;
 import static jooq.generated.tables.Department.DEPARTMENT;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Office.OFFICE;
@@ -9,6 +8,7 @@ import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Sale.SALE;
+import static jooq.generated.tables.TopThreeSalesPerEmployee.TOP_THREE_SALES_PER_EMPLOYEE;
 import org.jooq.DSLContext;
 import org.jooq.Table;
 import static org.jooq.impl.DSL.avg;
@@ -91,13 +91,13 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 4
     public void lateralOfficeCityCountryHasDepartments() {
-        
+
         Table<?> t = select().from(DEPARTMENT)
-                                .where(OFFICE.OFFICE_CODE.eq(DEPARTMENT.OFFICE_CODE)).asTable("t");
-        
+                .where(OFFICE.OFFICE_CODE.eq(DEPARTMENT.OFFICE_CODE)).asTable("t");
+
         System.out.println("EXAMPLE 4\n"
                 + ctx.select(OFFICE.CITY, OFFICE.COUNTRY, t.asterisk())
-                        .from(OFFICE, lateral(t))                        
+                        .from(OFFICE, lateral(t))
                         .fetch()
         );
     }
@@ -164,10 +164,10 @@ public class ClassicModelsRepository {
                         .fetch()
         );
     }
-    
+
     // EXAMPLE 9
-    public void findTop3SalesPerEmployeeViaTableValuedFunction() {       
-        
+    public void findTop3SalesPerEmployeeViaTableValuedFunction() {
+
         System.out.println("EXAMPLE 9\n"
                 + ctx.select(EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.FIRST_NAME,
                         EMPLOYEE.LAST_NAME, field(name("SALES")))
@@ -189,7 +189,7 @@ public class ClassicModelsRepository {
                         .fetch()
         );
     }
-    
+
     // EXAMPLE 11
     public void findTop3SalesPerEmployeeViaTableValuedFunctionAndCrossApply() {
 
