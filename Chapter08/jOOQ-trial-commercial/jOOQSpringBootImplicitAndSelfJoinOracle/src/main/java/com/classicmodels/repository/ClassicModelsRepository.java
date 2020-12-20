@@ -27,7 +27,7 @@ public class ClassicModelsRepository {
     }
 
     /* Implicit JOIN */
-    // EXAMPLE 1
+    // EXAMPLE 1 - non-ANSI JOIN syntax - better avoid it
     public void implicitJoinOfficeEmployeeViaWhere() {
 
         System.out.println("EXAMPLE 1\n"
