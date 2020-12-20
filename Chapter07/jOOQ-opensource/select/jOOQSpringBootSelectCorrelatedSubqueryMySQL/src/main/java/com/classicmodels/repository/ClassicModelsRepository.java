@@ -1,6 +1,7 @@
 package com.classicmodels.repository;
 
 import java.math.BigDecimal;
+import static jooq.generated.tables.BankTransaction.BANK_TRANSACTION;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
 import static jooq.generated.tables.Employee.EMPLOYEE;
@@ -8,7 +9,6 @@ import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import static jooq.generated.tables.Payment.PAYMENT;
-import jooq.generated.tables.Product;
 import static jooq.generated.tables.Product.PRODUCT;
 import jooq.generated.tables.Sale;
 import static jooq.generated.tables.Sale.SALE;
@@ -21,6 +21,8 @@ import static org.jooq.impl.DSL.concat;
 import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.max;
+import static org.jooq.impl.DSL.nvl;
+import static org.jooq.impl.DSL.row;
 import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.selectCount;
 import static org.jooq.impl.DSL.selectDistinct;
@@ -38,7 +40,7 @@ public class ClassicModelsRepository {
     public ClassicModelsRepository(DSLContext ctx) {
         this.ctx = ctx;
     }
-    
+
     // EXAMPLE 1
     /*
     select
@@ -57,7 +59,7 @@ public class ClassicModelsRepository {
       `classicmodels`.`employee`
     order by
       `sumSales` asc
-    */
+     */
     public void findEmployeesBySumSales() {
 
         // Field<?>
@@ -72,10 +74,9 @@ public class ClassicModelsRepository {
                 .from(SALE)
                 .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(SALE.EMPLOYEE_NUMBER)))
                 .as("sumSales");
-        */
-        
-        System.out.println("EXAMPLE 1\n" +
-                ctx.select(EMPLOYEE.EMPLOYEE_NUMBER,
+         */
+        System.out.println("EXAMPLE 1\n"
+                + ctx.select(EMPLOYEE.EMPLOYEE_NUMBER,
                         EMPLOYEE.FIRST_NAME, EMPLOYEE.JOB_TITLE, sumSales)
                         .from(EMPLOYEE)
                         .orderBy(sumSales.asc())
@@ -103,7 +104,7 @@ public class ClassicModelsRepository {
         ) as `fullName`
     from
       `classicmodels`.`customerdetail`
-    */
+     */
     public void findCustomerFullNameCityCountry() {
 
         // Field<?>
@@ -118,15 +119,14 @@ public class ClassicModelsRepository {
                 .from(CUSTOMER)
                 .where(CUSTOMER.CUSTOMER_NUMBER.eq(CUSTOMERDETAIL.CUSTOMER_NUMBER))).as("fullName");
          */
-        
-        System.out.println("EXAMPLE 2\n" +
-                ctx.select(
+        System.out.println("EXAMPLE 2\n"
+                + ctx.select(
                         CUSTOMERDETAIL.CITY, CUSTOMERDETAIL.COUNTRY, fullName)
                         .from(CUSTOMERDETAIL)
                         .fetch()
         );
 
-          // same query in one piece of fluent code
+        // same query in one piece of fluent code
         /*
         System.out.println("EXAMPLE 2\n" +
                 ctx.select(
@@ -138,7 +138,7 @@ public class ClassicModelsRepository {
                         .from(CUSTOMERDETAIL)
                         .fetch()
         );
-        */
+         */
     }
 
     // EXAMPLE 3
@@ -159,8 +159,8 @@ public class ClassicModelsRepository {
      */
     public void findOfficeAndNoOfEmployee() {
 
-        System.out.println("EXAMPLE 3\n" +
-                ctx.select(OFFICE.CITY, OFFICE.ADDRESS_LINE_FIRST,
+        System.out.println("EXAMPLE 3\n"
+                + ctx.select(OFFICE.CITY, OFFICE.ADDRESS_LINE_FIRST,
                         (selectCount().from(EMPLOYEE)
                                 .where(EMPLOYEE.OFFICE_CODE
                                         .eq(OFFICE.OFFICE_CODE))).asField("employeesNr"))
@@ -168,7 +168,7 @@ public class ClassicModelsRepository {
                         .fetch()
         );
     }
-    
+
     // EXAMPLE 4
     public void findMaxSalePerFiscalYearAndEmployee() {
 
@@ -197,8 +197,8 @@ public class ClassicModelsRepository {
         Sale s1 = SALE.as("s1");
         Sale s2 = SALE.as("s2");
 
-        System.out.println("EXAMPLE 4\n" +
-                ctx.select(s1.SALE_, s1.FISCAL_YEAR, s1.EMPLOYEE_NUMBER)
+        System.out.println("EXAMPLE 4\n"
+                + ctx.select(s1.SALE_, s1.FISCAL_YEAR, s1.EMPLOYEE_NUMBER)
                         .from(s1)
                         .where(s1.SALE_.eq(select(max(s2.SALE_))
                                 .from(s2)
@@ -222,8 +222,8 @@ public class ClassicModelsRepository {
         order by
           `classicmodels`.`sale`.`fiscal_year`
          */
-        System.out.println("EXAMPLE 4 (via groupBy)\n" +
-                ctx.select(SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, max(SALE.SALE_))
+        System.out.println("EXAMPLE 4 (via groupBy)\n"
+                + ctx.select(SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, max(SALE.SALE_))
                         .from(SALE)
                         .groupBy(SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER)
                         .orderBy(SALE.FISCAL_YEAR)
@@ -256,8 +256,8 @@ public class ClassicModelsRepository {
               `classicmodels`.`employee`.`employee_number` = `classicmodels`.`sale`.`employee_number`
           )
          */
-        System.out.println("EXAMPLE 5.1\n" +
-                ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
+        System.out.println("EXAMPLE 5.1\n"
+                + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
                         .from(EMPLOYEE)
                         .where(field(select(avg(SALE.SALE_)).from(SALE)).lt(
                                 (select(sum(SALE.SALE_)).from(SALE)
@@ -287,8 +287,8 @@ public class ClassicModelsRepository {
             `classicmodels`.`employee`.`employee_number` = `classicmodels`.`sale`.`employee_number`
         )
          */
-        System.out.println("EXAMPLE 5.2\n" +
-                ctx.selectDistinct(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
+        System.out.println("EXAMPLE 5.2\n"
+                + ctx.selectDistinct(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
                         .from(EMPLOYEE)
                         .join(OFFICE)
                         .on(field(select(avg(SALE.SALE_)).from(SALE))
@@ -298,7 +298,7 @@ public class ClassicModelsRepository {
                         .fetch()
         );
     }
-    
+
     // EXAMPLE 6
     /*
     select
@@ -323,8 +323,8 @@ public class ClassicModelsRepository {
      */
     public void findOfficeAndEmployeeMaxAndAvgSalary() {
 
-        System.out.println("EXAMPLE 6\n" +
-                ctx.select(OFFICE.CITY, OFFICE.ADDRESS_LINE_FIRST,
+        System.out.println("EXAMPLE 6\n"
+                + ctx.select(OFFICE.CITY, OFFICE.ADDRESS_LINE_FIRST,
                         (select(max(EMPLOYEE.SALARY)).from(EMPLOYEE)
                                 .where(EMPLOYEE.OFFICE_CODE
                                         .eq(OFFICE.OFFICE_CODE))).asField("maxSalary"),
@@ -333,7 +333,7 @@ public class ClassicModelsRepository {
                         .fetch()
         );
     }
-    
+
     // EXAMPLE 7
     /*
     select
@@ -358,11 +358,11 @@ public class ClassicModelsRepository {
     order by
       `classicmodels`.`customer`.`contact_first_name`,
       `classicmodels`.`customer`.`contact_last_name`
-    */
+     */
     public void findCustomerWithMoreThan10Sales() {
 
-        System.out.println("EXAMPLE 7\n" +
-                ctx.select(CUSTOMER.CUSTOMER_NUMBER, CUSTOMER.CONTACT_FIRST_NAME, CUSTOMER.CONTACT_LAST_NAME)
+        System.out.println("EXAMPLE 7\n"
+                + ctx.select(CUSTOMER.CUSTOMER_NUMBER, CUSTOMER.CONTACT_FIRST_NAME, CUSTOMER.CONTACT_LAST_NAME)
                         .from(CUSTOMER)
                         .whereExists(selectCount().from(ORDER)
                                 .where(CUSTOMER.CUSTOMER_NUMBER.eq(ORDER.CUSTOMER_NUMBER))
@@ -399,11 +399,11 @@ public class ClassicModelsRepository {
       `classicmodels`.`orderdetail`.`product_id`
     order by
       `classicmodels`.`orderdetail`.`quantity_ordered`
-    */
+     */
     public void findOrderdetailWithQuantityInStockGtQuantityOrdered() {
 
-        System.out.println("EXAMPLE 8\n" +
-                ctx.selectFrom(ORDERDETAIL)
+        System.out.println("EXAMPLE 8\n"
+                + ctx.selectFrom(ORDERDETAIL)
                         .whereNotExists(select(PRODUCT.PRODUCT_ID).from(PRODUCT)
                                 .where(PRODUCT.PRODUCT_ID.eq(ORDERDETAIL.PRODUCT_ID)
                                         .and(PRODUCT.QUANTITY_IN_STOCK.coerce(Integer.class)
@@ -433,11 +433,11 @@ public class ClassicModelsRepository {
                and `classicmodels`.`orderdetail`.`quantity_ordered` > ?
           )
     )
-    */
+     */
     public void findProductQuantityOrderedGt70() {
 
-        System.out.println("EXAMPLE 9\n" +
-                ctx.select(PRODUCT.PRODUCT_NAME, PRODUCT.BUY_PRICE)
+        System.out.println("EXAMPLE 9\n"
+                + ctx.select(PRODUCT.PRODUCT_NAME, PRODUCT.BUY_PRICE)
                         .from(PRODUCT)
                         .where(PRODUCT.PRODUCT_ID.eq(any(
                                 select(ORDERDETAIL.PRODUCT_ID).from(ORDERDETAIL)
@@ -465,11 +465,11 @@ public class ClassicModelsRepository {
           where
             `classicmodels`.`product`.`product_id` = `classicmodels`.`orderdetail`.`product_id`
         )
-    */
+     */
     public void findProductWithMsrpGtSellPrice() {
 
-        System.out.println("EXAMPLE 10\n" +
-                ctx.select(PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME)
+        System.out.println("EXAMPLE 10\n"
+                + ctx.select(PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME)
                         .from(PRODUCT)
                         .where(PRODUCT.MSRP.gt(all(
                                 select(ORDERDETAIL.PRICE_EACH).from(ORDERDETAIL)
@@ -500,17 +500,17 @@ public class ClassicModelsRepository {
         where
           `classicmodels`.`product`.`product_id` = `classicmodels`.`orderdetail`.`product_id`
       )
-    */
+     */
     public void findProductWithAvgBuyPriceGtAnyPriceEach() {
 
-        System.out.println("EXAMPLE 11\n" +
-                ctx.select(PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME, PRODUCT.BUY_PRICE)
+        System.out.println("EXAMPLE 11\n"
+                + ctx.select(PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME, PRODUCT.BUY_PRICE)
                         .from(PRODUCT)
                         .where(field(select(avg(PRODUCT.BUY_PRICE)).from(PRODUCT)).gt(any(
                                 select(ORDERDETAIL.PRICE_EACH).from(ORDERDETAIL)
                                         .where(PRODUCT.PRODUCT_ID.eq(ORDERDETAIL.PRODUCT_ID)))))
                         .fetch()
-                );
+        );
     }
 
     // EXAMPLE 12
@@ -535,11 +535,11 @@ public class ClassicModelsRepository {
         where
           `classicmodels`.`product`.`product_id` = `classicmodels`.`orderdetail`.`product_id`
       )
-    */
+     */
     public void findProductWithAvgBuyPriceGtAllPriceEach() {
 
-        System.out.println("EXAMPLE 12\n" +
-                ctx.select(PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME, PRODUCT.BUY_PRICE)
+        System.out.println("EXAMPLE 12\n"
+                + ctx.select(PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME, PRODUCT.BUY_PRICE)
                         .from(PRODUCT)
                         .where(field(select(avg(PRODUCT.BUY_PRICE)).from(PRODUCT))
                                 .gt(all(select(ORDERDETAIL.PRICE_EACH).from(ORDERDETAIL)
@@ -569,11 +569,11 @@ public class ClassicModelsRepository {
       `classicmodels`.`payment`
     order by
       `classicmodels`.`payment`.`caching_date`
-    */    
+     */
     public void findUnprocessedPayments() {
 
-        System.out.println("EXAMPLE 13\n" +
-                ctx.select(PAYMENT.INVOICE_AMOUNT, PAYMENT.PAYMENT_DATE, PAYMENT.CACHING_DATE,
+        System.out.println("EXAMPLE 13\n"
+                + ctx.select(PAYMENT.INVOICE_AMOUNT, PAYMENT.PAYMENT_DATE, PAYMENT.CACHING_DATE,
                         case_()
                                 .when(PAYMENT.CACHING_DATE.isNull(),
                                         select(CUSTOMER.CREDIT_LIMIT)
@@ -585,8 +585,8 @@ public class ClassicModelsRepository {
                         .orderBy(PAYMENT.CACHING_DATE)
                         .fetch()
         );
-    }       
-    
+    }
+
     // EXAMPLE 14
     /*
     select      
@@ -611,25 +611,25 @@ public class ClassicModelsRepository {
         group by
           `classicmodels`.`sale`.`employee_number`
       )
-    */
+     */
     public void findEmployeeNumberWithMoreSalesIn2005Than2003() {
-        
+
         Sale sale = SALE.as("s");
-        
-        System.out.println("EXAMPLE 14\n" +
-        ctx.select(sale.EMPLOYEE_NUMBER)
-                .from(sale)
-                .where(sale.FISCAL_YEAR.eq(2005))
-                .groupBy(sale.EMPLOYEE_NUMBER)
-                .having(sum(sale.SALE_).gt(
-                        select(sum(SALE.SALE_)).from(SALE)
-                                .where(SALE.FISCAL_YEAR.eq(2003)
-                                        .and(sale.EMPLOYEE_NUMBER.eq(SALE.EMPLOYEE_NUMBER)))
-                                .groupBy(SALE.EMPLOYEE_NUMBER)))
-                .fetch()
-                );
+
+        System.out.println("EXAMPLE 14\n"
+                + ctx.select(sale.EMPLOYEE_NUMBER)
+                        .from(sale)
+                        .where(sale.FISCAL_YEAR.eq(2005))
+                        .groupBy(sale.EMPLOYEE_NUMBER)
+                        .having(sum(sale.SALE_).gt(
+                                select(sum(SALE.SALE_)).from(SALE)
+                                        .where(SALE.FISCAL_YEAR.eq(2003)
+                                                .and(sale.EMPLOYEE_NUMBER.eq(SALE.EMPLOYEE_NUMBER)))
+                                        .groupBy(SALE.EMPLOYEE_NUMBER)))
+                        .fetch()
+        );
     }
-                 
+
     // EXAMPLE 15
     /*
     update
@@ -647,8 +647,8 @@ public class ClassicModelsRepository {
     @Transactional
     public void updateCustomerCreditLimit() {
 
-        System.out.println("EXAMPLE 15 (affected rows): " +
-                + ctx.update(CUSTOMER)
+        System.out.println("EXAMPLE 15 (affected rows): "
+                + +ctx.update(CUSTOMER)
                         .set(CUSTOMER.CREDIT_LIMIT,
                                 select(sum(PAYMENT.INVOICE_AMOUNT)).from(PAYMENT)
                                         .where(PAYMENT.CUSTOMER_NUMBER.eq(CUSTOMER.CUSTOMER_NUMBER)))
@@ -672,12 +672,12 @@ public class ClassicModelsRepository {
               and `classicmodels`.`customer`.`credit_limit` > ?
          )
       )
-    */
+     */
     @Transactional
     public void deletePaymentOfCustomerCreditLimitGt150000() {
 
-        System.out.println("EXAMPLE 16 (affected rows): " +
-                + ctx.deleteFrom(PAYMENT)
+        System.out.println("EXAMPLE 16 (affected rows): "
+                + +ctx.deleteFrom(PAYMENT)
                         .where(PAYMENT.CUSTOMER_NUMBER.in(select(CUSTOMER.CUSTOMER_NUMBER)
                                 .from(CUSTOMER).where(PAYMENT.CUSTOMER_NUMBER
                                 .eq(CUSTOMER.CUSTOMER_NUMBER)
@@ -685,7 +685,7 @@ public class ClassicModelsRepository {
                         .execute()
         );
     }
-    
+
     // EXAMPLE 17
     /*
     insert into `classicmodels`.`order` (
@@ -707,18 +707,22 @@ public class ClassicModelsRepository {
         `classicmodels`.`payment`.`payment_date` <> `classicmodels`.`order`.`order_date`
       order by
         `classicmodels`.`payment`.`payment_date`
-    */
+     */
     @Transactional
-    public void insertPaymentInOrder() {
-        
-        System.out.println("EXAMPLE 17 (affected rows): " +
-                ctx.insertInto(ORDER, ORDER.ORDER_DATE, ORDER.REQUIRED_DATE, 
-                        ORDER.SHIPPED_DATE, ORDER.STATUS, ORDER.CUSTOMER_NUMBER)                
-                        .select(selectDistinct(PAYMENT.PAYMENT_DATE, PAYMENT.PAYMENT_DATE,
-                                PAYMENT.CACHING_DATE, val("Shipped"), PAYMENT.CUSTOMER_NUMBER).from(PAYMENT, ORDER)                        
-                                .where(PAYMENT.PAYMENT_DATE.ne(ORDER.ORDER_DATE))
-                                .orderBy(PAYMENT.PAYMENT_DATE))
-                                //.onDuplicateKeyIgnore()
+    public void insertPaymentInBankTransaction() {
+        System.out.println("EXAMPLE 17 (affected rows): "
+                + ctx.insertInto(BANK_TRANSACTION, BANK_TRANSACTION.BANK_NAME, BANK_TRANSACTION.BANK_IBAN,
+                        BANK_TRANSACTION.TRANSFER_AMOUNT, BANK_TRANSACTION.CACHING_DATE,
+                        BANK_TRANSACTION.CUSTOMER_NUMBER, BANK_TRANSACTION.CHECK_NUMBER)
+                        .select(selectDistinct(val("N/A"), val("N/A"), PAYMENT.INVOICE_AMOUNT, 
+                                nvl(PAYMENT.CACHING_DATE, PAYMENT.PAYMENT_DATE), 
+                                PAYMENT.CUSTOMER_NUMBER, PAYMENT.CHECK_NUMBER)
+                                .from(PAYMENT)
+                                .leftOuterJoin(BANK_TRANSACTION)
+                                .on(row(PAYMENT.CUSTOMER_NUMBER, PAYMENT.CHECK_NUMBER)
+                                        .eq(row(BANK_TRANSACTION.CUSTOMER_NUMBER, BANK_TRANSACTION.CHECK_NUMBER)))
+                                .where(row(BANK_TRANSACTION.CUSTOMER_NUMBER, BANK_TRANSACTION.CHECK_NUMBER).isNull())
+                                .orderBy(PAYMENT.CACHING_DATE))
                         .execute()
         );
     }
