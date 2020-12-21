@@ -28,7 +28,7 @@ insert  into office(office_code,city,phone,address_line_first,address_line_secon
 
 ('6','Sydney','+61 2 9264 2451','5-11 Wentworth Avenue','Floor --2',NULL,'Australia','NSW 2010','APAC'),
 
-('7','London','+44 20 7877 2041','25 Old Broad Street','Level 7',NULL,'UK','EC2N 1HN','EMEA'),
+('7','London','+44 20 7877 2041','25 Old Broad Street','Level 7','N/A','UK','EC2N 1HN','EMEA'),
 
 ('8',NULL,'+44 20 1827 21411','25 Hum Street','Level 2',NULL,'USA','EC2N 1HN','EMEA'), 
 
@@ -36,44 +36,46 @@ insert  into office(office_code,city,phone,address_line_first,address_line_secon
 
 ('10',NULL,'+44 20 1827 21411','12 Home','Level 22',NULL,NULL,'EC2N 1HN','NA'), 
 
-('11','Paris','+32 12 713 4304','43 Rue 2',NULL,NULL,'France','25017','EMEA'),
+('11','Paris','+32 12 713 4304','43 Rue 2',NULL,NULL,'France','97562','EMEA'),
 
-('12','Tokyo','+81 33 224 3444','4-1 Kioicho',NULL,'Koil-Ku','Japan','101-6578','Japan');
+('12','Tokyo','+81 33 224 3444','4-1 Kioicho',NULL,'Koil-Ku','Japan','101-6578','Japan')
 end try
 begin catch
-end catch
+end catch;
 
 /*Data for the table `department` */
 
 SET IDENTITY_INSERT [department] ON
 begin try
-insert into [department] ([department_id],[name],[phone],[code],[office_code]) values 
+insert into [department] ([department_id],[name],[phone],[code],[office_code],[topic]) values 
 
-('1','Lumber','-int 4782','1333','1'),
+('1','Advertising','-int 4782','1333','1', 'publicity, promotion'),
 
-('2','Sales','-int 41233','1441','1'),
+('2','Sales','-int 41233','1441','1', 'commerce, trade, sellout, transaction'),
 
-('3','Accounting','-int 8233','2311','2'),
+('3','Accounting','-int 8233','2311','2', 'monetary, business'),
 
-('4','Finance','-int 4421','3222','3');
+('4','Finance','-int 4421','3222','3', 'commerce, fiscal, monetary, business')
 end try
 begin catch
 end catch
-SET IDENTITY_INSERT [department] OFF
+SET IDENTITY_INSERT [department] OFF;
 
 /*Data for the table `manager` */
 
+SET IDENTITY_INSERT [manager] ON
 begin try
-insert into [manager]([manager_name]) values 
+insert into [manager]([manager_id],[manager_name]) values 
 
-('Joana Nimar'),
+(1, 'Joana Nimar'),
 
-('Mark Janel'),
+(2, 'Mark Janel'),
 
-('Olivia Goy');
+(3, 'Olivia Goy')
 end try
 begin catch
 end catch
+SET IDENTITY_INSERT [manager] OFF;
 
 /*Data for the table `office_has_manager` */
 
@@ -92,63 +94,63 @@ insert into [office_has_manager] ([offices_office_code], [managers_manager_id]) 
 
 ('6', '3'),
 
-('7', '2');
+('7', '2')
 end try
 begin catch
-end catch
+end catch;
 
 /*Data for the table `employee` */
 begin try
-insert  into employee(employee_number,last_name,first_name,extension,email,office_code,salary,reports_to,job_title) values 
+insert  into employee(employee_number,last_name,first_name,extension,email,office_code,salary,reports_to,job_title,employee_of_year) values 
 
-(1002,'Murphy','Diane','x5800','dmurphy@classicmodelcars.com','1',120000,NULL,'President'),
+(1002,'Murphy','Diane','x5800','dmurphy@classicmodelcars.com','1',120000,NULL,'President',NULL),
 
-(1056,'Patterson','Mary','x4611','mpatterso@classicmodelcars.com','1',100000,1002,'VP Sales'),
+(1056,'Patterson','Mary','x4611','mpatterso@classicmodelcars.com','1',100000,1002,'VP Sales', NULL),
 
-(1076,'Firrelli','Jeff','x9273','jfirrelli@classicmodelcars.com','1',100000,1002,'VP Marketing'),
+(1076,'Firrelli','Jeff','x9273','jfirrelli@classicmodelcars.com','1',100000,1002,'VP Marketing', NULL),
 
-(1088,'Patterson','William','x4871','wpatterson@classicmodelcars.com','6',80000,1056,'Sales Manager (APAC)'),
+(1088,'Patterson','William','x4871','wpatterson@classicmodelcars.com','6',80000,1056,'Sales Manager (APAC)', NULL),
 
-(1102,'Bondur','Gerard','x5408','gbondur@classicmodelcars.com','4',80000,1056,'Sale Manager (EMEA)'),
+(1102,'Bondur','Gerard','x5408','gbondur@classicmodelcars.com','4',80000,1056,'Sale Manager (EMEA)', NULL),
 
-(1143,'Bow','Anthony','x5428','abow@classicmodelcars.com','1',75000,1056,'Sales Manager (NA)'),
+(1143,'Bow','Anthony','x5428','abow@classicmodelcars.com','1',75000,1056,'Sales Manager (NA)',NULL),
 
-(1165,'Jennings','Leslie','x3291','ljennings@classicmodelcars.com','1',60000,1143,'Sales Rep'),
+(1165,'Jennings','Leslie','x3291','ljennings@classicmodelcars.com','1',60000,1143,'Sales Rep','2003, 2004'),
 
-(1166,'Thompson','Leslie','x4065','lthompson@classicmodelcars.com','1',60000,1143,'Sales Rep'),
+(1166,'Thompson','Leslie','x4065','lthompson@classicmodelcars.com','1',60000,1143,'Sales Rep','2003, 2005'),
 
-(1188,'Firrelli','Julie','x2173','jfirrelli@classicmodelcars.com','2',60000,1143,'Sales Rep'),
+(1188,'Firrelli','Julie','x2173','jfirrelli@classicmodelcars.com','2',60000,1143,'Sales Rep','2004, 2005'),
 
-(1216,'Patterson','Steve','x4334','spatterson@classicmodelcars.com','2',55000,1143,'Sales Rep'),
+(1216,'Patterson','Steve','x4334','spatterson@classicmodelcars.com','2',55000,1143,'Sales Rep','2005, 2006'),
 
-(1286,'Tseng','Foon Yue','x2248','ftseng@classicmodelcars.com','3',55000,1143,'Sales Rep'),
+(1286,'Tseng','Foon Yue','x2248','ftseng@classicmodelcars.com','3',55000,1143,'Sales Rep','2002, 2003, 2004'),
 
-(1323,'Vanauf','George','x4102','gvanauf@classicmodelcars.com','3',55000,1143,'Sales Rep'),
+(1323,'Vanauf','George','x4102','gvanauf@classicmodelcars.com','3',55000,1143,'Sales Rep','2000, 2001, 2005'),
 
-(1337,'Bondur','Loui','x6493','lbondur@classicmodelcars.com','4',60000,1102,'Sales Rep'),
+(1337,'Bondur','Loui','x6493','lbondur@classicmodelcars.com','4',60000,1102,'Sales Rep','2004, 2007'),
 
-(1370,'Hernandez','Gerard','x2028','ghernande@classicmodelcars.com','4',65000,1102,'Sales Rep'),
+(1370,'Hernandez','Gerard','x2028','ghernande@classicmodelcars.com','4',65000,1102,'Sales Rep','2000, 2001'),
 
-(1401,'Castillo','Pamela','x2759','pcastillo@classicmodelcars.com','4',55000,1102,'Sales Rep'),
+(1401,'Castillo','Pamela','x2759','pcastillo@classicmodelcars.com','4',55000,1102,'Sales Rep','2000, 2001, 2003, 2005'),
 
-(1501,'Bott','Larry','x2311','lbott@classicmodelcars.com','7',50000,1102,'Sales Rep'),
+(1501,'Bott','Larry','x2311','lbott@classicmodelcars.com','7',50000,1102,'Sales Rep','2004, 2008'),
 
-(1504,'Jones','Barry','x102','bjones@classicmodelcars.com','7',50000,1102,'Sales Rep'),
+(1504,'Jones','Barry','x102','bjones@classicmodelcars.com','7',50000,1102,'Sales Rep','2002, 2003, 2005'),
 
-(1611,'Fixter','Andy','x101','afixter@classicmodelcars.com','6',50000,1088,'Sales Rep'),
+(1611,'Fixter','Andy','x101','afixter@classicmodelcars.com','6',50000,1088,'Sales Rep','2002, 2005'),
 
-(1612,'Marsh','Peter','x102','pmarsh@classicmodelcars.com','6',55000,1088,'Sales Rep'),
+(1612,'Marsh','Peter','x102','pmarsh@classicmodelcars.com','6',55000,1088,'Sales Rep','2003, 2005, 2006, 2007'),
 
-(1619,'King','Tom','x103','tking@classicmodelcars.com','6',60000,1088,'Sales Rep'),
+(1619,'King','Tom','x103','tking@classicmodelcars.com','6',60000,1088,'Sales Rep','2002, 2004'),
 
-(1621,'Nishi','Mami','x101','mnishi@classicmodelcars.com','5',55000,1056,'Sales Rep'),
+(1621,'Nishi','Mami','x101','mnishi@classicmodelcars.com','5',55000,1056,'Sales Rep','2003, 2005'),
 
-(1625,'Kato','Yoshimi','x102','ykato@classicmodelcars.com','5',60000,1621,'Sales Rep'),
+(1625,'Kato','Yoshimi','x102','ykato@classicmodelcars.com','5',60000,1621,'Sales Rep','2004, 2005, 2006'),
 
-(1702,'Gerard','Martin','x2312','mgerard@classicmodelcars.com','4',50000,1102,'Sales Rep');
+(1702,'Gerard','Martin','x2312','mgerard@classicmodelcars.com','4',50000,1102,'Sales Rep','2005, 2007')
 end try
 begin catch
-end catch
+end catch;
 
 /*Data for the table `customer` */
 
@@ -406,17 +408,17 @@ insert  into customer(customer_number,customer_name,contact_last_name,contact_fi
 
 (495,'Diecast Collectables','Franco','Valarie','6175552555',1188,'85100.00'),
 
-(496,'Kelly''s Gift Shop','Snowden','Tony','+64 9 5555500',1612,'110000.00');
+(496,'Kelly''s Gift Shop','Snowden','Tony','+64 9 5555500',1612,'110000.00')
 end try
 begin catch
 end catch
-SET IDENTITY_INSERT [customer] OFF
+SET IDENTITY_INSERT [customer] OFF;
 
 /*Data for the table `customerdetail` */
 begin try
 insert  into customerdetail(customer_number,address_line_first,address_line_second,city,state,postal_code,country) values 
 
-(99,'32, Avenue 90',NULL, 'Paris' ,NULL,'43000','France'),
+(99,'43 Rue 2',NULL, 'Paris' ,NULL,'25017','France'),
 
 (100,'51, Avenue 3',NULL, NULL ,NULL,'43000',NULL),
 
@@ -426,7 +428,7 @@ insert  into customerdetail(customer_number,address_line_first,address_line_seco
 
 (103,'54, rue Royale',NULL,'Nantes',NULL,'44000','France'),
 
-(112,'8489 Strong St.',NULL,'Las Vegas','NV','83030','USA'),
+(112,'8489 Strong St.',NULL,'Las Vegas','NV','75017','USA'),
 
 (114,'636 St Kilda Road','Level 3','Melbourne','Victoria','3004','Australia'),
 
@@ -564,7 +566,7 @@ insert  into customerdetail(customer_number,address_line_first,address_line_seco
 
 (323,'162-164 Grafton Road','Level 2','Auckland  ',NULL,NULL,'New Zealand'),
 
-(324,'35 King George',NULL,'London',NULL,'WX3 6FW','UK'),
+(324,'25 Old Broad Street','Level 7','London','N/A','EC2N 1HN','UK'),
 
 (328,'7476 Moss Rd.',NULL,'Newark','NJ','94019','USA'),
 
@@ -666,31 +668,53 @@ insert  into customerdetail(customer_number,address_line_first,address_line_seco
 
 (495,'6251 Ingle Ln.',NULL,'Boston','MA','51003','USA'),
 
-(496,'Arenales 1938 3''A''',NULL,'Auckland  ',NULL,NULL,'New Zealand');
+(496,'Arenales 1938 3''A''',NULL,'Auckland  ',NULL,NULL,'New Zealand')
 end try
 begin catch
-end catch
+end catch;
 
 /*Data for the table `productline` */
 begin try
-insert  into productline(product_line,text_description,html_description,image,created_on) values 
+insert  into productline(product_line,code,text_description,html_description,image,created_on) values 
 
-('Classic Cars','Attention car enthusiasts: Make your wildest car ownership dreams come true. Whether you are looking for classic muscle cars, dream sports cars or movie-inspired miniatures, you will find great choices in this category. These replicas feature superb attention to detail and craftsmanship and offer features such as working steering system, opening forward compartment, opening rear trunk with removable spare wheel, 4-wheel independent spring suspension, and so on. The models range in size from 1:10 to 1:24 scale and include numerous limited edition and several out-of-production vehicles. All models include a certificate of authenticity from their manufacturers and come fully assembled and ready for display in the home or office.',NULL,NULL,'2005-02-03'),
+('Classic Cars',599302,'Attention car enthusiasts: Make your wildest car ownership dreams come true. Whether you are looking for classic muscle cars, dream sports cars or movie-inspired miniatures, you will find great choices in this category. These replicas feature superb attention to detail and craftsmanship and offer features such as working steering system, opening forward compartment, opening rear trunk with removable spare wheel, 4-wheel independent spring suspension, and so on. The models range in size from 1:10 to 1:24 scale and include numerous limited edition and several out-of-production vehicles. All models include a certificate of authenticity from their manufacturers and come fully assembled and ready for display in the home or office.',NULL,NULL,'2005-02-03'),
 
-('Motorcycles','Our motorcycles are state of the art replicas of classic as well as contemporary motorcycle legends such as Harley Davidson, Ducati and Vespa. Models contain stunning details such as official logos, rotating wheels, working kickstand, front suspension, gear-shift lever, footbrake lever, and drive chain. Materials used include diecast and plastic. The models range in size from 1:10 to 1:50 scale and include numerous limited edition and several out-of-production vehicles. All models come fully assembled and ready for display in the home or office. Most include a certificate of authenticity.',NULL,NULL,'2004-12-12'),
+('Motorcycles',599302,'Our motorcycles are state of the art replicas of classic as well as contemporary motorcycle legends such as Harley Davidson, Ducati and Vespa. Models contain stunning details such as official logos, rotating wheels, working kickstand, front suspension, gear-shift lever, footbrake lever, and drive chain. Materials used include diecast and plastic. The models range in size from 1:10 to 1:50 scale and include numerous limited edition and several out-of-production vehicles. All models come fully assembled and ready for display in the home or office. Most include a certificate of authenticity.',NULL,NULL,'2004-12-12'),
 
-('Planes','Unique, diecast airplane and helicopter replicas suitable for collections, as well as home, office or classroom decorations. Models contain stunning details such as official logos and insignias, rotating jet engines and propellers, retractable wheels, and so on. Most come fully assembled and with a certificate of authenticity from their manufacturers.',NULL,NULL,'2004-02-14'),
+('Planes',433823,'Unique, diecast airplane and helicopter replicas suitable for collections, as well as home, office or classroom decorations. Models contain stunning details such as official logos and insignias, rotating jet engines and propellers, retractable wheels, and so on. Most come fully assembled and with a certificate of authenticity from their manufacturers.',NULL,NULL,'2004-02-14'),
 
-('Ships','The perfect holiday or anniversary gift for executives, clients, friends, and family. These handcrafted model ships are unique, stunning works of art that will be treasured for generations! They come fully assembled and ready for display in the home or office. We guarantee the highest quality, and best value.',NULL,NULL,'2005-12-12'),
+('Ships',433823,'The perfect holiday or anniversary gift for executives, clients, friends, and family. These handcrafted model ships are unique, stunning works of art that will be treasured for generations! They come fully assembled and ready for display in the home or office. We guarantee the highest quality, and best value.',NULL,NULL,'2005-12-12'),
 
-('Trains','Model trains are a rewarding hobby for enthusiasts of all ages. Whether you''re looking for collectible wooden trains, electric streetcars or locomotives, you''ll find a number of great choices for any budget within this category. The interactive aspect of trains makes toy trains perfect for young children. The wooden train sets are ideal for children under the age of 5.',NULL,NULL,'2004-03-03'),
+('Trains',123333,'Model trains are a rewarding hobby for enthusiasts of all ages. Whether you''re looking for collectible wooden trains, electric streetcars or locomotives, you''ll find a number of great choices for any budget within this category. The interactive aspect of trains makes toy trains perfect for young children. The wooden train sets are ideal for children under the age of 5.',NULL,NULL,'2004-03-03'),
 
-('Trucks and Buses','The Truck and Bus models are realistic replicas of buses and specialized trucks produced from the early 1920s to present. The models range in size from 1:12 to 1:50 scale and include numerous limited edition and several out-of-production vehicles. Materials used include tin, diecast and plastic. All models include a certificate of authenticity from their manufacturers and are a perfect ornament for the home and office.',NULL,NULL,'2005-02-25'),
+('Trucks and Buses',569331,'The Truck and Bus models are realistic replicas of buses and specialized trucks produced from the early 1920s to present. The models range in size from 1:12 to 1:50 scale and include numerous limited edition and several out-of-production vehicles. Materials used include tin, diecast and plastic. All models include a certificate of authenticity from their manufacturers and are a perfect ornament for the home and office.',NULL,NULL,'2005-02-25'),
 
-('Vintage Cars','Our Vintage Car models realistically portray automobiles produced from the early 1900s through the 1940s. Materials used include Bakelite, diecast, plastic and wood. Most of the replicas are in the 1:18 and 1:24 scale sizes, which provide the optimum in detail and accuracy. Prices range from $30.00 up to $180.00 for some special limited edition replicas. All models include a certificate of authenticity from their manufacturers and come fully assembled and ready for display in the home or office.',NULL,NULL,'2004-04-02');
+('Vintage Cars',223113,'Our Vintage Car models realistically portray automobiles produced from the early 1900s through the 1940s. Materials used include Bakelite, diecast, plastic and wood. Most of the replicas are in the 1:18 and 1:24 scale sizes, which provide the optimum in detail and accuracy. Prices range from $30.00 up to $180.00 for some special limited edition replicas. All models include a certificate of authenticity from their manufacturers and come fully assembled and ready for display in the home or office.',NULL,NULL,'2004-04-02')
 end try
 begin catch
-end catch
+end catch;
+
+/*Data for the table `productlinedetail` */
+
+begin try
+insert  into productlinedetail(product_line,code,line_capacity,line_type) values 
+
+('Classic Cars',599302,'200A', 1),
+
+('Motorcycles',599302,'150B', 1),
+
+('Planes',433823,'450C',2),
+
+('Ships',433823,'100A',3),
+
+('Trains',123333,'150A',2),
+
+('Trucks and Buses',569331,'566C',2),
+
+('Vintage Cars',223113,'1000A', 3)
+end try
+begin catch
+end catch;
 
 /*Data for the table `product` */
 
@@ -916,11 +940,11 @@ insert  into product(product_id,product_name,product_line,product_scale,product_
 
 (109,'Boeing X-32A JSF','Planes','1:72','Motor City Art Classics','10" Wingspan with retractable landing gears.Comes with pilot',4857,'32.77','49.66'),
 
-(110,'Pont Yacht','Ships','1:72','Unimax Art Galleries','Measures 38 inches Long x 33 3/4 inches High. Includes a stand.rnMany extras including rigging, long boats, pilot house, anchors, etc. Comes with 2 masts, all square-rigged',414,'33.30','54.60');
+(110,'Pont Yacht','Ships','1:72','Unimax Art Galleries','Measures 38 inches Long x 33 3/4 inches High. Includes a stand.rnMany extras including rigging, long boats, pilot house, anchors, etc. Comes with 2 masts, all square-rigged',414,'33.30','54.60')
 end try
 begin catch
 end catch
-SET IDENTITY_INSERT [product] OFF
+SET IDENTITY_INSERT [product] OFF;
 
 /*Data for the table `order` */
 
@@ -1578,15 +1602,15 @@ insert  into [order](order_id,order_date,required_date,shipped_date,status,comme
 
 (10424,'2005-05-31','2005-06-08',NULL,'In Process',NULL,141),
 
-(10425,'2005-05-31','2005-06-07',NULL,'In Process',NULL,119);
+(10425,'2005-05-31','2005-06-07',NULL,'In Process',NULL,119)
 end try
 begin catch
 end catch
-SET IDENTITY_INSERT [order] OFF
+SET IDENTITY_INSERT [order] OFF;
 
 /*Data for the table `orderdetail` */
 begin try
-insert into orderdetail(order_id,product_id,quantity_ordered,price_each,order_line_number) values 
+insert into orderdetail(order_id,product_id,quantity_ordered,price_each,order_line_number) values
 
 (10100,23,30,'136.00',3),
 
@@ -3586,8 +3610,12 @@ insert into orderdetail(order_id,product_id,quantity_ordered,price_each,order_li
 
 (10205,61,32,'27.88',5),
 
-(10205,64,24,'36.74',4);
+(10205,64,24,'36.74',4)
+end try
+begin catch
+end catch;
 
+begin try
 insert  into orderdetail(order_id,product_id,quantity_ordered,price_each,order_line_number) values 
 
 (10206,2,47,'203.59',6),
@@ -4794,9 +4822,9 @@ insert  into orderdetail(order_id,product_id,quantity_ordered,price_each,order_l
 
 (10275,1,45,'81.35',1),
 
-(10275,3,22,'115.37',4),
+(10275,2,22,'115.37',4),
 
-(10275,4,36,'154.93',3),
+(10275,40,36,'154.93',3),
 
 (10275,31,35,'70.12',9),
 
@@ -5586,8 +5614,12 @@ insert  into orderdetail(order_id,product_id,quantity_ordered,price_each,order_l
 
 (10312,82,44,'96.42',7),
 
-(10313,6,40,'141.83',7);
+(10313,6,40,'141.83',7)
+end try
+begin catch
+end catch;
 
+begin try
 insert  into orderdetail(order_id,product_id,quantity_ordered,price_each,order_line_number) values 
 
 (10313,9,21,'131.20',11),
@@ -5694,9 +5726,9 @@ insert  into orderdetail(order_id,product_id,quantity_ordered,price_each,order_l
 
 (10318,1,46,'84.22',1),
 
-(10318,3,45,'102.29',4),
+(10318,2,45,'102.29',4),
 
-(10318,4,37,'189.79',3),
+(10318,40,37,'189.79',3),
 
 (10318,31,31,'81.95',9),
 
@@ -7582,10 +7614,10 @@ insert  into orderdetail(order_id,product_id,quantity_ordered,price_each,order_l
 
 (10425,88,11,'50.32',6),
 
-(10425,94,18,'94.92',2);
+(10425,94,18,'94.92',2)
 end try
 begin catch
-end catch
+end catch;
 
 /*Data for the table `payment` */
 begin try
@@ -8135,52 +8167,98 @@ insert into payment(customer_number,check_number,payment_date,invoice_amount,cac
 
 (496,'MB342426','2003-07-16 21:10:15','32077.44', '2003-07-16 23:04:15'),
 
-(496,'MN89921','2004-12-31 09:02:11','52166.00', '2004-12-31 09:02:11');
+(496,'MN89921','2004-12-31 09:02:11','52166.00', '2004-12-31 09:02:11')
+end try
+begin catch
+end catch;
+
+/*Data for the table `bank_transaction` */
+
+SET IDENTITY_INSERT [bank_transaction] ON
+begin try
+insert into bank_transaction(transaction_id,bank_name,bank_iban,transfer_amount,customer_number,check_number,caching_date) values 
+
+(1,'Bank Ltd. US','DN44398834N34','6631.36',447,'AO757239','2003-09-15 18:22:54'),
+
+(2,'Bank Ltd. US','348398H3493HG93','26304.13',447,'OU516561','2004-12-17 16:45:22'),
+
+(3,'Transilvania Bank','8TVN598N454VN84T','9977.85',462,'GC60330','2003-11-08 18:57:25'),
+
+(4,'5 Stars Bank','8VN8UNT5U45T8','48355.87',462,'PE176846', '2004-11-27 14:30:22'),
+
+(5,'5 Stars Bank','TVU58NU58U84N4YUG','33967.73',398,'AJ478695','2005-02-14 12:09:15'),
+
+(6,'Optimus Bank','8V34VN5U435334','4588.36',333,'NF959653','2005-03-01 12:12:00'),
+
+(7,'Optimus Bank','8V34VN5U435334','8987.36',333,'NF959653','2005-03-01 14:00:00'),
+
+(8,'Optimus Bank','8V34VN5U435334','2544.36',333,'NF959653','2005-03-01 18:20:10'),
+
+(9,'Optimus Bank','8V34VN5U435334','5312.23',333,'NF959653','2005-03-01 19:32:56'),
+
+(10,'BRT Bank','TVNU343T38TUNU3T','52151.81',278,'GP636783', '2003-03-02 12:32:00')
 end try
 begin catch
 end catch
+SET IDENTITY_INSERT [bank_transaction] OFF;
 
 /*Data for the table `sale` */
+SET IDENTITY_INSERT [sale] ON
 begin try
-insert  into sale(fiscal_year,sale,employee_number) values 
+insert  into sale(sale_id,fiscal_year,sale,employee_number) values 
 
-(2003, 5282.64, 1370),
+(1, 2003, 5282.64, 1370),
 
-(2004, 1938.24, 1370),
+(2, 2004, 1938.24, 1370),
 
-(2004, 1676.14, 1370),
+(3, 2004, 1676.14, 1370),
 
-(2003, 3213, 1166),
+(4, 2003, 3213, 1166),
 
-(2004, 2121.35, 1166),
+(5, 2004, 2121.35, 1166),
 
-(2004, 3711.12, 1166),
+(6, 2004, 3711.12, 1166),
 
-(2003, 3449.26, 1611),
+(7, 2003, 3449.26, 1611),
 
-(2003, 4704.92, 1611),
+(8, 2003, 4704.92, 1611),
 
-(2004, 2974.43, 1611),
+(9, 2004, 2974.43, 1611),
 
-(2004, 4755.6, 1611),
+(10, 2004, 4755.6, 1611),
 
-(2004, 5657.4, 1611),
+(11, 2004, 5657.4, 1611),
 
-(2004, 3660.75, 1370),
+(12, 2004, 3660.75, 1370),
 
-(2004, 2812.32, 1370),
+(13, 2004, 2812.32, 1370),
 
-(2005, 1607.76, 1370),
+(14, 2005, 1607.76, 1370),
 
-(2005, 4996.62, 1370),
+(15, 2005, 4996.62, 1370),
 
-(2003, 5571.8, 1504),
+(16, 2003, 5571.8, 1504),
 
-(2003, 1491.38, 1504),
+(17, 2003, 1491.38, 1504),
 
-(2004, 3884.34, 1504),
+(18, 2004, 3884.34, 1504),
 
-(2004, 5241.44, 1504);
+(19, 2004, 5241.44, 1504)
+end try
+begin catch
+end catch
+SET IDENTITY_INSERT [sale] OFF;
+
+/*Data for the table `top3product` */
+
+begin try
+insert into top3product(product_id,product_name) values 
+
+(40, '1992 Ferrari 360 Spider red'),
+
+(1, '1969 Harley Davidson Ultimate Chopper'),
+
+(2, '1952 Alpine Renault 1300')
 end try
 begin catch
 end catch

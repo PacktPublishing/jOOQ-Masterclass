@@ -28,6 +28,6 @@ public class ClassicModelsService {
         classicModelsRepository.findEmployeeNumberWithMoreSalesIn2005Than2003();       // EXAMPLE 13
         classicModelsRepository.updateCustomerCreditLimit();                           // EXAMPLE 14
         classicModelsRepository.deletePaymentOfCustomerCreditLimitGt150000();          // EXAMPLE 15
-        classicModelsRepository.insertPaymentInOrder();                                // EXAMPLE 16                
+        classicModelsRepository.insertPaymentInBankTransaction();                      // EXAMPLE 16                
     }
 }
