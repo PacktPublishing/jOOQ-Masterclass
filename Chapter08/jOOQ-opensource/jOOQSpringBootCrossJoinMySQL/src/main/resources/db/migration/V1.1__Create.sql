@@ -14,10 +14,12 @@ This is a modified version of the original schema for MySQL
 USE `classicmodels`;
 
 DROP TABLE IF EXISTS `payment`;
+DROP TABLE IF EXISTS `bank_transaction`;
 DROP TABLE IF EXISTS `orderdetail`;
 DROP TABLE IF EXISTS `order`;
 DROP TABLE IF EXISTS `product`;
 DROP TABLE IF EXISTS `productline`;
+DROP TABLE IF EXISTS `top3product`;
 DROP TABLE IF EXISTS `productlinedetail`;
 DROP TABLE IF EXISTS `office_has_manager`;
 DROP TABLE IF EXISTS `manager`;
@@ -219,6 +221,16 @@ CREATE TABLE `orderdetail` (
   CONSTRAINT `orderdetails_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+/*Table structure for table `top3product` */
+
+CREATE TABLE `top3product` (  
+  `product_id` bigint NOT NULL,
+  `product_name` varchar(70) DEFAULT NULL,  
+  PRIMARY KEY (`product_id`),
+  KEY `product_id` (`product_id`),
+  CONSTRAINT `top3product_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 /*Table structure for table `payment` */
 
 CREATE TABLE `payment` (
@@ -226,10 +238,24 @@ CREATE TABLE `payment` (
   `check_number` varchar(50) NOT NULL,
   `payment_date` timestamp NOT NULL,
   `invoice_amount` decimal(10,2) NOT NULL,
-  `caching_date` timestamp DEFAULT NULL,
+  `caching_date` timestamp DEFAULT NULL,  
   PRIMARY KEY (`customer_number`,`check_number`),
   CONSTRAINT `unique_check_number` UNIQUE (`check_number`),
   CONSTRAINT `payments_ibfk_1` FOREIGN KEY (`customer_number`) REFERENCES `customer` (`customer_number`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Table structure for table `bank_transaction` */
+
+CREATE TABLE `bank_transaction` (
+  `transaction_id` bigint NOT NULL AUTO_INCREMENT,
+  `bank_name` varchar(50) NOT NULL,
+  `bank_iban` varchar(50) NOT NULL,  
+  `transfer_amount` decimal(10,2) NOT NULL,
+  `caching_date` timestamp NOT NULL DEFAULT NOW(),
+  `customer_number` bigint NOT NULL,
+  `check_number` varchar(50) NOT NULL, 
+  PRIMARY KEY (`transaction_id`),  
+  CONSTRAINT `bank_transaction_ibfk_1` FOREIGN KEY (`customer_number`,`check_number`) REFERENCES `payment` (`customer_number`,`check_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /* USER-DEFINED FUNCTIONS */
