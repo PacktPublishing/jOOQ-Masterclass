@@ -668,11 +668,37 @@ public class ClassicModelsRepository {
     
     // EXAMPLE 16
     /*
-  
+    insert into [classicmodels].[dbo].[bank_transaction] (
+      [bank_name], [bank_iban], [transfer_amount], 
+      [caching_date], [customer_number], 
+      [check_number]
+    ) 
+    select 
+      distinct ?, 
+      ?, 
+      [classicmodels].[dbo].[payment].[invoice_amount], 
+      case when [classicmodels].[dbo].[payment].[caching_date] is not null 
+        then [classicmodels].[dbo].[payment].[caching_date] 
+          else [classicmodels].[dbo].[payment].[payment_date] end, 
+      [classicmodels].[dbo].[payment].[customer_number], 
+      [classicmodels].[dbo].[payment].[check_number] 
+    from 
+      [classicmodels].[dbo].[payment] 
+      left outer join [classicmodels].[dbo].[bank_transaction] on (
+        [classicmodels].[dbo].[payment].[customer_number] 
+      = [classicmodels].[dbo].[bank_transaction].[customer_number] 
+        and [classicmodels].[dbo].[payment].[check_number] 
+      = [classicmodels].[dbo].[bank_transaction].[check_number]
+      ) 
+    where 
+      (
+        [classicmodels].[dbo].[bank_transaction].[customer_number] is null 
+        and [classicmodels].[dbo].[bank_transaction].[check_number] is null
+      )  
     */
     @Transactional
     public void insertPaymentInBankTransaction() {
-        System.out.println("EXAMPLE 17 (affected rows): "
+        System.out.println("EXAMPLE 16 (affected rows): "
                 + ctx.insertInto(BANK_TRANSACTION, BANK_TRANSACTION.BANK_NAME, BANK_TRANSACTION.BANK_IBAN,
                         BANK_TRANSACTION.TRANSFER_AMOUNT, BANK_TRANSACTION.CACHING_DATE,
                         BANK_TRANSACTION.CUSTOMER_NUMBER, BANK_TRANSACTION.CHECK_NUMBER)

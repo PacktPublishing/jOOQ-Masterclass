@@ -2,7 +2,7 @@ package com.classicmodels.repository;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.time.LocalDate;
+import static jooq.generated.tables.BankTransaction.BANK_TRANSACTION;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
 import static jooq.generated.tables.Employee.EMPLOYEE;
@@ -22,6 +22,8 @@ import static org.jooq.impl.DSL.concat;
 import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.max;
+import static org.jooq.impl.DSL.nvl;
+import static org.jooq.impl.DSL.row;
 import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.selectCount;
 import static org.jooq.impl.DSL.selectDistinct;
@@ -643,35 +645,52 @@ public class ClassicModelsRepository {
     
     // EXAMPLE 16
     /*
-    insert into "SYSTEM"."ORDER" (
-      "ORDER_DATE", "REQUIRED_DATE", "SHIPPED_DATE", 
-      "STATUS", "CUSTOMER_NUMBER"
+    insert into "SYSTEM"."BANK_TRANSACTION" (
+      "BANK_NAME", "BANK_IBAN", "TRANSFER_AMOUNT", 
+      "CACHING_DATE", "CUSTOMER_NUMBER", 
+      "CHECK_NUMBER"
     ) 
     select 
-      distinct "SYSTEM"."PAYMENT"."PAYMENT_DATE", 
-      "SYSTEM"."PAYMENT"."PAYMENT_DATE", 
-      "SYSTEM"."PAYMENT"."CACHING_DATE", 
+      distinct ?, 
       ?, 
-      "SYSTEM"."PAYMENT"."CUSTOMER_NUMBER" 
+      "SYSTEM"."PAYMENT"."INVOICE_AMOUNT", 
+      nvl(
+        "SYSTEM"."PAYMENT"."CACHING_DATE", 
+        "SYSTEM"."PAYMENT"."PAYMENT_DATE"
+      ), 
+      "SYSTEM"."PAYMENT"."CUSTOMER_NUMBER", 
+      "SYSTEM"."PAYMENT"."CHECK_NUMBER" 
     from 
-      "SYSTEM"."PAYMENT", 
-      "SYSTEM"."ORDER" 
+      "SYSTEM"."PAYMENT" 
+      left outer join "SYSTEM"."BANK_TRANSACTION" on (
+        "SYSTEM"."PAYMENT"."CUSTOMER_NUMBER", 
+        "SYSTEM"."PAYMENT"."CHECK_NUMBER"
+      ) = (
+        (
+          "SYSTEM"."BANK_TRANSACTION"."CUSTOMER_NUMBER", 
+          "SYSTEM"."BANK_TRANSACTION"."CHECK_NUMBER"
+        )
+      ) 
     where 
-      "SYSTEM"."PAYMENT"."PAYMENT_DATE" <> "SYSTEM"."ORDER"."ORDER_DATE" 
-    order by 
-      "SYSTEM"."PAYMENT"."PAYMENT_DATE"    
+      (
+        "SYSTEM"."BANK_TRANSACTION"."CUSTOMER_NUMBER" is null 
+        and "SYSTEM"."BANK_TRANSACTION"."CHECK_NUMBER" is null
+      )    
     */
     @Transactional
-    public void insertPaymentInOrder() {
-        
-        System.out.println("EXAMPLE 16 (affected rows): " +
-                ctx.insertInto(ORDER, ORDER.ORDER_DATE, ORDER.REQUIRED_DATE, 
-                        ORDER.SHIPPED_DATE, ORDER.STATUS, ORDER.CUSTOMER_NUMBER)                
-                        .select(selectDistinct(PAYMENT.PAYMENT_DATE.coerce(LocalDate.class), PAYMENT.PAYMENT_DATE.coerce(LocalDate.class),
-                                PAYMENT.CACHING_DATE.coerce(LocalDate.class), val("Shipped"), PAYMENT.CUSTOMER_NUMBER).from(PAYMENT, ORDER)                        
-                                .where(PAYMENT.PAYMENT_DATE.coerce(LocalDate.class).ne(ORDER.ORDER_DATE))
-                                .orderBy(PAYMENT.PAYMENT_DATE))
-                                //.onDuplicateKeyIgnore()
+    public void insertPaymentInBankTransaction() {
+        System.out.println("EXAMPLE 16 (affected rows): "
+                + ctx.insertInto(BANK_TRANSACTION, BANK_TRANSACTION.BANK_NAME, BANK_TRANSACTION.BANK_IBAN,
+                        BANK_TRANSACTION.TRANSFER_AMOUNT, BANK_TRANSACTION.CACHING_DATE,
+                        BANK_TRANSACTION.CUSTOMER_NUMBER, BANK_TRANSACTION.CHECK_NUMBER)
+                        .select(selectDistinct(val("N/A"), val("N/A"), PAYMENT.INVOICE_AMOUNT, 
+                                nvl(PAYMENT.CACHING_DATE, PAYMENT.PAYMENT_DATE), 
+                                PAYMENT.CUSTOMER_NUMBER, PAYMENT.CHECK_NUMBER)
+                                .from(PAYMENT)
+                                .leftOuterJoin(BANK_TRANSACTION)
+                                .on(row(PAYMENT.CUSTOMER_NUMBER, PAYMENT.CHECK_NUMBER)
+                                        .eq(row(BANK_TRANSACTION.CUSTOMER_NUMBER, BANK_TRANSACTION.CHECK_NUMBER)))
+                                .where(row(BANK_TRANSACTION.CUSTOMER_NUMBER, BANK_TRANSACTION.CHECK_NUMBER).isNull()))
                         .execute()
         );
     }
