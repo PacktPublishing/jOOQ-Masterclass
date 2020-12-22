@@ -48,6 +48,12 @@ EXCEPTION
 END;
 /
 BEGIN
+   EXECUTE IMMEDIATE 'DROP TABLE "TOP3PRODUCT" CASCADE CONSTRAINTS';
+EXCEPTION
+   WHEN OTHERS THEN NULL;
+END;
+/
+BEGIN
    EXECUTE IMMEDIATE 'DROP TABLE "PRODUCTLINEDETAIL" CASCADE CONSTRAINTS';
 EXCEPTION
    WHEN OTHERS THEN NULL;
@@ -419,6 +425,15 @@ CREATE TABLE orderdetail (
 
 CREATE INDEX product_id ON orderdetail (product_id);
 
+/*Table structure for table `top3product` */
+
+CREATE TABLE top3product (  
+  product_id number(10) NOT NULL,
+  product_name varchar2(70) DEFAULT NULL,  
+  PRIMARY KEY (product_id),  
+  CONSTRAINT top3product_ibfk_1 FOREIGN KEY (product_id) REFERENCES product (product_id)
+) ;
+
 /*Table structure for table `payment` */
 
 CREATE TABLE payment (
@@ -454,7 +469,7 @@ EXCEPTION
 END;
 /
 
-CREATE SEQUENCE bank_transaction_seq START WITH 10 INCREMENT BY 1;
+CREATE SEQUENCE bank_transaction_seq START WITH 100 INCREMENT BY 1;
 
 CREATE OR REPLACE TRIGGER bank_transaction_seq_tr
  BEFORE INSERT ON bank_transaction FOR EACH ROW
@@ -491,7 +506,7 @@ END;
 
 -- Create Object of your table
 BEGIN
-   EXECUTE IMMEDIATE 'CREATE TYPE TABLE_RES_OBJ AS OBJECT (SALES float);';
+   EXECUTE IMMEDIATE 'CREATE TYPE TABLE_RES_OBJ AS OBJECT (SALES FLOAT);';
 EXCEPTION
    WHEN OTHERS THEN NULL;
 END;

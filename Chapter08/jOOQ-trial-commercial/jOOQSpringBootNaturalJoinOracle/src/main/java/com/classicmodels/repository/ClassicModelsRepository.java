@@ -6,6 +6,7 @@ import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.asterisk;
+import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.table;
 import org.springframework.stereotype.Repository;
@@ -28,7 +29,7 @@ public class ClassicModelsRepository {
                 + ctx.select(asterisk())
                         .from(EMPLOYEE).naturalJoin(SALE)
                         .fetch()
-        );
+        );                
 
         System.out.println("EXAMPLE 1.2\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, SALE.SALE_)
@@ -41,8 +42,15 @@ public class ClassicModelsRepository {
                         .from(table("EMPLOYEE")).naturalJoin(table("SALE"))
                         .fetch()
         );
+        
+        System.out.println("EXAMPLE 1.4\n"
+                + ctx.select()
+                        .from(table("EMPLOYEE")).naturalJoin(table("SALE"))
+                        .where(field("EMPLOYEE_NUMBER").gt(1370L)) // points to EMPLOYEE.EMPLOYEE_NUMBER
+                        .fetch()
+        );
 
-        System.out.println("EXAMPLE 1.4 (uncomment to try) \n"
+        System.out.println("EXAMPLE 1.5 (uncomment to try) \n"
         // results in ORA-25155, uncomment to try
         /*
                 + ctx.select()
@@ -72,8 +80,15 @@ public class ClassicModelsRepository {
                         .from(table("EMPLOYEE")).naturalLeftOuterJoin(table("SALE"))
                         .fetch()
         );
+        
+        System.out.println("EXAMPLE 2.4\n"
+                + ctx.select()
+                        .from(table("EMPLOYEE")).naturalLeftOuterJoin(table("SALE"))
+                        .where(field("EMPLOYEE_NUMBER").gt(1370L)) // points to EMPLOYEE.EMPLOYEE_NUMBER
+                        .fetch()
+        );               
 
-        System.out.println("EXAMPLE 2.4 (uncomment to try) \n"
+        System.out.println("EXAMPLE 2.5 (uncomment to try) \n"
         // results in ORA-25155, uncomment to try
         /*
                 + ctx.select()
@@ -103,8 +118,15 @@ public class ClassicModelsRepository {
                         .from(table("EMPLOYEE")).naturalRightOuterJoin(table("SALE"))
                         .fetch()
         );
+        
+        System.out.println("EXAMPLE 3.4\n"
+                + ctx.select()
+                        .from(table("EMPLOYEE")).naturalRightOuterJoin(table("SALE"))
+                        .where(field("EMPLOYEE_NUMBER").gt(1370L)) // points to SALE.EMPLOYEE_NUMBER
+                        .fetch()
+        );
 
-        System.out.println("EXAMPLE 3.4 (uncomment to try) \n"
+        System.out.println("EXAMPLE 3.5 (uncomment to try) \n"
         // results in ORA-25155, uncomment to try
         /*
                 + ctx.select()
@@ -119,13 +141,13 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 4.1\n"
                 + ctx.select(asterisk())
-                        .from(EMPLOYEE).naturalRightOuterJoin(SALE)
+                        .from(EMPLOYEE).naturalFullOuterJoin(SALE)
                         .fetch()
         );
 
         System.out.println("EXAMPLE 4.2\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, SALE.SALE_)
-                        .from(EMPLOYEE).naturalRightOuterJoin(SALE)
+                        .from(EMPLOYEE).naturalFullOuterJoin(SALE)
                         .fetch()
         );
 
@@ -179,7 +201,7 @@ public class ClassicModelsRepository {
         );
 
         // In such case, we have to rely on explicit ON to eliminate
-        // CACHING_DATE column from JOIN. 
+        // CACHING_DATE column from JOIN
         System.out.println("EXAMPLE 7.2\n"
                 + ctx.select()
                         .from(PAYMENT.innerJoin(BANK_TRANSACTION)

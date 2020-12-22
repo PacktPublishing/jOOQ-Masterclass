@@ -4773,9 +4773,9 @@ insert /*+ ignore_row_on_dupkey_index(orderdetail(order_id, product_id)) */ into
 
  select 10275,1,45,'81.35',1 from dual union all 
 
- select 10275,3,22,'115.37',4 from dual union all 
+ select 10275,2,22,'115.37',4 from dual union all 
 
- select 10275,4,36,'154.93',3 from dual union all 
+ select 10275,40,36,'154.93',3 from dual union all 
 
  select 10275,31,35,'70.12',9 from dual union all 
 
@@ -5671,9 +5671,9 @@ insert /*+ ignore_row_on_dupkey_index(orderdetail(order_id, product_id)) */ into
 
  select 10318,1,46,'84.22',1 from dual union all 
 
- select 10318,3,45,'102.29',4 from dual union all 
+ select 10318,2,45,'102.29',4 from dual union all 
 
- select 10318,4,37,'189.79',3 from dual union all 
+ select 10318,40,37,'189.79',3 from dual union all 
 
  select 10318,31,31,'81.95',9 from dual union all 
 
@@ -8177,5 +8177,15 @@ select 17, 2003, 1491.38, 1504 from dual union all
 select 18, 2004, 3884.34, 1504 from dual union all 
 
 select 19, 2004, 5241.44, 1504 from dual;
+
+/*Data for the table `top3product` */
+
+insert /*+ ignore_row_on_dupkey_index(top3product(product_id)) */ into top3product(product_id,product_name)
+
+select 40, '1992 Ferrari 360 Spider red' from dual union all
+
+select 1, '1969 Harley Davidson Ultimate Chopper' from dual union all
+
+select 2, '1952 Alpine Renault 1300' from dual;
 
 /* END */
