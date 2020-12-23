@@ -52,6 +52,7 @@ CREATE TABLE `department` (
   `code` smallint DEFAULT 1,
   `office_code` varchar(10) NOT NULL,
   `topic` json NOT NULL,
+  `open_date` int DEFAULT NULL,
   PRIMARY KEY (`department_id`),
   KEY `office_code` (`office_code`),
   CONSTRAINT `department_ibfk_1` FOREIGN KEY (`office_code`) REFERENCES `office` (`office_code`)
@@ -68,7 +69,7 @@ CREATE TABLE `employee` (
   `office_code` varchar(10) NOT NULL,
   `salary` int NOT NULL,
   `reports_to` bigint DEFAULT NULL,
-  `job_title` varchar(50) NOT NULL,
+  `job_title` varchar(50) NOT NULL, 
   `employee_of_year` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`employee_number`),
   KEY `reports_to` (`reports_to`),

@@ -663,6 +663,8 @@ insert  into `productline`(`product_line`,`code`,`text_description`,`html_descri
 
 insert  into `productlinedetail`(`product_line`,`code`,`line_capacity`,`line_type`) values 
 
+('Classic Cars',599302,'200A', 1),
+
 ('Motorcycles',599302,'150B', 1),
 
 ('Planes',433823,'450C',2),

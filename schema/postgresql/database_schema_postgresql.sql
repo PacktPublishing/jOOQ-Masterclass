@@ -57,6 +57,7 @@ CREATE TABLE department (
   code smallint DEFAULT 1,
   office_code varchar(10) NOT NULL,
   topic text[] NOT NULL,
+  open_date int DEFAULT NULL,
   PRIMARY KEY (department_id)
 ,
   CONSTRAINT department_ibfk_1 FOREIGN KEY (office_code) REFERENCES office (office_code)

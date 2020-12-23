@@ -2,9 +2,20 @@ package com.classicmodels.converter;
 
 import java.time.YearMonth;
 import org.jooq.Converter;
+import org.jooq.DataType;
+import static org.jooq.impl.SQLDataType.INTEGER;
 
 public class YearMonthConverter implements Converter<Integer, YearMonth> {
 
+    public static final Converter<Integer, YearMonth> INTEGER_YEARMONTH_CONVERTER
+            = new YearMonthConverter();
+
+    public static final Converter<Integer[], YearMonth[]> INTEGER_YEARMONTH_ARR_CONVERTER
+            = INTEGER_YEARMONTH_CONVERTER.forArrays();
+
+    public static final DataType<YearMonth> YEARMONTH
+            = INTEGER.asConvertedDataType(INTEGER_YEARMONTH_CONVERTER);
+    
     @Override
     public YearMonth from(Integer t) {
 
