@@ -123,6 +123,7 @@ CREATE TABLE department (
   [office_code] varchar(10) NOT NULL,
   [topic] varchar(100) NOT NULL,
   [open_date] int DEFAULT NULL,
+  [dep_net_ipv4] varchar(16) DEFAULT NULL,
   PRIMARY KEY ([department_id])
 ,
   CONSTRAINT [department_ibfk_1] FOREIGN KEY ([office_code]) REFERENCES office ([office_code])

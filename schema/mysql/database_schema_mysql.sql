@@ -53,6 +53,7 @@ CREATE TABLE `department` (
   `office_code` varchar(10) NOT NULL,
   `topic` json NOT NULL,
   `open_date` int DEFAULT NULL,
+  `dep_net_ipv4` int unsigned DEFAULT NULL,
   PRIMARY KEY (`department_id`),
   KEY `office_code` (`office_code`),
   CONSTRAINT `department_ibfk_1` FOREIGN KEY (`office_code`) REFERENCES `office` (`office_code`)
