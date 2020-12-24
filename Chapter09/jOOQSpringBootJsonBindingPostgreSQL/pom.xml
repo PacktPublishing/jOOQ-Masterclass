@@ -157,19 +157,53 @@
                             <!-- The first matching forcedType will be applied to the data type definition. -->
                             <forcedTypes>
                                 <forcedType>
-
-                                    <!-- Specify the Java type of your custom type. This corresponds to the Converter's <U> type. -->
+                                    <!--  Must be one of ATTRIBUTE, COLUMN, ELEMENT, PARAMETER, SEQUENCE, 
+                                    or ALL and specifies what type of database objects 
+                                    this forced type is applicable to -->
+                                    <objectType>ALL</objectType>
+                                    
+                                    <!-- Must be one of NULL, NOT_NULL, or ALL and specifies if this forced 
+                                    type is applicable to NULL, NOT NULL, or all definitions -->
+                                    <nullability>ALL</nullability>
+                                    
+                                    <!-- Specify the Java type of your custom type. This corresponds to the Binding's <U> type. -->
                                     <userType>com.fasterxml.jackson.databind.JsonNode</userType>
-
-                                    <!-- Associate that custom type with your converter. -->
-                                    <converter>com.classicmodels.converter.JsonConverter</converter>
-
-                                    <!-- These are the same as for type rewriting -->
-                                    <includeExpression>.*\.manager_detail</includeExpression>
+                                    
+                                    <!-- Associate that custom type with your binding. -->
+                                    <binding>com.classicmodels.binding.JsonBinding</binding>
+                                    
+                                    <!-- A Java regex matching fully-qualified columns, attributes, parameters. Use the pipe to separate several expressions.
+                                    If provided, both "includeExpressions" and "includeTypes" must match. -->
+                                    <includeExpression>.*manager_detail</includeExpression>
+                                    
+                                    <!-- This exclude predicate is a regular expression which is matched 
+                                    against the definition's name; any definition's name matching 
+                                    the regular expression will be considered not matching this forced type -->
+                                    <excludeExpression></excludeExpression>
+                                    
+                                    <!-- A Java regex matching data types to be forced to
+                                    have this type.
+                                    Data types may be reported by your database as:
+                                    - NUMBER regexp suggestion: NUMBER
+                                    - NUMBER(5) regexp suggestion: NUMBER\(5\)
+                                    - NUMBER(5, 2) regexp suggestion: NUMBER\(5,\s*2\)
+                                    - any other form
+                                    It is thus recommended to use defensive regexes for types.
+                                    If provided, both "includeExpressions" and "includeTypes" must match. -->
                                     <includeTypes>.*</includeTypes>
+                                    
+                                    <!-- This exclude predicate is a regular expression which is matched 
+                                    against the name of the definition's type (provided that it has one);
+                                    any definition's type name matching the regular expression will be 
+                                    considered not matching this forced type -->
+                                    <excludeTypes></excludeTypes>
+                                    
+                                    <!-- An SQL query returning all (qualified or unqualified) object 
+                                    names which should be considered to match this forced type -->
+                                    <sql></sql>
                                 </forcedType>
                             </forcedTypes>
-                                                                                                     
+                                                                                   
                             <!-- The database type. The format here is:
                             org.jooq.meta.[database].[database]Database -->
                             <name>org.jooq.meta.postgres.PostgresDatabase</name>

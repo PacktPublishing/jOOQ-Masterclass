@@ -1,4 +1,4 @@
-package com.classicmodels.converter;
+package com.classicmodels.binding;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
