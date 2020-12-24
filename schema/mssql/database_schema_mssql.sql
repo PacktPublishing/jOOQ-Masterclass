@@ -231,6 +231,7 @@ CREATE TABLE product (
   [product_description] varchar(max) DEFAULT NULL,
   [quantity_in_stock] smallint DEFAULT 0,
   [buy_price] decimal(10,2) DEFAULT 0.0,
+  [specs] varchar(max) DEFAULT NULL,
   [msrp] decimal(10,2) DEFAULT 0.0,
   PRIMARY KEY ([product_id])
  ,

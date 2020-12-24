@@ -53,7 +53,7 @@ CREATE TABLE `department` (
   `office_code` varchar(10) NOT NULL,
   `topic` json NOT NULL,
   `open_date` int DEFAULT NULL,
-  `dep_net_ipv4` int unsigned DEFAULT NULL,
+  `dep_net_ipv4` varchar(16) DEFAULT NULL,
   PRIMARY KEY (`department_id`),
   KEY `office_code` (`office_code`),
   CONSTRAINT `department_ibfk_1` FOREIGN KEY (`office_code`) REFERENCES `office` (`office_code`)
@@ -189,6 +189,7 @@ CREATE TABLE `product` (
   `quantity_in_stock` smallint DEFAULT 0,
   `buy_price` decimal(10,2) DEFAULT 0.0,
   `msrp` decimal(10,2) DEFAULT 0.0,
+  `specs` mediumtext DEFAULT NULL,
   PRIMARY KEY (`product_id`),
   KEY `product_line` (`product_line`),
   CONSTRAINT `products_ibfk_1` FOREIGN KEY (`product_line`) REFERENCES `productline` (`product_line`)

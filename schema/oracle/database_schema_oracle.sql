@@ -351,6 +351,7 @@ CREATE TABLE product (
   quantity_in_stock number(5) DEFAULT 0,
   buy_price number(10,2) DEFAULT 0.0,
   msrp number(10,2) DEFAULT 0.0,
+  specs clob DEFAULT NULL,
   PRIMARY KEY (product_id)
  ,
   CONSTRAINT products_ibfk_1 FOREIGN KEY (product_line) REFERENCES productline (product_line)
