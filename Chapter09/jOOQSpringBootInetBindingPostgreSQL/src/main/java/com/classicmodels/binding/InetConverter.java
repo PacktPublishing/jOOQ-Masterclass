@@ -24,7 +24,11 @@ public class InetConverter implements Converter<Object, InetAddress> {
     @Override
     public Object to(InetAddress u) {
 
-        return u.getHostAddress();
+        if (u != null) {
+            return u.getHostAddress();
+        }
+
+        return null;
     }
 
     @Override
