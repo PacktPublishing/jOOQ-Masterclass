@@ -1,4 +1,4 @@
-﻿/*
+/*
 *********************************************************************
 http://www.mysqltutorial.org
 *********************************************************************
@@ -282,8 +282,8 @@ END;
 CREATE TABLE manager (
   manager_id number(10) NOT NULL,
   manager_name varchar2(50) NOT NULL,
-  manager_detail varchar2(4000),  
-  -- for large JSON, use manager_detail blob,
+  -- for small JSON use manager_detail varchar2(4000),
+  manager_detail blob,  
   PRIMARY KEY (manager_id),
   CONSTRAINT ENSURE_JSON CHECK (manager_detail IS JSON)
 ) ;
