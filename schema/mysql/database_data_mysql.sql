@@ -45,13 +45,13 @@ insert  into `office`(`office_code`,`city`,`phone`,`address_line_first`,`address
 
 insert into `department`(`department_id`,`name`,`phone`,`code`,`office_code`,`topic`) values 
 
-('1','Advertising','-int 4782','1333','1',JSON_OBJECT("Advertising", JSON_ARRAY('publicity', 'promotion'))),
+('1','Advertising','-int 4782','1333','1','publicity, promotion'),
 
-('2','Sales','-int 41233','1441','1', JSON_OBJECT("Sales", JSON_ARRAY('commerce', 'trade', 'sellout', 'transaction'))),
+('2','Sales','-int 41233','1441','1', 'commerce, trade, sellout, transaction'),
 
-('3','Accounting','-int 8233','2311','2', JSON_OBJECT("Accounting", JSON_ARRAY('monetary', 'business'))),
+('3','Accounting','-int 8233','2311','2', 'monetary, business'),
 
-('4','Finance','-int 4421','3222','3', JSON_OBJECT("Finance", JSON_ARRAY('commerce', 'fiscal', 'monetary', 'business'))) ON DUPLICATE KEY UPDATE department_id=department_id;
+('4','Finance','-int 4421','3222','3', 'commerce, fiscal, monetary, business') ON DUPLICATE KEY UPDATE department_id=department_id;
 
 /*Data for the table `manager` */
 

@@ -51,7 +51,7 @@ CREATE TABLE `department` (
   `phone` varchar(50) NOT NULL,
   `code` smallint DEFAULT 1,
   `office_code` varchar(10) NOT NULL,
-  `topic` json NOT NULL,
+  `topic` varchar(100) NOT NULL,
   `open_date` int DEFAULT NULL,
   `dep_net_ipv4` varchar(16) DEFAULT NULL,
   PRIMARY KEY (`department_id`),
