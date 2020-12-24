@@ -14,7 +14,7 @@ public class ClassicModelsService {
 
     public void callAll() {
 
-        classicModelsRepository.insertDepartment();
-        classicModelsRepository.findHRDepartment();
+        classicModelsRepository.insertCustomer();
+        classicModelsRepository.findAtelierOneCustomer();
     }
 }

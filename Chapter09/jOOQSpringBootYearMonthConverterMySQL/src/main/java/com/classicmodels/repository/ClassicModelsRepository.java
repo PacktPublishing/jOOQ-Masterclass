@@ -6,7 +6,7 @@ import static com.classicmodels.converter.YearMonthConverter.YEARMONTH;
 import java.time.YearMonth;
 import java.util.Arrays;
 import java.util.List;
-import static jooq.generated.tables.Department.DEPARTMENT;
+import static jooq.generated.tables.Customer.CUSTOMER;
 import org.jooq.Converter;
 import org.jooq.DSLContext;
 import org.jooq.DataType;
@@ -27,26 +27,26 @@ public class ClassicModelsRepository {
     }
 
     @Transactional
-    public void insertDepartment() {
+    public void insertCustomer() {
 
         // converter is not used (we insert '202010' directly)
-        ctx.insertInto(DEPARTMENT)
-                .values(null, "HR", "-int 8799", 2231, 4, "{\"HR\": [\"hiring\", \"interview\"]}",
-                        202010)
+        ctx.insertInto(CUSTOMER)
+                .values(null, "Atelier One", "Markus", "Alop", "0892 339 423",
+                        1370L, 50000, 202010)
                 .execute();
 
         // use converter explicitly by passing to it a valid YearMonth value
-        ctx.insertInto(DEPARTMENT)
-                .values(null, "HR", "-int 8799", 2231, 4, "{\"HR\": [\"hiring\", \"interview\"]}",
-                        INTEGER_YEARMONTH_CONVERTER.to(YearMonth.of(2020, 10)))
-                .execute();
+        ctx.insertInto(CUSTOMER)
+                .values(null, "Atelier One", "Markus", "Alop", "0892 339 423",
+                        1370L, 50000, INTEGER_YEARMONTH_CONVERTER.to(YearMonth.of(2020, 10)))
+                .execute();        
 
         // convert via data type       
-        ctx.insertInto(DEPARTMENT)
-                .values(null, "HR", "-int 8799", 2231, 4, "{\"HR\": [\"hiring\", \"interview\"]}",
-                        val(YearMonth.of(2020, 10), YEARMONTH))
-                .execute();
-
+        ctx.insertInto(CUSTOMER)
+                .values(null, "Atelier One", "Markus", "Alop", "0892 339 423",
+                        1370L, 50000, val(YearMonth.of(2020, 10), YEARMONTH))
+                .execute();        
+        
         // define the converter locally
         Converter<Integer, YearMonth> converter = Converter.ofNullable(Integer.class, YearMonth.class,
                 (Integer t) -> {
@@ -57,10 +57,10 @@ public class ClassicModelsRepository {
                 });
 
         // use the above 'converter'
-        ctx.insertInto(DEPARTMENT)
-                .values(null, "HR", "-int 8799", 2231, 4, "{\"HR\": [\"hiring\", \"interview\"]}",
-                        converter.to(YearMonth.of(2020, 10)))
-                .execute();
+        ctx.insertInto(CUSTOMER)
+                .values(null, "Atelier One", "Markus", "Alop", "0892 339 423",
+                        1370L, 50000, converter.to(YearMonth.of(2020, 10)))
+                .execute();                
 
         // declare data type locally
         DataType<YearMonth> yearmonth = INTEGER.asConvertedDataType(YearMonth.class,
@@ -72,63 +72,63 @@ public class ClassicModelsRepository {
                 });
         
         // convert via the above data type       
-        ctx.insertInto(DEPARTMENT)
-                .values(null, "HR", "-int 8799", 2231, 4, "{\"HR\": [\"hiring\", \"interview\"]}",
-                        val(YearMonth.of(2020, 10), yearmonth))
-                .execute();
+        ctx.insertInto(CUSTOMER)
+                .values(null, "Atelier One", "Markus", "Alop", "0892 339 423",
+                        1370L, 50000, val(YearMonth.of(2020, 10), yearmonth))
+                .execute();                
     }
 
-    public void findHRDepartment() {
+    public void findAtelierOneCustomer() {
 
-        // fetch any DEPARTMENT.OPEN_DATE and convert it via data type's convert()
-        Integer resultInt = ctx.select(DEPARTMENT.OPEN_DATE)
-                .from(DEPARTMENT)
-                .where(DEPARTMENT.NAME.eq("HR"))
-                .fetchAny(DEPARTMENT.OPEN_DATE);
+        // fetch any CUSTOMER.FIRST_BUY_DATE and convert it via data type's convert()
+        Integer resultInt = ctx.select(CUSTOMER.FIRST_BUY_DATE)
+                .from(CUSTOMER)
+                .where(CUSTOMER.CUSTOMER_NAME.eq("Atelier One"))
+                .fetchAny(CUSTOMER.FIRST_BUY_DATE);
 
         System.out.println("Converter is not used, so fetch as Integer: " + resultInt);
         YearMonth resultYM = YEARMONTH.convert(resultInt); // there is a convert() for array and one for List as well
         System.out.println("Use data type's convert() method: " + resultYM);
 
-        // fetch an array of DEPARTMENT.OPEN_DATE and convert via INTEGER_YEARMONTH_ARR_CONVERTER
-        Integer[] resultArrInt = ctx.select(DEPARTMENT.OPEN_DATE)
-                .from(DEPARTMENT)
-                .where(DEPARTMENT.NAME.eq("HR"))
-                .fetchArray(DEPARTMENT.OPEN_DATE);
+        // fetch an array of CUSTOMER.FIRST_BUY_DATE and convert via INTEGER_YEARMONTH_ARR_CONVERTER
+        Integer[] resultArrInt = ctx.select(CUSTOMER.FIRST_BUY_DATE)
+                .from(CUSTOMER)
+                .where(CUSTOMER.CUSTOMER_NAME.eq("Atelier One"))
+                .fetchArray(CUSTOMER.FIRST_BUY_DATE);        
 
         YearMonth[] resultArrYM1 = INTEGER_YEARMONTH_ARR_CONVERTER.from(resultArrInt);
         System.out.println("Use converter for arrays: " + Arrays.toString(resultArrYM1));
 
-        // fetch an array of DEPARTMENT.OPEN_DATE and convert in fetchArray()
-        YearMonth[] resultArrYM2 = ctx.select(DEPARTMENT.OPEN_DATE)
-                .from(DEPARTMENT)
-                .where(DEPARTMENT.NAME.eq("HR"))
-                .fetchArray(DEPARTMENT.OPEN_DATE, INTEGER_YEARMONTH_CONVERTER);
+        // fetch an array of CUSTOMER.FIRST_BUY_DATE and convert in fetchArray()
+        YearMonth[] resultArrYM2 = ctx.select(CUSTOMER.FIRST_BUY_DATE)
+                .from(CUSTOMER)
+                .where(CUSTOMER.CUSTOMER_NAME.eq("Atelier One"))
+                .fetchArray(CUSTOMER.FIRST_BUY_DATE, INTEGER_YEARMONTH_CONVERTER);
         System.out.println("Convert in fetchArray(): " + Arrays.toString(resultArrYM2));
 
-        // fetch a List of DEPARTMENT.OPEN_DATE and convertin fetch()
-        List<YearMonth> resultListYM = ctx.select(DEPARTMENT.OPEN_DATE)
-                .from(DEPARTMENT)
-                .where(DEPARTMENT.NAME.eq("HR"))
-                .fetch(DEPARTMENT.OPEN_DATE, INTEGER_YEARMONTH_CONVERTER);
+        // fetch a List of CUSTOMER.FIRST_BUY_DATE and convertin fetch()
+        List<YearMonth> resultListYM = ctx.select(CUSTOMER.FIRST_BUY_DATE)
+                .from(CUSTOMER)
+                .where(CUSTOMER.CUSTOMER_NAME.eq("Atelier One"))
+                .fetch(CUSTOMER.FIRST_BUY_DATE, INTEGER_YEARMONTH_CONVERTER);
         System.out.println("Convert in fetchArray(): " + resultListYM);
 
         // coercing
-        ctx.select(DEPARTMENT.OPEN_DATE.coerce(YEARMONTH))
-                .from(DEPARTMENT)
-                .where(DEPARTMENT.NAME.eq("HR"))
+        ctx.select(CUSTOMER.FIRST_BUY_DATE.coerce(YEARMONTH))
+                .from(CUSTOMER)
+                .where(CUSTOMER.CUSTOMER_NAME.eq("Atelier One"))
                 .fetch();
 
         // casting
-        ctx.select(DEPARTMENT.OPEN_DATE.cast(YEARMONTH))
-                .from(DEPARTMENT)
-                .where(DEPARTMENT.NAME.eq("HR"))
+        ctx.select(CUSTOMER.FIRST_BUY_DATE.cast(YEARMONTH))
+                .from(CUSTOMER)
+                .where(CUSTOMER.CUSTOMER_NAME.eq("Atelier One"))
                 .fetch();
 
         // new field
-        ctx.select(field(DEPARTMENT.OPEN_DATE.getName(), YEARMONTH))
-                .from(DEPARTMENT)
-                .where(DEPARTMENT.NAME.eq("HR"))
+        ctx.select(field(CUSTOMER.FIRST_BUY_DATE.getName(), YEARMONTH))
+                .from(CUSTOMER)
+                .where(CUSTOMER.CUSTOMER_NAME.eq("Atelier One"))
                 .fetch();
     }
 }

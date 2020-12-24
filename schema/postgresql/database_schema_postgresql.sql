@@ -58,8 +58,7 @@ CREATE TABLE department (
   phone varchar(50) NOT NULL,
   code smallint DEFAULT 1,
   office_code varchar(10) NOT NULL,
-  topic text[] NOT NULL,
-  open_date int DEFAULT NULL,
+  topic text[] NOT NULL,  
   dep_net_ipv4 inet DEFAULT NULL,
   PRIMARY KEY (department_id)
 ,
@@ -173,6 +172,7 @@ CREATE TABLE productline (
   html_description text,
   image bytea,
   created_on date NOT NULL DEFAULT NOW(),
+  open_date int DEFAULT NULL,
   PRIMARY KEY (product_line, code),
   CONSTRAINT unique_product_line UNIQUE(product_line)
 ) ;
