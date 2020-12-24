@@ -1,10 +1,9 @@
 package com.classicmodels.repository;
 
-import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.List;
-import static jooq.generated.Sequences.DEPARTMENT_DEPARTMENT_ID_SEQ;
-import static jooq.generated.tables.Department.DEPARTMENT;
+import java.util.Map;
+import static jooq.generated.tables.Product.PRODUCT;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,22 +19,21 @@ public class ClassicModelsRepository {
     }
 
     @Transactional
-    public void insertDepInet() throws UnknownHostException {
+    public void insertProductWithSpecs() throws UnknownHostException {
 
-        ctx.insertInto(DEPARTMENT)
-                .values(DEPARTMENT_DEPARTMENT_ID_SEQ.nextval(),
-                        "HR", "-int 8799", 2231, 4, new String[]{"hiring", "interiew"},
-                        202010, InetAddress.getByName("128.10.124.12"))
+        ctx.insertInto(PRODUCT, PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_LINE, PRODUCT.SPECS)
+                .values("2002 Masserati Levante", "Classic Cars",
+                        Map.of("Length (in)", "197", "Width (in)", "77.5", "Height (in)", "66.1", "Engine", "Twin Turbo Premium Unleaded V-6"))
                 .execute();
     }
 
-    public void fetchDepInet() {
+    public void fetchProductSpecs() {
 
-        List<InetAddress> inets = ctx.select(DEPARTMENT.DEP_NET_IPV4)
-                .from(DEPARTMENT)
-                .where(DEPARTMENT.NAME.eq("HR"))
-                .fetch(DEPARTMENT.DEP_NET_IPV4);
+        List<Map<String, String>> specs = ctx.select(PRODUCT.SPECS)
+                .from(PRODUCT)
+                .where(PRODUCT.PRODUCT_NAME.eq("2002 Masserati Levante"))
+                .fetch(PRODUCT.SPECS);
 
-        System.out.println("Inet addrs: " + inets);
+        System.out.println("Product specs: " + specs);
     }
 }

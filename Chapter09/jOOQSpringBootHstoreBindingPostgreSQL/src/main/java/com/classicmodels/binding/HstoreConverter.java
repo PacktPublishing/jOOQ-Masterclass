@@ -1,9 +1,8 @@
 package com.classicmodels.binding;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.Map;
 import org.jooq.Converter;
+import org.postgresql.util.HStoreConverter;
 
 public class HstoreConverter implements Converter<Object, Map<String, String>> {
 
@@ -12,13 +11,19 @@ public class HstoreConverter implements Converter<Object, Map<String, String>> {
 
         if (t != null) {
 
-            
+            return HStoreConverter.fromString(t.toString());
         }
+
         return null;
     }
 
     @Override
     public Object to(Map<String, String> u) {
+
+        if (u != null) {
+
+            return HStoreConverter.toString(u);
+        }
 
         return null;
     }
@@ -29,8 +34,8 @@ public class HstoreConverter implements Converter<Object, Map<String, String>> {
     }
 
     @Override
-    public Class<InetAddress> toType() {
-        return InetAddress.class;
+    public Class<Map<String, String>> toType() {
+        return (Class<Map<String, String>>) (Class) Map.class;
     }
 
 }

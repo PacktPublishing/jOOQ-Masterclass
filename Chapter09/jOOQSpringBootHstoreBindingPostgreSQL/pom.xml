@@ -166,14 +166,14 @@
                                     <nullability>ALL</nullability>
                                     
                                     <!-- Specify the Java type of your custom type. This corresponds to the Binding's <U> type. -->
-                                    <userType>java.net.InetAddress</userType>
+                                    <userType>java.util.Map&lt;String, String&gt;</userType>
                                     
                                     <!-- Associate that custom type with your binding. -->
-                                    <binding>com.classicmodels.binding.InetBinding</binding>
+                                    <binding>com.classicmodels.binding.HstoreBinding</binding>
                                     
                                     <!-- A Java regex matching fully-qualified columns, attributes, parameters. Use the pipe to separate several expressions.
                                     If provided, both "includeExpressions" and "includeTypes" must match. -->
-                                    <includeExpression>.*dep_net_ipv4</includeExpression>
+                                    <includeExpression>.*specs</includeExpression>
                                     
                                     <!-- This exclude predicate is a regular expression which is matched 
                                     against the definition's name; any definition's name matching 

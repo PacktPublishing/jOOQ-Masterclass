@@ -15,7 +15,7 @@ public class ClassicModelsService {
 
     public void callAll() throws UnknownHostException {
 
-        classicModelsRepository.insertDepInet();
-        classicModelsRepository.fetchDepInet();
+        classicModelsRepository.insertProductWithSpecs();
+        classicModelsRepository.fetchProductSpecs();
     }
 }
