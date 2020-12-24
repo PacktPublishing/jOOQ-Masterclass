@@ -22,6 +22,22 @@ public class ClassicModelsRepository {
     @Transactional
     public void insertDepInet() throws UnknownHostException {
 
+        // workaround to avoid defining a converter
+        /*
+        ctx.insertInto(DEPARTMENT)
+                .set(DEPARTMENT.DEPARTMENT_ID, DEPARTMENT_DEPARTMENT_ID_SEQ.nextval())
+                .set(DEPARTMENT.NAME, "HR")
+                .set(DEPARTMENT.PHONE, "-int 8799")
+                .set(DEPARTMENT.CODE, (short) 2231)
+                .set(DEPARTMENT.OFFICE_CODE, "4")
+                .set(DEPARTMENT.TOPIC, new String[]{"hiring", "interiew"})
+                .set(DEPARTMENT.OPEN_DATE, 202010)
+                //.set(DEPARTMENT.DEP_NET_IPV4, InetAddress.getByName("128.10.124.12"))
+                .set(DEPARTMENT.DEP_NET_IPV4, field("?::inet", String.class, "128.10.124.12"))
+                .execute();
+        */
+        
+        // use the InetConverter
         ctx.insertInto(DEPARTMENT)
                 .values(DEPARTMENT_DEPARTMENT_ID_SEQ.nextval(),
                         "HR", "-int 8799", 2231, 4, new String[]{"hiring", "interiew"},
@@ -31,6 +47,15 @@ public class ClassicModelsRepository {
 
     public void fetchDepInet() {
 
+        // workaround to avoid defining a converter
+        /*
+        List<String> inets = ctx.select(DEPARTMENT.DEP_NET_IPV4)
+                .from(DEPARTMENT)
+                .where(DEPARTMENT.NAME.eq("HR"))
+                .fetch(DEPARTMENT.DEP_NET_IPV4, String.class);
+        */
+        
+        // use the InetConverter
         List<InetAddress> inets = ctx.select(DEPARTMENT.DEP_NET_IPV4)
                 .from(DEPARTMENT)
                 .where(DEPARTMENT.NAME.eq("HR"))
