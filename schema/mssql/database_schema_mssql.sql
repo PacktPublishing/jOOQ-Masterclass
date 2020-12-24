@@ -154,6 +154,7 @@ CREATE TABLE customer (
   [phone] varchar(50) NOT NULL,
   [sales_rep_employee_number] bigint DEFAULT NULL,
   [credit_limit] decimal(10,2) DEFAULT NULL,
+  [first_buy_date] int DEFAULT NULL,
   PRIMARY KEY ([customer_number])
  ,
   CONSTRAINT [customers_ibfk_1] FOREIGN KEY ([sales_rep_employee_number]) REFERENCES employee ([employee_number])
@@ -205,7 +206,6 @@ CREATE TABLE productline (
   [html_description] varchar(max),
   [image] varbinary(max),
   [created_on] date DEFAULT GETDATE(),
-  [open_date] int DEFAULT NULL,
   PRIMARY KEY ([product_line],[code]),
   CONSTRAINT [unique_product_line] UNIQUE([product_line])
 );
