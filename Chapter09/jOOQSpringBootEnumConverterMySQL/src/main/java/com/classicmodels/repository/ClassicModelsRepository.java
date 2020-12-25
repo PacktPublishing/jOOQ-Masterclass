@@ -1,6 +1,6 @@
 package com.classicmodels.repository;
 
-import static com.classicmodels.converter.SaleRateIntConverter.SALE_RATE_INT_CONVERTER;
+import static com.classicmodels.converter.SaleVatIntConverter.SALE_VAT_INT_CONVERTER;
 import static com.classicmodels.converter.SaleRateStarConverter.SALE_RATE_STAR_CONVERTER;
 import static com.classicmodels.converter.SaleStrTrendConverter.SALE_STR_TREND_TYPE;
 import static com.classicmodels.converter.SaleStrTrendConverter.SALE_STR_TREND_CONVERTER;
@@ -37,19 +37,21 @@ public class ClassicModelsRepository {
                 .values(2005, 56444.32, 1370L, SALE_RATE_STAR_CONVERTER.to(StarType.FIVE_STARS))
                 .execute();
 
-        // use SALE_RATE_INT_CONVERTER
-        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.RATE)
-                .values(2005, 56444.32, 1370L, SALE_RATE_INT_CONVERTER.to(1000))
+        // use SALE_VAT_INT_CONVERTER
+        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.VAT)
+                .values(2005, 56444.32, 1370L, SALE_VAT_INT_CONVERTER.to(19))
                 .execute();
         
         // use SALE_STR_TREND_CONVERTER
         ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.TREND)
                 .values(2005, 56444.32, 1370L, SALE_STR_TREND_CONVERTER.to(TrendType.UP))
                 .execute();
-                
+
         // use SALE_STR_TREND_TYPE
         ctx.insertInto(SALE)
-                .values(null, 2005, 56444.32, 1370L, 0, SALE_RATE_INT_CONVERTER.to(1000), 
+                .values(null, 2005, 56444.32, 1370L, 0, 
+                        SALE_RATE_STAR_CONVERTER.to(StarType.FIVE_STARS),
+                        SALE_VAT_INT_CONVERTER.to(19),
                         val(TrendType.UP, SALE_STR_TREND_TYPE))
                 .execute();
     }
@@ -71,11 +73,11 @@ public class ClassicModelsRepository {
 
         System.out.println("Stars: " + stars);
 
-        // convert from RateType to Integer via explicit call of the converter
-        List<Integer> ints = ctx.select(SALE.RATE)
+        // convert from VatType to Integer via explicit call of the converter
+        List<Integer> ints = ctx.select(SALE.VAT)
                 .from(SALE)
-                .where(SALE.RATE.isNotNull())
-                .fetch(SALE.RATE, SALE_RATE_INT_CONVERTER);
+                .where(SALE.VAT.isNotNull())
+                .fetch(SALE.VAT, SALE_VAT_INT_CONVERTER);
 
         System.out.println("Stars as integers: " + ints);
         

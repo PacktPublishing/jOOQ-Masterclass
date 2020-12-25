@@ -190,6 +190,13 @@
                                                     <transform>AS_IS</transform>                                                                                      
                                                 </enumClass>                                                
                                             </enum>
+                                            <enum>         
+                                                <expression>sale_vat</expression>                                                                                            
+                                                <enumClass>                                                    
+                                                    <expression>VatType</expression>
+                                                    <transform>AS_IS</transform>                                                                                      
+                                                </enumClass>                                                
+                                            </enum>
                                         </enums>
                                     </matchers>
                                 </strategy>

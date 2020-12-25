@@ -45,13 +45,13 @@ insert  into `office`(`office_code`,`city`,`phone`,`address_line_first`,`address
 
 insert into `department`(`department_id`,`name`,`phone`,`code`,`office_code`,`topic`) values 
 
-('1','Advertising','-int 4782','1333','1',JSON_OBJECT("Advertising", JSON_ARRAY('publicity', 'promotion'))),
+('1','Advertising','-int 4782','1333','1','publicity, promotion'),
 
-('2','Sales','-int 41233','1441','1', JSON_OBJECT("Sales", JSON_ARRAY('commerce', 'trade', 'sellout', 'transaction'))),
+('2','Sales','-int 41233','1441','1', 'commerce, trade, sellout, transaction'),
 
-('3','Accounting','-int 8233','2311','2', JSON_OBJECT("Accounting", JSON_ARRAY('monetary', 'business'))),
+('3','Accounting','-int 8233','2311','2', 'monetary, business'),
 
-('4','Finance','-int 4421','3222','3', JSON_OBJECT("Finance", JSON_ARRAY('commerce', 'fiscal', 'monetary', 'business'))) ON DUPLICATE KEY UPDATE department_id=department_id;
+('4','Finance','-int 4421','3222','3', 'commerce, fiscal, monetary, business') ON DUPLICATE KEY UPDATE department_id=department_id;
 
 /*Data for the table `manager` */
 
@@ -8129,45 +8129,45 @@ insert  into `bank_transaction`(`transaction_id`,`bank_name`,`bank_iban`,`transf
 
 /*Data for the table `sale` */
 
-insert into sale(sale_id,fiscal_year,sale,employee_number) values 
+insert into sale(sale_id,fiscal_year,sale,employee_number,trend) values 
 
-(1, 2003, 5282.64, 1370),
+(1, 2003, 5282.64, 1370,'up'),
 
-(2, 2004, 1938.24, 1370),
+(2, 2004, 1938.24, 1370,'up'),
 
-(3, 2004, 1676.14, 1370),
+(3, 2004, 1676.14, 1370,'down'),
 
-(4, 2003, 3213, 1166),
+(4, 2003, 3213, 1166,'down'),
 
-(5, 2004, 2121.35, 1166),
+(5, 2004, 2121.35, 1166,'down'),
 
-(6, 2004, 3711.12, 1166),
+(6, 2004, 3711.12, 1166,'constant'),
 
-(7, 2003, 3449.26, 1611),
+(7, 2003, 3449.26, 1611,'constant'),
 
-(8, 2003, 4704.92, 1611),
+(8, 2003, 4704.92, 1611,'up'),
 
-(9, 2004, 2974.43, 1611),
+(9, 2004, 2974.43, 1611,'constant'),
 
-(10, 2004, 4755.6, 1611),
+(10, 2004, 4755.6, 1611,'up'),
 
-(11, 2004, 5657.4, 1611),
+(11, 2004, 5657.4, 1611,'down'),
 
-(12, 2004, 3660.75, 1370),
+(12, 2004, 3660.75, 1370,'down'),
 
-(13, 2004, 2812.32, 1370),
+(13, 2004, 2812.32, 1370,'down'),
 
-(14, 2005, 1607.76, 1370),
+(14, 2005, 1607.76, 1370,'up'),
 
-(15, 2005, 4996.62, 1370),
+(15, 2005, 4996.62, 1370,'constant'),
 
-(16, 2003, 5571.8, 1504),
+(16, 2003, 5571.8, 1504,'down'),
 
-(17, 2003, 1491.38, 1504),
+(17, 2003, 1491.38, 1504,'constant'),
 
-(18, 2004, 3884.34, 1504),
+(18, 2004, 3884.34, 1504,'down'),
 
-(19, 2004, 5241.44, 1504) ON DUPLICATE KEY UPDATE sale_id=sale_id;
+(19, 2004, 5241.44, 1504,'constant') ON DUPLICATE KEY UPDATE sale_id=sale_id;
 
 /*Data for the table `top3product` */
 
