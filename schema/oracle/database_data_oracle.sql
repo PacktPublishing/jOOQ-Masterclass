@@ -8140,43 +8140,43 @@ select 10,'BRT Bank','TVNU343T38TUNU3T','52151.81',278,'GP636783', '2003-03-02 1
 
 insert /*+ ignore_row_on_dupkey_index(sale(sale_id)) */ into sale(sale_id,fiscal_year,sale,employee_number,trend)
 
-select 1, 2003, 5282.64, 1370, 'up' from dual union all 
+select 1, 2003, 5282.64, 1370, 'UP' from dual union all 
 
-select 2, 2004, 1938.24, 1370, 'up' from dual union all 
+select 2, 2004, 1938.24, 1370, 'UP' from dual union all 
 
-select 3, 2004, 1676.14, 1370, 'down' from dual union all 
+select 3, 2004, 1676.14, 1370, 'DOWN' from dual union all 
 
-select 4, 2003, 3213, 1166, 'down' from dual union all 
+select 4, 2003, 3213, 1166, 'DOWN' from dual union all 
 
-select 5, 2004, 2121.35, 1166, 'down' from dual union all 
+select 5, 2004, 2121.35, 1166, 'DOWN' from dual union all 
 
-select 6, 2004, 3711.12, 1166, 'constant' from dual union all 
+select 6, 2004, 3711.12, 1166, 'CONSTANT' from dual union all 
 
-select 7, 2003, 3449.26, 1611, 'constant' from dual union all 
+select 7, 2003, 3449.26, 1611, 'CONSTANT' from dual union all 
 
-select 8, 2003, 4704.92, 1611, 'up' from dual union all 
+select 8, 2003, 4704.92, 1611, 'UP' from dual union all 
 
-select 9, 2004, 2974.43, 1611, 'constant' from dual union all 
+select 9, 2004, 2974.43, 1611, 'CONSTANT' from dual union all 
 
-select 10, 2004, 4755.6, 1611, 'up' from dual union all 
+select 10, 2004, 4755.6, 1611, 'UP' from dual union all 
 
-select 11, 2004, 5657.4, 1611, 'down' from dual union all 
+select 11, 2004, 5657.4, 1611, 'DOWN' from dual union all 
 
-select 12, 2004, 3660.75, 1370, 'down' from dual union all 
+select 12, 2004, 3660.75, 1370, 'DOWN' from dual union all 
 
-select 13, 2004, 2812.32, 1370, 'down' from dual union all 
+select 13, 2004, 2812.32, 1370, 'DOWN' from dual union all 
 
-select 14, 2005, 1607.76, 1370, 'up' from dual union all 
+select 14, 2005, 1607.76, 1370, 'UP' from dual union all 
 
-select 15, 2005, 4996.62, 1370, 'constant' from dual union all 
+select 15, 2005, 4996.62, 1370, 'CONSTANT' from dual union all 
 
-select 16, 2003, 5571.8, 1504, 'down' from dual union all 
+select 16, 2003, 5571.8, 1504, 'DOWN' from dual union all 
 
-select 17, 2003, 1491.38, 1504, 'constant' from dual union all 
+select 17, 2003, 1491.38, 1504, 'CONSTANT' from dual union all 
 
-select 18, 2004, 3884.34, 1504, 'down' from dual union all 
+select 18, 2004, 3884.34, 1504, 'DOWN' from dual union all 
 
-select 19, 2004, 5241.44, 1504, 'constant' from dual;
+select 19, 2004, 5241.44, 1504, 'CONSTANT' from dual;
 
 /*Data for the table `top3product` */
 
