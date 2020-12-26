@@ -1,16 +1,10 @@
 package com.classicmodels.repository;
 
-import static com.classicmodels.converter.SaleRateIntConverter.SALE_RATE_INT_CONVERTER;
-import static com.classicmodels.converter.SaleRateStarConverter.SALE_RATE_STAR_CONVERTER;
-import static com.classicmodels.converter.SaleStrTrendConverter.SALE_STR_TREND_TYPE;
-import static com.classicmodels.converter.SaleStrTrendConverter.SALE_STR_TREND_CONVERTER;
 import com.classicmodels.enums.StarType;
 import com.classicmodels.enums.TrendType;
 import java.util.List;
-import jooq.generated.enums.RateType;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
-import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,25 +26,25 @@ public class ClassicModelsRepository {
                 .values(2005, 56444.32, 1370L, StarType.FIVE_STARS)
                 .execute();
 
-        // use SALE_RATE_STAR_CONVERTER
+        // use SaleRateStarConverter
         ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.RATE)
                 .values(2005, 56444.32, 1370L, StarType.FIVE_STARS)
                 .execute();
 
-        // use SALE_RATE_INT_CONVERTER
-//        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.RATE)
-  //              .values(2005, 56444.32, 1370L, 1000)
-    //            .execute();
+        // use SaleVatIntConverter
+        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.VAT)
+                .values(2005, 56444.32, 1370L, 19)
+                .execute();
         
-        // use SALE_STR_TREND_CONVERTER
+        // use SaleStrTrendConverter
         ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.TREND)
                 .values(2005, 56444.32, 1370L, TrendType.UP)
                 .execute();
-                
-        // use SALE_STR_TREND_TYPE
+
+        // use all three converters
         ctx.insertInto(SALE)
-                .values(null, 2005, 56444.32, 1370L, 0, SALE_RATE_INT_CONVERTER.to(1000), 
-                        val(TrendType.UP, SALE_STR_TREND_TYPE))
+                .values(null, 2005, 56444.32, 1370L, 0, 
+                        StarType.FIVE_STARS, 19, TrendType.UP)
                 .execute();
     }
 
@@ -71,15 +65,15 @@ public class ClassicModelsRepository {
 
         System.out.println("Stars: " + stars);
 
-        // convert from RateType to Integer via explicit call of the converter
-      //  List<Integer> ints = ctx.select(SALE.RATE)
-        //        .from(SALE)
-          //      .where(SALE.RATE.isNotNull())
-            //    .fetch(SALE.RATE);
+        // convert from VatType to Integer via explicit call of the converter
+        List<Integer> ints = ctx.select(SALE.VAT)
+                .from(SALE)
+                .where(SALE.VAT.isNotNull())
+                .fetch(SALE.VAT);
 
-      //  System.out.println("Stars as integers: " + ints);
+        System.out.println("Stars as integers: " + ints);
         
-        // convert from String to TrendType via explicit call of the converter
+        // convert from Object to TrendType via explicit call of the converter
         List<TrendType> trends = ctx.select(SALE.TREND)
                 .from(SALE)
                 .where(SALE.TREND.isNotNull())

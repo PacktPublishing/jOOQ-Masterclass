@@ -170,9 +170,9 @@
                                             <userType>java.lang.Integer</userType>
                                             
                                             <!-- Associate that custom type with your converter. -->
-                                            <converter>com.classicmodels.converter.SaleRateIntConverter</converter>                                    
+                                            <converter>com.classicmodels.converter.SaleVatIntConverter</converter>                                    
                                             
-                                            <includeExpression>.*rate</includeExpression>
+                                            <includeExpression>.*vat</includeExpression>
                                             <includeTypes>.*</includeTypes>
                                         </forcedType>
                                         <forcedType>                                
@@ -216,23 +216,7 @@
                                     (default is 5 seconds) -->
                                     <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>
                                 </database>
-                                                               
-                                <strategy>
-                                    <matchers>                                                                               
-                                        <!-- Specify 0..n enum matchers to provide a strategy 
-                                        for naming objects created from enums. -->
-                                        <enums>
-                                            <enum>         
-                                                <expression>sale_rate</expression>                                                                                            
-                                                <enumClass>                                                    
-                                                    <expression>RateType</expression>
-                                                    <transform>AS_IS</transform>                                                                                      
-                                                </enumClass>                                                
-                                            </enum>
-                                        </enums>
-                                    </matchers>
-                                </strategy>
-                                
+                                                                                               
                                 <!-- jOOQ will generate POJOs in your behalf -->
                                 <generate>
                                     <pojos>true</pojos> 

@@ -1,25 +1,26 @@
 package com.classicmodels.converter;
 
 import com.classicmodels.enums.StarType;
-import jooq.generated.enums.RateType;
 import org.jooq.Converter;
 
-public class SaleRateStarConverter implements Converter<RateType, StarType> {
+public class SaleRateStarConverter implements Converter<String, StarType> {
     
     public final static SaleRateStarConverter SALE_RATE_STAR_CONVERTER = new SaleRateStarConverter();
 
     @Override
-    public StarType from(RateType t) {
+    public StarType from(String t) {
 
         if (t != null) {
 
             return switch (t) {
-                case SILVER ->
+                case "SILVER" ->
                     StarType.THREE_STARS;
-                case GOLD ->
+                case "GOLD" ->
                     StarType.FOUR_STARS;
-                case PLATINUM ->
+                case "PLATINUM" ->
                     StarType.FIVE_STARS;
+                default ->
+                    throw new IllegalArgumentException("Invalid value");
             };
         }
 
@@ -27,17 +28,19 @@ public class SaleRateStarConverter implements Converter<RateType, StarType> {
     }
 
     @Override
-    public RateType to(StarType u) {
+    public String to(StarType u) {
 
         if (u != null) {
 
             return switch (u) {
                 case THREE_STARS ->
-                    RateType.SILVER;
+                    "SILVER";
                 case FOUR_STARS ->
-                    RateType.GOLD;
+                    "GOLD";
                 case FIVE_STARS ->
-                    RateType.PLATINUM;
+                    "PLATINUM";
+                default ->
+                    throw new IllegalArgumentException("Invalid value");
             };
         }
 
@@ -45,8 +48,8 @@ public class SaleRateStarConverter implements Converter<RateType, StarType> {
     }
 
     @Override
-    public Class<RateType> fromType() {
-        return RateType.class;
+    public Class<String> fromType() {
+        return String.class;
     }
 
     @Override
