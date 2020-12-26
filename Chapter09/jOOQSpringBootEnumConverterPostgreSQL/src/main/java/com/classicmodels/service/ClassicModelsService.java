@@ -15,6 +15,6 @@ public class ClassicModelsService {
     public void callAll() {     
                 
         classicModelsRepository.insertSale();
-        classicModelsRepository.fetchSale();
+        classicModelsRepository.fetchSale();                
     }
 }

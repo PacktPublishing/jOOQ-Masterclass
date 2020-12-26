@@ -4,9 +4,9 @@ import com.classicmodels.enums.StarType;
 import jooq.generated.enums.RateType;
 import org.jooq.Converter;
 
-public class RateStarConverter implements Converter<RateType, StarType> {
+public class SaleRateStarConverter implements Converter<RateType, StarType> {
     
-    public final static RateStarConverter RATE_STAR_CONVERTER = new RateStarConverter();
+    public final static SaleRateStarConverter SALE_RATE_STAR_CONVERTER = new SaleRateStarConverter();
 
     @Override
     public StarType from(RateType t) {

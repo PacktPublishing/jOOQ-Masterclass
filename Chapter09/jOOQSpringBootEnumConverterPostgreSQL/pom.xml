@@ -153,24 +153,7 @@
                         <name>org.jooq.codegen.JavaGenerator</name>
         
                         <database>        
-                            
-                            <!--                            
-                            <forcedTypes>
-                                <forcedType>                                
-                                    <userType>com.classicmodels.enums.StarType</userType>
-                                    <converter>com.classicmodels.converter.RateStarConverter</converter>                                    
-                                    <includeExpression>.*\.rate</includeExpression>
-                                    <includeTypes>.*</includeTypes>
-                                </forcedType>
-                                <forcedType>                                
-                                    <userType>java.lang.Integer</userType>
-                                    <converter>com.classicmodels.converter.RateIntConverter</converter>                                    
-                                    <includeExpression>.*\.rate</includeExpression>
-                                    <includeTypes>.*</includeTypes>
-                                </forcedType>
-                            </forcedTypes>   
-                            -->
-                                                                                                                                             
+                                                                                                                                                                         
                             <!-- The database type. The format here is:
                             org.jooq.meta.[database].[database]Database -->
                             <name>org.jooq.meta.postgres.PostgresDatabase</name>

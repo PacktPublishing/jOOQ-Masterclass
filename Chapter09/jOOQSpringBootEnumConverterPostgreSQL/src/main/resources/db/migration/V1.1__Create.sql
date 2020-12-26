@@ -95,6 +95,7 @@ CREATE INDEX office_code ON employee (office_code);
 CREATE SEQUENCE sale_seq START 1000000;
 
 CREATE TYPE rate_type AS enum('SILVER', 'GOLD', 'PLATINUM');
+CREATE TYPE vat_type AS enum('NONE', 'MIN', 'MAX');
 
 CREATE TABLE sale (
   sale_id bigint NOT NULL DEFAULT NEXTVAL ('sale_seq'),  
@@ -103,6 +104,8 @@ CREATE TABLE sale (
   employee_number bigint DEFAULT NULL,  
   hot boolean DEFAULT FALSE,
   rate rate_type DEFAULT NULL,
+  vat vat_type DEFAULT NULL,
+  trend varchar(10) DEFAULT NULL,
   PRIMARY KEY (sale_id)
  ,  
   CONSTRAINT sales_ibfk_1 FOREIGN KEY (employee_number) REFERENCES employee (employee_number)
