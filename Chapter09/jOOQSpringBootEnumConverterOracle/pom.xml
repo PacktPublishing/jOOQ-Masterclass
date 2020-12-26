@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.app</groupId>
-    <artifactId>jOOQSpringBootAntiJoinDivisionOracle</artifactId>
+    <artifactId>jOOQSpringBootEnumConverterOracle</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQSpringBootAntiJoinDivisionOracle</name>
+    <name>jOOQSpringBootEnumConverterOracle</name>
     <description>jOOQ - Spring Boot app</description>    
 
     <parent>
