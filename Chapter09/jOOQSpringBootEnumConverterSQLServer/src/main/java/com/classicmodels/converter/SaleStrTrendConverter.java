@@ -18,11 +18,11 @@ public class SaleStrTrendConverter implements Converter<String, TrendType> {
 
         if (u != null) {
 
-            if (u.equalsIgnoreCase("up")) {
+            if (u.equals("UP")) {
                 return TrendType.UP;
-            } else if (u.equalsIgnoreCase("down")) {
+            } else if (u.equals("DOWN")) {
                 return TrendType.DOWN;
-            } else if (u.equalsIgnoreCase("constant")) {
+            } else if (u.equals("CONSTANT")) {
                 return TrendType.CONSTANT;
             }
         }
@@ -37,11 +37,11 @@ public class SaleStrTrendConverter implements Converter<String, TrendType> {
 
             return switch (t) {
                 case UP ->
-                    "up";
+                    "UP";
                 case DOWN ->
-                    "down";
+                    "DOWN";
                 case CONSTANT ->
-                    "constant";
+                    "CONSTANT";
             };
         }
 
