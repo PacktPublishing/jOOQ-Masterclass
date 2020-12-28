@@ -4,6 +4,7 @@ import java.util.List;
 import jooq.generated.embeddables.pojos.Location;
 import jooq.generated.embeddables.records.LocationRecord;
 import static jooq.generated.tables.Office.OFFICE;
+import jooq.generated.tables.records.OfficeRecord;
 import org.jooq.DSLContext;
 import org.jooq.Record1;
 import org.jooq.Result;
@@ -44,5 +45,10 @@ public class ClassicModelsRepository {
                 .fetchInto(Location.class);  
         
         System.out.println("Result:" + result);
+        
+        Result<OfficeRecord> resultAll = ctx.selectFrom(OFFICE)
+                .fetch();
+        
+        System.out.println("Result:\n" + resultAll);
     }
 }
