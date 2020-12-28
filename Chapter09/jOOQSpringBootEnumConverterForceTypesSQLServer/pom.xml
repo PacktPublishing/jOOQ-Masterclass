@@ -212,13 +212,7 @@
                                     (default is 5 seconds) -->
                                     <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>
                                 </database>
-                                
-                                <!-- jOOQ will generate POJOs in your behalf -->
-                                <generate>
-                                    <pojos>true</pojos> 
-                                    <validationAnnotations>true</validationAnnotations>                            
-                                </generate>
-                        
+                                                             
                                 <!-- jOOQ will generate POJOs in your behalf -->
                                 <generate>
                                     <pojos>true</pojos> 
