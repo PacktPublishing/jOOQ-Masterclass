@@ -30,7 +30,7 @@ public class ClassicModelsRepository {
         // no explicit converter
         ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.RATE)
                 .values(2005, 56444.32, 1370L, RateType.PLATINUM)
-                .execute();
+                .execute();                
 
         // use SALE_RATE_STAR_CONVERTER
         ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.RATE)
@@ -63,7 +63,7 @@ public class ClassicModelsRepository {
                 .where(SALE.RATE.isNotNull())
                 .fetch(SALE.RATE);
 
-        System.out.println("Rates: " + rates);
+        System.out.println("Rates: " + rates);                
 
         // convert from RateType to StarType via explicit call of the converter
         List<StarType> stars = ctx.select(SALE.RATE)
@@ -82,11 +82,19 @@ public class ClassicModelsRepository {
         System.out.println("Stars as integers: " + ints);
         
         // convert from String to TrendType via explicit call of the converter
-        List<TrendType> trends = ctx.select(SALE.TREND)
+        List<TrendType> trends1 = ctx.select(SALE.TREND)
                 .from(SALE)
                 .where(SALE.TREND.isNotNull())
                 .fetch(SALE.TREND, SALE_STR_TREND_CONVERTER);
         
-        System.out.println("Trends: " + trends);
+        System.out.println("Trends(1): " + trends1);
+        
+        // explicit mapping, no converter needed
+        List<TrendType> trends2 = ctx.select(SALE.TREND)
+                .from(SALE)
+                .where(SALE.TREND.isNotNull())
+                .fetch()
+                .map(rs -> TrendType.valueOf(rs.getValue(SALE.TREND)));
+        System.out.println("Trends(2): " + trends2);
     }    
 }
