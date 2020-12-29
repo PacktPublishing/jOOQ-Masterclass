@@ -82,11 +82,20 @@ public class ClassicModelsRepository {
         System.out.println("Stars as integers: " + ints);
         
         // convert from String to TrendType via explicit call of the converter
-        List<TrendType> trends = ctx.select(SALE.TREND)
+        List<TrendType> trends1 = ctx.select(SALE.TREND)
                 .from(SALE)
                 .where(SALE.TREND.isNotNull())
                 .fetch(SALE.TREND, SALE_STR_TREND_CONVERTER);
         
-        System.out.println("Trends: " + trends);
+        System.out.println("Trends(1): " + trends1);
+        
+        // explicit mapping, no converter needed
+        List<TrendType> trends2 = ctx.select(SALE.TREND)
+                .from(SALE)
+                .where(SALE.TREND.isNotNull())
+                .fetch()
+                .map(rs -> TrendType.valueOf(rs.getValue(SALE.TREND)));
+        
+        System.out.println("Trends(2): " + trends2);
     }    
 }
