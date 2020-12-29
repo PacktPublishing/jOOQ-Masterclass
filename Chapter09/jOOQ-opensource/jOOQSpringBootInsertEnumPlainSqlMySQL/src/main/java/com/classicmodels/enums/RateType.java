@@ -1,7 +1,6 @@
 package com.classicmodels.enums;
 
 import org.jooq.EnumType;
-import org.jooq.Schema;
 
 public enum RateType implements EnumType {
 
@@ -10,10 +9,10 @@ public enum RateType implements EnumType {
     @Override
     public String getLiteral() {
         return this.name();
-    }
+    }    
 
     @Override
     public String getName() {
-        return "rate";
+        return "rate_type";
     }
 }
