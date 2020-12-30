@@ -161,9 +161,25 @@
                                             <!-- Specify any data type that is supported in your database, or if unsupported,
                                             a type from org.jooq.impl.SQLDataType -->
                                             <name>BOOLEAN</name>
-                                            <!-- A Java regex matching fully-qualified columns, attributes, parameters. Use the pipe to separate several expressions.
-                                            If provided, both "includeExpression" and "includeTypes" must match. -->
-                                            <includeExpression>.*\.hot</includeExpression>
+                              
+                                             <!-- A Java regex matching fully-qualified columns, attributes, parameters. Use the pipe to separate several expressions.
+                                            If provided, both "includeExpressions" and "includeTypes" must match. -->
+                                            <!-- single field expressed as schema\table\field -->
+                                            <includeExpression>SYSTEM\.SALE\.HOT</includeExpression>
+                                            
+                                            <!-- or, like this -->
+                                            <!-- <expression>.*\.SALE\.HOT</expression> -->
+                                            
+                                            <!-- all 'rate' fields, no matter the table -->
+                                            <!-- <expression>.*\.HOT</expression> -->
+                                            
+                                            <!-- all fields containing 'HO', no matter the table -->
+                                            <!-- <expression>.*\.HO.*</expression> -->
+                                            
+                                            <!-- case-insensitive expressions -->
+                                            <!-- <expression>(?i:.*\.sale\.hot)</expression> -->
+                                            <!-- <expression>(?i:system\.sale\.hot)</expression> -->   
+
                                             <!-- A Java regex matching data types to be forced to have this type.
                                             Data types may be reported by your database as:
                                             - NUMBER regexp suggestion: NUMBER
@@ -172,7 +188,7 @@
                                             - any other form.
                                             It is thus recommended to use defensive regexes for types.
                                             If provided, both "includeExpression" and "includeTypes" must match. -->
-                                            <includeTypes>.*</includeTypes>
+                                            <includeTypes>NUMBER\(1,\s*0\)</includeTypes>
                                         </forcedType>
                                     </forcedTypes>                                                                        
                                                          
