@@ -3,6 +3,7 @@ package com.classicmodels.repository;
 import com.classicmodels.enums.StarType;
 import com.classicmodels.enums.TrendType;
 import java.util.List;
+import static jooq.generated.Sequences.SALE_SEQ;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
@@ -38,7 +39,7 @@ public class ClassicModelsRepository {
 
         // use all three converters
         ctx.insertInto(SALE)
-                .values(null, 2005, 56444.32, 1370L, 0, 
+                .values(SALE_SEQ.nextval(), 2005, 56444.32, 1370L, 0, 
                         StarType.FIVE_STARS, 19, TrendType.UP)
                 .execute();
     }
