@@ -21,12 +21,7 @@ public class ClassicModelsRepository {
 
     @Transactional
     public void insertSale() {
-
-        // no explicit converter
-        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.RATE)
-                .values(BigInteger.valueOf(2005), 56444.32, 1370L, StarType.FIVE_STARS)
-                .execute();
-
+        
         // use SaleRateStarConverter
         ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.RATE)
                 .values(BigInteger.valueOf(2005), 56444.32, 1370L, StarType.FIVE_STARS)
@@ -49,16 +44,8 @@ public class ClassicModelsRepository {
                 .execute();
     }
 
-    public void fetchSale() {
+    public void fetchSale() {        
 
-        List<StarType> rates = ctx.select(SALE.RATE)
-                .from(SALE)
-                .where(SALE.RATE.isNotNull())
-                .fetch(SALE.RATE);
-
-        System.out.println("Rates: " + rates);
-
-        // convert from RateType to StarType via explicit call of the converter
         List<StarType> stars = ctx.select(SALE.RATE)
                 .from(SALE)
                 .where(SALE.RATE.isNotNull())
@@ -66,15 +53,13 @@ public class ClassicModelsRepository {
 
         System.out.println("Stars: " + stars);
 
-        // convert from VatType to Integer via explicit call of the converter
-        List<Integer> ints = ctx.select(SALE.VAT)
+        List<Integer> vats = ctx.select(SALE.VAT)
                 .from(SALE)
                 .where(SALE.VAT.isNotNull())
                 .fetch(SALE.VAT);
 
-        System.out.println("Stars as integers: " + ints);
+        System.out.println("Vats: " + vats);
         
-        // convert from Object to TrendType via explicit call of the converter
         List<TrendType> trends = ctx.select(SALE.TREND)
                 .from(SALE)
                 .where(SALE.TREND.isNotNull())
