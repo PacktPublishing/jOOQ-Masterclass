@@ -16,5 +16,6 @@ public class ClassicModelsService {
 
         classicModelsRepository.insertSale(2003, 3344.21, 1370);
         classicModelsRepository.fetchSale();
+        classicModelsRepository.someConversions();
     }
 }
