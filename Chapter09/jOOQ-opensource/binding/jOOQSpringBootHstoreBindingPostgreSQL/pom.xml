@@ -164,7 +164,20 @@
                                     
                                     <!-- A Java regex matching fully-qualified columns, attributes, parameters. Use the pipe to separate several expressions.
                                     If provided, both "includeExpressions" and "includeTypes" must match. -->
-                                    <includeExpression>.*specs</includeExpression>
+                                    <includeExpression>public\.product\.specs</includeExpression>
+                                            
+                                    <!-- or, like this -->
+                                    <!-- <expression>.*\.product\.specs</expression> -->
+                                            
+                                    <!-- all 'specs' fields, no matter the table -->
+                                    <!-- <expression>.*\.specs</expression> -->
+                                            
+                                    <!-- all fields containing 'spe', no matter the table -->
+                                    <!-- <expression>.*\.spe.*</expression> -->
+                                            
+                                    <!-- case-insensitive expressions -->
+                                    <!-- <expression>(?i:.*\.product\.specs)</expression> -->
+                                    <!-- <expression>(?i:public\.product\.specs)</expression> -->   
                                     
                                     <!-- This exclude predicate is a regular expression which is matched 
                                     against the definition's name; any definition's name matching 
@@ -180,7 +193,11 @@
                                     - any other form
                                     It is thus recommended to use defensive regexes for types.
                                     If provided, both "includeExpressions" and "includeTypes" must match. -->
+                                    <!-- any type -->
                                     <includeTypes>.*</includeTypes>
+                                            
+                                    <!--  the type -->
+                                    <!-- <includeTypes>hstore</includeTypes> -->
                                     
                                     <!-- This exclude predicate is a regular expression which is matched 
                                     against the name of the definition's type (provided that it has one);
