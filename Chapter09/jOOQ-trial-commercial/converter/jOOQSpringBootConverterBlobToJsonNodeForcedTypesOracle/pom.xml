@@ -171,7 +171,7 @@
                                             <includeExpression>SYSTEM\.MANAGER\.MANAGER_DETAIL</includeExpression>
                                             
                                             <!-- or, like this -->
-                                            <!-- <expression>.*\MANAGER\.MANAGER_DETAIL</expression> -->
+                                            <!-- <expression>.*\.MANAGER\.MANAGER_DETAIL</expression> -->
                                             
                                             <!-- all 'manager_detail' fields, no matter the table -->
                                             <!-- <expression>.*\.MANAGER_DETAIL</expression> -->
@@ -180,7 +180,7 @@
                                             <!-- <expression>.*\.MANAGER_.*</expression> -->
                                             
                                             <!-- case-insensitive expressions -->
-                                            <!-- <expression>(?i:.*\manager\.manager_detail)</expression> -->
+                                            <!-- <expression>(?i:.*\.manager\.manager_detail)</expression> -->
                                             <!-- <expression>(?i:system\.manager\.manager_detail)</expression> -->
                                             
                                             <!-- A Java regex matching data types to be forced to have this type.
