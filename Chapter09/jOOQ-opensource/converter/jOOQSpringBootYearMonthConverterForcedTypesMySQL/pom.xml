@@ -234,21 +234,7 @@
                                     <!-- Give enough time to jOOQ to trigger the queries needed for generating sources 
                                     (default is 5 seconds) -->
                                     <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>
-                                </database>
-                                
-                                <!-- Rename the generated DAOs classes -->                      
-                                <strategy>
-                                    <matchers>
-                                        <tables>
-                                            <table>
-                                                <daoClass>                                                         
-                                                    <expression>$0_Repository</expression>
-                                                    <transform>PASCAL</transform>                                                                                      
-                                                </daoClass>
-                                            </table>
-                                        </tables>
-                                    </matchers>
-                                </strategy>
+                                </database>                                                                
                                 
                                 <!-- jOOQ will generate POJOs in your behalf -->
                                 <generate>
