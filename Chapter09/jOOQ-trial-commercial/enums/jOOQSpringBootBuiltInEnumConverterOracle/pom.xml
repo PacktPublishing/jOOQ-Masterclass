@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.app</groupId>
-    <artifactId>jOOQSpringBootEnumConverterOracle</artifactId>
+    <artifactId>jOOQSpringBootBuiltInEnumConverterOracle</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQSpringBootEnumConverterOracle</name>
+    <name>jOOQSpringBootBuiltInEnumConverterOracle</name>
     <description>jOOQ - Spring Boot app</description>    
 
     <parent>
