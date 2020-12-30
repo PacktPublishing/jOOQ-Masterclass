@@ -135,7 +135,7 @@
                         </goals>
                     </execution>
                 </executions>                
-                <configuration>                                                 
+                <configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.14.0.xsd">                                                 
                     <!-- Configure the database connection here -->
                     <jdbc>
                         <driver>${spring.datasource.driverClassName}</driver>

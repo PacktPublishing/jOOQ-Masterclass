@@ -25,7 +25,7 @@ public class ClassicModelsRepository {
     @Transactional
     public void insertSale() {
 
-        // rely on <forcedType/> 
+        // rely on jOOQ generated RateType
         ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.RATE)
                 .values(2005, 56444.32, 1370L, RateType.PLATINUM)
                 .execute();
