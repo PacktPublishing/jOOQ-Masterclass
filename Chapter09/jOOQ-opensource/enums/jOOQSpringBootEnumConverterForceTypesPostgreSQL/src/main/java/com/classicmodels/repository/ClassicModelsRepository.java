@@ -3,7 +3,6 @@ package com.classicmodels.repository;
 import com.classicmodels.enums.StarType;
 import com.classicmodels.enums.TrendType;
 import java.util.List;
-import static jooq.generated.Sequences.SALE_SEQ;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
@@ -20,12 +19,7 @@ public class ClassicModelsRepository {
     }
 
     @Transactional
-    public void insertSale() {
-
-        // no explicit converter
-        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.RATE)
-                .values(2005, 56444.32, 1370L, StarType.FIVE_STARS)
-                .execute();
+    public void insertSale() {    
 
         // use SaleRateStarConverter
         ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.RATE)
@@ -44,21 +38,14 @@ public class ClassicModelsRepository {
 
         // use all three converters
         ctx.insertInto(SALE)
-                .values(SALE_SEQ.nextval(), 2005, 56444.32, 1370L, 0, 
+                .values(null, 2005, 56444.32, 1370L, 0, 
                         StarType.FIVE_STARS, 19, TrendType.UP)
                 .execute();
     }
 
     public void fetchSale() {
-
-        List<StarType> rates = ctx.select(SALE.RATE)
-                .from(SALE)
-                .where(SALE.RATE.isNotNull())
-                .fetch(SALE.RATE);
-
-        System.out.println("Rates: " + rates);
-
-        // convert from RateType to StarType via explicit call of the converter
+        
+        // fetch as StarType
         List<StarType> stars = ctx.select(SALE.RATE)
                 .from(SALE)
                 .where(SALE.RATE.isNotNull())
@@ -66,15 +53,15 @@ public class ClassicModelsRepository {
 
         System.out.println("Stars: " + stars);
 
-        // convert from VatType to Integer via explicit call of the converter
-        List<Integer> ints = ctx.select(SALE.VAT)
+        // fetch as Integer
+        List<Integer> vats = ctx.select(SALE.VAT)
                 .from(SALE)
                 .where(SALE.VAT.isNotNull())
                 .fetch(SALE.VAT);
 
-        System.out.println("Stars as integers: " + ints);
+        System.out.println("Vats: " + vats);
         
-        // convert from Object to TrendType via explicit call of the converter
+        // fetch as TrendType
         List<TrendType> trends = ctx.select(SALE.TREND)
                 .from(SALE)
                 .where(SALE.TREND.isNotNull())
