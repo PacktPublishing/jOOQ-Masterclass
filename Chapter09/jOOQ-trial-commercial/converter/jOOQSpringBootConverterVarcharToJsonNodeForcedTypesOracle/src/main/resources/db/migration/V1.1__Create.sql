@@ -161,6 +161,9 @@ CREATE TABLE sale (
   sale float NOT NULL,    
   employee_number number(10) DEFAULT NULL,  
   hot number(1,0) DEFAULT 0,
+  rate varchar2(10) DEFAULT NULL CHECK (rate IN('SILVER', 'GOLD', 'PLATINUM')),
+  vat varchar2(10) DEFAULT NULL CHECK (vat IN('NONE', 'MIN', 'MAX')),
+  trend varchar2(10) DEFAULT NULL,
   PRIMARY KEY (sale_id)
 ,  
   CONSTRAINT sales_ibfk_1 FOREIGN KEY (employee_number) REFERENCES employee (employee_number)
@@ -196,6 +199,7 @@ CREATE TABLE customer (
   phone varchar2(50) NOT NULL,
   sales_rep_employee_number number(10) DEFAULT NULL,
   credit_limit number(10,2) DEFAULT NULL,
+  first_buy_date int DEFAULT NULL,
   PRIMARY KEY (customer_number)
  ,
   CONSTRAINT customers_ibfk_1 FOREIGN KEY (sales_rep_employee_number) REFERENCES employee (employee_number)
@@ -251,8 +255,7 @@ CREATE TABLE department (
   phone varchar(50) NOT NULL,
   code number(5) DEFAULT 1,
   office_code varchar(10) NOT NULL,
-  topic topicArr NOT NULL,
-  open_date int DEFAULT NULL,
+  topic topicArr NOT NULL,  
   dep_net_ipv4 varchar(16) DEFAULT NULL,
   PRIMARY KEY (department_id)
 ,
@@ -282,7 +285,8 @@ END;
 CREATE TABLE manager (
   manager_id number(10) NOT NULL,
   manager_name varchar2(50) NOT NULL,
-  manager_detail VARCHAR2(4000),  
+  manager_detail varchar2(4000),  
+  -- for large JSON, use manager_detail blob,
   PRIMARY KEY (manager_id),
   CONSTRAINT ENSURE_JSON CHECK (manager_detail IS JSON)
 ) ;
