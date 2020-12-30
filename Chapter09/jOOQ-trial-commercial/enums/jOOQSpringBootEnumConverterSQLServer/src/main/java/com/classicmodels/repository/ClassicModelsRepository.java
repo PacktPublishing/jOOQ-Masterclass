@@ -63,12 +63,12 @@ public class ClassicModelsRepository {
         System.out.println("Stars: " + stars);
 
         // convert from VatType to Integer via explicit call of the converter
-        List<Integer> ints = ctx.select(SALE.VAT)
+        List<Integer> vats = ctx.select(SALE.VAT)
                 .from(SALE)
                 .where(SALE.VAT.isNotNull())
                 .fetch(SALE.VAT, SALE_VAT_INT_CONVERTER);
 
-        System.out.println("Stars as integers: " + ints);
+        System.out.println("Vats: " + vats);
         
         // convert from String to TrendType via explicit call of the converter
         List<TrendType> trends1 = ctx.select(SALE.TREND)
