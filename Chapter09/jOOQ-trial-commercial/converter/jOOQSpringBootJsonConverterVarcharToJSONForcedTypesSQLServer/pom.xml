@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.app</groupId>
-    <artifactId>jOOQSpringBootJsonConverterToJSONSQLServer</artifactId>
+    <artifactId>jOOQSpringBootJsonConverterVarcharToJSONForcedTypesSQLServer</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQSpringBootJsonConverterToJSONSQLServer</name>
+    <name>jOOQSpringBootJsonConverterVarcharToJSONForcedTypesSQLServer</name>
     <description>jOOQ - Spring Boot app</description>    
 
     <parent>
@@ -155,12 +155,54 @@
                                             <!-- Associate that custom type with your converter. -->
                                             <converter>com.classicmodels.converter.JsonConverter</converter>
 
-                                            <!-- These are the same as for type rewriting -->
-                                            <includeExpression>.*\.manager_detail</includeExpression>
+                                            <!-- A Java regex matching fully-qualified columns, attributes, parameters. Use the pipe to separate several expressions.
+                                            If provided, both "includeExpression" and "includeTypes" must match. -->
+                                            <!-- single field expressed as schema\table\field -->
+                                            <includeExpression>dbo\.manager\.manager_detail</includeExpression>
+                                            
+                                            <!-- or, like this -->
+                                            <!-- <expression>.*\.manager\.manager_detail</expression> -->
+                                            
+                                            <!-- all 'manager_detail' fields, no matter the table -->
+                                            <!-- <expression>.*\.manager_detail</expression> -->
+                                            
+                                            <!-- all fields containing 'manager_', no matter the table -->
+                                            <!-- <expression>.*\.manager_.*</expression> -->
+                                            
+                                            <!-- case-insensitive expressions -->
+                                            <!-- <expression>(?i:.*\manager\.manager_detail)</expression> -->
+                                            <!-- <expression>(?i:dbo\.manager\.manager_detail)</expression> -->
+                                            
+                                            <!-- A Java regex matching data types to be forced to have this type.
+                             
+                                            Data types may be reported by your database as:
+                                            - NUMBER              regexp suggestion: NUMBER
+                                            - NUMBER(5)           regexp suggestion: NUMBER\(5\)
+                                            - NUMBER(5, 2)        regexp suggestion: NUMBER\(5,\s*2\)
+                                            - any other form.
+                             
+                                            It is thus recommended to use defensive regexes for types.
+                             
+                                            If provided, both "includeExpression" and "includeTypes" must match. -->
+                                            <!-- any type -->
                                             <includeTypes>.*</includeTypes>
+                                            
+                                            <!--  the type -->
+                                            <!-- <includeTypes>nvarchar\(4000\)</includeTypes> -->
+                                            
+                                            <!-- Force a type depending on data type nullability. Default is ALL.
+                                      
+                                            - ALL - Force a type regardless of whether data type is nullable or not (default)
+                                            - NULL - Force a type only when data type is nullable
+                                            - NOT_NULL - Force a type only when data type is not null -->
+                                            <nullability>ALL</nullability>
+          
+                                            <!-- Force a type on ALL or specific object types, including 
+                                            ATTRIBUTE, COLUMN, ELEMENT, PARAMETER, SEQUENCE -->
+                                            <objectType>ALL</objectType>
                                         </forcedType>
-                                    </forcedTypes>
-                            
+                                    </forcedTypes>    
+                                                                
                                     <!-- The database type. The format here is:
                                     org.jooq.meta.[database].[database]Database -->
                                     <name>org.jooq.meta.sqlserver.SQLServerDatabase</name>
@@ -184,19 +226,13 @@
                                     <!-- All elements that are excluded from your schema
                                     (A Java regular expression. Use the pipe to separate several expressions).
                                     Excludes match before includes, i.e. excludes have a higher priority. -->
-                                    <excludes>schema_version</excludes>
+                                    <excludes>flyway_schema_history</excludes>
                                     
                                     <!-- Give enough time to jOOQ to trigger the queries needed for generating sources 
                                     (default is 5 seconds) -->
                                     <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>
                                 </database>
-                                
-                                <!-- jOOQ will generate POJOs in your behalf -->
-                                <generate>
-                                    <pojos>true</pojos> 
-                                    <validationAnnotations>true</validationAnnotations>                            
-                                </generate>
-                        
+                                                                
                                 <!-- jOOQ will generate POJOs in your behalf -->
                                 <generate>
                                     <pojos>true</pojos> 

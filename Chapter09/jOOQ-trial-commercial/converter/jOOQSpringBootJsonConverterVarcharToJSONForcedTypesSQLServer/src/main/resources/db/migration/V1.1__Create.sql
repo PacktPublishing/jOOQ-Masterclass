@@ -121,8 +121,7 @@ CREATE TABLE department (
   [phone] varchar(50) NOT NULL,
   [code] smallint DEFAULT 1,
   [office_code] varchar(10) NOT NULL,
-  [topic] varchar(100) NOT NULL,
-  [open_date] int DEFAULT NULL,
+  [topic] varchar(100) NOT NULL,  
   [dep_net_ipv4] varchar(16) DEFAULT NULL,
   PRIMARY KEY ([department_id])
 ,
@@ -137,7 +136,10 @@ CREATE TABLE sale (
   [fiscal_year] int NOT NULL,  
   [sale] float NOT NULL,  
   [employee_number] bigint DEFAULT NULL,  
-  [hot] bit DEFAULT 0,
+  [hot] bit DEFAULT 0,  
+  [rate] varchar(10) DEFAULT NULL CHECK ([rate] IN('SILVER', 'GOLD', 'PLATINUM')),
+  [vat] varchar(10) DEFAULT NULL CHECK ([vat] IN('NONE', 'MIN', 'MAX')),
+  [trend] varchar(10) DEFAULT NULL,
   PRIMARY KEY ([sale_id])
 ,    
   CONSTRAINT [sales_ibfk_1] FOREIGN KEY ([employee_number]) REFERENCES employee ([employee_number])
@@ -155,6 +157,7 @@ CREATE TABLE customer (
   [phone] varchar(50) NOT NULL,
   [sales_rep_employee_number] bigint DEFAULT NULL,
   [credit_limit] decimal(10,2) DEFAULT NULL,
+  [first_buy_date] int DEFAULT NULL,
   PRIMARY KEY ([customer_number])
  ,
   CONSTRAINT [customers_ibfk_1] FOREIGN KEY ([sales_rep_employee_number]) REFERENCES employee ([employee_number])
