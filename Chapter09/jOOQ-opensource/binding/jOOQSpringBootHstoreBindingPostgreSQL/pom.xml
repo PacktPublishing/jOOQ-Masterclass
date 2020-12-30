@@ -152,19 +152,10 @@
                         Defaults to org.jooq.codegen.JavaGenerator -->
                         <name>org.jooq.codegen.JavaGenerator</name>
         
-                        <database>           
-                            
+                        <database>                                       
                             <forcedTypes>
                                 <forcedType>
-                                    <!--  Must be one of ATTRIBUTE, COLUMN, ELEMENT, PARAMETER, SEQUENCE, 
-                                          or ALL and specifies what type of database objects 
-                                          this forced type is applicable to -->
-                                    <objectType>ALL</objectType>
-                                    
-                                    <!-- Must be one of NULL, NOT_NULL, or ALL and specifies if this forced 
-                                         type is applicable to NULL, NOT NULL, or all definitions -->
-                                    <nullability>ALL</nullability>
-                                    
+                                                                                                            
                                     <!-- Specify the Java type of your custom type. This corresponds to the Binding's <U> type. -->
                                     <userType>java.util.Map&lt;String, String&gt;</userType>
                                     
@@ -200,6 +191,15 @@
                                     <!-- An SQL query returning all (qualified or unqualified) object 
                                     names which should be considered to match this forced type -->
                                     <sql></sql>
+                                    
+                                    <!--  Must be one of ATTRIBUTE, COLUMN, ELEMENT, PARAMETER, SEQUENCE, 
+                                          or ALL and specifies what type of database objects 
+                                          this forced type is applicable to -->
+                                    <objectType>ALL</objectType>
+                                    
+                                    <!-- Must be one of NULL, NOT_NULL, or ALL and specifies if this forced 
+                                         type is applicable to NULL, NOT NULL, or all definitions -->
+                                    <nullability>ALL</nullability>
                                 </forcedType>
                             </forcedTypes>
                                                                                                      

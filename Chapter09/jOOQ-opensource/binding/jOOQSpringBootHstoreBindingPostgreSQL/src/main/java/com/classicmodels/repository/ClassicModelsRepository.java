@@ -23,7 +23,8 @@ public class ClassicModelsRepository {
 
         ctx.insertInto(PRODUCT, PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_LINE, PRODUCT.SPECS)
                 .values("2002 Masserati Levante", "Classic Cars",
-                        Map.of("Length (in)", "197", "Width (in)", "77.5", "Height (in)", "66.1", "Engine", "Twin Turbo Premium Unleaded V-6"))
+                        Map.of("Length (in)", "197", "Width (in)", "77.5", "Height (in)", 
+                                "66.1", "Engine", "Twin Turbo Premium Unleaded V-6"))
                 .execute();
     }
 

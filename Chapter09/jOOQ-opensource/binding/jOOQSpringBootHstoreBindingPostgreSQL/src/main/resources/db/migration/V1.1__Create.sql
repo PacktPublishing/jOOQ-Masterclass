@@ -33,6 +33,8 @@ DROP SEQUENCE IF EXISTS order_seq;
 DROP SEQUENCE IF EXISTS sale_seq;
 DROP SEQUENCE IF EXISTS customer_seq;
 
+CREATE EXTENSION IF NOT EXISTS hstore;
+
 /*Table structure for table `office` */
 
 CREATE TABLE office (
@@ -56,8 +58,7 @@ CREATE TABLE department (
   phone varchar(50) NOT NULL,
   code smallint DEFAULT 1,
   office_code varchar(10) NOT NULL,
-  topic text[] NOT NULL,
-  open_date int DEFAULT NULL,
+  topic text[] NOT NULL,  
   dep_net_ipv4 inet DEFAULT NULL,
   PRIMARY KEY (department_id)
 ,
@@ -93,12 +94,18 @@ CREATE INDEX office_code ON employee (office_code);
 
 CREATE SEQUENCE sale_seq START 1000000;
 
+CREATE TYPE rate_type AS enum('SILVER', 'GOLD', 'PLATINUM');
+CREATE TYPE vat_type AS enum('NONE', 'MIN', 'MAX');
+
 CREATE TABLE sale (
   sale_id bigint NOT NULL DEFAULT NEXTVAL ('sale_seq'),  
   fiscal_year int NOT NULL,  
   sale float NOT NULL,  
   employee_number bigint DEFAULT NULL,  
   hot boolean DEFAULT FALSE,
+  rate rate_type DEFAULT NULL,
+  vat vat_type DEFAULT NULL,
+  trend varchar(10) DEFAULT NULL,
   PRIMARY KEY (sale_id)
  ,  
   CONSTRAINT sales_ibfk_1 FOREIGN KEY (employee_number) REFERENCES employee (employee_number)
@@ -118,6 +125,7 @@ CREATE TABLE customer (
   phone varchar(50) NOT NULL,  
   sales_rep_employee_number bigint DEFAULT NULL,
   credit_limit decimal(10,2) DEFAULT NULL,
+  first_buy_date int DEFAULT NULL,
   PRIMARY KEY (customer_number)
  ,
   CONSTRAINT customers_ibfk_1 FOREIGN KEY (sales_rep_employee_number) REFERENCES employee (employee_number)
@@ -147,6 +155,7 @@ CREATE SEQUENCE manager_seq START 1000000;
 CREATE TABLE manager (
   manager_id bigint NOT NULL DEFAULT NEXTVAL ('manager_seq'),
   manager_name varchar(50) NOT NULL,
+  manager_detail json DEFAULT NULL,
   PRIMARY KEY (manager_id)
 ) ;
 
