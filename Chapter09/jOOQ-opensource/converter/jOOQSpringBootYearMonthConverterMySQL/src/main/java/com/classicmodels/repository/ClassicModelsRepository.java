@@ -3,6 +3,7 @@ package com.classicmodels.repository;
 import static com.classicmodels.converter.YearMonthConverter.INTEGER_YEARMONTH_ARR_CONVERTER;
 import static com.classicmodels.converter.YearMonthConverter.INTEGER_YEARMONTH_CONVERTER;
 import static com.classicmodels.converter.YearMonthConverter.YEARMONTH;
+import java.math.BigDecimal;
 import java.time.YearMonth;
 import java.util.Arrays;
 import java.util.List;
@@ -29,25 +30,38 @@ public class ClassicModelsRepository {
     @Transactional
     public void insertCustomer() {
 
+        // non-type-safe,
         // converter is not used (we insert '202010' directly)
         ctx.insertInto(CUSTOMER)
                 .values(null, "Atelier One", "Markus", "Alop", "0892 339 423",
                         1370L, 50000, 202010)
                 .execute();
 
+        // non-type-safe,
         // use converter explicitly by passing to it a valid YearMonth value
         ctx.insertInto(CUSTOMER)
                 .values(null, "Atelier One", "Markus", "Alop", "0892 339 423",
                         1370L, 50000, INTEGER_YEARMONTH_CONVERTER.to(YearMonth.of(2020, 10)))
                 .execute();        
 
+        // non-type-safe,
         // convert via data type       
         ctx.insertInto(CUSTOMER)
                 .values(null, "Atelier One", "Markus", "Alop", "0892 339 423",
                         1370L, 50000, val(YearMonth.of(2020, 10), YEARMONTH))
                 .execute();        
         
-        // define the converter locally
+        // type-safe,
+        // use converter explicitly by passing to it a valid YearMonth value
+        ctx.insertInto(CUSTOMER, CUSTOMER.CUSTOMER_NAME, CUSTOMER.CONTACT_FIRST_NAME,
+                CUSTOMER.CONTACT_LAST_NAME, CUSTOMER.PHONE, CUSTOMER.SALES_REP_EMPLOYEE_NUMBER,
+                CUSTOMER.CREDIT_LIMIT, CUSTOMER.FIRST_BUY_DATE)
+                .values("Atelier One", "Markus", "Alop", "0892 339 423",
+                        1370L, BigDecimal.valueOf(50000), 
+                        INTEGER_YEARMONTH_CONVERTER.to(YearMonth.of(2020, 10)))
+                .execute();
+        
+        /* DECLARE CONVERTER LOCALLY, IN THIS CLASS */
         Converter<Integer, YearMonth> converter = Converter.ofNullable(Integer.class, YearMonth.class,
                 (Integer t) -> {
                     return YearMonth.of(t / 100, t % 100);
@@ -56,13 +70,13 @@ public class ClassicModelsRepository {
                     return (u.getYear() * 100) + u.getMonth().getValue();
                 });
 
-        // use the above 'converter'
+        // use the above local converter, 'converter'
         ctx.insertInto(CUSTOMER)
                 .values(null, "Atelier One", "Markus", "Alop", "0892 339 423",
                         1370L, 50000, converter.to(YearMonth.of(2020, 10)))
                 .execute();                
 
-        // declare data type locally
+        /* DECLARE CUSTOM DATA TYPE LOCALLY */
         DataType<YearMonth> yearmonth = INTEGER.asConvertedDataType(YearMonth.class,
                 (Integer t) -> {
                     return YearMonth.of(t / 100, t % 100);
@@ -71,7 +85,7 @@ public class ClassicModelsRepository {
                     return (u.getYear() * 100) + u.getMonth().getValue();
                 });
         
-        // convert via the above data type       
+        // convert via the above local data type 'yearmonth'      
         ctx.insertInto(CUSTOMER)
                 .values(null, "Atelier One", "Markus", "Alop", "0892 339 423",
                         1370L, 50000, val(YearMonth.of(2020, 10), yearmonth))
@@ -86,7 +100,7 @@ public class ClassicModelsRepository {
                 .where(CUSTOMER.CUSTOMER_NAME.eq("Atelier One"))
                 .fetchAny(CUSTOMER.FIRST_BUY_DATE);
 
-        System.out.println("Converter is not used, so fetch as Integer: " + resultInt);
+        System.out.println("Converter is not used, so the result is fetched as Integer: " + resultInt);
         YearMonth resultYM = YEARMONTH.convert(resultInt); // there is a convert() for array and one for List as well
         System.out.println("Use data type's convert() method: " + resultYM);
 
@@ -106,7 +120,7 @@ public class ClassicModelsRepository {
                 .fetchArray(CUSTOMER.FIRST_BUY_DATE, INTEGER_YEARMONTH_CONVERTER);
         System.out.println("Convert in fetchArray(): " + Arrays.toString(resultArrYM2));
 
-        // fetch a List of CUSTOMER.FIRST_BUY_DATE and convertin fetch()
+        // fetch a List of CUSTOMER.FIRST_BUY_DATE and convert in fetch()
         List<YearMonth> resultListYM = ctx.select(CUSTOMER.FIRST_BUY_DATE)
                 .from(CUSTOMER)
                 .where(CUSTOMER.CUSTOMER_NAME.eq("Atelier One"))
