@@ -170,7 +170,7 @@
                                             <!-- <expression>.*\.manager_.*</expression> -->
                                             
                                             <!-- case-insensitive expressions -->
-                                            <!-- <expression>(?i:.*\manager\.manager_detail)</expression> -->
+                                            <!-- <expression>(?i:.*\.manager\.manager_detail)</expression> -->
                                             <!-- <expression>(?i:dbo\.manager\.manager_detail)</expression> -->
                                             
                                             <!-- A Java regex matching data types to be forced to have this type.
