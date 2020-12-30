@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.app</groupId>
-    <artifactId>jOOQSpringBootConverterBlobToJsonNodeOracle</artifactId>
+    <artifactId>jOOQSpringBootConverterBlobToJsonNodeForcedTypesOracle</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQSpringBootConverterBlobToJsonNodeOracle</name>
+    <name>jOOQSpringBootConverterBlobToJsonNodeForcedTypesOracle</name>
     <description>jOOQ - Spring Boot app</description>    
 
     <parent>
