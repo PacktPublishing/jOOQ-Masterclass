@@ -168,18 +168,18 @@
                                             <!-- single field expressed as schema\table\field -->
                                             <includeExpression>classicmodels\.customer\.first_buy_date</includeExpression>
                                             
-                                            <!-- or, like this -->
-                                            <!-- <expression>.*\.customer\.first_buy_date</expression> -->
+                                            <!-- all 'first_buy_date' fields in any 'customer' table, no matter the schema -->
+                                            <!-- <includeExpression>.*\.customer\.first_buy_date</includeExpression> -->
                                             
-                                            <!-- all 'first_buy_date' fields, no matter the table -->
-                                            <!-- <expression>.*\.first_buy_date</expression> -->
+                                            <!-- all 'first_buy_date' fields, no matter the schema and the table -->
+                                            <!-- <includeExpression>.*\.first_buy_date</includeExpression> -->
                                             
-                                            <!-- all fields containing 'first_buy_', no matter the table -->
-                                            <!-- <expression>.*\.first_buy_.*</expression> -->
+                                            <!-- all fields containing 'first_buy_' -->
+                                            <!-- <includeExpression>.*\.first_buy_.*</includeExpression> -->
                                             
                                             <!-- case-insensitive expressions -->
-                                            <!-- <expression>(?i:.*\.customer\.first_buy_date)</expression> -->
-                                            <!-- <expression>(?i:classicmodels\.customer\.first_buy_date)</expression> -->
+                                            <!-- <includeExpression>(?i:.*\.customer\.first_buy_date)</includeExpression> -->
+                                            <!-- <includeExpression>(?i:classicmodels\.customer\.first_buy_date)</includeExpression> -->
                                             
                                             <!-- A Java regex matching data types to be forced to have this type.
                              
