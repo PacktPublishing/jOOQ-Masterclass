@@ -159,19 +159,61 @@
 
                                             <!-- Associate that custom type with your inline converter. -->
                                             <converter>
-                                              org.jooq.Converter.ofNullable(
+                                                org.jooq.Converter.ofNullable(
                                                 Integer.class, YearMonth.class, 
                                                 (Integer t) -&gt; {
-                                                  return YearMonth.of(t / 100, t % 100);
+                                                return YearMonth.of(t / 100, t % 100);
                                                 },
                                                 (YearMonth u) -&gt; {
-                                                  return (u.getYear() * 100) + u.getMonth().getValue();
+                                                return (u.getYear() * 100) + u.getMonth().getValue();
                                                 })
                                             </converter>
 
-                                            <!-- These are the same as for type rewriting -->
-                                            <includeExpression>.*\.first_buy_date</includeExpression>
+                                            <!-- A Java regex matching fully-qualified columns, attributes, parameters. Use the pipe to separate several expressions.
+                                            If provided, both "includeExpression" and "includeTypes" must match. -->
+                                            <!-- single field expressed as schema\table\field -->
+                                            <includeExpression>classicmodels\.customer\.first_buy_date</includeExpression>
+                                            
+                                            <!-- or, like this -->
+                                            <!-- <expression>.*\.customer\.first_buy_date</expression> -->
+                                            
+                                            <!-- all 'first_buy_date' fields, no matter the table -->
+                                            <!-- <expression>.*\.first_buy_date</expression> -->
+                                            
+                                            <!-- all fields containing 'first_buy_', no matter the table -->
+                                            <!-- <expression>.*\.first_buy_.*</expression> -->
+                                            
+                                            <!-- case-insensitive expressions -->
+                                            <!-- <expression>(?i:.*\.customer\.first_buy_date)</expression> -->
+                                            <!-- <expression>(?i:classicmodels\.customer\.first_buy_date)</expression> -->
+                                            
+                                            <!-- A Java regex matching data types to be forced to have this type.
+                             
+                                            Data types may be reported by your database as:
+                                            - NUMBER              regexp suggestion: NUMBER
+                                            - NUMBER(5)           regexp suggestion: NUMBER\(5\)
+                                            - NUMBER(5, 2)        regexp suggestion: NUMBER\(5,\s*2\)
+                                            - any other form.
+                             
+                                            It is thus recommended to use defensive regexes for types.
+                             
+                                            If provided, both "includeExpression" and "includeTypes" must match. -->
+                                            <!-- any type -->
                                             <includeTypes>.*</includeTypes>
+                                            
+                                            <!--  the type -->
+                                            <!-- <includeTypes>int</includeTypes> -->
+                                            
+                                            <!-- Force a type depending on data type nullability. Default is ALL.
+                                      
+                                            - ALL - Force a type regardless of whether data type is nullable or not (default)
+                                            - NULL - Force a type only when data type is nullable
+                                            - NOT_NULL - Force a type only when data type is not null -->
+                                            <nullability>ALL</nullability>
+          
+                                            <!-- Force a type on ALL or specific object types, including 
+                                            ATTRIBUTE, COLUMN, ELEMENT, PARAMETER, SEQUENCE -->
+                                            <objectType>ALL</objectType>
                                         </forcedType>
                                     </forcedTypes>
                                                                
