@@ -7,10 +7,10 @@ import java.util.Date;
 import org.jooq.Converter;
 import org.jooq.DataType;
 
-public class DateConverter implements Converter<YearMonth, Date> {
+public class DateToYearMonthConverter implements Converter<YearMonth, Date> {
 
     public static final Converter<YearMonth, Date> YEARMONTH_DATE_CONVERTER
-            = new DateConverter();
+            = new DateToYearMonthConverter();
 
     public static final Converter<YearMonth[], Date[]> YEARMONTH_DATE_ARR_CONVERTER
             = YEARMONTH_DATE_CONVERTER.forArrays();

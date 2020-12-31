@@ -1,9 +1,10 @@
 package com.classicmodels.repository;
 
-import static com.classicmodels.converter.DateConverter.YEARMONTH_DATE_CONVERTER;
+import static com.classicmodels.converter.DateToYearMonthConverter.YEARMONTH_DATE_CONVERTER;
 import static com.classicmodels.converter.YearMonthConverter.INTEGER_YEARMONTH_ARR_CONVERTER;
 import static com.classicmodels.converter.YearMonthConverter.INTEGER_YEARMONTH_CONVERTER;
 import static com.classicmodels.converter.YearMonthConverter.YEARMONTH;
+import static com.classicmodels.converter.YearMonthToDateConverter.DATE_YEARMONTH_CONVERTER;
 import java.math.BigDecimal;
 import java.time.YearMonth;
 import java.util.Arrays;
@@ -73,9 +74,19 @@ public class ClassicModelsRepository {
                         INTEGER_YEARMONTH_CONVERTER.to(YEARMONTH_DATE_CONVERTER.to(new Date())))
                 .execute();
 
+        // type-safe,
+        // nesting converters via to() and inverse()
+        ctx.insertInto(CUSTOMER, CUSTOMER.CUSTOMER_NAME, CUSTOMER.CONTACT_FIRST_NAME,
+                CUSTOMER.CONTACT_LAST_NAME, CUSTOMER.PHONE, CUSTOMER.SALES_REP_EMPLOYEE_NUMBER,
+                CUSTOMER.CREDIT_LIMIT, CUSTOMER.FIRST_BUY_DATE)
+                .values("Atelier One", "Markus", "Alop", "0892 339 423",
+                        1370L, BigDecimal.valueOf(50000),
+                        INTEGER_YEARMONTH_CONVERTER.to(DATE_YEARMONTH_CONVERTER.inverse().to(new Date())))
+                .execute();
+
         /* CONVERTER WHICH CANCELS ITSELF OUT (CIRCULAR CONVERTER) */
         INTEGER_YEARMONTH_CONVERTER.andThen(INTEGER_YEARMONTH_CONVERTER.inverse());
-        
+
         /* DECLARE CONVERTER LOCALLY, IN THIS CLASS */
         Converter<Integer, YearMonth> converter = Converter.ofNullable(Integer.class, YearMonth.class,
                 (Integer t) -> {
@@ -94,7 +105,7 @@ public class ClassicModelsRepository {
         /* DECLARE CUSTOM DATA TYPE LOCALLY */
         // via Converter
         DataType<YearMonth> yearmonthFromConv = INTEGER.asConvertedDataType(converter);
-        
+
         // without Converter
         DataType<YearMonth> yearmonth = INTEGER.asConvertedDataType(YearMonth.class,
                 (Integer t) -> {
@@ -149,12 +160,22 @@ public class ClassicModelsRepository {
         // fetch a List of CUSTOMER.FIRST_BUY_DATE and convert in fetch() via chained converters
         // - first, convert from INTEGER (database) to YearMonth
         // - second, convert from YearMonth to Date
-        List<Date> resultDateListYM = ctx.select(CUSTOMER.FIRST_BUY_DATE)
+        List<Date> resultDateListYM1 = ctx.select(CUSTOMER.FIRST_BUY_DATE)
                 .from(CUSTOMER)
                 .where(CUSTOMER.CUSTOMER_NAME.eq("Atelier One"))
                 .fetch(CUSTOMER.FIRST_BUY_DATE,
                         INTEGER_YEARMONTH_CONVERTER.andThen(YEARMONTH_DATE_CONVERTER));
-        System.out.println("Convert in fetch() via chained converters: " + resultDateListYM);
+        System.out.println("Convert in fetch() via chained converters: " + resultDateListYM1);
+
+        // fetch a List of CUSTOMER.FIRST_BUY_DATE and convert in fetch() via chained converters and inverse()
+        // - first, convert from INTEGER (database) to YearMonth
+        // - second, convert from YearMonth to Date
+        List<Date> resultDateListYM2 = ctx.select(CUSTOMER.FIRST_BUY_DATE)
+                .from(CUSTOMER)
+                .where(CUSTOMER.CUSTOMER_NAME.eq("Atelier One"))
+                .fetch(CUSTOMER.FIRST_BUY_DATE,
+                        INTEGER_YEARMONTH_CONVERTER.andThen(DATE_YEARMONTH_CONVERTER.inverse()));
+        System.out.println("Convert in fetch() via chained converters: " + resultDateListYM2);
 
         // coercing
         ctx.select(CUSTOMER.FIRST_BUY_DATE.coerce(YEARMONTH))
