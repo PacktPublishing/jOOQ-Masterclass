@@ -130,7 +130,7 @@
                         <goals>
                             <goal>generate</goal>
                         </goals>                                  
-                        <configuration>                                                 
+                        <configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.14.0.xsd">                                                 
                             <!-- Configure the database connection here. -->
                             <jdbc>
                                 <driver>${spring.datasource.driverClassName}</driver>
@@ -152,7 +152,7 @@
                                     <!-- The first matching forcedType will be applied to the data type definition. -->
                                     <forcedTypes>
                                         <forcedType>
-
+                                                                                        
                                             <!-- Specify the Java type of your custom type. This corresponds to the Converter's <U> type. -->
                                             <userType>java.time.YearMonth</userType>
 
