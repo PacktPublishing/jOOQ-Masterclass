@@ -1,5 +1,6 @@
 package com.classicmodels.repository;
 
+import java.math.BigDecimal;
 import java.time.YearMonth;
 import java.util.List;
 import static jooq.generated.tables.Customer.CUSTOMER;
@@ -26,10 +27,20 @@ public class ClassicModelsRepository {
                         1370L, 50000, 202010)
                 .execute();
 
+        // non type-safe,
         // behind the scene, jOOQ call our converter to convert from YearMonth to Integer
         ctx.insertInto(CUSTOMER)
                 .values(null, "Atelier One", "Markus", "Alop", "0892 339 423",
                         1370L, 50000, YearMonth.of(2020, 10))
+                .execute();
+        
+        // type-safe,
+        // behind the scene, jOOQ call our converter to convert from YearMonth to Integer
+        ctx.insertInto(CUSTOMER, CUSTOMER.CUSTOMER_NAME, CUSTOMER.CONTACT_FIRST_NAME,
+                CUSTOMER.CONTACT_LAST_NAME, CUSTOMER.PHONE, CUSTOMER.SALES_REP_EMPLOYEE_NUMBER,
+                CUSTOMER.CREDIT_LIMIT, CUSTOMER.FIRST_BUY_DATE)
+                .values("Atelier One", "Markus", "Alop", "0892 339 423",
+                        1370L, BigDecimal.valueOf(50000), YearMonth.of(2020, 10))
                 .execute();
     }
 
