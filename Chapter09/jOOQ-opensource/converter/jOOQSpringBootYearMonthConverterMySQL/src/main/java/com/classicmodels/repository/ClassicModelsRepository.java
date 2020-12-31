@@ -77,6 +77,7 @@ public class ClassicModelsRepository {
                 .execute();                
 
         /* DECLARE CUSTOM DATA TYPE LOCALLY */
+        DataType<YearMonth> yearmonthFromConv = INTEGER.asConvertedDataType(converter);
         DataType<YearMonth> yearmonth = INTEGER.asConvertedDataType(YearMonth.class,
                 (Integer t) -> {
                     return YearMonth.of(t / 100, t % 100);
