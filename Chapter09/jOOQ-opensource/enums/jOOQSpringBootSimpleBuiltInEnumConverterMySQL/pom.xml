@@ -152,20 +152,7 @@
                                                                         
                                     <!-- The first matching forcedType will be applied to the data type definition. -->
                                     <forcedTypes>
-                                        <forcedType>                                                                                                                        
-                                            <userType>com.classicmodels.enums.TrendType</userType>                                                                                                                                                                               
-                                            <enumConverter>true</enumConverter>
-                                            <includeExpression>classicmodels\.sale\.trend</includeExpression>
-                                            <includeTypes>.*</includeTypes>
-                                        </forcedType>
-                                        <forcedType>                                                                                                                        
-                                            <userType>com.classicmodels.enums.VatType</userType>                                                                                                                                                                               
-                                            <enumConverter>true</enumConverter>
-                                            <includeExpression>classicmodels\.sale\.vat</includeExpression>
-                                            <includeTypes>.*</includeTypes>
-                                        </forcedType>
                                         <forcedType>
-
                                             <!-- Specify the Java type of your custom type. This corresponds to the Converter's <U> type. -->
                                             <userType>com.classicmodels.enums.RateType</userType>
 
@@ -229,6 +216,14 @@
                                             type is applicable to NULL, NOT NULL, or all definitions -->
                                             <nullability>ALL</nullability>                                
                                         </forcedType>
+                                        
+                                        <!--  for the next two mappings we've reduced the code to the minimum -->
+                                        <forcedType>                                                                                                                        
+                                            <userType>com.classicmodels.enums.TrendType</userType>                                                                                                                                                                               
+                                            <enumConverter>true</enumConverter>
+                                            <includeExpression>classicmodels\.sale\.trend</includeExpression>
+                                            <includeTypes>.*</includeTypes>
+                                        </forcedType>                                        
                                     </forcedTypes>                                 
                                                                                                        
                                     <!-- The database type. The format here is:
