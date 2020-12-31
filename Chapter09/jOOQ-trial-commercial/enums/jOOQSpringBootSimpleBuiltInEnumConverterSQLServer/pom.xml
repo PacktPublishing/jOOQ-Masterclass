@@ -4,20 +4,20 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.app</groupId>
-    <artifactId>jOOQSpringBootSimpleBuiltInEnumConverterPostgreSQL</artifactId>
+    <artifactId>jOOQSpringBootSimpleBuiltInEnumConverterSQLServer</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQSpringBootSimpleBuiltInEnumConverterPostgreSQL</name>
+    <name>jOOQSpringBootSimpleBuiltInEnumConverterSQLServer</name>
     <description>jOOQ - Spring Boot app</description>    
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.3.RELEASE</version>
+        <version>2.3.3.RELEASE</version>        
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-
+    
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -25,11 +25,10 @@
         <java.version>14</java.version>                
         <maven.compiler.source>14</maven.compiler.source>
         <maven.compiler.target>14</maven.compiler.target>
-
-        <jooq.version>3.14.4</jooq.version>        
-        <mysql.connector.java.version>8.0.20</mysql.connector.java.version>                
-        <codehaus.mojo.version>1.0.0</codehaus.mojo.version>      
-        <maven.compiler.plugin.version>3.3</maven.compiler.plugin.version>          
+        
+        <jooq.version>3.14.4</jooq.version>             
+        <codehaus.mojo.version>1.0.0</codehaus.mojo.version>
+        <maven.compiler.plugin.version>3.3</maven.compiler.plugin.version>
     </properties>
 
     <dependencies>        
@@ -42,35 +41,31 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>        
         <dependency>
-            <groupId>org.jooq</groupId>
-            <artifactId>jooq</artifactId>         
+            <groupId>org.jooq.trial-java-8</groupId>
+            <artifactId>jooq</artifactId>
             <version>${jooq.version}</version>
-        </dependency>              
+        </dependency>                       
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
-        </dependency>
+        </dependency>        
         <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-        </dependency>                  
+            <groupId>com.microsoft.sqlserver</groupId>
+            <artifactId>mssql-jdbc</artifactId>
+        </dependency>
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>    
-        </dependency>
+        </dependency>         
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-    </dependencies>
-
+    </dependencies>   
+    
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>                
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -79,9 +74,8 @@
                     <compilerArgs>
                         <arg>--enable-preview</arg>
                     </compilerArgs>
-                    <debug>false</debug>
                 </configuration>
-            </plugin>
+            </plugin>        
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>properties-maven-plugin</artifactId>
@@ -102,7 +96,7 @@
             </plugin> 
             <plugin>
                 <groupId>org.flywaydb</groupId>
-                <artifactId>flyway-maven-plugin</artifactId>                
+                <artifactId>flyway-maven-plugin</artifactId>                                 
                 <executions>
                     <execution>
                         <phase>generate-sources</phase>
@@ -121,16 +115,17 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.jooq</groupId>
+                <groupId>org.jooq.trial-java-8</groupId>
                 <artifactId>jooq-codegen-maven</artifactId>               
+                <version>${jooq.version}</version>            
                 <executions>
                     <execution>
-                        <id>generate-mysql</id>
+                        <id>generate-mssql</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>generate</goal>
                         </goals>                                  
-                        <configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.14.0.xsd">                                                 
+                        <configuration>                                                 
                             <!-- Configure the database connection here. -->
                             <jdbc>
                                 <driver>${spring.datasource.driverClassName}</driver>
@@ -148,22 +143,20 @@
                                 Defaults to org.jooq.codegen.JavaGenerator -->
                                 <name>org.jooq.codegen.JavaGenerator</name>
         
-                                <database>                 
-                                                                        
-                                    <!-- The first matching forcedType will be applied to the data type definition. -->
+                                <database>      
+                                    
                                     <forcedTypes>
                                         <forcedType>
-                                            
-                                            <!-- Specify the Java type of your custom type. This corresponds to the Converter's <U> type. -->
+                                            <!-- Specify the Java type of your custom type. This corresponds to the Binding's <U> type. -->
                                             <userType>com.classicmodels.enums.RateType</userType>
-
+                                    
                                             <!-- Apply the built in org.jooq.impl.EnumConverter. -->
                                             <enumConverter>true</enumConverter>
-
+                                    
                                             <!-- A Java regex matching fully-qualified columns, attributes, parameters. Use the pipe to separate several expressions.
                                             If provided, both "includeExpressions" and "includeTypes" must match. -->
                                             <!-- single field expressed as schema\table\field -->
-                                            <includeExpression>public\.sale\.rate</includeExpression>
+                                            <includeExpression>dbo\.sale\.rate</includeExpression>
                                             
                                             <!-- or, like this -->
                                             <!-- <expression>.*\.sale\.rate</expression> -->
@@ -176,7 +169,7 @@
                                             
                                             <!-- case-insensitive expressions -->
                                             <!-- <expression>(?i:.*\.sale\.rate)</expression> -->
-                                            <!-- <expression>(?i:public\.sale\.rate)</expression> -->                                    
+                                            <!-- <expression>(?i:dbo\.sale\.rate)</expression> -->                                    
                                     
                                             <!-- This exclude predicate is a regular expression which is matched 
                                             against the definition's name; any definition's name matching 
@@ -191,12 +184,8 @@
                                             - NUMBER(5, 2) regexp suggestion: NUMBER\(5,\s*2\)
                                             - any other form
                                             It is thus recommended to use defensive regexes for types.
-                                            If provided, both "includeExpressions" and "includeTypes" must match. -->
-                                            <!-- any type -->
-                                            <includeTypes>.*</includeTypes>
-                                            
-                                            <!--  the type -->
-                                            <!-- <includeTypes>enum</includeTypes> -->
+                                            If provided, both "includeExpressions" and "includeTypes" must match. -->                                            
+                                            <includeTypes>.*</includeTypes>                                            
                                     
                                             <!-- This exclude predicate is a regular expression which is matched 
                                             against the name of the definition's type (provided that it has one);
@@ -218,23 +207,30 @@
                                             <nullability>ALL</nullability>                                
                                         </forcedType>
                                         
-                                        <!--  for the next mapping we've reduced the code to the minimum -->
+                                        <!--  for the next two mappings we've reduced the code to the minimum -->
+                                        <forcedType>                                                                                                                        
+                                            <userType>com.classicmodels.enums.VatType</userType>                                                                                                                                                                               
+                                            <enumConverter>true</enumConverter>
+                                            <includeExpression>dbo\.sale\.vat</includeExpression>
+                                            <includeTypes>.*</includeTypes>
+                                        </forcedType>  
                                         <forcedType>                                                                                                                        
                                             <userType>com.classicmodels.enums.TrendType</userType>                                                                                                                                                                               
                                             <enumConverter>true</enumConverter>
-                                            <includeExpression>public\.sale\.trend</includeExpression>
-                                            <includeTypes>.*</includeTypes>                                           
-                                        </forcedType>                                        
-                                    </forcedTypes>                                 
-                                                                                                       
+                                            <includeExpression>dbo\.sale\.trend</includeExpression>
+                                            <includeTypes>.*</includeTypes>
+                                        </forcedType>
+                                    </forcedTypes>
+                                                          
                                     <!-- The database type. The format here is:
                                     org.jooq.meta.[database].[database]Database -->
-                                    <name>org.jooq.meta.postgres.PostgresDatabase</name>
+                                    <name>org.jooq.meta.sqlserver.SQLServerDatabase</name>
             
                                     <!-- The database schema (or in the absence of schema support, in your RDBMS this
-                                    can be the owner, user, database name) to be generated. This cannot be combined with the <schemata/> element.                                     
-                                    If <inputSchema/> is missing then all schemas will be considered. -->
-                                    <inputSchema>public</inputSchema>                 
+                                    can be the owner, user, database name) to be generated. This cannot be combined with the <schemata/> element. 
+                                    If <inputSchema/> is missing then all schemata will be considered. -->
+                                    <inputCatalog>classicmodels</inputCatalog>
+                                    <inputSchema>dbo</inputSchema>                   
             
                                     <!-- All elements that are generated from your schema
                                     (A Java regular expression. Use the pipe to separate several expressions)
@@ -243,34 +239,34 @@
                                     Whitespace is ignored and comments are possible. -->       
                                     <includes>.*</includes>
             
-                                    <!-- Schema version provider -->            
-                                    <schemaVersionProvider>SELECT MAX(version) FROM flyway_schema_history</schemaVersionProvider>
+                                    <!-- schema version provider -->            
+                                    <!--<schemaVersionProvider>SELECT MAX(version) FROM schema_version</schemaVersionProvider>-->
             
                                     <!-- All elements that are excluded from your schema
                                     (A Java regular expression. Use the pipe to separate several expressions).
                                     Excludes match before includes, i.e. excludes have a higher priority. -->
-                                    <excludes>flyway_schema_history</excludes>
+                                    <excludes>schema_version</excludes>
                                     
                                     <!-- Give enough time to jOOQ to trigger the queries needed for generating sources 
                                     (default is 5 seconds) -->
                                     <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>
-                                </database>                                                                                                                                                                                                                                            
-                                                                                                                                                                  
+                                </database>
+                                                                
                                 <!-- jOOQ will generate POJOs in your behalf -->
                                 <generate>
                                     <pojos>true</pojos> 
-                                    <validationAnnotations>true</validationAnnotations>                            
+                                    <validationAnnotations>true</validationAnnotations>                                                                
                                 </generate>
                                 
                                 <target>
-                                    <!-- The destination package of your generated classes (within the destination directory).
-                                    jOOQ may append the schema name to this package if generating multiple schemas,
+                                    <!-- The destination package of your generated classes (within the destination directory). 
+                                 jOOQ may append the schema name to this package if generating multiple schemas,
                                     e.g. org.jooq.your.packagename.schema1
-                                    org.jooq.your.packagename.schema2 -->                                    
+                                    org.jooq.your.packagename.schema2 -->
                                     <packageName>jooq.generated</packageName>
             
-                                    <!-- The destination directory of your generated classes. Using Maven directory layout here -->
-                                    <directory>target/generated-sources/jooq</directory>                                                                       
+                                    <!-- The destination directory of your generated classes. Using Maven directory layout here. -->
+                                    <directory>target/generated-sources/jooq</directory>
                                 </target>
                             </generator>    
                                                                                               
