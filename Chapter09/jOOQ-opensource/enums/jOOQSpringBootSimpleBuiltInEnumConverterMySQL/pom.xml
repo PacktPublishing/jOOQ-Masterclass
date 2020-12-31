@@ -217,7 +217,7 @@
                                             <nullability>ALL</nullability>                                
                                         </forcedType>
                                         
-                                        <!--  for the next two mappings we've reduced the code to the minimum -->
+                                        <!--  for the next mapping we've reduced the code to the minimum -->
                                         <forcedType>                                                                                                                        
                                             <userType>com.classicmodels.enums.TrendType</userType>                                                                                                                                                                               
                                             <enumConverter>true</enumConverter>
