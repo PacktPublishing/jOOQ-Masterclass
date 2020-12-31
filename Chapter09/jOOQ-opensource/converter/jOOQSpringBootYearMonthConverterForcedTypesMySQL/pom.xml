@@ -167,10 +167,10 @@
                                             <!-- all 'first_buy_date' fields in any 'customer' table, no matter the schema -->
                                             <!-- <includeExpression>.*\.customer\.first_buy_date</includeExpression> -->
                                             
-                                            <!-- all 'first_buy_date' fields, no matter the table -->
+                                            <!-- all 'first_buy_date' fields, no matter the schema and the table -->
                                             <!-- <includeExpression>.*\.first_buy_date</includeExpression> -->
                                             
-                                            <!-- all fields containing 'first_buy_', no matter the table -->
+                                            <!-- all fields containing 'first_buy_' -->
                                             <!-- <includeExpression>.*\.first_buy_.*</includeExpression> -->
                                             
                                             <!-- case-insensitive expressions -->
