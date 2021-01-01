@@ -26,8 +26,8 @@ public class HstoreBinding implements Binding<Object, Map<String, String>> {
         return converter;
     }
 
-    @Override
     // Rending a bind variable for the binding context's value and casting it to the HSTORE type
+    @Override    
     public void sql(BindingSQLContext<Map<String, String>> ctx) throws SQLException {
        
         if (ctx.render().paramType() == ParamType.INLINED) {
