@@ -170,7 +170,7 @@
                                             <!-- single field expressed as schema\table\field -->
                                             <includeExpression>SYSTEM\.MANAGER\.MANAGER_DETAIL</includeExpression>
                                             
-                                            <!-- all 'first_buy_date' fields in any 'customer' table, no matter the schema -->
+                                            <!-- all 'manager_detail' fields in any 'manager' table, no matter the schema -->
                                             <!-- <includeExpression>.*\.MANAGER\.MANAGER_DETAIL</includeExpression> -->
                                             
                                             <!-- all 'manager_detail' fields, no matter the schema and the table -->
