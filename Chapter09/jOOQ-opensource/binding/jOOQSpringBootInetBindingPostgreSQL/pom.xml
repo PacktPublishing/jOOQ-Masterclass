@@ -166,18 +166,18 @@
                                     <!-- single field expressed as schema\table\field -->
                                     <includeExpression>public\.department\.dep_net_ipv4</includeExpression>
                                             
-                                    <!-- or, like this -->
-                                    <!-- <expression>.*\.department\.dep_net_ipv4</expression> -->
+                                    <!-- all 'dep_net_ipv4' fields in any 'department' table, no matter the schema -->
+                                    <!-- <includeExpression>.*\.department\.dep_net_ipv4</includeExpression> -->
                                             
-                                    <!-- all 'dep_net_ipv4' fields, no matter the table -->
-                                    <!-- <expression>.*\.dep_net_ipv4</expression> -->
+                                    <!-- all 'dep_net_ipv4' fields, no matter the schema and the table -->
+                                    <!-- <includeExpression>.*\.dep_net_ipv4</includeExpression> -->
                                             
-                                    <!-- all fields containing 'dep_net_', no matter the table -->
-                                    <!-- <expression>.*\.dep_net_.*</expression> -->
+                                    <!-- all fields containing 'dep_net_' -->
+                                    <!-- <includeExpression>.*\.dep_net_.*</includeExpression> -->
                                             
                                     <!-- case-insensitive expressions -->
-                                    <!-- <expression>(?i:.*\.department\.dep_net_ipv4)</expression> -->
-                                    <!-- <expression>(?i:public\.department\.dep_net_ipv4)</expression> -->                                    
+                                    <!-- <includeExpression>(?i:.*\.department\.dep_net_ipv4)</includeExpression> -->
+                                    <!-- <includeExpression>(?i:public\.department\.dep_net_ipv4)</includeExpression> -->                                    
                                     
                                     <!-- This exclude predicate is a regular expression which is matched 
                                     against the definition's name; any definition's name matching 
