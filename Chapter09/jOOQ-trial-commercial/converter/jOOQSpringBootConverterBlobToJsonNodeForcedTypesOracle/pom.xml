@@ -170,18 +170,18 @@
                                             <!-- single field expressed as schema\table\field -->
                                             <includeExpression>SYSTEM\.MANAGER\.MANAGER_DETAIL</includeExpression>
                                             
-                                            <!-- or, like this -->
-                                            <!-- <expression>.*\.MANAGER\.MANAGER_DETAIL</expression> -->
+                                            <!-- all 'first_buy_date' fields in any 'customer' table, no matter the schema -->
+                                            <!-- <includeExpression>.*\.MANAGER\.MANAGER_DETAIL</includeExpression> -->
                                             
-                                            <!-- all 'manager_detail' fields, no matter the table -->
-                                            <!-- <expression>.*\.MANAGER_DETAIL</expression> -->
+                                            <!-- all 'manager_detail' fields, no matter the schema and the table -->
+                                            <!-- <includeExpression>.*\.MANAGER_DETAIL</includeExpression> -->
                                             
-                                            <!-- all fields containing 'MANAGER_', no matter the table -->
-                                            <!-- <expression>.*\.MANAGER_.*</expression> -->
+                                            <!-- all fields containing 'MANAGER_' -->
+                                            <!-- <includeExpression>.*\.MANAGER_.*</includeExpression> -->
                                             
                                             <!-- case-insensitive expressions -->
-                                            <!-- <expression>(?i:.*\.manager\.manager_detail)</expression> -->
-                                            <!-- <expression>(?i:system\.manager\.manager_detail)</expression> -->
+                                            <!-- <includeExpression>(?i:.*\.manager\.manager_detail)</includeExpression> -->
+                                            <!-- <includeExpression>(?i:system\.manager\.manager_detail)</includeExpression> -->
                                             
                                             <!-- A Java regex matching data types to be forced to have this type.
                              
