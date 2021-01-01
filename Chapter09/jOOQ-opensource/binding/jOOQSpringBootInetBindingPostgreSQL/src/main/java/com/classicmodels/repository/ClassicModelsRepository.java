@@ -24,53 +24,77 @@ public class ClassicModelsRepository {
     @Transactional
     public void insertDepInet() throws UnknownHostException {
 
-        // workaround to avoid defining a converter
         /*
+        // workaround to avoid defining a converter (but, don't do this!)
         InetAddress addr = InetAddress.getByName("128.10.124.12");
-        ctx.insertInto(DEPARTMENT)
-                .set(DEPARTMENT.DEPARTMENT_ID, DEPARTMENT_DEPARTMENT_ID_SEQ.nextval())
-                .set(DEPARTMENT.NAME, "HR")
-                .set(DEPARTMENT.PHONE, "-int 8799")
-                .set(DEPARTMENT.CODE, (short) 2231)
-                .set(DEPARTMENT.OFFICE_CODE, "4")
-                .set(DEPARTMENT.TOPIC, new String[]{"hiring", "interiew"})                
-                //.set(DEPARTMENT.DEP_NET_IPV4, InetAddress.getByName("128.10.124.12")) - this will not work
-                // to test this, you need to disable the converter
-                .set(DEPARTMENT.DEP_NET_IPV4, field("?::inet", String.class, addr.getHostName()))
-                .execute();
-        */
         
-        // use the InetConverter
+        // non type-safe (don't do this!)
+        ctx.insertInto(DEPARTMENT)
+                .values(DEPARTMENT_DEPARTMENT_ID_SEQ.nextval(), "HR", "-int 8799",
+                        (short) 2231, "4", new String[]{"hiring", "interiew"},
+                        //InetAddress.getByName("128.10.124.12")) - this will not work                        
+                        field("?::inet", String.class, addr.getHostName())) // to test this, you need to disable the converter
+                .execute();
+        
+        // type-safe (don't do this!)
+        ctx.insertInto(DEPARTMENT, DEPARTMENT.NAME, DEPARTMENT.PHONE,
+                DEPARTMENT.CODE, DEPARTMENT.OFFICE_CODE, DEPARTMENT.TOPIC, DEPARTMENT.DEP_NET_IPV4)
+                .values("HR", "-int 8799",
+                        (short) 2231, "4", new String[]{"hiring", "interiew"},
+                        //InetAddress.getByName("128.10.124.12")) - this will not work                        
+                        field("?::inet", String.class, addr.getHostName())) // to test this, you need to disable the converter
+                .execute();
+         */
+        
+        // non type-safe, use the InetConverter
         ctx.insertInto(DEPARTMENT)
                 .values(DEPARTMENT_DEPARTMENT_ID_SEQ.nextval(),
                         "HR", "-int 8799", (short) 2231, "4", new String[]{"hiring", "interiew"},
                         InetAddress.getByName("128.10.124.12"))
                 .execute();
-        
+
+        // type-safe, use the InetConverter
+        ctx.insertInto(DEPARTMENT, DEPARTMENT.NAME, DEPARTMENT.PHONE,
+                DEPARTMENT.CODE, DEPARTMENT.OFFICE_CODE, DEPARTMENT.TOPIC, DEPARTMENT.DEP_NET_IPV4)
+                .values("HR", "-int 8799", (short) 2231, "4", new String[]{"hiring", "interiew"},
+                        InetAddress.getByName("128.10.124.12"))
+                .execute();
+
         // use the InetConverter and Department POJO         
         Integer nextId1 = ctx.select(DEPARTMENT_DEPARTMENT_ID_SEQ.nextval()).fetchOneInto(Integer.class);
         Department department = new Department(nextId1,
-                        "HR", "-int 8799", (short) 2231, "4", new String[]{"hiring", "interiew"},
-                        InetAddress.getByName("128.10.124.12"));
-        ctx.newRecord(DEPARTMENT, department).insert();        
-        
+                "HR", "-int 8799", (short) 2231, "4", new String[]{"hiring", "interiew"},
+                InetAddress.getByName("128.10.124.12"));
+        ctx.newRecord(DEPARTMENT, department).insert();
+
         // use the InetConverter and DepartmentRecord
         Integer nextId2 = ctx.select(DEPARTMENT_DEPARTMENT_ID_SEQ.nextval()).fetchOneInto(Integer.class);
         DepartmentRecord departmentr = new DepartmentRecord(nextId2,
-                        "HR", "-int 8799", (short) 2231, "4", new String[]{"hiring", "interiew"},
-                        InetAddress.getByName("128.10.124.12"));
-        ctx.insertInto(DEPARTMENT).values(departmentr.valuesRow().fields()).execute();        
+                "HR", "-int 8799", (short) 2231, "4", new String[]{"hiring", "interiew"},
+                InetAddress.getByName("128.10.124.12"));
+        ctx.insertInto(DEPARTMENT).values(departmentr.valuesRow().fields()).execute();
+
     }
 
     public void fetchDepInet() {
 
-        // fetch as Strings
         /*
-        List<String> inets = ctx.select(DEPARTMENT.DEP_NET_IPV4)
+        // workaround to avoid defining a converter (but, don't do this!)
+        // to test this, you need to disable the converter
+        List<InetAddress> inets = ctx.select(DEPARTMENT.DEP_NET_IPV4)
                 .from(DEPARTMENT)
                 .where(DEPARTMENT.NAME.eq("HR"))
-                .fetch(DEPARTMENT.DEP_NET_IPV4, String.class);
-        */
+                .fetch(rs -> {
+                    try {
+                        return InetAddress.getByName(String.valueOf(rs.getValue(DEPARTMENT.DEP_NET_IPV4)));
+                    } catch (UnknownHostException ex) {
+                        // handle exception
+                    }
+                    return null;
+                });
+        
+        System.out.println("Inets: " + inets);
+         */
         
         // use the InetConverter
         List<InetAddress> inets = ctx.select(DEPARTMENT.DEP_NET_IPV4)
