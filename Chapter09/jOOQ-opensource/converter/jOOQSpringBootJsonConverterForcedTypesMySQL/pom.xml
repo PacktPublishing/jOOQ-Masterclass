@@ -165,18 +165,18 @@
                                             <!-- single field expressed as schema\table\field -->
                                             <includeExpression>classicmodels\.manager\.manager_detail</includeExpression>
                                             
-                                            <!-- or, like this -->
-                                            <!-- <expression>.*\.manager\.manager_detail</expression> -->
+                                            <!-- all 'first_buy_date' fields in any 'customer' table, no matter the schema -->
+                                            <!-- <includeExpression>.*\.manager\.manager_detail</includeExpression> -->
                                             
-                                            <!-- all 'manager_detail' fields, no matter the table -->
-                                            <!-- <expression>.*\.manager_detail</expression> -->
+                                            <!-- all 'manager_detail' fields, no matter the schema and the table -->
+                                            <!-- <includeExpression>.*\.manager_detail</includeExpression> -->
                                             
-                                            <!-- all fields containing 'manager_', no matter the table -->
-                                            <!-- <expression>.*\.manager_.*</expression> -->
+                                            <!-- all fields containing 'manager_' -->
+                                            <!-- <includeExpression>.*\.manager_.*</includeExpression> -->
                                             
                                             <!-- case-insensitive expressions -->
-                                            <!-- <expression>(?i:.*\.manager\.manager_detail)</expression> -->
-                                            <!-- <expression>(?i:classicmodels\.manager\.manager_detail)</expression> -->
+                                            <!-- <includeExpression>(?i:.*\.manager\.manager_detail)</includeExpression> -->
+                                            <!-- <includeExpression>(?i:classicmodels\.manager\.manager_detail)</includeExpression> -->
                                             
                                             <!-- A Java regex matching data types to be forced to have this type.
                              
