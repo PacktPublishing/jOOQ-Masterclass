@@ -166,18 +166,18 @@
                                     If provided, both "includeExpressions" and "includeTypes" must match. -->
                                     <includeExpression>public\.product\.specs</includeExpression>
                                             
-                                    <!-- or, like this -->
-                                    <!-- <expression>.*\.product\.specs</expression> -->
+                                    <!-- all 'specs' fields in any 'product' table, no matter the schema -->
+                                    <!-- <includeExpression>.*\.product\.specs</includeExpression> -->
                                             
-                                    <!-- all 'specs' fields, no matter the table -->
-                                    <!-- <expression>.*\.specs</expression> -->
+                                    <!-- all 'specs' fields, no matter the schema and the table -->
+                                    <!-- <includeExpression>.*\.specs</includeExpression> -->
                                             
-                                    <!-- all fields containing 'spe', no matter the table -->
-                                    <!-- <expression>.*\.spe.*</expression> -->
+                                    <!-- all fields containing 'spe' -->
+                                    <!-- <includeExpression>.*\.spe.*</includeExpression> -->
                                             
                                     <!-- case-insensitive expressions -->
-                                    <!-- <expression>(?i:.*\.product\.specs)</expression> -->
-                                    <!-- <expression>(?i:public\.product\.specs)</expression> -->   
+                                    <!-- <includeExpression>(?i:.*\.product\.specs)</includeExpression> -->
+                                    <!-- <includeExpression>(?i:public\.product\.specs)</includeExpression> -->   
                                     
                                     <!-- This exclude predicate is a regular expression which is matched 
                                     against the definition's name; any definition's name matching 
