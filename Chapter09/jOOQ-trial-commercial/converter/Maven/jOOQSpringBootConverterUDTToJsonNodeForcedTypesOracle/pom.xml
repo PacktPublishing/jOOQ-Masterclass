@@ -180,8 +180,8 @@
                                             <!-- <includeExpression>.*\.MANAGER_.*</includeExpression> -->
                                             
                                             <!-- case-insensitive expressions -->
-                                            <!-- <includeExpression>(?i:.*\.manager\.manager_detail)</includeExpression> -->
-                                            <!-- <includeExpression>(?i:system\.manager\.manager_detail)</includeExpression> -->
+                                            <!-- <includeExpression>(?i:.*\.manager\.manager_evaluation)</includeExpression> -->
+                                            <!-- <includeExpression>(?i:system\.manager\.manager_evaluation)</includeExpression> -->
                                             
                                             <!-- A Java regex matching data types to be forced to have this type.
                              
