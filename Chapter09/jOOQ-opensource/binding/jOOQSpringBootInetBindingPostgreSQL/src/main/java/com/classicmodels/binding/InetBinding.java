@@ -26,7 +26,7 @@ public class InetBinding implements Binding<Object, InetAddress> {
         return converter;
     }
 
-    // Rending a bind variable for the binding context's value and casting it to the INET type
+    // Rendering a bind variable for the binding context's value and casting it to the INET type
     @Override
     public void sql(BindingSQLContext<InetAddress> ctx) throws SQLException {
        

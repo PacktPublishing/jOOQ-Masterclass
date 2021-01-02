@@ -27,7 +27,7 @@ public class JsonBinding implements Binding<JSON, JsonNode> {
         return converter;
     }
 
-    // Rending a bind variable for the binding context's value and casting it to the JSON type
+    // Rendering a bind variable for the binding context's value and casting it to the JSON type
     @Override
     public void sql(BindingSQLContext<JsonNode> ctx) throws SQLException {
 
