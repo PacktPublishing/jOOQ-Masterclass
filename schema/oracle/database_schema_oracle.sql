@@ -121,6 +121,7 @@ CREATE TABLE office (
   country varchar2(50),
   postal_code varchar2(15) NOT NULL,
   territory varchar2(10) NOT NULL,
+  location sdo_geometry DEFAULT NULL,
   PRIMARY KEY (office_code)
 ) ;
 

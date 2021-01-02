@@ -88,6 +88,7 @@ CREATE TABLE office (
   [country] varchar(50),
   [postal_code] varchar(15) NOT NULL,
   [territory] varchar(10) NOT NULL,
+  [location] [geometry] DEFAULT NULL,
   PRIMARY KEY ([office_code])
 ) ;
 
