@@ -132,6 +132,7 @@ CREATE TABLE `manager` (
   `manager_id` bigint NOT NULL AUTO_INCREMENT,
   `manager_name` varchar(50) NOT NULL,
   `manager_detail` json DEFAULT NULL,
+  `manager_evaluation` varchar(200) DEFAULT NULL, 
   PRIMARY KEY (`manager_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
