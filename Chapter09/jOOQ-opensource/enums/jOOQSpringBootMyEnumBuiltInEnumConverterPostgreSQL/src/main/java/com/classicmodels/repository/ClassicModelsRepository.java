@@ -6,6 +6,7 @@ import com.classicmodels.enums.VatType;
 import java.util.List;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
+import static org.jooq.impl.DSL.field;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,20 +23,22 @@ public class ClassicModelsRepository {
     @Transactional
     public void insertSale() {
 
-        // store RateType as String
+        // store RateType
         ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.RATE)
-                .values(2005, 56444.32, 1370L, RateType.PLATINUM.name())
+                .values(2005, 56444.32, 1370L,
+                        field("?::\"public\".\"rate_type\"", RateType.PLATINUM.name()))
                 .execute();
 
-        // rely VatConverter
+        // rely on VatConverter
         ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.VAT)
-                .values(2005, 56444.32, 1370L, VAT_CONVERTER.to(VatType.MAX))
+                .values(2005, 56444.32, 1370L, 
+                        field("?::\"public\".\"vat_type\"", VAT_CONVERTER.to(VatType.MAX)))
                 .execute();
     }
 
     public void fetchSale() {
 
-        List<RateType> rates = ctx.select(SALE.RATE)
+        List<RateType> rates = ctx.select(SALE.RATE.coerce(String.class))
                 .from(SALE)
                 .where(SALE.RATE.isNotNull())
                 .fetch(SALE.RATE, RateType.class);
