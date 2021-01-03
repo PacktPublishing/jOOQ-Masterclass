@@ -63,10 +63,10 @@ public class ClassicModelsRepository {
 
         System.out.println("Stars: " + stars);
 
-        List<String> vats = ctx.select(SALE.VAT)
+        List<VatType> vats = ctx.select(SALE.VAT)
                 .from(SALE)
                 .where(SALE.VAT.isNotNull())
-                .fetch(SALE.VAT, String.class);
+                .fetch(SALE.VAT);
 
         System.out.println("Vats: " + vats);
 
