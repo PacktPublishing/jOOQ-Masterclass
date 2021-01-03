@@ -21,8 +21,8 @@ public class ClassicModelsRepository {
     public void insertProductWithSpecs() {
 
         /*
-        // workaround to avoid defining a converter (but, don't do this!)
-        // to test this, you need to disable the converter
+        // workaround to avoid defining a binding/converter
+        // to test this, you need to disable the current binding
         ctx.insertInto(PRODUCT, PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_LINE, PRODUCT.SPECS)
                 .values("2002 Masserati Levante", "Classic Cars",
                         field("?::hstore", String.class,
@@ -30,7 +30,7 @@ public class ClassicModelsRepository {
                                         "66.1", "Engine", "Twin Turbo Premium Unleaded V-6"))))
                 .execute();
         */
-                
+          
         ctx.insertInto(PRODUCT, PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_LINE, PRODUCT.SPECS)
                 .values("2002 Masserati Levante", "Classic Cars",
                         Map.of("Length (in)", "197", "Width (in)", "77.5", "Height (in)", 
@@ -41,8 +41,8 @@ public class ClassicModelsRepository {
     public void fetchProductSpecs() {
 
         /*
-        // workaround to avoid defining a converter (but, don't do this!)
-        // to test this, you need to disable the converter
+        // workaround to avoid defining a binding/converter
+        // to test this, you need to disable the current binding
         List<Map<String, String>> specs = ctx.select(PRODUCT.SPECS.coerce(String.class))
                 .from(PRODUCT)
                 .where(PRODUCT.PRODUCT_NAME.eq("2002 Masserati Levante"))

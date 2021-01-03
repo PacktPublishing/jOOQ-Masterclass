@@ -25,7 +25,8 @@ public class ClassicModelsRepository {
     public void insertDepInet() throws UnknownHostException {
 
         /*
-        // workaround to avoid defining a converter (but, don't do this!)
+        // workaround to avoid defining a binding/converter
+        // to test this, you need to disable the current binding
         InetAddress addr = InetAddress.getByName("128.10.124.12");
         
         // non type-safe (don't do this!)
@@ -33,7 +34,7 @@ public class ClassicModelsRepository {
                 .values(DEPARTMENT_DEPARTMENT_ID_SEQ.nextval(), "HR", "-int 8799",
                         (short) 2231, "4", new String[]{"hiring", "interiew"},
                         //InetAddress.getByName("128.10.124.12")) - this will not work                        
-                        field("?::inet", String.class, addr.getHostName())) // to test this, you need to disable the converter
+                        field("?::inet", String.class, addr.getHostName())) 
                 .execute();
         
         // type-safe (don't do this!)
@@ -79,8 +80,8 @@ public class ClassicModelsRepository {
     public void fetchDepInet() {
 
         /*
-        // workaround to avoid defining a converter (but, don't do this!)
-        // to test this, you need to disable the converter
+        // workaround to avoid defining a binding/converter
+        // to test this, you need to disable the binding
         List<InetAddress> inets = ctx.select(DEPARTMENT.DEP_NET_IPV4)
                 .from(DEPARTMENT)
                 .where(DEPARTMENT.NAME.eq("HR"))
