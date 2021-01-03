@@ -168,18 +168,18 @@
                                             <!-- single field expressed as schema\table\field -->
                                             <includeExpression>SYSTEM\.SALE\.RATE</includeExpression>
                                             
-                                            <!-- or, like this -->
-                                            <!-- <expression>.*\.SALE\.RATE</expression> -->
+                                            <!-- all 'rate' fields in any 'sale' table, no matter the schema -->
+                                            <!-- <includeExpression>.*\.SALE\.RATE</includeExpression> -->
                                             
-                                            <!-- all 'rate' fields, no matter the table -->
-                                            <!-- <expression>.*\.RATE</expression> -->
+                                            <!-- all 'rate' fields, no matter the schema and the table -->
+                                            <!-- <includeExpression>.*\.RATE</includeExpression> -->
                                             
-                                            <!-- all fields containing 'RA', no matter the table -->
-                                            <!-- <expression>.*\.RA.*</expression> -->
+                                            <!-- all fields containing 'RA' -->
+                                            <!-- <includeExpression>.*\.RA.*</includeExpression> -->
                                             
                                             <!-- case-insensitive expressions -->
-                                            <!-- <expression>(?i:.*\.sale\.rate)</expression> -->
-                                            <!-- <expression>(?i:system\.sale\.rate)</expression> -->                                    
+                                            <!-- <includeExpression>(?i:.*\.sale\.rate)</includeExpression> -->
+                                            <!-- <includeExpression>(?i:system\.sale\.rate)</includeExpression> -->                                    
                                     
                                             <!-- This exclude predicate is a regular expression which is matched 
                                             against the definition's name; any definition's name matching 
