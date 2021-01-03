@@ -159,8 +159,8 @@
                                     <!-- Specify the Java type of your custom type. This corresponds to the Binding's <U> type. -->
                                     <userType>com.classicmodels.enums.StarType</userType>
                                     
-                                    <!-- Associate that custom type with your binding. -->
-                                    <binding>com.classicmodels.converter.SaleRateStarConverter</binding>
+                                    <!-- Associate that custom type with your converter. -->
+                                    <converter>com.classicmodels.converter.SaleRateStarConverter</converter>
                                     
                                     <!-- A Java regex matching fully-qualified columns, attributes, parameters. Use the pipe to separate several expressions.
                                     If provided, both "includeExpressions" and "includeTypes" must match. -->

@@ -156,7 +156,7 @@
                                             <userType>com.classicmodels.enums.StarType</userType>
                                     
                                             <!-- Associate that custom type with your converter. -->
-                                            <binding>com.classicmodels.converter.SaleRateStarConverter</binding>
+                                            <converter>com.classicmodels.converter.SaleRateStarConverter</converter>
                                     
                                             <!-- A Java regex matching fully-qualified columns, attributes, parameters. Use the pipe to separate several expressions.
                                             If provided, both "includeExpressions" and "includeTypes" must match. -->
