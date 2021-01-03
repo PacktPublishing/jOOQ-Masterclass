@@ -2,6 +2,7 @@ package com.classicmodels.binding;
 
 import java.awt.geom.Point2D;
 import java.sql.SQLException;
+import java.sql.SQLFeatureNotSupportedException;
 import java.sql.Types;
 import java.util.Objects;
 import org.jooq.Binding;
@@ -64,12 +65,12 @@ public class PointBinding implements Binding<Object, Point2D> {
     // Getting a value from a JDBC SQLInput (useful for Oracle OBJECT types)
     @Override
     public void get(BindingGetSQLInputContext<Point2D> bgsqlc) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        throw new SQLFeatureNotSupportedException("Not supported yet.");
     }
 
     // Setting a value on a JDBC SQLOutput (useful for Oracle OBJECT types)
     @Override
     public void set(BindingSetSQLOutputContext<Point2D> bsqlc) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        throw new SQLFeatureNotSupportedException("Not supported yet.");
     }
 }
