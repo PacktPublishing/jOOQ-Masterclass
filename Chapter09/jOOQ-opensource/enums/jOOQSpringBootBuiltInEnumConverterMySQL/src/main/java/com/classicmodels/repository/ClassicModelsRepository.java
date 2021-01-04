@@ -32,7 +32,7 @@ public class ClassicModelsRepository {
                 .execute();
         
         // rely on SALE_RATE_STAR_CONVERTER to convert from StarType to RateType
-         ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.RATE)
+        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.RATE)
                 .values(2005, 56444.32, 1370L, SALE_RATE_STAR_CONVERTER.to(StarType.FIVE_STARS))
                 .execute();
 
