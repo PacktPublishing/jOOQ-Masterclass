@@ -2,6 +2,7 @@ package com.classicmodels.repository;
 
 import static com.classicmodels.converter.SaleRateStarConverter.SALE_RATE_STAR_CONVERTER;
 import static com.classicmodels.converter.SaleStrTrendConverter.SALE_STR_TREND_CONVERTER;
+import static com.classicmodels.converter.SaleVatIntConverter.SALE_VAT_INT_CONVERTER;
 import com.classicmodels.enums.StarType;
 import com.classicmodels.enums.TrendType;
 import java.util.List;
@@ -35,9 +36,9 @@ public class ClassicModelsRepository {
                 .values(2005, 56444.32, 1370L, SALE_RATE_STAR_CONVERTER.to(StarType.FIVE_STARS))
                 .execute();
 
-        // rely on jOOQ generated VatType
+        // rely SALE_VAT_INT_CONVERTER
         ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.VAT)
-                .values(2005, 56444.32, 1370L, VatType.MAX)
+                .values(2005, 56444.32, 1370L, SALE_VAT_INT_CONVERTER.to(19))
                 .execute();
         
         // rely on SALE_STR_TREND_CONVERTER
@@ -62,10 +63,10 @@ public class ClassicModelsRepository {
 
         System.out.println("Stars: " + stars);
 
-        List<VatType> vats = ctx.select(SALE.VAT)
+        List<Integer> vats = ctx.select(SALE.VAT)
                 .from(SALE)
                 .where(SALE.VAT.isNotNull())
-                .fetch(SALE.VAT);
+                .fetch(SALE.VAT, SALE_VAT_INT_CONVERTER);
 
         System.out.println("Vats: " + vats);
 
