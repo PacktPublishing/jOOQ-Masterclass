@@ -7,7 +7,6 @@ import com.classicmodels.enums.RateType;
 import com.classicmodels.enums.StarType;
 import com.classicmodels.enums.TrendType;
 import java.util.List;
-import jooq.generated.enums.VatType;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
@@ -47,8 +46,8 @@ public class ClassicModelsRepository {
                 .execute();        
     }
 
-    public void fetchSale() {
-
+    public void fetchSale() {        
+        
         List<RateType> rates = ctx.select(SALE.RATE)
                 .from(SALE)
                 .where(SALE.RATE.isNotNull())
