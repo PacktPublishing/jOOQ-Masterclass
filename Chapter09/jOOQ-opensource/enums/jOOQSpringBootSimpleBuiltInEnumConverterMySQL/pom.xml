@@ -222,7 +222,7 @@
                                             <userType>com.classicmodels.enums.TrendType</userType>                                                                                                                                                                               
                                             <enumConverter>true</enumConverter>
                                             <includeExpression>classicmodels\.sale\.trend</includeExpression>
-                                            <includeTypes>.*</includeTypes>
+                                            <includeTypes>varchar</includeTypes>
                                         </forcedType>                                        
                                     </forcedTypes>                                 
                                                                                                        
