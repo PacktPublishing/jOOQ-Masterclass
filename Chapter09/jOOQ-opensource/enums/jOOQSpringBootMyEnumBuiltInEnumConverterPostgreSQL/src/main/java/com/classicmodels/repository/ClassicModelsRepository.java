@@ -55,10 +55,10 @@ public class ClassicModelsRepository {
                 .fetch(SALE.VAT, VAT_CONVERTER);
 
         System.out.println("Vats: " + vats);
-        
+
         Result<Record1<VatType>> maxGood = ctx.select(val("MAX").coerce(VATTYPE)).fetch();
         System.out.println("Result: \n" + maxGood); // MAX
-        
+
         Result<Record1<VatType>> maxWrong = ctx.select(val("MaX").coerce(VATTYPE)).fetch();
         System.out.println("Result: \n" + maxWrong); // null
     }
