@@ -26,7 +26,7 @@ public class JooqConfig {
                                                 .withUserType("java.time.YearMonth")
                                                 .withConverter("com.classicmodels.converter.YearMonthConverter")
                                                 .withIncludeExpression("classicmodels\\.customer\\.first_buy_date")
-                                                .withExcludeTypes("classicmodels\\.customer\\.first_buy_date"))
+                                                .withExcludeTypes(".*\\."))
                                 .withName("org.jooq.meta.mysql.MySQLDatabase")
                                 .withSchemaVersionProvider("SELECT MAX(version) FROM flyway_schema_history")
                                 .withIncludes(".*")
