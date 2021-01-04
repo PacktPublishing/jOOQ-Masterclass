@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 import static jooq.generated.tables.Payment.PAYMENT;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
@@ -31,7 +32,8 @@ public class ClassicModelsRepository {
 
         ctx.insertInto(PAYMENT, PAYMENT.CUSTOMER_NUMBER, PAYMENT.CHECK_NUMBER,
                 PAYMENT.PAYMENT_DATE, PAYMENT.INVOICE_AMOUNT, PAYMENT.CACHING_DATE)
-                .values(103L, "HQ33GHDD", paymentDate, BigDecimal.valueOf(18293.42), cachingDate)
+                .values(103L, UUID.randomUUID().toString(), 
+                        paymentDate, BigDecimal.valueOf(18293.42), cachingDate)
                 .execute();
     }
 
