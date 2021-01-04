@@ -121,6 +121,7 @@ CREATE TABLE office (
   country varchar2(50),
   postal_code varchar2(15) NOT NULL,
   territory varchar2(10) NOT NULL,
+  location sdo_geometry DEFAULT NULL,
   PRIMARY KEY (office_code)
 ) ;
 
@@ -282,11 +283,22 @@ END;
 
 /*Table structure for table `manager` */
 
+/* Define a type using CREATE TYPE */
+BEGIN
+   EXECUTE IMMEDIATE 'CREATE OR REPLACE TYPE evaluation_criteria AS OBJECT (
+   communication_ability number(6), ethics number(6), performance number(6), employee_input number(6))';
+EXCEPTION
+   WHEN OTHERS THEN NULL;
+END;
+/
+COMMIT;
+
 CREATE TABLE manager (
   manager_id number(10) NOT NULL,
-  manager_name varchar2(50) NOT NULL,
+  manager_name varchar2(50) NOT NULL,  
   manager_detail varchar2(4000),  
   -- for large JSON, use manager_detail blob,
+  manager_evaluation evaluation_criteria DEFAULT NULL, 
   PRIMARY KEY (manager_id),
   CONSTRAINT ENSURE_JSON CHECK (manager_detail IS JSON)
 ) ;

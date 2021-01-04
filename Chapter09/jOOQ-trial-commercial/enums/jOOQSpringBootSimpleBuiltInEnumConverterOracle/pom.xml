@@ -222,13 +222,13 @@
                                             <userType>com.classicmodels.enums.VatType</userType>                                                                                                                                   
                                             <enumConverter>true</enumConverter>
                                             <includeExpression>SYSTEM\.SALE\.VAT</includeExpression>
-                                            <includeTypes>.*</includeTypes>
+                                            <includeTypes>VARCHAR2\(10\)</includeTypes>
                                         </forcedType>
                                         <forcedType>                                                                                                                        
                                             <userType>com.classicmodels.enums.TrendType</userType>                                                                                                                                   
                                             <enumConverter>true</enumConverter>
                                             <includeExpression>SYSTEM\.SALE\.TREND</includeExpression>
-                                            <includeTypes>.*</includeTypes>
+                                            <includeTypes>VARCHAR2\(10\)</includeTypes>
                                         </forcedType>
                                     </forcedTypes>
                                                        
