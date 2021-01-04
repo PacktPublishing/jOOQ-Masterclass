@@ -172,12 +172,29 @@
                                     <!-- All elements that are excluded from your schema
                                     (A Java regular expression. Use the pipe to separate several expressions).
                                     Excludes match before includes, i.e. excludes have a higher priority. -->
-                                    <excludes>flyway_schema_history | sale_vat | sale_rate</excludes>
+                                    <!-- <excludes>flyway_schema_history | sale_vat | sale_rate</excludes> -->
+                                    <!-- use this if you want to rely on com.classicmodels.converter.VatConverter -->
+                                    <excludes>flyway_schema_history | sale_rate</excludes>
                                     
                                     <!-- Give enough time to jOOQ to trigger the queries needed for generating sources 
                                     (default is 5 seconds) -->
                                     <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>
                                 </database>
+                                
+                                <!-- this is useful only if you don't exclude 'sale_vat' generation -->
+                                <strategy>
+                                    <matchers>                                                                                                                       
+                                        <enums>                                           
+                                            <enum>         
+                                                <expression>sale_vat</expression>                                                                                            
+                                                <enumClass>                                                    
+                                                    <expression>VatType</expression>
+                                                    <transform>AS_IS</transform>                                                                                      
+                                                </enumClass>                                                
+                                            </enum>
+                                        </enums>
+                                    </matchers>
+                                </strategy>
                                                                                                                                
                                 <!-- jOOQ will generate POJOs in your behalf -->
                                 <generate>

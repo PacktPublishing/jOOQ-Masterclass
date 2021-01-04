@@ -1,11 +1,15 @@
 package com.classicmodels.repository;
 
+import static com.classicmodels.converter.VatConverter.VATTYPE;
 import static com.classicmodels.converter.VatConverter.VAT_CONVERTER;
 import com.classicmodels.enums.RateType;
 import com.classicmodels.enums.VatType;
 import java.util.List;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
+import org.jooq.Record1;
+import org.jooq.Result;
+import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,5 +52,11 @@ public class ClassicModelsRepository {
                 .fetch(SALE.VAT, VAT_CONVERTER);
 
         System.out.println("Vats: " + vats);
+        
+        Result<Record1<VatType>> maxGood = ctx.select(val("MAX").coerce(VATTYPE)).fetch();
+        System.out.println("Result: \n" + maxGood); // MAX
+        
+        Result<Record1<VatType>> maxWrong = ctx.select(val("MaX").coerce(VATTYPE)).fetch();
+        System.out.println("Result: \n" + maxWrong); // null
     }
 }
