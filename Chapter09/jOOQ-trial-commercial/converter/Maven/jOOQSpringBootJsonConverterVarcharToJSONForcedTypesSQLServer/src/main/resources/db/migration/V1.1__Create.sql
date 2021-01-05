@@ -88,6 +88,7 @@ CREATE TABLE office (
   [country] varchar(50),
   [postal_code] varchar(15) NOT NULL,
   [territory] varchar(10) NOT NULL,
+  [location] [geometry] DEFAULT NULL,
   PRIMARY KEY ([office_code])
 ) ;
 
@@ -184,9 +185,8 @@ PRIMARY KEY ([customer_number])
 CREATE TABLE manager (
   [manager_id] bigint NOT NULL IDENTITY,
   [manager_name] varchar(50) NOT NULL,
-  [manager_detail] NVARCHAR(4000) CHECK(
-        ISJSON(manager_detail) = 1
-  )
+  [manager_detail] nvarchar(4000) CHECK(ISJSON(manager_detail) = 1),
+  [manager_evaluation] varchar(200) DEFAULT NULL, 
   PRIMARY KEY ([manager_id])
 ) ;
 
