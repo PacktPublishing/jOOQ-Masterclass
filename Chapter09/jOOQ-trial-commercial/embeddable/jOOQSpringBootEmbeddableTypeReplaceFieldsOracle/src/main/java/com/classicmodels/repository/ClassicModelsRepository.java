@@ -1,10 +1,9 @@
 package com.classicmodels.repository;
 
 import java.util.List;
-import jooq.generated.embeddables.pojos.Location;
-import jooq.generated.embeddables.records.LocationRecord;
+import jooq.generated.embeddables.pojos.OfficeFullAddress;
+import jooq.generated.embeddables.records.OfficeFullAddressRecord;
 import static jooq.generated.tables.Office.OFFICE;
-import jooq.generated.tables.records.OfficeRecord;
 import org.jooq.DSLContext;
 import org.jooq.Record1;
 import org.jooq.Result;
@@ -24,31 +23,26 @@ public class ClassicModelsRepository {
     @Transactional
     public void insertOffice() {
 
-        // using embeddable type via LocationRecord   
-        ctx.insertInto(OFFICE, OFFICE.OFFICE_CODE, OFFICE.LOCATION, OFFICE.PHONE,
-                OFFICE.ADDRESS_LINE_SECOND, OFFICE.POSTAL_CODE, OFFICE.TERRITORY)
+        // using embeddable type via OfficeFullAddressRecord   
+        ctx.insertInto(OFFICE, OFFICE.OFFICE_CODE, OFFICE.OFFICE_FULL_ADDRESS, OFFICE.PHONE,
+                OFFICE.ADDRESS_LINE_SECOND, OFFICE.POSTAL_CODE)
                 .values(String.valueOf((int) (Math.random() * 1000)),
-                        new LocationRecord("Naples", "Giuseppe Mazzini", "Campania", "Italy"),
-                        "09822-1229-12", "N/A", "zip-2322", "N/A")
-                .execute();               
+                        new OfficeFullAddressRecord("Naples", "Giuseppe Mazzini", "Campania", "Italy", "N/A"),
+                        "09822-1229-12", "N/A", "zip-2322")
+                .execute();
     }
 
     public void findOffice() {
 
-        Result<Record1<LocationRecord>> resultRecord = ctx.select(OFFICE.LOCATION)
+        Result<Record1<OfficeFullAddressRecord>> embeddableRecord = ctx.select(OFFICE.OFFICE_FULL_ADDRESS)
                 .from(OFFICE)
                 .fetch();
-        System.out.println("Result record:" + resultRecord);
-        
-        List<Location> result = ctx.select(OFFICE.LOCATION)
+        System.out.println("Result record as OfficeFullAddressRecord:\n" + embeddableRecord);
+
+        List<OfficeFullAddress> result = ctx.select(OFFICE.OFFICE_FULL_ADDRESS)
                 .from(OFFICE)
-                .fetchInto(Location.class);  
-        
-        System.out.println("Result:" + result);
-        
-        Result<OfficeRecord> resultAll = ctx.selectFrom(OFFICE)
-                .fetch();
-        
-        System.out.println("Result:\n" + resultAll);
+                .fetchInto(OfficeFullAddress.class);
+
+        System.out.println("Result as POJO:\n" + result);
     }
 }

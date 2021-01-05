@@ -165,10 +165,10 @@
                                             <schema>classicmodels</schema>
                                             
                                             <!-- The name of the embeddable type -->
-                                            <name>LOCATION</name>
+                                            <name>OFFICE_FULL_ADDRESS</name>
                                             
                                             <!-- An optional, defining comment of an embeddable -->
-                                            <comment>Location of an office</comment>
+                                            <comment>The full address of an office</comment>
                                             
                                             <!-- The name of the reference to the embeddable type. Defaults to <name/> if left blank -->
                                             <referencingName/>
@@ -198,6 +198,9 @@
                                                 <field>                                                    
                                                     <expression>COUNTRY</expression>
                                                 </field>                                                
+                                                <field>                                                    
+                                                    <expression>TERRITORY</expression>
+                                                </field>
                                             </fields>
                                             <replacesFields>true</replacesFields>
                                         </embeddable>                                        
