@@ -50,20 +50,20 @@ public class ClassicModelsRepository {
 
     public void findOffice() {
 
-        Result<Record1<OfficeFullAddressRecord>> embeddableRecord = ctx.select(OFFICE.OFFICE_FULL_ADDRESS)
+        Result<Record1<OfficeFullAddressRecord>> result1 = ctx.select(OFFICE.OFFICE_FULL_ADDRESS)
                 .from(OFFICE)
                 .fetch();
-        System.out.println("Result record as OfficeFullAddressRecord:\n" + embeddableRecord);
+        System.out.println("Result as OfficeFullAddressRecord:\n" + result1);
 
-        List<JsonNode> jsonRecord = ctx.select(OFFICE.OFFICE_FULL_ADDRESS)
+        List<JsonNode> result2 = ctx.select(OFFICE.OFFICE_FULL_ADDRESS)
                 .from(OFFICE)
                 .fetch(OFFICE.OFFICE_FULL_ADDRESS, JSON_CONVERTER);
-        System.out.println("Result record as JsonNode:\n" + jsonRecord);
+        System.out.println("Result as JsonNode:\n" + result2);
 
-        List<OfficeFullAddress> result = ctx.select(OFFICE.OFFICE_FULL_ADDRESS)
+        List<OfficeFullAddress> result3 = ctx.select(OFFICE.OFFICE_FULL_ADDRESS)
                 .from(OFFICE)
                 .fetchInto(OfficeFullAddress.class);
 
-        System.out.println("Result as POJO:\n" + result);
+        System.out.println("Result as POJO:\n" + result3);
     }
 }
