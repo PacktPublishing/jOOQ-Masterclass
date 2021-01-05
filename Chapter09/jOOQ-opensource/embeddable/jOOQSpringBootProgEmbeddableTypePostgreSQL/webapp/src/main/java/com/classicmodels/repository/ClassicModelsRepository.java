@@ -4,6 +4,7 @@ import java.util.List;
 import jooq.generated.embeddables.pojos.OfficeFullAddress;
 import jooq.generated.embeddables.records.OfficeFullAddressRecord;
 import static jooq.generated.tables.Office.OFFICE;
+import jooq.generated.tables.pojos.Office;
 import org.jooq.DSLContext;
 import org.jooq.Record1;
 import org.jooq.Result;
@@ -23,6 +24,15 @@ public class ClassicModelsRepository {
     @Transactional
     public void insertOffice() {
 
+        // without embeddable        
+        ctx.insertInto(OFFICE, OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.ADDRESS_LINE_FIRST,
+                OFFICE.STATE, OFFICE.COUNTRY, OFFICE.TERRITORY, OFFICE.PHONE,
+                OFFICE.ADDRESS_LINE_SECOND, OFFICE.POSTAL_CODE)
+                .values(String.valueOf((int) (Math.random() * 1000)),
+                        "Naples", "Giuseppe Mazzini", "Campania", "Italy", "N/A",
+                        "09822-1229-12", "N/A", "zip-2322")
+                .execute();
+
         // using embeddable type via OfficeFullAddressRecord   
         ctx.insertInto(OFFICE, OFFICE.OFFICE_CODE, OFFICE.OFFICE_FULL_ADDRESS, OFFICE.PHONE,
                 OFFICE.ADDRESS_LINE_SECOND, OFFICE.POSTAL_CODE)
@@ -34,15 +44,21 @@ public class ClassicModelsRepository {
 
     public void findOffice() {
 
-        Result<Record1<OfficeFullAddressRecord>> embeddableRecord = ctx.select(OFFICE.OFFICE_FULL_ADDRESS)
+        Result<Record1<OfficeFullAddressRecord>> result1 = ctx.select(OFFICE.OFFICE_FULL_ADDRESS)
                 .from(OFFICE)
                 .fetch();
-        System.out.println("Result record as OfficeFullAddressRecord:\n" + embeddableRecord);
+        System.out.println("Result as OfficeFullAddressRecord:\n" + result1);
 
-        List<OfficeFullAddress> result = ctx.select(OFFICE.OFFICE_FULL_ADDRESS)
+        List<OfficeFullAddress> result2 = ctx.select(OFFICE.OFFICE_FULL_ADDRESS)
                 .from(OFFICE)
                 .fetchInto(OfficeFullAddress.class);
 
-        System.out.println("Result as POJO:\n" + result);
+        System.out.println("Result as POJO:\n" + result2);
+
+        List<Office> result3 = ctx.selectFrom(OFFICE)
+                .limit(10)
+                .fetchInto(Office.class);
+
+        System.out.println("All offices: " + result3);
     }
 }
