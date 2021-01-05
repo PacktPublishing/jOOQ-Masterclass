@@ -42,6 +42,7 @@ CREATE TABLE `office` (
   `country` varchar(50),
   `postal_code` varchar(15) NOT NULL,
   `territory` varchar(10) NOT NULL,
+  `location` point DEFAULT NULL,
   PRIMARY KEY (`office_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -131,6 +132,7 @@ CREATE TABLE `manager` (
   `manager_id` bigint NOT NULL AUTO_INCREMENT,
   `manager_name` varchar(50) NOT NULL,
   `manager_detail` json DEFAULT NULL,
+  `manager_evaluation` varchar(200) DEFAULT NULL, 
   PRIMARY KEY (`manager_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
