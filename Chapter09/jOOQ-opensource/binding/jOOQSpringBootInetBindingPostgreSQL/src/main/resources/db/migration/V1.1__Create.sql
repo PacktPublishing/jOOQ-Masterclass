@@ -47,6 +47,7 @@ CREATE TABLE office (
   country varchar(50),
   postal_code varchar(15) NOT NULL,
   territory varchar(10) NOT NULL,
+  location point DEFAULT NULL,
   PRIMARY KEY (office_code)
 ) ;
 
@@ -150,12 +151,16 @@ CREATE TABLE customerdetail (
 
 /*Table structure for table `manager` */
 
+/* Define a type using CREATE TYPE */
+CREATE TYPE evaluation_criteria AS (communication_ability int, ethics int, performance int, employee_input int);
+
 CREATE SEQUENCE manager_seq START 1000000;
 
 CREATE TABLE manager (
   manager_id bigint NOT NULL DEFAULT NEXTVAL ('manager_seq'),
   manager_name varchar(50) NOT NULL,
   manager_detail json DEFAULT NULL,
+  manager_evaluation evaluation_criteria DEFAULT NULL, 
   PRIMARY KEY (manager_id)
 ) ;
 
