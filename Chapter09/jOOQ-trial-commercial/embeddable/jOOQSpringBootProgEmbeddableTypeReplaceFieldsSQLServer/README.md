@@ -1,1 +1,1 @@
-jOOQ programmatic configuration of code generation (run against MySQL)
+Using jOOQ and Spring Data JPA (generated jOOQ code from entities)
