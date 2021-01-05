@@ -185,9 +185,10 @@ PRIMARY KEY ([customer_number])
 CREATE TABLE manager (
   [manager_id] bigint NOT NULL IDENTITY,
   [manager_name] varchar(50) NOT NULL,
-  [manager_detail] nvarchar(4000) CHECK(ISJSON(manager_detail) = 1),
+  [manager_detail] nvarchar(4000),
   [manager_evaluation] varchar(200) DEFAULT NULL, 
-  PRIMARY KEY ([manager_id])
+  PRIMARY KEY ([manager_id]),
+  CONSTRAINT ENSURE_JSON CHECK(ISJSON([manager_detail]) = 1)
 ) ;
 
 /*Table structure for table `office_has_manager` */
