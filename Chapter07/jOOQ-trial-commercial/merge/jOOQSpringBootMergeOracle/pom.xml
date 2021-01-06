@@ -129,7 +129,7 @@
                         <goals>
                             <goal>generate</goal>
                         </goals>                                  
-                        <configuration>                                                 
+                        <configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.14.0.xsd">                                                 
                             <!-- Configure the database connection here. -->
                             <jdbc>
                                 <driver>${spring.datasource.driverClassName}</driver>
@@ -164,6 +164,8 @@
                                     Whitespace is ignored and comments are possible. -->                                           
                                     <includes>.*</includes>
             
+                                    <includeCheckConstraints>true</includeCheckConstraints>
+            
                                     <!-- Schema version provider -->            
                                     <schemaVersionProvider>SELECT MAX("version") FROM "SYSTEM"."flyway_schema_history"</schemaVersionProvider>
             
@@ -178,7 +180,7 @@
                                     
                                     <!-- Give enough time to jOOQ to trigger the queries needed for generating sources 
                                     (default is 5 seconds) -->
-                                    <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>
+                                    <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>                                                                        
                                 </database>
                                 
                                 <!-- jOOQ will generate POJOs in your behalf -->

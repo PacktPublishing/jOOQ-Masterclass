@@ -162,12 +162,14 @@ CREATE TABLE sale (
   sale float NOT NULL,    
   employee_number number(10) DEFAULT NULL,  
   hot number(1,0) DEFAULT 0,
-  rate varchar2(10) DEFAULT NULL CHECK (rate IN('SILVER', 'GOLD', 'PLATINUM')),
-  vat varchar2(10) DEFAULT NULL CHECK (vat IN('NONE', 'MIN', 'MAX')),
+  rate varchar2(10) DEFAULT NULL,
+  vat varchar2(10) DEFAULT NULL,
   trend varchar2(10) DEFAULT NULL,
   PRIMARY KEY (sale_id)
 ,  
-  CONSTRAINT sales_ibfk_1 FOREIGN KEY (employee_number) REFERENCES employee (employee_number)
+  CONSTRAINT sales_ibfk_1 FOREIGN KEY (employee_number) REFERENCES employee (employee_number),
+  CONSTRAINT enum_rate_check CHECK (rate IN('SILVER', 'GOLD', 'PLATINUM')),
+  CONSTRAINT enum_vat_check CHECK (vat IN('NONE', 'MIN', 'MAX'))
 ) ;
 
 CREATE INDEX employee_number ON sale (employee_number);
@@ -256,7 +258,7 @@ CREATE TABLE department (
   phone varchar(50) NOT NULL,
   code number(5) DEFAULT 1,
   office_code varchar(10) NOT NULL,
-  topic topicArr NOT NULL,  
+  topic topicArr DEFAULT NULL,  
   dep_net_ipv4 varchar(16) DEFAULT NULL,
   PRIMARY KEY (department_id)
 ,

@@ -31,7 +31,7 @@ insert /*+ ignore_row_on_dupkey_index(office(office_code)) */ into office(office
 
  select '6','Sydney','+61 2 9264 2451','5-11 Wentworth Avenue','Floor --2',NULL,'Australia','NSW 2010','APAC' from dual union all 
 
- select '7','London','+44 20 7877 2041','25 Old Broad Street','Level 7',NULL,'UK','EC2N 1HN','EMEA' from dual union all
+ select '7','London','+44 20 7877 2041','25 Old Broad Street','Level 7','N/A','UK','EC2N 1HN','EMEA' from dual union all 
  
  select '8',NULL,'+44 20 1827 21411','25 Hum Street','Level 2',NULL,'USA','EC2N 1HN','EMEA' from dual union all 
 
@@ -45,15 +45,15 @@ insert /*+ ignore_row_on_dupkey_index(office(office_code)) */ into office(office
 
 /*Data for the table `department` */
 
-insert /*+ ignore_row_on_dupkey_index(department(department_id)) */ into department(department_id,name,phone,code,office_code) 
+insert /*+ ignore_row_on_dupkey_index(department(department_id)) */ into department(department_id,name,phone,code,office_code,topic) 
 
-select '1','Lumber','-int 4782','1333','1' from dual union all
+select '1','Advertising','-int 4782','1333','1',topicArr('publicity', 'promotion') from dual union all
 
-select '2','Sales','-int 41233','1441','1' from dual union all
+select '2','Sales','-int 41233','1441','1',topicArr('commerce', 'trade', 'sellout', 'transaction') from dual union all
 
-select '3','Accounting','-int 8233','2311','2' from dual union all
+select '3','Accounting','-int 8233','2311','2',topicArr('monetary', 'business') from dual union all
 
-select '4','Finance','-int 4421','3222','3' from dual;
+select '4','Finance','-int 4421','3222','3',topicArr('commerce', 'fiscal', 'monetary', 'business') from dual;
 
 /*Data for the table `manager` */
 
@@ -85,53 +85,53 @@ insert /*+ ignore_row_on_dupkey_index(office_has_manager(offices_office_code, ma
 
 /*Data for the table `employee` */
 
-insert /*+ ignore_row_on_dupkey_index(employee(employee_number)) */ into employee(employee_number,last_name,first_name,extension,email,office_code,salary,reports_to,job_title) 
+insert /*+ ignore_row_on_dupkey_index(employee(employee_number)) */ into employee(employee_number,last_name,first_name,extension,email,office_code,salary,reports_to,job_title,employee_of_year) 
 
- select 1002,'Murphy','Diane','x5800','dmurphy@classicmodelcars.com','1',120000,NULL,'President' from dual union all 
+ select 1002,'Murphy','Diane','x5800','dmurphy@classicmodelcars.com','1',120000,NULL,'President',NULL from dual union all 
 
- select 1056,'Patterson','Mary','x4611','mpatterso@classicmodelcars.com','1',100000,1002,'VP Sales' from dual union all 
+ select 1056,'Patterson','Mary','x4611','mpatterso@classicmodelcars.com','1',100000,1002,'VP Sales',NULL from dual union all 
 
- select 1076,'Firrelli','Jeff','x9273','jfirrelli@classicmodelcars.com','1',100000,1002,'VP Marketing' from dual union all 
+ select 1076,'Firrelli','Jeff','x9273','jfirrelli@classicmodelcars.com','1',100000,1002,'VP Marketing',NULL from dual union all 
 
- select 1088,'Patterson','William','x4871','wpatterson@classicmodelcars.com','6',80000,1056,'Sales Manager (APAC)' from dual union all 
+ select 1088,'Patterson','William','x4871','wpatterson@classicmodelcars.com','6',80000,1056,'Sales Manager (APAC)',NULL from dual union all 
 
- select 1102,'Bondur','Gerard','x5408','gbondur@classicmodelcars.com','4',80000,1056,'Sale Manager (EMEA)' from dual union all 
+ select 1102,'Bondur','Gerard','x5408','gbondur@classicmodelcars.com','4',80000,1056,'Sale Manager (EMEA)',NULL from dual union all 
 
- select 1143,'Bow','Anthony','x5428','abow@classicmodelcars.com','1',75000,1056,'Sales Manager (NA)' from dual union all 
+ select 1143,'Bow','Anthony','x5428','abow@classicmodelcars.com','1',75000,1056,'Sales Manager (NA)',NULL from dual union all 
 
- select 1165,'Jennings','Leslie','x3291','ljennings@classicmodelcars.com','1',60000,1143,'Sales Rep' from dual union all 
+ select 1165,'Jennings','Leslie','x3291','ljennings@classicmodelcars.com','1',60000,1143,'Sales Rep',employeeOfYearArr(2003, 2004) from dual union all 
 
- select 1166,'Thompson','Leslie','x4065','lthompson@classicmodelcars.com','1',60000,1143,'Sales Rep' from dual union all 
+ select 1166,'Thompson','Leslie','x4065','lthompson@classicmodelcars.com','1',60000,1143,'Sales Rep',employeeOfYearArr(2003, 2005) from dual union all 
 
- select 1188,'Firrelli','Julie','x2173','jfirrelli@classicmodelcars.com','2',60000,1143,'Sales Rep' from dual union all 
+ select 1188,'Firrelli','Julie','x2173','jfirrelli@classicmodelcars.com','2',60000,1143,'Sales Rep',employeeOfYearArr(2004, 2005) from dual union all 
 
- select 1216,'Patterson','Steve','x4334','spatterson@classicmodelcars.com','2',55000,1143,'Sales Rep' from dual union all 
+ select 1216,'Patterson','Steve','x4334','spatterson@classicmodelcars.com','2',55000,1143,'Sales Rep',employeeOfYearArr(2005, 2006) from dual union all 
 
- select 1286,'Tseng','Foon Yue','x2248','ftseng@classicmodelcars.com','3',55000,1143,'Sales Rep' from dual union all 
+ select 1286,'Tseng','Foon Yue','x2248','ftseng@classicmodelcars.com','3',55000,1143,'Sales Rep',employeeOfYearArr(2002, 2003, 2004) from dual union all 
 
- select 1323,'Vanauf','George','x4102','gvanauf@classicmodelcars.com','3',55000,1143,'Sales Rep' from dual union all 
+ select 1323,'Vanauf','George','x4102','gvanauf@classicmodelcars.com','3',55000,1143,'Sales Rep',employeeOfYearArr(2000, 2001, 2005) from dual union all 
 
- select 1337,'Bondur','Loui','x6493','lbondur@classicmodelcars.com','4',60000,1102,'Sales Rep' from dual union all 
+ select 1337,'Bondur','Loui','x6493','lbondur@classicmodelcars.com','4',60000,1102,'Sales Rep',employeeOfYearArr(2004, 2007) from dual union all 
 
- select 1370,'Hernandez','Gerard','x2028','ghernande@classicmodelcars.com','4',65000,1102,'Sales Rep' from dual union all 
+ select 1370,'Hernandez','Gerard','x2028','ghernande@classicmodelcars.com','4',65000,1102,'Sales Rep',employeeOfYearArr(2000, 2001) from dual union all 
 
- select 1401,'Castillo','Pamela','x2759','pcastillo@classicmodelcars.com','4',55000,1102,'Sales Rep' from dual union all 
+ select 1401,'Castillo','Pamela','x2759','pcastillo@classicmodelcars.com','4',55000,1102,'Sales Rep',employeeOfYearArr(2000, 2001, 2003, 2005) from dual union all 
 
- select 1501,'Bott','Larry','x2311','lbott@classicmodelcars.com','7',50000,1102,'Sales Rep' from dual union all 
+ select 1501,'Bott','Larry','x2311','lbott@classicmodelcars.com','7',50000,1102,'Sales Rep',employeeOfYearArr(2004, 2008) from dual union all 
 
- select 1504,'Jones','Barry','x102','bjones@classicmodelcars.com','7',50000,1102,'Sales Rep' from dual union all 
+ select 1504,'Jones','Barry','x102','bjones@classicmodelcars.com','7',50000,1102,'Sales Rep',employeeOfYearArr(2002, 2003, 2005) from dual union all 
 
- select 1611,'Fixter','Andy','x101','afixter@classicmodelcars.com','6',50000,1088,'Sales Rep' from dual union all 
+ select 1611,'Fixter','Andy','x101','afixter@classicmodelcars.com','6',50000,1088,'Sales Rep',employeeOfYearArr(2002, 2005) from dual union all 
 
- select 1612,'Marsh','Peter','x102','pmarsh@classicmodelcars.com','6',55000,1088,'Sales Rep' from dual union all 
+ select 1612,'Marsh','Peter','x102','pmarsh@classicmodelcars.com','6',55000,1088,'Sales Rep',employeeOfYearArr(2003, 2005, 2006, 2007) from dual union all 
 
- select 1619,'King','Tom','x103','tking@classicmodelcars.com','6',60000,1088,'Sales Rep' from dual union all 
+ select 1619,'King','Tom','x103','tking@classicmodelcars.com','6',60000,1088,'Sales Rep',employeeOfYearArr(2002, 2004) from dual union all 
 
- select 1621,'Nishi','Mami','x101','mnishi@classicmodelcars.com','5',55000,1056,'Sales Rep' from dual union all 
+ select 1621,'Nishi','Mami','x101','mnishi@classicmodelcars.com','5',55000,1056,'Sales Rep',employeeOfYearArr(2003, 2005) from dual union all 
 
- select 1625,'Kato','Yoshimi','x102','ykato@classicmodelcars.com','5',60000,1621,'Sales Rep' from dual union all 
+ select 1625,'Kato','Yoshimi','x102','ykato@classicmodelcars.com','5',60000,1621,'Sales Rep',employeeOfYearArr(2004, 2005, 2006) from dual union all 
 
- select 1702,'Gerard','Martin','x2312','mgerard@classicmodelcars.com','4',50000,1102,'Sales Rep' from dual;
+ select 1702,'Gerard','Martin','x2312','mgerard@classicmodelcars.com','4',50000,1102,'Sales Rep',employeeOfYearArr(2005, 2007) from dual;
 
 /*Data for the table `customer` */
 
@@ -393,7 +393,7 @@ insert /*+ ignore_row_on_dupkey_index(customer(customer_number)) */ into custome
 
 insert /*+ ignore_row_on_dupkey_index(customerdetail(customer_number)) */ into customerdetail(customer_number,address_line_first,address_line_second,city,state,postal_code,country) 
 
- select 99,'32, Avenue 90',NULL, 'Paris' ,NULL,'43000','France' from dual union all
+ select 99,'43 Rue 2',NULL, 'Paris' ,NULL,'25017','France' from dual union all
 
  select 100,'51, Avenue 3',NULL, NULL ,NULL,'43000',NULL from dual union all
 
@@ -541,7 +541,7 @@ insert /*+ ignore_row_on_dupkey_index(customerdetail(customer_number)) */ into c
 
  select 323,'162-164 Grafton Road','Level 2','Auckland  ',NULL,NULL,'New Zealand' from dual union all
 
- select 324,'35 King George',NULL,'London',NULL,'WX3 6FW','UK' from dual union all
+ select 324,'25 Old Broad Street','Level 7','London','N/A','EC2N 1HN','UK' from dual union all
 
  select 328,'7476 Moss Rd.',NULL,'Newark','NJ','94019','USA' from dual union all
 
@@ -649,22 +649,39 @@ insert /*+ ignore_row_on_dupkey_index(customerdetail(customer_number)) */ into c
 
 for the table `productline` */
 
-insert /*+ ignore_row_on_dupkey_index(productline(product_line)) */ into productline(product_line,text_description,html_description,image,created_on) 
+insert /*+ ignore_row_on_dupkey_index(productline(product_line)) */ into productline(product_line,code,text_description,html_description,image,created_on) 
 
- select 'Classic Cars','Attention car enthusiasts: Make your wildest car ownership dreams come true. Whether you are looking for classic muscle cars, dream sports cars or movie-inspired miniatures, you will find great choices in this category. These replicas feature superb attention to detail and craftsmanship and offer features such as working steering system, opening forward compartment, opening rear trunk with removable spare wheel, 4-wheel independent spring suspension, and so on. The models range in size from 1:10 to 1:24 scale and include numerous limited edition and several out-of-production vehicles. All models include a certificate of authenticity from their manufacturers and come fully assembled and ready for display in the home or office.',NULL,NULL,'2005-02-03' from dual union all 
+ select 'Classic Cars',599302,'Attention car enthusiasts: Make your wildest car ownership dreams come true. Whether you are looking for classic muscle cars, dream sports cars or movie-inspired miniatures, you will find great choices in this category. These replicas feature superb attention to detail and craftsmanship and offer features such as working steering system, opening forward compartment, opening rear trunk with removable spare wheel, 4-wheel independent spring suspension, and so on. The models range in size from 1:10 to 1:24 scale and include numerous limited edition and several out-of-production vehicles. All models include a certificate of authenticity from their manufacturers and come fully assembled and ready for display in the home or office.',NULL,NULL,'2005-02-03' from dual union all 
 
- select 'Motorcycles','Our motorcycles are state of the art replicas of classic as well as contemporary motorcycle legends such as Harley Davidson, Ducati and Vespa. Models contain stunning details such as official logos, rotating wheels, working kickstand, front suspension, gear-shift lever, footbrake lever, and drive chain. Materials used include diecast and plastic. The models range in size from 1:10 to 1:50 scale and include numerous limited edition and several out-of-production vehicles. All models come fully assembled and ready for display in the home or office. Most include a certificate of authenticity.',NULL,NULL,'2004-12-12' from dual union all 
+ select 'Motorcycles',599302,'Our motorcycles are state of the art replicas of classic as well as contemporary motorcycle legends such as Harley Davidson, Ducati and Vespa. Models contain stunning details such as official logos, rotating wheels, working kickstand, front suspension, gear-shift lever, footbrake lever, and drive chain. Materials used include diecast and plastic. The models range in size from 1:10 to 1:50 scale and include numerous limited edition and several out-of-production vehicles. All models come fully assembled and ready for display in the home or office. Most include a certificate of authenticity.',NULL,NULL,'2004-12-12' from dual union all 
 
- select 'Planes','Unique, diecast airplane and helicopter replicas suitable for collections, as well as home, office or classroom decorations. Models contain stunning details such as official logos and insignias, rotating jet engines and propellers, retractable wheels, and so on. Most come fully assembled and with a certificate of authenticity from their manufacturers.',NULL,NULL,'2004-02-14' from dual union all 
+ select 'Planes',433823,'Unique, diecast airplane and helicopter replicas suitable for collections, as well as home, office or classroom decorations. Models contain stunning details such as official logos and insignias, rotating jet engines and propellers, retractable wheels, and so on. Most come fully assembled and with a certificate of authenticity from their manufacturers.',NULL,NULL,'2004-02-14' from dual union all 
 
- select 'Ships','The perfect holiday or anniversary gift for executives, clients, friends, and family. These handcrafted model ships are unique, stunning works of art that will be treasured for generations! They come fully assembled and ready for display in the home or office. We guarantee the highest quality, and best value.',NULL,NULL,'2005-12-12' from dual union all 
+ select 'Ships',433823,'The perfect holiday or anniversary gift for executives, clients, friends, and family. These handcrafted model ships are unique, stunning works of art that will be treasured for generations! They come fully assembled and ready for display in the home or office. We guarantee the highest quality, and best value.',NULL,NULL,'2005-12-12' from dual union all 
 
- select 'Trains','Model trains are a rewarding hobby for enthusiasts of all ages. Whether you''re looking for collectible wooden trains, electric streetcars or locomotives, you''ll find a number of great choices for any budget within this category. The interactive aspect of trains makes toy trains perfect for young children. The wooden train sets are ideal for children under the age of 5.',NULL,NULL,'2004-03-03' from dual union all 
+ select 'Trains',123333,'Model trains are a rewarding hobby for enthusiasts of all ages. Whether you''re looking for collectible wooden trains, electric streetcars or locomotives, you''ll find a number of great choices for any budget within this category. The interactive aspect of trains makes toy trains perfect for young children. The wooden train sets are ideal for children under the age of 5.',NULL,NULL,'2004-03-03' from dual union all 
 
- select 'Trucks and Buses','The Truck and Bus models are realistic replicas of buses and specialized trucks produced from the early 1920s to present. The models range in size from 1:12 to 1:50 scale and include numerous limited edition and several out-of-production vehicles. Materials used include tin, diecast and plastic. All models include a certificate of authenticity from their manufacturers and are a perfect ornament for the home and office.',NULL,NULL,'2005-02-25' from dual union all 
+ select 'Trucks and Buses',569331,'The Truck and Bus models are realistic replicas of buses and specialized trucks produced from the early 1920s to present. The models range in size from 1:12 to 1:50 scale and include numerous limited edition and several out-of-production vehicles. Materials used include tin, diecast and plastic. All models include a certificate of authenticity from their manufacturers and are a perfect ornament for the home and office.',NULL,NULL,'2005-02-25' from dual union all 
 
- select 'Vintage Cars','Our Vintage Car models realistically portray automobiles produced from the early 1900s through the 1940s. Materials used include Bakelite, diecast, plastic and wood. Most of the replicas are in the 1:18 and 1:24 scale sizes, which provide the optimum in detail and accuracy. Prices range from $30.00 up to $180.00 for some special limited edition replicas. All models include a certificate of authenticity from their manufacturers and come fully assembled and ready for display in the home or office.',NULL,NULL,'2004-04-02' from dual;
+ select 'Vintage Cars',223113,'Our Vintage Car models realistically portray automobiles produced from the early 1900s through the 1940s. Materials used include Bakelite, diecast, plastic and wood. Most of the replicas are in the 1:18 and 1:24 scale sizes, which provide the optimum in detail and accuracy. Prices range from $30.00 up to $180.00 for some special limited edition replicas. All models include a certificate of authenticity from their manufacturers and come fully assembled and ready for display in the home or office.',NULL,NULL,'2004-04-02' from dual;
 
+/*Data for the table `productlinedetail` */
+
+insert /*+ ignore_row_on_dupkey_index(productlinedetail(product_line)) */ into productlinedetail(product_line,code,line_capacity,line_type) 
+
+select 'Classic Cars',599302,'200A', 1 from dual union all 
+
+select 'Motorcycles',599302,'150B', 1 from dual union all 
+
+select 'Planes',433823,'450C',2 from dual union all 
+
+select 'Ships',433823,'100A',3 from dual union all 
+
+select 'Trains',123333,'150A',2 from dual union all 
+
+select 'Trucks and Buses',569331,'566C',2 from dual union all 
+
+select 'Vintage Cars',223113,'1000A', 3 from dual;
 
 /*Data for the table `product` */
 
@@ -4756,9 +4773,9 @@ insert /*+ ignore_row_on_dupkey_index(orderdetail(order_id, product_id)) */ into
 
  select 10275,1,45,'81.35',1 from dual union all 
 
- select 10275,3,22,'115.37',4 from dual union all 
+ select 10275,2,22,'115.37',4 from dual union all 
 
- select 10275,4,36,'154.93',3 from dual union all 
+ select 10275,40,36,'154.93',3 from dual union all 
 
  select 10275,31,35,'70.12',9 from dual union all 
 
@@ -5654,9 +5671,9 @@ insert /*+ ignore_row_on_dupkey_index(orderdetail(order_id, product_id)) */ into
 
  select 10318,1,46,'84.22',1 from dual union all 
 
- select 10318,3,45,'102.29',4 from dual union all 
+ select 10318,2,45,'102.29',4 from dual union all 
 
- select 10318,4,37,'189.79',3 from dual union all 
+ select 10318,40,37,'189.79',3 from dual union all 
 
  select 10318,31,31,'81.95',9 from dual union all 
 
@@ -8089,80 +8106,86 @@ select 489,'PO860906','2004-01-31 05:20:15','7310.42', '2004-01-31 07:30:25'  fr
 
 select 495,'BH167026','2003-12-26 13:33:13','59265.14', '2003-12-26 15:38:09'  from dual union all
 
-select 495,'FN155234','2004-05-14 12:37:35','6276.60', '2004-05-14 12:39:25'  from dual union all
+select 495,'FN155234','2004-05-14 12:37:35','6276.60', '2004-05-14 12:39:25' from dual union all
 
-select 496,'EU531600','2005-05-25 02:47:35','30253.75', '2005-05-25 03:30:15'  from dual union all
+select 496,'EU531600','2005-05-25 02:47:35','30253.75', '2005-05-25 03:30:15' from dual union all
 
-select 496,'MB342426','2003-07-16 21:10:15','32077.44', '2003-07-16 23:04:15'  from dual union all
+select 496,'MB342426','2003-07-16 21:10:15','32077.44', '2003-07-16 23:04:15' from dual union all
 
 select 496,'MN89921','2004-12-31 09:02:11','52166.00', '2004-12-31 09:02:11'  from dual;
 
-insert /*+ ignore_row_on_dupkey_index(sale(sale_id)) */ into sale(sale_id,fiscal_year,sale,employee_number)
+/*Data for the table `bank_transaction` */
 
-select 1, 2003, 5282.64, 1370 from dual union all 
+insert /*+ ignore_row_on_dupkey_index(bank_transaction(transaction_id)) */ into bank_transaction(transaction_id,bank_name,bank_iban,transfer_amount,customer_number,check_number,caching_date)
 
-select 2, 2004, 1938.24, 1370 from dual union all 
+select 1,'Bank Ltd. US','DN44398834N34','6631.36',447,'AO757239','2003-09-15 18:22:54' from dual union all
 
-select 3, 2004, 1676.14, 1370 from dual union all 
+select 2,'Bank Ltd. US','348398H3493HG93','26304.13',447,'OU516561','2004-12-17 16:45:22' from dual union all
 
-select 4, 2003, 3213, 1166 from dual union all 
+select 3,'Transilvania Bank','8TVN598N454VN84T','9977.85',462,'GC60330','2003-11-08 18:57:25' from dual union all
 
-select 5, 2004, 2121.35, 1166 from dual union all 
+select 4,'5 Stars Bank','8VN8UNT5U45T8','48355.87',462,'PE176846', '2004-11-27 14:30:22' from dual union all
 
-select 6, 2004, 3711.12, 1166 from dual union all 
+select 5,'5 Stars Bank','TVU58NU58U84N4YUG','33967.73',398,'AJ478695','2005-02-14 12:09:15' from dual union all
 
-select 7, 2003, 3449.26, 1611 from dual union all 
+select 6,'Optimus Bank','8V34VN5U435334','4588.36',333,'NF959653','2005-03-01 12:12:00' from dual union all
 
-select 8, 2003, 4704.92, 1611 from dual union all 
+select 7,'Optimus Bank','8V34VN5U435334','8987.36',333,'NF959653','2005-03-01 14:00:00' from dual union all
 
-select 9, 2004, 2974.43, 1611 from dual union all 
+select 8,'Optimus Bank','8V34VN5U435334','2544.36',333,'NF959653','2005-03-01 18:20:10' from dual union all
 
-select 10, 2004, 4755.6, 1611 from dual union all 
+select 9,'Optimus Bank','8V34VN5U435334','5312.23',333,'NF959653','2005-03-01 19:32:56' from dual union all
 
-select 11, 2004, 5657.4, 1611 from dual union all 
+select 10,'BRT Bank','TVNU343T38TUNU3T','52151.81',278,'GP636783', '2003-03-02 12:32:00' from dual;
 
-select 12, 2004, 3660.75, 1370 from dual union all 
+insert /*+ ignore_row_on_dupkey_index(sale(sale_id)) */ into sale(sale_id,fiscal_year,sale,employee_number,trend)
 
-select 13, 2004, 2812.32, 1370 from dual union all 
+select 1, 2003, 5282.64, 1370, 'UP' from dual union all 
 
-select 14, 2005, 1607.76, 1370 from dual union all 
+select 2, 2004, 1938.24, 1370, 'UP' from dual union all 
 
-select 15, 2005, 4996.62, 1370 from dual union all 
+select 3, 2004, 1676.14, 1370, 'DOWN' from dual union all 
 
-select 16, 2003, 5571.8, 1504 from dual union all 
+select 4, 2003, 3213, 1166, 'DOWN' from dual union all 
 
-select 17, 2003, 1491.38, 1504 from dual union all 
+select 5, 2004, 2121.35, 1166, 'DOWN' from dual union all 
 
-select 18, 2004, 3884.34, 1504 from dual union all 
+select 6, 2004, 3711.12, 1166, 'CONSTANT' from dual union all 
 
-select 19, 2004, 5241.44, 1504 from dual;
+select 7, 2003, 3449.26, 1611, 'CONSTANT' from dual union all 
 
-/* Data for the table `paymentdetail` */
+select 8, 2003, 4704.92, 1611, 'UP' from dual union all 
 
-insert /*+ ignore_row_on_dupkey_index(paymentdetail(customer_number,check_number)) */ into paymentdetail(customer_number,check_number,bank_name,bank_iban,transaction_type)
+select 9, 2004, 2974.43, 1611, 'CONSTANT' from dual union all 
 
-select 103,'HQ336336','Transilvania Bank', '2203-20223RO0-22X', 5 from dual union all
+select 10, 2004, 4755.6, 1611, 'UP' from dual union all 
 
-select 103,'JM555205','BCR Bank', '1223-4423BLG0-2222Q', 3 from dual union all
+select 11, 2004, 5657.4, 1611, 'DOWN' from dual union all 
 
-select 103,'OM314933','Home Bank', '44KMR-44NRE4-4D', 2 from dual union all
+select 12, 2004, 3660.75, 1370, 'DOWN' from dual union all 
 
-select 112,'BO864823','Lion Bank', 'DK4K4J-3J2-3N2', 1 from dual union all
+select 13, 2004, 2812.32, 1370, 'DOWN' from dual union all 
 
-select 112,'HQ55022','BCR Bank', '4333K334-3J434-34434M', 1 from dual union all
+select 14, 2005, 1607.76, 1370, 'UP' from dual union all 
 
-select 112,'ND748579','Transilvania Bank', 'AK33K-2322-23M32', 3 from dual union all
+select 15, 2005, 4996.62, 1370, 'CONSTANT' from dual union all 
 
-select 114,'GG31455','BRDO Bank', 'SDKSDS0E-43M-ER-SD', 1 from dual union all
+select 16, 2003, 5571.8, 1504, 'DOWN' from dual union all 
 
-select 114,'MA765515','KZ Bank', 'DSDD-344334K-DD-43', 4 from dual union all 
+select 17, 2003, 1491.38, 1504, 'CONSTANT' from dual union all 
 
-select 114,'NP603840','BCR Bank', 'SDDK02323-223D-4D', 3 from dual union all
+select 18, 2004, 3884.34, 1504, 'DOWN' from dual union all 
 
-select 114,'NR27552','KZa Bank', '4L4L23-232KDS-SDS', 2 from dual union all
+select 19, 2004, 5241.44, 1504, 'CONSTANT' from dual;
 
-select 119,'DB933704','Transilvania Bank', 'DS-D32-2SDS', 1 from dual union all
+/*Data for the table `top3product` */
 
-select 496,'MN89921','Transilvania Bank', 'SDK2-223-23D', 2 from dual;
+insert /*+ ignore_row_on_dupkey_index(top3product(product_id)) */ into top3product(product_id,product_name)
+
+select 40, '1992 Ferrari 360 Spider red' from dual union all
+
+select 1, '1969 Harley Davidson Ultimate Chopper' from dual union all
+
+select 2, '1952 Alpine Renault 1300' from dual;
 
 /* END */
