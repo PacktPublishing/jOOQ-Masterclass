@@ -80,10 +80,10 @@ public class ClassicModelsRepository {
         Table<OrderdetailRecord> t1 = ORDERDETAIL; // type-safe table expression       
         
         // you could even do this, but there is no more type-safety
-        Collection<? extends SelectField> fields = List.of(tc1, a1, a2);
+        Collection<? extends SelectField> sf = List.of(tc1, a1, a2);
         
         /* return */
-        // ctx.select(fields)
+        // ctx.select(sf)
         ctx.select(tc1, a1, a2)        
                 .from(t1)
                 .where(tc2.gt(uc1))
