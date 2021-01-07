@@ -14,8 +14,8 @@ import org.jooq.SelectSeekStep1;
 import org.jooq.SelectSelectStep;
 import org.jooq.Table;
 import org.jooq.impl.DSL;
-import static org.jooq.impl.DSL.inline;
 import static org.jooq.impl.DSL.sum;
+import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -35,7 +35,7 @@ public class ClassicModelsRepository {
                 sum(ORDERDETAIL.QUANTITY_ORDERED).as("itemsCount"),
                 sum(ORDERDETAIL.PRICE_EACH.mul(ORDERDETAIL.QUANTITY_ORDERED)).as("total"))
                 .from(ORDERDETAIL)
-                .where(ORDERDETAIL.QUANTITY_ORDERED.gt(inline(20)))
+                .where(ORDERDETAIL.QUANTITY_ORDERED.gt(val(20)))
                 .groupBy(ORDERDETAIL.ORDER_LINE_NUMBER)
                 .orderBy(ORDERDETAIL.ORDER_LINE_NUMBER)
                 .getSQL();
@@ -47,7 +47,7 @@ public class ClassicModelsRepository {
         // TableField<OrderdetailRecord,Integer> tfc2 = ORDERDETAIL.QUANTITY_ORDERED; // or, as a TableField
         Field<BigDecimal> tc3 = ORDERDETAIL.PRICE_EACH;    // table column expression
         // TableField<OrderdetailRecord,BigDecimal> tfc3 = ORDERDETAIL.PRICE_EACH; // or, as a TableField
-        Field<Integer> uc1 = inline(20);                   // Unnamed column expression     
+        Field<Integer> uc1 = val(20);                   // Unnamed column expression     
 
         /* return */
         ctx.select(tc1, sum(tc2).as("itemsCount"),
