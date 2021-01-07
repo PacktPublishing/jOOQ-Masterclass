@@ -1,6 +1,8 @@
 package com.classicmodels.repository;
 
 import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.List;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import jooq.generated.tables.records.OrderdetailRecord;
 import org.jooq.Condition;
@@ -8,6 +10,7 @@ import org.jooq.DSLContext;
 import org.jooq.Field;
 import org.jooq.Record3;
 import org.jooq.SelectConditionStep;
+import org.jooq.SelectField;
 import org.jooq.SelectHavingStep;
 import org.jooq.SelectJoinStep;
 import org.jooq.SelectSeekStep1;
@@ -76,8 +79,12 @@ public class ClassicModelsRepository {
         // Table<?> t1 = ORDERDETAIL;              // non type-safe table expression
         Table<OrderdetailRecord> t1 = ORDERDETAIL; // type-safe table expression       
         
+        // you could even do this, but there is no more type-safety
+        Collection<? extends SelectField> fields = List.of(tc1, a1, a2);
+        
         /* return */
-        ctx.select(tc1, a1, a2)
+        // ctx.select(fields)
+        ctx.select(tc1, a1, a2)        
                 .from(t1)
                 .where(tc2.gt(uc1))
                 .groupBy(tc1)
