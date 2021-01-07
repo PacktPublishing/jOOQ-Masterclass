@@ -35,7 +35,7 @@ public class ClassicModelsRepository {
                 sum(ORDERDETAIL.QUANTITY_ORDERED).as("itemsCount"),
                 sum(ORDERDETAIL.PRICE_EACH.mul(ORDERDETAIL.QUANTITY_ORDERED)).as("total"))
                 .from(ORDERDETAIL)
-                .where(ORDERDETAIL.QUANTITY_ORDERED.gt(val(20)))
+                .where((val(20).lt(ORDERDETAIL.QUANTITY_ORDERED)))
                 .groupBy(ORDERDETAIL.ORDER_LINE_NUMBER)
                 .orderBy(ORDERDETAIL.ORDER_LINE_NUMBER)
                 .getSQL();
