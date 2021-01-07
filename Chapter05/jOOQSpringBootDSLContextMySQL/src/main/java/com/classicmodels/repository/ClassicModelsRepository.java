@@ -59,7 +59,7 @@ public class ClassicModelsRepository {
 
     public List<Office> findOfficesInTerritory4(String territory) {
 
-        try ( Connection conn
+        try (Connection conn
                 = DriverManager.getConnection(
                         "jdbc:mysql://localhost:3306/classicmodels", "root", "root")) {
 
@@ -87,6 +87,8 @@ public class ClassicModelsRepository {
         return sql;
     }
 
+    // prior to jOOQ 3.14
+    /*
     public List<Office> findOfficesInTerritory6(String territory) {
 
         try ( DSLContext ctx = DSL.using(
@@ -98,6 +100,19 @@ public class ClassicModelsRepository {
 
             return result;
         }
-    }
+    }    
+     */
+    
+    // starting with jOOQ 3.14
+    public List<Office> findOfficesInTerritory6(String territory) {
 
+        DSLContext ctxLocal = DSL.using(
+                "jdbc:mysql://localhost:3306/classicmodels", "root", "root");
+
+        List<Office> result = ctxLocal.selectFrom(OFFICE)
+                .where(OFFICE.TERRITORY.eq(territory))
+                .fetchInto(Office.class);
+
+        return result;
+    }
 }
