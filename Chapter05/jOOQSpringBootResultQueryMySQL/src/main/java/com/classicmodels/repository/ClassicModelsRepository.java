@@ -1,8 +1,10 @@
 package com.classicmodels.repository;
 
 import java.util.List;
+import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Payment.PAYMENT;
+import jooq.generated.tables.records.CustomerRecord;
 import org.jooq.DSLContext;
 import org.jooq.Query;
 import org.jooq.Record1;
@@ -49,4 +51,8 @@ public class ClassicModelsRepository {
         return result;
     }
         
+    public CustomerRecord fetchOneCustomer() {
+        
+        return ctx.selectFrom(CUSTOMER).limit(1).fetchOne();
+    }
 }
