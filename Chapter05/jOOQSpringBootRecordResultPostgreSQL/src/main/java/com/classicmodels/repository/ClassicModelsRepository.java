@@ -160,6 +160,14 @@ public class ClassicModelsRepository {
     public void typesafeSelectJoin() {
 
         /* type-safe Result<Record> via select() */        
+        /*
+        Result<Record14<Long, String, String, String, String, Long, 
+                BigDecimal, Long, String, String, String, String, String, String>> result = ...
+        
+        CAN BE REPLACED WITH JAVA 9
+        
+        var result = ...
+        */
         Result<Record14<Long, String, String, String, String, Long, 
                 BigDecimal, Long, String, String, String, String, String, String>> result
                 = ctx.select(CUSTOMER.CUSTOMER_NUMBER, CUSTOMER.CUSTOMER_NAME,
@@ -175,6 +183,14 @@ public class ClassicModelsRepository {
                         .fetch();
         
         /* type-safe Result<Record> via into() */
+        /*
+        Result<Record14<Long, String, String, String, String, Long, 
+                BigDecimal, Long, String, String, String, String, String, String>> result = ...
+        
+        CAN BE REPLACED WITH JAVA 9
+        
+        var result = ...
+        */
         /*
         Result<Record14<Long, String, String, String, String, Long, 
                 BigDecimal, Long, String, String, String, String, String, String>> result = ctx.select()
@@ -364,6 +380,17 @@ public class ClassicModelsRepository {
         
         // 22 columns 
         /* type-safe Result<Record> */
+        /*
+        Result<Record22<String, String, String, String, String,
+                String, String, String, String, String,
+                String, String, String, String, String,
+                String, String, String, String, String,
+                String, String>> typesafe ...
+        
+        CAN BE REPLACED WITH JAVA 9
+        
+        var typesafe = ...
+        */
         Result<Record22<String, String, String, String, String,
                 String, String, String, String, String,
                 String, String, String, String, String,
