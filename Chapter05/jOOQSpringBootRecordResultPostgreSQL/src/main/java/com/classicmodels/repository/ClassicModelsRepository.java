@@ -159,7 +159,23 @@ public class ClassicModelsRepository {
 
     public void typesafeSelectJoin() {
 
-        /* type-safe Result<Record> */
+        /* type-safe Result<Record> via select() */        
+        Result<Record14<Long, String, String, String, String, Long, 
+                BigDecimal, Long, String, String, String, String, String, String>> result
+                = ctx.select(CUSTOMER.CUSTOMER_NUMBER, CUSTOMER.CUSTOMER_NAME,
+                        CUSTOMER.CONTACT_FIRST_NAME, CUSTOMER.CONTACT_LAST_NAME,
+                        CUSTOMER.PHONE, CUSTOMER.SALES_REP_EMPLOYEE_NUMBER, CUSTOMER.CREDIT_LIMIT,
+                        CUSTOMERDETAIL.CUSTOMER_NUMBER, CUSTOMERDETAIL.ADDRESS_LINE_FIRST,
+                        CUSTOMERDETAIL.ADDRESS_LINE_SECOND, CUSTOMERDETAIL.CITY,
+                        CUSTOMERDETAIL.COUNTRY, CUSTOMERDETAIL.POSTAL_CODE,
+                        CUSTOMERDETAIL.STATE)
+                        .from(CUSTOMER)
+                        .join(CUSTOMERDETAIL)
+                        .on(CUSTOMER.CUSTOMER_NUMBER.eq(CUSTOMERDETAIL.CUSTOMER_NUMBER))
+                        .fetch();
+        
+        /* type-safe Result<Record> via into() */
+        /*
         Result<Record14<Long, String, String, String, String, Long, 
                 BigDecimal, Long, String, String, String, String, String, String>> result = ctx.select()
                 .from(CUSTOMER)
@@ -173,7 +189,8 @@ public class ClassicModelsRepository {
                         CUSTOMERDETAIL.ADDRESS_LINE_SECOND, CUSTOMERDETAIL.CITY,
                         CUSTOMERDETAIL.COUNTRY, CUSTOMERDETAIL.POSTAL_CODE,
                         CUSTOMERDETAIL.STATE);
-
+        */
+        
         /* type-safe values */
         /*
         for (Record14 r : result) {
