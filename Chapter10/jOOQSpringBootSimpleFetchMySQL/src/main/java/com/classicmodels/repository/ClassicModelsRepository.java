@@ -18,7 +18,7 @@ public class ClassicModelsRepository {
 
     private final DSLContext ctx;
 
-    public ClassicModelsRepository(DataSource ds) {
+    public ClassicModelsRepository(DSLContext ctx) {
         this.ctx = ctx;
     }
 
