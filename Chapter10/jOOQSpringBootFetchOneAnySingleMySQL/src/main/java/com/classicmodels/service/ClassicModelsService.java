@@ -14,8 +14,9 @@ public class ClassicModelsService {
 
     public void callAll() {
 
-        classicModelsRepository.fetchPlainSQL();
-        classicModelsRepository.fetchFewFields();
-        classicModelsRepository.fetchAndConvert();
+        classicModelsRepository.fetchOneEmployee();
+        classicModelsRepository.fetchSingleEmployee();
+        classicModelsRepository.fetchAnyEmployee();
+        
     }
 }
