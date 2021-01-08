@@ -1,10 +1,10 @@
 package com.classicmodels.repository;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import javax.management.Query;
 import jooq.generated.Keys;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Department.DEPARTMENT;
@@ -14,6 +14,7 @@ import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Sale.SALE;
 import jooq.generated.tables.records.PaymentRecord;
+import org.flywaydb.core.internal.database.base.Table;
 import org.jooq.DSLContext;
 import org.jooq.Query;
 import org.jooq.Table;
