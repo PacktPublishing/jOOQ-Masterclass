@@ -42,19 +42,22 @@ public class ClassicModelsRepository {
                 .where(CUSTOMER.CUSTOMER_NUMBER.eq(112L)) // one or none (null)
                 .fetchOne(CUSTOMER.FIRST_BUY_DATE, INTEGER_YEARMONTH_CONVERTER);
         System.out.println("Example 1.4\n" + result4);
+        
+        var result5 = ctx.fetchOne(EMPLOYEE, EMPLOYEE.EMPLOYEE_NUMBER.eq(1370L)); // EmployeeRecord
+        System.out.println("Example 1.5 \n" + result5);
 
         // Avoid
-        String result5 = ctx.selectFrom(EMPLOYEE)
-                .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1370L)) // one or none (null)
-                .fetchOne(EMPLOYEE.EMAIL);
-        System.out.println("Example 1.5 (avoid) \n" + result5);
-
-        // Avoid
-        String result6 = ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.JOB_TITLE, EMPLOYEE.EMAIL)
-                .from(EMPLOYEE)
+        String result6 = ctx.selectFrom(EMPLOYEE)
                 .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1370L)) // one or none (null)
                 .fetchOne(EMPLOYEE.EMAIL);
         System.out.println("Example 1.6 (avoid) \n" + result6);
+
+        // Avoid
+        String result7 = ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.JOB_TITLE, EMPLOYEE.EMAIL)
+                .from(EMPLOYEE)
+                .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1370L)) // one or none (null)
+                .fetchOne(EMPLOYEE.EMAIL);
+        System.out.println("Example 1.7 (avoid) \n" + result7);
     }
 
     public void fetchSingleEmployee() {
@@ -81,19 +84,22 @@ public class ClassicModelsRepository {
                 .where(CUSTOMER.CUSTOMER_NUMBER.eq(112L)) // one or none (null)
                 .fetchSingle(CUSTOMER.FIRST_BUY_DATE, INTEGER_YEARMONTH_CONVERTER);
         System.out.println("Example 2.4\n" + result4);
+        
+        var result5 = ctx.fetchSingle(EMPLOYEE, EMPLOYEE.EMPLOYEE_NUMBER.eq(1370L)); // EmployeeRecord
+        System.out.println("Example 2.5 \n" + result5);
 
         // Avoid
-        String result5 = ctx.selectFrom(EMPLOYEE)
-                .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1370L)) // one or none (null)
-                .fetchSingle(EMPLOYEE.EMAIL);
-        System.out.println("Example 2.5 (avoid) \n" + result5);
-
-        // Avoid
-        String result6 = ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.JOB_TITLE, EMPLOYEE.EMAIL)
-                .from(EMPLOYEE)
+        String result6 = ctx.selectFrom(EMPLOYEE)
                 .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1370L)) // one or none (null)
                 .fetchSingle(EMPLOYEE.EMAIL);
         System.out.println("Example 2.6 (avoid) \n" + result6);
+
+        // Avoid
+        String result7 = ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.JOB_TITLE, EMPLOYEE.EMAIL)
+                .from(EMPLOYEE)
+                .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1370L)) // one or none (null)
+                .fetchSingle(EMPLOYEE.EMAIL);
+        System.out.println("Example 2.7 (avoid) \n" + result7);
     }
     
     public void fetchAnyEmployee() {
@@ -119,19 +125,22 @@ public class ClassicModelsRepository {
                 .from(CUSTOMER)
                 .where(CUSTOMER.CUSTOMER_NUMBER.eq(112L))
                 .fetchAny(CUSTOMER.FIRST_BUY_DATE, INTEGER_YEARMONTH_CONVERTER);
-        System.out.println("Example 3.4\n" + result4);
+        System.out.println("Example 3.4\n" + result4);  
+        
+        var result5 = ctx.fetchAny(EMPLOYEE, EMPLOYEE.EMPLOYEE_OF_YEAR.isNotNull()); // EmployeeRecord
+        System.out.println("Example 3.5\n" + result5);
         
         // Avoid
-        String result5 = ctx.selectFrom(EMPLOYEE)
+        String result6 = ctx.selectFrom(EMPLOYEE)
                 .where(EMPLOYEE.EMPLOYEE_NUMBER.in(1370L, 1504L, 1611L))
                 .fetchAny(EMPLOYEE.EMAIL);
-        System.out.println("Example 3.5 (avoid) \n" + result5);
+        System.out.println("Example 3.6 (avoid) \n" + result6);
         
         // Avoid
-        String result6 = ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.JOB_TITLE, EMPLOYEE.EMAIL)
+        String result7 = ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.JOB_TITLE, EMPLOYEE.EMAIL)
                 .from(EMPLOYEE)
                 .where(EMPLOYEE.EMPLOYEE_NUMBER.in(1370L, 1504L, 1611L))
                 .fetchAny(EMPLOYEE.EMAIL);
-        System.out.println("Example 3.6 (avoid) \n" + result6);                
+        System.out.println("Example 3.7 (avoid) \n" + result7);                
     }
 }
