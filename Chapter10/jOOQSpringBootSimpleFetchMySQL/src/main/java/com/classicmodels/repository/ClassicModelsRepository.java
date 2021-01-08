@@ -4,7 +4,6 @@ import static com.classicmodels.converter.YearMonthConverter.INTEGER_YEARMONTH_C
 import java.math.BigDecimal;
 import java.time.YearMonth;
 import java.util.List;
-import javax.sql.DataSource;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import org.jooq.DSLContext;
 import org.jooq.ResultQuery;
