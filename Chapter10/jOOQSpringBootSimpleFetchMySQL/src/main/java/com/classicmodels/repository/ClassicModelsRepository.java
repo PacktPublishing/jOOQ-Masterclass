@@ -17,11 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class ClassicModelsRepository {
 
     private final DSLContext ctx;
-    private final DataSource ds;
 
-    public ClassicModelsRepository(DSLContext ctx, DataSource ds) {
+    public ClassicModelsRepository(DataSource ds) {
         this.ctx = ctx;
-        this.ds = ds;
     }
 
     // DSLContext fetching    
@@ -30,25 +28,25 @@ public class ClassicModelsRepository {
         // Fetch via plain SQL
         System.out.println("Example 1.1\n"
                 + ctx.fetch("SELECT customer_name FROM customer") // Result<Record>
-             // + ctx.fetch("SELECT customer_name FROM customer").into(String.class) // List<String>
+        // + ctx.fetch("SELECT customer_name FROM customer").into(String.class) // List<String>
         );
 
         // Fetch from ResultQuery
         System.out.println("Example 1.2\n"
                 + ctx.resultQuery("SELECT customer_name FROM customer").fetch() // Result<Record>
-             // + ctx.resultQuery("SELECT customer_name FROM customer").fetchInto(String.class) // List<String>
+        // + ctx.resultQuery("SELECT customer_name FROM customer").fetchInto(String.class) // List<String>
         );
 
         ResultQuery<Record> resultQuery = ctx.resultQuery("SELECT customer_name FROM customer");
 
         System.out.println("Example 1.3\n"
                 + resultQuery.fetch() // Result<Record>
-             // + resultQuery.fetch().into(String.class) // List<String>
+        // + resultQuery.fetch().into(String.class) // List<String>
         );
 
         System.out.println("Example 1.4\n"
                 + ctx.fetch(resultQuery) // Result<Record>
-             // + ctx.fetch(resultQuery).into(String.class) // List<String>
+        // + ctx.fetch(resultQuery).into(String.class) // List<String>
         );
 
         System.out.println("Example 1.5\n"
@@ -65,17 +63,17 @@ public class ClassicModelsRepository {
         System.out.println("Example 2.1\n"
                 + ctx.select(CUSTOMER.CUSTOMER_NAME)
                         .from(CUSTOMER).fetch(CUSTOMER.CUSTOMER_NAME) // List<String>
-             // or, like this
-             // + ctx.fetchValues(CUSTOMER.CUSTOMER_NAME) // List<String>
+        // or, like this
+        // + ctx.fetchValues(CUSTOMER.CUSTOMER_NAME) // List<String>
         );
 
         // Avoid
         System.out.println("Example 2.2\n"
                 + ctx.select().from(CUSTOMER)
                         .fetch(CUSTOMER.CUSTOMER_NAME) // List<String>                
-                     // .fetch(field(""), String.class)
-                     // .fetch("", String.class)
-                     // .fetch(0)
+        // .fetch(field(""), String.class)
+        // .fetch("", String.class)
+        // .fetch(0)
         );
 
         // The above case applies to multiple fields as well        
@@ -91,7 +89,7 @@ public class ClassicModelsRepository {
                 + ctx.select().from(CUSTOMER)
                         .fetch()
                         .into(CUSTOMER.CUSTOMER_NAME, CUSTOMER.CREDIT_LIMIT) // Result<Record2<String, BigDecimal>>
-                     // .into(field("customer_name", String.class), field("credit_limit", BigDecimal.class))                                        
+        // .into(field("customer_name", String.class), field("credit_limit", BigDecimal.class))                                        
         );
     }
 
