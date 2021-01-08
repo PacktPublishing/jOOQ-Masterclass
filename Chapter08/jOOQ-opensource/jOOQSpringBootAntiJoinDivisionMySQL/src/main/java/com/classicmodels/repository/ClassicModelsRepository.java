@@ -11,6 +11,7 @@ import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.selectCount;
 import static org.jooq.impl.DSL.selectDistinct;
 import static org.jooq.impl.DSL.selectOne;
+import static org.jooq.impl.DSL.trueCondition;
 import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,7 +71,7 @@ public class ClassicModelsRepository {
                                         .leftAntiJoin(ORDERDETAIL)
                                         .on(field("OID").eq(ORDERDETAIL.ORDER_ID)
                                                 .and(TOP3PRODUCT.PRODUCT_ID.eq(ORDERDETAIL.PRODUCT_ID))))
-                                .on(val(1).eq(val(1))))
+                                .on(trueCondition())) // or, on(val(1).eq(val(1)))
                         .fetch()
         );
     }

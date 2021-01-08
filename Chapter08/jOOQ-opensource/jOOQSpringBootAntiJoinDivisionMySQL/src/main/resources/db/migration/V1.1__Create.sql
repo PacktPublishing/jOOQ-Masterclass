@@ -19,6 +19,7 @@ DROP TABLE IF EXISTS `orderdetail`;
 DROP TABLE IF EXISTS `order`;
 DROP TABLE IF EXISTS `product`;
 DROP TABLE IF EXISTS `productline`;
+DROP TABLE IF EXISTS `top3product`;
 DROP TABLE IF EXISTS `productlinedetail`;
 DROP TABLE IF EXISTS `office_has_manager`;
 DROP TABLE IF EXISTS `manager`;
@@ -41,6 +42,7 @@ CREATE TABLE `office` (
   `country` varchar(50),
   `postal_code` varchar(15) NOT NULL,
   `territory` varchar(10) NOT NULL,
+  `location` point DEFAULT NULL,
   PRIMARY KEY (`office_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -50,7 +52,8 @@ CREATE TABLE `department` (
   `phone` varchar(50) NOT NULL,
   `code` smallint DEFAULT 1,
   `office_code` varchar(10) NOT NULL,
-  `topic` json NOT NULL,
+  `topic` varchar(100) DEFAULT NULL,  
+  `dep_net_ipv4` varchar(16) DEFAULT NULL,
   PRIMARY KEY (`department_id`),
   KEY `office_code` (`office_code`),
   CONSTRAINT `department_ibfk_1` FOREIGN KEY (`office_code`) REFERENCES `office` (`office_code`)
@@ -67,7 +70,7 @@ CREATE TABLE `employee` (
   `office_code` varchar(10) NOT NULL,
   `salary` int NOT NULL,
   `reports_to` bigint DEFAULT NULL,
-  `job_title` varchar(50) NOT NULL,
+  `job_title` varchar(50) NOT NULL, 
   `employee_of_year` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`employee_number`),
   KEY `reports_to` (`reports_to`),
@@ -84,6 +87,9 @@ CREATE TABLE `sale` (
   `sale` float NOT NULL,  
   `employee_number` bigint DEFAULT NULL,  
   `hot` boolean DEFAULT FALSE,  
+  `rate` enum ('SILVER', 'GOLD', 'PLATINUM') DEFAULT NULL,
+  `vat` enum ('NONE', 'MIN', 'MAX') DEFAULT NULL,
+  `trend` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`sale_id`),  
   KEY `employee_number` (`employee_number`),  
   CONSTRAINT `sales_ibfk_1` FOREIGN KEY (`employee_number`) REFERENCES `employee` (`employee_number`)
@@ -99,6 +105,7 @@ CREATE TABLE `customer` (
   `phone` varchar(50) NOT NULL,
   `sales_rep_employee_number` bigint DEFAULT NULL,
   `credit_limit` decimal(10,2) DEFAULT NULL,
+  `first_buy_date` int DEFAULT NULL,
   PRIMARY KEY (`customer_number`),
   KEY `sales_rep_employee_number` (`sales_rep_employee_number`),
   CONSTRAINT `customers_ibfk_1` FOREIGN KEY (`sales_rep_employee_number`) REFERENCES `employee` (`employee_number`)
@@ -124,6 +131,8 @@ CREATE TABLE `customerdetail` (
 CREATE TABLE `manager` (
   `manager_id` bigint NOT NULL AUTO_INCREMENT,
   `manager_name` varchar(50) NOT NULL,
+  `manager_detail` json DEFAULT NULL,
+  `manager_evaluation` varchar(200) DEFAULT NULL, 
   PRIMARY KEY (`manager_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -186,6 +195,7 @@ CREATE TABLE `product` (
   `quantity_in_stock` smallint DEFAULT 0,
   `buy_price` decimal(10,2) DEFAULT 0.0,
   `msrp` decimal(10,2) DEFAULT 0.0,
+  `specs` mediumtext DEFAULT NULL,
   PRIMARY KEY (`product_id`),
   KEY `product_line` (`product_line`),
   CONSTRAINT `products_ibfk_1` FOREIGN KEY (`product_line`) REFERENCES `productline` (`product_line`)
