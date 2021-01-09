@@ -25,8 +25,8 @@ public class JooqConfig {
                                         new ForcedType()
                                                 .withUserType("java.time.YearMonth")
                                                 .withConverter("org.jooq.Converter.ofNullable(Integer.class, YearMonth.class, "
-                                                        + "(Integer t) -> { return YearMonth.of(t / 100, t % 100); }, "
-                                                        + "(YearMonth u) -> { return (u.getYear() * 100) + u.getMonth().getValue(); })")
+                                                        + "(Integer t) -> { return YearMonth.of(1970, 1).with(java.time.temporal.ChronoField.PROLEPTIC_MONTH, t); }, "
+                                                        + "(YearMonth u) -> { return (int) u.getLong(java.time.temporal.ChronoField.PROLEPTIC_MONTH); })")
                                                 .withIncludeExpression("classicmodels\\.customer\\.first_buy_date")
                                                 .withExcludeTypes(".*\\."))
                                 .withName("org.jooq.meta.mysql.MySQLDatabase")
