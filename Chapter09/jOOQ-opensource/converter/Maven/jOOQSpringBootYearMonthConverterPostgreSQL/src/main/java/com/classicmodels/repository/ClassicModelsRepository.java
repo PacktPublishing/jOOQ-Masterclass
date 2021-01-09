@@ -7,6 +7,7 @@ import static com.classicmodels.converter.YearMonthConverter.YEARMONTH;
 import static com.classicmodels.converter.YearMonthToDateConverter.DATE_YEARMONTH_CONVERTER;
 import java.math.BigDecimal;
 import java.time.YearMonth;
+import java.time.temporal.ChronoField;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -38,7 +39,7 @@ public class ClassicModelsRepository {
         // converter is not used (we insert '202010' directly)
         ctx.insertInto(CUSTOMER)
                 .values(CUSTOMER_SEQ.nextval(), "Atelier One", "Markus", "Alop", "0892 339 423",
-                        1370L, 50000, 202010)
+                        1370L, 50000, 24249)
                 .execute();
 
         // non-type-safe,
@@ -91,10 +92,10 @@ public class ClassicModelsRepository {
         /* DECLARE CONVERTER LOCALLY, IN THIS CLASS */
         Converter<Integer, YearMonth> converter = Converter.ofNullable(Integer.class, YearMonth.class,
                 (Integer t) -> {
-                    return YearMonth.of(t / 100, t % 100);
+                    return YearMonth.of(1970, 1).with(ChronoField.PROLEPTIC_MONTH, t);
                 },
                 (YearMonth u) -> {
-                    return (u.getYear() * 100) + u.getMonth().getValue();
+                    return (int) u.getLong(ChronoField.PROLEPTIC_MONTH);
                 });
 
         // use the above local converter, 'converter'
@@ -110,10 +111,10 @@ public class ClassicModelsRepository {
         // without Converter
         DataType<YearMonth> yearmonth = INTEGER.asConvertedDataType(YearMonth.class,
                 (Integer t) -> {
-                    return YearMonth.of(t / 100, t % 100);
+                    return YearMonth.of(1970, 1).with(ChronoField.PROLEPTIC_MONTH, t);
                 },
                 (YearMonth u) -> {
-                    return (u.getYear() * 100) + u.getMonth().getValue();
+                    return (int) u.getLong(ChronoField.PROLEPTIC_MONTH);
                 });
 
         // convert via the above local data type 'yearmonth'      
