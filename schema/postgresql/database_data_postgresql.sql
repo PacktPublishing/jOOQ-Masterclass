@@ -383,7 +383,7 @@ insert  into customer(customer_number,customer_name,contact_last_name,contact_fi
 
 (495,'Diecast Collectables','Franco','Valarie','6175552555',1188,'85100.00',20409),
 
-(496,'Kelly''s Gift Shop','Snowden','Tony','+64 9 5555500',1612,'110000.00',20142) ON CONFLICT (customer_number) DO NOTHING;;
+(496,'Kelly''s Gift Shop','Snowden','Tony','+64 9 5555500',1612,'110000.00',20142) ON CONFLICT (customer_number) DO NOTHING;
 
 /*Data for the table `customerdetail` */
 
