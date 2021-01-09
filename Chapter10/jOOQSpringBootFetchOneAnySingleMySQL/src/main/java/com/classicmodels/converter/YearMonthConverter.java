@@ -1,6 +1,7 @@
 package com.classicmodels.converter;
 
 import java.time.YearMonth;
+import java.time.temporal.ChronoField;
 import org.jooq.Converter;
 import org.jooq.DataType;
 import static org.jooq.impl.SQLDataType.INTEGER;
@@ -15,12 +16,13 @@ public class YearMonthConverter implements Converter<Integer, YearMonth> {
 
     public static final DataType<YearMonth> YEARMONTH
             = INTEGER.asConvertedDataType(INTEGER_YEARMONTH_CONVERTER);
-    
+
     @Override
     public YearMonth from(Integer t) {
 
         if (t != null) {
-            return YearMonth.of(t / 100, t % 100);
+            
+            return YearMonth.of(1970, 1).with(ChronoField.PROLEPTIC_MONTH, t);
         }
 
         return null;
@@ -31,8 +33,7 @@ public class YearMonthConverter implements Converter<Integer, YearMonth> {
 
         if (u != null) {
 
-            return (u.getYear() * 100)
-                    + u.getMonth().getValue();
+            return (int) u.getLong(ChronoField.PROLEPTIC_MONTH);
         }
 
         return null;
