@@ -133,239 +133,239 @@ insert  into employee(employee_number,last_name,first_name,extension,email,offic
 
 insert  into customer(customer_number,customer_name,contact_last_name,contact_first_name,phone,sales_rep_employee_number,credit_limit,first_buy_date) values 
 
-(99,'Australian Home','Paoule','Sart ','40.11.2555',1370,'21000.00',202010),
+(99,'Australian Home','Paoule','Sart ','40.11.2555',1370,'21000.00',20210),
 
-(100,'Joliyon','Schmitt','Rue ','10.22.2535',1370,'21000.00',202010),
+(100,'Joliyon','Schmitt','Rue ','10.22.2535',1370,'21000.00',20201),
 
-(101,'Marquez Xioa','Calor','Sar ','`11.12.2525',1370,'21000.00',201805),
+(101,'Marquez Xioa','Calor','Sar ','`11.12.2525',1370,'21000.00',21805),
 
-(102,'Falafel 3','Hor','Carine ','20.12.2525',1370,'21000.00',201805),
+(102,'Falafel 3','Hor','Carine ','20.12.2525',1370,'21000.00',21805),
 
-(103,'Atelier graphique','Schmitt','Carine ','40.32.2555',1370,'21000.00',201806),
+(103,'Atelier graphique','Schmitt','Carine ','40.32.2555',1370,'21000.00',20186),
 
-(112,'Signal Gift Stores','King','Jean','7025551838',1166,'71800.00',201803),
+(112,'Signal Gift Stores','King','Jean','7025551838',1166,'71800.00',21803),
 
-(114,'Australian Collectors, Co.','Ferguson','Peter','03 9520 4555',1611,'117300.00',201605),
+(114,'Australian Collectors, Co.','Ferguson','Peter','03 9520 4555',1611,'117300.00',20105),
 
-(119,'La Rochelle Gifts','Labrune','Janine ','40.67.8555',1370,'118200.00',201403),
+(119,'La Rochelle Gifts','Labrune','Janine ','40.67.8555',1370,'118200.00',20140),
 
-(121,'Baane Mini Imports','Bergulfsen','Jonas ','07-98 9555',1504,'81700.00',201403),
+(121,'Baane Mini Imports','Bergulfsen','Jonas ','07-98 9555',1504,'81700.00',21403),
 
-(124,'Mini Gifts Distributors Ltd.','Nelson','Susan','4155551450',1165,'210500.00',201403),
+(124,'Mini Gifts Distributors Ltd.','Nelson','Susan','4155551450',1165,'210500.00',20143),
 
 (125,'Havel & Zbyszek Co','Piestrzeniewicz','Zbyszek ','(26) 642-7555',NULL,'0.00',NULL),
 
-(128,'Blauer See Auto, Co.','Keitel','Roland','+49 69 66 90 2555',1504,'59700.00',201901),
+(128,'Blauer See Auto, Co.','Keitel','Roland','+49 69 66 90 2555',1504,'59700.00',20101),
 
-(129,'Mini Wheels Co.','Murphy','Julie','6505555787',1165,'64600.00',201902),
+(129,'Mini Wheels Co.','Murphy','Julie','6505555787',1165,'64600.00',20190),
 
-(131,'Land of Toys Inc.','Lee','Kwai','2125557818',1323,'114900.00',201903),
+(131,'Land of Toys Inc.','Lee','Kwai','2125557818',1323,'114900.00',20903),
 
-(141,'Euro+ Shopping Channel','Freyre','Diego ','(91) 555 94 44',1370,'227600.00',201901),
+(141,'Euro+ Shopping Channel','Freyre','Diego ','(91) 555 94 44',1370,'227600.00',20191),
 
-(144,'Volvo Model Replicas, Co','Berglund','Christina ','0921-12 3555',1504,'53100.00',201912),
+(144,'Volvo Model Replicas, Co','Berglund','Christina ','0921-12 3555',1504,'53100.00',20192),
 
-(145,'Danish Wholesale Imports','Petersen','Jytte ','31 12 3555',1401,'83400.00',200405),
+(145,'Danish Wholesale Imports','Petersen','Jytte ','31 12 3555',1401,'83400.00',20405),
 
-(146,'Saveley & Henriot, Co.','Saveley','Mary ','78.32.5555',1337,'123900.00',200407),
+(146,'Saveley & Henriot, Co.','Saveley','Mary ','78.32.5555',1337,'123900.00',20407),
 
-(148,'Dragon Souveniers, Ltd.','Natividad','Eric','+65 221 7555',1621,'103800.00',200505),
+(148,'Dragon Souveniers, Ltd.','Natividad','Eric','+65 221 7555',1621,'103800.00',20505),
 
-(151,'Muscle Machine Inc','Young','Jeff','2125557413',1286,'138500.00',200409),
+(151,'Muscle Machine Inc','Young','Jeff','2125557413',1286,'138500.00',20409),
 
-(157,'Diecast Classics Inc.','Leong','Kelvin','2155551555',1216,'100600.00',200410),
+(157,'Diecast Classics Inc.','Leong','Kelvin','2155551555',1216,'100600.00',20410),
 
-(161,'Technics Stores Inc.','Hashimoto','Juri','6505556809',1165,'84600.00',201407),
+(161,'Technics Stores Inc.','Hashimoto','Juri','6505556809',1165,'84600.00',21407),
 
-(166,'Handji Gifts& Co','Victorino','Wendy','+65 224 1555',1612,'97900.00',201403),
+(166,'Handji Gifts& Co','Victorino','Wendy','+65 224 1555',1612,'97900.00',20143),
 
-(167,'Herkku Gifts','Oeztan','Veysel','+47 2267 3215',1504,'96800.00',201407),
+(167,'Herkku Gifts','Oeztan','Veysel','+47 2267 3215',1504,'96800.00',20147),
 
-(168,'American Souvenirs Inc','Franco','Keith','2035557845',1286,'0.00',201403),
+(168,'American Souvenirs Inc','Franco','Keith','2035557845',1286,'0.00',20103),
 
 (169,'Porto Imports Co.','de Castro','Isabel ','(1) 356-5555',NULL,'0.00',NULL),
 
-(171,'Daedalus Designs Imports','Rancé','Martine ','20.16.1555',1370,'82900.00',200405),
+(171,'Daedalus Designs Imports','Rancé','Martine ','20.16.1555',1370,'82900.00',20045),
 
-(172,'La Corne D''abondance, Co.','Bertrand','Marie','(1) 42.34.2555',1337,'84300.00',200405),
+(172,'La Corne D''abondance, Co.','Bertrand','Marie','(1) 42.34.2555',1337,'84300.00',20405),
 
-(173,'Cambridge Collectables Co.','Tseng','Jerry','6175555555',1188,'43400.00',201010),
+(173,'Cambridge Collectables Co.','Tseng','Jerry','6175555555',1188,'43400.00',20110),
 
-(175,'Gift Depot Inc.','King','Julie','2035552570',1323,'84300.00',201011),
+(175,'Gift Depot Inc.','King','Julie','2035552570',1323,'84300.00',20011),
 
-(177,'Osaka Souveniers Co.','Kentary','Mory','+81 06 6342 5555',1621,'81200.00',201012),
+(177,'Osaka Souveniers Co.','Kentary','Mory','+81 06 6342 5555',1621,'81200.00',20102),
 
-(181,'Vitachrome Inc.','Frick','Michael','2125551500',1286,'76400.00',200902),
+(181,'Vitachrome Inc.','Frick','Michael','2125551500',1286,'76400.00',20092),
 
-(186,'Toys of Finland, Co.','Karttunen','Matti','90-224 8555',1501,'96500.00',200402),
+(186,'Toys of Finland, Co.','Karttunen','Matti','90-224 8555',1501,'96500.00',20002),
 
-(187,'AV Stores, Co.','Ashworth','Rachel','(171) 555-1555',1501,'136800.00',200802),
+(187,'AV Stores, Co.','Ashworth','Rachel','(171) 555-1555',1501,'136800.00',20002),
 
-(189,'Clover Collections, Co.','Cassidy','Dean','+353 1862 1555',1504,'69400.00',200903),
+(189,'Clover Collections, Co.','Cassidy','Dean','+353 1862 1555',1504,'69400.00',20903),
 
-(198,'Auto-Moto Classics Inc.','Taylor','Leslie','6175558428',1216,'23000.00',200904),
+(198,'Auto-Moto Classics Inc.','Taylor','Leslie','6175558428',1216,'23000.00',20094),
 
-(201,'UK Collectables, Ltd.','Devon','Elizabeth','(171) 555-2282',1501,'92700.00',200905),
+(201,'UK Collectables, Ltd.','Devon','Elizabeth','(171) 555-2282',1501,'92700.00',20905),
 
-(202,'Canadian Gift Exchange Network','Tamuri','Yoshi ','(604) 555-3392',1323,'90300.00',200908),
+(202,'Canadian Gift Exchange Network','Tamuri','Yoshi ','(604) 555-3392',1323,'90300.00',20908),
 
-(204,'Online Mini Collectables','Barajas','Miguel','6175557555',1188,'68700.00',200503),
+(204,'Online Mini Collectables','Barajas','Miguel','6175557555',1188,'68700.00',20503),
 
-(205,'Toys4GrownUps.com','Young','Julie','6265557265',1166,'90700.00',200504),
+(205,'Toys4GrownUps.com','Young','Julie','6265557265',1166,'90700.00',20504),
 
 (206,'Asian Shopping Network, Co','Walker','Brydey','+612 9411 1555',NULL,'0.00',NULL),
 
-(209,'Mini Caravy','Citeaux','Frédérique ','88.60.1555',1370,'53800.00',200506),
+(209,'Mini Caravy','Citeaux','Frédérique ','88.60.1555',1370,'53800.00',20506),
 
-(211,'King Kong Collectables, Co.','Gao','Mike','+852 2251 1555',1621,'58600.00',201403),
+(211,'King Kong Collectables, Co.','Gao','Mike','+852 2251 1555',1621,'58600.00',20143),
 
-(216,'Enaco Distributors','Saavedra','Eduardo ','(93) 203 4555',1702,'60300.00',200503),
+(216,'Enaco Distributors','Saavedra','Eduardo ','(93) 203 4555',1702,'60300.00',20003),
 
-(219,'Boards & Toys Co.','Young','Mary','3105552373',1166,'11000.00',200503),
+(219,'Boards & Toys Co.','Young','Mary','3105552373',1166,'11000.00',20003),
 
 (223,'Natürlich Autos','Kloss','Horst ','0372-555188',NULL,'0.00',NULL),
 
-(227,'Heintze Collectables','Ibsen','Palle','86 21 3555',1401,'120800.00',200103),
+(227,'Heintze Collectables','Ibsen','Palle','86 21 3555',1401,'120800.00',20103),
 
-(233,'Québec Home Shopping Network','Fresnière','Jean ','(514) 555-8054',1286,'48700.00',200102),
+(233,'Québec Home Shopping Network','Fresnière','Jean ','(514) 555-8054',1286,'48700.00',20012),
 
 (237,'ANG Resellers','Camino','Alejandra ','(91) 745 6555',NULL,'0.00',NULL),
 
-(239,'Collectable Mini Designs Co.','Thompson','Valarie','7605558146',1166,'105000.00',200111),
+(239,'Collectable Mini Designs Co.','Thompson','Valarie','7605558146',1166,'105000.00',20111),
 
-(240,'giftsbymail.co.uk','Bennett','Helen ','(198) 555-8888''UK',1501,'93900.00',201203),
+(240,'giftsbymail.co.uk','Bennett','Helen ','(198) 555-8888''UK',1501,'93900.00',20103),
 
-(242,'Alpha Cognac','Roulet','Annette ','61.77.6555',1370,'61100.00',201211),
+(242,'Alpha Cognac','Roulet','Annette ','61.77.6555',1370,'61100.00',20121),
 
 (247,'Messner Shopping Network','Messner','Renate ','069-0555984',NULL,'0.00',NULL),
 
-(249,'Amica Models & Co.','Accorti','Paolo ','011-4988555',1401,'113000.00',201601),
+(249,'Amica Models & Co.','Accorti','Paolo ','011-4988555',1401,'113000.00',20161),
 
-(250,'Lyon Souveniers','Da Silva','Daniel','+33 1 46 62 7555',1337,'68100.00',201602),
+(250,'Lyon Souveniers','Da Silva','Daniel','+33 1 46 62 7555',1337,'68100.00',20102),
 
-(256,'Auto Associés & Cie.','Tonini','Daniel ','30.59.8555',1370,'77900.00',201603),
+(256,'Auto Associés & Cie.','Tonini','Daniel ','30.59.8555',1370,'77900.00',20163),
 
-(259,'Toms Spezialitäten, Ltd','Pfalzheim','Henriette ','0221-5554327',1504,'120400.00',201604),
+(259,'Toms Spezialitäten, Ltd','Pfalzheim','Henriette ','0221-5554327',1504,'120400.00',20104),
 
-(260,'Royal Canadian Collectables, Ltd.','Lincoln','Elizabeth ','(604) 555-4555',1323,'89600.00',201605),
+(260,'Royal Canadian Collectables, Ltd.','Lincoln','Elizabeth ','(604) 555-4555',1323,'89600.00',20165),
 
 (273,'Franken Gifts, Co','Franken','Peter ','089-0877555',NULL,'0.00',NULL),
 
-(276,'Anna''s Decorations, Ltd','O''Hara','Anna','02 9936 8555',1611,'107800.00',201604),
+(276,'Anna''s Decorations, Ltd','O''Hara','Anna','02 9936 8555',1611,'107800.00',21604),
 
-(278,'Rovelli Gifts','Rovelli','Giovanni ','035-640555',1401,'119600.00',201611),
+(278,'Rovelli Gifts','Rovelli','Giovanni ','035-640555',1401,'119600.00',21611),
 
-(282,'Souveniers And Things Co.','Huxley','Adrian','+61 2 9495 8555',1611,'93300.00',201606),
+(282,'Souveniers And Things Co.','Huxley','Adrian','+61 2 9495 8555',1611,'93300.00',20106),
 
-(286,'Marta''s Replicas Co.','Hernandez','Marta','6175558555',1216,'123700.00',201607),
+(286,'Marta''s Replicas Co.','Hernandez','Marta','6175558555',1216,'123700.00',20607),
 
 (293,'BG&E Collectables','Harrison','Ed','+41 26 425 50 01',NULL,'0.00',NULL),
 
-(298,'Vida Sport, Ltd','Holz','Mihael','0897-034555',1702,'141300.00',201601),
+(298,'Vida Sport, Ltd','Holz','Mihael','0897-034555',1702,'141300.00',20161),
 
-(299,'Norway Gifts By Mail, Co.','Klaeboe','Jan','+47 2212 1555',1504,'95100.00',201601),
+(299,'Norway Gifts By Mail, Co.','Klaeboe','Jan','+47 2212 1555',1504,'95100.00',20161),
 
 (303,'Schuyler Imports','Schuyler','Bradley','+31 20 491 9555',NULL,'0.00',NULL),
 
 (307,'Der Hund Imports','Andersen','Mel','030-0074555',NULL,'0.00',NULL),
 
-(311,'Oulu Toy Supplies, Inc.','Koskitalo','Pirkko','981-443655',1501,'90500.00',201601),
+(311,'Oulu Toy Supplies, Inc.','Koskitalo','Pirkko','981-443655',1501,'90500.00',20161),
 
-(314,'Petit Auto','Dewey','Catherine ','(02) 5554 67',1401,'79900.00',201601),
+(314,'Petit Auto','Dewey','Catherine ','(02) 5554 67',1401,'79900.00',20160),
 
-(319,'Mini Classics','Frick','Steve','9145554562',1323,'102700.00',200001),
+(319,'Mini Classics','Frick','Steve','9145554562',1323,'102700.00',20001),
 
-(320,'Mini Creations Ltd.','Huang','Wing','5085559555',1188,'94500.00',200002),
+(320,'Mini Creations Ltd.','Huang','Wing','5085559555',1188,'94500.00',20002),
 
-(321,'Corporate Gift Ideas Co.','Brown','Julie','6505551386',1165,'105000.00',200003),
+(321,'Corporate Gift Ideas Co.','Brown','Julie','6505551386',1165,'105000.00',20003),
 
-(323,'Down Under Souveniers, Inc','Graham','Mike','+64 9 312 5555',1612,'88000.00',200004),
+(323,'Down Under Souveniers, Inc','Graham','Mike','+64 9 312 5555',1612,'88000.00',20004),
 
-(324,'Stylish Desk Decors, Co.','Brown','Ann ','(171) 555-0297',1501,'77000.00',200005),
+(324,'Stylish Desk Decors, Co.','Brown','Ann ','(171) 555-0297',1501,'77000.00',20005),
 
-(328,'Tekni Collectables Inc.','Brown','William','2015559350',1323,'43000.00',200006),
+(328,'Tekni Collectables Inc.','Brown','William','2015559350',1323,'43000.00',20006),
 
-(333,'Australian Gift Network, Co','Calaghan','Ben','61-7-3844-6555',1611,'51600.00',200101),
+(333,'Australian Gift Network, Co','Calaghan','Ben','61-7-3844-6555',1611,'51600.00',20101),
 
-(334,'Suominen Souveniers','Suominen','Kalle','+358 9 8045 555',1501,'98800.00',200103),
+(334,'Suominen Souveniers','Suominen','Kalle','+358 9 8045 555',1501,'98800.00',20103),
 
 (335,'Cramer Spezialitäten, Ltd','Cramer','Philip ','0555-09555',NULL,'0.00',NULL),
 
-(339,'Classic Gift Ideas, Inc','Cervantes','Francisca','2155554695',1188,'81100.00',200107),
+(339,'Classic Gift Ideas, Inc','Cervantes','Francisca','2155554695',1188,'81100.00',20007),
 
-(344,'CAF Imports','Fernandez','Jesus','+34 913 728 555',1702,'59600.00',200101),
+(344,'CAF Imports','Fernandez','Jesus','+34 913 728 555',1702,'59600.00',20001),
 
-(347,'Men ''R'' US Retailers, Ltd.','Chandler','Brian','2155554369',1166,'57700.00',200101),
+(347,'Men ''R'' US Retailers, Ltd.','Chandler','Brian','2155554369',1166,'57700.00',20001),
 
 (348,'Asian Treasures, Inc.','McKenna','Patricia ','2967 555',NULL,'0.00',NULL),
 
-(350,'Marseille Mini Autos','Lebihan','Laurence ','91.24.4555',1337,'65000.00',200301),
+(350,'Marseille Mini Autos','Lebihan','Laurence ','91.24.4555',1337,'65000.00',20030),
 
-(353,'Reims Collectables','Henriot','Paul ','26.47.1555',1337,'81100.00',200304),
+(353,'Reims Collectables','Henriot','Paul ','26.47.1555',1337,'81100.00',20030),
 
 (356,'SAR Distributors, Co','Kuger','Armand','+27 21 550 3555',NULL,'0.00',NULL),
 
-(357,'GiftsForHim.com','MacKinlay','Wales','64-9-3763555',1612,'77700.00',200308),
+(357,'GiftsForHim.com','MacKinlay','Wales','64-9-3763555',1612,'77700.00',20038),
 
 (361,'Kommission Auto','Josephs','Karin','0251-555259',NULL,'0.00',NULL),
 
-(362,'Gifts4AllAges.com','Yoshido','Juri','6175559555',1216,'41900.00',200310),
+(362,'Gifts4AllAges.com','Yoshido','Juri','6175559555',1216,'41900.00',20010),
 
-(363,'Online Diecast Creations Co.','Young','Dorothy','6035558647',1216,'114200.00',200310),
+(363,'Online Diecast Creations Co.','Young','Dorothy','6035558647',1216,'114200.00',20310),
 
 (369,'Lisboa Souveniers, Inc','Rodriguez','Lino ','(1) 354-2555',NULL,'0.00',NULL),
 
-(376,'Precious Collectables','Urs','Braun','0452-076555',1702,'0.00',200310),
+(376,'Precious Collectables','Urs','Braun','0452-076555',1702,'0.00',20310),
 
-(379,'Collectables For Less Inc.','Nelson','Allen','6175558555',1188,'70700.00',200310),
+(379,'Collectables For Less Inc.','Nelson','Allen','6175558555',1188,'70700.00',20310),
 
-(381,'Royale Belge','Cartrain','Pascale ','(071) 23 67 2555',1401,'23500.00',200310),
+(381,'Royale Belge','Cartrain','Pascale ','(071) 23 67 2555',1401,'23500.00',20310),
 
-(382,'Salzburg Collectables','Pipps','Georg ','6562-9555',1401,'71700.00',200310),
+(382,'Salzburg Collectables','Pipps','Georg ','6562-9555',1401,'71700.00',20030),
 
-(385,'Cruz & Sons Co.','Cruz','Arnold','+63 2 555 3587',1621,'81500.00',200310),
+(385,'Cruz & Sons Co.','Cruz','Arnold','+63 2 555 3587',1621,'81500.00',20310),
 
-(386,'L''ordine Souveniers','Moroni','Maurizio ','0522-556555',1401,'121400.00',200310),
+(386,'L''ordine Souveniers','Moroni','Maurizio ','0522-556555',1401,'121400.00',20310),
 
-(398,'Tokyo Collectables, Ltd','Shimamura','Akiko','+81 3 3584 0555',1621,'94400.00',200311),
+(398,'Tokyo Collectables, Ltd','Shimamura','Akiko','+81 3 3584 0555',1621,'94400.00',20311),
 
-(406,'Auto Canal+ Petit','Perrier','Dominique','(1) 47.55.6555',1337,'95000.00',200312),
+(406,'Auto Canal+ Petit','Perrier','Dominique','(1) 47.55.6555',1337,'95000.00',23312),
 
 (409,'Stuttgart Collectable Exchange','Müller','Rita ','0711-555361',NULL,'0.00',NULL),
 
-(412,'Extreme Desk Decorations, Ltd','McRoy','Sarah','04 499 9555',1612,'86800.00',200311),
+(412,'Extreme Desk Decorations, Ltd','McRoy','Sarah','04 499 9555',1612,'86800.00',20311),
 
-(415,'Bavarian Collectables Imports, Co.','Donnermeyer','Michael',' +49 89 61 08 9555',1504,'77000.00',200312),
+(415,'Bavarian Collectables Imports, Co.','Donnermeyer','Michael',' +49 89 61 08 9555',1504,'77000.00',20012),
 
-(424,'Classic Legends Inc.','Hernandez','Maria','2125558493',1286,'67500.00',201010),
+(424,'Classic Legends Inc.','Hernandez','Maria','2125558493',1286,'67500.00',21010),
 
 (443,'Feuer Online Stores, Inc','Feuer','Alexander ','0342-555176',NULL,'0.00',NULL),
 
-(447,'Gift Ideas Corp.','Lewis','Dan','2035554407',1323,'49700.00',201011),
+(447,'Gift Ideas Corp.','Lewis','Dan','2035554407',1323,'49700.00',20111),
 
-(448,'Scandinavian Gift Ideas','Larsson','Martha','0695-34 6555',1504,'116400.00',201012),
+(448,'Scandinavian Gift Ideas','Larsson','Martha','0695-34 6555',1504,'116400.00',20102),
 
-(450,'The Sharp Gifts Warehouse','Frick','Sue','4085553659',1165,'77600.00',201004),
+(450,'The Sharp Gifts Warehouse','Frick','Sue','4085553659',1165,'77600.00',20104),
 
-(452,'Mini Auto Werke','Mendel','Roland ','7675-3555',1401,'45300.00',201204),
+(452,'Mini Auto Werke','Mendel','Roland ','7675-3555',1401,'45300.00',20104),
 
-(455,'Super Scale Inc.','Murphy','Leslie','2035559545',1286,'95400.00',201205),
+(455,'Super Scale Inc.','Murphy','Leslie','2035559545',1286,'95400.00',20125),
 
-(456,'Microscale Inc.','Choi','Yu','2125551957',1286,'39800.00',201207),
+(456,'Microscale Inc.','Choi','Yu','2125551957',1286,'39800.00',20120),
 
-(458,'Corrida Auto Replicas, Ltd','Sommer','Martín ','(91) 555 22 82',1702,'104600.00',201209),
+(458,'Corrida Auto Replicas, Ltd','Sommer','Martín ','(91) 555 22 82',1702,'104600.00',20109),
 
 (459,'Warburg Exchange','Ottlieb','Sven ','0241-039123',NULL,'0.00',NULL),
 
-(462,'FunGiftIdeas.com','Benitez','Violeta','5085552555',1216,'85800.00',201212),
+(462,'FunGiftIdeas.com','Benitez','Violeta','5085552555',1216,'85800.00',20112),
 
 (465,'Anton Designs, Ltd.','Anton','Carmen','+34 913 728555',NULL,'0.00',NULL),
 
-(471,'Australian Collectables, Ltd','Clenahan','Sean','61-9-3844-6555',1611,'60300.00',201507),
+(471,'Australian Collectables, Ltd','Clenahan','Sean','61-9-3844-6555',1611,'60300.00',20107),
 
-(473,'Frau da Collezione','Ricotti','Franco','+39 022515555',1401,'34800.00',201502),
+(473,'Frau da Collezione','Ricotti','Franco','+39 022515555',1401,'34800.00',21502),
 
-(475,'West Coast Collectables Co.','Thompson','Steve','3105553722',1166,'55400.00',201304),
+(475,'West Coast Collectables Co.','Thompson','Steve','3105553722',1166,'55400.00',20104),
 
 (477,'Mit Vergnügen & Co.','Moos','Hanna ','0621-08555',NULL,'0.00',NULL),
 
@@ -373,17 +373,17 @@ insert  into customer(customer_number,customer_name,contact_last_name,contact_fi
 
 (481,'Raanan Stores, Inc','Altagar,G M','Raanan','+ 972 9 959 8555',NULL,'0.00',NULL),
 
-(484,'Iberia Gift Imports, Corp.','Roel','José Pedro ','(95) 555 82 82',1702,'65700.00',201504),
+(484,'Iberia Gift Imports, Corp.','Roel','José Pedro ','(95) 555 82 82',1702,'65700.00',20154),
 
-(486,'Motor Mint Distributors Inc.','Salazar','Rosa','2155559857',1323,'72600.00',201504),
+(486,'Motor Mint Distributors Inc.','Salazar','Rosa','2155559857',1323,'72600.00',20154),
 
-(487,'Signal Collectibles Ltd.','Taylor','Sue','4155554312',1165,'60300.00',201504),
+(487,'Signal Collectibles Ltd.','Taylor','Sue','4155554312',1165,'60300.00',21504),
 
-(489,'Double Decker Gift Stores, Ltd','Smith','Thomas ','(171) 555-7555',1501,'43300.00',201403),
+(489,'Double Decker Gift Stores, Ltd','Smith','Thomas ','(171) 555-7555',1501,'43300.00',20103),
 
-(495,'Diecast Collectables','Franco','Valarie','6175552555',1188,'85100.00',201409),
+(495,'Diecast Collectables','Franco','Valarie','6175552555',1188,'85100.00',20409),
 
-(496,'Kelly''s Gift Shop','Snowden','Tony','+64 9 5555500',1612,'110000.00',201412) ON CONFLICT (customer_number) DO NOTHING;;
+(496,'Kelly''s Gift Shop','Snowden','Tony','+64 9 5555500',1612,'110000.00',20142) ON CONFLICT (customer_number) DO NOTHING;
 
 /*Data for the table `customerdetail` */
 

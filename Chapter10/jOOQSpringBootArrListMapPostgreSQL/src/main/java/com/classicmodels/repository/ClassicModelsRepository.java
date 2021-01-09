@@ -179,6 +179,7 @@ public class ClassicModelsRepository {
                 concat(CUSTOMER.CONTACT_FIRST_NAME, val(" "),
                         CUSTOMER.CONTACT_LAST_NAME).as("customer_name"), CUSTOMER.CREDIT_LIMIT)
                 .from(CUSTOMER)
+                .limit(10)
                 .fetchMap(field("customer_name", String.class));
         System.out.println("Example 3.2\n" + prettyPrint(result2));
 
