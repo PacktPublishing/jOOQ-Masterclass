@@ -16,5 +16,6 @@ public class ClassicModelsService {
 
         classicModelsRepository.fetchArrayExamples();
         classicModelsRepository.fetchListExamples();
+        classicModelsRepository.fetchMapExamples();
     }
 }
