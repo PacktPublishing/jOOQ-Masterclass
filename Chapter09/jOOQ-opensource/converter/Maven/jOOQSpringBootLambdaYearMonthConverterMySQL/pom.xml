@@ -159,8 +159,8 @@
 
                                             <!-- Associate that custom type with your lambda converter. -->
                                             <lambdaConverter>
-                                                <from>(Integer t) -&gt; { return YearMonth.of(t / 100, t % 100); }</from>
-                                                <to>(YearMonth u) -&gt; { return (u.getYear() * 100) + u.getMonth().getValue(); }</to>                                            
+                                                <from><![CDATA[(Integer t) -> { return YearMonth.of(1970, 1).with(java.time.temporal.ChronoField.PROLEPTIC_MONTH, t); }]]></from>
+                                                <to><![CDATA[(YearMonth u) -> { return (int) u.getLong(java.time.temporal.ChronoField.PROLEPTIC_MONTH); }]]></to>                                            
                                             </lambdaConverter>
 
                                             <!-- A Java regex matching fully-qualified columns, attributes, parameters. Use the pipe to separate several expressions.
