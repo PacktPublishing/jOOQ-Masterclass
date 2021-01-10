@@ -12,8 +12,11 @@ import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
 import static jooq.generated.tables.Department.DEPARTMENT;
 import static jooq.generated.tables.Order.ORDER;
+import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Product.PRODUCT;
+import jooq.generated.tables.pojos.Customer;
+import jooq.generated.tables.pojos.Customerdetail;
 import jooq.generated.tables.pojos.Department;
 import jooq.generated.tables.records.CustomerRecord;
 import jooq.generated.tables.records.CustomerdetailRecord;
@@ -30,6 +33,7 @@ import org.jooq.Record3;
 import static org.jooq.impl.DSL.concat;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.rowNumber;
+import static org.jooq.impl.DSL.sum;
 import static org.jooq.impl.DSL.val;
 
 @Repository
@@ -217,40 +221,62 @@ public class ClassicModelsRepository {
                 .on(CUSTOMER.CUSTOMER_NUMBER.eq(CUSTOMERDETAIL.CUSTOMER_NUMBER))
                 .fetchMap(CUSTOMER, CUSTOMERDETAIL);
         System.out.println("Example 3.8\n" + prettyPrint(result8));
+        
+        // denormalising (flattening)
+        Map<CustomerRecord, Record> result9 = ctx.select()
+                .from(CUSTOMER)
+                .join(CUSTOMERDETAIL)
+                .on(CUSTOMER.CUSTOMER_NUMBER.eq(CUSTOMERDETAIL.CUSTOMER_NUMBER))
+                .fetchMap(CUSTOMER);
+        System.out.println("Example 3.9\n" + prettyPrint(result9));
+        
+        Map<Customer, Customerdetail> result10 = ctx.select()
+                .from(CUSTOMER)
+                .join(CUSTOMERDETAIL)
+                .on(CUSTOMER.CUSTOMER_NUMBER.eq(CUSTOMERDETAIL.CUSTOMER_NUMBER))
+                .fetchMap(Customer.class, Customerdetail.class);
+        System.out.println("Example 3.10\n" + prettyPrint(result10));
 
         // mapping one-to-many
-        Map<Record, Record> result9 = ctx.select(concat(CUSTOMER.CONTACT_FIRST_NAME, val(" "), 
+        Map<Record, Record> result11 = ctx.select(concat(CUSTOMER.CONTACT_FIRST_NAME, val(" "), 
                 CUSTOMER.CONTACT_LAST_NAME).as("customer_name"), PAYMENT.INVOICE_AMOUNT, PAYMENT.CACHING_DATE)
                 .from(CUSTOMER)
                 .join(PAYMENT)
                 .on(CUSTOMER.CUSTOMER_NUMBER.eq(PAYMENT.CUSTOMER_NUMBER))
                 .fetchMap(new Field[]{PAYMENT.INVOICE_AMOUNT, PAYMENT.CACHING_DATE},
                 new Field[]{field("customer_name", String.class)});
-        System.out.println("Example 3.9\n" + prettyPrint(result9));
+        System.out.println("Example 3.11\n" + prettyPrint(result11));
 
-        Map<Integer, BigDecimal> result10 = ctx.select(rowNumber().over().as("no"), CUSTOMER.CREDIT_LIMIT)
+        Map<Integer, BigDecimal> result12 = ctx.select(rowNumber().over().as("no"), CUSTOMER.CREDIT_LIMIT)
                 .from(CUSTOMER)
                 .fetchMap(field("no", Integer.class), CUSTOMER.CREDIT_LIMIT);
-        System.out.println("Example 3.10\n" + prettyPrint(result10));
+        System.out.println("Example 3.12\n" + prettyPrint(result12));
+        
+        Map<Long, Integer> result13 = ctx.select(
+                ORDERDETAIL.PRODUCT_ID, sum(ORDERDETAIL.QUANTITY_ORDERED).as("sum"))
+                .from(ORDERDETAIL)
+                .groupBy(ORDERDETAIL.PRODUCT_ID)
+                .fetchMap(ORDERDETAIL.PRODUCT_ID, field("sum", Integer.class));
+        System.out.println("Example 3.13\n" + prettyPrint(result13));
 
-        Map<String, Object> result11 = ctx.select(DEPARTMENT.NAME,
+        Map<String, Object> result14 = ctx.select(DEPARTMENT.NAME,
                 DEPARTMENT.OFFICE_CODE, DEPARTMENT.PHONE).from(DEPARTMENT)
                 .where(DEPARTMENT.DEPARTMENT_ID.eq(1))
                 .fetchOneMap();
-        System.out.println("Example 3.11\n" + prettyPrint(result11));
+        System.out.println("Example 3.14\n" + prettyPrint(result14));
 
-        Map<String, Object> result12 = ctx.selectFrom(PRODUCT)
+        Map<String, Object> result15 = ctx.selectFrom(PRODUCT)
                 .where(PRODUCT.PRODUCT_ID.eq(23L))
                 .fetchSingleMap();
-        System.out.println("Example 3.12\n" + prettyPrint(result12));
+        System.out.println("Example 3.15\n" + prettyPrint(result15));
 
-        Map<String, Object> result13 = ctx.selectFrom(ORDER)
+        Map<String, Object> result16 = ctx.selectFrom(ORDER)
                 .fetchAnyMap();
-        System.out.println("Example 3.13\n" + prettyPrint(result13));
+        System.out.println("Example 3.16\n" + prettyPrint(result16));
 
-        List<Map<String, Object>> result14 = ctx.selectFrom(DEPARTMENT)
+        List<Map<String, Object>> result17 = ctx.selectFrom(DEPARTMENT)
                 .fetchMaps();
-        System.out.println("Example 3.14\n" + result14);
+        System.out.println("Example 3.17\n" + result17);                
     }
 
     public static <K, V> String prettyPrint(Map<K, V> map) {
