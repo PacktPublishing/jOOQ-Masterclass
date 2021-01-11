@@ -153,6 +153,56 @@
                         <name>org.jooq.codegen.JavaGenerator</name>
         
                         <database>           
+                            
+                            <!-- For each type, one embeddable entry is required -->
+                            <embeddables>
+                                <embeddable>
+                                    <!-- The optional catalog of the embeddable type (the catalog of the first matched table if left empty) -->
+                                    <catalog/>
+                                            
+                                    <!-- The optional schema of the embeddable type (the schema of the first matched table if left empty) -->
+                                    <schema>classicmodels</schema>
+                                            
+                                    <!-- The name of the embeddable type -->
+                                    <name>OFFICE_FULL_ADDRESS</name>
+                                            
+                                    <!-- An optional, defining comment of an embeddable -->
+                                    <comment>The full address an office</comment>
+                                            
+                                    <!-- The name of the reference to the embeddable type. Defaults to <name/> if left blank -->
+                                    <referencingName/>
+                                            
+                                    <!-- An optional, referencing comment of an embeddable. Defaults to <comment/> if left blank -->
+                                    <referencingComment/>
+                                            
+                                    <!-- A regular expression matching qualified or unqualified table names to which to apply this embeddable specification
+                                    If left blank, this will apply to all tables -->
+                                    <tables>.*\.office</tables>
+                                            
+                                    <!-- A list of fields to match to an embeddable's attributes. 
+                                    Each field must match exactly one column in each matched table.
+                                    A mandatory regular expression matches field names, whereas an optional name can be provided to define the embeddable
+                                    attribute name. If no name is provided, then the first matched field's name will be taken -->
+                                    <fields>
+                                        <field>
+                                            <expression>CITY</expression>
+                                        </field>                                              
+                                        <field>
+                                            <!-- <name>ADDRESS</name> - optional name -->
+                                            <expression>ADDRESS_LINE_FIRST</expression>
+                                        </field>
+                                        <field>                                                    
+                                            <expression>STATE</expression>
+                                        </field>
+                                        <field>                                                    
+                                            <expression>COUNTRY</expression>
+                                        </field>                                                
+                                        <field>                                                    
+                                            <expression>TERRITORY</expression>
+                                        </field>
+                                    </fields>
+                                </embeddable>                                        
+                            </embeddables>
                                                                                                                                  
                             <!-- The database type. The format here is:
                             org.jooq.meta.[database].[database]Database -->
