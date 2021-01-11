@@ -206,6 +206,35 @@
                                         </field>
                                     </fields>
                                 </embeddable>                                        
+                                <embeddable>
+                                    <schema>classicmodels</schema>
+                                    <name>MANAGER_STATUS</name>
+                                    <tables>.*\.manager</tables>
+                                    <fields>
+                                        <field>
+                                            <expression>MANAGER_NAME</expression>
+                                        </field>                                              
+                                        <field>                                            
+                                            <expression>MANAGER_EVALUATION</expression>
+                                        </field>                                        
+                                    </fields>
+                                </embeddable>
+                                <embeddable>
+                                    <schema>classicmodels</schema>
+                                    <name>DEPARTMENT_DETAIL</name>
+                                    <tables>.*\.department</tables>
+                                    <fields>
+                                        <field>
+                                            <expression>NAME</expression>
+                                        </field>                                              
+                                        <field>                                            
+                                            <expression>PHONE</expression>
+                                        </field>                                        
+                                        <field>                                            
+                                            <expression>TOPIC</expression>
+                                        </field>
+                                    </fields>
+                                </embeddable>
                             </embeddables>  
                                                                                                                                  
                             <!-- The database type. The format here is:
@@ -261,7 +290,7 @@
                             <!-- <constructorPropertiesAnnotationOnPojos>true</constructorPropertiesAnnotationOnPojos> -->
                                                                           
                             <!-- generating interfaces for POJOs (if interfaces are generated, POJOs will implement them) -->
-                             <interfaces>true</interfaces>
+                            <!-- <interfaces>true</interfaces> -->
                                                                                                                                                       
                             <!-- generating immutable POJOs -->
                             <!-- <immutablePojos>true</immutablePojos> -->
