@@ -61,7 +61,11 @@
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
             <version>${hibernate.validator.version}</version>
-        </dependency>     
+        </dependency>            
+        <dependency>
+            <groupId>javax.persistence</groupId>
+            <artifactId>javax.persistence-api</artifactId>    
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -152,7 +156,57 @@
                         Defaults to org.jooq.codegen.JavaGenerator -->
                         <name>org.jooq.codegen.JavaGenerator</name>
         
-                        <database>           
+                        <database>         
+                            
+                            <!-- For each type, one embeddable entry is required -->
+                            <embeddables>
+                                <embeddable>
+                                    <!-- The optional catalog of the embeddable type (the catalog of the first matched table if left empty) -->
+                                    <catalog/>
+                                            
+                                    <!-- The optional schema of the embeddable type (the schema of the first matched table if left empty) -->
+                                    <schema>classicmodels</schema>
+                                            
+                                    <!-- The name of the embeddable type -->
+                                    <name>OFFICE_FULL_ADDRESS</name>
+                                            
+                                    <!-- An optional, defining comment of an embeddable -->
+                                    <comment>The full address an office</comment>
+                                            
+                                    <!-- The name of the reference to the embeddable type. Defaults to <name/> if left blank -->
+                                    <referencingName/>
+                                            
+                                    <!-- An optional, referencing comment of an embeddable. Defaults to <comment/> if left blank -->
+                                    <referencingComment/>
+                                            
+                                    <!-- A regular expression matching qualified or unqualified table names to which to apply this embeddable specification
+                                    If left blank, this will apply to all tables -->
+                                    <tables>.*\.office</tables>
+                                            
+                                    <!-- A list of fields to match to an embeddable's attributes. 
+                                    Each field must match exactly one column in each matched table.
+                                    A mandatory regular expression matches field names, whereas an optional name can be provided to define the embeddable
+                                    attribute name. If no name is provided, then the first matched field's name will be taken -->
+                                    <fields>
+                                        <field>
+                                            <expression>CITY</expression>
+                                        </field>                                              
+                                        <field>
+                                            <!-- <name>ADDRESS</name> - optional name -->
+                                            <expression>ADDRESS_LINE_FIRST</expression>
+                                        </field>
+                                        <field>                                                    
+                                            <expression>STATE</expression>
+                                        </field>
+                                        <field>                                                    
+                                            <expression>COUNTRY</expression>
+                                        </field>                                                
+                                        <field>                                                    
+                                            <expression>TERRITORY</expression>
+                                        </field>
+                                    </fields>
+                                </embeddable>                                        
+                            </embeddables>  
                                                                                                                                  
                             <!-- The database type. The format here is:
                             org.jooq.meta.[database].[database]Database -->
@@ -174,13 +228,26 @@
                             (A Java regular expression. Use the pipe to separate several expressions).
                             Excludes match before includes, i.e. excludes have a higher priority -->
                             <excludes>flyway_schema_history</excludes>                                                        
+                            
+                            <!-- this forces LocalDateTime in POJOs -->
+                            <!-- <dateAsTimestamp>true</dateAsTimestamp> -->
+                            
+                            <!-- The JDBC and Java type system don't know any unsigned integer data types, 
+                            but some databases do, most importantly MySQL. This flag allows for overriding the 
+                            default mapping from unsigned to signed integers and generates jOOU types instead:
+                                
+                            - org.jooq.types.UByte / org.jooq.types.UShort / org.jooq.types.UInteger / org.jooq.types.ULong
+                            
+                            Those types work just like ordinary java.lang.Number wrapper types, except that 
+                            there is no primitive version of them. This config affects generated POJOs. -->
+                            <!-- <unsignedTypes>true</unsignedTypes> -->                            
                         </database>
                         
                         <!-- jOOQ will generate POJOs in your behalf -->
-                        <generate>
+                        <generate>                            
                             <pojos>true</pojos>                            
                             <validationAnnotations>true</validationAnnotations>
-                            
+                                                                                   
                             <!-- adds equals() and hashCode() to POJOs -->
                             <!-- <pojosEqualsAndHashCode>true</pojosEqualsAndHashCode> -->
                             
@@ -193,11 +260,11 @@
                             <!-- adds @ConstructorProperties to POJOs -->                                             
                             <!-- <constructorPropertiesAnnotationOnPojos>true</constructorPropertiesAnnotationOnPojos> -->
                                                                           
-                            <!-- generating interfaces for POJOs -->
-                            <!-- <interfaces>true</interfaces> -->
+                            <!-- generating interfaces for POJOs (if interfaces are generated, POJOs will implement them) -->
+                             <interfaces>true</interfaces>
                                                                                                                                                       
                             <!-- generating immutable POJOs -->
-                            <!-- <immutablePojos>true</immutablePojos> -->                                                        
+                            <!-- <immutablePojos>true</immutablePojos> -->
                              
                             <!-- generating immutable interfaces for POJOs -->
                             <!-- <immutableInterfaces>true</immutableInterfaces> -->
@@ -205,12 +272,19 @@
                             <!-- generating JDK 14 Records -->
                             <!-- This is WIP, https://github.com/jOOQ/jOOQ/issues/10287 -->
                             <!-- <pojosAsJavaRecordClasses>true</pojosAsJavaRecordClasses> -->
+                                                        
+                            <!-- adds JPA specific annotations to the generated POJOs -->
+                            <!-- <jpaAnnotations>true</jpaAnnotations> -->
+                            <!-- <jpaVersion>2.2</jpaVersion> -->
+                            
+                            <!-- fluent style setters -->
+                            <!-- <fluentSetters>true</fluentSetters> -->
                             
                             <!-- generating POJOs for Kotlin -->
                             <!-- <pojosAsKotlinDataClasses>true</pojosAsKotlinDataClasses> -->
                             
                             <!-- generating POJOs for Scala -->
-                            <!-- <pojosAsScalaCaseClasses>true</pojosAsScalaCaseClasses> -->
+                            <!-- <pojosAsScalaCaseClasses>true</pojosAsScalaCaseClasses> -->                                                             
                         </generate>
                         
                         <target>

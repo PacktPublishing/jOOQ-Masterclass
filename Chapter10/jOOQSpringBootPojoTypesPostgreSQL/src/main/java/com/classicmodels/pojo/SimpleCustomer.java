@@ -1,4 +1,4 @@
-package com.classicmodels.pojos;
+package com.classicmodels.pojo;
 
 import java.io.Serializable;
 import java.time.YearMonth;

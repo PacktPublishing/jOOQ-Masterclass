@@ -57,13 +57,13 @@ select '4','Finance','-int 4421','3222','3',topicArr('commerce', 'fiscal', 'mone
 
 /*Data for the table `manager` */
 
-insert /*+ ignore_row_on_dupkey_index(manager(manager_id)) */ into manager (manager_id, manager_name) 
+insert /*+ ignore_row_on_dupkey_index(manager(manager_id)) */ into manager (manager_id, manager_name, manager_evaluation) 
 
- select '1', 'Joana Nimar' from dual union all
+ select '1', 'Joana Nimar', evaluation_criteria('67, 34, 33, 66') from dual union all
 
- select '2', 'Mark Janel' from dual union all
+ select '2', 'Mark Janel', evaluation_criteria('99, 23, 11, 23') from dual union all
  
- select '3', 'Olivia Goy' from dual;
+ select '3', 'Olivia Goy', evaluation_criteria('99, 34, 11, 78') from dual;
 
 /*Data for the table `office_has_manager` */
 

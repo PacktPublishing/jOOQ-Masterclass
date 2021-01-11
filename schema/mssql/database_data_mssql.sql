@@ -65,13 +65,13 @@ SET IDENTITY_INSERT [department] OFF;
 
 SET IDENTITY_INSERT [manager] ON
 begin try
-insert into [manager]([manager_id],[manager_name]) values 
+insert into [manager]([manager_id],[manager_name],[manager_evaluation]) values 
 
-(1, 'Joana Nimar'),
+(1, 'Joana Nimar','67, 34, 33, 66'),
 
-(2, 'Mark Janel'),
+(2, 'Mark Janel','99, 23, 11, 23'),
 
-(3, 'Olivia Goy')
+(3, 'Olivia Goy','99, 34, 11, 78')
 end try
 begin catch
 end catch

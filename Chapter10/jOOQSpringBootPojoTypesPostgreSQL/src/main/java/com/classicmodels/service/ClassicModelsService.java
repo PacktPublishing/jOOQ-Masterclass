@@ -16,6 +16,8 @@ public class ClassicModelsService {
 
         classicModelsRepository.fetchSimplePojoExamples();
         classicModelsRepository.fetchImmutablePojoExamples();
+        classicModelsRepository.fetchJpaLikePojoExamples();
+        classicModelsRepository.fetchJavaRecordPojoExamples();
         classicModelsRepository.fetchProxyablePojoExamples();
     }
 }

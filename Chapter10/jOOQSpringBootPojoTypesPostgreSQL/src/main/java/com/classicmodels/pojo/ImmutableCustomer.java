@@ -1,9 +1,9 @@
-package com.classicmodels.pojos;
+package com.classicmodels.pojo;
 
 import java.io.Serializable;
 import java.time.YearMonth;
 
-public class ImmutableCustomer implements Serializable {
+public final class ImmutableCustomer implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
@@ -13,6 +13,14 @@ public class ImmutableCustomer implements Serializable {
     public ImmutableCustomer(String customerName, YearMonth ym) {
         this.customerName = customerName;
         this.ym = ym;
+    }        
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public YearMonth getYm() {
+        return ym;
     }        
 
     @Override

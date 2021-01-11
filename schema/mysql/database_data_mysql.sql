@@ -55,13 +55,13 @@ insert into `department`(`department_id`,`name`,`phone`,`code`,`office_code`,`to
 
 /*Data for the table `manager` */
 
-insert into `manager` (`manager_id`, `manager_name`) values 
+insert into `manager` (`manager_id`, `manager_name`, `manager_evaluation`) values 
 
-('1', 'Joana Nimar'),
+('1', 'Joana Nimar', '67, 34, 33, 66'),
 
-('2', 'Mark Janel'),
+('2', 'Mark Janel', '99, 23, 11, 23'),
 
-('3', 'Olivia Goy') ON DUPLICATE KEY UPDATE manager_id=manager_id;
+('3', 'Olivia Goy', '99, 34, 11, 78') ON DUPLICATE KEY UPDATE manager_id=manager_id;
 
 /*Data for the table `office_has_manager` */
 

@@ -1,9 +1,10 @@
-package com.classicmodels.pojos;
+package com.classicmodels.pojo;
 
 import java.beans.ConstructorProperties;
 import java.io.Serializable;
+import java.util.Arrays;
 
-public class ImmutableDepartment implements Serializable {
+public final class ImmutableDepartment implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
@@ -18,6 +19,18 @@ public class ImmutableDepartment implements Serializable {
         this.topic = topic;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public Short getCode() {
+        return code;
+    }
+
+    public String[] getTopic() {
+        return Arrays.copyOf(topic, topic.length);
+    }   
+    
     @Override
     public String toString() {
         return "ImmutableDepartment{" + "name=" + name + ", code=" + code + ", topic=" + topic + '}';
