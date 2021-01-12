@@ -1,16 +1,17 @@
 package com.classicmodels.repository;
 
 import com.classicmodels.pojo.MaxHeap;
+import com.classicmodels.pojo.Product;
+import com.classicmodels.pojo.Productline;
 import java.math.BigDecimal;
 import java.util.List;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
+import static jooq.generated.tables.Product.PRODUCT;
+import static jooq.generated.tables.Productline.PRODUCTLINE;
 import org.jooq.DSLContext;
 import org.jooq.Record2;
 import org.jooq.RecordMapper;
-import static org.jooq.impl.DSL.concat;
-import static org.jooq.impl.DSL.field;
-import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -67,6 +68,15 @@ public class ClassicModelsRepository {
     }
 
     public void recordMapperPojos() {
-
+        
+        var r = ctx.select()
+                .from(PRODUCTLINE)
+                .leftOuterJoin(PRODUCT)
+                .on(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE))
+                .fetchGroups(Productline.class, Product.class);
+                
+                
+                System.out.println("r="+r);
+        
     }
 }
