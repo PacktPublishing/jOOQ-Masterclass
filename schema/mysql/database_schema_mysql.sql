@@ -72,6 +72,7 @@ CREATE TABLE `employee` (
   `reports_to` bigint DEFAULT NULL,
   `job_title` varchar(50) NOT NULL, 
   `employee_of_year` varchar(50) DEFAULT NULL,
+  `monthly_bonus` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`employee_number`),
   KEY `reports_to` (`reports_to`),
   KEY `office_code` (`office_code`),
