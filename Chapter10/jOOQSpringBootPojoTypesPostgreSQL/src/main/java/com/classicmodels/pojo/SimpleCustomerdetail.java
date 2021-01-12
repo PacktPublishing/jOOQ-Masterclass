@@ -1,21 +1,20 @@
 package com.classicmodels.pojo;
 
 import java.io.Serializable;
-import java.time.YearMonth;
 import java.util.Objects;
 
-public class SimpleCustomer implements Serializable {
+public class SimpleCustomerdetail implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
-    public String customerName;
-    public YearMonth ym;
+    public String city;
+    public String country;
 
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 89 * hash + Objects.hashCode(this.customerName);
-        hash = 89 * hash + Objects.hashCode(this.ym);
+        hash = 97 * hash + Objects.hashCode(this.city);
+        hash = 97 * hash + Objects.hashCode(this.country);
         return hash;
     }
 
@@ -30,18 +29,19 @@ public class SimpleCustomer implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final SimpleCustomer other = (SimpleCustomer) obj;
-        if (!Objects.equals(this.customerName, other.customerName)) {
+        final SimpleCustomerdetail other = (SimpleCustomerdetail) obj;
+        if (!Objects.equals(this.city, other.city)) {
             return false;
         }
-        if (!Objects.equals(this.ym, other.ym)) {
+        if (!Objects.equals(this.country, other.country)) {
             return false;
         }
         return true;
     }
-        
+
     @Override
     public String toString() {
-        return "SimpleCustomer{" + "customerName=" + customerName + ", ym=" + ym + '}';
-    }        
+        return "SimpleCustomerdetail{" + "city=" + city + ", country=" + country + '}';
+    }
+   
 }

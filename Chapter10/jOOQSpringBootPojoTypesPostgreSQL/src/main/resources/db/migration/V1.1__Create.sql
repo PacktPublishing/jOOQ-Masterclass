@@ -82,6 +82,7 @@ CREATE TABLE employee (
   reports_to bigint DEFAULT NULL,
   job_title varchar(50) NOT NULL,
   employee_of_year int[] DEFAULT NULL,
+  monthly_bonus int[] DEFAULT NULL,
   PRIMARY KEY (employee_number)
  ,
   CONSTRAINT employees_ibfk_1 FOREIGN KEY (reports_to) REFERENCES employee (employee_number),
