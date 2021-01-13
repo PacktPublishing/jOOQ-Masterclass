@@ -1,12 +1,11 @@
 package com.classicmodels.pojo;
 
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import org.simpleflatmapper.map.annotation.Key;
 
-public class EmployeeDTO implements Serializable {
+public class SimpleEmployee implements Serializable {
 
     private static final long serialVersionUID = 1;
 
@@ -14,8 +13,9 @@ public class EmployeeDTO implements Serializable {
     private Long employeeNumber;
     private String firstName;
     private String lastName;
-    private Set<CustomerDTO> customers = new HashSet<>();
-    private Set<SaleDTO> sales = new HashSet<>();
+    
+    private Set<SimpleCustomer> customers;
+    private Set<SimpleSale> sales;
 
     public Long getEmployeeNumber() {
         return employeeNumber;
@@ -41,19 +41,19 @@ public class EmployeeDTO implements Serializable {
         this.lastName = lastName;
     }
 
-    public Set<CustomerDTO> getCustomers() {
+    public Set<SimpleCustomer> getCustomers() {
         return customers;
     }
 
-    public void setCustomers(Set<CustomerDTO> customers) {
+    public void setCustomers(Set<SimpleCustomer> customers) {
         this.customers = customers;
     }
 
-    public Set<SaleDTO> getSales() {
+    public Set<SimpleSale> getSales() {
         return sales;
     }
 
-    public void setSales(Set<SaleDTO> sales) {
+    public void setSales(Set<SimpleSale> sales) {
         this.sales = sales;
     }
 
@@ -83,7 +83,7 @@ public class EmployeeDTO implements Serializable {
             return false;
         }
         
-        final EmployeeDTO other = (EmployeeDTO) obj;
+        final SimpleEmployee other = (SimpleEmployee) obj;
         if (!Objects.equals(this.firstName, other.firstName)) {
             return false;
         }
@@ -101,7 +101,7 @@ public class EmployeeDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "EmployeeDTO{" + "employeeNumber=" + employeeNumber 
+        return "Employee{" + "employeeNumber=" + employeeNumber 
                 + ", firstName=" + firstName + ", lastName=" + lastName 
                 + ", customers=" + customers + ", sales=" + sales + '}';
     }

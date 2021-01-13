@@ -1,6 +1,6 @@
 package com.classicmodels.repository;
 
-import com.classicmodels.pojo.EmployeeDTO;
+import com.classicmodels.pojo.SimpleEmployee;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collections;
@@ -16,37 +16,40 @@ import org.simpleflatmapper.jdbc.JdbcMapperFactory;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class EmployeeRepository {
+public class ClassicModelsRepository {
 
-    private final DSLContext create;
-    private final JdbcMapper<EmployeeDTO> jdbcMapper;
+    private final DSLContext ctx;
+    private final JdbcMapper<SimpleEmployee> jdbcMapper;
 
-    public EmployeeRepository(DSLContext create) {
-        this.create = create;
+    public ClassicModelsRepository(DSLContext ctx) {
+        this.ctx = ctx;
 
         this.jdbcMapper = JdbcMapperFactory
                 .newInstance()
-                // .addKeys("employeeNumber") // I use @Key in EmployeeDTO
-                .newMapper(EmployeeDTO.class);
+                // .addKeys("employeeNumber") // I use @Key in SimpleEmployee
+                .newMapper(SimpleEmployee.class);
     }
 
-    public List<EmployeeDTO> findEmployeeWithSalesAndCustomersByOfficeCode(String officeCode) {
+    public List<SimpleEmployee> findEmployeeWithSalesAndCustomersByOfficeCode(String officeCode) {
 
         try ( ResultSet rs
-                = create.select(EMPLOYEE.EMPLOYEE_NUMBER,
+                = ctx.select(EMPLOYEE.EMPLOYEE_NUMBER,
                         EMPLOYEE.FIRST_NAME,
                         EMPLOYEE.LAST_NAME,
                         CUSTOMER.CUSTOMER_NAME.as("customers_customerName"),
                         SALE.SALE_.as("sales_sale"))
                         .from(EMPLOYEE)
-                        .leftJoin(CUSTOMER).on(EMPLOYEE.EMPLOYEE_NUMBER
-                        .eq(CUSTOMER.SALES_REP_EMPLOYEE_NUMBER))
-                        .leftJoin(SALE).using(EMPLOYEE.EMPLOYEE_NUMBER)
+                        .leftJoin(CUSTOMER)
+                        .on(EMPLOYEE.EMPLOYEE_NUMBER
+                                .eq(CUSTOMER.SALES_REP_EMPLOYEE_NUMBER))
+                        .leftJoin(SALE)
+                        .on(EMPLOYEE.EMPLOYEE_NUMBER
+                                .eq(SALE.EMPLOYEE_NUMBER))
                         .where(EMPLOYEE.OFFICE_CODE.eq(officeCode))
                         .orderBy(EMPLOYEE.EMPLOYEE_NUMBER)
                         .fetchResultSet()) {
 
-                    Stream<EmployeeDTO> stream = jdbcMapper.stream(rs);
+                    Stream<SimpleEmployee> stream = jdbcMapper.stream(rs);
 
                     return stream.collect(toList());
 
