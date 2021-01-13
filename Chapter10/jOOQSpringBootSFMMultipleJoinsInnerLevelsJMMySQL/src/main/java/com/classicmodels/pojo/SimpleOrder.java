@@ -2,12 +2,11 @@ package com.classicmodels.pojo;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import org.simpleflatmapper.map.annotation.Key;
 
-public class OrderDTO implements Serializable {
+public class SimpleOrder implements Serializable {
 
     private static final long serialVersionUID = 1;
     
@@ -15,7 +14,8 @@ public class OrderDTO implements Serializable {
     private Long orderId;
     private LocalDate orderDate;
     private LocalDate shippedDate;
-    private Set<OrderDetailDTO> details = new HashSet<>(); // or LinkedHashSet
+    
+    private Set<SimpleOrderDetail> details;
 
     public LocalDate getOrderDate() {
         return orderDate;
@@ -41,11 +41,11 @@ public class OrderDTO implements Serializable {
         this.shippedDate = shippedDate;
     }
 
-    public Set<OrderDetailDTO> getDetails() {
+    public Set<SimpleOrderDetail> getDetails() {
         return details;
     }
 
-    public void setDetails(Set<OrderDetailDTO> details) {
+    public void setDetails(Set<SimpleOrderDetail> details) {
         this.details = details;
     }     
 
@@ -75,7 +75,7 @@ public class OrderDTO implements Serializable {
             return false;
         }
         
-        final OrderDTO other = (OrderDTO) obj;
+        final SimpleOrder other = (SimpleOrder) obj;
         if (!Objects.equals(this.orderId, other.orderId)) {
             return false;
         }
@@ -93,7 +93,7 @@ public class OrderDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "OrderDTO{" + "orderId=" + orderId + ", orderDate=" + orderDate 
+        return "Order{" + "orderId=" + orderId + ", orderDate=" + orderDate 
                 + ", shippedDate=" + shippedDate + ", details=" + details + '}';
     }
         

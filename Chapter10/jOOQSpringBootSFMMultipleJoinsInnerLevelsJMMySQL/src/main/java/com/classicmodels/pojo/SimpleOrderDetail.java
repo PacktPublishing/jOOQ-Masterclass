@@ -3,14 +3,15 @@ package com.classicmodels.pojo;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class OrderDetailDTO implements Serializable {
+public class SimpleOrderDetail implements Serializable {
 
     private static final long serialVersionUID = 1;
         
     private Long productId;
     private Integer quantityOrdered;
     private Float priceEach;
-    private ProductDTO product;
+    
+    private SimpleProduct product;
 
     public Long getProductId() {
         return productId;
@@ -38,11 +39,11 @@ public class OrderDetailDTO implements Serializable {
         this.priceEach = priceEach;
     }
 
-    public ProductDTO getProduct() {
+    public SimpleProduct getProduct() {
         return product;
     }
 
-    public void setProduct(ProductDTO product) {
+    public void setProduct(SimpleProduct product) {
         this.product = product;
     }        
 
@@ -72,7 +73,7 @@ public class OrderDetailDTO implements Serializable {
             return false;
         }
         
-        final OrderDetailDTO other = (OrderDetailDTO) obj;
+        final SimpleOrderDetail other = (SimpleOrderDetail) obj;
         if (!Objects.equals(this.productId, other.productId)) {
             return false;
         }
@@ -90,7 +91,7 @@ public class OrderDetailDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "OrderDetailDTO{" + "productId=" + productId 
+        return "OrderDetail{" + "productId=" + productId 
                 + ", quantityOrdered=" + quantityOrdered 
                 + ", priceEach=" + priceEach + ", product=" + product + '}';
     }

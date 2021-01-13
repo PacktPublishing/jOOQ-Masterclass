@@ -1,19 +1,19 @@
 package com.classicmodels.pojo;
 
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import org.simpleflatmapper.map.annotation.Key;
 
-public class CustomerDTO implements Serializable {
+public class SimpleCustomer implements Serializable {
 
     private static final long serialVersionUID = 1;
        
     @Key
     private Long customerNumber;
     private String customerName;  
-    private Set<OrderDTO> orders = new HashSet<>(); // or LinkedHashSet
+    
+    private Set<SimpleOrder> orders;
 
     public String getCustomerName() {
         return customerName;
@@ -31,11 +31,11 @@ public class CustomerDTO implements Serializable {
         this.customerNumber = customerNumber;
     }        
 
-    public Set<OrderDTO> getOrders() {
+    public Set<SimpleOrder> getOrders() {
         return orders;
     }
 
-    public void setOrders(Set<OrderDTO> orders) {
+    public void setOrders(Set<SimpleOrder> orders) {
         this.orders = orders;
     }        
 
@@ -58,7 +58,7 @@ public class CustomerDTO implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final CustomerDTO other = (CustomerDTO) obj;
+        final SimpleCustomer other = (SimpleCustomer) obj;
         if (!Objects.equals(this.customerName, other.customerName)) {
             return false;
         }
@@ -70,7 +70,7 @@ public class CustomerDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "CustomerDTO{" + "customerNumber=" + customerNumber + ", customerName=" + customerName + ", orders=" + orders + '}';
+        return "Customer{" + "customerNumber=" + customerNumber + ", customerName=" + customerName + ", orders=" + orders + '}';
     }
 
     
