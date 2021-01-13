@@ -1,10 +1,12 @@
 package com.classicmodels.repository;
 
+import com.classicmodels.mapper.CustomerRecordMapper;
+import com.classicmodels.pojo.FlatProductline;
 import com.classicmodels.pojo.MaxHeap;
-import com.classicmodels.pojo.Product;
-import com.classicmodels.pojo.Productline;
+import com.classicmodels.pojo.SimpleCustomer;
 import java.math.BigDecimal;
 import java.util.List;
+import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import static jooq.generated.tables.Product.PRODUCT;
@@ -31,21 +33,18 @@ public class ClassicModelsRepository {
                 .from(ORDERDETAIL)
                 .fetch(new RecordMapper<Record2<BigDecimal, Integer>, Double>() {
 
+                    List<Integer> tax = List.of(1, 2, 3, 4, 5);
+                    
                     @Override
                     public Double map(Record2<BigDecimal, Integer> record) {
-                        return record.get(ORDERDETAIL.PRICE_EACH).doubleValue()
-                                * record.get(ORDERDETAIL.QUANTITY_ORDERED);
+                                                
+                        double total = record.get(ORDERDETAIL.PRICE_EACH).doubleValue()
+                                * record.get(ORDERDETAIL.QUANTITY_ORDERED);                                              
+                        
+                        return total - tax.get((int) (total % 5));
                     }
                 });
-
-        // or, as a lambda expression
-        /*
-        List<Double> result1 = ctx.select(ORDERDETAIL.PRICE_EACH, ORDERDETAIL.QUANTITY_ORDERED)
-                .from(ORDERDETAIL)
-                .fetch((Record2<BigDecimal, Integer> record) 
-                   -> record.get(ORDERDETAIL.PRICE_EACH).doubleValue()
-                        * record.get(ORDERDETAIL.QUANTITY_ORDERED));
-         */
+        
         System.out.println("Example 1.1\n: " + result1);
 
         List<MaxHeap> result2 = ctx.select(EMPLOYEE.EMAIL, EMPLOYEE.MONTHLY_BONUS)
@@ -69,14 +68,17 @@ public class ClassicModelsRepository {
 
     public void recordMapperPojos() {
         
-        var r = ctx.select()
-                .from(PRODUCTLINE)
-                .leftOuterJoin(PRODUCT)
-                .on(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE))
-                .fetchGroups(Productline.class, Product.class);
-                
-                
-                System.out.println("r="+r);
+        List<SimpleCustomer> result1 = ctx.selectFrom(CUSTOMER)
+              //.fetchInto(SimpleCustomer.class);      // using jOOQ default mapper
+                .fetch(new CustomerRecordMapper());    // use our mapper
+        System.out.println("Example 2.1\n" + result1);
         
+        List<FlatProductline> r = ctx.select(PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.CODE,
+                PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_VENDOR, PRODUCT.QUANTITY_IN_STOCK)
+                .from(PRODUCTLINE)
+                .join(PRODUCT)
+                .on(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE))
+                .fetchInto(FlatProductline.class);
+        System.out.println("Example 2.2\n" + r);
     }
 }
