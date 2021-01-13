@@ -1,7 +1,7 @@
 package com.classicmodels;
 
-import com.classicmodels.pojo.EmployeeDTO;
-import com.classicmodels.service.EmployeeService;
+import com.classicmodels.pojo.SimpleEmployee;
+import com.classicmodels.service.ClassicModelsService;
 import java.util.List;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
@@ -11,10 +11,10 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class MainApplication {
 
-    private final EmployeeService employeeService;
+    private final ClassicModelsService classicModelsService;
 
-    public MainApplication(EmployeeService employeeService) {
-        this.employeeService = employeeService;
+    public MainApplication(ClassicModelsService classicModelsService) {
+        this.classicModelsService = classicModelsService;
     }
 
     public static void main(String[] args) {
@@ -26,8 +26,8 @@ public class MainApplication {
         return args -> {
 
             System.out.println("Sample: Fetch employees from a certain office (4) with customers and sales:");
-            List<EmployeeDTO> employees = employeeService.fetchEmployeeWithSalesAndCustomersByOfficeCode("4");
-            System.out.println(employees);
+            List<SimpleEmployee> result = classicModelsService.fetchEmployeeWithSalesAndCustomersByOfficeCode("4");
+            System.out.println(result);
         };
     }
 }

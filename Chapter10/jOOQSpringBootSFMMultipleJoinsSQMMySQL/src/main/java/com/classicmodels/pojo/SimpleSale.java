@@ -3,7 +3,7 @@ package com.classicmodels.pojo;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class SaleDTO implements Serializable {
+public class SimpleSale implements Serializable {
 
     private static final long serialVersionUID = 1;
     
@@ -41,7 +41,7 @@ public class SaleDTO implements Serializable {
             return false;
         }
         
-        final SaleDTO other = (SaleDTO) obj;
+        final SimpleSale other = (SimpleSale) obj;
         if (!Objects.equals(this.sale, other.sale)) {
             return false;
         }
@@ -51,7 +51,7 @@ public class SaleDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "SaleDTO{" + "sale=" + sale + '}';
+        return "Sale{" + "sale=" + sale + '}';
     }
     
 }
