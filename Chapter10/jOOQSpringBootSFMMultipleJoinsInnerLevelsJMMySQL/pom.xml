@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.app</groupId>
-    <artifactId>jOOQSpringBootSFMOneToOneJMMySQL</artifactId>
+    <artifactId>jOOQSpringBootSFMMultipleJoinsInnerLevelsJMMySQL</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQSpringBootSFMOneToOneJMMySQL</name>
+    <name>jOOQSpringBootSFMMultipleJoinsInnerLevelsJMMySQL</name>
     <description>jOOQ - Spring Boot app</description>    
 
     <parent>
