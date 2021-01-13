@@ -11,22 +11,22 @@ import org.simpleflatmapper.jooq.SelectQueryMapperFactory;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class CustomerRepository {
+public class ClassicModelsRepository {
 
-    private final SelectQueryMapper<SimpleCustomer> customerMapper;
-    private final DSLContext create;
+    private final SelectQueryMapper<SimpleCustomer> sqMapper;
+    private final DSLContext ctx;
 
-    public CustomerRepository(DSLContext create) {
-        this.create = create;
-        this.customerMapper = SelectQueryMapperFactory
+    public ClassicModelsRepository(DSLContext ctx) {
+        this.ctx = ctx;
+        this.sqMapper = SelectQueryMapperFactory
                 .newInstance()
                 .newMapper(SimpleCustomer.class);
     }
 
     public List<SimpleCustomer> findCustomerByCreditLimit(float creditLimit) {
 
-        List<SimpleCustomer> customers = customerMapper.asList(
-                create.select(CUSTOMER.CUSTOMER_NAME, CUSTOMER.PHONE, CUSTOMER.CREDIT_LIMIT,
+        List<SimpleCustomer> customers = sqMapper.asList(
+                ctx.select(CUSTOMER.CUSTOMER_NAME, CUSTOMER.PHONE, CUSTOMER.CREDIT_LIMIT,
                               CUSTOMERDETAIL.ADDRESS_LINE_FIRST, CUSTOMERDETAIL.STATE, CUSTOMERDETAIL.CITY)
                         .from(CUSTOMER)
                         .innerJoin(CUSTOMERDETAIL).
