@@ -10,22 +10,22 @@ import org.simpleflatmapper.jooq.SelectQueryMapperFactory;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class ProductRepository {
+public class ClassicModelsRepository {
 
-    private final SelectQueryMapper<SimpleProductLine> productMapper;
-    private final DSLContext create;
+    private final SelectQueryMapper<SimpleProductLine> sqMapper;
+    private final DSLContext ctx;
 
-    public ProductRepository(DSLContext create) {
-        this.create = create;
-        this.productMapper = SelectQueryMapperFactory
+    public ClassicModelsRepository(DSLContext ctx) {
+        this.ctx = ctx;
+        this.sqMapper = SelectQueryMapperFactory
                 .newInstance()
                 .newMapper(SimpleProductLine.class);
     }
 
     public List<SimpleProductLine> findProductLineWithProducts() {
 
-        List<SimpleProductLine> products = productMapper.asList(
-                create.select(PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.TEXT_DESCRIPTION,
+        List<SimpleProductLine> products = sqMapper.asList(
+                ctx.select(PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.TEXT_DESCRIPTION,
                               PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_VENDOR, PRODUCT.QUANTITY_IN_STOCK)
                         .from(PRODUCTLINE)
                         .innerJoin(PRODUCT)

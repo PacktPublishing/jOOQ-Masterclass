@@ -1,17 +1,17 @@
 package com.classicmodels.service;
 
 import com.classicmodels.pojo.SimpleProductLine;
-import com.classicmodels.repository.ProductRepository;
+import com.classicmodels.repository.ClassicModelsRepository;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class ProductService {
+public class ClassicModelsService {
 
-    private final ProductRepository productRepository;
+    private final ClassicModelsRepository productRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public ClassicModelsService(ClassicModelsRepository productRepository) {
         this.productRepository = productRepository;
     }
 

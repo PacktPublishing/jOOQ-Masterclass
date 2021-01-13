@@ -1,23 +1,23 @@
 package com.classicmodels.controller;
 
 import com.classicmodels.pojo.SimpleProductLine;
-import com.classicmodels.service.ProductService;
+import com.classicmodels.service.ClassicModelsService;
 import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class ProductController {
+public class ClassicModelsController {
 
-    private final ProductService productService;
+    private final ClassicModelsService classicModelsService;
 
-    public ProductController(ProductService productService) {
-        this.productService = productService;
+    public ClassicModelsController(ClassicModelsService classicModelsService) {
+        this.classicModelsService = classicModelsService;
     }
 
     @GetMapping("/productline")
     public List<SimpleProductLine> fetchProductLineWithProducts() {
 
-        return productService.fetchProductLineWithProducts();
+        return classicModelsService.fetchProductLineWithProducts();
     }
 }
