@@ -1,25 +1,25 @@
 package com.classicmodels.controller;
 
 import com.classicmodels.pojo.SimpleCustomer;
-import com.classicmodels.service.CustomerService;
+import com.classicmodels.service.ClassicModelService;
 import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class CustomerController {
+public class ClassicModelController {
 
-    private final CustomerService customerService;
+    private final ClassicModelService classicModelService;
 
-    public CustomerController(CustomerService customerService) {
-        this.customerService = customerService;
+    public ClassicModelController(ClassicModelService classicModelService) {
+        this.classicModelService = classicModelService;
     }
 
     @GetMapping("/customer")
     public List<SimpleCustomer> fetchCustomerByCreditLimit(
             @RequestParam("creditLimit") float creditLimit) {
 
-        return customerService.fetchCustomerByCreditLimit(creditLimit);
+        return classicModelService.fetchCustomerByCreditLimit(creditLimit);
     }
 }

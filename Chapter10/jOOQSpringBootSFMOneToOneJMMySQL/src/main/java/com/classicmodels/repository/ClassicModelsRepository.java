@@ -16,14 +16,14 @@ import org.simpleflatmapper.jdbc.JdbcMapperFactory;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class CustomerRepository {
+public class ClassicModelsRepository {
 
-    private final JdbcMapper<SimpleCustomer> customerMapper;
-    private final DSLContext create;
+    private final JdbcMapper<SimpleCustomer> jdbcMapper;
+    private final DSLContext ctx;
 
-    public CustomerRepository(DSLContext create) {
-        this.create = create;
-        this.customerMapper = JdbcMapperFactory
+    public ClassicModelsRepository(DSLContext ctx) {
+        this.ctx = ctx;
+        this.jdbcMapper = JdbcMapperFactory
                 .newInstance()
                 .newMapper(SimpleCustomer.class);
     }
@@ -31,7 +31,7 @@ public class CustomerRepository {
     public List<SimpleCustomer> findCustomerByCreditLimit(float creditLimit) {
 
         try ( ResultSet rs
-                = create.select(CUSTOMER.CUSTOMER_NAME,
+                = ctx.select(CUSTOMER.CUSTOMER_NAME,
                         CUSTOMER.PHONE,
                         CUSTOMER.CREDIT_LIMIT,
                         CUSTOMERDETAIL.ADDRESS_LINE_FIRST.as("details_addressLineFirst"),
@@ -44,7 +44,7 @@ public class CustomerRepository {
                         .orderBy(CUSTOMER.CUSTOMER_NUMBER)
                         .fetchResultSet()) {
 
-                    Stream<SimpleCustomer> stream = customerMapper.stream(rs);
+                    Stream<SimpleCustomer> stream = jdbcMapper.stream(rs);
 
                     return stream.collect(toList());
 
