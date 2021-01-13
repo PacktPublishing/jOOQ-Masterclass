@@ -1,6 +1,6 @@
 package com.classicmodels.controller;
 
-import com.classicmodels.pojo.CustomerDTO;
+import com.classicmodels.pojo.SimpleCustomer;
 import com.classicmodels.service.CustomerService;
 import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +17,7 @@ public class CustomerController {
     }
 
     @GetMapping("/customer")
-    public List<CustomerDTO> fetchCustomerByCreditLimit(@RequestParam float creditLimit) {
+    public List<SimpleCustomer> fetchCustomerByCreditLimit(@RequestParam("creditLimit") float creditLimit) {
 
         return customerService.fetchCustomerByCreditLimit(creditLimit);
     }

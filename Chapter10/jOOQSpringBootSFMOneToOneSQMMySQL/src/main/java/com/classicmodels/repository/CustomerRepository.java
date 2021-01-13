@@ -1,6 +1,6 @@
 package com.classicmodels.repository;
 
-import com.classicmodels.pojo.CustomerDTO;
+import com.classicmodels.pojo.SimpleCustomer;
 import java.math.BigDecimal;
 import java.util.List;
 import static jooq.generated.tables.Customer.CUSTOMER;
@@ -13,23 +13,24 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class CustomerRepository {
 
-    private final SelectQueryMapper<CustomerDTO> customerMapper;
+    private final SelectQueryMapper<SimpleCustomer> customerMapper;
     private final DSLContext create;
 
     public CustomerRepository(DSLContext create) {
         this.create = create;
         this.customerMapper = SelectQueryMapperFactory
                 .newInstance()
-                .newMapper(CustomerDTO.class);
+                .newMapper(SimpleCustomer.class);
     }
 
-    public List<CustomerDTO> findCustomerByCreditLimit(float creditLimit) {
+    public List<SimpleCustomer> findCustomerByCreditLimit(float creditLimit) {
 
-        List<CustomerDTO> customers = customerMapper.asList(
+        List<SimpleCustomer> customers = customerMapper.asList(
                 create.select(CUSTOMER.CUSTOMER_NAME, CUSTOMER.PHONE, CUSTOMER.CREDIT_LIMIT,
                               CUSTOMERDETAIL.ADDRESS_LINE_FIRST, CUSTOMERDETAIL.STATE, CUSTOMERDETAIL.CITY)
                         .from(CUSTOMER)
-                        .innerJoin(CUSTOMERDETAIL).using(CUSTOMER.CUSTOMER_NUMBER)
+                        .innerJoin(CUSTOMERDETAIL).
+                        on(CUSTOMER.CUSTOMER_NUMBER.eq(CUSTOMERDETAIL.CUSTOMER_NUMBER))
                         .where(CUSTOMER.CREDIT_LIMIT.le(BigDecimal.valueOf(creditLimit)))
                         .orderBy(CUSTOMER.CUSTOMER_NUMBER)
         );

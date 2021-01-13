@@ -3,14 +3,14 @@ package com.classicmodels.pojo;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class CustomerDTO implements Serializable {
+public class SimpleCustomer implements Serializable {
 
     private static final long serialVersionUID = 1;
 
     private String customerName;
     private String phone;
     private Float creditLimit;
-    private CustomerDetailDTO details;
+    private SimpleCustomerDetail details;
 
     public String getCustomerName() {
         return customerName;
@@ -36,11 +36,11 @@ public class CustomerDTO implements Serializable {
         this.creditLimit = creditLimit;
     }
 
-    public CustomerDetailDTO getDetails() {
+    public SimpleCustomerDetail getDetails() {
         return details;
     }
 
-    public void setDetails(CustomerDetailDTO details) {
+    public void setDetails(SimpleCustomerDetail details) {
         this.details = details;
     }
 
@@ -70,7 +70,7 @@ public class CustomerDTO implements Serializable {
             return false;
         }
         
-        final CustomerDTO other = (CustomerDTO) obj;
+        final SimpleCustomer other = (SimpleCustomer) obj;
         if (!Objects.equals(this.customerName, other.customerName)) {
             return false;
         }

@@ -1,6 +1,6 @@
 package com.classicmodels;
 
-import com.classicmodels.pojo.CustomerDTO;
+import com.classicmodels.pojo.SimpleCustomer;
 import com.classicmodels.service.CustomerService;
 import java.util.List;
 import org.springframework.boot.ApplicationRunner;
@@ -26,7 +26,7 @@ public class MainApplication {
         return args -> {
 
             System.out.println("Sample: Fetch customers having a credit limit smaller than 50000:");
-            List<CustomerDTO> customers = customerRepository.fetchCustomerByCreditLimit(50000.0f);
+            List<SimpleCustomer> customers = customerRepository.fetchCustomerByCreditLimit(50000.0f);
             System.out.println(customers);
         };
     }
