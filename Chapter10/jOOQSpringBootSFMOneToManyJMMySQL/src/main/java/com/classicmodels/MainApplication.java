@@ -1,7 +1,7 @@
 package com.classicmodels;
 
 import com.classicmodels.pojo.SimpleProductLine;
-import com.classicmodels.service.ProductService;
+import com.classicmodels.service.ClassicModelsService;
 import java.util.List;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
@@ -11,10 +11,10 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class MainApplication {
 
-    private final ProductService productRepository;
+    private final ClassicModelsService classicModelsService;
 
-    public MainApplication(ProductService productRepository) {
-        this.productRepository = productRepository;
+    public MainApplication(ClassicModelsService classicModelsService) {
+        this.classicModelsService = classicModelsService;
     }
 
     public static void main(String[] args) {
@@ -26,7 +26,7 @@ public class MainApplication {
         return args -> {
 
             System.out.println("Sample: Fetch product lines with products:");
-            List<SimpleProductLine> products = productRepository.fetchProductLineWithProducts();
+            List<SimpleProductLine> products = classicModelsService.fetchProductLineWithProducts();
             System.out.println(products);
         };
     }

@@ -15,23 +15,23 @@ import org.simpleflatmapper.jdbc.JdbcMapperFactory;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class ProductRepository {
+public class ClassicModelsRepository {
 
-    private final JdbcMapper<SimpleProductLine> productMapper;
-    private final DSLContext create;
+    private final JdbcMapper<SimpleProductLine> jdbcMapper;
+    private final DSLContext ctx;
 
-    public ProductRepository(DSLContext create) {
-        this.create = create;
-        this.productMapper = JdbcMapperFactory
+    public ClassicModelsRepository(DSLContext ctx) {
+        this.ctx = ctx;
+        this.jdbcMapper = JdbcMapperFactory
                 .newInstance()
-                // .addKeys("productLine") // I use @Key in ProductLineDTO
+                // .addKeys("productLine") // I use @Key in SimpleProductLine
                 .newMapper(SimpleProductLine.class);
     }
 
     public List<SimpleProductLine> findProductLineWithProducts() {
 
         try ( ResultSet rs
-                = create.select(PRODUCTLINE.PRODUCT_LINE.as("productLine"), 
+                = ctx.select(PRODUCTLINE.PRODUCT_LINE.as("productLine"), 
                                 PRODUCTLINE.TEXT_DESCRIPTION,
                                 PRODUCT.PRODUCT_NAME.as("products_productName"),
                                 PRODUCT.PRODUCT_VENDOR.as("products_productVendor"),
@@ -41,7 +41,7 @@ public class ProductRepository {
                         .orderBy(PRODUCTLINE.PRODUCT_LINE)
                         .fetchResultSet()) {
 
-                    Stream<SimpleProductLine> stream = productMapper.stream(rs);
+                    Stream<SimpleProductLine> stream = jdbcMapper.stream(rs);
 
                     return stream.collect(toList());
 

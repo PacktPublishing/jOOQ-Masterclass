@@ -1,17 +1,17 @@
 package com.classicmodels.controller;
 
 import com.classicmodels.pojo.SimpleProductLine;
-import com.classicmodels.service.ProductService;
+import com.classicmodels.service.ClassicModelsService;
 import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class ProductController {
+public class ClassicModelsController {
 
-    private final ProductService productService;
+    private final ClassicModelsService productService;
 
-    public ProductController(ProductService productService) {
+    public ClassicModelsController(ClassicModelsService productService) {
         this.productService = productService;
     }
 
