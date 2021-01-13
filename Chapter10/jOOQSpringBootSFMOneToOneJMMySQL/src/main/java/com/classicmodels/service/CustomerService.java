@@ -1,6 +1,6 @@
 package com.classicmodels.service;
 
-import com.classicmodels.pojo.CustomerDTO;
+import com.classicmodels.pojo.SimpleCustomer;
 import com.classicmodels.repository.CustomerRepository;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ public class CustomerService {
     }
 
     @Transactional(readOnly = true)
-    public List<CustomerDTO> fetchCustomerByCreditLimit(float creditLimit) {
+    public List<SimpleCustomer> fetchCustomerByCreditLimit(float creditLimit) {
 
         return customerRepository.findCustomerByCreditLimit(creditLimit);
     }

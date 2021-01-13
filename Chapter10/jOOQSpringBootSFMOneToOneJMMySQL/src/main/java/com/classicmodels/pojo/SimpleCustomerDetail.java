@@ -3,7 +3,7 @@ package com.classicmodels.pojo;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class CustomerDetailDTO implements Serializable {
+public class SimpleCustomerDetail implements Serializable {
 
     private static final long serialVersionUID = 1;
     
@@ -61,7 +61,7 @@ public class CustomerDetailDTO implements Serializable {
             return false;
         }
         
-        final CustomerDetailDTO other = (CustomerDetailDTO) obj;
+        final SimpleCustomerDetail other = (SimpleCustomerDetail) obj;
         if (!Objects.equals(this.addressLineFirst, other.addressLineFirst)) {
             return false;
         }

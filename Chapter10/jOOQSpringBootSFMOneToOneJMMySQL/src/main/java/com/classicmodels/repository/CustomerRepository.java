@@ -1,6 +1,6 @@
 package com.classicmodels.repository;
 
-import com.classicmodels.pojo.CustomerDTO;
+import com.classicmodels.pojo.SimpleCustomer;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,32 +18,33 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class CustomerRepository {
 
-    private final JdbcMapper<CustomerDTO> customerMapper;
+    private final JdbcMapper<SimpleCustomer> customerMapper;
     private final DSLContext create;
 
     public CustomerRepository(DSLContext create) {
         this.create = create;
         this.customerMapper = JdbcMapperFactory
                 .newInstance()
-                .newMapper(CustomerDTO.class);
+                .newMapper(SimpleCustomer.class);
     }
 
-    public List<CustomerDTO> findCustomerByCreditLimit(float creditLimit) {
+    public List<SimpleCustomer> findCustomerByCreditLimit(float creditLimit) {
 
         try ( ResultSet rs
-                = create.select(CUSTOMER.CUSTOMER_NAME, 
-                                CUSTOMER.PHONE, 
-                                CUSTOMER.CREDIT_LIMIT,
-                                CUSTOMERDETAIL.ADDRESS_LINE_FIRST.as("details_addressLineFirst"), 
-                                CUSTOMERDETAIL.STATE.as("details_state"), 
-                                CUSTOMERDETAIL.CITY.as("details_city"))
+                = create.select(CUSTOMER.CUSTOMER_NAME,
+                        CUSTOMER.PHONE,
+                        CUSTOMER.CREDIT_LIMIT,
+                        CUSTOMERDETAIL.ADDRESS_LINE_FIRST.as("details_addressLineFirst"),
+                        CUSTOMERDETAIL.STATE.as("details_state"),
+                        CUSTOMERDETAIL.CITY.as("details_city"))
                         .from(CUSTOMER)
-                        .innerJoin(CUSTOMERDETAIL).using(CUSTOMER.CUSTOMER_NUMBER)
+                        .innerJoin(CUSTOMERDETAIL)
+                        .on(CUSTOMER.CUSTOMER_NUMBER.eq(CUSTOMERDETAIL.CUSTOMER_NUMBER))
                         .where(CUSTOMER.CREDIT_LIMIT.le(BigDecimal.valueOf(creditLimit)))
                         .orderBy(CUSTOMER.CUSTOMER_NUMBER)
                         .fetchResultSet()) {
 
-                    Stream<CustomerDTO> stream = customerMapper.stream(rs);
+                    Stream<SimpleCustomer> stream = customerMapper.stream(rs);
 
                     return stream.collect(toList());
 
