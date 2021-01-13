@@ -16,7 +16,7 @@ public class ClassicModelsController {
         this.classicModelsService = classicModelsService;
     }
 
-    @GetMapping("/employee")
+    @GetMapping("/employees")
     public List<SimpleEmployee> fetchEmployeeWithSalesAndCustomersByOfficeCode(
             @RequestParam("officeCode") String officeCode) {
 

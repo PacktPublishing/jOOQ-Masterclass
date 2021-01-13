@@ -16,7 +16,7 @@ public class ClassicModelController {
         this.classicModelService = classicModelService;
     }
 
-    @GetMapping("/customer")
+    @GetMapping("/customers")
     public List<SimpleCustomer> fetchCustomerByCreditLimit(
             @RequestParam("creditLimit") float creditLimit) {
 

@@ -26,8 +26,8 @@ public class MainApplication {
         return args -> {
 
             System.out.println("Sample: Fetch customers having a credit limit smaller than 50000:");
-            List<SimpleCustomer> customers = classicModelsService.fetchCustomerByCreditLimit(50000.0f);
-            System.out.println(customers);
+            List<SimpleCustomer> result = classicModelsService.fetchCustomerByCreditLimit(50000.0f);
+            System.out.println(result);
         };
     }
 }

@@ -15,7 +15,7 @@ public class ClassicModelsController {
         this.clasicModelsService = clasicModelsService;
     }
 
-    @GetMapping("/manageroffice")
+    @GetMapping("/manageroffices")
     public List<SimpleManager> fetchManagerAndOffice() {
 
         return clasicModelsService.fetchManagerAndOffice();

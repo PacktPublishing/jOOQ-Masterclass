@@ -15,7 +15,7 @@ public class ClassicModelsController {
         this.productService = productService;
     }
 
-    @GetMapping("/productline")
+    @GetMapping("/productlines")
     public List<SimpleProductLine> fetchProductLineWithProducts() {
 
         return productService.fetchProductLineWithProducts();

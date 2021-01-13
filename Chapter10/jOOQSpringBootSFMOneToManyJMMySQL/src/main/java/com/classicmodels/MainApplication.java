@@ -26,8 +26,8 @@ public class MainApplication {
         return args -> {
 
             System.out.println("Sample: Fetch product lines with products:");
-            List<SimpleProductLine> products = classicModelsService.fetchProductLineWithProducts();
-            System.out.println(products);
+            List<SimpleProductLine> result = classicModelsService.fetchProductLineWithProducts();
+            System.out.println(result);
         };
     }
 }

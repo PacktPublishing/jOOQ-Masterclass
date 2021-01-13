@@ -26,8 +26,8 @@ public class MainApplication {
         return args -> {
 
             System.out.println("Sample: Fetch employees from a certain office (4) with customers and sales:");
-            List<SimpleEmployee> employees = classicModelsService.fetchEmployeeWithSalesAndCustomersByOfficeCode("4");
-            System.out.println(employees);
+            List<SimpleEmployee> result = classicModelsService.fetchEmployeeWithSalesAndCustomersByOfficeCode("4");
+            System.out.println(result);
         };
     }
 }

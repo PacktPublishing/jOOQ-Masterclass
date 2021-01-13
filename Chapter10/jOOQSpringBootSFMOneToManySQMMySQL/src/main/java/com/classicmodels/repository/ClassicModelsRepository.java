@@ -24,7 +24,7 @@ public class ClassicModelsRepository {
 
     public List<SimpleProductLine> findProductLineWithProducts() {
 
-        List<SimpleProductLine> products = sqMapper.asList(
+        List<SimpleProductLine> result = sqMapper.asList(
                 ctx.select(PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.TEXT_DESCRIPTION,
                               PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_VENDOR, PRODUCT.QUANTITY_IN_STOCK)
                         .from(PRODUCTLINE)
@@ -33,6 +33,6 @@ public class ClassicModelsRepository {
                         .orderBy(PRODUCTLINE.PRODUCT_LINE)
         );
 
-        return products;
+        return result;
     }
 }

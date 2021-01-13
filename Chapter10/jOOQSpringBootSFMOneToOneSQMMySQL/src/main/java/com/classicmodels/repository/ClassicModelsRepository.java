@@ -25,7 +25,7 @@ public class ClassicModelsRepository {
 
     public List<SimpleCustomer> findCustomerByCreditLimit(float creditLimit) {
 
-        List<SimpleCustomer> customers = sqMapper.asList(
+        List<SimpleCustomer> result = sqMapper.asList(
                 ctx.select(CUSTOMER.CUSTOMER_NAME, CUSTOMER.PHONE, CUSTOMER.CREDIT_LIMIT,
                               CUSTOMERDETAIL.ADDRESS_LINE_FIRST, CUSTOMERDETAIL.STATE, CUSTOMERDETAIL.CITY)
                         .from(CUSTOMER)
@@ -35,6 +35,6 @@ public class ClassicModelsRepository {
                         .orderBy(CUSTOMER.CUSTOMER_NUMBER)
         );
 
-        return customers;
+        return result;
     }
 }
