@@ -79,7 +79,7 @@ public class SimpleCustomerDetail implements Serializable {
 
     @Override
     public String toString() {
-        return "CustomerDetailDTO{" + "addressLineFirst=" + addressLineFirst 
+        return "CustomerDetail{" + "addressLineFirst=" + addressLineFirst 
                 + ", state=" + state + ", city=" + city + '}';
     }
            

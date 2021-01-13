@@ -88,7 +88,7 @@ public class SimpleCustomer implements Serializable {
 
     @Override
     public String toString() {
-        return "CustomerDTO{" + "customerName=" + customerName 
+        return "Customer{" + "customerName=" + customerName 
                 + ", phone=" + phone + ", creditLimit=" + creditLimit + ", details=" + details + '}';
     }
         
