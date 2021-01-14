@@ -30,11 +30,13 @@ public class ClassicModelsRepository {
         this.ctx = ctx;
         this.jdbcMapper1 = JdbcMapperFactory
                 .newInstance()
+                // .unorderedJoin() // use this if you don't want to order, .orderBy(MANAGER.MANAGER_ID)
                 // .addKeys("managerId") // I use @Key in SimpleManager
                 .newMapper(SimpleManager.class);                
         
         this.jdbcMapper2 = JdbcMapperFactory
                 .newInstance()
+                // .unorderedJoin() // use this if you don't want to order, .orderBy(OFFICE.OFFICE_CODE)
                 // .addKeys("officeCode") // I use @Key in SimpleOffice
                 .newMapper(SimpleOffice.class); 
     }
