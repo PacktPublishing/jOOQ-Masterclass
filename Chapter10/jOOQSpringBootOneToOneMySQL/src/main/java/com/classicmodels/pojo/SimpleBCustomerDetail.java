@@ -3,20 +3,30 @@ package com.classicmodels.pojo;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class SimpleCustomerDetail implements Serializable {
+public class SimpleBCustomerDetail implements Serializable {
 
     private static final long serialVersionUID = 1;
     
     private String addressLineFirst;
     private String state;
     private String city;
+    
+    private SimpleBCustomer customer;
 
-    public SimpleCustomerDetail(String addressLineFirst, String state, String city) {
+    public SimpleBCustomerDetail(String addressLineFirst, String state, String city) {
         this.addressLineFirst = addressLineFirst;
         this.state = state;
         this.city = city;
     }        
 
+    public SimpleBCustomerDetail(String addressLineFirst, String state, 
+            String city, SimpleBCustomer customer) {
+        this.addressLineFirst = addressLineFirst;
+        this.state = state;
+        this.city = city;
+        this.customer = customer;
+    }
+        
     public String getAddressLineFirst() {
         return addressLineFirst;
     }
@@ -41,6 +51,14 @@ public class SimpleCustomerDetail implements Serializable {
         this.city = city;
     }
 
+    public SimpleBCustomer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(SimpleBCustomer customer) {
+        this.customer = customer;
+    }
+        
     @Override
     public int hashCode() {
         
@@ -67,7 +85,7 @@ public class SimpleCustomerDetail implements Serializable {
             return false;
         }
         
-        final SimpleCustomerDetail other = (SimpleCustomerDetail) obj;
+        final SimpleBCustomerDetail other = (SimpleBCustomerDetail) obj;
         if (!Objects.equals(this.addressLineFirst, other.addressLineFirst)) {
             return false;
         }
@@ -85,8 +103,7 @@ public class SimpleCustomerDetail implements Serializable {
 
     @Override
     public String toString() {
-        return "CustomerDetail{" + "addressLineFirst=" + addressLineFirst 
+        return "SimpleBCustomerDetail{" + "addressLineFirst=" + addressLineFirst 
                 + ", state=" + state + ", city=" + city + '}';
-    }
-           
+    }               
 }

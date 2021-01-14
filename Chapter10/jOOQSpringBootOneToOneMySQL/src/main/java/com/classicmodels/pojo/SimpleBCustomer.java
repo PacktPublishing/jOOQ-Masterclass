@@ -3,7 +3,7 @@ package com.classicmodels.pojo;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class SimpleCustomer implements Serializable {
+public class SimpleBCustomer implements Serializable {
 
     private static final long serialVersionUID = 1;
 
@@ -11,20 +11,20 @@ public class SimpleCustomer implements Serializable {
     private String phone;
     private Float creditLimit;
     
-    private SimpleCustomerDetail details;
+    private SimpleBCustomerDetail detail;
 
-    public SimpleCustomer(String customerName, String phone, Float creditLimit) {
+    public SimpleBCustomer(String customerName, String phone, Float creditLimit) {
         this.customerName = customerName;
         this.phone = phone;
         this.creditLimit = creditLimit;
     }   
     
-    public SimpleCustomer(String customerName, String phone, Float creditLimit, 
-            SimpleCustomerDetail details) {
+    public SimpleBCustomer(String customerName, String phone, 
+            Float creditLimit, SimpleBCustomerDetail detail) {
         this.customerName = customerName;
         this.phone = phone;
         this.creditLimit = creditLimit;
-        this.details = details;
+        this.detail = detail;
     }        
 
     public String getCustomerName() {
@@ -51,13 +51,13 @@ public class SimpleCustomer implements Serializable {
         this.creditLimit = creditLimit;
     }
 
-    public SimpleCustomerDetail getDetails() {
-        return details;
+    public SimpleBCustomerDetail getDetail() {
+        return detail;
     }
 
-    public void setDetails(SimpleCustomerDetail details) {
-        this.details = details;
-    }
+    public void setDetail(SimpleBCustomerDetail detail) {
+        this.detail = detail;
+    }   
 
     @Override
     public int hashCode() {
@@ -85,7 +85,7 @@ public class SimpleCustomer implements Serializable {
             return false;
         }
         
-        final SimpleCustomer other = (SimpleCustomer) obj;
+        final SimpleBCustomer other = (SimpleBCustomer) obj;
         if (!Objects.equals(this.customerName, other.customerName)) {
             return false;
         }
@@ -103,8 +103,7 @@ public class SimpleCustomer implements Serializable {
 
     @Override
     public String toString() {
-        return "Customer{" + "customerName=" + customerName 
-                + ", phone=" + phone + ", creditLimit=" + creditLimit + ", details=" + details + '}';
-    }
-        
+        return "SimpleBCustomer{" + "customerName=" + customerName 
+                + ", phone=" + phone + ", creditLimit=" + creditLimit + '}';
+    }            
 }
