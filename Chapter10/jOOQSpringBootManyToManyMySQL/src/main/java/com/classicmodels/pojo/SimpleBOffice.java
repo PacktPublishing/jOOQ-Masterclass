@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class SimpleOffice implements Serializable {
+public class SimpleBOffice implements Serializable {
 
     private static final long serialVersionUID = 1;
    
@@ -16,9 +16,9 @@ public class SimpleOffice implements Serializable {
     private String city;
 
     @JsonBackReference
-    private List<SimpleManager> managers = new ArrayList<>();
+    private List<SimpleBManager> managers = new ArrayList<>();
 
-    public SimpleOffice(String officeCode, String state, String city) {
+    public SimpleBOffice(String officeCode, String state, String city) {
         this.officeCode = officeCode;
         this.state = state;
         this.city = city;
@@ -48,11 +48,11 @@ public class SimpleOffice implements Serializable {
         this.city = city;
     }
 
-    public List<SimpleManager> getManagers() {
+    public List<SimpleBManager> getManagers() {
         return managers;
     }
 
-    public void setManagers(List<SimpleManager> managers) {
+    public void setManagers(List<SimpleBManager> managers) {
         this.managers = managers;
     }
 
@@ -76,7 +76,7 @@ public class SimpleOffice implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final SimpleOffice other = (SimpleOffice) obj;
+        final SimpleBOffice other = (SimpleBOffice) obj;
         if (!Objects.equals(this.officeCode, other.officeCode)) {
             return false;
         }
@@ -91,7 +91,7 @@ public class SimpleOffice implements Serializable {
 
     @Override
     public String toString() {
-        return "Office{" + "officeCode=" + officeCode
+        return "SimpleBOffice{" + "officeCode=" + officeCode 
                 + ", state=" + state + ", city=" + city + '}';
-    }
+    }   
 }

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class SimpleManager implements Serializable {
+public class SimpleBManager implements Serializable {
 
     private static final long serialVersionUID = 1;
     
@@ -14,9 +14,9 @@ public class SimpleManager implements Serializable {
     private String managerName;
     
     @JsonManagedReference
-    private List<SimpleOffice> offices = new ArrayList<>();
+    private List<SimpleBOffice> offices = new ArrayList<>();
 
-    public SimpleManager(Long managerId, String managerName) {
+    public SimpleBManager(Long managerId, String managerName) {
         this.managerId = managerId;
         this.managerName = managerName;
     }      
@@ -37,11 +37,11 @@ public class SimpleManager implements Serializable {
         this.managerName = managerName;
     }
 
-    public List<SimpleOffice> getOffices() {
+    public List<SimpleBOffice> getOffices() {
         return offices;
     }
 
-    public void setOffices(List<SimpleOffice> offices) {
+    public void setOffices(List<SimpleBOffice> offices) {
         this.offices = offices;
     }
 
@@ -68,7 +68,7 @@ public class SimpleManager implements Serializable {
             return false;
         }
 
-        final SimpleManager other = (SimpleManager) obj;
+        final SimpleBManager other = (SimpleBManager) obj;
         if (!Objects.equals(this.managerName, other.managerName)) {
             return false;
         }
@@ -82,8 +82,6 @@ public class SimpleManager implements Serializable {
 
     @Override
     public String toString() {
-        return "Manager{" + "managerId=" + managerId 
-                + ", managerName=" + managerName + '}';
-    }
-
+        return "SimpleBManager{" + "managerId=" + managerId + ", managerName=" + managerName + '}';
+    }    
 }

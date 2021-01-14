@@ -23,7 +23,8 @@ public class MainApplication {
     public ApplicationRunner init() {
         return args -> {
 
-            classicModelsService.fetchManyToMany();
+            classicModelsService.fetchManyToManyUnidirectional();
+            classicModelsService.fetchManyToManyBidirectional();
 
         };
     }

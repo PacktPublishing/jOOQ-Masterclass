@@ -1,6 +1,6 @@
 package com.classicmodels.service;
 
-import com.classicmodels.pojo.SimpleManager;
+import com.classicmodels.pojo.SimpleBManager;
 import com.classicmodels.repository.ClassicModelsRepository;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -14,8 +14,13 @@ public class ClassicModelsService {
         this.classicModelsRepository = classicModelsRepository;
     }
 
-    public List<SimpleManager> fetchManyToMany() {
+    public List<SimpleBManager> fetchManyToManyUnidirectional() {
 
-        return classicModelsRepository.fetchManyToMany();
+        return classicModelsRepository.fetchManyToManyUnidirectional();
+    }
+    
+    public List<SimpleBManager> fetchManyToManyBidirectional() {
+
+        return classicModelsRepository.fetchManyToManyBidirectional();
     }
 }
