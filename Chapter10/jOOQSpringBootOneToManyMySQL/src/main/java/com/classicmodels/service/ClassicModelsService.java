@@ -14,6 +14,7 @@ public class ClassicModelsService {
 
     public void callAll() {
 
-        classicModelsRepository.fetchOneToMany();
+        classicModelsRepository.fetchOneToManyUnidirectional();
+        classicModelsRepository.fetchOneToManyBidirectional();
     }
 }

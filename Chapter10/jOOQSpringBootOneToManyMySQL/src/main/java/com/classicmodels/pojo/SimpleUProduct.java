@@ -3,7 +3,7 @@ package com.classicmodels.pojo;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class SimpleProduct implements Serializable {
+public class SimpleUProduct implements Serializable {
 
     private static final long serialVersionUID = 1;
     
@@ -11,7 +11,7 @@ public class SimpleProduct implements Serializable {
     private String productVendor;
     private Short quantityInStock;
 
-    public SimpleProduct(String productName, String productVendor, Short quantityInStock) {
+    public SimpleUProduct(String productName, String productVendor, Short quantityInStock) {
         this.productName = productName;
         this.productVendor = productVendor;
         this.quantityInStock = quantityInStock;
@@ -67,7 +67,7 @@ public class SimpleProduct implements Serializable {
             return false;
         }
         
-        final SimpleProduct other = (SimpleProduct) obj;
+        final SimpleUProduct other = (SimpleUProduct) obj;
         if (!Objects.equals(this.productName, other.productName)) {
             return false;
         }
@@ -85,9 +85,7 @@ public class SimpleProduct implements Serializable {
 
     @Override
     public String toString() {
-        return "Product{" + "productName=" + productName 
-                + ", productVendor=" + productVendor 
-                + ", quantityInStock=" + quantityInStock + '}';
-    }
-       
+        return "SimpleUProduct{" + "productName=" + productName 
+                + ", productVendor=" + productVendor + ", quantityInStock=" + quantityInStock + '}';
+    }       
 }

@@ -5,16 +5,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class SimpleProductLine implements Serializable {
+public class SimpleUProductLine implements Serializable {
 
     private static final long serialVersionUID = 1;
   
     private String productLine;
     private String textDescription;   
     
-    private List<SimpleProduct> products = new ArrayList<>();
+    private List<SimpleUProduct> products = new ArrayList<>();
 
-    public SimpleProductLine(String productLine, String textDescription) {
+    public SimpleUProductLine(String productLine, String textDescription) {
         this.productLine = productLine;
         this.textDescription = textDescription;
     }
@@ -35,11 +35,11 @@ public class SimpleProductLine implements Serializable {
         this.textDescription = textDescription;
     }
 
-    public List<SimpleProduct> getProducts() {
+    public List<SimpleUProduct> getProducts() {
         return products;
     }
 
-    public void setProducts(List<SimpleProduct> products) {
+    public void setProducts(List<SimpleUProduct> products) {
         this.products = products;
     }
 
@@ -68,7 +68,7 @@ public class SimpleProductLine implements Serializable {
             return false;
         }
         
-        final SimpleProductLine other = (SimpleProductLine) obj;
+        final SimpleUProductLine other = (SimpleUProductLine) obj;
         if (!Objects.equals(this.productLine, other.productLine)) {
             return false;
         }
@@ -82,8 +82,7 @@ public class SimpleProductLine implements Serializable {
 
     @Override
     public String toString() {
-        return "ProductLine{" + "productLine=" + productLine 
-                + ", textDescription=" + textDescription + ", products=" + products + '}';
-    }
-           
+        return "SimpleUProductLine{" + "productLine=" + productLine 
+                + ", textDescription=" + textDescription + '}';
+    }      
 }
