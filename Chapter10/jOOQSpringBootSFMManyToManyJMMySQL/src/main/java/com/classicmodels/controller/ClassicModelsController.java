@@ -10,21 +10,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ClassicModelsController {
 
-    private final ClasicModelsService clasicModelsService;
+    private final ClasicModelsService classicModelsService;
 
-    public ClassicModelsController(ClasicModelsService clasicModelsService) {
-        this.clasicModelsService = clasicModelsService;
+    public ClassicModelsController(ClasicModelsService classicModelsService) {
+        this.classicModelsService = classicModelsService;
     }
 
     @GetMapping("/manageroffices")
     public List<SimpleManager> fetchManagerAndOffice() {
 
-        return clasicModelsService.fetchManagerAndOffice();
+        return classicModelsService.fetchManagerAndOffice();
     }
     
     @GetMapping("/officemanagers")
     public List<SimpleOffice> fetchOfficeAndManager() {
 
-        return clasicModelsService.fetchOfficeAndManager();
+        return classicModelsService.fetchOfficeAndManager();
     }
 }

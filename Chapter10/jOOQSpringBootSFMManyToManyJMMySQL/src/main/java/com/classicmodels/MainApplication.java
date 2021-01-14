@@ -12,10 +12,10 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class MainApplication {
 
-    private final ClasicModelsService clasicModelsService;
+    private final ClasicModelsService classicModelsService;
 
-    public MainApplication(ClasicModelsService clasicModelsService) {
-        this.clasicModelsService = clasicModelsService;
+    public MainApplication(ClasicModelsService classicModelsService) {
+        this.classicModelsService = classicModelsService;
     }
 
     public static void main(String[] args) {
@@ -27,7 +27,7 @@ public class MainApplication {
         return args -> {
 
             System.out.println("Sample: Fetch managers and offices:");
-            List<SimpleManager> result1 = clasicModelsService.fetchManagerAndOffice();
+            List<SimpleManager> result1 = classicModelsService.fetchManagerAndOffice();
             for (SimpleManager manager : result1) {
                 System.out.println("==================================");
                 System.out.println(manager);
@@ -35,7 +35,7 @@ public class MainApplication {
             }
 
             System.out.println("Sample: Fetch offices and managers:");
-            List<SimpleOffice> result2 = clasicModelsService.fetchOfficeAndManager();
+            List<SimpleOffice> result2 = classicModelsService.fetchOfficeAndManager();
             for (SimpleOffice office : result2) {
                 System.out.println("==================================");
                 System.out.println(office);
