@@ -86,13 +86,21 @@ insert into [office_has_manager] ([offices_office_code], [managers_manager_id]) 
 
 ('2', '1'),
 
+('1', '3'),
+
 ('3', '1'),
 
 ('4', '2'),
 
 ('5', '3'),
 
+('5', '2'),
+
 ('6', '3'),
+
+('6', '2'),
+
+('6', '1'),
 
 ('7', '2')
 end try

@@ -65,19 +65,27 @@ insert into manager (manager_id, manager_name, manager_evaluation) values
 
 insert into office_has_manager (offices_office_code, managers_manager_id) values 
 
-('1', 1),
+('1', '1'),
 
-('2', 1),
+('2', '1'),
 
-('3', 1),
+('1', '3'),
 
-('4', 2),
+('3', '1'),
 
-('5', 3),
+('4', '2'),
 
-('6', 3),
+('5', '3'),
 
-('7', 2) ON CONFLICT (offices_office_code, managers_manager_id) DO NOTHING;
+('5', '2'),
+
+('6', '3'),
+
+('6', '2'),
+
+('6', '1'),
+
+('7', '2') ON CONFLICT (offices_office_code, managers_manager_id) DO NOTHING;
 
 /*Data for the table `employee` */
 

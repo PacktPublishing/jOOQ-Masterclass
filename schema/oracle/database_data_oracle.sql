@@ -69,19 +69,27 @@ insert /*+ ignore_row_on_dupkey_index(manager(manager_id)) */ into manager (mana
 
 insert /*+ ignore_row_on_dupkey_index(office_has_manager(offices_office_code, managers_manager_id)) */ into office_has_manager (offices_office_code, managers_manager_id)
 
- select '1', 1 from dual union all
+select '1', 1 from dual union all
 
- select '2', 1 from dual union all
+select '2', 1 from dual union all
 
- select '3', 1 from dual union all
+select '1', 3 from dual union all
 
- select '4', 2 from dual union all
+select '3', 1 from dual union all
 
- select '5', 3 from dual union all
+select '4', 2 from dual union all
 
- select '6', 3 from dual union all
+select '5', 3 from dual union all
 
- select '7', 2 from dual;
+select '5', 2 from dual union all
+
+select '6', 3 from dual union all
+
+select '6', 2 from dual union all
+
+select '6', 1 from dual union all
+
+select '7', 2 from dual;
 
 /*Data for the table `employee` */
 
