@@ -29,6 +29,7 @@ public class ClassicModelsRepository {
         this.ctx = ctx;
     }
 
+    // bidirectional many-to-many
     public List<SimpleManager> fetchManyToMany() {
 
         ResultSet rs = ctx.select(MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME,
