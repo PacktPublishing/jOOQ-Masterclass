@@ -1,6 +1,7 @@
 package com.classicmodels.repository;
 
 import com.classicmodels.pojo.SimpleManager;
+import com.classicmodels.pojo.SimpleOffice;
 import java.util.List;
 import static jooq.generated.tables.Manager.MANAGER;
 import static jooq.generated.tables.Office.OFFICE;
@@ -15,20 +16,27 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class ClassicModelsRepository {
-
+    
     private final DSLContext ctx;
-    private final SelectQueryMapper<SimpleManager> sqMapper;
-
+    private final SelectQueryMapper<SimpleManager> sqMapper1;
+    private final SelectQueryMapper<SimpleOffice> sqMapper2;
+    
     public ClassicModelsRepository(DSLContext ctx) {
-        this.ctx = ctx;
-        this.sqMapper = SelectQueryMapperFactory
+        this.ctx = ctx;        
+        this.sqMapper1 = SelectQueryMapperFactory
                 .newInstance()
+                // .unorderedJoin() // use this if you don't want to order, .orderBy(MANAGER.MANAGER_ID)
                 .newMapper(SimpleManager.class);
+        
+        this.sqMapper2 = SelectQueryMapperFactory
+                .newInstance()
+                // .unorderedJoin() // use this if you don't want to order, .orderBy(OFFICE.OFFICE_CODE)                
+                .newMapper(SimpleOffice.class);        
     }
-
+    
     public List<SimpleManager> findManagerAndOffice() {
-
-        List<SimpleManager> result = sqMapper.asList(
+        
+        List<SimpleManager> result = sqMapper1.asList(
                 ctx.select(MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME,
                         field("officeCode"), field("city"), field("state"))
                         .from(MANAGER)
@@ -38,18 +46,49 @@ public class ClassicModelsRepository {
                                 .from(OFFICE).join(OFFICE_HAS_MANAGER)
                                 .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE)).asTable("t"))
                         .on(MANAGER.MANAGER_ID.eq(field(name("managers_manager_id"), Long.class)))
+                        .orderBy(MANAGER.MANAGER_ID)
         );
 
         /* or, like this
-        List<SimpleManager> result = sqMapper.asList(
+        List<SimpleManager> result = sqMapper1.asList(
                 ctx.select(MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME,
                         OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.STATE)
                         .from(MANAGER, OFFICE, OFFICE_HAS_MANAGER)
                         .where(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID))
                         .and(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))
-                        .orderBy(MANAGER.MANAGER_ID)
+                        .orderBy(MANAGER.MANAGER_ID)        
         );
-        */
+         */
+        
+        return result;
+    }
+    
+    public List<SimpleOffice> findOfficeAndManager() {
+        
+        List<SimpleOffice> result = sqMapper2.asList(
+                ctx.select(OFFICE.OFFICE_CODE, OFFICE.STATE, OFFICE.CITY,
+                        field("managers_managerId"), field("managers_managerName"))
+                        .from(OFFICE)
+                        .join(select(MANAGER.MANAGER_ID.as("managers_managerId"),
+                                MANAGER.MANAGER_NAME.as("managers_managerName"),
+                                OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE.as("offices_office_code"))
+                                .from(MANAGER).join(OFFICE_HAS_MANAGER)
+                                .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID)).asTable("t"))
+                        .on(OFFICE.OFFICE_CODE.eq(field(name("offices_office_code"), String.class)))
+                        .orderBy(OFFICE.OFFICE_CODE)
+        );
+
+        /* or, like this
+        List<SimpleOffice> result = sqMapper2.asList(
+                ctx.select(OFFICE.OFFICE_CODE, OFFICE.STATE, OFFICE.CITY,
+                        MANAGER.MANAGER_ID.as("managers_managerId"), 
+                        MANAGER.MANAGER_NAME.as("managers_managerName"))
+                        .from(OFFICE, MANAGER, OFFICE_HAS_MANAGER)
+                        .where(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID))
+                        .and(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))
+                        .orderBy(OFFICE.OFFICE_CODE)  
+        );
+         */
         
         return result;
     }

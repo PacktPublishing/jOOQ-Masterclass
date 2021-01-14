@@ -1,6 +1,7 @@
 package com.classicmodels;
 
 import com.classicmodels.pojo.SimpleManager;
+import com.classicmodels.pojo.SimpleOffice;
 import com.classicmodels.service.ClassicModelsService;
 import java.util.List;
 import org.springframework.boot.ApplicationRunner;
@@ -26,8 +27,20 @@ public class MainApplication {
         return args -> {
 
             System.out.println("Sample: Fetch managers and offices:");
-            List<SimpleManager> result = classicModelsService.fetchManagerAndOffice();
-            System.out.println(result);
+            List<SimpleManager> result1 = classicModelsService.fetchManagerAndOffice();
+            for (SimpleManager manager : result1) {
+                System.out.println("==================================");
+                System.out.println(manager);
+                System.out.println(manager.getOffices());
+            }
+
+            System.out.println("Sample: Fetch offices and managers:");
+            List<SimpleOffice> result2 = classicModelsService.fetchOfficeAndManager();
+            for (SimpleOffice office : result2) {
+                System.out.println("==================================");
+                System.out.println(office);
+                System.out.println(office.getManagers());
+            }
 
         };
     }
