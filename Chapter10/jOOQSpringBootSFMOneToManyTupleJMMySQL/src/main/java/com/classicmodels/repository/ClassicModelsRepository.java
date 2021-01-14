@@ -30,18 +30,15 @@ public class ClassicModelsRepository {
         this.jdbcMapper
                 = JdbcMapperFactory
                         .newInstance()
-                        .addKeys("productLine")
+                        .addKeys("product_line")
                         .newMapper(new TypeReference<Tuple2<ProductlineRecord, List<ProductRecord>>>() {});
     }
 
     public List<Tuple2<ProductlineRecord, List<ProductRecord>>> findProductLineWithProducts() {
 
         try ( ResultSet rs
-                = ctx.select(PRODUCTLINE.PRODUCT_LINE.as("productLine"),
-                        PRODUCTLINE.TEXT_DESCRIPTION,
-                        PRODUCT.PRODUCT_NAME.as("products_productName"),
-                        PRODUCT.PRODUCT_VENDOR.as("products_productVendor"),
-                        PRODUCT.QUANTITY_IN_STOCK.as("products_quantityInStock"))
+                = ctx.select(PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.TEXT_DESCRIPTION, PRODUCT.PRODUCT_NAME,
+                        PRODUCT.PRODUCT_VENDOR, PRODUCT.QUANTITY_IN_STOCK)
                         .from(PRODUCTLINE)
                         .innerJoin(PRODUCT).using(PRODUCT.PRODUCT_LINE)
                         .orderBy(PRODUCTLINE.PRODUCT_LINE)
