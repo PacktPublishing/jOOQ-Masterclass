@@ -1,15 +1,24 @@
 package com.classicmodels.pojo;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
+import org.simpleflatmapper.map.annotation.Key;
 
 public class SimpleOffice implements Serializable {
 
     private static final long serialVersionUID = 1;
 
+    @Key
     private String officeCode;
+    
     private String state;
     private String city;
+    
+    @JsonInclude(Include.NON_EMPTY)
+    private List<SimpleManager> managers;
 
     public String getOfficeCode() {
         return officeCode;
@@ -35,43 +44,44 @@ public class SimpleOffice implements Serializable {
         this.city = city;
     }
 
+    public List<SimpleManager> getManagers() {
+        return managers;
+    }
+
+    public void setManagers(List<SimpleManager> managers) {
+        this.managers = managers;
+    }
+
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 41 * hash + Objects.hashCode(this.officeCode);
-        hash = 41 * hash + Objects.hashCode(this.state);
-        hash = 41 * hash + Objects.hashCode(this.city);
+        int hash = 7;
+        hash = 73 * hash + Objects.hashCode(this.officeCode);
+        hash = 73 * hash + Objects.hashCode(this.state);
+        hash = 73 * hash + Objects.hashCode(this.city);
         return hash;
     }
 
     @Override
     public boolean equals(Object obj) {
-
         if (this == obj) {
             return true;
         }
-
         if (obj == null) {
             return false;
         }
-
         if (getClass() != obj.getClass()) {
             return false;
         }
-
         final SimpleOffice other = (SimpleOffice) obj;
         if (!Objects.equals(this.officeCode, other.officeCode)) {
             return false;
         }
-
         if (!Objects.equals(this.state, other.state)) {
             return false;
         }
-
         if (!Objects.equals(this.city, other.city)) {
             return false;
         }
-
         return true;
     }
 
@@ -80,5 +90,4 @@ public class SimpleOffice implements Serializable {
         return "Office{" + "officeCode=" + officeCode
                 + ", state=" + state + ", city=" + city + '}';
     }
-
 }

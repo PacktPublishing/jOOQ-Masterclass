@@ -1,6 +1,7 @@
 package com.classicmodels.controller;
 
 import com.classicmodels.pojo.SimpleManager;
+import com.classicmodels.pojo.SimpleOffice;
 import com.classicmodels.service.ClasicModelsService;
 import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,5 +20,11 @@ public class ClassicModelsController {
     public List<SimpleManager> fetchManagerAndOffice() {
 
         return clasicModelsService.fetchManagerAndOffice();
+    }
+    
+    @GetMapping("/officemanagers")
+    public List<SimpleOffice> fetchOfficeAndManager() {
+
+        return clasicModelsService.fetchOfficeAndManager();
     }
 }

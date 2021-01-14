@@ -1,5 +1,7 @@
 package com.classicmodels.pojo;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
@@ -13,6 +15,8 @@ public class SimpleManager implements Serializable {
     private Long managerId;
     
     private String managerName;
+    
+    @JsonInclude(Include.NON_EMPTY)
     private List<SimpleOffice> offices;
 
     public Long getManagerId() {
@@ -77,7 +81,7 @@ public class SimpleManager implements Serializable {
     @Override
     public String toString() {
         return "Manager{" + "managerId=" + managerId 
-                + ", managerName=" + managerName + ", offices=" + offices + '}';
+                + ", managerName=" + managerName + '}';
     }
 
 }

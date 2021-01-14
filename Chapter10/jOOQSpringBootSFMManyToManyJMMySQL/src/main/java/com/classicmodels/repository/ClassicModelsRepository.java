@@ -1,6 +1,7 @@
 package com.classicmodels.repository;
 
 import com.classicmodels.pojo.SimpleManager;
+import com.classicmodels.pojo.SimpleOffice;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collections;
@@ -22,14 +23,20 @@ import org.springframework.stereotype.Repository;
 public class ClassicModelsRepository {
 
     private final DSLContext ctx;
-    private final JdbcMapper<SimpleManager> jdbcMapper;
+    private final JdbcMapper<SimpleManager> jdbcMapper1;
+    private final JdbcMapper<SimpleOffice> jdbcMapper2;
 
     public ClassicModelsRepository(DSLContext ctx) {
         this.ctx = ctx;
-        this.jdbcMapper = JdbcMapperFactory
+        this.jdbcMapper1 = JdbcMapperFactory
                 .newInstance()
                 // .addKeys("managerId") // I use @Key in SimpleManager
-                .newMapper(SimpleManager.class);
+                .newMapper(SimpleManager.class);                
+        
+        this.jdbcMapper2 = JdbcMapperFactory
+                .newInstance()
+                // .addKeys("officeCode") // I use @Key in SimpleOffice
+                .newMapper(SimpleOffice.class); 
     }
 
     public List<SimpleManager> findManagerAndOffice() {
@@ -44,6 +51,7 @@ public class ClassicModelsRepository {
                                 .from(OFFICE).join(OFFICE_HAS_MANAGER)
                                 .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE)).asTable("t"))
                         .on(MANAGER.MANAGER_ID.eq(field(name("managers_manager_id"), Long.class)))
+                        .orderBy(MANAGER.MANAGER_ID)
                 
                 /* or, like this
                 = ctx.select(MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME,
@@ -57,7 +65,44 @@ public class ClassicModelsRepository {
                          */
                         .fetchResultSet()) {
 
-                    Stream<SimpleManager> stream = jdbcMapper.stream(rs);
+                    Stream<SimpleManager> stream = jdbcMapper1.stream(rs);
+
+                    return stream.collect(toList());
+
+                } catch (SQLException ex) {
+                    // handle exception (for example, wrap it into a unchecked exception)
+                }
+
+                return Collections.emptyList();
+    }
+    
+    public List<SimpleOffice> findOfficeAndManager() {
+
+        try ( ResultSet rs                
+                = ctx.select(OFFICE.OFFICE_CODE, OFFICE.STATE, OFFICE.CITY,                        
+                        field("managers_managerId"), field("managers_managerName"))
+                        .from(OFFICE)
+                        .join(select(MANAGER.MANAGER_ID.as("managers_managerId"),
+                                MANAGER.MANAGER_NAME.as("managers_managerName"),                                
+                                OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE.as("offices_office_code"))
+                                .from(MANAGER).join(OFFICE_HAS_MANAGER)
+                                .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID)).asTable("t"))
+                        .on(OFFICE.OFFICE_CODE.eq(field(name("offices_office_code"), String.class)))
+                        .orderBy(OFFICE.OFFICE_CODE)
+                
+                // or, like this
+                /*
+                = ctx.select(OFFICE.OFFICE_CODE, OFFICE.STATE, OFFICE.CITY,
+                        MANAGER.MANAGER_ID.as("managers_managerId"), 
+                        MANAGER.MANAGER_NAME.as("managers_managerName"))
+                        .from(OFFICE, MANAGER, OFFICE_HAS_MANAGER)
+                        .where(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID))
+                        .and(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))
+                        .orderBy(OFFICE.OFFICE_CODE)                         
+                */
+                        .fetchResultSet()) {
+
+                    Stream<SimpleOffice> stream = jdbcMapper2.stream(rs);
 
                     return stream.collect(toList());
 

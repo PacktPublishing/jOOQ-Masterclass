@@ -1,6 +1,7 @@
 package com.classicmodels.service;
 
 import com.classicmodels.pojo.SimpleManager;
+import com.classicmodels.pojo.SimpleOffice;
 import com.classicmodels.repository.ClassicModelsRepository;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -21,4 +22,10 @@ public class ClasicModelsService {
         return classicModelsRepository.findManagerAndOffice();
     }
 
+    @Transactional(readOnly = true)
+    public List<SimpleOffice> fetchOfficeAndManager() {
+
+        return classicModelsRepository.findOfficeAndManager();
+    }
 }
+
