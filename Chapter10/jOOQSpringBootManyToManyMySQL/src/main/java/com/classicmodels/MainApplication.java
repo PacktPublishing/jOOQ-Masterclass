@@ -23,7 +23,7 @@ public class MainApplication {
     public ApplicationRunner init() {
         return args -> {
 
-            classicModelsService.callAll();
+            classicModelsService.fetchManyToMany();
 
         };
     }

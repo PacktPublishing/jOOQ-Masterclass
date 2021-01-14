@@ -1,5 +1,6 @@
 package com.classicmodels.pojo;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,8 @@ public class SimpleOffice implements Serializable {
     
     private String state;
     private String city;
-       
+
+    @JsonBackReference
     private List<SimpleManager> managers = new ArrayList<>();
 
     public SimpleOffice(String officeCode, String state, String city) {

@@ -1,6 +1,8 @@
 package com.classicmodels.service;
 
+import com.classicmodels.pojo.SimpleManager;
 import com.classicmodels.repository.ClassicModelsRepository;
+import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,8 +14,8 @@ public class ClassicModelsService {
         this.classicModelsRepository = classicModelsRepository;
     }
 
-    public void callAll() {
+    public List<SimpleManager> fetchManyToMany() {
 
-        classicModelsRepository.fetchManyToMany();
+        return classicModelsRepository.fetchManyToMany();
     }
 }

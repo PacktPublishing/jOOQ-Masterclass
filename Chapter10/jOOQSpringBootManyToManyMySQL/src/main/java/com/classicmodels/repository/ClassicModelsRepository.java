@@ -29,7 +29,7 @@ public class ClassicModelsRepository {
         this.ctx = ctx;
     }
 
-    public void fetchManyToMany() {
+    public List<SimpleManager> fetchManyToMany() {
 
         ResultSet rs = ctx.select(MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME,
                 field("officeCode"), field("city"), field("state"))
@@ -90,5 +90,7 @@ public class ClassicModelsRepository {
                 System.out.println(so.getManagers());
             }
         }
+        
+        return result;
     }
 }

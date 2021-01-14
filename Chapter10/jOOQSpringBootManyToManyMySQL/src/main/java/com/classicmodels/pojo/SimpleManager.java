@@ -1,5 +1,6 @@
 package com.classicmodels.pojo;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,7 @@ public class SimpleManager implements Serializable {
     private Long managerId;    
     private String managerName;
     
+    @JsonManagedReference
     private List<SimpleOffice> offices = new ArrayList<>();
 
     public SimpleManager(Long managerId, String managerName) {
