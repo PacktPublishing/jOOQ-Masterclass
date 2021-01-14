@@ -2,6 +2,7 @@ package com.classicmodels.repository;
 
 import com.classicmodels.pojo.SimpleCustomer;
 import com.classicmodels.pojo.SimpleCustomerDetail;
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -15,6 +16,8 @@ import org.jooq.Field;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.jooq.Record;
+import org.jooq.Record6;
+import org.jooq.RecordMapper;
 
 @Repository
 @Transactional(readOnly = true)
@@ -39,8 +42,25 @@ public class ClassicModelsRepository {
                 .fetchInto(SimpleCustomer.class);
         System.out.println("Example 1\n" + result1);
 
-        // approach 2 (use map())
+        // approach 2 (use RecordMapper)
         List<SimpleCustomer> result2 = ctx.select(
+                CUSTOMER.CUSTOMER_NAME, CUSTOMER.PHONE, CUSTOMER.CREDIT_LIMIT,
+                CUSTOMERDETAIL.ADDRESS_LINE_FIRST, CUSTOMERDETAIL.STATE, CUSTOMERDETAIL.CITY)
+                .from(CUSTOMER)
+                .join(CUSTOMERDETAIL)
+                .on(CUSTOMER.CUSTOMER_NUMBER.eq(CUSTOMERDETAIL.CUSTOMER_NUMBER))
+                .fetch((Record6<String, String, BigDecimal, String, String, String> record) -> new SimpleCustomer(
+                        record.getValue(CUSTOMER.CUSTOMER_NAME),
+                        record.getValue(CUSTOMER.PHONE),
+                        record.getValue(CUSTOMER.CREDIT_LIMIT).floatValue(),
+                        new SimpleCustomerDetail(
+                                record.getValue(CUSTOMERDETAIL.ADDRESS_LINE_FIRST),
+                                record.getValue(CUSTOMERDETAIL.STATE),
+                                record.getValue(CUSTOMERDETAIL.CITY))));
+        System.out.println("Example 2\n" + result2);
+
+        // approach 3 (use map(RecordMapper))
+        List<SimpleCustomer> result3 = ctx.select(
                 CUSTOMER.CUSTOMER_NAME, CUSTOMER.PHONE, CUSTOMER.CREDIT_LIMIT,
                 CUSTOMERDETAIL.ADDRESS_LINE_FIRST, CUSTOMERDETAIL.STATE, CUSTOMERDETAIL.CITY)
                 .from(CUSTOMER)
@@ -55,10 +75,10 @@ public class ClassicModelsRepository {
                         rs.getValue(CUSTOMERDETAIL.ADDRESS_LINE_FIRST),
                         rs.getValue(CUSTOMERDETAIL.STATE),
                         rs.getValue(CUSTOMERDETAIL.CITY))));
-        System.out.println("Example 2\n" + result2);
+        System.out.println("Example 3\n" + result3);
 
-        // approach 3 (shortcut of approach 2)
-        List<SimpleCustomer> result3 = ctx.select(
+        // approach 4 (shortcut of approach 3)
+        List<SimpleCustomer> result4 = ctx.select(
                 CUSTOMER.CUSTOMER_NAME, CUSTOMER.PHONE, CUSTOMER.CREDIT_LIMIT,
                 CUSTOMERDETAIL.ADDRESS_LINE_FIRST, CUSTOMERDETAIL.STATE, CUSTOMERDETAIL.CITY)
                 .from(CUSTOMER)
@@ -72,9 +92,9 @@ public class ClassicModelsRepository {
                         rs.getValue(CUSTOMERDETAIL.ADDRESS_LINE_FIRST),
                         rs.getValue(CUSTOMERDETAIL.STATE),
                         rs.getValue(CUSTOMERDETAIL.CITY))));
-        System.out.println("Example 3\n" + result3);
+        System.out.println("Example 4\n" + result4);
 
-        // approach 4 (stream Map<Record, Record>)
+        // approach 5 (stream Map<Record, Record>)
         Map<Record, Record> map = ctx.select(
                 CUSTOMER.CUSTOMER_NAME, CUSTOMER.PHONE, CUSTOMER.CREDIT_LIMIT,
                 CUSTOMERDETAIL.ADDRESS_LINE_FIRST, CUSTOMERDETAIL.STATE, CUSTOMERDETAIL.CITY)
@@ -84,7 +104,7 @@ public class ClassicModelsRepository {
                 .fetchMap(new Field[]{CUSTOMER.CUSTOMER_NAME, CUSTOMER.PHONE, CUSTOMER.CREDIT_LIMIT},
                 new Field[]{CUSTOMERDETAIL.ADDRESS_LINE_FIRST, CUSTOMERDETAIL.STATE, CUSTOMERDETAIL.CITY});
 
-        List<SimpleCustomer> result4 = map.entrySet()
+        List<SimpleCustomer> result5 = map.entrySet()
                 .stream()
                 .map((e) -> {
                     SimpleCustomer customer = e.getKey().into(SimpleCustomer.class);
@@ -92,9 +112,9 @@ public class ClassicModelsRepository {
 
                     return customer;
                 }).collect(Collectors.toList());
-        System.out.println("Example 4\n" + result4);
-        
-        // approach 5 (map from ResultSet)
+        System.out.println("Example 5\n" + result5);
+
+        // approach 6 (map from ResultSet)
         ResultSet rs = ctx.select(
                 CUSTOMER.CUSTOMER_NAME, CUSTOMER.PHONE, CUSTOMER.CREDIT_LIMIT,
                 CUSTOMERDETAIL.ADDRESS_LINE_FIRST, CUSTOMERDETAIL.STATE, CUSTOMERDETAIL.CITY)
@@ -103,20 +123,19 @@ public class ClassicModelsRepository {
                 .on(CUSTOMER.CUSTOMER_NUMBER.eq(CUSTOMERDETAIL.CUSTOMER_NUMBER))
                 .fetchResultSet();
 
-        List<SimpleCustomer> result5 = new ArrayList<>();
-        try {            
+        List<SimpleCustomer> result6 = new ArrayList<>();
+        try {
             while (rs.next()) {
-                result5.add(new SimpleCustomer(
+                result6.add(new SimpleCustomer(
                         rs.getString("customer_name"), rs.getString("phone"), rs.getFloat("credit_limit"),
                         new SimpleCustomerDetail(rs.getString("address_line_first"),
                                 rs.getString("state"), rs.getString("city")))
-                        
                 );
             }
         } catch (SQLException ex) {
             // handle exception
         }
-        System.out.println("Example 5\n" + result5);
+        System.out.println("Example 6\n" + result6);
 
     }
 }
