@@ -102,7 +102,7 @@ public class ClassicModelsRepository {
                 .orderBy(CUSTOMER.CREDIT_LIMIT)
                 .forJSON().path()
                 .fetch();
-        System.out.println("Example 1.1:\n" + result1.formatJSON());
+        System.out.println("Example 3.1:\n" + result1.formatJSON());
 
         Result<Record1<JSON>> result2 = ctx.select(concat(CUSTOMER.CONTACT_FIRST_NAME, val(" "),
                 CUSTOMER.CONTACT_LAST_NAME).as("name"), CUSTOMER.CREDIT_LIMIT)
@@ -110,7 +110,7 @@ public class ClassicModelsRepository {
                 .orderBy(CUSTOMER.CREDIT_LIMIT)
                 .forJSON().path()
                 .fetch();
-        System.out.println("Example 1.2:\n" + result2.formatJSON());
+        System.out.println("Example 3.2:\n" + result2.formatJSON());
 
         Result<Record1<JSON>> result3 = ctx.select(concat(CUSTOMER.CONTACT_FIRST_NAME, val(" "),
                 CUSTOMER.CONTACT_LAST_NAME).as("name"), CUSTOMER.CREDIT_LIMIT)
@@ -118,7 +118,7 @@ public class ClassicModelsRepository {
                 .orderBy(CUSTOMER.CREDIT_LIMIT)
                 .forJSON().path().root()
                 .fetch();
-        System.out.println("Example 1.3:\n" + result3.formatJSON());
+        System.out.println("Example 3.3:\n" + result3.formatJSON());
 
         Result<Record1<JSON>> result4 = ctx.select(concat(CUSTOMER.CONTACT_FIRST_NAME, val(" "),
                 CUSTOMER.CONTACT_LAST_NAME).as("name"), CUSTOMER.CREDIT_LIMIT)
@@ -126,7 +126,7 @@ public class ClassicModelsRepository {
                 .orderBy(CUSTOMER.CREDIT_LIMIT)
                 .forJSON().path().root("customer")
                 .fetch();
-        System.out.println("Example 1.4:\n" + result4.formatJSON());
+        System.out.println("Example 3.4:\n" + result4.formatJSON());
 
         // auto() -> format the output automatically based on the structure of the SELECT statement
         Result<Record1<JSON>> result5 = ctx.select(
@@ -139,7 +139,7 @@ public class ClassicModelsRepository {
                 .limit(5)
                 .forJSON().auto().root("customer")
                 .fetch();
-        System.out.println("Example 1.5:\n" + result5.formatJSON());
+        System.out.println("Example 3.5:\n" + result5.formatJSON());
 
         // path() -> default usage
         Result<Record1<JSON>> result6 = ctx.select(
@@ -152,7 +152,7 @@ public class ClassicModelsRepository {
                 .limit(5)
                 .forJSON().path().root("customer")
                 .fetch();
-        System.out.println("Example 1.6:\n" + result6.formatJSON());
+        System.out.println("Example 3.6:\n" + result6.formatJSON());
 
         // path() -> format nested results by using dot-separated column names or by using nested queries
         Result<Record1<JSON>> result7 = ctx.select(
@@ -166,7 +166,7 @@ public class ClassicModelsRepository {
                 .limit(5)
                 .forJSON().path().root("customer")
                 .fetch();
-        System.out.println("Example 1.7:\n" + result7.formatJSON());
+        System.out.println("Example 3.7:\n" + result7.formatJSON());
     }
 
     public void fetchJsonTable() {
@@ -182,7 +182,7 @@ public class ClassicModelsRepository {
                         .column("phone", VARCHAR).path("$.contact.phone")
                         .as("t"))
                 .fetch();
-        System.out.println("Example 3.1:\n" + result1);
+        System.out.println("Example 4.1:\n" + result1);
 
         Result<Record> result2 = ctx.select(table("t").asterisk())
                 .from(MANAGER).crossApply(
@@ -204,6 +204,6 @@ public class ClassicModelsRepository {
                         .column("projects", NVARCHAR).path("$.projects") // null (needs crossApply again)
                         .as("t"))
                 .fetch();
-        System.out.println("Example 3.2:\n" + result2);
+        System.out.println("Example 4.2:\n" + result2);
     }
 }
