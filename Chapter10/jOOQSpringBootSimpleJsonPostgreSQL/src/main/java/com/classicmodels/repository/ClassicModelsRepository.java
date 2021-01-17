@@ -108,13 +108,13 @@ public class ClassicModelsRepository {
         System.out.println("Example 2.2:\n" + result2);
         
         Result<Record1<JSON>> result3 = ctx.select(
-                jsonValue(MANAGER.MANAGER_DETAIL, "$.phoneNumber[*].number[0]").as("homeMobilePhones"))
+                jsonValue(MANAGER.MANAGER_DETAIL, "$.phoneNumber[0].number[0]").as("firstHomePhone"))
                 .from(MANAGER)
                 .fetch();
         System.out.println("Example 2.3:\n" + result3);
         
         Result<Record1<JSON>> result4 = ctx.select(
-                jsonValue(MANAGER.MANAGER_DETAIL, "$.phoneNumber[1].number[*]").as("allMobilePhones"))
+                jsonValue(MANAGER.MANAGER_DETAIL, "$.phoneNumber[1].number").as("allMobilePhones"))
                 .from(MANAGER)
                 .fetch();
         System.out.println("Example 2.4:\n" + result4);
@@ -133,7 +133,14 @@ public class ClassicModelsRepository {
                 .where(jsonValue(MANAGER.MANAGER_DETAIL, "$.projects[*].role")
                         .like("%Principal Manager%"))
                 .fetch();
-        System.out.println("Example 2.6:\n" + result6);                             
+        System.out.println("Example 2.6:\n" + result6);  
+        
+        Result<Record1<JSON>> result7 = ctx.select(
+                jsonValue(MANAGER.MANAGER_DETAIL, 
+                        "$[*] ? (@.projects[0].start.datetime() > \"2015-01-01\".datetime() && @.projects[0].end.datetime() < \"2020-01-01\".datetime())"))
+                .from(MANAGER)                
+                .fetch();
+        System.out.println("Example 2.7:\n" + result7);
     }
     
     public void fetchJsonTable() {
