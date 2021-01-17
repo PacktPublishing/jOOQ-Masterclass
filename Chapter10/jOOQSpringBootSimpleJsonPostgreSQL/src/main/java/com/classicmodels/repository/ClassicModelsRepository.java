@@ -22,6 +22,7 @@ import static org.jooq.impl.DSL.jsonObjectAgg;
 import static org.jooq.impl.DSL.jsonTable;
 import static org.jooq.impl.DSL.key;
 import static org.jooq.impl.DSL.lateral;
+import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.table;
 import static org.jooq.impl.DSL.val;
 import static org.jooq.impl.SQLDataType.DATE;
@@ -132,7 +133,7 @@ public class ClassicModelsRepository {
                 .where(jsonValue(MANAGER.MANAGER_DETAIL, "$.projects[*].role")
                         .like("%Principal Manager%"))
                 .fetch();
-        System.out.println("Example 2.6:\n" + result6);              
+        System.out.println("Example 2.6:\n" + result6);                             
     }
     
     public void fetchJsonTable() {
@@ -172,11 +173,11 @@ public class ClassicModelsRepository {
         System.out.println("Example 3.2:\n" + result2);
         
         Result<Record> result3 = ctx.select(table("t").asterisk())
-                .from(MANAGER, lateral(jsonTable(jsonValue(MANAGER.MANAGER_DETAIL, "$.projects[*]"), val("$[*]"))
+                .from(MANAGER, lateral(jsonTable(jsonValue(MANAGER.MANAGER_DETAIL, "$.projects"), val("$[*]"))
                         .column("id").forOrdinality()
                         .column("name", VARCHAR)
                         .column("start", DATE)
-                        .column("end", DATE) // for string "Now" this will be null
+                        .column("end", DATE) 
                         .column("type", VARCHAR)
                         .column("role", VARCHAR)
                         .column("details", VARCHAR)
@@ -186,11 +187,11 @@ public class ClassicModelsRepository {
 
         // filter result
         Result<Record> result4 = ctx.select(table("t").asterisk())
-                .from(MANAGER, lateral(jsonTable(jsonValue(MANAGER.MANAGER_DETAIL, "$.projects[*]"), val("$[*]"))
+                .from(MANAGER, lateral(jsonTable(jsonValue(MANAGER.MANAGER_DETAIL, "$.projects"), val("$[*]"))
                         .column("id").forOrdinality()
                         .column("name", VARCHAR)
                         .column("start", DATE)
-                        .column("end", DATE) // for string "Now" this will be null
+                        .column("end", DATE) 
                         .column("type", VARCHAR)
                         .column("role", VARCHAR)
                         .column("details", VARCHAR)
@@ -203,16 +204,16 @@ public class ClassicModelsRepository {
         Result<Record1<JSON>> result5 = ctx.select(jsonObject("projects", jsonArrayAgg(
                 jsonObject(key("name").value(field("name")),
                         key("start").value(field("start")),
-                   //     key("end").value(field("end")), // for string "Now" this will be null
-                        key("type").value(field("type")),
+                        key("end").value(field(name("end"))),    // 'end' and 'type' are reserved words in PostgreSQL
+                        key("type").value(field(name("type"))),  // so, we use name() to create the proper SQL identifier
                         key("role").value(field("role")),
                         key("details").value(field("details"))
                 ))))
-                .from(MANAGER, lateral(jsonTable(jsonValue(MANAGER.MANAGER_DETAIL, "$.projects[*]"), val("$[*]"))
+                .from(MANAGER, lateral(jsonTable(jsonValue(MANAGER.MANAGER_DETAIL, "$.projects"), val("$[*]"))
                         .column("id").forOrdinality()
                         .column("name", VARCHAR)
                         .column("start", DATE)
-                     //   .column("end", DATE) // for string "Now" this will be null
+                        .column("end", DATE) 
                         .column("type", VARCHAR)
                         .column("role", VARCHAR)
                         .column("details", VARCHAR)
@@ -223,7 +224,7 @@ public class ClassicModelsRepository {
         // aggregate
         Result<Record2<String, Integer>> result6 = ctx.select(
                 field("type", String.class), count(field("type")))
-                .from(MANAGER, lateral(jsonTable(jsonValue(MANAGER.MANAGER_DETAIL, "$.projects[*]"), val("$[*]"))
+                .from(MANAGER, lateral(jsonTable(jsonValue(MANAGER.MANAGER_DETAIL, "$.projects"), val("$[*]"))
                         .column("type", VARCHAR)
                         .as("t")))
                 .groupBy(field("type"))
@@ -232,17 +233,17 @@ public class ClassicModelsRepository {
 
         // order and limit result
         Result<Record> result7 = ctx.select(table("t").asterisk())
-                .from(MANAGER, lateral(jsonTable(jsonValue(MANAGER.MANAGER_DETAIL, "$.projects[*]"), val("$[*]"))
+                .from(MANAGER, lateral(jsonTable(jsonValue(MANAGER.MANAGER_DETAIL, "$.projects"), val("$[*]"))
                         .column("id").forOrdinality()
                         .column("name", VARCHAR)
                         .column("start", DATE)
-                        .column("end", DATE) // for string "Now" this will be null
+                        .column("end", DATE)
                         .column("type", VARCHAR)
                         .column("role", VARCHAR)
                         .column("details", VARCHAR)
                         .as("t")))
                 .orderBy(field("start"))
-                //.limit((2))
+                .limit((2))
                 .fetch();
         System.out.println("Example 3.7:\n" + result7);
     }   
