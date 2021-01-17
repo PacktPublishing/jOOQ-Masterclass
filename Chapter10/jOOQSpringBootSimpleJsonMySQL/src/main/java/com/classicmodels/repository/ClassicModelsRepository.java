@@ -138,9 +138,9 @@ public class ClassicModelsRepository {
                 jsonValue(MANAGER.MANAGER_DETAIL, "$.email").as("email"))
                 .from(MANAGER)
                 .where(jsonValue(MANAGER.MANAGER_DETAIL, "$.projects[0].start").coerce(LocalDate.class)
-                        .gt(LocalDate.of(2013, 9, 1)).and(
-                        jsonValue(MANAGER.MANAGER_DETAIL, "$.projects[0].end").coerce(String.class)
-                                .eq("Now")
+                        .gt(LocalDate.of(2015, 1, 1)).and(
+                        jsonValue(MANAGER.MANAGER_DETAIL, "$.projects[0].end").coerce(LocalDate.class)
+                                .lt(LocalDate.of(2020, 1, 1))
                 ))
                 .fetch();
         System.out.println("Example 2.7:\n" + result7);
@@ -187,7 +187,7 @@ public class ClassicModelsRepository {
                         .column("id").forOrdinality()
                         .column("name", VARCHAR)
                         .column("start", DATE)
-                        .column("end", DATE) // for string "Now" this will be null
+                        .column("end", DATE)
                         .column("type", VARCHAR)
                         .column("role", VARCHAR)
                         .column("details", VARCHAR)
@@ -201,7 +201,7 @@ public class ClassicModelsRepository {
                         .column("id").forOrdinality()
                         .column("name", VARCHAR)
                         .column("start", DATE)
-                        .column("end", DATE) // for string "Now" this will be null
+                        .column("end", DATE)
                         .column("type", VARCHAR)
                         .column("role", VARCHAR)
                         .column("details", VARCHAR)
@@ -214,7 +214,7 @@ public class ClassicModelsRepository {
         Result<Record1<JSON>> result5 = ctx.select(jsonObject("projects", jsonArrayAgg(
                 jsonObject(key("name").value(field("name")),
                         key("start").value(field("start")),
-                        key("end").value(field("end")), // for string "Now" this will be null
+                        key("end").value(field("end")),
                         key("type").value(field("type")),
                         key("role").value(field("role")),
                         key("details").value(field("details"))
@@ -223,7 +223,7 @@ public class ClassicModelsRepository {
                         .column("id").forOrdinality()
                         .column("name", VARCHAR)
                         .column("start", DATE)
-                        .column("end", DATE) // for string "Now" this will be null
+                        .column("end", DATE)
                         .column("type", VARCHAR)
                         .column("role", VARCHAR)
                         .column("details", VARCHAR)
@@ -247,7 +247,7 @@ public class ClassicModelsRepository {
                         .column("id").forOrdinality()
                         .column("name", VARCHAR)
                         .column("start", DATE)
-                        .column("end", DATE) // for string "Now" this will be null
+                        .column("end", DATE)
                         .column("type", VARCHAR)
                         .column("role", VARCHAR)
                         .column("details", VARCHAR)
