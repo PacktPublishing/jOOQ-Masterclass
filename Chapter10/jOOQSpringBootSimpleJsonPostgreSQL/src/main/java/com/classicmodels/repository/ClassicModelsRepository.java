@@ -119,6 +119,7 @@ public class ClassicModelsRepository {
                 .fetch();
         System.out.println("Example 2.4:\n" + result4);
         
+        // use Example 2.5 and 2.6 only if you cannot use 2.7
         Result<Record1<JSON>> result5 = ctx.select(
                 jsonValue(MANAGER.MANAGER_DETAIL, "$.email").as("email"))
                 .from(MANAGER)
@@ -135,12 +136,20 @@ public class ClassicModelsRepository {
                 .fetch();
         System.out.println("Example 2.6:\n" + result6);  
         
+        // this is way better than 2.5 and 2.6
         Result<Record1<JSON>> result7 = ctx.select(
+                jsonValue(MANAGER.MANAGER_DETAIL, "$.email").as("email"))
+                .from(MANAGER)
+                .where(jsonExists(MANAGER.MANAGER_DETAIL, "$[*] ? (@.projects[*].role == \"Principal Manager\")"))
+                .fetch();
+        System.out.println("Example 2.7:\n" + result7);  
+        
+        Result<Record1<JSON>> result8 = ctx.select(
                 jsonValue(MANAGER.MANAGER_DETAIL, 
                         "$[*] ? (@.projects[0].start.datetime() > \"2015-01-01\".datetime() && @.projects[0].end.datetime() < \"2020-01-01\".datetime())"))
                 .from(MANAGER)                
                 .fetch();
-        System.out.println("Example 2.7:\n" + result7);
+        System.out.println("Example 2.8:\n" + result8);
     }
     
     public void fetchJsonTable() {
