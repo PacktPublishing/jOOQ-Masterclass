@@ -188,7 +188,7 @@ public class ClassicModelsRepository {
                 .from(MANAGER).crossApply(
                         jsonTable(MANAGER.MANAGER_DETAIL.coerce(JSON.class), val("$"))
                         .column("id").forOrdinality()
-                        .column("firstName", VARCHAR)
+                        .column("firstName", VARCHAR(10)) // add the size to avoid VARCHAR(max)
                         .column("lastName", VARCHAR)
                         .column("gender", VARCHAR)
                         .column("dob", DATE)
