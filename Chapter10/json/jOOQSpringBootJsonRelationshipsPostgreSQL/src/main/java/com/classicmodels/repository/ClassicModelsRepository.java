@@ -30,7 +30,7 @@ public class ClassicModelsRepository {
 
     public ClassicModelsRepository(DSLContext ctx) {
         this.ctx = ctx;
-    }   
+    }
 
     public void oneToOneToJson() {
 
@@ -48,7 +48,7 @@ public class ClassicModelsRepository {
                 .on(CUSTOMER.CUSTOMER_NUMBER.eq(CUSTOMERDETAIL.CUSTOMER_NUMBER))
                 .fetch();
 
-        System.out.println("Example 2 (one-to-one):\n" + result.formatJSON());
+        System.out.println("Example 1 (one-to-one):\n" + result.formatJSON());
     }
 
     public void oneToOneToJsonLimit() {
@@ -70,18 +70,18 @@ public class ClassicModelsRepository {
                 .limit(2)
                 .fetch();
 
-        System.out.println("Example 3.1 (one-to-one and limit):\n" + result1.formatJSON());
+        System.out.println("Example 2.1 (one-to-one and limit):\n" + result1.formatJSON());
 
         // limit your result before aggregating via subquery
         Result<Record1<JSON>> result2 = ctx.select(jsonArrayAgg(jsonObject(
-                key("customerName").value(field("t","customerName")),
-                key("phone").value(field("t","phone")),
-                key("creditLimit").value(field("t","creditLimit")),
+                key("customerName").value(field(name("customerName"))),
+                key("phone").value(field(name("phone"))),
+                key("creditLimit").value(field(name("creditLimit"))),
                 key("details").value(
-                        jsonObject(key("city").value(field("t","city")),
-                                key("addressLineFirst").value(field("t","addressFirstLine")),
-                                key("state").value(field("t","state"))))))
-                .orderBy(field("t","creditLimit")))
+                        jsonObject(key("city").value(field(name("city"))),
+                                key("addressLineFirst").value(field(name("addressFirstLine"))),
+                                key("state").value(field(name("state")))))))
+                .orderBy(field(name("creditLimit"))))
                 .from(select(CUSTOMER.CUSTOMER_NAME.as("customerName"),
                         CUSTOMER.PHONE.as("phone"), CUSTOMER.CREDIT_LIMIT.as("creditLimit"),
                         CUSTOMERDETAIL.CITY.as("city"),
@@ -94,7 +94,7 @@ public class ClassicModelsRepository {
                         .limit(2).asTable("t"))
                 .fetch();
 
-        System.out.println("Example 3.2 (one-to-one and limit):\n" + result2.formatJSON());
+        System.out.println("Example 2.2 (one-to-one and limit):\n" + result2.formatJSON());
     }
 
     public void oneToManyToJson() {
@@ -115,7 +115,7 @@ public class ClassicModelsRepository {
                 .orderBy(PRODUCTLINE.PRODUCT_LINE)
                 .fetch();
 
-        System.out.println("Example 4 (one-to-many):\n" + result.formatJSON());
+        System.out.println("Example 3 (one-to-many):\n" + result.formatJSON());
     }
 
     public void oneToManyToJsonLimit() {
@@ -138,7 +138,7 @@ public class ClassicModelsRepository {
                 .limit(2)
                 .fetch();
 
-        System.out.println("Example 5.1 (one-to-many and limit):\n" + result1.formatJSON());
+        System.out.println("Example 4.1 (one-to-many and limit):\n" + result1.formatJSON());
 
         // limit 'many' in one-to-many
         Result<Record1<JSON>> result2 = ctx.select(
@@ -146,10 +146,10 @@ public class ClassicModelsRepository {
                         key("productLine").value(PRODUCTLINE.PRODUCT_LINE),
                         key("textDescription").value(PRODUCTLINE.TEXT_DESCRIPTION),
                         key("products").value(jsonArrayAgg(
-                                jsonObject(key("productName").value(field("t","productName")),
-                                        key("productVendor").value(field("t","productVendor")),
-                                        key("quantityInStock").value(field("t","quantityInStock"))))
-                                .orderBy(field("t","quantityInStock")))))
+                                jsonObject(key("productName").value(field(name("productName"))),
+                                        key("productVendor").value(field(name("productVendor"))),
+                                        key("quantityInStock").value(field(name("quantityInStock")))))
+                                .orderBy(field(name("quantityInStock"))))))
                 .from(PRODUCTLINE,
                         lateral(select(PRODUCT.PRODUCT_NAME.as("productName"),
                                 PRODUCT.PRODUCT_VENDOR.as("productVendor"),
@@ -162,7 +162,7 @@ public class ClassicModelsRepository {
                 .orderBy(PRODUCTLINE.PRODUCT_LINE)
                 .fetch();
 
-        System.out.println("Example 5.2 (one-to-many and limit):\n" + result2.formatJSON());
+        System.out.println("Example 4.2 (one-to-many and limit):\n" + result2.formatJSON());
 
         // limit 'one' and 'many' in one-to-many
         Result<Record1<JSON>> result3 = ctx.select(
@@ -170,10 +170,10 @@ public class ClassicModelsRepository {
                         key("productLine").value(PRODUCTLINE.PRODUCT_LINE),
                         key("textDescription").value(PRODUCTLINE.TEXT_DESCRIPTION),
                         key("products").value(jsonArrayAgg(
-                                jsonObject(key("productName").value(field("t","productName")),
-                                        key("productVendor").value(field("t","productVendor")),
-                                        key("quantityInStock").value(field("t","quantityInStock"))))
-                                .orderBy(field("t","quantityInStock")))))
+                                jsonObject(key("productName").value(field(name("productName"))),
+                                        key("productVendor").value(field(name("productVendor"))),
+                                        key("quantityInStock").value(field(name("quantityInStock")))))
+                                .orderBy(field(name("quantityInStock"))))))
                 .from(PRODUCTLINE,
                         lateral(select(PRODUCT.PRODUCT_NAME.as("productName"),
                                 PRODUCT.PRODUCT_VENDOR.as("productVendor"),
@@ -187,7 +187,7 @@ public class ClassicModelsRepository {
                 .limit(3) // limit 'one'
                 .fetch();
 
-        System.out.println("Example 5.3 (one-to-many and limit):\n" + result3.formatJSON());
+        System.out.println("Example 4.3 (one-to-many and limit):\n" + result3.formatJSON());
     }
 
     public void manyToManyToJsonManagersOffices() {
@@ -198,10 +198,10 @@ public class ClassicModelsRepository {
                         key("managerName").value(MANAGER.MANAGER_NAME),
                         key("mobilePhone").value(jsonValue(MANAGER.MANAGER_DETAIL, "$.phoneNumber[*].number[1]")),
                         key("offices").value(jsonArrayAgg(
-                                jsonObject(key("officeCode").value(field("t","officeCode")),
-                                        key("state").value(field("t","state")),
-                                        key("city").value(field("t","city"))))
-                                .orderBy(field("t","officeCode")))))
+                                jsonObject(key("officeCode").value(field(name("officeCode"))),
+                                        key("state").value(field(name("state"))),
+                                        key("city").value(field(name("city")))))
+                                .orderBy(field(name("officeCode"))))))
                 .from(MANAGER)
                 .join(select(OFFICE.OFFICE_CODE.as("officeCode"),
                         OFFICE.CITY.as("city"), OFFICE.STATE.as("state"),
@@ -213,7 +213,7 @@ public class ClassicModelsRepository {
                 .orderBy(MANAGER.MANAGER_ID)
                 .fetch();
 
-        System.out.println("Example 6 (many-to-many):\n" + result.formatJSON());
+        System.out.println("Example 5 (many-to-many):\n" + result.formatJSON());
     }
 
     public void manyToManyToJsonOfficesManagers() {
@@ -224,10 +224,10 @@ public class ClassicModelsRepository {
                         key("state").value(OFFICE.STATE),
                         key("city").value(OFFICE.CITY),
                         key("managers").value(jsonArrayAgg(
-                                jsonObject(key("managerId").value(field("t","managerId")),
-                                        key("managerName").value(field("t","managerName")),
+                                jsonObject(key("managerId").value(field(name("managerId"))),
+                                        key("managerName").value(field(name("managerName"))),
                                         key("mobilePhone").value(jsonValue(field("details", JSON.class), "$.phoneNumber[*].number[1]"))))
-                                .orderBy(field("t","managerId")))))
+                                .orderBy(field(name("managerId"))))))
                 .from(OFFICE)
                 .join(select(MANAGER.MANAGER_ID.as("managerId"),
                         MANAGER.MANAGER_NAME.as("managerName"),
@@ -235,12 +235,12 @@ public class ClassicModelsRepository {
                         OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE.as("offices_office_code"))
                         .from(MANAGER).join(OFFICE_HAS_MANAGER)
                         .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID)).asTable("t"))
-                .on(OFFICE.OFFICE_CODE.eq(field("offices_office_code", String.class)))
+                .on(OFFICE.OFFICE_CODE.eq(field(name("offices_office_code"), String.class)))
                 .groupBy(OFFICE.OFFICE_CODE)
                 .orderBy(OFFICE.OFFICE_CODE)
                 .fetch();
 
-        System.out.println("Example 7 (many-to-many):\n" + result.formatJSON());
+        System.out.println("Example 6 (many-to-many):\n" + result.formatJSON());
     }
 
     public void manyToManyToJsonManagersOfficesLimit() {
@@ -251,10 +251,10 @@ public class ClassicModelsRepository {
                         key("managerName").value(MANAGER.MANAGER_NAME),
                         key("mobilePhone").value(jsonValue(MANAGER.MANAGER_DETAIL, "$.phoneNumber[*].number[1]")),
                         key("offices").value(jsonArrayAgg(
-                                jsonObject(key("officeCode").value(field("t","officeCode")),
-                                        key("state").value(field("t","state")),
-                                        key("city").value(field("t","city"))))
-                                .orderBy(field("t","officeCode")))))
+                                jsonObject(key("officeCode").value(field(name("officeCode"))),
+                                        key("state").value(field(name("state"))),
+                                        key("city").value(field(name("city")))))
+                                .orderBy(field(name("officeCode"))))))
                 .from(MANAGER)
                 .join(select(OFFICE.OFFICE_CODE.as("officeCode"),
                         OFFICE.CITY.as("city"), OFFICE.STATE.as("state"),
@@ -272,6 +272,6 @@ public class ClassicModelsRepository {
                 .limit(1) // limit the number of managers
                 .fetch();
 
-        System.out.println("Example 8 (many-to-many and limit):\n" + result.formatJSON());
+        System.out.println("Example 7 (many-to-many and limit):\n" + result.formatJSON());
     }
 }

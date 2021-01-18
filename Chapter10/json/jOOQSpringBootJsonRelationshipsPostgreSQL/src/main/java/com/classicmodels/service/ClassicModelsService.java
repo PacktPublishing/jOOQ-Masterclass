@@ -22,7 +22,6 @@ public class ClassicModelsService {
         
         classicModelsRepository.manyToManyToJsonManagersOffices();
         classicModelsRepository.manyToManyToJsonOfficesManagers();
-        classicModelsRepository.manyToManyToJsonManagersOfficesLimit();
-        
+        classicModelsRepository.manyToManyToJsonManagersOfficesLimit();        
     }
 }
