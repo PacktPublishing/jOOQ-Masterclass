@@ -197,13 +197,13 @@ public class ClassicModelsRepository {
                         .column("city", VARCHAR).path("$.address.city")
                         .column("state", VARCHAR).path("$.address.state")
                         .column("zipOrPostal", VARCHAR).path("$.address.zipOrPostal")
-                        .column("phoneNumber", NVARCHAR).path("$.phoneNumber") // null (needs crossApply again)
-                        .column("summary", VARCHAR).path("$.summary") // null (needs crossApply again)
+                        .column("phoneNumber", NVARCHAR).path("$.phoneNumber") // null 
+                        .column("summary", VARCHAR).path("$.summary") // null
                         .column("computerSkills", NVARCHAR).path("$.computerSkills")
                         .column("shareholder", VARCHAR).path("$.shareholder") // null, if doesn't exists
-                        .column("projects", NVARCHAR).path("$.projects") // null (needs crossApply again)
+                        .column("projects", NVARCHAR).path("$.projects") // null 
                         .as("t"))
                 .fetch();
-        System.out.println("Example 4.2:\n" + result2);
+        System.out.println("Example 4.2:\n" + result2);                
     }
 }
