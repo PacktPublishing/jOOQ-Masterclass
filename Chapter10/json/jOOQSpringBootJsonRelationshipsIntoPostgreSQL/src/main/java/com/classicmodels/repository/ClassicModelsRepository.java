@@ -32,7 +32,7 @@ public class ClassicModelsRepository {
         this.ctx = ctx;
     }
 
-    public void oneToOneToJson() {
+    public void oneToOneToJsonToPojo() {
 
         List<SimpleCustomer> result = ctx.select(jsonObject(
                 key("customerName").value(CUSTOMER.CUSTOMER_NAME),
@@ -50,7 +50,7 @@ public class ClassicModelsRepository {
         System.out.println("Example 2 (one-to-one):\n" + result);
     }
 
-    public void oneToManyToJson() {
+    public void oneToManyToJsonToPojo() {
 
         List<SimpleProductLine> result = ctx.select(
                 jsonObject(
@@ -71,7 +71,7 @@ public class ClassicModelsRepository {
         System.out.println("Example 2 (one-to-many):\n" + result);
     }
 
-    public void manyToManyToJsonManagersOffices() {
+    public void manyToManyToJsonToPojoManagersOffices() {
 
         List<SimpleManager> result = ctx.select(
                 jsonObject(
@@ -104,7 +104,7 @@ public class ClassicModelsRepository {
         }
     }
 
-    public void manyToManyToJsonOfficesManagers() {
+    public void manyToManyToJsonToPojoOfficesManagers() {
 
         List<SimpleOffice> result = ctx.select(
                 jsonObject(
