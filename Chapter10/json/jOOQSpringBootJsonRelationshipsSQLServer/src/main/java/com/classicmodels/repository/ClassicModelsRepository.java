@@ -31,7 +31,7 @@ public class ClassicModelsRepository {
 
     public void oneToOneToJson() {
         
-        Result<Record1<JSON>> result1x = ctx.select(
+        Result<Record1<JSON>> result1 = ctx.select(
                 jsonObject(
                         key("customerName").value(CUSTOMER.CUSTOMER_NAME),
                         key("phone").value(CUSTOMER.PHONE),
@@ -46,9 +46,9 @@ public class ClassicModelsRepository {
                 .orderBy(CUSTOMER.CREDIT_LIMIT)
                 .fetch();
         
-        System.out.println("Example 1.1 (one-to-one):\n" + result1x.formatJSON());
+        System.out.println("Example 1.1 (one-to-one):\n" + result1.formatJSON());
 
-        Result<Record1<JSON>> result1 = ctx.select(CUSTOMER.CUSTOMER_NAME,
+        Result<Record1<JSON>> result2 = ctx.select(CUSTOMER.CUSTOMER_NAME,
                 CUSTOMER.PHONE, CUSTOMER.CREDIT_LIMIT, CUSTOMERDETAIL.CITY,
                 CUSTOMERDETAIL.ADDRESS_LINE_FIRST,
                 CUSTOMERDETAIL.STATE)
@@ -59,9 +59,9 @@ public class ClassicModelsRepository {
                 .forJSON().path().root("data")
                 .fetch();
 
-        System.out.println("Example 1.1 (one-to-one):\n" + result1.formatJSON());
+        System.out.println("Example 1.2 (one-to-one):\n" + result2.formatJSON());
         
-        Result<Record1<JSON>> result2 = ctx.select(CUSTOMER.CUSTOMER_NAME,
+        Result<Record1<JSON>> result3 = ctx.select(CUSTOMER.CUSTOMER_NAME,
                 CUSTOMER.PHONE, CUSTOMER.CREDIT_LIMIT, CUSTOMERDETAIL.CITY,
                 CUSTOMERDETAIL.ADDRESS_LINE_FIRST,
                 CUSTOMERDETAIL.STATE)
@@ -72,7 +72,7 @@ public class ClassicModelsRepository {
                 .forJSON().auto().root("data")
                 .fetch();
 
-        System.out.println("Example 1.2 (one-to-one):\n" + result2.formatJSON());
+        System.out.println("Example 1.3 (one-to-one):\n" + result3.formatJSON());
     }
 
     public void oneToManyToJson() {
