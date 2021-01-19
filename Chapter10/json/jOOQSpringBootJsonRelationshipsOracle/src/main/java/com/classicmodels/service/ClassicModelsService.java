@@ -17,7 +17,7 @@ public class ClassicModelsService {
         classicModelsRepository.oneToOneToJson();
         classicModelsRepository.oneToOneToJsonLimit();
         
-        classicModelsRepository.oneToManyToJson();
+       // classicModelsRepository.oneToManyToJson();
         //classicModelsRepository.oneToManyToJsonLimit();
         
         //classicModelsRepository.manyToManyToJsonManagersOffices();
