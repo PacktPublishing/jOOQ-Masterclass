@@ -15,7 +15,7 @@ public class ClassicModelsService {
     public void callAll() {
         
         classicModelsRepository.oneToOneToJson();
-        classicModelsRepository.oneToOneToJsonLimit();
+        //classicModelsRepository.oneToOneToJsonLimit();
         
        // classicModelsRepository.oneToManyToJson();
         //classicModelsRepository.oneToManyToJsonLimit();

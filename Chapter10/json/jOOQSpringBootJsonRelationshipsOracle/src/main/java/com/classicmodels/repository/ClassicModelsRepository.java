@@ -34,8 +34,26 @@ public class ClassicModelsRepository {
     }
 
     public void oneToOneToJson() {
+        
+        Result<Record1<JSON>> result1 = ctx.select(
+                jsonObject(
+                        key("customerName").value(CUSTOMER.CUSTOMER_NAME),
+                        key("phone").value(CUSTOMER.PHONE),
+                        key("creditLimit").value(CUSTOMER.CREDIT_LIMIT),
+                        key("details").value(select(
+                                jsonObject(key("city").value(CUSTOMERDETAIL.CITY),
+                                        key("addressLineFirst").value(CUSTOMERDETAIL.ADDRESS_LINE_FIRST),
+                                        key("state").value(CUSTOMERDETAIL.STATE)))
+                                .from(CUSTOMERDETAIL)
+                                .where(CUSTOMERDETAIL.CUSTOMER_NUMBER.eq(CUSTOMER.CUSTOMER_NUMBER)))))
+                .from(CUSTOMER)
+                .orderBy(CUSTOMER.CREDIT_LIMIT)
+                .fetch();
 
-        Result<Record1<JSON>> result = ctx.select(jsonObject(
+        System.out.println("Example 1.1 (one-to-one):\n" + result1.formatJSON());
+
+        // same thing as above via JOIN
+        Result<Record1<JSON>> result2 = ctx.select(jsonObject(
                 key("customerName").value(CUSTOMER.CUSTOMER_NAME),
                 key("phone").value(CUSTOMER.PHONE),
                 key("creditLimit").value(CUSTOMER.CREDIT_LIMIT),
@@ -49,7 +67,7 @@ public class ClassicModelsRepository {
                 .orderBy(CUSTOMER.CREDIT_LIMIT)
                 .fetch();
 
-        System.out.println("Example 1 (one-to-one):\n" + result.formatJSON());
+        System.out.println("Example 1.2 (one-to-one):\n" + result2.formatJSON());
     }
 
     public void oneToOneToJsonLimit() {
