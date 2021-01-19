@@ -15,7 +15,6 @@ import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.jsonValue;
 import static org.jooq.impl.DSL.jsonArrayAgg;
 import static org.jooq.impl.DSL.jsonObject;
-import static org.jooq.impl.DSL.jsonbArrayAgg;
 import static org.jooq.impl.DSL.key;
 import static org.jooq.impl.DSL.lateral;
 import static org.jooq.impl.DSL.name;
@@ -40,7 +39,7 @@ public class ClassicModelsRepository {
                         key("customerName").value(CUSTOMER.CUSTOMER_NAME),
                         key("phone").value(CUSTOMER.PHONE),
                         key("creditLimit").value(CUSTOMER.CREDIT_LIMIT),
-                        key("details").value(select(jsonbArrayAgg(
+                        key("details").value(select(jsonArrayAgg(
                                 jsonObject(key("city").value(CUSTOMERDETAIL.CITY),
                                         key("addressLineFirst").value(CUSTOMERDETAIL.ADDRESS_LINE_FIRST),
                                         key("state").value(CUSTOMERDETAIL.STATE))))
@@ -77,7 +76,7 @@ public class ClassicModelsRepository {
                         key("customerName").value(CUSTOMER.CUSTOMER_NAME),
                         key("phone").value(CUSTOMER.PHONE),
                         key("creditLimit").value(CUSTOMER.CREDIT_LIMIT),
-                        key("details").value(select(jsonbArrayAgg(
+                        key("details").value(select(jsonArrayAgg(
                                 jsonObject(key("city").value(CUSTOMERDETAIL.CITY),
                                         key("addressLineFirst").value(CUSTOMERDETAIL.ADDRESS_LINE_FIRST),
                                         key("state").value(CUSTOMERDETAIL.STATE))))
@@ -140,7 +139,7 @@ public class ClassicModelsRepository {
                 jsonObject(
                         key("productLine").value(PRODUCTLINE.PRODUCT_LINE),
                         key("textDescription").value(PRODUCTLINE.TEXT_DESCRIPTION),
-                        key("products").value(select(jsonbArrayAgg(
+                        key("products").value(select(jsonArrayAgg(
                                 jsonObject(key("productName").value(PRODUCT.PRODUCT_NAME),
                                         key("productVendor").value(PRODUCT.PRODUCT_VENDOR),
                                         key("quantityInStock").value(PRODUCT.QUANTITY_IN_STOCK)))
