@@ -39,10 +39,10 @@ public class ClassicModelsRepository {
                         key("customerName").value(CUSTOMER.CUSTOMER_NAME),
                         key("phone").value(CUSTOMER.PHONE),
                         key("creditLimit").value(CUSTOMER.CREDIT_LIMIT),
-                        key("details").value(select(jsonArrayAgg(
+                        key("details").value(select(
                                 jsonObject(key("city").value(CUSTOMERDETAIL.CITY),
                                         key("addressLineFirst").value(CUSTOMERDETAIL.ADDRESS_LINE_FIRST),
-                                        key("state").value(CUSTOMERDETAIL.STATE))))
+                                        key("state").value(CUSTOMERDETAIL.STATE)))
                                 .from(CUSTOMERDETAIL)
                                 .where(CUSTOMERDETAIL.CUSTOMER_NUMBER.eq(CUSTOMER.CUSTOMER_NUMBER)))))
                 .from(CUSTOMER)
@@ -76,10 +76,10 @@ public class ClassicModelsRepository {
                         key("customerName").value(CUSTOMER.CUSTOMER_NAME),
                         key("phone").value(CUSTOMER.PHONE),
                         key("creditLimit").value(CUSTOMER.CREDIT_LIMIT),
-                        key("details").value(select(jsonArrayAgg(
+                        key("details").value(select(
                                 jsonObject(key("city").value(CUSTOMERDETAIL.CITY),
                                         key("addressLineFirst").value(CUSTOMERDETAIL.ADDRESS_LINE_FIRST),
-                                        key("state").value(CUSTOMERDETAIL.STATE))))
+                                        key("state").value(CUSTOMERDETAIL.STATE)))
                                 .from(CUSTOMERDETAIL)
                                 .where(CUSTOMERDETAIL.CUSTOMER_NUMBER.eq(CUSTOMER.CUSTOMER_NUMBER)))))
                 .from(CUSTOMER)
