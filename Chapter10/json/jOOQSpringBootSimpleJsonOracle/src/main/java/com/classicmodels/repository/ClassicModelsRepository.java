@@ -21,13 +21,11 @@ import static org.jooq.impl.DSL.jsonExists;
 import static org.jooq.impl.DSL.jsonObjectAgg;
 import static org.jooq.impl.DSL.jsonTable;
 import static org.jooq.impl.DSL.key;
-import static org.jooq.impl.DSL.lateral;
 import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.table;
 import static org.jooq.impl.DSL.val;
 import static org.jooq.impl.SQLDataType.DATE;
 import static org.jooq.impl.SQLDataType.INTEGER;
-import static org.jooq.impl.SQLDataType.JSON;
 import static org.jooq.impl.SQLDataType.VARCHAR;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -108,48 +106,30 @@ public class ClassicModelsRepository {
         System.out.println("Example 2.2:\n" + result2);
         
         Result<Record1<JSON>> result3 = ctx.select(
-                jsonValue(MANAGER.MANAGER_DETAIL, "$.phoneNumber[0].number[0]").as("firstHomePhone"))
+                jsonValue(MANAGER.MANAGER_DETAIL, "$.phoneNumber[1].number[0]").as("firstMobilePhone"))
                 .from(MANAGER)
                 .fetch();
         System.out.println("Example 2.3:\n" + result3);
         
         Result<Record1<JSON>> result4 = ctx.select(
-                jsonValue(MANAGER.MANAGER_DETAIL, "$.phoneNumber[1].number").as("allMobilePhones"))
+                jsonValue(MANAGER.MANAGER_DETAIL, "$.phoneNumber[0].number[0]").as("firstHomePhone"))
                 .from(MANAGER)
                 .fetch();
-        System.out.println("Example 2.4:\n" + result4);
-        
-        // use Example 2.5 and 2.6 only if you cannot use 2.7
+        System.out.println("Example 2.4:\n" + result4);               
+                
         Result<Record1<JSON>> result5 = ctx.select(
-                jsonValue(MANAGER.MANAGER_DETAIL, "$.email").as("email"))
-                .from(MANAGER)
-                .where(jsonValue(MANAGER.MANAGER_DETAIL, "$.projects[*].role").cast(String.class)
-                        .contains("Principal Manager"))
-                .fetch();
-        System.out.println("Example 2.5:\n" + result5);
-        
-        Result<Record1<JSON>> result6 = ctx.select(
-                jsonValue(MANAGER.MANAGER_DETAIL, "$.email").as("email"))
-                .from(MANAGER)
-                .where(jsonValue(MANAGER.MANAGER_DETAIL, "$.projects[*].role")
-                        .like("%Principal Manager%"))
-                .fetch();
-        System.out.println("Example 2.6:\n" + result6);  
-        
-        // this is way better than 2.5 and 2.6
-        Result<Record1<JSON>> result7 = ctx.select(
                 jsonValue(MANAGER.MANAGER_DETAIL, "$.email").as("email"))
                 .from(MANAGER)
                 .where(jsonExists(MANAGER.MANAGER_DETAIL, "$[*] ? (@.projects[*].role == \"Principal Manager\")"))
                 .fetch();
-        System.out.println("Example 2.7:\n" + result7);  
+        System.out.println("Example 2.5:\n" + result5);  
         
-        Result<Record1<JSON>> result8 = ctx.select(
-                jsonValue(MANAGER.MANAGER_DETAIL, 
-                        "$[*] ? (@.projects[0].start.datetime() > \"2015-01-01\".datetime() && @.projects[0].end.datetime() < \"2020-01-01\".datetime())"))
+        var result6 = ctx.select()                
                 .from(MANAGER)                
+                .where(jsonExists(MANAGER.MANAGER_DETAIL, 
+                        "$[*] ? (@.projects[0].start > \"2015-01-01\" && @.projects[0].end < \"2020-01-01\")"))
                 .fetch();
-        System.out.println("Example 2.8:\n" + result8);
+        System.out.println("Example 2.6:\n" + result6);
     }
     
     public void fetchJsonTable() {
@@ -167,10 +147,10 @@ public class ClassicModelsRepository {
                 .fetch();
         System.out.println("Example 3.1:\n" + result1);
         
-        Result<Record> result2 = ctx.select(table("t").asterisk())
-                .from(MANAGER, lateral(jsonTable(jsonArray(MANAGER.MANAGER_DETAIL), val("$[*]"))
+        Result<Record> result2 = ctx.select(table(name("t")).asterisk())
+                .from(MANAGER).crossApply(jsonTable(MANAGER.MANAGER_DETAIL, val("$[*]"))
                         .column("id").forOrdinality()
-                        .column("firstName", VARCHAR)
+                        .column("firstName", VARCHAR(10)) // specify a size for all to avoid default values
                         .column("lastName", VARCHAR)
                         .column("gender", VARCHAR)
                         .column("dob", DATE)
@@ -179,17 +159,17 @@ public class ClassicModelsRepository {
                         .column("city", VARCHAR).path("$.address.city")
                         .column("state", VARCHAR).path("$.address.state")
                         .column("zipOrPostal", VARCHAR).path("$.address.zipOrPostal")
-                        .column("phoneNumber", JSON).path("$.phoneNumber")
+                        .column("phoneNumber", VARCHAR).path("$.phoneNumber") // null                        
                         .column("summary", VARCHAR).path("$.summary")
-                        .column("computerSkills", JSON).path("$.computerSkills")
+                        .column("computerSkills", VARCHAR).path("$.computerSkills") // null
                         .column("shareholder", VARCHAR).path("$.shareholder") // null, if doesn't exists
-                        .column("projects", JSON).path("$.projects")
-                        .as("t")))
+                        .column("projects", VARCHAR).path("$.projects") // null
+                        .as("t"))
                 .fetch();
         System.out.println("Example 3.2:\n" + result2);
         
-        Result<Record> result3 = ctx.select(table("t").asterisk())
-                .from(MANAGER, lateral(jsonTable(jsonValue(MANAGER.MANAGER_DETAIL, "$.projects"), val("$[*]"))
+        Result<Record> result3 = ctx.select(table(name("t")).asterisk())
+                .from(MANAGER).crossApply(jsonTable(MANAGER.MANAGER_DETAIL, val("$.projects[*]"))
                         .column("id").forOrdinality()
                         .column("name", VARCHAR)
                         .column("start", DATE)
@@ -197,13 +177,13 @@ public class ClassicModelsRepository {
                         .column("type", VARCHAR)
                         .column("role", VARCHAR)
                         .column("details", VARCHAR)
-                        .as("t")))
+                        .as("t"))
                 .fetch();
         System.out.println("Example 3.3:\n" + result3);
 
         // filter result
-        Result<Record> result4 = ctx.select(table("t").asterisk())
-                .from(MANAGER, lateral(jsonTable(jsonValue(MANAGER.MANAGER_DETAIL, "$.projects"), val("$[*]"))
+        Result<Record> result4 = ctx.select(table(name("t")).asterisk())
+                .from(MANAGER).crossApply(jsonTable(MANAGER.MANAGER_DETAIL, val("$.projects[*]"))
                         .column("id").forOrdinality()
                         .column("name", VARCHAR)
                         .column("start", DATE)
@@ -211,21 +191,21 @@ public class ClassicModelsRepository {
                         .column("type", VARCHAR)
                         .column("role", VARCHAR)
                         .column("details", VARCHAR)
-                        .as("t")))
-                .where(field("type").eq("development"))
+                        .as("t"))
+                .where(field(name("type")).eq("development"))
                 .fetch();
         System.out.println("Example 3.4:\n" + result4);
 
         // back to JSON        
         Result<Record1<JSON>> result5 = ctx.select(jsonObject("projects", jsonArrayAgg(
-                jsonObject(key("name").value(field("name")),
-                        key("start").value(field("start")),
-                        key("end").value(field(name("end"))),    // 'end' and 'type' are reserved words in PostgreSQL
-                        key("type").value(field(name("type"))),  // so, we use name() to create the proper SQL identifier
-                        key("role").value(field("role")),
-                        key("details").value(field("details"))
+                jsonObject(key("name").value(field(name("name"))),
+                        key("start").value(field(name("start"))),
+                        key("end").value(field(name("end"))),   
+                        key("type").value(field(name("type"))), 
+                        key("role").value(field(name("role"))),
+                        key("details").value(field(name("details")))
                 ))))
-                .from(MANAGER, lateral(jsonTable(jsonValue(MANAGER.MANAGER_DETAIL, "$.projects"), val("$[*]"))
+                .from(MANAGER).crossApply(jsonTable(MANAGER.MANAGER_DETAIL, val("$.projects[*]"))
                         .column("id").forOrdinality()
                         .column("name", VARCHAR)
                         .column("start", DATE)
@@ -233,23 +213,23 @@ public class ClassicModelsRepository {
                         .column("type", VARCHAR)
                         .column("role", VARCHAR)
                         .column("details", VARCHAR)
-                        .as("t")))
+                        .as("t"))
                 .fetch();
         System.out.println("Example 3.5:\n" + result5.formatJSON());
 
         // aggregate
         Result<Record2<String, Integer>> result6 = ctx.select(
-                field("type", String.class), count(field("type")))
-                .from(MANAGER, lateral(jsonTable(jsonValue(MANAGER.MANAGER_DETAIL, "$.projects"), val("$[*]"))
+                field(name("type"), String.class), count(field(name("type"))))
+                .from(MANAGER).crossApply(jsonTable(MANAGER.MANAGER_DETAIL, val("$.projects[*]"))
                         .column("type", VARCHAR)
-                        .as("t")))
-                .groupBy(field("type"))
+                        .as("t"))
+                .groupBy(field(name("type")))
                 .fetch();
         System.out.println("Example 3.6:\n" + result6);
 
         // order and limit result
-        Result<Record> result7 = ctx.select(table("t").asterisk())
-                .from(MANAGER, lateral(jsonTable(jsonValue(MANAGER.MANAGER_DETAIL, "$.projects"), val("$[*]"))
+        Result<Record> result7 = ctx.select(table(name("t")).asterisk())
+                .from(MANAGER).crossApply(jsonTable(MANAGER.MANAGER_DETAIL, val("$.projects[*]"))
                         .column("id").forOrdinality()
                         .column("name", VARCHAR)
                         .column("start", DATE)
@@ -257,8 +237,8 @@ public class ClassicModelsRepository {
                         .column("type", VARCHAR)
                         .column("role", VARCHAR)
                         .column("details", VARCHAR)
-                        .as("t")))
-                .orderBy(field("start"))
+                        .as("t"))
+                .orderBy(field(name("start")))
                 .limit((2))
                 .fetch();
         System.out.println("Example 3.7:\n" + result7);
