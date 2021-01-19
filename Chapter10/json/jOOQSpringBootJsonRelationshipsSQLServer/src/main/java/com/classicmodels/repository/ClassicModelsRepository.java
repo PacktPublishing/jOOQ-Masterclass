@@ -12,6 +12,8 @@ import org.jooq.JSON;
 import org.jooq.Record1;
 import org.jooq.Result;
 import static org.jooq.impl.DSL.field;
+import static org.jooq.impl.DSL.jsonObject;
+import static org.jooq.impl.DSL.key;
 import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.select;
 import org.springframework.stereotype.Repository;
@@ -28,6 +30,23 @@ public class ClassicModelsRepository {
     }
 
     public void oneToOneToJson() {
+        
+        Result<Record1<JSON>> result1x = ctx.select(
+                jsonObject(
+                        key("customerName").value(CUSTOMER.CUSTOMER_NAME),
+                        key("phone").value(CUSTOMER.PHONE),
+                        key("creditLimit").value(CUSTOMER.CREDIT_LIMIT),
+                        key("details").value(select(
+                                jsonObject(key("city").value(CUSTOMERDETAIL.CITY),
+                                        key("addressLineFirst").value(CUSTOMERDETAIL.ADDRESS_LINE_FIRST),
+                                        key("state").value(CUSTOMERDETAIL.STATE)))
+                                .from(CUSTOMERDETAIL)
+                                .where(CUSTOMERDETAIL.CUSTOMER_NUMBER.eq(CUSTOMER.CUSTOMER_NUMBER)))))
+                .from(CUSTOMER)
+                .orderBy(CUSTOMER.CREDIT_LIMIT)
+                .fetch();
+        
+        System.out.println("Example 1.1 (one-to-one):\n" + result1x.formatJSON());
 
         Result<Record1<JSON>> result1 = ctx.select(CUSTOMER.CUSTOMER_NAME,
                 CUSTOMER.PHONE, CUSTOMER.CREDIT_LIMIT, CUSTOMERDETAIL.CITY,
