@@ -59,7 +59,7 @@ public class ClassicModelsRepository {
                 key("details").value(
                         jsonObject(key("city").value(CUSTOMERDETAIL.CITY),
                                 key("addressLineFirst").value(CUSTOMERDETAIL.ADDRESS_LINE_FIRST),
-                                key("state").value(CUSTOMERDETAIL.STATE)).absentOnNull()))) // for fun, null are not rendered
+                                key("state").value(CUSTOMERDETAIL.STATE)))))
                 .orderBy(CUSTOMER.CREDIT_LIMIT))
                 .from(CUSTOMER)
                 .join(CUSTOMERDETAIL)
