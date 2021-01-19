@@ -12,9 +12,10 @@ import org.jooq.JSON;
 import org.jooq.Record1;
 import org.jooq.Result;
 import static org.jooq.impl.DSL.field;
-import static org.jooq.impl.DSL.jsonObject;
 import static org.jooq.impl.DSL.jsonValue;
 import static org.jooq.impl.DSL.jsonArrayAgg;
+import static org.jooq.impl.DSL.jsonObject;
+import static org.jooq.impl.DSL.jsonbArrayAgg;
 import static org.jooq.impl.DSL.key;
 import static org.jooq.impl.DSL.lateral;
 import static org.jooq.impl.DSL.name;
@@ -30,11 +31,29 @@ public class ClassicModelsRepository {
 
     public ClassicModelsRepository(DSLContext ctx) {
         this.ctx = ctx;
-    }   
+    }
 
     public void oneToOneToJson() {
 
-        Result<Record1<JSON>> result = ctx.select(jsonArrayAgg(jsonObject(
+        Result<Record1<JSON>> result1 = ctx.select(
+                jsonObject(
+                        key("customerName").value(CUSTOMER.CUSTOMER_NAME),
+                        key("phone").value(CUSTOMER.PHONE),
+                        key("creditLimit").value(CUSTOMER.CREDIT_LIMIT),
+                        key("details").value(select(jsonbArrayAgg(
+                                jsonObject(key("city").value(CUSTOMERDETAIL.CITY),
+                                        key("addressLineFirst").value(CUSTOMERDETAIL.ADDRESS_LINE_FIRST),
+                                        key("state").value(CUSTOMERDETAIL.STATE))))
+                                .from(CUSTOMERDETAIL)
+                                .where(CUSTOMERDETAIL.CUSTOMER_NUMBER.eq(CUSTOMER.CUSTOMER_NUMBER)))))
+                .from(CUSTOMER)
+                .orderBy(CUSTOMER.CREDIT_LIMIT)
+                .fetch();
+
+        System.out.println("Example 1.1 (one-to-one):\n" + result1.formatJSON());
+
+        // same thing as above via JOIN
+        Result<Record1<JSON>> result2 = ctx.select(jsonArrayAgg(jsonObject(
                 key("customerName").value(CUSTOMER.CUSTOMER_NAME),
                 key("phone").value(CUSTOMER.PHONE),
                 key("creditLimit").value(CUSTOMER.CREDIT_LIMIT),
@@ -48,13 +67,31 @@ public class ClassicModelsRepository {
                 .on(CUSTOMER.CUSTOMER_NUMBER.eq(CUSTOMERDETAIL.CUSTOMER_NUMBER))
                 .fetch();
 
-        System.out.println("Example 1 (one-to-one):\n" + result.formatJSON());
+        System.out.println("Example 1.2 (one-to-one):\n" + result2.formatJSON());
     }
 
     public void oneToOneToJsonLimit() {
+        
+        Result<Record1<JSON>> result1 = ctx.select(
+                jsonObject(
+                        key("customerName").value(CUSTOMER.CUSTOMER_NAME),
+                        key("phone").value(CUSTOMER.PHONE),
+                        key("creditLimit").value(CUSTOMER.CREDIT_LIMIT),
+                        key("details").value(select(jsonbArrayAgg(
+                                jsonObject(key("city").value(CUSTOMERDETAIL.CITY),
+                                        key("addressLineFirst").value(CUSTOMERDETAIL.ADDRESS_LINE_FIRST),
+                                        key("state").value(CUSTOMERDETAIL.STATE))))
+                                .from(CUSTOMERDETAIL)
+                                .where(CUSTOMERDETAIL.CUSTOMER_NUMBER.eq(CUSTOMER.CUSTOMER_NUMBER)))))
+                .from(CUSTOMER)
+                .orderBy(CUSTOMER.CUSTOMER_NAME)
+                .limit(2)
+                .fetch();
+        
+        System.out.println("Example 2.1 (one-to-one and limit):\n" + result1.formatJSON());
 
-        // limit via groupBy()
-        Result<Record1<JSON>> result1 = ctx.select(jsonArrayAgg(jsonObject(
+        // limit join() via groupBy()
+        Result<Record1<JSON>> result2 = ctx.select(jsonArrayAgg(jsonObject(
                 key("customerName").value(CUSTOMER.CUSTOMER_NAME),
                 key("phone").value(CUSTOMER.PHONE),
                 key("creditLimit").value(CUSTOMER.CREDIT_LIMIT),
@@ -70,10 +107,10 @@ public class ClassicModelsRepository {
                 .limit(2)
                 .fetch();
 
-        System.out.println("Example 2.1 (one-to-one and limit):\n" + result1.formatJSON());
+        System.out.println("Example 2.2 (one-to-one and limit):\n" + result2.formatJSON());
 
         // limit your result before aggregating via subquery
-        Result<Record1<JSON>> result2 = ctx.select(jsonArrayAgg(jsonObject(
+        Result<Record1<JSON>> result3 = ctx.select(jsonArrayAgg(jsonObject(
                 key("customerName").value(field("customerName")),
                 key("phone").value(field("phone")),
                 key("creditLimit").value(field("creditLimit")),
@@ -94,12 +131,30 @@ public class ClassicModelsRepository {
                         .limit(2))
                 .fetch();
 
-        System.out.println("Example 2.2 (one-to-one and limit):\n" + result2.formatJSON());
+        System.out.println("Example 2.3 (one-to-one and limit):\n" + result3.formatJSON());
     }
 
     public void oneToManyToJson() {
 
-        Result<Record1<JSON>> result = ctx.select(
+        Result<Record1<JSON>> result1 = ctx.select(
+                jsonObject(
+                        key("productLine").value(PRODUCTLINE.PRODUCT_LINE),
+                        key("textDescription").value(PRODUCTLINE.TEXT_DESCRIPTION),
+                        key("products").value(select(jsonbArrayAgg(
+                                jsonObject(key("productName").value(PRODUCT.PRODUCT_NAME),
+                                        key("productVendor").value(PRODUCT.PRODUCT_VENDOR),
+                                        key("quantityInStock").value(PRODUCT.QUANTITY_IN_STOCK)))
+                                .orderBy(PRODUCT.QUANTITY_IN_STOCK))
+                                .from(PRODUCT)
+                                .where(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE)))))
+                .from(PRODUCTLINE)
+                .orderBy(PRODUCTLINE.PRODUCT_LINE)
+                .fetch();
+
+        System.out.println("Example 3.1 (one-to-many):\n" + result1.formatJSON());
+
+        // same thing as above via JOIN
+        Result<Record1<JSON>> result2 = ctx.select(
                 jsonObject(
                         key("productLine").value(PRODUCTLINE.PRODUCT_LINE),
                         key("textDescription").value(PRODUCTLINE.TEXT_DESCRIPTION),
@@ -115,11 +170,11 @@ public class ClassicModelsRepository {
                 .orderBy(PRODUCTLINE.PRODUCT_LINE)
                 .fetch();
 
-        System.out.println("Example 3 (one-to-many):\n" + result.formatJSON());
+        System.out.println("Example 3.2 (one-to-many):\n" + result2.formatJSON());
     }
 
     public void oneToManyToJsonLimit() {
-
+                
         // limit 'one' in one-to-many
         Result<Record1<JSON>> result1 = ctx.select(
                 jsonObject(
