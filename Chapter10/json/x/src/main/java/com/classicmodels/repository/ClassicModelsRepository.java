@@ -32,19 +32,18 @@ public class ClassicModelsRepository {
     }
 
     public void oneToOneToJson() {
-        
-        List<SimpleCustomer> result1 = ctx.select(
-                jsonObject(
-                        key("customerName").value(CUSTOMER.CUSTOMER_NAME),
-                        key("phone").value(CUSTOMER.PHONE),
-                        key("creditLimit").value(CUSTOMER.CREDIT_LIMIT),
-                        key("details").value(select(
-                                jsonObject(key("addressLineFirst").value(CUSTOMERDETAIL.ADDRESS_LINE_FIRST),
-                                        key("state").value(CUSTOMERDETAIL.STATE),                                        
-                                        key("city").value(CUSTOMERDETAIL.CITY)).nullOnNull())
-                                .from(CUSTOMERDETAIL)
-                                .where(CUSTOMERDETAIL.CUSTOMER_NUMBER.eq(CUSTOMER.CUSTOMER_NUMBER)))))
+                
+        List<SimpleCustomer> result1 = ctx.select(jsonObject(
+                key("customerName").value(CUSTOMER.CUSTOMER_NAME),
+                key("phone").value(CUSTOMER.PHONE),
+                key("creditLimit").value(CUSTOMER.CREDIT_LIMIT),
+                key("details").value(
+                        jsonObject(key("city").value(CUSTOMERDETAIL.CITY),
+                                key("addressLineFirst").value(CUSTOMERDETAIL.ADDRESS_LINE_FIRST),
+                                key("state").value(CUSTOMERDETAIL.STATE)))))
                 .from(CUSTOMER)
+                .join(CUSTOMERDETAIL)
+                .on(CUSTOMER.CUSTOMER_NUMBER.eq(CUSTOMERDETAIL.CUSTOMER_NUMBER))
                 .orderBy(CUSTOMER.CREDIT_LIMIT)
                 .fetchInto(SimpleCustomer.class);
         

@@ -47,18 +47,22 @@ public class ClassicModelsRepository {
                 .fetch();
         
         System.out.println("Example 1.1 (one-to-one):\n" + result1.formatJSON());
-
-        Result<Record1<JSON>> result2 = ctx.select(CUSTOMER.CUSTOMER_NAME,
-                CUSTOMER.PHONE, CUSTOMER.CREDIT_LIMIT, CUSTOMERDETAIL.CITY,
-                CUSTOMERDETAIL.ADDRESS_LINE_FIRST,
-                CUSTOMERDETAIL.STATE)
+        
+        // same thing as above via JOIN
+        Result<Record1<JSON>> result2 = ctx.select(jsonObject(
+                key("customerName").value(CUSTOMER.CUSTOMER_NAME),
+                key("phone").value(CUSTOMER.PHONE),
+                key("creditLimit").value(CUSTOMER.CREDIT_LIMIT),
+                key("details").value(
+                        jsonObject(key("city").value(CUSTOMERDETAIL.CITY),
+                                key("addressLineFirst").value(CUSTOMERDETAIL.ADDRESS_LINE_FIRST),
+                                key("state").value(CUSTOMERDETAIL.STATE)))))
                 .from(CUSTOMER)
                 .join(CUSTOMERDETAIL)
                 .on(CUSTOMER.CUSTOMER_NUMBER.eq(CUSTOMERDETAIL.CUSTOMER_NUMBER))
-                .orderBy(CUSTOMER.CREDIT_LIMIT)               
-                .forJSON().path().root("data")
+                .orderBy(CUSTOMER.CREDIT_LIMIT)
                 .fetch();
-
+        
         System.out.println("Example 1.2 (one-to-one):\n" + result2.formatJSON());
         
         Result<Record1<JSON>> result3 = ctx.select(CUSTOMER.CUSTOMER_NAME,
@@ -69,10 +73,23 @@ public class ClassicModelsRepository {
                 .join(CUSTOMERDETAIL)
                 .on(CUSTOMER.CUSTOMER_NUMBER.eq(CUSTOMERDETAIL.CUSTOMER_NUMBER))
                 .orderBy(CUSTOMER.CREDIT_LIMIT)               
-                .forJSON().auto().root("data")
+                .forJSON().path().root("data")
                 .fetch();
 
         System.out.println("Example 1.3 (one-to-one):\n" + result3.formatJSON());
+        
+        Result<Record1<JSON>> result4 = ctx.select(CUSTOMER.CUSTOMER_NAME,
+                CUSTOMER.PHONE, CUSTOMER.CREDIT_LIMIT, CUSTOMERDETAIL.CITY,
+                CUSTOMERDETAIL.ADDRESS_LINE_FIRST,
+                CUSTOMERDETAIL.STATE)
+                .from(CUSTOMER)
+                .join(CUSTOMERDETAIL)
+                .on(CUSTOMER.CUSTOMER_NUMBER.eq(CUSTOMERDETAIL.CUSTOMER_NUMBER))
+                .orderBy(CUSTOMER.CREDIT_LIMIT)               
+                .forJSON().auto().root("data")
+                .fetch();
+
+        System.out.println("Example 1.4 (one-to-one):\n" + result4.formatJSON());
     }
 
     public void oneToManyToJson() {
