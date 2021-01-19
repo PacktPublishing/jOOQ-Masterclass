@@ -9,24 +9,16 @@ import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Productline.PRODUCTLINE;
 import org.jooq.DSLContext;
 import org.jooq.JSON;
-import org.jooq.JSONEntry;
 import org.jooq.Record1;
-import org.jooq.Record2;
 import org.jooq.Result;
-import static org.jooq.impl.DSL.concat;
 import static org.jooq.impl.DSL.field;
-import static org.jooq.impl.DSL.jsonArray;
 import static org.jooq.impl.DSL.jsonObject;
 import static org.jooq.impl.DSL.jsonValue;
 import static org.jooq.impl.DSL.jsonArrayAgg;
-import static org.jooq.impl.DSL.jsonEntry;
-import static org.jooq.impl.DSL.jsonExists;
-import static org.jooq.impl.DSL.jsonObjectAgg;
 import static org.jooq.impl.DSL.key;
 import static org.jooq.impl.DSL.lateral;
 import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.select;
-import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,7 +48,7 @@ public class ClassicModelsRepository {
                 .on(CUSTOMER.CUSTOMER_NUMBER.eq(CUSTOMERDETAIL.CUSTOMER_NUMBER))
                 .fetch();
 
-        System.out.println("Example 2 (one-to-one):\n" + result.formatJSON());
+        System.out.println("Example 1 (one-to-one):\n" + result.formatJSON());
     }
 
     public void oneToOneToJsonLimit() {
@@ -78,7 +70,7 @@ public class ClassicModelsRepository {
                 .limit(2)
                 .fetch();
 
-        System.out.println("Example 3.1 (one-to-one and limit):\n" + result1.formatJSON());
+        System.out.println("Example 2.1 (one-to-one and limit):\n" + result1.formatJSON());
 
         // limit your result before aggregating via subquery
         Result<Record1<JSON>> result2 = ctx.select(jsonArrayAgg(jsonObject(
@@ -102,7 +94,7 @@ public class ClassicModelsRepository {
                         .limit(2))
                 .fetch();
 
-        System.out.println("Example 3.2 (one-to-one and limit):\n" + result2.formatJSON());
+        System.out.println("Example 2.2 (one-to-one and limit):\n" + result2.formatJSON());
     }
 
     public void oneToManyToJson() {
@@ -123,7 +115,7 @@ public class ClassicModelsRepository {
                 .orderBy(PRODUCTLINE.PRODUCT_LINE)
                 .fetch();
 
-        System.out.println("Example 4 (one-to-many):\n" + result.formatJSON());
+        System.out.println("Example 3 (one-to-many):\n" + result.formatJSON());
     }
 
     public void oneToManyToJsonLimit() {
@@ -146,7 +138,7 @@ public class ClassicModelsRepository {
                 .limit(2)
                 .fetch();
 
-        System.out.println("Example 5.1 (one-to-many and limit):\n" + result1.formatJSON());
+        System.out.println("Example 4.1 (one-to-many and limit):\n" + result1.formatJSON());
 
         // limit 'many' in one-to-many
         Result<Record1<JSON>> result2 = ctx.select(
@@ -170,7 +162,7 @@ public class ClassicModelsRepository {
                 .orderBy(PRODUCTLINE.PRODUCT_LINE)
                 .fetch();
 
-        System.out.println("Example 5.2 (one-to-many and limit):\n" + result2.formatJSON());
+        System.out.println("Example 4.2 (one-to-many and limit):\n" + result2.formatJSON());
 
         // limit 'one' and 'many' in one-to-many
         Result<Record1<JSON>> result3 = ctx.select(
@@ -195,7 +187,7 @@ public class ClassicModelsRepository {
                 .limit(3) // limit 'one'
                 .fetch();
 
-        System.out.println("Example 5.3 (one-to-many and limit):\n" + result3.formatJSON());
+        System.out.println("Example 4.3 (one-to-many and limit):\n" + result3.formatJSON());
     }
 
     public void manyToManyToJsonManagersOffices() {
@@ -221,7 +213,7 @@ public class ClassicModelsRepository {
                 .orderBy(MANAGER.MANAGER_ID)
                 .fetch();
 
-        System.out.println("Example 6 (many-to-many):\n" + result.formatJSON());
+        System.out.println("Example 5 (many-to-many):\n" + result.formatJSON());
     }
 
     public void manyToManyToJsonOfficesManagers() {
@@ -248,7 +240,7 @@ public class ClassicModelsRepository {
                 .orderBy(OFFICE.OFFICE_CODE)
                 .fetch();
 
-        System.out.println("Example 7 (many-to-many):\n" + result.formatJSON());
+        System.out.println("Example 6 (many-to-many):\n" + result.formatJSON());
     }
 
     public void manyToManyToJsonManagersOfficesLimit() {
@@ -279,6 +271,6 @@ public class ClassicModelsRepository {
                 .limit(1) // limit the number of managers
                 .fetch();
 
-        System.out.println("Example 8 (many-to-many and limit):\n" + result.formatJSON());
+        System.out.println("Example 7 (many-to-many and limit):\n" + result.formatJSON());
     }
 }
