@@ -33,8 +33,25 @@ public class ClassicModelsRepository {
     }
 
     public void oneToOneToJsonToPojo() {
+        
+        List<SimpleCustomer> result1 = ctx.select(
+                jsonObject(
+                        key("customerName").value(CUSTOMER.CUSTOMER_NAME),
+                        key("phone").value(CUSTOMER.PHONE),
+                        key("creditLimit").value(CUSTOMER.CREDIT_LIMIT),
+                        key("details").value(select(
+                                jsonObject(key("addressLineFirst").value(CUSTOMERDETAIL.ADDRESS_LINE_FIRST),
+                                        key("state").value(CUSTOMERDETAIL.STATE),                                        
+                                        key("city").value(CUSTOMERDETAIL.CITY)))
+                                .from(CUSTOMERDETAIL)
+                                .where(CUSTOMERDETAIL.CUSTOMER_NUMBER.eq(CUSTOMER.CUSTOMER_NUMBER)))))
+                .from(CUSTOMER)
+                .orderBy(CUSTOMER.CREDIT_LIMIT)
+                .fetchInto(SimpleCustomer.class);
 
-        List<SimpleCustomer> result = ctx.select(jsonObject(
+        System.out.println("Example 1.1 (one-to-one):\n" + result1);
+
+        List<SimpleCustomer> result2 = ctx.select(jsonObject(
                 key("customerName").value(CUSTOMER.CUSTOMER_NAME),
                 key("phone").value(CUSTOMER.PHONE),
                 key("creditLimit").value(CUSTOMER.CREDIT_LIMIT),
@@ -48,12 +65,29 @@ public class ClassicModelsRepository {
                 .on(CUSTOMER.CUSTOMER_NUMBER.eq(CUSTOMERDETAIL.CUSTOMER_NUMBER))
                 .fetchInto(SimpleCustomer.class);
 
-        System.out.println("Example 1 (one-to-one):\n" + result);
+        System.out.println("Example 1.2 (one-to-one):\n" + result2);
     }
 
     public void oneToManyToJsonToPojo() {
 
-        List<SimpleProductLine> result = ctx.select(
+        List<SimpleProductLine> result1 = ctx.select(
+                jsonObject(
+                        key("productLine").value(PRODUCTLINE.PRODUCT_LINE),
+                        key("textDescription").value(PRODUCTLINE.TEXT_DESCRIPTION),
+                        key("products").value(select(jsonArrayAgg(
+                                jsonObject(key("productName").value(PRODUCT.PRODUCT_NAME),
+                                        key("productVendor").value(PRODUCT.PRODUCT_VENDOR),
+                                        key("quantityInStock").value(PRODUCT.QUANTITY_IN_STOCK)))
+                                .orderBy(PRODUCT.QUANTITY_IN_STOCK))
+                                .from(PRODUCT)
+                                .where(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE)))))
+                .from(PRODUCTLINE)
+                .orderBy(PRODUCTLINE.PRODUCT_LINE)
+                .fetchInto(SimpleProductLine.class);
+        
+        System.out.println("Example 2.1 (one-to-many):\n" + result1);
+        
+        List<SimpleProductLine> result2 = ctx.select(
                 jsonObject(
                         key("productLine").value(PRODUCTLINE.PRODUCT_LINE),
                         key("textDescription").value(PRODUCTLINE.TEXT_DESCRIPTION),
@@ -69,7 +103,7 @@ public class ClassicModelsRepository {
                 .orderBy(PRODUCTLINE.PRODUCT_LINE)
                 .fetchInto(SimpleProductLine.class);
 
-        System.out.println("Example 2 (one-to-many):\n" + result);
+        System.out.println("Example 2.2 (one-to-many):\n" + result2);
     }
 
     public void manyToManyToJsonToPojoManagersOffices() {
