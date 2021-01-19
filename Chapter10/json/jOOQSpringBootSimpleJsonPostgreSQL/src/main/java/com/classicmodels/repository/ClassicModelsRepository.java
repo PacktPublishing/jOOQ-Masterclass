@@ -140,7 +140,8 @@ public class ClassicModelsRepository {
         Result<Record1<JSON>> result7 = ctx.select(
                 jsonValue(MANAGER.MANAGER_DETAIL, "$.email").as("email"))
                 .from(MANAGER)
-                .where(jsonExists(MANAGER.MANAGER_DETAIL, "$[*] ? (@.projects[*].role == \"Principal Manager\")"))
+                .where(jsonExists(MANAGER.MANAGER_DETAIL, 
+                        "$[*] ? (@.projects[*].role == \"Principal Manager\")"))
                 .fetch();
         System.out.println("Example 2.7:\n" + result7);  
         
@@ -168,7 +169,7 @@ public class ClassicModelsRepository {
         System.out.println("Example 3.1:\n" + result1);
         
         Result<Record> result2 = ctx.select(table("t").asterisk())
-                .from(MANAGER, lateral(jsonTable(jsonArray(MANAGER.MANAGER_DETAIL), val("$[*]"))
+                .from(MANAGER, lateral(jsonTable(MANAGER.MANAGER_DETAIL, val("$[*]"))
                         .column("id").forOrdinality()
                         .column("firstName", VARCHAR)
                         .column("lastName", VARCHAR)
@@ -189,7 +190,7 @@ public class ClassicModelsRepository {
         System.out.println("Example 3.2:\n" + result2);
         
         Result<Record> result3 = ctx.select(table("t").asterisk())
-                .from(MANAGER, lateral(jsonTable(jsonValue(MANAGER.MANAGER_DETAIL, "$.projects"), val("$[*]"))
+                .from(MANAGER, lateral(jsonTable(MANAGER.MANAGER_DETAIL, val("$.projects[*]"))
                         .column("id").forOrdinality()
                         .column("name", VARCHAR)
                         .column("start", DATE)
@@ -203,7 +204,7 @@ public class ClassicModelsRepository {
 
         // filter result
         Result<Record> result4 = ctx.select(table("t").asterisk())
-                .from(MANAGER, lateral(jsonTable(jsonValue(MANAGER.MANAGER_DETAIL, "$.projects"), val("$[*]"))
+                .from(MANAGER, lateral(jsonTable(MANAGER.MANAGER_DETAIL, val("$.projects[*]"))
                         .column("id").forOrdinality()
                         .column("name", VARCHAR)
                         .column("start", DATE)
@@ -225,7 +226,7 @@ public class ClassicModelsRepository {
                         key("role").value(field("role")),
                         key("details").value(field("details"))
                 ))))
-                .from(MANAGER, lateral(jsonTable(jsonValue(MANAGER.MANAGER_DETAIL, "$.projects"), val("$[*]"))
+                .from(MANAGER, lateral(jsonTable(MANAGER.MANAGER_DETAIL, val("$.projects[*]"))
                         .column("id").forOrdinality()
                         .column("name", VARCHAR)
                         .column("start", DATE)
@@ -240,7 +241,7 @@ public class ClassicModelsRepository {
         // aggregate
         Result<Record2<String, Integer>> result6 = ctx.select(
                 field("type", String.class), count(field("type")))
-                .from(MANAGER, lateral(jsonTable(jsonValue(MANAGER.MANAGER_DETAIL, "$.projects"), val("$[*]"))
+                .from(MANAGER, lateral(jsonTable(MANAGER.MANAGER_DETAIL, val("$.projects[*]"))
                         .column("type", VARCHAR)
                         .as("t")))
                 .groupBy(field("type"))
@@ -249,7 +250,7 @@ public class ClassicModelsRepository {
 
         // order and limit result
         Result<Record> result7 = ctx.select(table("t").asterisk())
-                .from(MANAGER, lateral(jsonTable(jsonValue(MANAGER.MANAGER_DETAIL, "$.projects"), val("$[*]"))
+                .from(MANAGER, lateral(jsonTable(MANAGER.MANAGER_DETAIL, val("$.projects[*]"))
                         .column("id").forOrdinality()
                         .column("name", VARCHAR)
                         .column("start", DATE)
