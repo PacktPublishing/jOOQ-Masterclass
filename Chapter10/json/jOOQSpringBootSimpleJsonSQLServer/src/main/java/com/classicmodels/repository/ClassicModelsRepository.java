@@ -8,13 +8,17 @@ import org.jooq.JSON;
 import org.jooq.JSONEntry;
 import org.jooq.Record1;
 import org.jooq.Record;
+import org.jooq.Record2;
 import org.jooq.Result;
 import static org.jooq.impl.DSL.concat;
+import static org.jooq.impl.DSL.count;
+import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.jsonObject;
 import static org.jooq.impl.DSL.jsonEntry;
 import static org.jooq.impl.DSL.jsonTable;
 import static org.jooq.impl.DSL.jsonValue;
 import static org.jooq.impl.DSL.key;
+import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.table;
 import static org.jooq.impl.DSL.val;
 import static org.jooq.impl.SQLDataType.DATE;
@@ -92,7 +96,7 @@ public class ClassicModelsRepository {
                 .where(jsonValue(MANAGER.MANAGER_DETAIL.coerce(JSON.class), "$.projects[0].role")
                         .like("%Principal Manager%"))
                 .fetch();
-        System.out.println("Example 2.5:\n" + result5);
+        System.out.println("Example 2.5:\n" + result5);               
     }
 
     public void fetchForJson() {
@@ -204,6 +208,82 @@ public class ClassicModelsRepository {
                         .column("projects", NVARCHAR).path("$.projects") // null 
                         .as("t"))
                 .fetch();
-        System.out.println("Example 4.2:\n" + result2);                
+        System.out.println("Example 4.2:\n" + result2);    
+        
+        Result<Record> result3 = ctx.select(table("t").asterisk())
+                .from(MANAGER).crossApply(jsonTable(
+                        MANAGER.MANAGER_DETAIL.coerce(JSON.class), val("$.projects"))
+                        .column("id").forOrdinality()
+                        .column("name", VARCHAR)
+                        .column("start", DATE)
+                        .column("end", DATE) 
+                        .column("type", VARCHAR)
+                        .column("role", VARCHAR)
+                        .column("details", VARCHAR)
+                        .as("t"))
+                .fetch();
+        System.out.println("Example 4.3:\n" + result3);
+        
+        // filter result
+        Result<Record> result4 = ctx.select(table("t").asterisk())
+                .from(MANAGER).crossApply(jsonTable(MANAGER.MANAGER_DETAIL.coerce(JSON.class), val("$.projects"))
+                        .column("id").forOrdinality()
+                        .column("name", VARCHAR)
+                        .column("start", DATE)
+                        .column("end", DATE) 
+                        .column("type", VARCHAR)
+                        .column("role", VARCHAR)
+                        .column("details", VARCHAR)
+                        .as("t"))
+                .where(field("type").eq("development"))
+                .fetch();
+        System.out.println("Example 4.4:\n" + result4);
+        
+        // back to JSON        
+        Result<Record1<JSON>> result5 = ctx.select(jsonObject("projects", 
+                jsonObject(key("name").value(field("name")),
+                        key("start").value(field("start")),
+                        key("end").value(field(name("end"))),   
+                        key("type").value(field("type")), 
+                        key("role").value(field("role")),
+                        key("details").value(field("details"))
+                )))
+                .from(MANAGER).crossApply(jsonTable(MANAGER.MANAGER_DETAIL.coerce(JSON.class), val("$.projects"))
+                        .column("id").forOrdinality()
+                        .column("name", VARCHAR)
+                        .column("start", DATE)
+                        .column("end", DATE) 
+                        .column("type", VARCHAR)
+                        .column("role", VARCHAR)
+                        .column("details", VARCHAR)
+                        .as("t"))
+                .fetch();
+        System.out.println("Example 4.5:\n" + result5.formatJSON());
+        
+        // aggregate
+        Result<Record2<String, Integer>> result6 = ctx.select(
+                field("type", String.class), count(field("type")))
+                .from(MANAGER).crossApply(jsonTable(MANAGER.MANAGER_DETAIL.coerce(JSON.class), val("$.projects"))
+                        .column("type", VARCHAR)
+                        .as("t"))
+                .groupBy(field(name("type")))
+                .fetch();
+        System.out.println("Example 4.6:\n" + result6);
+        
+        // order and limit result
+        Result<Record> result7 = ctx.select(table("t").asterisk())
+                .from(MANAGER).crossApply(jsonTable(MANAGER.MANAGER_DETAIL.coerce(JSON.class), val("$.projects"))
+                        .column("id").forOrdinality()
+                        .column("name", VARCHAR)
+                        .column("start", DATE)
+                        .column("end", DATE)
+                        .column("type", VARCHAR)
+                        .column("role", VARCHAR)
+                        .column("details", VARCHAR)
+                        .as("t"))
+                .orderBy(field("start"))
+                .limit((2))
+                .fetch();
+        System.out.println("Example 4.7:\n" + result7);
     }
 }
