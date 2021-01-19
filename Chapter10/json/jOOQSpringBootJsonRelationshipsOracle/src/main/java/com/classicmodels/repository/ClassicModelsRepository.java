@@ -72,7 +72,25 @@ public class ClassicModelsRepository {
 
     public void oneToOneToJsonLimit() {
         
-        Result<Record1<JSON>> result1 = ctx.select(jsonObject(
+        Result<Record1<JSON>> result1 = ctx.select(
+                jsonObject(
+                        key("customerName").value(CUSTOMER.CUSTOMER_NAME),
+                        key("phone").value(CUSTOMER.PHONE),
+                        key("creditLimit").value(CUSTOMER.CREDIT_LIMIT),
+                        key("details").value(select(
+                                jsonObject(key("city").value(CUSTOMERDETAIL.CITY),
+                                        key("addressLineFirst").value(CUSTOMERDETAIL.ADDRESS_LINE_FIRST),
+                                        key("state").value(CUSTOMERDETAIL.STATE)))
+                                .from(CUSTOMERDETAIL)
+                                .where(CUSTOMERDETAIL.CUSTOMER_NUMBER.eq(CUSTOMER.CUSTOMER_NUMBER)))))
+                .from(CUSTOMER)
+                .orderBy(CUSTOMER.CREDIT_LIMIT)
+                .limit(2)
+                .fetch();
+
+        System.out.println("Example 2.1 (one-to-one):\n" + result1.formatJSON());
+        
+        Result<Record1<JSON>> result2 = ctx.select(jsonObject(
                 key("customerName").value(CUSTOMER.CUSTOMER_NAME),
                 key("phone").value(CUSTOMER.PHONE),
                 key("creditLimit").value(CUSTOMER.CREDIT_LIMIT),
@@ -87,10 +105,10 @@ public class ClassicModelsRepository {
                 .limit(2)
                 .fetch();
 
-        System.out.println("Example 2.1 (one-to-one and limit):\n" + result1.formatJSON());
+        System.out.println("Example 2.2 (one-to-one and limit):\n" + result2.formatJSON());
 
         // limit your result before aggregating via subquery
-        Result<Record1<JSON>> result2 = ctx.select(jsonObject(
+        Result<Record1<JSON>> result3 = ctx.select(jsonObject(
                 key("customerName").value(field(name("customerName"))),
                 key("phone").value(field(name("phone"))),
                 key("creditLimit").value(field(name("creditLimit"))),
@@ -110,7 +128,7 @@ public class ClassicModelsRepository {
                         .limit(2).asTable("t"))
                 .fetch();
 
-        System.out.println("Example 2.2 (one-to-one and limit):\n" + result2.formatJSON());
+        System.out.println("Example 2.3 (one-to-one and limit):\n" + result3.formatJSON());
     }
 
     public void oneToManyToJson() {
