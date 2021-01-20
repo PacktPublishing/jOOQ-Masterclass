@@ -30,7 +30,7 @@ public class ClassicModelsRepository {
     }
 
     public void oneToOneToJson() {
-        
+
         Result<Record1<JSON>> result1 = ctx.select(
                 jsonObject(
                         key("customerName").value(CUSTOMER.CUSTOMER_NAME),
@@ -45,9 +45,9 @@ public class ClassicModelsRepository {
                 .from(CUSTOMER)
                 .orderBy(CUSTOMER.CREDIT_LIMIT)
                 .fetch();
-        
+
         System.out.println("Example 1.1 (one-to-one):\n" + result1.formatJSON());
-        
+
         // same thing as above via JOIN
         Result<Record1<JSON>> result2 = ctx.select(jsonObject(
                 key("customerName").value(CUSTOMER.CUSTOMER_NAME),
@@ -62,9 +62,9 @@ public class ClassicModelsRepository {
                 .on(CUSTOMER.CUSTOMER_NUMBER.eq(CUSTOMERDETAIL.CUSTOMER_NUMBER))
                 .orderBy(CUSTOMER.CREDIT_LIMIT)
                 .fetch();
-        
+
         System.out.println("Example 1.2 (one-to-one):\n" + result2.formatJSON());
-        
+
         Result<Record1<JSON>> result3 = ctx.select(CUSTOMER.CUSTOMER_NAME,
                 CUSTOMER.PHONE, CUSTOMER.CREDIT_LIMIT, CUSTOMERDETAIL.CITY,
                 CUSTOMERDETAIL.ADDRESS_LINE_FIRST,
@@ -72,12 +72,12 @@ public class ClassicModelsRepository {
                 .from(CUSTOMER)
                 .join(CUSTOMERDETAIL)
                 .on(CUSTOMER.CUSTOMER_NUMBER.eq(CUSTOMERDETAIL.CUSTOMER_NUMBER))
-                .orderBy(CUSTOMER.CREDIT_LIMIT)               
+                .orderBy(CUSTOMER.CREDIT_LIMIT)
                 .forJSON().path().root("data")
                 .fetch();
 
         System.out.println("Example 1.3 (one-to-one):\n" + result3.formatJSON());
-        
+
         Result<Record1<JSON>> result4 = ctx.select(CUSTOMER.CUSTOMER_NAME,
                 CUSTOMER.PHONE, CUSTOMER.CREDIT_LIMIT, CUSTOMERDETAIL.CITY,
                 CUSTOMERDETAIL.ADDRESS_LINE_FIRST,
@@ -85,7 +85,7 @@ public class ClassicModelsRepository {
                 .from(CUSTOMER)
                 .join(CUSTOMERDETAIL)
                 .on(CUSTOMER.CUSTOMER_NUMBER.eq(CUSTOMERDETAIL.CUSTOMER_NUMBER))
-                .orderBy(CUSTOMER.CREDIT_LIMIT)               
+                .orderBy(CUSTOMER.CREDIT_LIMIT)
                 .forJSON().auto().root("data")
                 .fetch();
 
@@ -120,6 +120,19 @@ public class ClassicModelsRepository {
                 .fetch();
 
         System.out.println("Example 2.2 (one-to-many):\n" + result2.formatJSON());
+
+        var result3 = ctx.select(
+                PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.TEXT_DESCRIPTION,
+                select(PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_VENDOR, PRODUCT.QUANTITY_IN_STOCK)
+                        .from(PRODUCT)
+                        .where(PRODUCT.PRODUCT_LINE.eq(PRODUCTLINE.PRODUCT_LINE))
+                        // .limit(5) // limit products
+                        .forJSON().path().asField("products"))
+                .from(PRODUCTLINE)
+                // .limit(2) // limit product lines
+                .fetch();
+
+        System.out.println("Example 2.3 (one-to-many):\n" + result3.formatJSON());
     }
 
     public void manyToManyToJsonManagersOffices() {
@@ -137,9 +150,9 @@ public class ClassicModelsRepository {
                 .orderBy(MANAGER.MANAGER_ID)
                 .forJSON().path().root("data")
                 .fetch();
-        
+
         System.out.println("Example 3.1 (many-to-many):\n" + result1.formatJSON());
-        
+
         Result<Record1<JSON>> result2 = ctx.select(
                 MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME,
                 field("office_code"), field("city"), field("state"))
@@ -174,7 +187,7 @@ public class ClassicModelsRepository {
                 .fetch();
 
         System.out.println("Example 4.1 (many-to-many):\n" + result1.formatJSON());
-        
+
         Result<Record1<JSON>> result2 = ctx.select(
                 OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.STATE,
                 field("manager_id"), field("manager_name"))
