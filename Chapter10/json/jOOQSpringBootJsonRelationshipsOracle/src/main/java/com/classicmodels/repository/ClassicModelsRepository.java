@@ -237,6 +237,17 @@ public class ClassicModelsRepository {
                 .fetch();
 
         System.out.println("Example 3.4 (one-to-many):\n" + result4.formatJSON());
+        
+        var result5 = ctx.select(
+                PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.TEXT_DESCRIPTION,
+                select(PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_VENDOR, PRODUCT.QUANTITY_IN_STOCK)
+                        .from(PRODUCT)
+                        .where(PRODUCT.PRODUCT_LINE.eq(PRODUCTLINE.PRODUCT_LINE))                        
+                        .forJSON().path().asField("products"))
+                .from(PRODUCTLINE)                
+                .fetch();
+
+        System.out.println("Example 3.5 (one-to-many):\n" + result5.formatJSON());
     }
 
     public void oneToManyToJsonLimit() {
@@ -309,6 +320,19 @@ public class ClassicModelsRepository {
                 .fetch();
 
         System.out.println("Example 4.3 (one-to-many and limit):\n" + result3.formatJSON());
+        
+        var result4 = ctx.select(
+                PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.TEXT_DESCRIPTION,
+                select(PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_VENDOR, PRODUCT.QUANTITY_IN_STOCK)
+                        .from(PRODUCT)
+                        .where(PRODUCT.PRODUCT_LINE.eq(PRODUCTLINE.PRODUCT_LINE))
+                        .limit(5) // limit 'many'
+                        .forJSON().path().asField("products"))
+                .from(PRODUCTLINE)
+                .limit(2) // limit 'one'
+                .fetch();
+
+        System.out.println("Example 4.4 (one-to-many):\n" + result4.formatJSON());
     }
 
     public void manyToManyToJsonManagersOffices() {
