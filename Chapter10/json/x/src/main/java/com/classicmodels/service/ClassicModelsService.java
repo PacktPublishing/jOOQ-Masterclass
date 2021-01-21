@@ -14,9 +14,7 @@ public class ClassicModelsService {
 
     public void callAll() {
         
-        classicModelsRepository.oneToOneToJson();
-      //  classicModelsRepository.oneToManyToJson();
-      //  classicModelsRepository.manyToManyToJsonManagersOffices();
-      //  classicModelsRepository.manyToManyToJsonOfficesManagers();        
+      classicModelsRepository.oneToOneToJsonToPojo();
+      classicModelsRepository.oneToManyToJsonToPojo();
     }
 }

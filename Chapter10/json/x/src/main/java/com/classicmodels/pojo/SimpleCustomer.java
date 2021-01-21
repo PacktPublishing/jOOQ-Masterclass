@@ -6,12 +6,22 @@ import java.util.Objects;
 public class SimpleCustomer implements Serializable {
 
     private static final long serialVersionUID = 1;
-
+    
     private String customerName;
     private String phone;
     private Float creditLimit;
-    private SimpleCustomerDetail details;
-
+    private SimpleCustomerDetail details;            
+    
+    public SimpleCustomer() {}
+    
+    public SimpleCustomer(String customerName, String phone, Float creditLimit, 
+            SimpleCustomerDetail details) {
+        this.customerName = customerName;
+        this.phone = phone;
+        this.creditLimit = creditLimit;
+        this.details = details;
+    }
+        
     public String getCustomerName() {
         return customerName;
     }

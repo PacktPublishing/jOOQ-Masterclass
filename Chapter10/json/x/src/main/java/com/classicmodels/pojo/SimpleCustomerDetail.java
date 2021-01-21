@@ -6,11 +6,24 @@ import java.util.Objects;
 public class SimpleCustomerDetail implements Serializable {
 
     private static final long serialVersionUID = 1;
-    
+        
     private String addressLineFirst;
     private String state;
-    private String city;    
+    private String city;           
     
+    public SimpleCustomerDetail() {}
+    
+    public SimpleCustomerDetail(String addressLineFirst, String state, String city) {
+        this.addressLineFirst = addressLineFirst;
+        this.state = state;
+        this.city = city;
+    }         
+
+    public SimpleCustomerDetail(String city, String addressLineFirst) {
+        this.addressLineFirst = addressLineFirst;
+        this.city = city;
+    }
+            
     public String getAddressLineFirst() {
         return addressLineFirst;
     }
