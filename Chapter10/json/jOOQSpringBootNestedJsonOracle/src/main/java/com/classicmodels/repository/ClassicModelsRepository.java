@@ -29,7 +29,7 @@ public class ClassicModelsRepository {
     }
 
     public void jsonProductlineProductOrderdetail() {
-/*
+
         Result<Record1<JSON>> result1 = ctx.select(
                 jsonObject(
                         key("productLine").value(PRODUCTLINE.PRODUCT_LINE),
@@ -52,7 +52,7 @@ public class ClassicModelsRepository {
                 .from(PRODUCTLINE)
                 .fetch();
         System.out.println("Example 1.1:\n" + result1.formatJSON());
-  
+
         Result<Record1<JSON>> result2 = ctx.select(
                 PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.TEXT_DESCRIPTION,
                 select(PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_VENDOR, PRODUCT.QUANTITY_IN_STOCK,
@@ -74,7 +74,6 @@ public class ClassicModelsRepository {
                 .fetch();
 
         System.out.println("Example 1.2:\n" + result2.formatJSON());
-*/
     }
 
     public void jsonCustomerPaymentBankTransactionCustomerdetail() {
@@ -105,10 +104,10 @@ public class ClassicModelsRepository {
                                         key("state").value(CUSTOMERDETAIL.STATE)))
                                 .from(CUSTOMERDETAIL)
                                 .where(CUSTOMERDETAIL.CUSTOMER_NUMBER.eq(CUSTOMER.CUSTOMER_NUMBER)))))
-                .from(CUSTOMER)                
+                .from(CUSTOMER)
                 .fetch();
         System.out.println("Example 2.1:\n" + result1.formatJSON());
-        
+
         Result<Record1<JSON>> result2 = ctx.select(
                 CUSTOMER.CUSTOMER_NAME, CUSTOMER.CREDIT_LIMIT,
                 select(PAYMENT.CUSTOMER_NUMBER, PAYMENT.INVOICE_AMOUNT, PAYMENT.CACHING_DATE,
@@ -126,7 +125,7 @@ public class ClassicModelsRepository {
                         .forJSON().path().asField("payments"),
                 select(CUSTOMERDETAIL.CITY, CUSTOMERDETAIL.ADDRESS_LINE_FIRST, CUSTOMERDETAIL.STATE)
                         .from(CUSTOMERDETAIL)
-                        .where(CUSTOMERDETAIL.CUSTOMER_NUMBER.eq(CUSTOMER.CUSTOMER_NUMBER))                       
+                        .where(CUSTOMERDETAIL.CUSTOMER_NUMBER.eq(CUSTOMER.CUSTOMER_NUMBER))
                         .forJSON().path().asField("details"))
                 .from(CUSTOMER)
                 .orderBy(CUSTOMER.CREDIT_LIMIT)
