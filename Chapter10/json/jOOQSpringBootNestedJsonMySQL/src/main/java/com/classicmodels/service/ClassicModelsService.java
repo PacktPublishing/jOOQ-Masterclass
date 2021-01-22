@@ -16,6 +16,7 @@ public class ClassicModelsService {
         
         classicModelsRepository.jsonProductlineProductOrderdetail();
         classicModelsRepository.jsonCustomerPaymentBankTransactionCustomerdetail();
+        classicModelsRepository.jsonOfficeManagerDepartmentEmployeeSale();
         
         
     }
