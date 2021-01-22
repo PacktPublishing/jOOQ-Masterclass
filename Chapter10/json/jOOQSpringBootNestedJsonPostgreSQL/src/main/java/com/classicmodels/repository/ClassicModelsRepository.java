@@ -107,7 +107,7 @@ public class ClassicModelsRepository {
                         key("officeCountry").value(OFFICE.COUNTRY),
                         key("departments").value(select(jsonArrayAgg(
                                 jsonObject(key("departmentName").value(DEPARTMENT.NAME),
-                                        key("departmentTopic").value(DEPARTMENT.TOPIC))))
+                                        key("departmentPhone").value(DEPARTMENT.PHONE))))
                                 .from(DEPARTMENT)
                                 .where(DEPARTMENT.OFFICE_CODE.eq(OFFICE.OFFICE_CODE))),
                         key("employees").value(select(jsonArrayAgg(
