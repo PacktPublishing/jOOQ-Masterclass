@@ -3,17 +3,25 @@ package com.classicmodels.repository;
 import static jooq.generated.tables.BankTransaction.BANK_TRANSACTION;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
+import static jooq.generated.tables.Department.DEPARTMENT;
+import static jooq.generated.tables.Employee.EMPLOYEE;
+import static jooq.generated.tables.Manager.MANAGER;
+import static jooq.generated.tables.Office.OFFICE;
+import static jooq.generated.tables.OfficeHasManager.OFFICE_HAS_MANAGER;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Productline.PRODUCTLINE;
+import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import org.jooq.JSON;
 import org.jooq.Record1;
 import org.jooq.Result;
+import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.jsonObject;
 import static org.jooq.impl.DSL.jsonArrayAgg;
 import static org.jooq.impl.DSL.key;
+import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.select;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -134,5 +142,75 @@ public class ClassicModelsRepository {
                 .fetch();
 
         System.out.println("Example 2.2:\n" + result2.formatJSON());
+    }
+    
+    public void jsonOfficeManagerDepartmentEmployeeSale() {
+
+        Result<Record1<JSON>> result1 = ctx.select(
+                jsonObject(
+                        key("officeCode").value(OFFICE.OFFICE_CODE),
+                        key("officeCity").value(OFFICE.CITY),
+                        key("officeCountry").value(OFFICE.COUNTRY),
+                        key("departments").value(select(jsonArrayAgg(
+                                jsonObject(key("departmentName").value(DEPARTMENT.NAME),
+                                        key("departmentPhone").value(DEPARTMENT.PHONE))))
+                                .from(DEPARTMENT)
+                                .where(DEPARTMENT.OFFICE_CODE.eq(OFFICE.OFFICE_CODE))),
+                        key("employees").value(select(jsonArrayAgg(
+                                jsonObject(key("employeeFirstName").value(EMPLOYEE.FIRST_NAME),
+                                        key("employeeLastName").value(EMPLOYEE.LAST_NAME),
+                                        key("employeeSalary").value(EMPLOYEE.SALARY),
+                                        key("sales").value(select(jsonArrayAgg(
+                                                jsonObject(key("fiscalYear").value(SALE.FISCAL_YEAR),
+                                                        key("sale").value(SALE.SALE_)))
+                                                .orderBy(SALE.FISCAL_YEAR))
+                                                .from(SALE)
+                                                .where(SALE.EMPLOYEE_NUMBER.eq(EMPLOYEE.EMPLOYEE_NUMBER))))))
+                                .from(EMPLOYEE)
+                                .where(EMPLOYEE.OFFICE_CODE.eq(OFFICE.OFFICE_CODE))),
+                        key("managers").value(jsonArrayAgg(
+                                jsonObject(key("managerId").value(field(name("managerId"))),
+                                        key("managerName").value(field(name("managerName")))))
+                                .orderBy(field(name("managerId"))))))
+                .from(OFFICE)
+                .join(select(MANAGER.MANAGER_ID.as("managerId"),
+                        MANAGER.MANAGER_NAME.as("managerName"),                     
+                        OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE.as("offices_office_code"))
+                        .from(MANAGER).join(OFFICE_HAS_MANAGER)
+                        .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID)).asTable("t"))
+                .on(OFFICE.OFFICE_CODE.eq(field(name("offices_office_code"), String.class)))
+                .groupBy(OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.COUNTRY)
+                .orderBy(OFFICE.OFFICE_CODE)
+                .fetch();
+        
+        System.out.println("Example 3.1:\n" + result1.formatJSON());
+        
+        Result<Record1<JSON>> result2 = ctx.select(
+                OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.COUNTRY,
+                select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY,
+                        select(SALE.FISCAL_YEAR, SALE.SALE_)
+                                .from(SALE)
+                                .where(SALE.EMPLOYEE_NUMBER.eq(EMPLOYEE.EMPLOYEE_NUMBER))
+                                .forJSON().path().asField("SALES"))
+                        .from(EMPLOYEE)
+                        .where(EMPLOYEE.OFFICE_CODE.eq(OFFICE.OFFICE_CODE))
+                        .forJSON().path().asField("EMPLOYEES"),
+                select(DEPARTMENT.NAME, DEPARTMENT.PHONE)
+                        .from(DEPARTMENT)
+                        .where(DEPARTMENT.OFFICE_CODE.eq(OFFICE.OFFICE_CODE))
+                        .forJSON().path().asField("DEPARTMENTS"),
+                select(field("MANAGER_ID"), field("MANAGER_NAME"))
+                        .from(select(MANAGER.MANAGER_ID.as("MANAGER_ID"),
+                                MANAGER.MANAGER_NAME.as("MANAGER_NAME"),
+                                OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE.as("OFFICES_OFFICE_CODE"))
+                                .from(MANAGER).join(OFFICE_HAS_MANAGER)
+                                .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID)).asTable("T"))
+                        .where(OFFICE.OFFICE_CODE.eq(field(name("OFFICES_OFFICE_CODE"), String.class)))                       
+                        .forJSON().path().asField("MANAGERS"))               
+                .from(OFFICE)
+                .forJSON().path()                
+                .fetch();
+
+        System.out.println("Example 3.2:\n" + result2.formatJSON());
     }
 }
