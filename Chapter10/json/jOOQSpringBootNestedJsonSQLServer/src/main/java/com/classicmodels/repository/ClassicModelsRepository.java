@@ -100,7 +100,7 @@ public class ClassicModelsRepository {
                         .from(EMPLOYEE)
                         .where(EMPLOYEE.OFFICE_CODE.eq(OFFICE.OFFICE_CODE))
                         .forJSON().path().asField("employees"),
-                select(DEPARTMENT.NAME, DEPARTMENT.TOPIC)
+                select(DEPARTMENT.NAME, DEPARTMENT.PHONE)
                         .from(DEPARTMENT)
                         .where(DEPARTMENT.OFFICE_CODE.eq(OFFICE.OFFICE_CODE))
                         .forJSON().path().asField("departments"),
