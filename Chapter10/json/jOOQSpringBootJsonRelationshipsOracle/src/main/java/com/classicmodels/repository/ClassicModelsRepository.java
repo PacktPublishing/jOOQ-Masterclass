@@ -13,7 +13,6 @@ import org.jooq.Record1;
 import org.jooq.Result;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.jsonObject;
-import static org.jooq.impl.DSL.jsonValue;
 import static org.jooq.impl.DSL.jsonArrayAgg;
 import static org.jooq.impl.DSL.jsonbArrayAgg;
 import static org.jooq.impl.DSL.key;
@@ -340,8 +339,7 @@ public class ClassicModelsRepository {
         Result<Record1<JSON>> result1 = ctx.select(
                 jsonObject(
                         key("managerId").value(MANAGER.MANAGER_ID),
-                        key("managerName").value(MANAGER.MANAGER_NAME),
-                        key("mobilePhone").value(jsonValue(MANAGER.MANAGER_DETAIL, "$.phoneNumber[*].number[1]")),
+                        key("managerName").value(MANAGER.MANAGER_NAME),                       
                         key("offices").value(jsonArrayAgg(
                                 jsonObject(key("officeCode").value(field(name("officeCode"))),
                                         key("state").value(field(name("state"))),
@@ -353,8 +351,8 @@ public class ClassicModelsRepository {
                         OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID.as("managers_manager_id"))
                         .from(OFFICE).join(OFFICE_HAS_MANAGER)
                         .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE)).asTable("t"))
-                .on(MANAGER.MANAGER_ID.eq(field("managers_manager_id", Long.class)))
-                .groupBy(MANAGER.MANAGER_ID)
+                .on(MANAGER.MANAGER_ID.eq(field(name("managers_manager_id"), Long.class)))
+                .groupBy(MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME)
                 .orderBy(MANAGER.MANAGER_ID)
                 .fetch();
 
@@ -362,7 +360,7 @@ public class ClassicModelsRepository {
         
         Result<Record1<JSON>> result2 = ctx.select(
                 MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME,
-                field("office_code"), field("city"), field("state"))
+                field(name("office_code")), field(name("city")), field(name("state")))
                 .from(MANAGER)
                 .join(select(OFFICE.OFFICE_CODE.as("office_code"),
                         OFFICE.CITY.as("city"), OFFICE.STATE.as("state"),
@@ -378,7 +376,7 @@ public class ClassicModelsRepository {
         
         Result<Record1<JSON>> result3 = ctx.select(
                 MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME,
-                field("office_code"), field("city"), field("state"))
+                field(name("office_code")), field(name("city")), field(name("state")))
                 .from(MANAGER)
                 .join(select(OFFICE.OFFICE_CODE.as("office_code"),
                         OFFICE.CITY.as("city"), OFFICE.STATE.as("state"),
@@ -391,6 +389,23 @@ public class ClassicModelsRepository {
                 .fetch();
 
         System.out.println("Example 5.3 (many-to-many):\n" + result3.formatJSON());
+        
+        Result<Record1<JSON>> result4 = ctx.select(
+                MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME,
+                select(field(name("office_code")), field(name("city")), field(name("state")))
+                        .from(select(OFFICE.OFFICE_CODE.as("office_code"),
+                                OFFICE.CITY.as("city"), OFFICE.STATE.as("state"),
+                                OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID.as("managers_manager_id"))
+                                .from(OFFICE).join(OFFICE_HAS_MANAGER)
+                                .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE)).asTable("offices"))
+                        .where(MANAGER.MANAGER_ID.eq(field(name("managers_manager_id"), Long.class)))
+                        .orderBy(MANAGER.MANAGER_ID)
+                        .forJSON().path().asField("offices"))
+                .from(MANAGER)
+                .forJSON().path()
+                .fetch();
+
+        System.out.println("Example 5.4 (many-to-many):\n" + result4.formatJSON());
     }
 
     public void manyToManyToJsonOfficesManagers() {
@@ -402,18 +417,16 @@ public class ClassicModelsRepository {
                         key("city").value(OFFICE.CITY),
                         key("managers").value(jsonArrayAgg(
                                 jsonObject(key("managerId").value(field(name("managerId"))),
-                                        key("managerName").value(field(name("managerName"))),
-                                        key("mobilePhone").value(jsonValue(field("details", JSON.class), "$.phoneNumber[*].number[1]"))))
+                                        key("managerName").value(field(name("managerName")))))                               
                                 .orderBy(field(name("managerId"))))))
                 .from(OFFICE)
                 .join(select(MANAGER.MANAGER_ID.as("managerId"),
-                        MANAGER.MANAGER_NAME.as("managerName"),
-                        MANAGER.MANAGER_DETAIL.as("details"),
+                        MANAGER.MANAGER_NAME.as("managerName"),                        
                         OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE.as("offices_office_code"))
                         .from(MANAGER).join(OFFICE_HAS_MANAGER)
                         .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID)).asTable("t"))
                 .on(OFFICE.OFFICE_CODE.eq(field(name("offices_office_code"), String.class)))
-                .groupBy(OFFICE.OFFICE_CODE)
+                .groupBy(OFFICE.OFFICE_CODE, OFFICE.STATE, OFFICE.CITY)
                 .orderBy(OFFICE.OFFICE_CODE)
                 .fetch();
 
@@ -421,14 +434,14 @@ public class ClassicModelsRepository {
         
         Result<Record1<JSON>> result2 = ctx.select(
                 OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.STATE,
-                field("manager_id"), field("manager_name"))
+                field(name("manager_id")), field(name("manager_name")))
                 .from(OFFICE)
                 .join(select(MANAGER.MANAGER_ID.as("manager_id"),
                         MANAGER.MANAGER_NAME.as("manager_name"),
                         OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE.as("offices_office_code"))
                         .from(MANAGER).join(OFFICE_HAS_MANAGER)
                         .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID)).asTable("managers"))
-                .on(OFFICE.OFFICE_CODE.eq(field("offices_office_code", String.class)))
+                .on(OFFICE.OFFICE_CODE.eq(field(name("offices_office_code"), String.class)))
                 .orderBy(OFFICE.OFFICE_CODE)
                 .forJSON().auto().root("data")
                 .fetch();
@@ -437,14 +450,14 @@ public class ClassicModelsRepository {
         
         Result<Record1<JSON>> result3 = ctx.select(
                 OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.STATE,
-                field("manager_id"), field("manager_name"))
+                field(name("manager_id")), field(name("manager_name")))
                 .from(OFFICE)
                 .join(select(MANAGER.MANAGER_ID.as("manager_id"),
                         MANAGER.MANAGER_NAME.as("manager_name"),
                         OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE.as("offices_office_code"))
                         .from(MANAGER).join(OFFICE_HAS_MANAGER)
                         .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID)).asTable("managers"))
-                .on(OFFICE.OFFICE_CODE.eq(field("offices_office_code", String.class)))
+                .on(OFFICE.OFFICE_CODE.eq(field(name("offices_office_code"), String.class)))
                 .orderBy(OFFICE.OFFICE_CODE)
                 .forJSON().auto().root("data")
                 .fetch();
@@ -457,8 +470,7 @@ public class ClassicModelsRepository {
         Result<Record1<JSON>> result = ctx.select(
                 jsonObject(
                         key("managerId").value(MANAGER.MANAGER_ID),
-                        key("managerName").value(MANAGER.MANAGER_NAME),
-                        key("mobilePhone").value(jsonValue(MANAGER.MANAGER_DETAIL, "$.phoneNumber[*].number[1]")),
+                        key("managerName").value(MANAGER.MANAGER_NAME),                        
                         key("offices").value(jsonArrayAgg(
                                 jsonObject(key("officeCode").value(field(name("officeCode"))),
                                         key("state").value(field(name("state"))),
@@ -469,16 +481,15 @@ public class ClassicModelsRepository {
                         OFFICE.CITY.as("city"), OFFICE.STATE.as("state"),
                         OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID.as("managers_manager_id"))
                         .from(OFFICE).join(OFFICE_HAS_MANAGER)
-                        .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))
-                        .groupBy(OFFICE.OFFICE_CODE, OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID)
+                        .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))                       
                         .orderBy(OFFICE.OFFICE_CODE)
-                        .limit(5) // limit the number of offices                        
+                        //.limit(5) // limit the number of offices                        
                         .asTable("t")
                 )
-                .on(MANAGER.MANAGER_ID.eq(field("managers_manager_id", Long.class)))
-                .groupBy(MANAGER.MANAGER_ID)
+                .on(MANAGER.MANAGER_ID.eq(field(name("managers_manager_id"), Long.class)))
+                .groupBy(MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME)
                 .orderBy(MANAGER.MANAGER_ID)
-                .limit(1) // limit the number of managers
+                //.limit(2) // limit the number of managers
                 .fetch();
 
         System.out.println("Example 7 (many-to-many and limit):\n" + result.formatJSON());

@@ -16,14 +16,14 @@ public class ClassicModelsService {
     // then you should set MAX_STRING_SIZE to EXTENTED instead of STANDARD    
     public void callAll() {
         
-        classicModelsRepository.oneToOneToJson();
-        classicModelsRepository.oneToOneToJsonLimit();
+      classicModelsRepository.oneToOneToJson();
+      classicModelsRepository.oneToOneToJsonLimit();
         
-        classicModelsRepository.oneToManyToJson();
-        classicModelsRepository.oneToManyToJsonLimit();
+      classicModelsRepository.oneToManyToJson();
+      classicModelsRepository.oneToManyToJsonLimit();
         
-        classicModelsRepository.manyToManyToJsonManagersOffices();
-        classicModelsRepository.manyToManyToJsonOfficesManagers();
-        classicModelsRepository.manyToManyToJsonManagersOfficesLimit();        
+      classicModelsRepository.manyToManyToJsonManagersOffices();
+      classicModelsRepository.manyToManyToJsonOfficesManagers();
+      classicModelsRepository.manyToManyToJsonManagersOfficesLimit();        
     }
 }
