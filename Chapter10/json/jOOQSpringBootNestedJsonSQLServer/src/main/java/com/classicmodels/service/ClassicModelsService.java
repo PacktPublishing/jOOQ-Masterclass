@@ -15,6 +15,7 @@ public class ClassicModelsService {
     public void callAll() {
         
         classicModelsRepository.jsonProductlineProductOrderdetail();
-        classicModelsRepository.jsonCustomerPaymentBankTransactionCustomerdetail();                
+        classicModelsRepository.jsonCustomerPaymentBankTransactionCustomerdetail();   
+        classicModelsRepository.jsonOfficeManagerDepartmentEmployeeSale();
     }
 }
