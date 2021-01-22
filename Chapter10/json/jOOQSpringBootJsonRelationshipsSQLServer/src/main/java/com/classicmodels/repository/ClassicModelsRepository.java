@@ -168,6 +168,23 @@ public class ClassicModelsRepository {
                 .fetch();
 
         System.out.println("Example 3.2 (many-to-many):\n" + result2.formatJSON());
+
+        Result<Record1<JSON>> result3 = ctx.select(
+                MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME,
+                select(field("office_code"), field("city"), field("state"))
+                        .from(select(OFFICE.OFFICE_CODE.as("office_code"),
+                                OFFICE.CITY.as("city"), OFFICE.STATE.as("state"),
+                                OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID.as("managers_manager_id"))
+                                .from(OFFICE).join(OFFICE_HAS_MANAGER)
+                                .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE)).asTable("offices"))
+                        .where(MANAGER.MANAGER_ID.eq(field(name("managers_manager_id"), Long.class)))
+                        .orderBy(MANAGER.MANAGER_ID)
+                        .forJSON().path().asField("offices"))
+                .from(MANAGER)
+                .forJSON().path()
+                .fetch();
+
+        System.out.println("Example 3.3 (many-to-many):\n" + result3.formatJSON());
     }
 
     public void manyToManyToJsonOfficesManagers() {
