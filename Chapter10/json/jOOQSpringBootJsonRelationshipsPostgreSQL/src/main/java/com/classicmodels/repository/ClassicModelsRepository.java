@@ -2,6 +2,7 @@ package com.classicmodels.repository;
 
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
+import static jooq.generated.tables.Department.DEPARTMENT;
 import static jooq.generated.tables.Manager.MANAGER;
 import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.OfficeHasManager.OFFICE_HAS_MANAGER;
@@ -19,6 +20,7 @@ import static org.jooq.impl.DSL.key;
 import static org.jooq.impl.DSL.lateral;
 import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.select;
+import static org.jooq.impl.DSL.unnest;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +33,30 @@ public class ClassicModelsRepository {
     public ClassicModelsRepository(DSLContext ctx) {
         this.ctx = ctx;
     }
+
+    public void arrayToJson() {
+
+        Result<Record1<JSON>> result = ctx.select(jsonObject(
+                key("id").value(DEPARTMENT.DEPARTMENT_ID),
+                key(DEPARTMENT.NAME).value(jsonArrayAgg(field("r")))))
+                .from(DEPARTMENT, lateral(select(field("topic"))
+                        .from(unnest(DEPARTMENT.TOPIC).as("t", "topic"))
+                ).as("r")).groupBy(DEPARTMENT.DEPARTMENT_ID)
+                .fetch();
+
+        System.out.println("Example (array)" + result.formatJSON());
+    }
+    
+    public void UDTToJson() {
+        
+        Result<Record1<JSON>> result = ctx.select(jsonObject(
+                key("mananger").value(MANAGER.MANAGER_NAME),
+                key("evaluation").value(MANAGER.MANAGER_EVALUATION)))
+                .from(MANAGER)
+                .fetch();
+        
+        System.out.println("Example (UDT)" + result.formatJSON());
+    }        
 
     public void oneToOneToJson() {
 
@@ -70,7 +96,7 @@ public class ClassicModelsRepository {
     }
 
     public void oneToOneToJsonLimit() {
-        
+
         Result<Record1<JSON>> result1 = ctx.select(
                 jsonObject(
                         key("customerName").value(CUSTOMER.CUSTOMER_NAME),
@@ -86,7 +112,7 @@ public class ClassicModelsRepository {
                 .orderBy(CUSTOMER.CUSTOMER_NAME)
                 .limit(2)
                 .fetch();
-        
+
         System.out.println("Example 2.1 (one-to-one and limit):\n" + result1.formatJSON());
 
         // limit via groupBy()
@@ -134,7 +160,7 @@ public class ClassicModelsRepository {
     }
 
     public void oneToManyToJson() {
-        
+
         Result<Record1<JSON>> result1 = ctx.select(
                 jsonObject(
                         key("productLine").value(PRODUCTLINE.PRODUCT_LINE),
