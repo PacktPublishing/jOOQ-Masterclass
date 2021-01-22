@@ -123,21 +123,21 @@ public class ClassicModelsRepository {
                                 .from(EMPLOYEE)
                                 .where(EMPLOYEE.OFFICE_CODE.eq(OFFICE.OFFICE_CODE))),
                         key("managers").value(jsonArrayAgg(
-                                jsonObject(key("managerId").value(field("managerId")),
-                                        key("managerName").value(field("managerName"))))
-                                .orderBy(field("managerId")))))
+                                jsonObject(key("managerId").value(field(name("managerId"))),
+                                        key("managerName").value(field(name("managerName")))))
+                                .orderBy(field(name("managerId"))))))
                 .from(OFFICE)
                 .join(select(MANAGER.MANAGER_ID.as("managerId"),
                         MANAGER.MANAGER_NAME.as("managerName"),
                         MANAGER.MANAGER_DETAIL.as("details"),
                         OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE.as("offices_office_code"))
                         .from(MANAGER).join(OFFICE_HAS_MANAGER)
-                        .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID)))
+                        .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID)).asTable("t"))
                 .on(OFFICE.OFFICE_CODE.eq(field(name("offices_office_code"), String.class)))
                 .groupBy(OFFICE.OFFICE_CODE)
                 .orderBy(OFFICE.OFFICE_CODE)
                 .fetch();
-        
+
         System.out.println("Example 3:\n" + result.formatJSON());
     }
 }
