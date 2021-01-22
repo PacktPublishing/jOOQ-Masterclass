@@ -15,7 +15,7 @@ public class ClassicModelsService {
     // if you get, ORA-40478: output value too large (maximum: 4000)
     // then you should set MAX_STRING_SIZE to EXTENTED instead of STANDARD    
     public void callAll() {
-        
+        /*
       classicModelsRepository.oneToOneToJson();
       classicModelsRepository.oneToOneToJsonLimit();
         
@@ -24,6 +24,8 @@ public class ClassicModelsService {
         
       classicModelsRepository.manyToManyToJsonManagersOffices();
       classicModelsRepository.manyToManyToJsonOfficesManagers();
-      classicModelsRepository.manyToManyToJsonManagersOfficesLimit();        
+      classicModelsRepository.manyToManyToJsonManagersOfficesLimit();  
+*/
+classicModelsRepository.UDTToJson();
     }
 }
