@@ -38,28 +38,15 @@ public class ClassicModelsRepository {
     // then you should set MAX_STRING_SIZE to EXTENTED instead of STANDARD
     
     public void arrayToJson() {
-
-        var result = ctx.select(jsonObject(
-                key("id").value(DEPARTMENT.DEPARTMENT_ID),
-                key(DEPARTMENT.NAME). value(jsonObject(jsonArrayAgg(field("COLUMN_VALUE"))))))
+        
+        var result = ctx.select(DEPARTMENT.DEPARTMENT_ID, DEPARTMENT.NAME, 
+                field("COLUMN_VALUE").as("EVALUATION"))
                 .from(DEPARTMENT, lateral(select(field("COLUMN_VALUE"))
-                        .from(table(DEPARTMENT.TOPIC))   
-                        //.groupBy(DEPARTMENT.DEPARTMENT_ID, field("COLUMN_VALUE"))
-                ))
+                        .from(table(DEPARTMENT.TOPIC))))                
+                .forJSON().path()
                 .fetch();
 
         System.out.println("Example (array)" + result.formatJSON());
-    }
-
-    public void UDTToJson() {
-
-        Result<Record1<JSON>> result = ctx.select(jsonObject(
-                key("mananger").value(MANAGER.MANAGER_NAME),
-                key("evaluation").value(MANAGER.MANAGER_EVALUATION.cast(String.class))))
-                .from(MANAGER)
-                .fetch();
-
-        System.out.println("Example (UDT)" + result.formatJSON());
     }
 
     public void oneToOneToJson() {
