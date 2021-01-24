@@ -6,10 +6,12 @@ import static jooq.generated.tables.Productline.PRODUCTLINE;
 import org.jooq.DSLContext;
 import org.jooq.Record1;
 import org.jooq.Record;
+import org.jooq.Record2;
 import org.jooq.Result;
 import org.jooq.XML;
 import org.jooq.impl.DSL;
 import static org.jooq.impl.DSL.concat;
+import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.table;
 import static org.jooq.impl.DSL.val;
@@ -168,6 +170,14 @@ public class ClassicModelsRepository {
                 .fetch();
 
         System.out.println("Example 2.3:\n" + result3.formatXML());
+        
+        // simple example of using xmlexists()        
+        Result<Record1<String>> result4 = ctx.select(PRODUCTLINE.PRODUCT_LINE)
+                .from(PRODUCTLINE)
+                .where(xmlexists("/productline").passing(PRODUCTLINE.HTML_DESCRIPTION))
+                .fetch();
+
+        System.out.println("Example 2.4:\n" + result4);
     }
 
     public void xmlTableExample() {
@@ -184,9 +194,35 @@ public class ClassicModelsRepository {
                 .fetch();
         
         System.out.println("Example 3.1:\n" + result1.formatXML());
+        
+        Result<Record> result2 = ctx.select(table("t").asterisk())
+                .from(PRODUCTLINE, xmltable("//productline/details").passing(PRODUCTLINE.HTML_DESCRIPTION)
+                        .column("id").forOrdinality()
+                        .column("power", VARCHAR)
+                        .column("type", VARCHAR)
+                        .column("nr_of_lines", INTEGER).path("type/@nr_of_lines")                        
+                        .column("command", VARCHAR).path("type/@command")     
+                        .as("t"))
+                .fetch();
+        
+        System.out.println("Example 3.2:\n" + result2.formatXML());
+        
+        // filter result
+        Result<Record> result3 = ctx.select(table("t").asterisk())
+                .from(PRODUCTLINE, xmltable("//productline/details").passing(PRODUCTLINE.HTML_DESCRIPTION)
+                        .column("id").forOrdinality()
+                        .column("power", VARCHAR)
+                        .column("type", VARCHAR)
+                        .column("nr_of_lines", INTEGER).path("type/@nr_of_lines")                        
+                        .column("command", VARCHAR).path("type/@command")     
+                        .as("t"))
+                .where(field("command").eq("ERP"))
+                .fetch();
+        
+        System.out.println("Example 3.3:\n" + result3.formatXML());
 
         // back to XML        
-        Result<Record1<XML>> result2 = ctx.select(xmlelement("details",                
+        Result<Record1<XML>> result4 = ctx.select(xmlelement("details",                
                         xmlelement("power", (field("power"))),
                         xmlelement("type", xmlattributes(field("nr_of_lines"), field("command")), field("type"))))                
                 .from(PRODUCTLINE, xmltable("//productline/details").passing(PRODUCTLINE.HTML_DESCRIPTION)
@@ -197,6 +233,32 @@ public class ClassicModelsRepository {
                         .column("command", VARCHAR).path("type/@command")                        
                         .as("t"))
                 .fetch();
-        System.out.println("Example 3.2:\n" + result2.formatXML());
+        System.out.println("Example 3.4:\n" + result4.formatXML());
+        
+        // aggregate
+        Result<Record2<String, Integer>> result5 = ctx.select(field("command", String.class), count(field("command")))
+                .from(PRODUCTLINE, xmltable("//productline/details").passing(PRODUCTLINE.HTML_DESCRIPTION)                                           
+                        .column("command", VARCHAR).path("type/@command")     
+                        .as("t"))
+                .groupBy(field("command"))
+                .fetch();
+        
+        System.out.println("Example 3.5:\n" + result5);
+        
+        // order and limit result
+        Result<Record> result6 = ctx.select(table("t").asterisk())
+                .from(PRODUCTLINE, xmltable("//productline").passing(PRODUCTLINE.HTML_DESCRIPTION)
+                        .column("id").forOrdinality()
+                        .column("name", VARCHAR)
+                        .column("code", VARCHAR)
+                        .column("capacity", XML)
+                        .column("power", VARCHAR).path("details/power")
+                        .column("command", VARCHAR).path("details/type/@command")
+                        .as("t"))
+                .orderBy(field("name"))
+                .limit((2))
+                .fetch();
+        
+        System.out.println("Example 3.6:\n" + result6);
     }
 }
