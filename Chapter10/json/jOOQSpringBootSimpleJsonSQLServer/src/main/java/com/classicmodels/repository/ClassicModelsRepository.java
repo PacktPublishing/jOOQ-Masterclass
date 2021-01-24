@@ -201,11 +201,11 @@ public class ClassicModelsRepository {
                         .column("city", VARCHAR).path("$.address.city")
                         .column("state", VARCHAR).path("$.address.state")
                         .column("zipOrPostal", VARCHAR).path("$.address.zipOrPostal")
-                        .column("phoneNumber", NVARCHAR).path("$.phoneNumber") // null 
-                        .column("summary", VARCHAR).path("$.summary") // null
-                        .column("computerSkills", NVARCHAR).path("$.computerSkills")
-                        .column("shareholder", VARCHAR).path("$.shareholder") // null, if doesn't exists
-                        .column("projects", NVARCHAR).path("$.projects") // null 
+                        .column("phoneNumber", NVARCHAR) // null 
+                        .column("summary", VARCHAR) // null
+                        .column("computerSkills", NVARCHAR)
+                        .column("shareholder", VARCHAR) // null, if doesn't exists
+                        .column("projects", NVARCHAR) // null 
                         .as("t"))
                 .fetch();
         System.out.println("Example 4.2:\n" + result2);    
