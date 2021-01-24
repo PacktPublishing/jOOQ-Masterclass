@@ -180,11 +180,11 @@ public class ClassicModelsRepository {
                         .column("city", VARCHAR).path("$.address.city")
                         .column("state", VARCHAR).path("$.address.state")
                         .column("zipOrPostal", VARCHAR).path("$.address.zipOrPostal")
-                        .column("phoneNumber", JSON).path("$.phoneNumber")
-                        .column("summary", VARCHAR).path("$.summary")
-                        .column("computerSkills", JSON).path("$.computerSkills")
-                        .column("shareholder", VARCHAR).path("$.shareholder") // null, if doesn't exists
-                        .column("projects", JSON).path("$.projects")
+                        .column("phoneNumber", JSON)
+                        .column("summary", VARCHAR)
+                        .column("computerSkills", JSON)
+                        .column("shareholder", VARCHAR) // null, if doesn't exists
+                        .column("projects", JSON)
                         .as("t")))
                 .fetch();
         System.out.println("Example 3.2:\n" + result2);
