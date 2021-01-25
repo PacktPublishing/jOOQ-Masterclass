@@ -14,6 +14,9 @@ import org.jooq.XML;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.select;
+import static org.jooq.impl.DSL.xmlagg;
+import static org.jooq.impl.DSL.xmlforest;
+import static org.jooq.impl.DSL.xmlelement;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,6 +57,42 @@ public class ClassicModelsRepository {
                 .fetch();
 
         System.out.println("Example 1.2 (one-to-one):\n" + result2.formatXML());
+        
+        Result<Record1<XML>> result3 = ctx.select(
+                xmlelement("customer",
+                        xmlelement("customerName", CUSTOMER.CUSTOMER_NAME),
+                        xmlelement("phone", CUSTOMER.PHONE),
+                        xmlelement("creditLimit", CUSTOMER.CREDIT_LIMIT),
+                        xmlelement("details", field(select(xmlforest(
+                                CUSTOMERDETAIL.CITY.as("city"),
+                                CUSTOMERDETAIL.ADDRESS_LINE_FIRST.as("addressLineFirst"),
+                                CUSTOMERDETAIL.STATE.as("state")))
+                                .from(CUSTOMERDETAIL)
+                                .where(CUSTOMERDETAIL.CUSTOMER_NUMBER
+                                        .eq(CUSTOMER.CUSTOMER_NUMBER))))))
+                .from(CUSTOMER)
+                .orderBy(CUSTOMER.CREDIT_LIMIT)
+                .fetch();
+
+        System.out.println("Example 1.3 (one-to-one):\n" + result3.formatXML());
+        
+        // same thing as above via JOIN        
+        Result<Record1<XML>> result4 = ctx.select(
+                xmlelement("customer",
+                        xmlelement("customerName", CUSTOMER.CUSTOMER_NAME),
+                        xmlelement("phone", CUSTOMER.PHONE),
+                        xmlelement("creditLimit", CUSTOMER.CREDIT_LIMIT),
+                        xmlelement("details", xmlforest(
+                                CUSTOMERDETAIL.CITY.as("city"),
+                                CUSTOMERDETAIL.ADDRESS_LINE_FIRST.as("addressLineFirst"),
+                                CUSTOMERDETAIL.STATE.as("state")))))
+                .from(CUSTOMER)
+                .join(CUSTOMERDETAIL)
+                .on(CUSTOMER.CUSTOMER_NUMBER.eq(CUSTOMERDETAIL.CUSTOMER_NUMBER))
+                .orderBy(CUSTOMER.CREDIT_LIMIT)
+                .fetch();
+
+        System.out.println("Example 1.4 (one-to-one):\n" + result4.formatXML());
     }
 
     public void oneToManyToXml() {
@@ -97,6 +136,43 @@ public class ClassicModelsRepository {
                 .fetch();
 
         System.out.println("Example 2.3 (one-to-many):\n" + result3.formatXML());
+        
+        Result<Record1<XML>> result4 = ctx.select(
+                xmlelement("productLine",
+                        xmlelement("productLine", PRODUCTLINE.PRODUCT_LINE),
+                        xmlelement("textDescription", PRODUCTLINE.TEXT_DESCRIPTION),
+                        xmlelement("products", field(select(xmlagg(
+                                xmlelement("product", // optionally, each product wrapped in <product/>
+                                        xmlforest(
+                                                PRODUCT.PRODUCT_NAME.as("productName"),
+                                                PRODUCT.PRODUCT_VENDOR.as("productVendor"),
+                                                PRODUCT.QUANTITY_IN_STOCK.as("quantityInStock")))))
+                                .from(PRODUCT)
+                                .where(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE))))))
+                .from(PRODUCTLINE)
+                .orderBy(PRODUCTLINE.PRODUCT_LINE)
+                .fetch();
+
+        System.out.println("Example 2.4 (one-to-many):\n" + result4.formatXML());
+        
+        Result<Record1<XML>> result5 = ctx.select(
+                xmlelement("productLine",
+                        xmlelement("productLine", PRODUCTLINE.PRODUCT_LINE),
+                        xmlelement("textDescription", PRODUCTLINE.TEXT_DESCRIPTION),
+                        xmlelement("products", xmlagg(
+                                xmlelement("product", // optionally, each product wrapped in <product/>
+                                        xmlforest(
+                                                PRODUCT.PRODUCT_NAME.as("productName"),
+                                                PRODUCT.PRODUCT_VENDOR.as("productVendor"),
+                                                PRODUCT.QUANTITY_IN_STOCK.as("quantityInStock")))))))
+                .from(PRODUCTLINE)
+                .join(PRODUCT)
+                .on(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE))
+                .groupBy(PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.TEXT_DESCRIPTION)
+                .orderBy(PRODUCTLINE.PRODUCT_LINE)
+                .fetch();
+
+        System.out.println("Example 2.5 (one-to-many):\n" + result5.formatXML());
     }
 
     public void manyToManyToXmlManagersOffices() {
@@ -132,6 +208,28 @@ public class ClassicModelsRepository {
                 .fetch();
 
         System.out.println("Example 3.2 (many-to-many):\n" + result2.formatXML());        
+        
+        Result<Record1<XML>> result3 = ctx.select(
+                xmlelement("managers",
+                        xmlelement("managerId", MANAGER.MANAGER_ID),
+                        xmlelement("managerName", MANAGER.MANAGER_NAME),
+                        xmlelement("offices", xmlagg(
+                                xmlelement("office", // optionally, each office is wrapped in <office/>
+                                        xmlforest(field(name("officeCode")),
+                                                field(name("state")),
+                                                field(name("city"))))))))
+                .from(MANAGER)
+                .join(select(OFFICE.OFFICE_CODE.as("officeCode"),
+                        OFFICE.CITY.as("city"), OFFICE.STATE.as("state"),
+                        OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID.as("managers_manager_id"))
+                        .from(OFFICE).join(OFFICE_HAS_MANAGER)
+                        .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE)).asTable("t"))
+                .on(MANAGER.MANAGER_ID.eq(field(name("managers_manager_id"), Long.class)))
+                .groupBy(MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME)
+                .orderBy(MANAGER.MANAGER_ID)
+                .fetch();
+
+        System.out.println("Example 3.3 (many-to-many):\n" + result3.formatXML());
     }
 
     public void manyToManyToXmlOfficesManagers() {
@@ -166,6 +264,29 @@ public class ClassicModelsRepository {
                 .forXML().auto().root("managers")
                 .fetch();
 
-        System.out.println("Example 4.2 (many-to-many):\n" + result2.formatXML());         
+        System.out.println("Example 4.2 (many-to-many):\n" + result2.formatXML());    
+        
+        Result<Record1<XML>> result3 = ctx.select(
+                xmlelement("offices",
+                        xmlelement("officeCode", OFFICE.OFFICE_CODE),
+                        xmlelement("state", OFFICE.STATE),
+                        xmlelement("city", OFFICE.CITY),
+                        xmlelement("managers", xmlagg(
+                                xmlelement("manager", // optionally, each manager is wrapped in <manager/>
+                                        xmlforest(field(name("managerId")),
+                                                field(name("managerName"))))))))
+                .from(OFFICE)
+                .join(select(MANAGER.MANAGER_ID.as("managerId"),
+                        MANAGER.MANAGER_NAME.as("managerName"),
+                        MANAGER.MANAGER_DETAIL.as("details"),
+                        OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE.as("offices_office_code"))
+                        .from(MANAGER).join(OFFICE_HAS_MANAGER)
+                        .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID)).asTable("t"))
+                .on(OFFICE.OFFICE_CODE.eq(field(name("offices_office_code"), String.class)))
+                .groupBy(OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.STATE)
+                .orderBy(OFFICE.OFFICE_CODE)
+                .fetch();
+
+        System.out.println("Example 4.3 (many-to-many):\n" + result3.formatXML());
     }
 }
