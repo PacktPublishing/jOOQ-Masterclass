@@ -2,6 +2,7 @@ package com.classicmodels.repository;
 
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
+import static jooq.generated.tables.Department.DEPARTMENT;
 import static jooq.generated.tables.Manager.MANAGER;
 import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.OfficeHasManager.OFFICE_HAS_MANAGER;
@@ -12,8 +13,10 @@ import org.jooq.Record1;
 import org.jooq.Result;
 import org.jooq.XML;
 import static org.jooq.impl.DSL.field;
+import static org.jooq.impl.DSL.lateral;
 import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.select;
+import static org.jooq.impl.DSL.table;
 import static org.jooq.impl.DSL.xmlagg;
 import static org.jooq.impl.DSL.xmlforest;
 import static org.jooq.impl.DSL.xmlelement;
@@ -28,6 +31,32 @@ public class ClassicModelsRepository {
 
     public ClassicModelsRepository(DSLContext ctx) {
         this.ctx = ctx;
+    }
+
+    public void arrayToXML() {
+
+        Result<Record1<XML>> result = ctx.select(
+                xmlelement("department", 
+                        xmlelement("id", DEPARTMENT.DEPARTMENT_ID),
+                        xmlelement("topic", field("COLUMN_VALUE"))))
+                .from(DEPARTMENT, lateral(select(field("COLUMN_VALUE"))
+                        .from(table(DEPARTMENT.TOPIC))))
+                        .orderBy(DEPARTMENT.DEPARTMENT_ID)
+                .fetch();
+
+        System.out.println("Example (array):\n" + result.formatXML());
+    }
+
+    public void UDTToXML() {
+
+        Result<Record1<XML>> result = ctx.select(
+                xmlelement("REPORT",
+                        xmlelement("MANAGER", MANAGER.MANAGER_NAME),
+                        xmlelement("EVALUATION", MANAGER.MANAGER_EVALUATION)))
+                .from(MANAGER)
+                .fetch();
+
+        System.out.println("Example (UDT):\n" + result.formatXML());
     }
 
     public void oneToOneToXml() {
@@ -57,7 +86,7 @@ public class ClassicModelsRepository {
                 .fetch();
 
         System.out.println("Example 1.2 (one-to-one):\n" + result2.formatXML());
-        
+
         Result<Record1<XML>> result3 = ctx.select(
                 xmlelement("customer",
                         xmlelement("customerName", CUSTOMER.CUSTOMER_NAME),
@@ -75,7 +104,7 @@ public class ClassicModelsRepository {
                 .fetch();
 
         System.out.println("Example 1.3 (one-to-one):\n" + result3.formatXML());
-        
+
         // same thing as above via JOIN        
         Result<Record1<XML>> result4 = ctx.select(
                 xmlelement("customer",
@@ -136,7 +165,7 @@ public class ClassicModelsRepository {
                 .fetch();
 
         System.out.println("Example 2.3 (one-to-many):\n" + result3.formatXML());
-        
+
         Result<Record1<XML>> result4 = ctx.select(
                 xmlelement("productLine",
                         xmlelement("productLine", PRODUCTLINE.PRODUCT_LINE),
@@ -154,7 +183,7 @@ public class ClassicModelsRepository {
                 .fetch();
 
         System.out.println("Example 2.4 (one-to-many):\n" + result4.formatXML());
-        
+
         Result<Record1<XML>> result5 = ctx.select(
                 xmlelement("productLine",
                         xmlelement("productLine", PRODUCTLINE.PRODUCT_LINE),
@@ -176,7 +205,7 @@ public class ClassicModelsRepository {
     }
 
     public void manyToManyToXmlManagersOffices() {
-        
+
         Result<Record1<XML>> result1 = ctx.select(
                 MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME,
                 field(name("office_code")), field(name("city")), field(name("state")))
@@ -207,8 +236,8 @@ public class ClassicModelsRepository {
                 .forXML().auto().root("offices")
                 .fetch();
 
-        System.out.println("Example 3.2 (many-to-many):\n" + result2.formatXML());        
-        
+        System.out.println("Example 3.2 (many-to-many):\n" + result2.formatXML());
+
         Result<Record1<XML>> result3 = ctx.select(
                 xmlelement("managers",
                         xmlelement("managerId", MANAGER.MANAGER_ID),
@@ -264,8 +293,8 @@ public class ClassicModelsRepository {
                 .forXML().auto().root("managers")
                 .fetch();
 
-        System.out.println("Example 4.2 (many-to-many):\n" + result2.formatXML());    
-        
+        System.out.println("Example 4.2 (many-to-many):\n" + result2.formatXML());
+
         Result<Record1<XML>> result3 = ctx.select(
                 xmlelement("offices",
                         xmlelement("officeCode", OFFICE.OFFICE_CODE),
