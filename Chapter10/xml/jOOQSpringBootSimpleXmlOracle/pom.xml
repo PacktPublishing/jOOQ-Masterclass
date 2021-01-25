@@ -28,6 +28,7 @@
         
         <jaxb.version>2.3.0</jaxb.version>
         <jooq.version>3.14.4</jooq.version>             
+        <xdb6.version>18.3.0.0</xdb6.version>
         <codehaus.mojo.version>1.0.0</codehaus.mojo.version>
         <maven.compiler.plugin.version>3.3</maven.compiler.plugin.version>
     </properties>
@@ -59,10 +60,10 @@
             <artifactId>ucp</artifactId>            
         </dependency>    
         <dependency>
-            <groupId>com.oracle.database.jdbc</groupId>
-            <artifactId>xdb6</artifactId> 
-            <version>1.0</version>           
-        </dependency> 
+            <groupId>com.oracle.database.xml</groupId>
+            <artifactId>xdb6</artifactId>
+            <version>${xdb6.version}</version>
+        </dependency>
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>    
