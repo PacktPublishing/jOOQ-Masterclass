@@ -1,5 +1,8 @@
 package com.classicmodels.repository;
 
+import com.classicmodels.pojo.SimpleCustomer;
+import com.classicmodels.pojo.SimpleProductLine;
+import java.util.List;
 import static jooq.generated.tables.BankTransaction.BANK_TRANSACTION;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
@@ -22,7 +25,6 @@ import static org.jooq.impl.DSL.jsonObject;
 import static org.jooq.impl.DSL.jsonArrayAgg;
 import static org.jooq.impl.DSL.jsonEntry;
 import static org.jooq.impl.DSL.key;
-import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.select;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,8 +65,8 @@ public class ClassicModelsRepository {
                 .fetch();
         System.out.println("Example 1.1:\n" + result1.formatJSON());
 
-        // the same thing but using jsonEntry
-        Result<Record1<JSON>> result2 = ctx.select(
+        // the same thing but using jsonEntry and mapping to POJO
+        List<SimpleProductLine> result2 = ctx.select(
                 jsonObject(
                         jsonEntry("productLine", PRODUCTLINE.PRODUCT_LINE),
                         jsonEntry("textDescription", PRODUCTLINE.TEXT_DESCRIPTION),
@@ -85,13 +87,14 @@ public class ClassicModelsRepository {
                                 .where(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE))
                                 .orderBy(PRODUCTLINE.PRODUCT_LINE)))))
                 .from(PRODUCTLINE)
-                .fetch();
-        System.out.println("Example 1.2:\n" + result2.formatJSON());
+                .fetchInto(SimpleProductLine.class);
+        
+        System.out.println("Example 1.2:\n" + result2);
     }
 
     public void jsonCustomerPaymentBankTransactionCustomerdetail() {
 
-        Result<Record1<JSON>> result = ctx.select(
+       List<SimpleCustomer> result = ctx.select(
                 jsonObject(
                         key("customerName").value(CUSTOMER.CUSTOMER_NAME),
                         key("creditLimit").value(CUSTOMER.CREDIT_LIMIT),
@@ -120,8 +123,8 @@ public class ClassicModelsRepository {
                                 .where(CUSTOMERDETAIL.CUSTOMER_NUMBER.eq(CUSTOMER.CUSTOMER_NUMBER)))))
                 .from(CUSTOMER)
                 .orderBy(CUSTOMER.CREDIT_LIMIT)
-                .fetch();
-        System.out.println("Example 2:\n" + result.formatJSON());
+                .fetchInto(SimpleCustomer.class);
+        System.out.println("Example 2:\n" + result);
     }
 
     public void jsonOfficeManagerDepartmentEmployeeSale() {
