@@ -33,7 +33,7 @@ public class ClassicModelsRepository {
     }
 
     public void oneToOneToJsonToPojo() {
-        
+
         List<SimpleCustomer> result1 = ctx.select(
                 jsonObject(
                         key("customerName").value(CUSTOMER.CUSTOMER_NAME),
@@ -41,7 +41,7 @@ public class ClassicModelsRepository {
                         key("creditLimit").value(CUSTOMER.CREDIT_LIMIT),
                         key("details").value(select(
                                 jsonObject(key("addressLineFirst").value(CUSTOMERDETAIL.ADDRESS_LINE_FIRST),
-                                        key("state").value(CUSTOMERDETAIL.STATE),                                        
+                                        key("state").value(CUSTOMERDETAIL.STATE),
                                         key("city").value(CUSTOMERDETAIL.CITY)))
                                 .from(CUSTOMERDETAIL)
                                 .where(CUSTOMERDETAIL.CUSTOMER_NUMBER.eq(CUSTOMER.CUSTOMER_NUMBER)))))
@@ -84,9 +84,9 @@ public class ClassicModelsRepository {
                 .from(PRODUCTLINE)
                 .orderBy(PRODUCTLINE.PRODUCT_LINE)
                 .fetchInto(SimpleProductLine.class);
-        
+
         System.out.println("Example 2.1 (one-to-many):\n" + result1);
-        
+
         List<SimpleProductLine> result2 = ctx.select(
                 jsonObject(
                         key("productLine").value(PRODUCTLINE.PRODUCT_LINE),
@@ -108,7 +108,32 @@ public class ClassicModelsRepository {
 
     public void manyToManyToJsonToPojoManagersOffices() {
 
-        List<SimpleManager> result = ctx.select(
+        List<SimpleManager> result1 = ctx.select(
+                jsonObject(
+                        key("managerId").value(MANAGER.MANAGER_ID),
+                        key("managerName").value(MANAGER.MANAGER_NAME),
+                        key("offices").value(field(select(jsonArrayAgg(jsonObject(
+                                key("officeCode").value(OFFICE.OFFICE_CODE), 
+                                key("state").value(OFFICE.STATE), 
+                                key("city").value(OFFICE.CITY))))
+                                .from(OFFICE)
+                                .join(OFFICE_HAS_MANAGER)
+                                .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))
+                                .where(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID.eq(MANAGER.MANAGER_ID))))))
+                .from(MANAGER)
+                .fetchInto(SimpleManager.class);
+
+        // trivial display         
+        System.out.println("\nExample 3.1 (many-to-many):");
+        for (SimpleManager sm : result1) {
+
+            System.out.println("\nManager:");
+            System.out.println("===========================");
+            System.out.println(sm);
+            System.out.println(sm.getOffices());
+        }
+
+        List<SimpleManager> result2 = ctx.select(
                 jsonObject(
                         key("managerId").value(MANAGER.MANAGER_ID),
                         key("managerName").value(MANAGER.MANAGER_NAME),
@@ -129,8 +154,8 @@ public class ClassicModelsRepository {
                 .fetchInto(SimpleManager.class);
 
         // trivial display         
-        System.out.println("\nExample 3 (many-to-many):");
-        for (SimpleManager sm : result) {
+        System.out.println("\nExample 3.2 (many-to-many):");
+        for (SimpleManager sm : result2) {
 
             System.out.println("\nManager:");
             System.out.println("===========================");
@@ -140,8 +165,33 @@ public class ClassicModelsRepository {
     }
 
     public void manyToManyToJsonToPojoOfficesManagers() {
+        
+        List<SimpleOffice> result1 = ctx.select(
+                jsonObject(
+                        key("officeCode").value(OFFICE.OFFICE_CODE),
+                        key("state").value(OFFICE.STATE),
+                        key("city").value(OFFICE.CITY),
+                        key("managers").value(field(select(jsonArrayAgg(jsonObject(
+                                key("managerId").value(MANAGER.MANAGER_ID), 
+                                key("managerName").value(MANAGER.MANAGER_NAME))))
+                                .from(MANAGER)
+                                .join(OFFICE_HAS_MANAGER)
+                                .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID))
+                                .where(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))))))
+                .from(OFFICE)
+                .fetchInto(SimpleOffice.class);
+        
+        // trivial display         
+        System.out.println("\nExample 4.1 (many-to-many):");
+        for (SimpleOffice so : result1) {
 
-        List<SimpleOffice> result = ctx.select(
+            System.out.println("\nOffice:");
+            System.out.println("===========================");
+            System.out.println(so);
+            System.out.println(so.getManagers());
+        }
+
+        List<SimpleOffice> result2 = ctx.select(
                 jsonObject(
                         key("officeCode").value(OFFICE.OFFICE_CODE),
                         key("state").value(OFFICE.STATE),
@@ -162,8 +212,8 @@ public class ClassicModelsRepository {
                 .fetchInto(SimpleOffice.class);
 
         // trivial display         
-        System.out.println("\nExample 4 (many-to-many):");
-        for (SimpleOffice so : result) {
+        System.out.println("\nExample 4.2 (many-to-many):");
+        for (SimpleOffice so : result2) {
 
             System.out.println("\nOffice:");
             System.out.println("===========================");
