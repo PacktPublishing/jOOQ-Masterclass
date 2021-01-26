@@ -194,16 +194,13 @@ public class ClassicModelsRepository {
                                                 .where(SALE.EMPLOYEE_NUMBER.eq(EMPLOYEE.EMPLOYEE_NUMBER))))))
                                 .from(EMPLOYEE)
                                 .where(EMPLOYEE.OFFICE_CODE.eq(OFFICE.OFFICE_CODE))),
-                        key("managers").value(select(jsonArrayAgg(
-                                jsonObject(key("managerId").value(field(name("managerId"))),
-                                        key("managerName").value(field(name("managerName")))))
-                                .orderBy(field(name("managerId"))))
-                                .from(select(MANAGER.MANAGER_ID.as("managerId"),
-                                        MANAGER.MANAGER_NAME.as("managerName"),
-                                        OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE.as("offices_office_code"))
-                                        .from(MANAGER).join(OFFICE_HAS_MANAGER)
-                                        .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID)).asTable("t"))
-                                .where(OFFICE.OFFICE_CODE.eq(field(name("offices_office_code"), String.class))))))
+                        key("managers").value(field(select(jsonArrayAgg(jsonObject(
+                                MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME))
+                                .orderBy(MANAGER.MANAGER_ID))
+                                .from(MANAGER)
+                                .join(OFFICE_HAS_MANAGER)
+                                .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID))
+                                .where(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))))))
                 .from(OFFICE)
                 .orderBy(OFFICE.OFFICE_CODE)
                 .fetch();
