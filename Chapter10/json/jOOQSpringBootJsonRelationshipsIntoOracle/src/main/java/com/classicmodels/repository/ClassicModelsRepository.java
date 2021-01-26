@@ -17,7 +17,6 @@ import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.jsonObject;
 import static org.jooq.impl.DSL.jsonArrayAgg;
 import static org.jooq.impl.DSL.key;
-import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.select;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -133,7 +132,32 @@ public class ClassicModelsRepository {
     
     public void manyToManyToJsonToPojoManagersOffices() {
 
-        List<SimpleManager> result = ctx.select(
+        List<SimpleManager> result1 = ctx.select(
+                jsonObject(
+                        key("managerId").value(MANAGER.MANAGER_ID),
+                        key("managerName").value(MANAGER.MANAGER_NAME),
+                        key("offices").value(field(select(jsonArrayAgg(jsonObject(
+                                key("officeCode").value(OFFICE.OFFICE_CODE), 
+                                key("state").value(OFFICE.STATE), 
+                                key("city").value(OFFICE.CITY))))
+                                .from(OFFICE)
+                                .join(OFFICE_HAS_MANAGER)
+                                .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))
+                                .where(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID.eq(MANAGER.MANAGER_ID))))))
+                .from(MANAGER)
+                .fetchInto(SimpleManager.class);
+        
+        // trivial display         
+        System.out.println("\nExample 3.1 (many-to-many):");
+        for (SimpleManager sm : result1) {
+
+            System.out.println("\nManager:");
+            System.out.println("===========================");
+            System.out.println(sm);
+            System.out.println(sm.getOffices());
+        }
+       
+        List<SimpleManager> result2 = ctx.select(
                 jsonObject(
                         key("managerId").value(MANAGER.MANAGER_ID.as("MANAGER_ID")),
                         key("managerName").value(MANAGER.MANAGER_NAME.as("MANAGER_NAME")),
@@ -154,8 +178,8 @@ public class ClassicModelsRepository {
                 .fetchInto(SimpleManager.class);
 
         // trivial display         
-        System.out.println("\nExample 3 (many-to-many):");
-        for (SimpleManager sm : result) {
+        System.out.println("\nExample 3.2 (many-to-many):");
+        for (SimpleManager sm : result2) {
 
             System.out.println("\nManager:");
             System.out.println("===========================");
@@ -165,8 +189,33 @@ public class ClassicModelsRepository {
     }
 
     public void manyToManyToJsonToPojoOfficesManagers() {
+        
+        List<SimpleOffice> result1 = ctx.select(
+                jsonObject(
+                        key("officeCode").value(OFFICE.OFFICE_CODE),
+                        key("state").value(OFFICE.STATE),
+                        key("city").value(OFFICE.CITY),
+                        key("managers").value(field(select(jsonArrayAgg(jsonObject(
+                                key("managerId").value(MANAGER.MANAGER_ID), 
+                                key("managerName").value(MANAGER.MANAGER_NAME))))
+                                .from(MANAGER)
+                                .join(OFFICE_HAS_MANAGER)
+                                .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID))
+                                .where(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))))))
+                .from(OFFICE)
+                .fetchInto(SimpleOffice.class);
+        
+        // trivial display         
+        System.out.println("\nExample 4.1 (many-to-many):");
+        for (SimpleOffice so : result1) {
 
-        List<SimpleOffice> result = ctx.select(
+            System.out.println("\nOffice:");
+            System.out.println("===========================");
+            System.out.println(so);
+            System.out.println(so.getManagers());
+        }
+
+        List<SimpleOffice> result2 = ctx.select(
                 jsonObject(
                         key("officeCode").value(OFFICE.OFFICE_CODE),
                         key("state").value(OFFICE.STATE),
@@ -187,13 +236,13 @@ public class ClassicModelsRepository {
                 .fetchInto(SimpleOffice.class);
 
         // trivial display         
-        System.out.println("\nExample 4 (many-to-many):");
-        for (SimpleOffice so : result) {
+        System.out.println("\nExample 4.2 (many-to-many):");
+        for (SimpleOffice so : result2) {
 
             System.out.println("\nOffice:");
             System.out.println("===========================");
             System.out.println(so);
             System.out.println(so.getManagers());
-        }
+        }                
     }
 }
