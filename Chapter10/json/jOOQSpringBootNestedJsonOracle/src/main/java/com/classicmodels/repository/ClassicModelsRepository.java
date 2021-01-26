@@ -221,13 +221,11 @@ public class ClassicModelsRepository {
                         .from(DEPARTMENT)
                         .where(DEPARTMENT.OFFICE_CODE.eq(OFFICE.OFFICE_CODE))
                         .forJSON().path().asField("DEPARTMENTS"),
-                select(field("MANAGER_ID"), field("MANAGER_NAME"))
-                        .from(select(MANAGER.MANAGER_ID.as("MANAGER_ID"),
-                                MANAGER.MANAGER_NAME.as("MANAGER_NAME"),
-                                OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE.as("OFFICES_OFFICE_CODE"))
-                                .from(MANAGER).join(OFFICE_HAS_MANAGER)
-                                .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID)).asTable("T"))
-                        .where(OFFICE.OFFICE_CODE.eq(field(name("OFFICES_OFFICE_CODE"), String.class)))
+                select(MANAGER.MANAGER_ID.as("MANAGER_ID"), MANAGER.MANAGER_NAME.as("MANAGER_NAME"))
+                        .from(MANAGER)
+                        .join(OFFICE_HAS_MANAGER)
+                        .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID))
+                        .where(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))
                         .forJSON().path().asField("MANAGERS"))
                 .from(OFFICE)
                 .forJSON().path()
