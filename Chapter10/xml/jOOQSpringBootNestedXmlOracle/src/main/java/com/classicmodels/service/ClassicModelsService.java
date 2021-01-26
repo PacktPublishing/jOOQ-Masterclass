@@ -14,8 +14,8 @@ public class ClassicModelsService {
 
     public void callAll() {
         
-        classicModelsRepository.xmlProductlineProductOrderdetail();
-        classicModelsRepository.xmlCustomerPaymentBankTransactionCustomerdetail();   
+      //  classicModelsRepository.xmlProductlineProductOrderdetail();
+       // classicModelsRepository.xmlCustomerPaymentBankTransactionCustomerdetail();   
         classicModelsRepository.xmlOfficeManagerDepartmentEmployeeSale();
     }
 }
