@@ -143,7 +143,7 @@ public class ClassicModelsRepository {
 
         System.out.println("Example 2.2:\n" + result2.formatJSON());
     }
-    
+
     public void jsonOfficeManagerDepartmentEmployeeSale() {
 
         Result<Record1<JSON>> result1 = ctx.select(
@@ -168,23 +168,22 @@ public class ClassicModelsRepository {
                                                 .where(SALE.EMPLOYEE_NUMBER.eq(EMPLOYEE.EMPLOYEE_NUMBER))))))
                                 .from(EMPLOYEE)
                                 .where(EMPLOYEE.OFFICE_CODE.eq(OFFICE.OFFICE_CODE))),
-                        key("managers").value(jsonArrayAgg(
+                        key("managers").value(select(jsonArrayAgg(
                                 jsonObject(key("managerId").value(field(name("managerId"))),
                                         key("managerName").value(field(name("managerName")))))
-                                .orderBy(field(name("managerId"))))))
+                                .orderBy(field(name("managerId"))))
+                                .from(select(MANAGER.MANAGER_ID.as("managerId"),
+                                        MANAGER.MANAGER_NAME.as("managerName"),
+                                        OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE.as("offices_office_code"))
+                                        .from(MANAGER).join(OFFICE_HAS_MANAGER)
+                                        .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID)).asTable("t"))
+                                .where(OFFICE.OFFICE_CODE.eq(field(name("offices_office_code"), String.class))))))
                 .from(OFFICE)
-                .join(select(MANAGER.MANAGER_ID.as("managerId"),
-                        MANAGER.MANAGER_NAME.as("managerName"),                     
-                        OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE.as("offices_office_code"))
-                        .from(MANAGER).join(OFFICE_HAS_MANAGER)
-                        .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID)).asTable("t"))
-                .on(OFFICE.OFFICE_CODE.eq(field(name("offices_office_code"), String.class)))
-                .groupBy(OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.COUNTRY)
                 .orderBy(OFFICE.OFFICE_CODE)
                 .fetch();
-        
+
         System.out.println("Example 3.1:\n" + result1.formatJSON());
-        
+
         Result<Record1<JSON>> result2 = ctx.select(
                 OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.COUNTRY,
                 select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY,
@@ -205,10 +204,10 @@ public class ClassicModelsRepository {
                                 OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE.as("OFFICES_OFFICE_CODE"))
                                 .from(MANAGER).join(OFFICE_HAS_MANAGER)
                                 .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID)).asTable("T"))
-                        .where(OFFICE.OFFICE_CODE.eq(field(name("OFFICES_OFFICE_CODE"), String.class)))                       
-                        .forJSON().path().asField("MANAGERS"))               
+                        .where(OFFICE.OFFICE_CODE.eq(field(name("OFFICES_OFFICE_CODE"), String.class)))
+                        .forJSON().path().asField("MANAGERS"))
                 .from(OFFICE)
-                .forJSON().path()                
+                .forJSON().path()
                 .fetch();
 
         System.out.println("Example 3.2:\n" + result2.formatJSON());
