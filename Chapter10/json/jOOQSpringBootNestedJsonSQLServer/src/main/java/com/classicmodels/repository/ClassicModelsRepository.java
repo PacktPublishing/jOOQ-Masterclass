@@ -104,14 +104,12 @@ public class ClassicModelsRepository {
                         .from(DEPARTMENT)
                         .where(DEPARTMENT.OFFICE_CODE.eq(OFFICE.OFFICE_CODE))
                         .forJSON().path().asField("departments"),
-                select(field("managerId"), field("managerName"))
-                        .from(select(MANAGER.MANAGER_ID.as("managerId"),
-                                MANAGER.MANAGER_NAME.as("managerName"),
-                                OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE.as("offices_office_code"))
-                                .from(MANAGER).join(OFFICE_HAS_MANAGER)
-                                .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID)).asTable("t"))
-                        .where(OFFICE.OFFICE_CODE.eq(field(name("offices_office_code"), String.class)))                       
-                        .forJSON().path().asField("managers"))               
+                select(MANAGER.MANAGER_ID.as("managerId"), MANAGER.MANAGER_NAME.as("managerName"))
+                        .from(MANAGER)
+                        .join(OFFICE_HAS_MANAGER)
+                        .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID))
+                        .where(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))
+                        .forJSON().path().asField("managers"))        
                 .from(OFFICE)
                 .forJSON().path()                
                 .fetch();
