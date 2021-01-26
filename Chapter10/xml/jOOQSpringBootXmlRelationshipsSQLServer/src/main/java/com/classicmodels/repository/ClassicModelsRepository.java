@@ -31,8 +31,7 @@ public class ClassicModelsRepository {
 
         Result<Record1<XML>> result1 = ctx.select(CUSTOMER.CUSTOMER_NAME,
                 CUSTOMER.PHONE, CUSTOMER.CREDIT_LIMIT, CUSTOMERDETAIL.CITY,
-                CUSTOMERDETAIL.ADDRESS_LINE_FIRST,
-                CUSTOMERDETAIL.STATE)
+                CUSTOMERDETAIL.ADDRESS_LINE_FIRST, CUSTOMERDETAIL.STATE)
                 .from(CUSTOMER)
                 .join(CUSTOMERDETAIL)
                 .on(CUSTOMER.CUSTOMER_NUMBER.eq(CUSTOMERDETAIL.CUSTOMER_NUMBER))
