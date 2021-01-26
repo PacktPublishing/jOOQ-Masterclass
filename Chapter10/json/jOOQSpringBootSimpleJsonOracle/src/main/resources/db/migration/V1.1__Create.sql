@@ -347,7 +347,7 @@ CREATE TABLE productline (
   product_line varchar2(50) NOT NULL,
   code number(10) NOT NULL,
   text_description varchar2(4000) DEFAULT NULL,
-  html_description clob,
+  html_description xmltype,
   image blob,
   created_on date DEFAULT SYSDATE NOT NULL,
   PRIMARY KEY (product_line, code),
