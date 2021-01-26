@@ -1,14 +1,10 @@
 package com.classicmodels.repository;
 
 import com.classicmodels.pojo.SimpleCustomer;
-import com.classicmodels.pojo.SimpleManager;
 import com.classicmodels.pojo.SimpleProductLine;
 import java.util.List;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
-import static jooq.generated.tables.Manager.MANAGER;
-import static jooq.generated.tables.Office.OFFICE;
-import static jooq.generated.tables.OfficeHasManager.OFFICE_HAS_MANAGER;
 import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Productline.PRODUCTLINE;
 import org.jooq.DSLContext;
