@@ -17,8 +17,6 @@ import org.jooq.DSLContext;
 import org.jooq.Record1;
 import org.jooq.Result;
 import org.jooq.XML;
-import static org.jooq.impl.DSL.field;
-import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.select;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -104,16 +102,14 @@ public class ClassicModelsRepository {
                         .from(DEPARTMENT)
                         .where(DEPARTMENT.OFFICE_CODE.eq(OFFICE.OFFICE_CODE))
                         .forXML().path().asField("departments"),
-                select(field("managerId"), field("managerName"))
-                        .from(select(MANAGER.MANAGER_ID.as("managerId"),
-                                MANAGER.MANAGER_NAME.as("managerName"),
-                                OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE.as("offices_office_code"))
-                                .from(MANAGER).join(OFFICE_HAS_MANAGER)
-                                .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID)).asTable("t"))
-                        .where(OFFICE.OFFICE_CODE.eq(field(name("offices_office_code"), String.class)))                       
-                        .forXML().path().asField("managers"))               
+                select(MANAGER.MANAGER_ID.as("managerId"), MANAGER.MANAGER_NAME.as("managerName"))
+                        .from(MANAGER)
+                        .join(OFFICE_HAS_MANAGER)
+                        .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID))
+                        .where(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))
+                        .forXML().path().asField("managers"))
                 .from(OFFICE)
-                .forXML().path()                
+                .forXML().path()
                 .fetch();
 
         System.out.println("Example 3:\n" + result.formatXML());
