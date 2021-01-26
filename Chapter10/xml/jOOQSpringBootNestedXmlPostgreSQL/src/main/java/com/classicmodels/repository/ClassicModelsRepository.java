@@ -110,34 +110,32 @@ public class ClassicModelsRepository {
                                         xmlforest(DEPARTMENT.NAME.as("departmentName"),
                                                 DEPARTMENT.PHONE.as("departmentPhone")))))
                                 .from(DEPARTMENT)
-                                .where(DEPARTMENT.OFFICE_CODE.eq(OFFICE.OFFICE_CODE))),
-                                xmlelement("employees", field(select(xmlagg(
-                                        xmlelement("employee", // optionally, each employee wrapped in <employee/>
-                                                xmlforest(EMPLOYEE.FIRST_NAME.as("employeeFirstName"),
-                                                        EMPLOYEE.LAST_NAME.as("employeeLastName"),
-                                                        EMPLOYEE.SALARY.as("employeeSalary"),
-                                                        field(select(xmlagg(
-                                                                xmlelement("sale", // optionally, each sale wrapped in <sale/>
-                                                                        xmlforest(SALE.FISCAL_YEAR.as("fiscalYear"),
-                                                                                SALE.SALE_.as("sale")))))
-                                                                .from(SALE)
-                                                                .where(SALE.EMPLOYEE_NUMBER.eq(EMPLOYEE.EMPLOYEE_NUMBER)))
-                                                                .as("sales")))))
-                                        .from(EMPLOYEE)
-                                        .where(EMPLOYEE.OFFICE_CODE.eq(OFFICE.OFFICE_CODE))))),
+                                .where(DEPARTMENT.OFFICE_CODE.eq(OFFICE.OFFICE_CODE)))),
+                        xmlelement("employees", field(select(xmlagg(
+                                xmlelement("employee", // optionally, each employee wrapped in <employee/>
+                                        xmlforest(EMPLOYEE.FIRST_NAME.as("employeeFirstName"),
+                                                EMPLOYEE.LAST_NAME.as("employeeLastName"),
+                                                EMPLOYEE.SALARY.as("employeeSalary"),
+                                                field(select(xmlagg(
+                                                        xmlelement("sale", // optionally, each sale wrapped in <sale/>
+                                                                xmlforest(SALE.FISCAL_YEAR.as("fiscalYear"),
+                                                                        SALE.SALE_.as("sale")))))
+                                                        .from(SALE)
+                                                        .where(SALE.EMPLOYEE_NUMBER.eq(EMPLOYEE.EMPLOYEE_NUMBER)))
+                                                        .as("sales")))))
+                                .from(EMPLOYEE)
+                                .where(EMPLOYEE.OFFICE_CODE.eq(OFFICE.OFFICE_CODE)))),
                         xmlelement("managers", field(select(xmlagg(
                                 xmlelement("manager", // optionally, each manager wrapped in <manager/>
                                         xmlforest(field(name("managerId")).as("managerId"),
-                                                field(name("managerName")).as("managerName")))))))))
+                                                field(name("managerName")).as("managerName")))))
+                                .from(select(MANAGER.MANAGER_ID.as("managerId"),
+                                        MANAGER.MANAGER_NAME.as("managerName"),
+                                        OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE.as("offices_office_code"))
+                                        .from(MANAGER).join(OFFICE_HAS_MANAGER)
+                                        .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID)).asTable("t"))
+                                .where(OFFICE.OFFICE_CODE.eq(field(name("offices_office_code"), String.class)))))))
                 .from(OFFICE)
-                .join(select(MANAGER.MANAGER_ID.as("managerId"),
-                        MANAGER.MANAGER_NAME.as("managerName"),
-                        MANAGER.MANAGER_DETAIL.as("details"),
-                        OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE.as("offices_office_code"))
-                        .from(MANAGER).join(OFFICE_HAS_MANAGER)
-                        .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID)).asTable("t"))
-                .on(OFFICE.OFFICE_CODE.eq(field(name("offices_office_code"), String.class)))
-                .groupBy(OFFICE.OFFICE_CODE)
                 .orderBy(OFFICE.OFFICE_CODE)
                 .fetch();
 
