@@ -18,8 +18,10 @@ import org.jooq.JSON;
 import org.jooq.Record1;
 import org.jooq.Result;
 import static org.jooq.impl.DSL.field;
-import static org.jooq.impl.DSL.jsonObject;
 import static org.jooq.impl.DSL.jsonArrayAgg;
+import static org.jooq.impl.DSL.jsonObject;
+import static org.jooq.impl.DSL.jsonEntry;
+import static org.jooq.impl.DSL.jsonObject;
 import static org.jooq.impl.DSL.key;
 import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.select;
@@ -38,7 +40,7 @@ public class ClassicModelsRepository {
 
     public void jsonProductlineProductOrderdetail() {
 
-        Result<Record1<JSON>> result = ctx.select(
+        Result<Record1<JSON>> result1 = ctx.select(
                 jsonObject(
                         key("productLine").value(PRODUCTLINE.PRODUCT_LINE),
                         key("textDescription").value(PRODUCTLINE.TEXT_DESCRIPTION),
@@ -60,7 +62,32 @@ public class ClassicModelsRepository {
                                 .orderBy(PRODUCTLINE.PRODUCT_LINE))))
                 .from(PRODUCTLINE)
                 .fetch();
-        System.out.println("Example 1:\n" + result.formatJSON());
+        System.out.println("Example 1.1:\n" + result1.formatJSON());
+        
+        // the same thing but using jsonEntry
+        Result<Record1<JSON>> result2 = ctx.select(
+                jsonObject(
+                        jsonEntry("productLine", PRODUCTLINE.PRODUCT_LINE),
+                        jsonEntry("textDescription", PRODUCTLINE.TEXT_DESCRIPTION),
+                        jsonEntry("products", field(select(jsonArrayAgg(
+                                jsonObject(jsonEntry("productName", PRODUCT.PRODUCT_NAME),
+                                        jsonEntry("productVendor", PRODUCT.PRODUCT_VENDOR),
+                                        jsonEntry("quantityInStock", PRODUCT.QUANTITY_IN_STOCK),
+                                        jsonEntry("orderdetail",
+                                                field(select(jsonArrayAgg(
+                                                        jsonObject(
+                                                                jsonEntry("quantityOrdered", ORDERDETAIL.QUANTITY_ORDERED),
+                                                                jsonEntry("priceEach", ORDERDETAIL.PRICE_EACH)))
+                                                        .orderBy(ORDERDETAIL.QUANTITY_ORDERED))
+                                                        .from(ORDERDETAIL)
+                                                        .where(ORDERDETAIL.PRODUCT_ID.eq(PRODUCT.PRODUCT_ID))))))
+                                .orderBy(PRODUCT.QUANTITY_IN_STOCK))
+                                .from(PRODUCT)
+                                .where(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE))
+                                .orderBy(PRODUCTLINE.PRODUCT_LINE)))))
+                .from(PRODUCTLINE)
+                .fetch();
+        System.out.println("Example 1.2:\n" + result2.formatJSON());
     }
 
     public void jsonCustomerPaymentBankTransactionCustomerdetail() {
