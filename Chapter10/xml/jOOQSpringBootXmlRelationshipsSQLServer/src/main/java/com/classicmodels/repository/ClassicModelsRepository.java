@@ -100,8 +100,22 @@ public class ClassicModelsRepository {
     }
 
     public void manyToManyToXmlManagersOffices() {
-        
+
         Result<Record1<XML>> result1 = ctx.select(
+                MANAGER.MANAGER_ID.as("managerId"), MANAGER.MANAGER_NAME.as("managerName"),
+                select(OFFICE.OFFICE_CODE.as("officeCode"), OFFICE.CITY, OFFICE.STATE)
+                        .from(OFFICE)
+                        .join(OFFICE_HAS_MANAGER)
+                        .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))
+                        .where(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID))
+                        .forXML().path().asField("offices"))
+                .from(MANAGER)
+                .forXML().path()
+                .fetch();
+
+        System.out.println("Example 3.1 (many-to-many):\n" + result1.formatXML());
+
+        Result<Record1<XML>> result2 = ctx.select(
                 MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME,
                 field("office_code"), field("city"), field("state"))
                 .from(MANAGER)
@@ -115,9 +129,9 @@ public class ClassicModelsRepository {
                 .forXML().path().root("offices")
                 .fetch();
 
-        System.out.println("Example 3.1 (many-to-many):\n" + result1.formatXML());
+        System.out.println("Example 3.2 (many-to-many):\n" + result2.formatXML());
 
-        Result<Record1<XML>> result2 = ctx.select(
+        Result<Record1<XML>> result3 = ctx.select(
                 MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME,
                 field("office_code"), field("city"), field("state"))
                 .from(MANAGER)
@@ -131,23 +145,21 @@ public class ClassicModelsRepository {
                 .forXML().auto().root("offices")
                 .fetch();
 
-        System.out.println("Example 3.2 (many-to-many):\n" + result2.formatXML());        
+        System.out.println("Example 3.3 (many-to-many):\n" + result3.formatXML());
     }
 
     public void manyToManyToXmlOfficesManagers() {
 
         Result<Record1<XML>> result1 = ctx.select(
-                OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.STATE,
-                field("manager_id"), field("manager_name"))
+                OFFICE.OFFICE_CODE.as("officeCode"), OFFICE.CITY, OFFICE.STATE,
+                select(MANAGER.MANAGER_ID.as("managerId"), MANAGER.MANAGER_NAME.as("managerName"))
+                        .from(MANAGER)
+                        .join(OFFICE_HAS_MANAGER)
+                        .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID))
+                        .where(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))
+                        .forXML().path().asField("managers"))
                 .from(OFFICE)
-                .join(select(MANAGER.MANAGER_ID.as("manager_id"),
-                        MANAGER.MANAGER_NAME.as("manager_name"),
-                        OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE.as("offices_office_code"))
-                        .from(MANAGER).join(OFFICE_HAS_MANAGER)
-                        .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID)).asTable("managers"))
-                .on(OFFICE.OFFICE_CODE.eq(field("offices_office_code", String.class)))
-                .orderBy(OFFICE.OFFICE_CODE)
-                .forXML().auto().root("managers")
+                .forXML().path()
                 .fetch();
 
         System.out.println("Example 4.1 (many-to-many):\n" + result1.formatXML());
@@ -166,6 +178,22 @@ public class ClassicModelsRepository {
                 .forXML().auto().root("managers")
                 .fetch();
 
-        System.out.println("Example 4.2 (many-to-many):\n" + result2.formatXML());         
+        System.out.println("Example 4.2 (many-to-many):\n" + result2.formatXML());
+
+        Result<Record1<XML>> result3 = ctx.select(
+                OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.STATE,
+                field("manager_id"), field("manager_name"))
+                .from(OFFICE)
+                .join(select(MANAGER.MANAGER_ID.as("manager_id"),
+                        MANAGER.MANAGER_NAME.as("manager_name"),
+                        OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE.as("offices_office_code"))
+                        .from(MANAGER).join(OFFICE_HAS_MANAGER)
+                        .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID)).asTable("managers"))
+                .on(OFFICE.OFFICE_CODE.eq(field("offices_office_code", String.class)))
+                .orderBy(OFFICE.OFFICE_CODE)
+                .forXML().auto().root("managers")
+                .fetch();
+
+        System.out.println("Example 4.3 (many-to-many):\n" + result3.formatXML());
     }
 }
