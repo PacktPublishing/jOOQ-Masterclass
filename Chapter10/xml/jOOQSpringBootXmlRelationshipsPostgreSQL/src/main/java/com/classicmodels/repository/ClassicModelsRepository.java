@@ -38,7 +38,7 @@ public class ClassicModelsRepository {
         Result<Record1<XML>> result = ctx.select(
                 xmlelement("departments",
                         xmlagg(xmlelement("department",
-                               xmlforest(DEPARTMENT.DEPARTMENT_ID, field("r").as("topic"))))))
+                                xmlforest(DEPARTMENT.DEPARTMENT_ID, field("r").as("topic"))))))
                 .from(DEPARTMENT, lateral(select(field("topic"))
                         .from(unnest(DEPARTMENT.TOPIC).as("t", "topic"))
                 ).as("r")).groupBy(field("r"))
@@ -214,7 +214,22 @@ public class ClassicModelsRepository {
 
     public void manyToManyToXmlManagersOffices() {
 
-        Result<Record1<XML>> result = ctx.select(
+        Result<Record1<XML>> result1 = ctx.select(
+                xmlelement("managers",
+                        xmlelement("managerId", MANAGER.MANAGER_ID),
+                        xmlelement("managerName", MANAGER.MANAGER_NAME),
+                        xmlelement("offices", field(select(xmlagg(xmlelement("office",
+                                xmlforest(OFFICE.OFFICE_CODE.as("officeCode"), OFFICE.CITY, OFFICE.COUNTRY))))
+                                .from(OFFICE)
+                                .join(OFFICE_HAS_MANAGER)
+                                .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))
+                                .where(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID.eq(MANAGER.MANAGER_ID))))))
+                .from(MANAGER)
+                .fetch();
+
+        System.out.println("Example 4.1 (many-to-many):\n" + result1.formatXML());
+
+        Result<Record1<XML>> result2 = ctx.select(
                 xmlelement("managers",
                         xmlelement("managerId", MANAGER.MANAGER_ID),
                         xmlelement("managerName", MANAGER.MANAGER_NAME),
@@ -234,12 +249,29 @@ public class ClassicModelsRepository {
                 .orderBy(MANAGER.MANAGER_ID)
                 .fetch();
 
-        System.out.println("Example 4 (many-to-many):\n" + result.formatXML());
+        System.out.println("Example 4.2 (many-to-many):\n" + result2.formatXML());
     }
 
     public void manyToManyToXmlOfficesManagers() {
 
-        Result<Record1<XML>> result = ctx.select(
+        Result<Record1<XML>> result1 = ctx.select(
+                xmlelement("offices",
+                        xmlelement("officeCode", OFFICE.OFFICE_CODE),
+                        xmlelement("state", OFFICE.STATE),
+                        xmlelement("city", OFFICE.CITY),
+                        xmlelement("managers", field(select(xmlagg(xmlelement("manager",
+                                xmlforest(MANAGER.MANAGER_ID.as("managerId"),
+                                        MANAGER.MANAGER_NAME.as("managerName")))))
+                                .from(MANAGER)
+                                .join(OFFICE_HAS_MANAGER)
+                                .on(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID.eq(MANAGER.MANAGER_ID))
+                                .where(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))))))
+                .from(OFFICE)
+                .fetch();
+
+        System.out.println("Example 5.1 (many-to-many):\n" + result1.formatXML());
+
+        Result<Record1<XML>> result2 = ctx.select(
                 xmlelement("offices",
                         xmlelement("officeCode", OFFICE.OFFICE_CODE),
                         xmlelement("state", OFFICE.STATE),
@@ -260,7 +292,7 @@ public class ClassicModelsRepository {
                 .orderBy(OFFICE.OFFICE_CODE)
                 .fetch();
 
-        System.out.println("Example 5 (many-to-many):\n" + result.formatXML());
+        System.out.println("Example 5.2 (many-to-many):\n" + result2.formatXML());
     }
 
     public void manyToManyToJsonManagersOfficesLimit() {
