@@ -33,10 +33,13 @@ public class ClassicModelsRepository {
 
         Result<Record1<JSON>> result1 = ctx.select(
                 jsonObject(
+                        // or, jsonEntry("customerName", CUSTOMER.CUSTOMER_NAME)
                         key("customerName").value(CUSTOMER.CUSTOMER_NAME),
                         key("phone").value(CUSTOMER.PHONE),
                         key("creditLimit").value(CUSTOMER.CREDIT_LIMIT),
                         key("details").value(select(
+                                // or, jsonObject(CUSTOMERDETAIL.CITY,
+                                //                CUSTOMERDETAIL.ADDRESS_LINE_FIRST, CUSTOMERDETAIL.STATE)
                                 jsonObject(key("city").value(CUSTOMERDETAIL.CITY),
                                         key("addressLineFirst").value(CUSTOMERDETAIL.ADDRESS_LINE_FIRST),
                                         key("state").value(CUSTOMERDETAIL.STATE)))
@@ -136,7 +139,7 @@ public class ClassicModelsRepository {
     }
 
     public void manyToManyToJsonManagersOffices() {
-
+                
         Result<Record1<JSON>> result1 = ctx.select(
                 MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME,
                 field("office_code"), field("city"), field("state"))
