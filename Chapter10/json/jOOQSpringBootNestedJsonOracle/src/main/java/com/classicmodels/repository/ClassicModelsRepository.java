@@ -256,7 +256,7 @@ public class ClassicModelsRepository {
                         .forJSON().path().asField("details"))
                 .from(CUSTOMER)
                 .orderBy(CUSTOMER.CONTACT_LAST_NAME)
-                .limit(1) // limit 'customers'
+                .limit(1) 
                 .forJSON().path().withoutArrayWrapper()
                 .fetchInto(SimpleCustomer.class);
 
@@ -384,7 +384,8 @@ public class ClassicModelsRepository {
                         .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID))
                         .where(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))
                         .forJSON().path().asField("managers"))
-                .from(OFFICE)                
+                .from(OFFICE)           
+                .limit(1)
                 .forJSON().path().withoutArrayWrapper()
                 .fetchInto(SimpleOffice.class);
 
