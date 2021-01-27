@@ -15,7 +15,7 @@ public class SimplePayment implements Serializable {
 
     private static final long serialVersionUID = 1;
 
-    private Long paymentNumber;
+    private Long customerNumber;
     private BigDecimal invoiceAmount;
     
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.000000")
@@ -25,13 +25,13 @@ public class SimplePayment implements Serializable {
     
     private List<SimpleBank> transactions;
 
-    public Long getPaymentNumber() {
-        return paymentNumber;
+    public Long getCustomerNumber() {
+        return customerNumber;
     }
 
-    public void setPaymentNumber(Long paymentNumber) {
-        this.paymentNumber = paymentNumber;
-    }
+    public void setCustomerNumber(Long customerNumber) {
+        this.customerNumber = customerNumber;
+    }    
 
     public BigDecimal getInvoiceAmount() {
         return invoiceAmount;
@@ -60,7 +60,7 @@ public class SimplePayment implements Serializable {
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 83 * hash + Objects.hashCode(this.paymentNumber);
+        hash = 83 * hash + Objects.hashCode(this.customerNumber);
         hash = 83 * hash + Objects.hashCode(this.invoiceAmount);
         hash = 83 * hash + Objects.hashCode(this.cachingDate);
         return hash;
@@ -78,7 +78,7 @@ public class SimplePayment implements Serializable {
             return false;
         }
         final SimplePayment other = (SimplePayment) obj;
-        if (!Objects.equals(this.paymentNumber, other.paymentNumber)) {
+        if (!Objects.equals(this.customerNumber, other.customerNumber)) {
             return false;
         }
         if (!Objects.equals(this.invoiceAmount, other.invoiceAmount)) {
@@ -92,7 +92,7 @@ public class SimplePayment implements Serializable {
         
     @Override
     public String toString() {
-        return "SimplePayment{" + "paymentNumber=" + paymentNumber
+        return "SimplePayment{" + "customerNumber=" + customerNumber
                 + ", invoiceAmount=" + invoiceAmount + ", cachingDate=" + cachingDate
                 + ", transactions=" + transactions + '}';
     }
