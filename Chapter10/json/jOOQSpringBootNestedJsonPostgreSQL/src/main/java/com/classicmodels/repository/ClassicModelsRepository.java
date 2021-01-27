@@ -1,5 +1,9 @@
 package com.classicmodels.repository;
 
+import com.classicmodels.pojo.SimpleCustomer;
+import com.classicmodels.pojo.SimpleOffice;
+import com.classicmodels.pojo.SimpleProductLine;
+import java.util.List;
 import static jooq.generated.tables.BankTransaction.BANK_TRANSACTION;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
@@ -18,12 +22,10 @@ import org.jooq.JSON;
 import org.jooq.Record1;
 import org.jooq.Result;
 import static org.jooq.impl.DSL.field;
+import static org.jooq.impl.DSL.jsonObject;
 import static org.jooq.impl.DSL.jsonArrayAgg;
-import static org.jooq.impl.DSL.jsonObject;
 import static org.jooq.impl.DSL.jsonEntry;
-import static org.jooq.impl.DSL.jsonObject;
 import static org.jooq.impl.DSL.key;
-import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.select;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,10 +64,11 @@ public class ClassicModelsRepository {
                                 .orderBy(PRODUCTLINE.PRODUCT_LINE))))
                 .from(PRODUCTLINE)
                 .fetch();
+
         System.out.println("Example 1.1:\n" + result1.formatJSON());
-        
-        // the same thing but using jsonEntry
-        Result<Record1<JSON>> result2 = ctx.select(
+
+        // the same thing but using jsonEntry and mapping to POJO
+        List<SimpleProductLine> result2 = ctx.select(
                 jsonObject(
                         jsonEntry("productLine", PRODUCTLINE.PRODUCT_LINE),
                         jsonEntry("textDescription", PRODUCTLINE.TEXT_DESCRIPTION),
@@ -86,13 +89,47 @@ public class ClassicModelsRepository {
                                 .where(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE))
                                 .orderBy(PRODUCTLINE.PRODUCT_LINE)))))
                 .from(PRODUCTLINE)
-                .fetch();
-        System.out.println("Example 1.2:\n" + result2.formatJSON());
+                .fetchInto(SimpleProductLine.class);
+
+        System.out.println("Example 1.2:\n" + result2);
     }
 
     public void jsonCustomerPaymentBankTransactionCustomerdetail() {
 
-        Result<Record1<JSON>> result = ctx.select(
+        Result<Record1<JSON>> result1 = ctx.select(
+                jsonObject(
+                        jsonEntry("customerName", CUSTOMER.CUSTOMER_NAME),
+                        jsonEntry("creditLimit", CUSTOMER.CREDIT_LIMIT),
+                        jsonEntry("payments", field(select(jsonArrayAgg(
+                                jsonObject(jsonEntry("paymentNumber", PAYMENT.CUSTOMER_NUMBER),
+                                        jsonEntry("invoiceAmount", PAYMENT.INVOICE_AMOUNT),
+                                        jsonEntry("cachingDate", PAYMENT.CACHING_DATE),
+                                        jsonEntry("transactions", field(select(jsonArrayAgg(
+                                                jsonObject(
+                                                        jsonEntry("bankName", BANK_TRANSACTION.BANK_NAME),
+                                                        jsonEntry("transferAmount", BANK_TRANSACTION.TRANSFER_AMOUNT)))
+                                                .orderBy(BANK_TRANSACTION.TRANSFER_AMOUNT))
+                                                .from(BANK_TRANSACTION)
+                                                .where(BANK_TRANSACTION.CUSTOMER_NUMBER.eq(PAYMENT.CUSTOMER_NUMBER)
+                                                        .and(BANK_TRANSACTION.CHECK_NUMBER.eq(PAYMENT.CHECK_NUMBER)))))))
+                                .orderBy(PAYMENT.CACHING_DATE))
+                                .from(PAYMENT)
+                                .where(PAYMENT.CUSTOMER_NUMBER.eq(CUSTOMER.CUSTOMER_NUMBER))
+                                .orderBy(CUSTOMER.CUSTOMER_NAME))),
+                        jsonEntry("details", field(select(
+                                jsonObject(jsonEntry("city", CUSTOMERDETAIL.CITY),
+                                        jsonEntry("addressLineFirst", CUSTOMERDETAIL.ADDRESS_LINE_FIRST),
+                                        jsonEntry("state", CUSTOMERDETAIL.STATE)))
+                                .from(CUSTOMERDETAIL)
+                                .where(CUSTOMERDETAIL.CUSTOMER_NUMBER.eq(CUSTOMER.CUSTOMER_NUMBER))))))
+                .from(CUSTOMER)
+                .orderBy(CUSTOMER.CREDIT_LIMIT)
+                .fetch();
+
+        System.out.println("Example 2.1:\n" + result1);
+
+        // the same thing but using key().value() and mapping to POJO
+        List<SimpleCustomer> result2 = ctx.select(
                 jsonObject(
                         key("customerName").value(CUSTOMER.CUSTOMER_NAME),
                         key("creditLimit").value(CUSTOMER.CREDIT_LIMIT),
@@ -121,13 +158,51 @@ public class ClassicModelsRepository {
                                 .where(CUSTOMERDETAIL.CUSTOMER_NUMBER.eq(CUSTOMER.CUSTOMER_NUMBER)))))
                 .from(CUSTOMER)
                 .orderBy(CUSTOMER.CREDIT_LIMIT)
-                .fetch();
-        System.out.println("Example 2:\n" + result.formatJSON());
+                .fetchInto(SimpleCustomer.class);
+
+        System.out.println("Example 2.2:\n" + result2);
     }
 
     public void jsonOfficeManagerDepartmentEmployeeSale() {
 
-        Result<Record1<JSON>> result = ctx.select(
+        Result<Record1<JSON>> result1 = ctx.select(
+                jsonObject(
+                        jsonEntry("officeCode", OFFICE.OFFICE_CODE),
+                        jsonEntry("officeCity", OFFICE.CITY),
+                        jsonEntry("officeCountry", OFFICE.COUNTRY),
+                        jsonEntry("departments", field(select(jsonArrayAgg(
+                                jsonObject(jsonEntry("departmentName", DEPARTMENT.NAME),
+                                        jsonEntry("departmentPhone", DEPARTMENT.PHONE))))
+                                .from(DEPARTMENT)
+                                .where(DEPARTMENT.OFFICE_CODE.eq(OFFICE.OFFICE_CODE)))),
+                        jsonEntry("employees", field(select(jsonArrayAgg(
+                                jsonObject(jsonEntry("employeeFirstName", EMPLOYEE.FIRST_NAME),
+                                        jsonEntry("employeeLastName", EMPLOYEE.LAST_NAME),
+                                        jsonEntry("employeeSalary", EMPLOYEE.SALARY),
+                                        jsonEntry("sales", field(select(jsonArrayAgg(
+                                                jsonObject(jsonEntry("fiscalYear", SALE.FISCAL_YEAR),
+                                                        jsonEntry("sale", SALE.SALE_)))
+                                                .orderBy(SALE.FISCAL_YEAR))
+                                                .from(SALE)
+                                                .where(SALE.EMPLOYEE_NUMBER.eq(EMPLOYEE.EMPLOYEE_NUMBER)))))))
+                                .from(EMPLOYEE)
+                                .where(EMPLOYEE.OFFICE_CODE.eq(OFFICE.OFFICE_CODE)))),
+                        jsonEntry("managers", field(select(jsonArrayAgg(jsonObject(
+                                jsonEntry("managerId", MANAGER.MANAGER_ID),
+                                jsonEntry("managerName", MANAGER.MANAGER_NAME)))
+                                .orderBy(MANAGER.MANAGER_ID))
+                                .from(MANAGER)
+                                .join(OFFICE_HAS_MANAGER)
+                                .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID))
+                                .where(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))))))
+                .from(OFFICE)
+                .orderBy(OFFICE.OFFICE_CODE)
+                .fetch();
+
+        System.out.println("Example 3.1:\n" + result1.formatJSON());
+
+        // the same thing but using key().value() and mapping to POJO
+        List<SimpleOffice> result2 = ctx.select(
                 jsonObject(
                         key("officeCode").value(OFFICE.OFFICE_CODE),
                         key("officeCity").value(OFFICE.CITY),
@@ -150,7 +225,8 @@ public class ClassicModelsRepository {
                                 .from(EMPLOYEE)
                                 .where(EMPLOYEE.OFFICE_CODE.eq(OFFICE.OFFICE_CODE))),
                         key("managers").value(field(select(jsonArrayAgg(jsonObject(
-                                MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME))
+                                key("managerId").value(MANAGER.MANAGER_ID),
+                                key("managerName").value(MANAGER.MANAGER_NAME)))
                                 .orderBy(MANAGER.MANAGER_ID))
                                 .from(MANAGER)
                                 .join(OFFICE_HAS_MANAGER)
@@ -158,8 +234,8 @@ public class ClassicModelsRepository {
                                 .where(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))))))
                 .from(OFFICE)
                 .orderBy(OFFICE.OFFICE_CODE)
-                .fetch();
+                .fetchInto(SimpleOffice.class);
 
-        System.out.println("Example 3:\n" + result.formatJSON());
+        System.out.println("Example 3.2:\n" + result2);
     }
 }
