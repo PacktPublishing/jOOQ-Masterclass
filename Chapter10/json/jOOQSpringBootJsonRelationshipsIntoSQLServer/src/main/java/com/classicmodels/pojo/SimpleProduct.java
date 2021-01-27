@@ -9,8 +9,8 @@ public class SimpleProduct implements Serializable {
 
     private String productName;
     private String productVendor;
-    private String quantityInStock;       
-
+    private String quantityInStock;          
+            
     public SimpleProduct(String productName, String productVendor, String quantityInStock) {
         this.productName = productName;
         this.productVendor = productVendor;

@@ -11,7 +11,7 @@ public class SimpleProductLine implements Serializable {
     private String productLine;
     private String textDescription;   
     private List<SimpleProduct> products;        
-    
+        
     public SimpleProductLine(String productLine, 
             String textDescription, List<SimpleProduct> products) {
         this.productLine = productLine;
