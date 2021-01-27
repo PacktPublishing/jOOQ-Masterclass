@@ -101,7 +101,7 @@ public class ClassicModelsRepository {
                         jsonEntry("customerName", CUSTOMER.CUSTOMER_NAME),
                         jsonEntry("creditLimit", CUSTOMER.CREDIT_LIMIT),
                         jsonEntry("payments", field(select(jsonArrayAgg(
-                                jsonObject(jsonEntry("paymentNumber", PAYMENT.CUSTOMER_NUMBER),
+                                jsonObject(jsonEntry("customerNumber", PAYMENT.CUSTOMER_NUMBER),
                                         jsonEntry("invoiceAmount", PAYMENT.INVOICE_AMOUNT),
                                         jsonEntry("cachingDate", PAYMENT.CACHING_DATE),
                                         jsonEntry("transactions", field(select(jsonArrayAgg(
@@ -134,7 +134,7 @@ public class ClassicModelsRepository {
                         key("customerName").value(CUSTOMER.CUSTOMER_NAME),
                         key("creditLimit").value(CUSTOMER.CREDIT_LIMIT),
                         key("payments").value(select(jsonArrayAgg(
-                                jsonObject(key("paymentNumber").value(PAYMENT.CUSTOMER_NUMBER),
+                                jsonObject(key("customerNumber").value(PAYMENT.CUSTOMER_NUMBER),
                                         key("invoiceAmount").value(PAYMENT.INVOICE_AMOUNT),
                                         key("cachingDate").value(PAYMENT.CACHING_DATE),
                                         key("transactions")
