@@ -174,7 +174,7 @@ public class ClassicModelsRepository {
                         .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID)).asTable("managers"))
                 .on(OFFICE.OFFICE_CODE.eq(field("offices_office_code", String.class)))
                 .orderBy(OFFICE.OFFICE_CODE)
-                .forXML().auto().root("managers")
+                .forXML().path().root("managers")
                 .fetch();
 
         System.out.println("Example 4.2 (many-to-many):\n" + result2.formatXML());
