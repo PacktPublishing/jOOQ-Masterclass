@@ -1,5 +1,7 @@
 package com.classicmodels.repository;
 
+import com.classicmodels.pojo.SimpleProductLine;
+import java.util.List;
 import static jooq.generated.tables.BankTransaction.BANK_TRANSACTION;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
@@ -22,7 +24,6 @@ import static org.jooq.impl.DSL.jsonObject;
 import static org.jooq.impl.DSL.jsonArrayAgg;
 import static org.jooq.impl.DSL.jsonEntry;
 import static org.jooq.impl.DSL.key;
-import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.select;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,7 +39,7 @@ public class ClassicModelsRepository {
     }
 
     public void jsonProductlineProductOrderdetail() {
-
+/*
         Result<Record1<JSON>> result1 = ctx.select(
                 jsonObject(
                         key("productLine").value(PRODUCTLINE.PRODUCT_LINE),
@@ -61,9 +62,9 @@ public class ClassicModelsRepository {
                 .from(PRODUCTLINE)
                 .fetch();
         System.out.println("Example 1.1:\n" + result1.formatJSON());
-        
-        // the same thing but using jsonEntry
-        Result<Record1<JSON>> result2 = ctx.select(
+  */      
+        // the same thing but using jsonEntry and mapping to POJO
+        List<SimpleProductLine> result2 = ctx.select(
                 jsonObject(
                         jsonEntry("productLine", PRODUCTLINE.PRODUCT_LINE),
                         jsonEntry("textDescription", PRODUCTLINE.TEXT_DESCRIPTION),
@@ -84,9 +85,10 @@ public class ClassicModelsRepository {
                                 .where(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE))
                                 .orderBy(PRODUCTLINE.PRODUCT_LINE)))))
                 .from(PRODUCTLINE)
-                .fetch();
-        System.out.println("Example 1.2:\n" + result2.formatJSON());
+                .fetchInto(SimpleProductLine.class);
 
+        System.out.println("Example 1.2:\n" + result2);
+    /*    
         Result<Record1<JSON>> result3 = ctx.select(
                 PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.TEXT_DESCRIPTION,
                 select(PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_VENDOR, PRODUCT.QUANTITY_IN_STOCK,
@@ -108,6 +110,31 @@ public class ClassicModelsRepository {
                 .fetch();
 
         System.out.println("Example 1.3:\n" + result3.formatJSON());
+        
+        // same thing as above but mapping to POJO
+        List<SimpleProductLine> result4 = ctx.select(
+                PRODUCTLINE.PRODUCT_LINE.as("productLine"), PRODUCTLINE.TEXT_DESCRIPTION.as("textDescription"),
+                select(PRODUCT.PRODUCT_NAME.as("productName"), PRODUCT.PRODUCT_VENDOR.as("productVendor"),
+                        PRODUCT.QUANTITY_IN_STOCK.as("quantityInStock"),
+                        select(ORDERDETAIL.QUANTITY_ORDERED.as("quantityOrdered"),
+                                ORDERDETAIL.PRICE_EACH.as("priceEach"))
+                                .from(ORDERDETAIL)
+                                .where(ORDERDETAIL.PRODUCT_ID.eq(PRODUCT.PRODUCT_ID))
+                                .orderBy(ORDERDETAIL.QUANTITY_ORDERED)
+                                .limit(3)
+                                .forJSON().path().asField("orderdetail"))
+                        .from(PRODUCT)
+                        .where(PRODUCT.PRODUCT_LINE.eq(PRODUCTLINE.PRODUCT_LINE))
+                        .orderBy(PRODUCT.QUANTITY_IN_STOCK)
+                        .limit(2)
+                        .forJSON().path().asField("products"))
+                .from(PRODUCTLINE)
+                .orderBy(PRODUCTLINE.PRODUCT_LINE)
+                .limit(1)
+                .forJSON().path().withoutArrayWrapper()
+                .fetchInto(SimpleProductLine.class);
+
+        System.out.println("Example 1.4:\n" + result4);*/
     }
 
     public void jsonCustomerPaymentBankTransactionCustomerdetail() {
