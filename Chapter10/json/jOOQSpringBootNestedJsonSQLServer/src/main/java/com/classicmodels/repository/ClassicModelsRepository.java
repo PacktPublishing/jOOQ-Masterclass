@@ -140,7 +140,7 @@ public class ClassicModelsRepository {
                         .forJSON().path().asField("details"))
                 .from(CUSTOMER)
                 .orderBy(CUSTOMER.CUSTOMER_NAME)
-                .limit(2) // limit 'customers'
+                .limit(1) // limit 'customers'
                 .forJSON().path().withoutArrayWrapper()
                 .fetchInto(SimpleCustomer.class);
 
