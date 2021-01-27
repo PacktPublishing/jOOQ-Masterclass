@@ -36,13 +36,12 @@ public class ClassicModelsRepository {
 
     // if you get, ORA-40478: output value too large (maximum: 4000)
     // then you should set MAX_STRING_SIZE to EXTENTED instead of STANDARD
-    
     public void arrayToJson() {
-        
-        var result = ctx.select(DEPARTMENT.DEPARTMENT_ID, DEPARTMENT.NAME, 
+
+        var result = ctx.select(DEPARTMENT.DEPARTMENT_ID, DEPARTMENT.NAME,
                 field("COLUMN_VALUE").as("EVALUATION"))
                 .from(DEPARTMENT, lateral(select(field("COLUMN_VALUE"))
-                        .from(table(DEPARTMENT.TOPIC))))                
+                        .from(table(DEPARTMENT.TOPIC))))
                 .forJSON().path()
                 .fetch();
 
@@ -356,7 +355,7 @@ public class ClassicModelsRepository {
         Result<Record1<JSON>> result1 = ctx.select(
                 jsonObject(
                         key("managerId").value(MANAGER.MANAGER_ID),
-                        key("managerName").value(MANAGER.MANAGER_NAME),        
+                        key("managerName").value(MANAGER.MANAGER_NAME),
                         key("offices").value(field(select(jsonArrayAgg(jsonObject(
                                 OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.COUNTRY)))
                                 .from(OFFICE)
@@ -365,9 +364,9 @@ public class ClassicModelsRepository {
                                 .where(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID.eq(MANAGER.MANAGER_ID))))))
                 .from(MANAGER)
                 .fetch();
-        
+
         System.out.println("Example 5.1 (many-to-many):\n" + result1.formatJSON());
-        
+
         Result<Record1<JSON>> result2 = ctx.select(
                 jsonObject(
                         key("managerId").value(MANAGER.MANAGER_ID),
@@ -391,17 +390,15 @@ public class ClassicModelsRepository {
         System.out.println("Example 5.2 (many-to-many):\n" + result2.formatJSON());
 
         Result<Record1<JSON>> result3 = ctx.select(
-                MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME,
-                field(name("office_code")), field(name("city")), field(name("state")))
-                .from(MANAGER)
-                .join(select(OFFICE.OFFICE_CODE.as("office_code"),
-                        OFFICE.CITY.as("city"), OFFICE.STATE.as("state"),
-                        OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID.as("managers_manager_id"))
-                        .from(OFFICE).join(OFFICE_HAS_MANAGER)
-                        .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE)).asTable("offices"))
-                .on(MANAGER.MANAGER_ID.eq(field(name("managers_manager_id"), Long.class)))
-                .orderBy(MANAGER.MANAGER_ID)
-                .forJSON().path().root("data")
+                OFFICE.OFFICE_CODE.as("officeCode"), OFFICE.CITY, OFFICE.STATE,
+                select(MANAGER.MANAGER_ID.as("managerId"), MANAGER.MANAGER_NAME.as("managerName"))
+                        .from(MANAGER)
+                        .join(OFFICE_HAS_MANAGER)
+                        .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID))
+                        .where(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))
+                        .forJSON().path().asField("managers"))
+                .from(OFFICE)
+                .forJSON().path()
                 .fetch();
 
         System.out.println("Example 5.3 (many-to-many):\n" + result3.formatJSON());
@@ -417,12 +414,28 @@ public class ClassicModelsRepository {
                         .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE)).asTable("offices"))
                 .on(MANAGER.MANAGER_ID.eq(field(name("managers_manager_id"), Long.class)))
                 .orderBy(MANAGER.MANAGER_ID)
-                .forJSON().auto().root("data")
+                .forJSON().path().root("data")
                 .fetch();
 
         System.out.println("Example 5.4 (many-to-many):\n" + result4.formatJSON());
 
         Result<Record1<JSON>> result5 = ctx.select(
+                MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME,
+                field(name("office_code")), field(name("city")), field(name("state")))
+                .from(MANAGER)
+                .join(select(OFFICE.OFFICE_CODE.as("office_code"),
+                        OFFICE.CITY.as("city"), OFFICE.STATE.as("state"),
+                        OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID.as("managers_manager_id"))
+                        .from(OFFICE).join(OFFICE_HAS_MANAGER)
+                        .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE)).asTable("offices"))
+                .on(MANAGER.MANAGER_ID.eq(field(name("managers_manager_id"), Long.class)))
+                .orderBy(MANAGER.MANAGER_ID)
+                .forJSON().auto().root("data")
+                .fetch();
+
+        System.out.println("Example 5.5 (many-to-many):\n" + result5.formatJSON());
+
+        Result<Record1<JSON>> result6 = ctx.select(
                 MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME,
                 select(field(name("office_code")), field(name("city")), field(name("state")))
                         .from(select(OFFICE.OFFICE_CODE.as("office_code"),
@@ -437,11 +450,11 @@ public class ClassicModelsRepository {
                 .forJSON().path()
                 .fetch();
 
-        System.out.println("Example 5.5 (many-to-many):\n" + result5.formatJSON());
+        System.out.println("Example 5.6 (many-to-many):\n" + result6.formatJSON());
     }
 
     public void manyToManyToJsonOfficesManagers() {
-        
+
         Result<Record1<JSON>> result1 = ctx.select(
                 jsonObject(
                         key("officeCode").value(OFFICE.OFFICE_CODE),
@@ -455,7 +468,7 @@ public class ClassicModelsRepository {
                                 .where(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))))))
                 .from(OFFICE)
                 .fetch();
-        
+
         System.out.println("Example 6.1 (many-to-many):\n" + result1.formatJSON());
 
         Result<Record1<JSON>> result2 = ctx.select(
@@ -481,17 +494,15 @@ public class ClassicModelsRepository {
         System.out.println("Example 6.2 (many-to-many):\n" + result2.formatJSON());
 
         Result<Record1<JSON>> result3 = ctx.select(
-                OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.STATE,
-                field(name("manager_id")), field(name("manager_name")))
-                .from(OFFICE)
-                .join(select(MANAGER.MANAGER_ID.as("manager_id"),
-                        MANAGER.MANAGER_NAME.as("manager_name"),
-                        OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE.as("offices_office_code"))
-                        .from(MANAGER).join(OFFICE_HAS_MANAGER)
-                        .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID)).asTable("managers"))
-                .on(OFFICE.OFFICE_CODE.eq(field(name("offices_office_code"), String.class)))
-                .orderBy(OFFICE.OFFICE_CODE)
-                .forJSON().auto().root("data")
+                MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME,
+                select(OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.STATE)
+                        .from(OFFICE)
+                        .join(OFFICE_HAS_MANAGER)
+                        .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))
+                        .where(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID))
+                        .forJSON().path().asField("offices"))
+                .from(MANAGER)
+                .forJSON().path()
                 .fetch();
 
         System.out.println("Example 6.3 (many-to-many):\n" + result3.formatJSON());
@@ -511,35 +522,57 @@ public class ClassicModelsRepository {
                 .fetch();
 
         System.out.println("Example 6.4 (many-to-many):\n" + result4.formatJSON());
+
+        Result<Record1<JSON>> result5 = ctx.select(
+                OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.STATE,
+                field(name("manager_id")), field(name("manager_name")))
+                .from(OFFICE)
+                .join(select(MANAGER.MANAGER_ID.as("manager_id"),
+                        MANAGER.MANAGER_NAME.as("manager_name"),
+                        OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE.as("offices_office_code"))
+                        .from(MANAGER).join(OFFICE_HAS_MANAGER)
+                        .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID)).asTable("managers"))
+                .on(OFFICE.OFFICE_CODE.eq(field(name("offices_office_code"), String.class)))
+                .orderBy(OFFICE.OFFICE_CODE)
+                .forJSON().auto().root("data")
+                .fetch();
+
+        System.out.println("Example 6.5 (many-to-many):\n" + result5.formatJSON());
+
+        Result<Record1<JSON>> result6 = ctx.select(
+                OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.STATE,
+                select(field(name("manager_id")), field(name("manager_name")))
+                        .from(select(MANAGER.MANAGER_ID.as("manager_id"),
+                                MANAGER.MANAGER_NAME.as("manager_name"),
+                                OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE.as("offices_office_code"))
+                                .from(MANAGER).join(OFFICE_HAS_MANAGER)
+                                .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID)).asTable("managers"))
+                        .where(OFFICE.OFFICE_CODE.eq(field(name("offices_office_code"), String.class)))
+                        .orderBy(OFFICE.OFFICE_CODE)
+                        .forJSON().path().asField("managers"))
+                .from(OFFICE)
+                .forJSON().path()
+                .fetch();
+
+        System.out.println("Example 6.6 (many-to-many):\n" + result6.formatJSON());
     }
 
     public void manyToManyToJsonManagersOfficesLimit() {
 
         Result<Record1<JSON>> result = ctx.select(
-                jsonObject(
-                        key("managerId").value(MANAGER.MANAGER_ID),
-                        key("managerName").value(MANAGER.MANAGER_NAME),
-                        key("offices").value(jsonArrayAgg(
-                                jsonObject(key("officeCode").value(field(name("officeCode"))),
-                                        key("state").value(field(name("state"))),
-                                        key("city").value(field(name("city")))))
-                                .orderBy(field(name("officeCode"))))))
-                .from(MANAGER)
-                .join(select(OFFICE.OFFICE_CODE.as("officeCode"),
-                        OFFICE.CITY.as("city"), OFFICE.STATE.as("state"),
-                        OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID.as("managers_manager_id"))
-                        .from(OFFICE).join(OFFICE_HAS_MANAGER)
+                MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME,
+                select(OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.STATE)
+                        .from(OFFICE)
+                        .join(OFFICE_HAS_MANAGER)
                         .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))
-                        .orderBy(OFFICE.OFFICE_CODE)
-                        //.limit(5) // limit the number of offices                        
-                        .asTable("t")
-                )
-                .on(MANAGER.MANAGER_ID.eq(field(name("managers_manager_id"), Long.class)))
-                .groupBy(MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME)
-                .orderBy(MANAGER.MANAGER_ID)
-                //.limit(2) // limit the number of managers
+                        .where(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID))
+                        .limit(2) // limit the number of offices                        
+                        .forJSON().path().asField("offices"))
+                .from(MANAGER)
+                .limit(3) // limit the number of managers
+                .forJSON().path()
                 .fetch();
 
-        System.out.println("Example 7 (many-to-many and limit):\n" + result.formatJSON());
+        System.out.println("Example 7 (many-to-many):\n" + result.formatJSON());
     }
 }
