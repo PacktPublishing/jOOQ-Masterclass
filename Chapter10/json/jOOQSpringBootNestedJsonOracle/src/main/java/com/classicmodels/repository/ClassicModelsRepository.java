@@ -1,5 +1,7 @@
 package com.classicmodels.repository;
 
+import com.classicmodels.pojo.SimpleCustomer;
+import com.classicmodels.pojo.SimpleOffice;
 import com.classicmodels.pojo.SimpleProductLine;
 import java.util.List;
 import static jooq.generated.tables.BankTransaction.BANK_TRANSACTION;
@@ -39,7 +41,7 @@ public class ClassicModelsRepository {
     }
 
     public void jsonProductlineProductOrderdetail() {
-/*
+
         Result<Record1<JSON>> result1 = ctx.select(
                 jsonObject(
                         key("productLine").value(PRODUCTLINE.PRODUCT_LINE),
@@ -62,7 +64,7 @@ public class ClassicModelsRepository {
                 .from(PRODUCTLINE)
                 .fetch();
         System.out.println("Example 1.1:\n" + result1.formatJSON());
-  */      
+
         // the same thing but using jsonEntry and mapping to POJO
         List<SimpleProductLine> result2 = ctx.select(
                 jsonObject(
@@ -82,13 +84,12 @@ public class ClassicModelsRepository {
                                                         .where(ORDERDETAIL.PRODUCT_ID.eq(PRODUCT.PRODUCT_ID))))))
                                 .orderBy(PRODUCT.QUANTITY_IN_STOCK))
                                 .from(PRODUCT)
-                                .where(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE))
-                                .orderBy(PRODUCTLINE.PRODUCT_LINE)))))
+                                .where(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE))))))
                 .from(PRODUCTLINE)
                 .fetchInto(SimpleProductLine.class);
 
         System.out.println("Example 1.2:\n" + result2);
-    /*    
+
         Result<Record1<JSON>> result3 = ctx.select(
                 PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.TEXT_DESCRIPTION,
                 select(PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_VENDOR, PRODUCT.QUANTITY_IN_STOCK,
@@ -110,7 +111,7 @@ public class ClassicModelsRepository {
                 .fetch();
 
         System.out.println("Example 1.3:\n" + result3.formatJSON());
-        
+
         // same thing as above but mapping to POJO
         List<SimpleProductLine> result4 = ctx.select(
                 PRODUCTLINE.PRODUCT_LINE.as("productLine"), PRODUCTLINE.TEXT_DESCRIPTION.as("textDescription"),
@@ -134,7 +135,7 @@ public class ClassicModelsRepository {
                 .forJSON().path().withoutArrayWrapper()
                 .fetchInto(SimpleProductLine.class);
 
-        System.out.println("Example 1.4:\n" + result4);*/
+        System.out.println("Example 1.4:\n" + result4);
     }
 
     public void jsonCustomerPaymentBankTransactionCustomerdetail() {
@@ -144,7 +145,7 @@ public class ClassicModelsRepository {
                         key("customerName").value(CUSTOMER.CUSTOMER_NAME),
                         key("creditLimit").value(CUSTOMER.CREDIT_LIMIT),
                         key("payments").value(select(jsonArrayAgg(
-                                jsonObject(key("paymentNumber").value(PAYMENT.CUSTOMER_NUMBER),
+                                jsonObject(key("customerNumber").value(PAYMENT.CUSTOMER_NUMBER),
                                         key("invoiceAmount").value(PAYMENT.INVOICE_AMOUNT),
                                         key("cachingDate").value(PAYMENT.CACHING_DATE),
                                         key("transactions")
@@ -169,7 +170,40 @@ public class ClassicModelsRepository {
                 .fetch();
         System.out.println("Example 2.1:\n" + result1.formatJSON());
 
-        Result<Record1<JSON>> result2 = ctx.select(
+        // the same thing but using key().value() and mapping to POJO
+        List<SimpleCustomer> result2 = ctx.select(
+                jsonObject(
+                        key("customerName").value(CUSTOMER.CUSTOMER_NAME),
+                        key("creditLimit").value(CUSTOMER.CREDIT_LIMIT),
+                        key("payments").value(select(jsonArrayAgg(
+                                jsonObject(key("customerNumber").value(PAYMENT.CUSTOMER_NUMBER),
+                                        key("invoiceAmount").value(PAYMENT.INVOICE_AMOUNT),
+                                        key("cachingDate").value(PAYMENT.CACHING_DATE),
+                                        key("transactions")
+                                                .value(select(jsonArrayAgg(
+                                                        jsonObject(
+                                                                key("bankName").value(BANK_TRANSACTION.BANK_NAME),
+                                                                key("transferAmount").value(BANK_TRANSACTION.TRANSFER_AMOUNT)))
+                                                        .orderBy(BANK_TRANSACTION.TRANSFER_AMOUNT))
+                                                        .from(BANK_TRANSACTION)
+                                                        .where(BANK_TRANSACTION.CUSTOMER_NUMBER.eq(PAYMENT.CUSTOMER_NUMBER)
+                                                                .and(BANK_TRANSACTION.CHECK_NUMBER.eq(PAYMENT.CHECK_NUMBER))))))
+                                .orderBy(PAYMENT.CACHING_DATE))
+                                .from(PAYMENT)
+                                .where(PAYMENT.CUSTOMER_NUMBER.eq(CUSTOMER.CUSTOMER_NUMBER))),
+                        key("details").value(select(
+                                jsonObject(key("city").value(CUSTOMERDETAIL.CITY),
+                                        key("addressLineFirst").value(CUSTOMERDETAIL.ADDRESS_LINE_FIRST),
+                                        key("state").value(CUSTOMERDETAIL.STATE)))
+                                .from(CUSTOMERDETAIL)
+                                .where(CUSTOMERDETAIL.CUSTOMER_NUMBER.eq(CUSTOMER.CUSTOMER_NUMBER)))))
+                .from(CUSTOMER)
+                .orderBy(CUSTOMER.CREDIT_LIMIT)
+                .fetchInto(SimpleCustomer.class);
+
+        System.out.println("Example 2.2:\n" + result2);
+
+        Result<Record1<JSON>> result3 = ctx.select(
                 CUSTOMER.CUSTOMER_NAME, CUSTOMER.CREDIT_LIMIT,
                 select(PAYMENT.CUSTOMER_NUMBER, PAYMENT.INVOICE_AMOUNT, PAYMENT.CACHING_DATE,
                         select(BANK_TRANSACTION.BANK_NAME, BANK_TRANSACTION.TRANSFER_AMOUNT)
@@ -194,11 +228,43 @@ public class ClassicModelsRepository {
                 .forJSON().path()
                 .fetch();
 
-        System.out.println("Example 2.2:\n" + result2.formatJSON());
+        System.out.println("Example 2.3:\n" + result3.formatJSON());
+
+        // same thing as above but mapping to POJO
+        List<SimpleCustomer> result4 = ctx.select(
+                CUSTOMER.CUSTOMER_NAME.as("customerName"), CUSTOMER.CREDIT_LIMIT.as("creditLimit"),
+                select(PAYMENT.CUSTOMER_NUMBER.as("customerNumber"), PAYMENT.INVOICE_AMOUNT.as("invoiceAmount"),
+                        PAYMENT.CACHING_DATE.as("cachingDate"),
+                        select(BANK_TRANSACTION.BANK_NAME.as("bankName"),
+                                BANK_TRANSACTION.TRANSFER_AMOUNT.as("transferAmount"))
+                                .from(BANK_TRANSACTION)
+                                .where(BANK_TRANSACTION.CUSTOMER_NUMBER.eq(PAYMENT.CUSTOMER_NUMBER)
+                                        .and(BANK_TRANSACTION.CHECK_NUMBER.eq(PAYMENT.CHECK_NUMBER)))
+                                .orderBy(BANK_TRANSACTION.TRANSFER_AMOUNT)
+                                .limit(2) // limit 'transactions'
+                                .forJSON().path().asField("transactions"))
+                        .from(PAYMENT)
+                        .where(PAYMENT.CUSTOMER_NUMBER.eq(CUSTOMER.CUSTOMER_NUMBER))
+                        .orderBy(PAYMENT.CACHING_DATE)
+                        .limit(2) // limit 'payments'
+                        .forJSON().path().asField("payments"),
+                select(CUSTOMERDETAIL.CITY.as("city"),
+                        CUSTOMERDETAIL.ADDRESS_LINE_FIRST.as("addressLineFirst"),
+                        CUSTOMERDETAIL.STATE.as("state"))
+                        .from(CUSTOMERDETAIL)
+                        .where(CUSTOMERDETAIL.CUSTOMER_NUMBER.eq(CUSTOMER.CUSTOMER_NUMBER))
+                        .forJSON().path().asField("details"))
+                .from(CUSTOMER)
+                .orderBy(CUSTOMER.CONTACT_LAST_NAME)
+                .limit(1) // limit 'customers'
+                .forJSON().path().withoutArrayWrapper()
+                .fetchInto(SimpleCustomer.class);
+
+        System.out.println("Example 2.4:\n" + result4);
     }
 
     public void jsonOfficeManagerDepartmentEmployeeSale() {
-
+        
         Result<Record1<JSON>> result1 = ctx.select(
                 jsonObject(
                         key("officeCode").value(OFFICE.OFFICE_CODE),
@@ -233,8 +299,45 @@ public class ClassicModelsRepository {
                 .fetch();
 
         System.out.println("Example 3.1:\n" + result1.formatJSON());
+         
+        // the same thing but using key().value() and mapping to POJO
+        List<SimpleOffice> result2 = ctx.select(
+                jsonObject(
+                        key("officeCode").value(OFFICE.OFFICE_CODE),
+                        key("officeCity").value(OFFICE.CITY),
+                        key("officeCountry").value(OFFICE.COUNTRY),
+                        key("departments").value(select(jsonArrayAgg(
+                                jsonObject(key("departmentName").value(DEPARTMENT.NAME),
+                                        key("departmentPhone").value(DEPARTMENT.PHONE))))
+                                .from(DEPARTMENT)
+                                .where(DEPARTMENT.OFFICE_CODE.eq(OFFICE.OFFICE_CODE))),
+                        key("employees").value(select(jsonArrayAgg(
+                                jsonObject(key("employeeFirstName").value(EMPLOYEE.FIRST_NAME),
+                                        key("employeeLastName").value(EMPLOYEE.LAST_NAME),
+                                        key("employeeSalary").value(EMPLOYEE.SALARY),
+                                        key("sales").value(select(jsonArrayAgg(
+                                                jsonObject(key("fiscalYear").value(SALE.FISCAL_YEAR),
+                                                        key("sale").value(SALE.SALE_)))
+                                                .orderBy(SALE.FISCAL_YEAR))
+                                                .from(SALE)
+                                                .where(SALE.EMPLOYEE_NUMBER.eq(EMPLOYEE.EMPLOYEE_NUMBER))))))
+                                .from(EMPLOYEE)
+                                .where(EMPLOYEE.OFFICE_CODE.eq(OFFICE.OFFICE_CODE))),
+                        key("managers").value(field(select(jsonArrayAgg(jsonObject(
+                                key("managerId").value(MANAGER.MANAGER_ID),
+                                key("managerName").value(MANAGER.MANAGER_NAME)))
+                                .orderBy(MANAGER.MANAGER_ID))
+                                .from(MANAGER)
+                                .join(OFFICE_HAS_MANAGER)
+                                .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID))
+                                .where(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))))))
+                .from(OFFICE)
+                .orderBy(OFFICE.OFFICE_CODE)
+                .fetchInto(SimpleOffice.class);
 
-        Result<Record1<JSON>> result2 = ctx.select(
+        System.out.println("Example 3.2:\n" + result2);
+        
+        Result<Record1<JSON>> result3 = ctx.select(
                 OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.COUNTRY,
                 select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY,
                         select(SALE.FISCAL_YEAR, SALE.SALE_)
@@ -258,6 +361,33 @@ public class ClassicModelsRepository {
                 .forJSON().path()
                 .fetch();
 
-        System.out.println("Example 3.2:\n" + result2.formatJSON());
+        System.out.println("Example 3.3:\n" + result3.formatJSON());
+         
+        // same thing as above but mapping to POJO
+        List<SimpleOffice> result4 = ctx.select(
+                OFFICE.OFFICE_CODE.as("officeCode"), OFFICE.CITY.as("officeCity"), OFFICE.COUNTRY.as("officeCountry"),
+                select(EMPLOYEE.FIRST_NAME.as("employeeFirstName"), EMPLOYEE.LAST_NAME.as("employeeLastName"), EMPLOYEE.SALARY.as("employeeSalary"),
+                        select(SALE.FISCAL_YEAR.as("fiscalYear"), SALE.SALE_.as("sale"))
+                                .from(SALE)
+                                .where(SALE.EMPLOYEE_NUMBER.eq(EMPLOYEE.EMPLOYEE_NUMBER))
+                                .forJSON().path().asField("sales"))
+                        .from(EMPLOYEE)
+                        .where(EMPLOYEE.OFFICE_CODE.eq(OFFICE.OFFICE_CODE))
+                        .forJSON().path().asField("employees"),
+                select(DEPARTMENT.NAME.as("departmentName"), DEPARTMENT.PHONE.as("departmentPhone"))
+                        .from(DEPARTMENT)
+                        .where(DEPARTMENT.OFFICE_CODE.eq(OFFICE.OFFICE_CODE))
+                        .forJSON().path().asField("departments"),
+                select(MANAGER.MANAGER_ID.as("managerId"), MANAGER.MANAGER_NAME.as("managerName"))
+                        .from(MANAGER)
+                        .join(OFFICE_HAS_MANAGER)
+                        .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID))
+                        .where(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))
+                        .forJSON().path().asField("managers"))
+                .from(OFFICE)                
+                .forJSON().path().withoutArrayWrapper()
+                .fetchInto(SimpleOffice.class);
+
+        System.out.println("Example 3.4:\n" + result4);
     }
 }

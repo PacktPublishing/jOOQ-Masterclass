@@ -11,8 +11,8 @@ public class SimpleCustomer implements Serializable {
     
     private String customerName;
     private BigDecimal creditLimit;
-    private List<SimplePayment> payments;   
-    private SimpleCustomerDetail details;
+    private List<SimplePayment> payments;           
+    private List<SimpleCustomerDetail> details;
 
     public String getCustomerName() {
         return customerName;
@@ -38,11 +38,11 @@ public class SimpleCustomer implements Serializable {
         this.payments = payments;
     }
 
-    public SimpleCustomerDetail getDetails() {
+    public List<SimpleCustomerDetail> getDetails() {
         return details;
     }
 
-    public void setDetails(SimpleCustomerDetail details) {
+    public void setDetails(List<SimpleCustomerDetail> details) {
         this.details = details;
     }
 

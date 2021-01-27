@@ -1,6 +1,5 @@
 package com.classicmodels.pojo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -17,8 +16,7 @@ public class SimplePayment implements Serializable {
 
     private Long customerNumber;
     private BigDecimal invoiceAmount;
-    
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.000000")
+        
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime cachingDate;
