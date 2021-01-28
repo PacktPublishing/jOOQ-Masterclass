@@ -142,6 +142,7 @@
                 <configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.14.0.xsd">                                                 
                     <!-- Configure the database connection here -->
                     <jdbc>
+                        <autoCommit>false</autoCommit>
                         <driver>${spring.datasource.driverClassName}</driver>
                         <url>${spring.datasource.url}</url>
                         <user>${spring.datasource.username}</user>
