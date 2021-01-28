@@ -53,7 +53,8 @@ public class ClassicModelsRepository {
             }
         }
     }
-    
+
+    @Transactional    
     public void fetchCustomerLazyAndUpdate() {
         
         // By default, SQLServer JDBC retrieves the entire result set at a time. 

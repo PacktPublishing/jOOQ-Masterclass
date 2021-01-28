@@ -54,6 +54,7 @@ public class ClassicModelsRepository {
         }
     }
     
+    @Transactional
     public void fetchCustomerLazyAndUpdate() {
         
         // By default, Oracle JDBC retrieves a result set of 10 rows at a time from the database cursor. 
