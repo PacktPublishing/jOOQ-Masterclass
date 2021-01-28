@@ -128,6 +128,7 @@
                         <configuration>                                                 
                             <!-- Configure the database connection here. -->
                             <jdbc>
+                                <autoCommit>false</autoCommit>
                                 <driver>${spring.datasource.driverClassName}</driver>
                                 <url>${spring.datasource.url}</url>
                                 <user>${spring.datasource.username}</user>
