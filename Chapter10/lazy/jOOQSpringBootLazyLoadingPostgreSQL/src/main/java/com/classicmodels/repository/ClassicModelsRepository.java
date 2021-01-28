@@ -1,6 +1,7 @@
 package com.classicmodels.repository;
 
 import java.math.BigDecimal;
+import java.sql.ResultSet;
 import java.util.List;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
@@ -111,7 +112,9 @@ public class ClassicModelsRepository {
         // Instruct jOOQ to scan a result set of 1 row at a time from the ResultSet. 
         // So, both PostgreSQL and jOOQ will fetch exactly one row at a time.
         System.out.println("\nExample 5.1:\n");
-        try ( Cursor<CustomerRecord> cursor = ctx.selectFrom(CUSTOMER).fetchSize(1).fetchLazy()) {
+        try ( Cursor<CustomerRecord> cursor = ctx.selectFrom(CUSTOMER)
+                .resultSetType(ResultSet.TYPE_FORWARD_ONLY) // this is the default, so you can omit it
+                .fetchSize(1).fetchLazy()) {
 
             while (cursor.hasNext()) {
                 CustomerRecord customer = cursor.fetchNext();
