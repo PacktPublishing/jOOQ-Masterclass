@@ -1,6 +1,7 @@
 package com.classicmodels.repository;
 
 import java.math.BigDecimal;
+import java.sql.ResultSet;
 import java.util.List;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
@@ -54,9 +55,9 @@ public class ClassicModelsRepository {
         }
     }
 
-    @Transactional    
+    @Transactional
     public void fetchCustomerLazyAndUpdate() {
-        
+
         // By default, MySQL JDBC retrieves the entire result set at a time. 
         // Next, jOOQ scans the fetched ResultSet record by record via fetchNext() and update it based on a condition.
         System.out.println("\nExample 3:\n");
@@ -73,7 +74,7 @@ public class ClassicModelsRepository {
             }
         }
     }
-    
+
     public void fetchCustomerLazyAndRecordMapper() {
 
         // By default, MySQL JDBC retrieves the entire result set at a time. 
@@ -104,14 +105,17 @@ public class ClassicModelsRepository {
                     }
                 }
     }
-    
+
     public void fetchExactlyOneRow() {
 
         // Instruct MySQL JDBC to retrieve a result set of 1 row at a time from the database cursor. 
         // Instruct jOOQ to scan a result set of 1 row at a time from the ResultSet. 
         // So, both MySQL and jOOQ will fetch exactly one row at a time.
         System.out.println("\nExample 5.1:\n");
-        try ( Cursor<CustomerRecord> cursor = ctx.selectFrom(CUSTOMER).fetchSize(Integer.MIN_VALUE).fetchLazy()) {
+        try ( Cursor<CustomerRecord> cursor = ctx.selectFrom(CUSTOMER)
+                .resultSetType(ResultSet.TYPE_FORWARD_ONLY)
+                .resultSetConcurrency(ResultSet.CONCUR_READ_ONLY)
+                .fetchSize(Integer.MIN_VALUE).fetchLazy()) {
 
             while (cursor.hasNext()) {
                 CustomerRecord customer = cursor.fetchNext();
@@ -119,22 +123,25 @@ public class ClassicModelsRepository {
                 System.out.println("Customer:\n" + customer);
             }
         }
-        
+
         // same thing but using explicitly ResultQuery
         System.out.println("\nExample 5.2:\n");
-        ResultQuery<CustomerRecord> resultQuery = ctx.selectFrom(CUSTOMER).fetchSize(Integer.MIN_VALUE);        
+        ResultQuery<CustomerRecord> resultQuery = ctx.selectFrom(CUSTOMER)
+                .resultSetType(ResultSet.TYPE_FORWARD_ONLY)
+                .resultSetConcurrency(ResultSet.CONCUR_READ_ONLY)
+                .fetchSize(Integer.MIN_VALUE);
         Cursor<CustomerRecord> cursor = resultQuery.fetchLazy();
-        
+
         try (cursor) {
-            
+
             while (cursor.hasNext()) {
                 CustomerRecord customer = cursor.fetchNext();
 
                 System.out.println("Customer:\n" + customer);
             }
-        }        
+        }
     }
-    
+
     public void fetchExactlyOneRowGlobal() {
 
         // Instruct MySQL JDBC to retrieve a result set of 1 row at a time from the database cursor. 
@@ -143,8 +150,12 @@ public class ClassicModelsRepository {
         // Global fetchSize() (of course. you can do this setting via @Bean as well).
         System.out.println("Example 6:\n");
         try ( Cursor<CustomerRecord> cursor = ctx.configuration().set(
-                new Settings().withFetchSize(Integer.MIN_VALUE)).dsl()
-                .selectFrom(CUSTOMER).fetchLazy()) {
+                new Settings()
+                        .withFetchSize(Integer.MIN_VALUE)).dsl()
+                .selectFrom(CUSTOMER)
+                .resultSetType(ResultSet.TYPE_FORWARD_ONLY)
+                .resultSetConcurrency(ResultSet.CONCUR_READ_ONLY)
+                .fetchLazy()) {
 
             while (cursor.hasNext()) {
                 CustomerRecord customer = cursor.fetchNext();
@@ -152,5 +163,5 @@ public class ClassicModelsRepository {
                 System.out.println("Customer:\n" + customer);
             }
         }
-    }
+    }        
 }
