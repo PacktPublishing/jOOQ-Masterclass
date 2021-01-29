@@ -79,8 +79,8 @@ public class ClassicModelsRepository {
     @Transactional(readOnly = true)
     public void lazyFetchingViaFetchStream() {
 
-        ctx.fetchStream("SELECT * FROM sale")
-                .filter(rs -> rs.getValue(SALE.SALE_) > 5000)
+        ctx.fetchStream("SELECT sale FROM sale")
+                .filter(rs -> rs.getValue("sale", Double.class) > 5000)
                 .forEach(System.out::println);
 
         ctx.selectFrom(SALE).fetchStream()
@@ -100,8 +100,8 @@ public class ClassicModelsRepository {
                 .resultSetConcurrency(ResultSet.CONCUR_READ_ONLY)
                 .fetchSize(5).fetchStream() // jOOQ fluent API ends here                                                                
                 .collect(Collectors.teeing( // Stream API starts here                           
-                        summingDouble(rs -> rs.getValue("sale", Double.class)),
-                        mapping(rs -> rs.getValue("sale", Double.class), toList()),
+                        summingDouble(rs -> rs.getValue(SALE.SALE_)),
+                        mapping(rs -> rs.getValue(SALE.SALE_), toList()),
                         SimpleSale::new));
         System.out.println("Result=" + result2);
 
@@ -111,8 +111,8 @@ public class ClassicModelsRepository {
                 .resultSetConcurrency(ResultSet.CONCUR_READ_ONLY)
                 .fetchSize(5) // jOOQ fluent API ends here                                                                
                 .collect(Collectors.teeing( // Stream API starts here                           
-                        summingDouble(rs -> rs.getValue("sale", Double.class)),
-                        mapping(rs -> rs.getValue("sale", Double.class), toList()),
+                        summingDouble(rs -> rs.getValue(SALE.SALE_)),
+                        mapping(rs -> rs.getValue(SALE.SALE_), toList()),
                         SimpleSale::new));
         System.out.println("Result=" + result3);
     }

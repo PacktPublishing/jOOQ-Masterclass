@@ -78,8 +78,8 @@ public class ClassicModelsRepository {
     @Transactional(readOnly = true)
     public void lazyFetchingViaFetchStream() {
 
-        ctx.fetchStream("SELECT * FROM sale")
-                .filter(rs -> rs.getValue(SALE.SALE_) > 5000)
+        ctx.fetchStream("SELECT sale FROM sale")
+                .filter(rs -> rs.getValue("sale", Double.class) > 5000)
                 .forEach(System.out::println);
 
         ctx.selectFrom(SALE).fetchStream()
@@ -96,16 +96,16 @@ public class ClassicModelsRepository {
         SimpleSale result2 = ctx.select(SALE.SALE_)
                 .from(SALE).fetchSize(5).fetchStream() // jOOQ fluent API ends here                                                                
                 .collect(Collectors.teeing( // Stream API starts here                           
-                        summingDouble(rs -> rs.getValue("sale", Double.class)),
-                        mapping(rs -> rs.getValue("sale", Double.class), toList()),
+                        summingDouble(rs -> rs.getValue(SALE.SALE_)),
+                        mapping(rs -> rs.getValue(SALE.SALE_), toList()),
                         SimpleSale::new));
         System.out.println("Result=" + result2);
 
         // if you don't need the stream pipeline then simply don't use fetchStream()
         SimpleSale result3 = ctx.select(SALE.SALE_).from(SALE).fetchSize(5) // jOOQ fluent API ends here                                                                
                 .collect(Collectors.teeing( // Stream API starts here                           
-                        summingDouble(rs -> rs.getValue("sale", Double.class)),
-                        mapping(rs -> rs.getValue("sale", Double.class), toList()),
+                        summingDouble(rs -> rs.getValue(SALE.SALE_)),
+                        mapping(rs -> rs.getValue(SALE.SALE_), toList()),
                         SimpleSale::new));
         System.out.println("Result=" + result3);
     }
