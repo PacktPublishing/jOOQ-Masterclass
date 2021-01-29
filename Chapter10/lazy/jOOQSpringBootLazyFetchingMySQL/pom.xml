@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.app</groupId>
-    <artifactId>jOOQSpringBootLazyStreamingMySQL</artifactId>
+    <artifactId>jOOQSpringBootLazyFetchingMySQL</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQSpringBootLazyStreamingMySQL</name>
+    <name>jOOQSpringBootLazyFetchingMySQL</name>
     <description>jOOQ - Spring Boot app</description>    
 
     <parent>

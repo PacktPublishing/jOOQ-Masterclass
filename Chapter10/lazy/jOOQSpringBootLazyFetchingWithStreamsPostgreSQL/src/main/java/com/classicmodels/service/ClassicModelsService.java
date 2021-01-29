@@ -13,8 +13,10 @@ public class ClassicModelsService {
     }
 
     public void callAll() {
-        
-           //classicModelsRepository.streamingWithAndWithoutLazy();
-           classicModelsRepository.q();
+
+        classicModelsRepository.eagerAndLazyFetchingWithStreams();
+        classicModelsRepository.eagerAndLazyFetchingWithStreamsAndTransactional();
+        classicModelsRepository.lazyFetchingViaFetchStream();
+        classicModelsRepository.lazyFetchingGroupsViaFetchStream();
     }
 }

@@ -8,6 +8,11 @@ public class SimpleSale implements Serializable {
     private double totalSale;
     private List<Double> sales;
 
+    public SimpleSale(double totalSale, List<Double> sales) {
+        this.totalSale = totalSale;
+        this.sales = sales;
+    }        
+
     public double getTotalSale() {
         return totalSale;
     }
