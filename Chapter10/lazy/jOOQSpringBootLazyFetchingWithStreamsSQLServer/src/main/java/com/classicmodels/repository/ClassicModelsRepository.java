@@ -1,7 +1,6 @@
 package com.classicmodels.repository;
 
 import com.classicmodels.pojo.SimpleSale;
-import java.sql.ResultSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -95,10 +94,7 @@ public class ClassicModelsRepository {
         System.out.println("Result=" + result1);
 
         SimpleSale result2 = ctx.select(SALE.SALE_)
-                .from(SALE)
-                .resultSetType(ResultSet.TYPE_FORWARD_ONLY)
-                .resultSetConcurrency(ResultSet.CONCUR_READ_ONLY)
-                .fetchSize(5).fetchStream() // jOOQ fluent API ends here                                                                
+                .from(SALE).fetchSize(5).fetchStream() // jOOQ fluent API ends here                                                                
                 .collect(Collectors.teeing( // Stream API starts here                           
                         summingDouble(rs -> rs.getValue("sale", Double.class)),
                         mapping(rs -> rs.getValue("sale", Double.class), toList()),
@@ -106,10 +102,7 @@ public class ClassicModelsRepository {
         System.out.println("Result=" + result2);
 
         // if you don't need the stream pipeline then simply don't use fetchStream()
-        SimpleSale result3 = ctx.select(SALE.SALE_).from(SALE)
-                .resultSetType(ResultSet.TYPE_FORWARD_ONLY)
-                .resultSetConcurrency(ResultSet.CONCUR_READ_ONLY)
-                .fetchSize(5) // jOOQ fluent API ends here                                                                
+        SimpleSale result3 = ctx.select(SALE.SALE_).from(SALE).fetchSize(5) // jOOQ fluent API ends here                                                                
                 .collect(Collectors.teeing( // Stream API starts here                           
                         summingDouble(rs -> rs.getValue("sale", Double.class)),
                         mapping(rs -> rs.getValue("sale", Double.class), toList()),
@@ -118,16 +111,14 @@ public class ClassicModelsRepository {
     }
 
     // lazy fetching groups with streams
-    @Transactional(readOnly = true)
+    @Transactional(readOnly=true)
     public void lazyFetchingGroupsViaFetchStream() {
 
         Map<Productline, List<Product>> result = ctx.select()
                 .from(PRODUCTLINE)
                 .leftOuterJoin(PRODUCT)
                 .on(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE))
-                .resultSetType(ResultSet.TYPE_FORWARD_ONLY)
-                .resultSetConcurrency(ResultSet.CONCUR_READ_ONLY)
-                .fetchSize(5)
+                .fetchSize(5) // optionally, set the fetch size
                 // .fetchStream() // add this only if  you want to add additional operations to the stream pipeline                 
                 .collect(Collectors.groupingBy(rs -> rs.into(Productline.class),
                         Collectors.mapping(rs -> rs.into(Product.class), toList())));

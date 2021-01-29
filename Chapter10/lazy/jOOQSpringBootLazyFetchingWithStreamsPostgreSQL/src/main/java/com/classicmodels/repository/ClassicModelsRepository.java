@@ -75,6 +75,7 @@ public class ClassicModelsRepository {
     }
 
     // lazy fetching with streams
+    @Transactional(readOnly = true)
     public void lazyFetchingViaFetchStream() {
 
         ctx.fetchStream("SELECT * FROM sale")
@@ -110,6 +111,7 @@ public class ClassicModelsRepository {
     }
 
     // lazy fetching groups with streams
+    @Transactional(readOnly = true)
     public void lazyFetchingGroupsViaFetchStream() {
 
         Map<Productline, List<Product>> result = ctx.select()
