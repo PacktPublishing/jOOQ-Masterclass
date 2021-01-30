@@ -315,6 +315,7 @@ CREATE TABLE bank_transaction (
   [caching_date] datetime DEFAULT GETDATE(),
   [customer_number] bigint NOT NULL,
   [check_number] varchar(50) NOT NULL, 
+  [status] varchar(50) NOT NULL,
   PRIMARY KEY ([transaction_id]),  
   CONSTRAINT [bank_transaction_ibfk_1] FOREIGN KEY ([customer_number],[check_number]) REFERENCES payment ([customer_number],[check_number])
 ) ;
