@@ -12,8 +12,9 @@ public class ClassicModelsService {
         this.classicModelsRepository = classicModelsRepository;
     }
 
-   public void q() {
-       
-       classicModelsRepository.q();
-   }
+    public void callAll() {
+
+        classicModelsRepository.fetchEmployeesAndOffices();
+        classicModelsRepository.deleteAndCountSalesOfNonSalesRepHavingNoCustomers();
+    }
 }
