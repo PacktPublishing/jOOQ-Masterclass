@@ -8184,7 +8184,13 @@ select 17, 2003, 1491.38, 1504, 'CONSTANT' from dual union all
 
 select 18, 2004, 3884.34, 1504, 'DOWN' from dual union all 
 
-select 19, 2004, 5241.44, 1504, 'CONSTANT' from dual;
+select 19, 2004, 5241.44, 1504, 'CONSTANT' from dual union all
+
+select 20, 2004, 51241.54, 1143,'DOWN' from dual union all
+
+select 21, 2003, 25241.43, 1143,'DOWN' from dual union all
+
+select 22, 2005, 52343.12, 1102,'DOWN' from dual;
 
 /*Data for the table `top3product` */
 

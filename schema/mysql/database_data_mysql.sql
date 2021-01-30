@@ -8177,7 +8177,13 @@ insert into sale(sale_id,fiscal_year,sale,employee_number,trend) values
 
 (18, 2004, 3884.34, 1504,'DOWN'),
 
-(19, 2004, 5241.44, 1504,'CONSTANT') ON DUPLICATE KEY UPDATE sale_id=sale_id;
+(19, 2004, 5241.44, 1504,'CONSTANT'),
+
+(20, 2004, 51241.54, 1143,'DOWN'),
+
+(21, 2003, 25241.43, 1143,'DOWN'),
+
+(22, 2005, 52343.12, 1102,'DOWN') ON DUPLICATE KEY UPDATE sale_id=sale_id;
 
 /*Data for the table `top3product` */
 
