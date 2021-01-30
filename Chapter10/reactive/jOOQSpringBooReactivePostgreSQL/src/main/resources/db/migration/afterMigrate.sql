@@ -11,13 +11,9 @@ This is a modified version of the original schema
 
 /* START */
 
-USE `classicmodels`;
-
-SET SESSION group_concat_max_len = 100000;
-
 /*Data for the table `office` */
 
-insert  into `office`(`office_code`,`city`,`phone`,`address_line_first`,`address_line_second`,`state`,`country`,`postal_code`,`territory`) values 
+insert  into office(office_code,city,phone,address_line_first,address_line_second,state,country,postal_code,territory) values 
 
 ('1','San Francisco','+1 650 219 4782','100 Market Street','Suite 300','CA','USA','94080','NA'),
 
@@ -25,11 +21,11 @@ insert  into `office`(`office_code`,`city`,`phone`,`address_line_first`,`address
 
 ('3','NYC','+1 212 555 3000','523 East 53rd Street','apt. 5A','NY','USA','10022','NA'),
 
-('4','Paris','+33 14 723 4404','43 Rue Jouffroy D\'abbans',NULL,NULL,'France','75017','EMEA'),
+('4','Paris','+33 14 723 4404','43 Rue Jouffroy D''abbans',NULL,NULL,'France','75017','EMEA'),
 
 ('5','Tokyo','+81 33 224 5000','4-1 Kioicho',NULL,'Chiyoda-Ku','Japan','102-8578','Japan'),
 
-('6','Sydney','+61 2 9264 2451','5-11 Wentworth Avenue','Floor #2',NULL,'Australia','NSW 2010','APAC'),
+('6','Sydney','+61 2 9264 2451','5-11 Wentworth Avenue','Floor --2',NULL,'Australia','NSW 2010','APAC'),
 
 ('7','London','+44 20 7877 2041','25 Old Broad Street','Level 7','N/A','UK','EC2N 1HN','EMEA'),
 
@@ -39,35 +35,35 @@ insert  into `office`(`office_code`,`city`,`phone`,`address_line_first`,`address
 
 ('10',NULL,'+44 20 1827 21411','12 Home','Level 22',NULL,NULL,'EC2N 1HN','NA'), 
 
-('11','Paris','+32 12 713 4304','43 Rue 2',NULL,NULL,'France','25017','EMEA'),
+('11','Paris','+32 12 713 4304','43 Rue 2',NULL,NULL,'France','97562','EMEA'),
 
-('12','Tokyo','+81 33 224 3444','4-1 Kioicho',NULL,'Koil-Ku','Japan','101-6578','Japan') ON DUPLICATE KEY UPDATE office_code=office_code;
+('12','Tokyo','+81 33 224 3444','4-1 Kioicho',NULL,'Koil-Ku','Japan','101-6578','Japan') ON CONFLICT (office_code) DO NOTHING;
 
 /*Data for the table `department` */
 
-insert into `department`(`department_id`,`name`,`phone`,`code`,`office_code`,`topic`) values 
+insert into department(department_id,name,phone,code,office_code,topic) values 
 
-('1','Advertising','-int 4782','1333','1','publicity, promotion'),
+('1','Advertising','-int 4782','1333','1',ARRAY['publicity', 'promotion']),
 
-('2','Sales','-int 41233','1441','1', 'commerce, trade, sellout, transaction'),
+('2','Sales','-int 41233','1441','1', ARRAY['commerce', 'trade', 'sellout', 'transaction']),
 
-('3','Accounting','-int 8233','2311','2', 'monetary, business'),
+('3','Accounting','-int 8233','2311','2', ARRAY['monetary', 'business']),
 
-('4','Finance','-int 4421','3222','3', 'commerce, fiscal, monetary, business') ON DUPLICATE KEY UPDATE department_id=department_id;
+('4','Finance','-int 4421','3222','3', ARRAY['commerce', 'fiscal', 'monetary', 'business']) ON CONFLICT (department_id) DO NOTHING;
 
 /*Data for the table `manager` */
 
-insert into `manager` (`manager_id`, `manager_name`, `manager_evaluation`, `manager_detail`) values 
+insert into manager (manager_id, manager_name, manager_evaluation, manager_detail) values 
 
-('1', 'Joana Nimar', '67, 34, 33, 66', '{"firstName":"Joana","lastName":"Nimar","gender":"Female","dob":"1983-01-01","email":"joananimar@gmail.com","age":30,"address":{"streetAddress":"21 Fake Street","city":"New York City","state":"NY","zipOrPostal":"10021"},"phoneNumber":[{"type":"home","number":["212 555-1234","212 543-0933"]},{"type":"mobile","number":["646 555-4567","644 153-3527","626 231-6743"]}],"summary":"6 years of management experience","computerSkills":[{"OS":["Linux"],"Office":["MS Word","Excel"],"Management":["X10Mangement","ManPlat1","AllCeo"],"Tools":["GMail","Meet"]}],"shareholder":"5%","projects":[{"name":"SBS (aka. Shared Business Services)","start":"2015-08-01","end":"2019-11-21","type":"development","role":"Sr. Manager","details":"Develop a powerful team in a short time"},{"name":"RLCM (aka. Role Lifecycle Management)","start":"2011-03-01","end":"2015-07-01","type":"development","role":"Manager Leader","details":"Increase income"},{"name":"Member-Provider Portal Enhancement","start":"2009-03-01","end":"2011-03-01","type":"enhancement","role":"Technical Leader","details":"Managing the enhancement and defects fixing team"}]}'),
+('1', 'Joana Nimar', (67, 34, 33, 66), '{"firstName":"Joana","lastName":"Nimar","gender":"Female","dob":"1983-01-01","email":"joananimar@gmail.com","age":30,"address":{"streetAddress":"21 Fake Street","city":"New York City","state":"NY","zipOrPostal":"10021"},"phoneNumber":[{"type":"home","number":["212 555-1234","212 543-0933"]},{"type":"mobile","number":["646 555-4567","644 153-3527","626 231-6743"]}],"summary":"6 years of management experience","computerSkills":[{"OS":["Linux"],"Office":["MS Word","Excel"],"Management":["X10Mangement","ManPlat1","AllCeo"],"Tools":["GMail","Meet"]}],"shareholder":"5%","projects":[{"name":"SBS (aka. Shared Business Services)","start":"2015-08-01","end":"2019-11-21","type":"development","role":"Sr. Manager","details":"Develop a powerful team in a short time"},{"name":"RLCM (aka. Role Lifecycle Management)","start":"2011-03-01","end":"2015-07-01","type":"development","role":"Manager Leader","details":"Increase income"},{"name":"Member-Provider Portal Enhancement","start":"2009-03-01","end":"2011-03-01","type":"enhancement","role":"Technical Leader","details":"Managing the enhancement and defects fixing team"}]}'),
 
-('2', 'Mark Janel', '99, 23, 11, 23', '{"firstName":"Mark","lastName":"Janel","gender":"Male","dob":"1985-03-07","email":"markjanel@yahoo.com","age":37,"address":{"streetAddress":"24 Red Street","city":"Banesti","state":"Prahova","zipOrPostal":"506734"},"phoneNumber":[{"type":"home","number":["0727 823 989","0723 621 723","0712 212 676"]},{"type":"mobile","number":["378 555 233","678 154 227"]}],"summary":"4 years of management experience","computerSkills":[{"OS":["Windows"],"Office":["Power Point","Access","FoxPro"],"Management":["AllCeo","ManagementTools Suite"],"Tools":["Skype","GMail","Meet","Google Calendar"]}],"projects":[{"name":"Business Retail","start":"2012-02-05","end":"2014-10-11","type":"retail","role":"General Manager","details":"Expand retail business"},{"name":"Selling Point","start":"2011-01-01","end":"2012-02-05","type":"selling","role":"Manager Leader","details":"Manager of selling department"}]}'),
+('2', 'Mark Janel', (99, 23, 11, 23), '{"firstName":"Mark","lastName":"Janel","gender":"Male","dob":"1985-03-07","email":"markjanel@yahoo.com","age":37,"address":{"streetAddress":"24 Red Street","city":"Banesti","state":"Prahova","zipOrPostal":"506734"},"phoneNumber":[{"type":"home","number":["0727 823 989","0723 621 723","0712 212 676"]},{"type":"mobile","number":["378 555 233","678 154 227"]}],"summary":"4 years of management experience","computerSkills":[{"OS":["Windows"],"Office":["Power Point","Access","FoxPro"],"Management":["AllCeo","ManagementTools Suite"],"Tools":["Skype","GMail","Meet","Google Calendar"]}],"projects":[{"name":"Business Retail","start":"2012-02-05","end":"2014-10-11","type":"retail","role":"General Manager","details":"Expand retail business"},{"name":"Selling Point","start":"2011-01-01","end":"2012-02-05","type":"selling","role":"Manager Leader","details":"Manager of selling department"}]}'),
 
-('3', 'Olivia Goy', '99, 34, 11, 78', '{"firstName":"Olivia","lastName":"Goy","gender":"Female","dob":"1978-08-04","email":"oliviagoy@gmail.com","age":42,"address":{"streetAddress":"118 National Street","city":"Barcelona","state":"Catalonia","zipOrPostal":"660933"},"phoneNumber":[{"type":"home","number":["0999 3844 3333","0223 1333 4455","0265 7883 4422"]},{"type":"mobile","number":["980 992 122","112 644 212","322 323 642"]}],"summary":"10 years of management experience","computerSkills":[{"OS":["Linux","Windows"],"Office":["MS Word","Power Point"],"Management":["ManPlat1","AllCeo","TeamManagement"],"Tools":["Slack"]}],"projects":[{"name":"Marketing Share","start":"2016-08-02","end":"2021-06-02","type":"administrator","role":"Principal Manager","details":"Marketing share for small companies"},{"name":"Draft Management","start":"2014-06-06","end":"2016-08-02","type":"development","role":"Manager Leader","details":"First e-management platform"},{"name":"Car Management","start":"2005-03-21","end":"2014-06-06","type":"enhancement","role":"Leader of retail","details":"Enhancement of cars management"}]}') ON DUPLICATE KEY UPDATE manager_id=manager_id;
+('3', 'Olivia Goy', (99, 34, 11, 78), '{"firstName":"Olivia","lastName":"Goy","gender":"Female","dob":"1978-08-04","email":"oliviagoy@gmail.com","age":42,"address":{"streetAddress":"118 National Street","city":"Barcelona","state":"Catalonia","zipOrPostal":"660933"},"phoneNumber":[{"type":"home","number":["0999 3844 3333","0223 1333 4455","0265 7883 4422"]},{"type":"mobile","number":["980 992 122","112 644 212","322 323 642"]}],"summary":"10 years of management experience","computerSkills":[{"OS":["Linux","Windows"],"Office":["MS Word","Power Point"],"Management":["ManPlat1","AllCeo","TeamManagement"],"Tools":["Slack"]}],"projects":[{"name":"Marketing Share","start":"2016-08-02","end":"2021-06-02","type":"administrator","role":"Principal Manager","details":"Marketing share for small companies"},{"name":"Draft Management","start":"2014-06-06","end":"2016-08-02","type":"development","role":"Manager Leader","details":"First e-management platform"},{"name":"Car Management","start":"2005-03-21","end":"2014-06-06","type":"enhancement","role":"Leader of retail","details":"Enhancement of cars management"}]}') ON CONFLICT (manager_id) DO NOTHING;
 
 /*Data for the table `office_has_manager` */
 
-insert into `office_has_manager` (`offices_office_code`, `managers_manager_id`) values 
+insert into office_has_manager (offices_office_code, managers_manager_id) values 
 
 ('1', '1'),
 
@@ -89,61 +85,61 @@ insert into `office_has_manager` (`offices_office_code`, `managers_manager_id`) 
 
 ('6', '1'),
 
-('7', '2') ON DUPLICATE KEY UPDATE offices_office_code=offices_office_code;
+('7', '2') ON CONFLICT (offices_office_code, managers_manager_id) DO NOTHING;
 
 /*Data for the table `employee` */
 
-insert  into `employee`(`employee_number`,`last_name`,`first_name`,`extension`,`email`,`office_code`,`salary`, `reports_to`,`job_title`,`employee_of_year`, `monthly_bonus`) values 
+insert  into employee(employee_number,last_name,first_name,extension,email,office_code,salary,reports_to,job_title,employee_of_year,monthly_bonus) values 
 
-(1002,'Murphy','Diane','x5800','dmurphy@classicmodelcars.com','1',120000,NULL,'President',NULL,'450, 210, 222, 123, 110, 0, 0, 0, 560, 440, 315, 125, 0, 900'),
+(1002,'Murphy','Diane','x5800','dmurphy@classicmodelcars.com','1',120000,NULL,'President',NULL, ARRAY[450, 210, 222, 123, 110, 0, 0, 0, 560, 440, 315, 125, 0, 900]),
 
 (1056,'Patterson','Mary','x4611','mpatterso@classicmodelcars.com','1',100000,1002,'VP Sales', NULL, NULL),
 
-(1076,'Firrelli','Jeff','x9273','jfirrelli@classicmodelcars.com','1',100000,1002,'VP Marketing', NULL,'0, 0, 0, 125, 125, 150, 232, 100, 0'),
+(1076,'Firrelli','Jeff','x9273','jfirrelli@classicmodelcars.com','1',100000,1002,'VP Marketing', NULL, ARRAY[0, 0, 0, 125, 125, 150, 232, 100, 0]),
 
-(1088,'Patterson','William','x4871','wpatterson@classicmodelcars.com','6',80000,1056,'Sales Manager (APAC)', NULL,'560, 120, 440, 320, 315, 0, 0, 100, 125, 0, 900'),
+(1088,'Patterson','William','x4871','wpatterson@classicmodelcars.com','6',80000,1056,'Sales Manager (APAC)', NULL, ARRAY[560, 120, 440, 320, 315, 0, 0, 100, 125, 0, 900]),
 
 (1102,'Bondur','Gerard','x5408','gbondur@classicmodelcars.com','4',80000,1056,'Sale Manager (EMEA)', NULL, NULL),
 
 (1143,'Bow','Anthony','x5428','abow@classicmodelcars.com','1',75000,1056,'Sales Manager (NA)',NULL, NULL),
 
-(1165,'Jennings','Leslie','x3291','ljennings@classicmodelcars.com','1',60000,1143,'Sales Rep','2003, 2004', NULL),
+(1165,'Jennings','Leslie','x3291','ljennings@classicmodelcars.com','1',60000,1143,'Sales Rep',ARRAY[2003, 2004], NULL),
 
-(1166,'Thompson','Leslie','x4065','lthompson@classicmodelcars.com','1',60000,1143,'Sales Rep','2003, 2005', NULL),
+(1166,'Thompson','Leslie','x4065','lthompson@classicmodelcars.com','1',60000,1143,'Sales Rep',ARRAY[2003, 2005], NULL),
 
-(1188,'Firrelli','Julie','x2173','jfirrelli@classicmodelcars.com','2',60000,1143,'Sales Rep','2004, 2005', NULL),
+(1188,'Firrelli','Julie','x2173','jfirrelli@classicmodelcars.com','2',60000,1143,'Sales Rep',ARRAY[2004, 2005], NULL),
 
-(1216,'Patterson','Steve','x4334','spatterson@classicmodelcars.com','2',55000,1143,'Sales Rep','2005, 2006', NULL),
+(1216,'Patterson','Steve','x4334','spatterson@classicmodelcars.com','2',55000,1143,'Sales Rep',ARRAY[2005, 2006], NULL),
 
-(1286,'Tseng','Foon Yue','x2248','ftseng@classicmodelcars.com','3',55000,1143,'Sales Rep','2002, 2003, 2004', NULL),
+(1286,'Tseng','Foon Yue','x2248','ftseng@classicmodelcars.com','3',55000,1143,'Sales Rep',ARRAY[2002, 2003, 2004], NULL),
 
-(1323,'Vanauf','George','x4102','gvanauf@classicmodelcars.com','3',55000,1143,'Sales Rep','2000, 2001, 2005', NULL),
+(1323,'Vanauf','George','x4102','gvanauf@classicmodelcars.com','3',55000,1143,'Sales Rep',ARRAY[2000, 2001, 2005], NULL),
 
-(1337,'Bondur','Loui','x6493','lbondur@classicmodelcars.com','4',60000,1102,'Sales Rep','2004, 2007', NULL),
+(1337,'Bondur','Loui','x6493','lbondur@classicmodelcars.com','4',60000,1102,'Sales Rep',ARRAY[2004, 2007], NULL),
 
-(1370,'Hernandez','Gerard','x2028','ghernande@classicmodelcars.com','4',65000,1102,'Sales Rep','2000, 2001', NULL),
+(1370,'Hernandez','Gerard','x2028','ghernande@classicmodelcars.com','4',65000,1102,'Sales Rep',ARRAY[2000, 2001], NULL),
 
-(1401,'Castillo','Pamela','x2759','pcastillo@classicmodelcars.com','4',55000,1102,'Sales Rep','2000, 2001, 2003, 2005', NULL),
+(1401,'Castillo','Pamela','x2759','pcastillo@classicmodelcars.com','4',55000,1102,'Sales Rep',ARRAY[2000, 2001, 2003, 2005], NULL),
 
-(1501,'Bott','Larry','x2311','lbott@classicmodelcars.com','7',50000,1102,'Sales Rep','2004, 2008', NULL),
+(1501,'Bott','Larry','x2311','lbott@classicmodelcars.com','7',50000,1102,'Sales Rep',ARRAY[2004, 2008], NULL),
 
-(1504,'Jones','Barry','x102','bjones@classicmodelcars.com','7',50000,1102,'Sales Rep','2002, 2003, 2005', NULL),
+(1504,'Jones','Barry','x102','bjones@classicmodelcars.com','7',50000,1102,'Sales Rep',ARRAY[2002, 2003, 2005], NULL),
 
-(1611,'Fixter','Andy','x101','afixter@classicmodelcars.com','6',50000,1088,'Sales Rep','2002, 2005', NULL),
+(1611,'Fixter','Andy','x101','afixter@classicmodelcars.com','6',50000,1088,'Sales Rep',ARRAY[2002, 2005], NULL),
 
-(1612,'Marsh','Peter','x102','pmarsh@classicmodelcars.com','6',55000,1088,'Sales Rep','2003, 2005, 2006, 2007', NULL),
+(1612,'Marsh','Peter','x102','pmarsh@classicmodelcars.com','6',55000,1088,'Sales Rep',ARRAY[2003, 2005, 2006, 2007], NULL),
 
-(1619,'King','Tom','x103','tking@classicmodelcars.com','6',60000,1088,'Sales Rep','2002, 2004', NULL),
+(1619,'King','Tom','x103','tking@classicmodelcars.com','6',60000,1088,'Sales Rep',ARRAY[2002, 2004], NULL),
 
-(1621,'Nishi','Mami','x101','mnishi@classicmodelcars.com','5',55000,1056,'Sales Rep','2003, 2005', NULL),
+(1621,'Nishi','Mami','x101','mnishi@classicmodelcars.com','5',55000,1056,'Sales Rep',ARRAY[2003, 2005], NULL),
 
-(1625,'Kato','Yoshimi','x102','ykato@classicmodelcars.com','5',60000,1621,'Sales Rep','2004, 2005, 2006', NULL),
+(1625,'Kato','Yoshimi','x102','ykato@classicmodelcars.com','5',60000,1621,'Sales Rep',ARRAY[2004, 2005, 2006], NULL),
 
-(1702,'Gerard','Martin','x2312','mgerard@classicmodelcars.com','4',50000,1102,'Sales Rep','2005, 2007', NULL) ON DUPLICATE KEY UPDATE employee_number=employee_number;
+(1702,'Gerard','Martin','x2312','mgerard@classicmodelcars.com','4',50000,1102,'Sales Rep',ARRAY[2005, 2007], NULL) ON CONFLICT (employee_number) DO NOTHING;;
 
 /*Data for the table `customer` */
 
-insert  into `customer`(`customer_number`,`customer_name`,`contact_last_name`,`contact_first_name`,`phone`,`sales_rep_employee_number`,`credit_limit`,`first_buy_date`) values 
+insert  into customer(customer_number,customer_name,contact_last_name,contact_first_name,phone,sales_rep_employee_number,credit_limit,first_buy_date) values 
 
 (99,'Australian Home','Paoule','Sart ','40.11.2555',1370,'21000.00',20210),
 
@@ -395,9 +391,11 @@ insert  into `customer`(`customer_number`,`customer_name`,`contact_last_name`,`c
 
 (495,'Diecast Collectables','Franco','Valarie','6175552555',1188,'85100.00',20409),
 
-(496,'Kelly''s Gift Shop','Snowden','Tony','+64 9 5555500',1612,'110000.00',20142) ON DUPLICATE KEY UPDATE customer_number=customer_number;
+(496,'Kelly''s Gift Shop','Snowden','Tony','+64 9 5555500',1612,'110000.00',20142) ON CONFLICT (customer_number) DO NOTHING;
 
-insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_line_second`,`city`,`state`,`postal_code`,`country`) values 
+/*Data for the table `customerdetail` */
+
+insert  into customerdetail(customer_number,address_line_first,address_line_second,city,state,postal_code,country) values 
 
 (99,'43 Rue 2',NULL, 'Paris' ,NULL,'25017','France'),
 
@@ -409,7 +407,7 @@ insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_li
 
 (103,'54, rue Royale',NULL,'Nantes',NULL,'44000','France'),
 
-(112,'8489 Strong St.',NULL,'Las Vegas','NV','83030','USA'),
+(112,'8489 Strong St.',NULL,'Las Vegas','NV','75017','USA'),
 
 (114,'636 St Kilda Road','Level 3','Melbourne','Victoria','3004','Australia'),
 
@@ -509,7 +507,7 @@ insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_li
 
 (250,'27 rue du Colonel Pierre Avia',NULL,'Paris',NULL,'75508','France'),
 
-(256,'67, avenue de l\'Europe',NULL,'Versailles',NULL,'78000','France'),
+(256,'67, avenue de l''Europe',NULL,'Versailles',NULL,'78000','France'),
 
 (259,'Mehrheimerstr. 369',NULL,'Köln',NULL,'50739','Germany'),
 
@@ -559,7 +557,7 @@ insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_li
 
 (339,'782 First Street',NULL,'Philadelphia','PA','71270','USA'),
 
-(344,'Merchants House','27-30 Merchant\'s Quay','Madrid',NULL,'28023','Spain'),
+(344,'Merchants House','27-30 Merchant''s Quay','Madrid',NULL,'28023','Spain'),
 
 (347,'6047 Douglas Av.',NULL,'Los Angeles','CA','91003','USA'),
 
@@ -567,7 +565,7 @@ insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_li
 
 (350,'12, rue des Bouchers',NULL,'Marseille',NULL,'13008','France'),
 
-(353,'59 rue de l\'Abbaye',NULL,'Reims',NULL,'51100','France'),
+(353,'59 rue de l''Abbaye',NULL,'Reims',NULL,'51100','France'),
 
 (356,'1250 Pretorius Street',NULL,'Hatfield','Pretoria','0028','South Africa'),
 
@@ -649,29 +647,29 @@ insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_li
 
 (495,'6251 Ingle Ln.',NULL,'Boston','MA','51003','USA'),
 
-(496,'Arenales 1938 3\'A\'',NULL,'Auckland  ',NULL,NULL,'New Zealand') ON DUPLICATE KEY UPDATE customer_number=customer_number;
+(496,'Arenales 1938 3''A''',NULL,'Auckland  ',NULL,NULL,'New Zealand') ON CONFLICT (customer_number) DO NOTHING;
 
 /*Data for the table `productline` */
 
-insert  into `productline`(`product_line`,`code`,`text_description`,`html_description`,`image`) values 
+insert  into productline(product_line,code,text_description,html_description,image,created_on) values 
 
-('Classic Cars',599302, 'Attention car enthusiasts: Make your wildest car ownership dreams come true. Whether you are looking for classic muscle cars, dream sports cars or movie-inspired miniatures, you will find great choices in this category. These replicas feature superb attention to detail and craftsmanship and offer features such as working steering system, opening forward compartment, opening rear trunk with removable spare wheel, 4-wheel independent spring suspension, and so on. The models range in size from 1:10 to 1:24 scale and include numerous limited edition and several out-of-production vehicles. All models include a certificate of authenticity from their manufacturers and come fully assembled and ready for display in the home or office.',NULL,NULL),
+('Classic Cars',599302,'Attention car enthusiasts: Make your wildest car ownership dreams come true. Whether you are looking for classic muscle cars, dream sports cars or movie-inspired miniatures, you will find great choices in this category. These replicas feature superb attention to detail and craftsmanship and offer features such as working steering system, opening forward compartment, opening rear trunk with removable spare wheel, 4-wheel independent spring suspension, and so on. The models range in size from 1:10 to 1:24 scale and include numerous limited edition and several out-of-production vehicles. All models include a certificate of authenticity from their manufacturers and come fully assembled and ready for display in the home or office.','<productline><name>Classic Cars</name><code>599302</code><capacity supportClass="a, b, c"><a index="200A">200</a><b index="100B">100</b><c index="500C">500<note for="client">This has certain limitations</note></c></capacity><details><power>5000kw</power><type nr_of_lines="5" command="ERP">1</type></details></productline>',NULL,'2005-02-03'),
 
-('Motorcycles',599302,'Our motorcycles are state of the art replicas of classic as well as contemporary motorcycle legends such as Harley Davidson, Ducati and Vespa. Models contain stunning details such as official logos, rotating wheels, working kickstand, front suspension, gear-shift lever, footbrake lever, and drive chain. Materials used include diecast and plastic. The models range in size from 1:10 to 1:50 scale and include numerous limited edition and several out-of-production vehicles. All models come fully assembled and ready for display in the home or office. Most include a certificate of authenticity.',NULL,NULL),
+('Motorcycles',599302,'Our motorcycles are state of the art replicas of classic as well as contemporary motorcycle legends such as Harley Davidson, Ducati and Vespa. Models contain stunning details such as official logos, rotating wheels, working kickstand, front suspension, gear-shift lever, footbrake lever, and drive chain. Materials used include diecast and plastic. The models range in size from 1:10 to 1:50 scale and include numerous limited edition and several out-of-production vehicles. All models come fully assembled and ready for display in the home or office. Most include a certificate of authenticity.','<productline><name>Motorcycles</name><code>599302</code><capacity supportClass="a, b"><a index="250A">200</a><b index="150B">100</b></capacity><details><power>2000kw</power><type nr_of_lines="3" command="OPS">2</type></details></productline>',NULL,'2004-12-12'),
 
-('Planes',433823,'Unique, diecast airplane and helicopter replicas suitable for collections, as well as home, office or classroom decorations. Models contain stunning details such as official logos and insignias, rotating jet engines and propellers, retractable wheels, and so on. Most come fully assembled and with a certificate of authenticity from their manufacturers.',NULL,NULL),
+('Planes',433823,'Unique, diecast airplane and helicopter replicas suitable for collections, as well as home, office or classroom decorations. Models contain stunning details such as official logos and insignias, rotating jet engines and propellers, retractable wheels, and so on. Most come fully assembled and with a certificate of authenticity from their manufacturers.',NULL,NULL,'2004-02-14'),
 
-('Ships',433823,'The perfect holiday or anniversary gift for executives, clients, friends, and family. These handcrafted model ships are unique, stunning works of art that will be treasured for generations! They come fully assembled and ready for display in the home or office. We guarantee the highest quality, and best value.',NULL,NULL),
+('Ships',433823,'The perfect holiday or anniversary gift for executives, clients, friends, and family. These handcrafted model ships are unique, stunning works of art that will be treasured for generations! They come fully assembled and ready for display in the home or office. We guarantee the highest quality, and best value.',NULL,NULL,'2005-12-12'),
 
-('Trains',123333,'Model trains are a rewarding hobby for enthusiasts of all ages. Whether you\'re looking for collectible wooden trains, electric streetcars or locomotives, you\'ll find a number of great choices for any budget within this category. The interactive aspect of trains makes toy trains perfect for young children. The wooden train sets are ideal for children under the age of 5.',NULL,NULL),
+('Trains',123333,'Model trains are a rewarding hobby for enthusiasts of all ages. Whether you''re looking for collectible wooden trains, electric streetcars or locomotives, you''ll find a number of great choices for any budget within this category. The interactive aspect of trains makes toy trains perfect for young children. The wooden train sets are ideal for children under the age of 5.','<productline><name>Trains</name><code>123333</code><capacity supportClass="a, b, b1, c"><a index="250A">200</a><b index="150B">100<b1 index="300B">300</b1></b><c index="350B">350</c></capacity><details><power>20000kw</power><type nr_of_lines="1" command="ERP">1</type></details></productline>',NULL,'2004-03-03'),
 
-('Trucks and Buses',569331,'The Truck and Bus models are realistic replicas of buses and specialized trucks produced from the early 1920s to present. The models range in size from 1:12 to 1:50 scale and include numerous limited edition and several out-of-production vehicles. Materials used include tin, diecast and plastic. All models include a certificate of authenticity from their manufacturers and are a perfect ornament for the home and office.',NULL,NULL),
+('Trucks and Buses',569331,'The Truck and Bus models are realistic replicas of buses and specialized trucks produced from the early 1920s to present. The models range in size from 1:12 to 1:50 scale and include numerous limited edition and several out-of-production vehicles. Materials used include tin, diecast and plastic. All models include a certificate of authenticity from their manufacturers and are a perfect ornament for the home and office.',NULL,NULL,'2005-02-25'),
 
-('Vintage Cars',223113,'Our Vintage Car models realistically portray automobiles produced from the early 1900s through the 1940s. Materials used include Bakelite, diecast, plastic and wood. Most of the replicas are in the 1:18 and 1:24 scale sizes, which provide the optimum in detail and accuracy. Prices range from $30.00 up to $180.00 for some special limited edition replicas. All models include a certificate of authenticity from their manufacturers and come fully assembled and ready for display in the home or office.',NULL,NULL) ON DUPLICATE KEY UPDATE product_line=product_line;
+('Vintage Cars',223113,'Our Vintage Car models realistically portray automobiles produced from the early 1900s through the 1940s. Materials used include Bakelite, diecast, plastic and wood. Most of the replicas are in the 1:18 and 1:24 scale sizes, which provide the optimum in detail and accuracy. Prices range from $30.00 up to $180.00 for some special limited edition replicas. All models include a certificate of authenticity from their manufacturers and come fully assembled and ready for display in the home or office.',NULL,NULL,'2004-04-02') ON CONFLICT (product_line) DO NOTHING;
 
 /*Data for the table `productlinedetail` */
 
-insert  into `productlinedetail`(`product_line`,`code`,`line_capacity`,`line_type`) values 
+insert  into productlinedetail(product_line,code,line_capacity,line_type) values 
 
 ('Classic Cars',599302,'200A', 1),
 
@@ -685,11 +683,11 @@ insert  into `productlinedetail`(`product_line`,`code`,`line_capacity`,`line_typ
 
 ('Trucks and Buses',569331,'566C',2),
 
-('Vintage Cars',223113,'1000A', 3) ON DUPLICATE KEY UPDATE product_line=product_line;
+('Vintage Cars',223113,'1000A', 3) ON CONFLICT (product_line) DO NOTHING;
 
 /*Data for the table `product` */
 
-insert  into `product`(`product_id`,`product_name`,`product_line`,`product_scale`,`product_vendor`,`product_description`,`quantity_in_stock`,`buy_price`,`msrp`) values 
+insert  into product(product_id,product_name,product_line,product_scale,product_vendor,product_description,quantity_in_stock,buy_price,msrp) values 
 
 (1,'1969 Harley Davidson Ultimate Chopper','Motorcycles','1:10','Min Lin Diecast','This replica features working kickstand, front suspension, gear-shift lever, footbrake lever, drive chain, wheels and steering. All parts are particularly delicate due to their precise scale and require special care and attention.',7933,'48.81','95.70'),
 
@@ -697,7 +695,7 @@ insert  into `product`(`product_id`,`product_name`,`product_line`,`product_scale
 
 (3,'1996 Moto Guzzi 1100i','Motorcycles','1:10','Highway 66 Mini Classics','Official Moto Guzzi logos and insignias, saddle bags located on side of motorcycle, detailed engine, working steering, working suspension, two leather seats, luggage rack, dual exhaust pipes, small saddle bag located on handle bars, two-tone paint with chrome accents, superior die-cast detail , rotating wheels , working kick stand, diecast metal with plastic parts and baked enamel finish.',6625,'68.99','118.94'),
 
-(4,'2003 Harley-Davidson Eagle Drag Bike','Motorcycles','1:10','Red Start Diecast','Model features, official Harley Davidson logos and insignias, detachable rear wheelie bar, heavy diecast metal with resin parts, authentic multi-color tampo-printed graphics, separate engine drive belts, free-turning front fork, rotating tires and rear racing slick, certificate of authenticity, detailed engine, display stand\r\n, precision diecast replica, baked enamel finish, 1:10 scale model, removable fender, seat and tank cover piece for displaying the superior detail of the v-twin engine',5582,'91.02','193.66'),
+(4,'2003 Harley-Davidson Eagle Drag Bike','Motorcycles','1:10','Red Start Diecast','Model features, official Harley Davidson logos and insignias, detachable rear wheelie bar, heavy diecast metal with resin parts, authentic multi-color tampo-printed graphics, separate engine drive belts, free-turning front fork, rotating tires and rear racing slick, certificate of authenticity, detailed engine, display standrn, precision diecast replica, baked enamel finish, 1:10 scale model, removable fender, seat and tank cover piece for displaying the superior detail of the v-twin engine',5582,'91.02','193.66'),
 
 (5,'1972 Alfa Romeo GTA','Classic Cars','1:10','Motor City Art Classics','Features include: Turnable front wheels; steering function; detailed interior; detailed engine; opening hood; opening trunk; opening doors; and detailed chassis.',3252,'85.68','136.00'),
 
@@ -711,7 +709,7 @@ insert  into `product`(`product_id`,`product_name`,`product_line`,`product_scale
 
 (10,'2002 Suzuki XREO','Motorcycles','1:12','Unimax Art Galleries','Official logos and insignias, saddle bags located on side of motorcycle, detailed engine, working steering, working suspension, two leather seats, luggage rack, dual exhaust pipes, small saddle bag located on handle bars, two-tone paint with chrome accents, superior die-cast detail , rotating wheels , working kick stand, diecast metal with plastic parts and baked enamel finish.',9997,'66.27','150.62'),
 
-(11,'1969 Corvair Monza','Classic Cars','1:18','Welly Diecast Productions','1:18 scale die-cast about 10\" long doors open, hood opens, trunk opens and wheels roll',6906,'89.14','151.08'),
+(11,'1969 Corvair Monza','Classic Cars','1:18','Welly Diecast Productions','1:18 scale die-cast about 10" long doors open, hood opens, trunk opens and wheels roll',6906,'89.14','151.08'),
 
 (12,'1968 Dodge Charger','Classic Cars','1:12','Welly Diecast Productions','1:12 scale model of a 1968 Dodge Charger. Hood, doors and trunk all open to reveal highly detailed interior features. Steering wheel actually turns the front wheels. Color black',9123,'75.16','117.44'),
 
@@ -719,7 +717,7 @@ insert  into `product`(`product_id`,`product_name`,`product_line`,`product_scale
 
 (14,'1970 Plymouth Hemi Cuda','Classic Cars','1:12','Studio M Art Models','Very detailed 1970 Plymouth Cuda model in 1:12 scale. The Cuda is generally accepted as one of the fastest original muscle cars from the 1970s. This model is a reproduction of one of the orginal 652 cars built in 1970. Red color.',5663,'31.92','79.80'),
 
-(15,'1957 Chevy Pickup','Trucks and Buses','1:12','Exoto Designs','1:12 scale die-cast about 20\" long Hood opens, Rubber wheels',6125,'55.70','118.50'),
+(15,'1957 Chevy Pickup','Trucks and Buses','1:12','Exoto Designs','1:12 scale die-cast about 20" long Hood opens, Rubber wheels',6125,'55.70','118.50'),
 
 (16,'1969 Dodge Charger','Classic Cars','1:12','Welly Diecast Productions','Detailed model of the 1969 Dodge Charger. This model includes finely detailed interior and exterior features. Painted in red and white.',7323,'58.73','115.16'),
 
@@ -733,7 +731,7 @@ insert  into `product`(`product_id`,`product_name`,`product_line`,`product_scale
 
 (21,'1965 Aston Martin DB5','Classic Cars','1:18','Classic Metal Creations','Die-cast model of the silver 1965 Aston Martin DB5 in silver. This model includes full wire wheels and doors that open with fully detailed passenger compartment. In 1:18 scale, this model measures approximately 10 inches/20 cm long.',9042,'65.96','124.44'),
 
-(22,'1980s Black Hawk Helicopter','Planes','1:18','Red Start Diecast','1:18 scale replica of actual Army\'s UH-60L BLACK HAWK Helicopter. 100% hand-assembled. Features rotating rotor blades, propeller blades and rubber wheels.',5330,'77.27','157.69'),
+(22,'1980s Black Hawk Helicopter','Planes','1:18','Red Start Diecast','1:18 scale replica of actual Army''s UH-60L BLACK HAWK Helicopter. 100% hand-assembled. Features rotating rotor blades, propeller blades and rubber wheels.',5330,'77.27','157.69'),
 
 (23,'1917 Grand Touring Sedan','Vintage Cars','1:18','Welly Diecast Productions','This 1:18 scale replica of the 1917 Grand Touring car has all the features you would expect from museum quality reproductions: all four doors and bi-fold hood opening, detailed engine and instrument panel, chrome-look trim, and tufted upholstery, all topped off with a factory baked-enamel finish.',2724,'86.70','170.00'),
 
@@ -741,7 +739,7 @@ insert  into `product`(`product_id`,`product_name`,`product_line`,`product_scale
 
 (25,'1995 Honda Civic','Classic Cars','1:18','Min Lin Diecast','This model features, opening hood, opening doors, detailed engine, rear spoiler, opening trunk, working steering, tinted windows, baked enamel finish. Color yellow.',9772,'93.89','142.25'),
 
-(26,'1998 Chrysler Plymouth Prowler','Classic Cars','1:18','Gearbox Collectibles','Turnable front wheels; steering function; detailed interior; detailed engine; opening hood; opening trunk; opening doors; and detailed chassis.',4724,'101.51','163.73'),
+(26,'1998 Chrysler Plymouth Prowler','Classic Cars','1:18','Gearbox Collectibles','Turnable front wheels; steering create function; detailed interior; detailed engine; opening hood; opening trunk; opening doors; and detailed chassis.',4724,'101.51','163.73'),
 
 (27,'1911 Ford Town Car','Vintage Cars','1:18','Motor City Art Classics','Features opening hood, opening doors, opening trunk, wide white wall tires, front door arm rests, working steering system.',540,'33.30','60.54'),
 
@@ -765,7 +763,7 @@ insert  into `product`(`product_id`,`product_name`,`product_line`,`product_scale
 
 (37,'1999 Yamaha Speed Boat','Ships','1:18','Min Lin Diecast','Exact replica. Wood and Metal. Many extras including rigging, long boats, pilot house, anchors, etc. Comes with three masts, all square-rigged.',4259,'51.61','86.02'),
 
-(38,'18th Century Vintage Horse Carriage','Vintage Cars','1:18','Red Start Diecast','Hand crafted diecast-like metal horse carriage is re-created in about 1:18 scale of antique horse carriage. This antique style metal Stagecoach is all hand-assembled with many different parts.\r\n\r\nThis collectible metal horse carriage is painted in classic Red, and features turning steering wheel and is entirely hand-finished.',5992,'60.74','104.72'),
+(38,'18th Century Vintage Horse Carriage','Vintage Cars','1:18','Red Start Diecast','Hand crafted diecast-like metal horse carriage is re-created in about 1:18 scale of antique horse carriage. This antique style metal Stagecoach is all hand-assembled with many different parts.rnrnThis collectible metal horse carriage is painted in classic Red, and features turning steering wheel and is entirely hand-finished.',5992,'60.74','104.72'),
 
 (39,'1903 Ford Model A','Vintage Cars','1:18','Unimax Art Galleries','Features opening trunk,  working steering system',3913,'68.30','136.59'),
 
@@ -779,7 +777,7 @@ insert  into `product`(`product_id`,`product_name`,`product_line`,`product_scale
 
 (44,'1917 Maxwell Touring Car','Vintage Cars','1:18','Exoto Designs','Features Gold Trim, Full Size Spare Tire, Chrome Trim, Chrome Grille, Opening Hood, Opening Doors, Opening Trunk, Detailed Engine, Working Steering System',7913,'57.54','99.21'),
 
-(45,'1976 Ford Gran Torino','Classic Cars','1:18','Gearbox Collectibles','Highly detailed 1976 Ford Gran Torino \"Starsky and Hutch\" diecast model. Very well constructed and painted in red and white patterns.',9127,'73.49','146.99'),
+(45,'1976 Ford Gran Torino','Classic Cars','1:18','Gearbox Collectibles','Highly detailed 1976 Ford Gran Torino "Starsky and Hutch" diecast model. Very well constructed and painted in red and white patterns.',9127,'73.49','146.99'),
 
 (46,'1948 Porsche Type 356 Roadster','Classic Cars','1:18','Gearbox Collectibles','This model features working front and rear suspension on accurately replicated and actuating shock absorbers as well as opening engine cover, rear stabilizer flap,  and 4 opening doors.',8990,'62.16','141.28'),
 
@@ -793,7 +791,7 @@ insert  into `product`(`product_id`,`product_name`,`product_line`,`product_scale
 
 (51,'1904 Buick Runabout','Vintage Cars','1:18','Exoto Designs','Features opening trunk,  working steering system',8290,'52.66','87.77'),
 
-(52,'1940s Ford truck','Trucks and Buses','1:18','Motor City Art Classics','This 1940s Ford Pick-Up truck is re-created in 1:18 scale of original 1940s Ford truck. This antique style metal 1940s Ford Flatbed truck is all hand-assembled. This collectible 1940\'s Pick-Up truck is painted in classic dark green color, and features rotating wheels.',3128,'84.76','121.08'),
+(52,'1940s Ford truck','Trucks and Buses','1:18','Motor City Art Classics','This 1940s Ford Pick-Up truck is re-created in 1:18 scale of original 1940s Ford truck. This antique style metal 1940s Ford Flatbed truck is all hand-assembled. This collectible 1940''s Pick-Up truck is painted in classic dark green color, and features rotating wheels.',3128,'84.76','121.08'),
 
 (53,'1939 Cadillac Limousine','Vintage Cars','1:18','Studio M Art Models','Features completely detailed interior including Velvet flocked drapes,deluxe wood grain floor, and a wood grain casket with seperate chrome handles',6645,'23.14','50.31'),
 
@@ -803,11 +801,11 @@ insert  into `product`(`product_id`,`product_name`,`product_line`,`product_scale
 
 (56,'1970 Chevy Chevelle SS 454','Classic Cars','1:24','Unimax Art Galleries','This model features rotating wheels, working streering system and opening doors. All parts are particularly delicate due to their precise scale and require special care and attention. It should not be picked up by the doors, roof, hood or trunk.',1005,'49.24','73.49'),
 
-(57,'1970 Dodge Coronet','Classic Cars','1:24','Highway 66 Mini Classics','1:24 scale die-cast about 18\" long doors open, hood opens and rubber wheels',4074,'32.37','57.80'),
+(57,'1970 Dodge Coronet','Classic Cars','1:24','Highway 66 Mini Classics','1:24 scale die-cast about 18" long doors open, hood opens and rubber wheels',4074,'32.37','57.80'),
 
 (58,'1997 BMW R 1100 S','Motorcycles','1:24','Autoart Studio Design','Detailed scale replica with working suspension and constructed from over 70 parts',7003,'60.86','112.70'),
 
-(59,'1966 Shelby Cobra 427 S/C','Classic Cars','1:24','Carousel DieCast Legends','This diecast model of the 1966 Shelby Cobra 427 S/C includes many authentic details and operating parts. The 1:24 scale model of this iconic lighweight sports car from the 1960s comes in silver and it\'s own display case.',8197,'29.18','50.31'),
+(59,'1966 Shelby Cobra 427 S/C','Classic Cars','1:24','Carousel DieCast Legends','This diecast model of the 1966 Shelby Cobra 427 S/C includes many authentic details and operating parts. The 1:24 scale model of this iconic lighweight sports car from the 1960s comes in silver and it''s own display case.',8197,'29.18','50.31'),
 
 (60,'1928 British Royal Navy Airplane','Planes','1:24','Classic Metal Creations','Official logos and insignias',3627,'66.74','109.42'),
 
@@ -845,7 +843,7 @@ insert  into `product`(`product_id`,`product_name`,`product_line`,`product_scale
 
 (77,'1940 Ford Delivery Sedan','Vintage Cars','1:24','Carousel DieCast Legends','Chrome Trim, Chrome Grille, Opening Hood, Opening Doors, Opening Trunk, Detailed Engine, Working Steering System. Color black.',6621,'48.64','83.86'),
 
-(78,'1956 Porsche 356A Coupe','Classic Cars','1:18','Classic Metal Creations','Features include: Turnable front wheels; steering function; detailed interior; detailed engine; opening hood; opening trunk; opening doors; and detailed chassis.',6600,'98.30','140.43'),
+(78,'1956 Porsche 356A Coupe','Classic Cars','1:18','Classic Metal Creations','Features include: Turnable front wheels; steering create function; detailed interior; detailed engine; opening hood; opening trunk; opening doors; and detailed chassis.',6600,'98.30','140.43'),
 
 (79,'Corsair F4U ( Bird Cage)','Planes','1:24','Second Gear Diecast','Has retractable wheels and comes with a stand. Official logos and insignias.',6812,'29.34','68.24'),
 
@@ -867,7 +865,7 @@ insert  into `product`(`product_id`,`product_name`,`product_line`,`product_scale
 
 (88,'1954 Greyhound Scenicruiser','Trucks and Buses','1:32','Classic Metal Creations','Model features bi-level seating, 50 windows, skylights & glare resistant glass, working steering system, original logos',2874,'25.98','54.11'),
 
-(89,'1950\'s Chicago Surface Lines Streetcar','Trains','1:32','Gearbox Collectibles','This streetcar is a joy to see. It has 80 separate windows, electric wire guides, detailed interiors with seats, poles and drivers controls, rolling and turning wheel assemblies, plus authentic factory baked-enamel finishes (Green Hornet for Chicago and Cream and Crimson for Boston).',8601,'26.72','62.14'),
+(89,'1950''s Chicago Surface Lines Streetcar','Trains','1:32','Gearbox Collectibles','This streetcar is a joy to see. It has 80 separate windows, electric wire guides, detailed interiors with seats, poles and drivers controls, rolling and turning wheel assemblies, plus authentic factory baked-enamel finishes (Green Hornet for Chicago and Cream and Crimson for Boston).',8601,'26.72','62.14'),
 
 (90,'1996 Peterbilt 379 Stake Bed with Outrigger','Trucks and Buses','1:32','Red Start Diecast','This model features, opening doors, detailed engine, working steering, tinted windows, detailed interior, die-struck logos, removable stakes operating outriggers, detachable second trailer, functioning 360-degree self loader, precision molded resin trailer and trim, baked enamel finish on cab',814,'33.61','64.64'),
 
@@ -883,23 +881,23 @@ insert  into `product`(`product_id`,`product_name`,`product_line`,`product_scale
 
 (96,'2002 Yamaha YZR M1','Motorcycles','1:50','Autoart Studio Design','Features rotating wheels , working kick stand. Comes with stand.',600,'34.17','81.36'),
 
-(97,'The Schooner Bluenose','Ships','1:700','Autoart Studio Design','All wood with canvas sails. Measures 31 1/2 inches in Length, 22 inches High and 4 3/4 inches Wide. Many extras.\r\nThe schooner Bluenose was built in Nova Scotia in 1921 to fish the rough waters off the coast of Newfoundland. Because of the Bluenose racing prowess she became the pride of all Canadians. Still featured on stamps and the Canadian dime, the Bluenose was lost off Haiti in 1946.',1897,'34.00','66.67'),
+(97,'The Schooner Bluenose','Ships','1:700','Autoart Studio Design','All wood with canvas sails. Measures 31 1/2 inches in Length, 22 inches High and 4 3/4 inches Wide. Many extras.rnThe schooner Bluenose was built in Nova Scotia in 1921 to fish the rough waters off the coast of Newfoundland. Because of the Bluenose racing prowess she became the pride of all Canadians. Still featured on stamps and the Canadian dime, the Bluenose was lost off Haiti in 1946.',1897,'34.00','66.67'),
 
 (98,'American Airlines: B767-300','Planes','1:700','Min Lin Diecast','Exact replia with official logos and insignias and retractable wheels',5841,'51.15','91.34'),
 
-(99,'The Mayflower','Ships','1:700','Studio M Art Models','Measures 31 1/2 inches Long x 25 1/2 inches High x 10 5/8 inches Wide\r\nAll wood with canvas sail. Extras include long boats, rigging, ladders, railing, anchors, side cannons, hand painted, etc.',737,'43.30','86.61'),
+(99,'The Mayflower','Ships','1:700','Studio M Art Models','Measures 31 1/2 inches Long x 25 1/2 inches High x 10 5/8 inches WidernAll wood with canvas sail. Extras include long boats, rigging, ladders, railing, anchors, side cannons, hand painted, etc.',737,'43.30','86.61'),
 
-(100,'HMS Bounty','Ships','1:700','Unimax Art Galleries','Measures 30 inches Long x 27 1/2 inches High x 4 3/4 inches Wide. \r\nMany extras including rigging, long boats, pilot house, anchors, etc. Comes with three masts, all square-rigged.',3501,'39.83','90.52'),
+(100,'HMS Bounty','Ships','1:700','Unimax Art Galleries','Measures 30 inches Long x 27 1/2 inches High x 4 3/4 inches Wide. rnMany extras including rigging, long boats, pilot house, anchors, etc. Comes with three masts, all square-rigged.',3501,'39.83','90.52'),
 
 (101,'America West Airlines B757-200','Planes','1:700','Motor City Art Classics','Official logos and insignias. Working steering system. Rotating jet engines',9653,'68.80','99.72'),
 
-(102,'The USS Constitution Ship','Ships','1:700','Red Start Diecast','All wood with canvas sails. Measures 31 1/2\" Length x 22 3/8\" High x 8 1/4\" Width. Extras include 4 boats on deck, sea sprite on bow, anchors, copper railing, pilot houses, etc.',7083,'33.97','72.28'),
+(102,'The USS Constitution Ship','Ships','1:700','Red Start Diecast','All wood with canvas sails. Measures 31 1/2" Length x 22 3/8" High x 8 1/4" Width. Extras include 4 boats on deck, sea sprite on bow, anchors, copper railing, pilot houses, etc.',7083,'33.97','72.28'),
 
-(103,'1982 Camaro Z28','Classic Cars','1:18','Carousel DieCast Legends','Features include opening and closing doors. Color: White. \r\nMeasures approximately 9 1/2\" Long.',6934,'46.53','101.15'),
+(103,'1982 Camaro Z28','Classic Cars','1:18','Carousel DieCast Legends','Features include opening and closing doors. Color: White. rnMeasures approximately 9 1/2" Long.',6934,'46.53','101.15'),
 
 (104,'ATA: B757-300','Planes','1:700','Highway 66 Mini Classics','Exact replia with official logos and insignias and retractable wheels',7106,'59.33','118.65'),
 
-(105,'F/A 18 Hornet 1/72','Planes','1:72','Motor City Art Classics','10\" Wingspan with retractable landing gears.Comes with pilot',551,'54.40','80.00'),
+(105,'F/A 18 Hornet 1/72','Planes','1:72','Motor City Art Classics','10" Wingspan with retractable landing gears.Comes with pilot',551,'54.40','80.00'),
 
 (106,'The Titanic','Ships','1:700','Carousel DieCast Legends','Completed model measures 19 1/2 inches long, 9 inches high, 3inches wide and is in barn red/black. All wood and metal.',1956,'51.09','100.17'),
 
@@ -907,13 +905,13 @@ insert  into `product`(`product_id`,`product_name`,`product_line`,`product_scale
 
 (108,'American Airlines: MD-11S','Planes','1:700','Second Gear Diecast','Polished finish. Exact replia with official logos and insignias and retractable wheels',8820,'36.27','74.03'),
 
-(109,'Boeing X-32A JSF','Planes','1:72','Motor City Art Classics','10\" Wingspan with retractable landing gears.Comes with pilot',4857,'32.77','49.66'),
+(109,'Boeing X-32A JSF','Planes','1:72','Motor City Art Classics','10" Wingspan with retractable landing gears.Comes with pilot',4857,'32.77','49.66'),
 
-(110,'Pont Yacht','Ships','1:72','Unimax Art Galleries','Measures 38 inches Long x 33 3/4 inches High. Includes a stand.\r\nMany extras including rigging, long boats, pilot house, anchors, etc. Comes with 2 masts, all square-rigged',414,'33.30','54.60') ON DUPLICATE KEY UPDATE product_id=product_id;
+(110,'Pont Yacht','Ships','1:72','Unimax Art Galleries','Measures 38 inches Long x 33 3/4 inches High. Includes a stand.rnMany extras including rigging, long boats, pilot house, anchors, etc. Comes with 2 masts, all square-rigged',414,'33.30','54.60') ON CONFLICT (product_id) DO NOTHING;
 
 /*Data for the table `order` */
 
-insert  into `order`(`order_id`,`order_date`,`required_date`,`shipped_date`,`status`,`comments`,`customer_number`) values 
+insert  into "order"(order_id,order_date,required_date,shipped_date,status,comments,customer_number) values 
 
 (10100,'2003-01-06','2003-01-13','2003-01-10','Shipped',NULL,363),
 
@@ -1043,13 +1041,13 @@ insert  into `order`(`order_id`,`order_date`,`required_date`,`shipped_date`,`sta
 
 (10163,'2003-10-20','2003-10-27','2003-10-24','Shipped',NULL,424),
 
-(10164,'2003-10-21','2003-10-30','2003-10-23','Resolved','This order was disputed, but resolved on 11/1/2003; Customer doesn\'t like the colors and precision of the models.',452),
+(10164,'2003-10-21','2003-10-30','2003-10-23','Resolved','This order was disputed, but resolved on 11/1/2003; Customer doesn''t like the colors and precision of the models.',452),
 
-(10165,'2003-10-22','2003-10-31','2003-12-26','Shipped','This order was on hold because customers\'s credit limit had been exceeded. Order will ship when payment is received',148),
+(10165,'2003-10-22','2003-10-31','2003-12-26','Shipped','This order was on hold because customers''s credit limit had been exceeded. Order will ship when payment is received',148),
 
 (10166,'2003-10-21','2003-10-30','2003-10-27','Shipped',NULL,462),
 
-(10167,'2003-10-23','2003-10-30',NULL,'Cancelled','Customer called to cancel. The warehouse was notified in time and the order didn\'t ship. They have a new VP of Sales and are shifting their sales model. Our VP of Sales should contact them.',448),
+(10167,'2003-10-23','2003-10-30',NULL,'Cancelled','Customer called to cancel. The warehouse was notified in time and the order didn''t ship. They have a new VP of Sales and are shifting their sales model. Our VP of Sales should contact them.',448),
 
 (10168,'2003-10-28','2003-11-03','2003-11-01','Shipped',NULL,161),
 
@@ -1369,7 +1367,7 @@ insert  into `order`(`order_id`,`order_date`,`required_date`,`shipped_date`,`sta
 
 (10326,'2004-11-09','2004-11-16','2004-11-10','Shipped',NULL,144),
 
-(10327,'2004-11-10','2004-11-19','2004-11-13','Resolved','Order was disputed and resolved on 12/1/04. The Sales Manager was involved. Customer claims the scales of the models don\'t match what was discussed.',145),
+(10327,'2004-11-10','2004-11-19','2004-11-13','Resolved','Order was disputed and resolved on 12/1/04. The Sales Manager was involved. Customer claims the scales of the models don''t match what was discussed.',145),
 
 (10328,'2004-11-12','2004-11-21','2004-11-18','Shipped','Customer very concerned about the exact color of the models. There is high risk that he may dispute the order because there is a slight color mismatch',278),
 
@@ -1449,7 +1447,7 @@ insert  into `order`(`order_id`,`order_date`,`required_date`,`shipped_date`,`sta
 
 (10366,'2005-01-10','2005-01-19','2005-01-12','Shipped',NULL,381),
 
-(10367,'2005-01-12','2005-01-21','2005-01-16','Resolved','This order was disputed and resolved on 2/1/2005. Customer claimed that container with shipment was damaged. FedEx\'s investigation proved this wrong.',205),
+(10367,'2005-01-12','2005-01-21','2005-01-16','Resolved','This order was disputed and resolved on 2/1/2005. Customer claimed that container with shipment was damaged. FedEx''s investigation proved this wrong.',205),
 
 (10368,'2005-01-19','2005-01-27','2005-01-24','Shipped','Can we renegotiate this one?',124),
 
@@ -1487,7 +1485,7 @@ insert  into `order`(`order_id`,`order_date`,`required_date`,`shipped_date`,`sta
 
 (10385,'2005-02-28','2005-03-09','2005-03-01','Shipped',NULL,124),
 
-(10386,'2005-03-01','2005-03-09','2005-03-06','Resolved','Disputed then Resolved on 3/15/2005. Customer doesn\'t like the craftsmaship of the models.',141),
+(10386,'2005-03-01','2005-03-09','2005-03-06','Resolved','Disputed then Resolved on 3/15/2005. Customer doesn''t like the craftsmaship of the models.',141),
 
 (10387,'2005-03-02','2005-03-09','2005-03-06','Shipped','We need to keep in close contact with their Marketing VP. He is the decision maker for all their purchases.',148),
 
@@ -1545,11 +1543,11 @@ insert  into `order`(`order_id`,`order_date`,`required_date`,`shipped_date`,`sta
 
 (10414,'2005-05-06','2005-05-13',NULL,'On Hold','Customer credit limit exceeded. Will ship when a payment is received.',362),
 
-(10415,'2005-05-09','2005-05-20','2005-05-12','Disputed','Customer claims the scales of the models don\'t match what was discussed. I keep all the paperwork though to prove otherwise',471),
+(10415,'2005-05-09','2005-05-20','2005-05-12','Disputed','Customer claims the scales of the models don''t match what was discussed. I keep all the paperwork though to prove otherwise',471),
 
 (10416,'2005-05-10','2005-05-16','2005-05-14','Shipped',NULL,386),
 
-(10417,'2005-05-13','2005-05-19','2005-05-19','Disputed','Customer doesn\'t like the colors and precision of the models.',141),
+(10417,'2005-05-13','2005-05-19','2005-05-19','Disputed','Customer doesn''t like the colors and precision of the models.',141),
 
 (10418,'2005-05-16','2005-05-24','2005-05-20','Shipped',NULL,412),
 
@@ -1565,11 +1563,11 @@ insert  into `order`(`order_id`,`order_date`,`required_date`,`shipped_date`,`sta
 
 (10424,'2005-05-31','2005-06-08',NULL,'In Process',NULL,141),
 
-(10425,'2005-05-31','2005-06-07',NULL,'In Process',NULL,119) ON DUPLICATE KEY UPDATE order_id=order_id;
+(10425,'2005-05-31','2005-06-07',NULL,'In Process',NULL,119) ON CONFLICT (order_id) DO NOTHING;
 
 /*Data for the table `orderdetail` */
 
-insert  into `orderdetail`(`order_id`,`product_id`,`quantity_ordered`,`price_each`,`order_line_number`) values 
+insert  into orderdetail(order_id,product_id,quantity_ordered,price_each,order_line_number) values 
 
 (10100,23,30,'136.00',3),
 
@@ -7561,11 +7559,12 @@ insert  into `orderdetail`(`order_id`,`product_id`,`quantity_ordered`,`price_eac
 
 (10425,88,11,'50.32',6),
 
-(10425,94,18,'94.92',2) ON DUPLICATE KEY UPDATE order_id=order_id;
+(10425,94,18,'94.92',2) ON CONFLICT (order_id, product_id) DO NOTHING;
 
-/* Data for the table `payment` */
+/*Data for the table `payment` */
 
-insert  into `payment`(`customer_number`,`check_number`,`payment_date`,`invoice_amount`, `caching_date`) values 
+insert into payment(customer_number,check_number,payment_date,invoice_amount,caching_date) values 
+
 
 (103,'HQ336336','2004-10-19 12:00:01','6066.78', '2004-10-19 12:30:15'),
 
@@ -8111,11 +8110,11 @@ insert  into `payment`(`customer_number`,`check_number`,`payment_date`,`invoice_
 
 (496,'MB342426','2003-07-16 21:10:15','32077.44', '2003-07-16 23:04:15'),
 
-(496,'MN89921','2004-12-31 09:02:11','52166.00', '2004-12-31 09:02:11') ON DUPLICATE KEY UPDATE customer_number=customer_number;
+(496,'MN89921','2004-12-31 09:02:11','52166.00', '2004-12-31 09:02:11') ON CONFLICT (customer_number,check_number) DO NOTHING;
 
 /*Data for the table `bank_transaction` */
 
-insert  into `bank_transaction`(`transaction_id`,`bank_name`,`bank_iban`,`transfer_amount`,`customer_number`,`check_number`,`caching_date`,`status`) values 
+insert into bank_transaction(transaction_id,bank_name,bank_iban,transfer_amount,customer_number,check_number,caching_date,status) values 
 
 (1,'Bank Ltd. US','DN44398834N34','6631.36',447,'AO757239','2003-09-15 18:22:54','SUCCESS'),
 
@@ -8135,9 +8134,7 @@ insert  into `bank_transaction`(`transaction_id`,`bank_name`,`bank_iban`,`transf
 
 (9,'Optimus Bank','8V34VN5U435334','5312.23',333,'NF959653','2005-03-01 19:32:56','RETRIED'),
 
-(10,'BRT Bank','TVNU343T38TUNU3T','52151.81',278,'GP636783', '2003-03-02 12:32:00','FAILED') ON DUPLICATE KEY UPDATE transaction_id=transaction_id;
-
-/*Data for the table `sale` */
+(10,'BRT Bank','TVNU343T38TUNU3T','52151.81',278,'GP636783', '2003-03-02 12:32:00','FAILED') ON CONFLICT (transaction_id) DO NOTHING;
 
 insert into sale(sale_id,fiscal_year,sale,employee_number,trend) values 
 
@@ -8177,16 +8174,16 @@ insert into sale(sale_id,fiscal_year,sale,employee_number,trend) values
 
 (18, 2004, 3884.34, 1504,'DOWN'),
 
-(19, 2004, 5241.44, 1504,'CONSTANT') ON DUPLICATE KEY UPDATE sale_id=sale_id;
+(19, 2004, 5241.44, 1504,'CONSTANT') ON CONFLICT (sale_id) DO NOTHING;
 
 /*Data for the table `top3product` */
 
-insert into `top3product`(`product_id`,`product_name`) values 
+insert into top3product(product_id,product_name) values 
 
 (40, '1992 Ferrari 360 Spider red'),
 
 (1, '1969 Harley Davidson Ultimate Chopper'),
 
-(2, '1952 Alpine Renault 1300') ON DUPLICATE KEY UPDATE product_id=product_id;
+(2, '1952 Alpine Renault 1300') ON CONFLICT (product_id) DO NOTHING;
 
 /* END */
