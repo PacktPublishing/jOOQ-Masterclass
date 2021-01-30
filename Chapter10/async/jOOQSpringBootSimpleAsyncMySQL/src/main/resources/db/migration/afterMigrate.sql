@@ -8115,27 +8115,27 @@ insert  into `payment`(`customer_number`,`check_number`,`payment_date`,`invoice_
 
 /*Data for the table `bank_transaction` */
 
-insert  into `bank_transaction`(`transaction_id`,`bank_name`,`bank_iban`,`transfer_amount`,`customer_number`,`check_number`,`caching_date`) values 
+insert  into `bank_transaction`(`transaction_id`,`bank_name`,`bank_iban`,`transfer_amount`,`customer_number`,`check_number`,`caching_date`,`status`) values 
 
-(1,'Bank Ltd. US','DN44398834N34','6631.36',447,'AO757239','2003-09-15 18:22:54'),
+(1,'Bank Ltd. US','DN44398834N34','6631.36',447,'AO757239','2003-09-15 18:22:54','SUCCESS'),
 
-(2,'Bank Ltd. US','348398H3493HG93','26304.13',447,'OU516561','2004-12-17 16:45:22'),
+(2,'Bank Ltd. US','348398H3493HG93','26304.13',447,'OU516561','2004-12-17 16:45:22','FAILED'),
 
-(3,'Transilvania Bank','8TVN598N454VN84T','9977.85',462,'GC60330','2003-11-08 18:57:25'),
+(3,'Transilvania Bank','8TVN598N454VN84T','9977.85',462,'GC60330','2003-11-08 18:57:25','SUCCESS'),
 
-(4,'5 Stars Bank','8VN8UNT5U45T8','48355.87',462,'PE176846', '2004-11-27 14:30:22'),
+(4,'5 Stars Bank','8VN8UNT5U45T8','48355.87',462,'PE176846', '2004-11-27 14:30:22','SUCCESS'),
 
-(5,'5 Stars Bank','TVU58NU58U84N4YUG','33967.73',398,'AJ478695','2005-02-14 12:09:15'),
+(5,'5 Stars Bank','TVU58NU58U84N4YUG','33967.73',398,'AJ478695','2005-02-14 12:09:15','FAILED'),
 
-(6,'Optimus Bank','8V34VN5U435334','4588.36',333,'NF959653','2005-03-01 12:12:00'),
+(6,'Optimus Bank','8V34VN5U435334','4588.36',333,'NF959653','2005-03-01 12:12:00','UNAUTHORIZED'),
 
-(7,'Optimus Bank','8V34VN5U435334','8987.36',333,'NF959653','2005-03-01 14:00:00'),
+(7,'Optimus Bank','8V34VN5U435334','8987.36',333,'NF959653','2005-03-01 14:00:00','UNAUTHORIZED'),
 
-(8,'Optimus Bank','8V34VN5U435334','2544.36',333,'NF959653','2005-03-01 18:20:10'),
+(8,'Optimus Bank','8V34VN5U435334','2544.36',333,'NF959653','2005-03-01 18:20:10','FAILED'),
 
-(9,'Optimus Bank','8V34VN5U435334','5312.23',333,'NF959653','2005-03-01 19:32:56'),
+(9,'Optimus Bank','8V34VN5U435334','5312.23',333,'NF959653','2005-03-01 19:32:56','RETRIED'),
 
-(10,'BRT Bank','TVNU343T38TUNU3T','52151.81',278,'GP636783', '2003-03-02 12:32:00') ON DUPLICATE KEY UPDATE transaction_id=transaction_id;
+(10,'BRT Bank','TVNU343T38TUNU3T','52151.81',278,'GP636783', '2003-03-02 12:32:00','FAILED') ON DUPLICATE KEY UPDATE transaction_id=transaction_id;
 
 /*Data for the table `sale` */
 

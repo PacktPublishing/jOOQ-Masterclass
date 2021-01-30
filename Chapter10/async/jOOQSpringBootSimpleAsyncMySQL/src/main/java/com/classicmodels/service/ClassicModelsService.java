@@ -12,8 +12,9 @@ public class ClassicModelsService {
         this.classicModelsRepository = classicModelsRepository;
     }
 
-    public void insertAsync() {
+    public void updateTop3ProductsAsync() {
         
-        classicModelsRepository.insertAsync().join();
+        classicModelsRepository.updateTop3ProductsAsync().join();        
+        classicModelsRepository.insertUpdateDeleteOrder().join();
     }
 }
