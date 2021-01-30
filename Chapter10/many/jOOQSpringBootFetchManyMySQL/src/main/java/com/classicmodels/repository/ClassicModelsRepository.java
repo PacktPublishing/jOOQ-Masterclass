@@ -1,6 +1,7 @@
 package com.classicmodels.repository;
 
 import java.util.List;
+import static jooq.generated.tables.Employee.EMPLOYEE;
 import jooq.generated.tables.pojos.Office;
 import jooq.generated.tables.pojos.Employee;
 import org.jooq.DSLContext;
@@ -22,7 +23,7 @@ public class ClassicModelsRepository {
     public void fetchEmployeesAndOffices() {
 
         Results results = ctx.resultQuery("SELECT * FROM employee LIMIT 10; SELECT * FROM office LIMIT 5")
-                .fetchMany();
+                .fetchMany();                
 
         System.out.println("Results: " + results);
         System.out.println("Size: " + results.size()); // 2, means 2 result sets
