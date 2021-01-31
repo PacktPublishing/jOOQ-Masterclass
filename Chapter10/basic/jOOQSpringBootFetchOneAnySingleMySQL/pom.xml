@@ -33,13 +33,6 @@
     </properties>
 
     <dependencies>        
-        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-aop -->
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-aop</artifactId>
-    <version>2.4.1</version>
-</dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
@@ -184,21 +177,7 @@
                                     (default is 5 seconds) -->
                                     <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>
                                 </database>
-                                
-                                <!-- Rename the generated DAOs classes -->                      
-                                <strategy>
-                                    <matchers>
-                                        <tables>
-                                            <table>
-                                                <daoClass>                                                         
-                                                    <expression>$0_Repository</expression>
-                                                    <transform>PASCAL</transform>                                                                                      
-                                                </daoClass>
-                                            </table>
-                                        </tables>
-                                    </matchers>
-                                </strategy>
-                                
+                                                                
                                 <!-- jOOQ will generate POJOs in your behalf -->
                                 <generate>
                                     <pojos>true</pojos> 
