@@ -12,9 +12,6 @@ import org.jooq.DSLContext;
 import org.jooq.JSON;
 import org.jooq.Record1;
 import org.jooq.Result;
-import static org.jooq.impl.DSL.jsonObject;
-import static org.jooq.impl.DSL.jsonArrayAgg;
-import static org.jooq.impl.DSL.key;
 import static org.jooq.impl.DSL.select;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,29 +28,11 @@ public class ClassicModelsRepository {
 
     public String jsonProductlineProductOrderdetail() {
 
-        Result<Record1<JSON>> result = ctx.select(
-                jsonObject("root", jsonArrayAgg(
-                        jsonObject(
-                                key("productLine").value(PRODUCTLINE.PRODUCT_LINE),
-                                key("textDescription").value(PRODUCTLINE.TEXT_DESCRIPTION),
-                                key("products").value(select(jsonArrayAgg(
-                                        jsonObject(key("productName").value(PRODUCT.PRODUCT_NAME),
-                                                key("productVendor").value(PRODUCT.PRODUCT_VENDOR),
-                                                key("quantityInStock").value(PRODUCT.QUANTITY_IN_STOCK),
-                                                key("orderdetail")
-                                                        .value(select(jsonArrayAgg(
-                                                                jsonObject(
-                                                                        key("quantityOrdered").value(ORDERDETAIL.QUANTITY_ORDERED),
-                                                                        key("priceEach").value(ORDERDETAIL.PRICE_EACH)))
-                                                                .orderBy(ORDERDETAIL.QUANTITY_ORDERED))
-                                                                .from(ORDERDETAIL)
-                                                                .where(ORDERDETAIL.PRODUCT_ID.eq(PRODUCT.PRODUCT_ID)))))
-                                        .orderBy(PRODUCT.QUANTITY_IN_STOCK))
-                                        .from(PRODUCT)
-                                        .where(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE))
-                                        .orderBy(PRODUCTLINE.PRODUCT_LINE))))))
-                .from(PRODUCTLINE)                
-                .fetch(); // feel free to practice fetchOne(), fetchAny(), fetchSingle() and so on
+        Result<Record1<JSON>> result = ctx.select(PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.CODE)                
+                .from(PRODUCTLINE)
+                .orderBy(PRODUCTLINE.PRODUCT_LINE)
+                .forJSON().path().root("root")
+                .fetch();// feel free to practice fetchOne(), fetchAny(), fetchSingle() and so on
 
         System.out.println("\nExample (format the result set as JSON) 1.1:\n"
                 + result.formatJSON());
@@ -76,7 +55,7 @@ public class ClassicModelsRepository {
         } catch (JsonProcessingException ex) {
             Logger.getLogger(ClassicModelsRepository.class.getName()).log(Level.SEVERE, null, ex);
         }
-                
-        return result.get(0).value1().data();
+  
+        return result.get(0).value1().data();        
     }
 }
