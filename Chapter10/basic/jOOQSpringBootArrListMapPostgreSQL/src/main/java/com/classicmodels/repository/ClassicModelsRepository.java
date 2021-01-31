@@ -115,33 +115,36 @@ public class ClassicModelsRepository {
                 .from(OFFICE)
                 .fetchArray(OFFICE.OFFICE_FULL_ADDRESS);
         System.out.println("Example 1.11\n" + Arrays.toString(result11));
-
-        /* There is a bug in 3.14, but probably you'll not have it in the latest jOOQ version        
-        Record3<Integer, String, String>[] result = ctx.select(
+     
+        Record3<Integer, String, String>[] result12 = ctx.select(
                 DEPARTMENT.DEPARTMENT_ID, DEPARTMENT.OFFICE_CODE, DEPARTMENT.NAME)
                 .from(DEPARTMENT)
-                .fetchArray();        
+                .fetchArray();                
+        System.out.println("Example 1.12\n" + Arrays.toString(result12));
          
-        Record1<String>[] result = ctx.select(DEPARTMENT.NAME)
+        Record1<String>[] result13 = ctx.select(DEPARTMENT.NAME)
                 .from(DEPARTMENT)                
                 .fetchArray();   
+        System.out.println("Example 1.13\n" + Arrays.toString(result13));
         
-        Record1<String[]>[] result = ctx.select(DEPARTMENT.TOPIC)
+        Record1<String[]>[] result14 = ctx.select(DEPARTMENT.TOPIC)
                 .from(DEPARTMENT)
                 .fetchArray();        
-        
+        System.out.println("Example 1.14\n" + Arrays.toString(result14));
+                
         // fetch an UDT type
-        Record2<String, EvaluationCriteriaRecord>[] result 
+        Record2<String, EvaluationCriteriaRecord>[] result15 
                 = ctx.select(MANAGER.MANAGER_NAME, MANAGER.MANAGER_EVALUATION)
                 .from(MANAGER)
                 .fetchArray();
+        System.out.println("Example 1.15\n" + Arrays.toString(result15));
         
         // fetch embeddable type
-        Record2<String, OfficeFullAddressRecord>[] result 
+        Record2<String, OfficeFullAddressRecord>[] result16 
                 = ctx.select(OFFICE.OFFICE_CODE, OFFICE.OFFICE_FULL_ADDRESS)        
                 .from(OFFICE)
-                .fetchArray();
-         */
+                .fetchArray();         
+        System.out.println("Example 1.16\n" + Arrays.toString(result16));
     }
 
     public void fetchListExamples() {
