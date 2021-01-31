@@ -53,81 +53,89 @@ insert into department(department_id,name,phone,code,office_code,topic) values
 
 /*Data for the table `manager` */
 
-insert into manager (manager_id, manager_name, manager_evaluation) values 
+insert into manager (manager_id, manager_name, manager_evaluation, manager_detail) values 
 
-('1', 'Joana Nimar', (67, 34, 33, 66)),
+('1', 'Joana Nimar', (67, 34, 33, 66), '{"firstName":"Joana","lastName":"Nimar","gender":"Female","dob":"1983-01-01","email":"joananimar@gmail.com","age":30,"address":{"streetAddress":"21 Fake Street","city":"New York City","state":"NY","zipOrPostal":"10021"},"phoneNumber":[{"type":"home","number":["212 555-1234","212 543-0933"]},{"type":"mobile","number":["646 555-4567","644 153-3527","626 231-6743"]}],"summary":"6 years of management experience","computerSkills":[{"OS":["Linux"],"Office":["MS Word","Excel"],"Management":["X10Mangement","ManPlat1","AllCeo"],"Tools":["GMail","Meet"]}],"shareholder":"5%","projects":[{"name":"SBS (aka. Shared Business Services)","start":"2015-08-01","end":"2019-11-21","type":"development","role":"Sr. Manager","details":"Develop a powerful team in a short time"},{"name":"RLCM (aka. Role Lifecycle Management)","start":"2011-03-01","end":"2015-07-01","type":"development","role":"Manager Leader","details":"Increase income"},{"name":"Member-Provider Portal Enhancement","start":"2009-03-01","end":"2011-03-01","type":"enhancement","role":"Technical Leader","details":"Managing the enhancement and defects fixing team"}]}'),
 
-('2', 'Mark Janel', (99, 23, 11, 23)),
+('2', 'Mark Janel', (99, 23, 11, 23), '{"firstName":"Mark","lastName":"Janel","gender":"Male","dob":"1985-03-07","email":"markjanel@yahoo.com","age":37,"address":{"streetAddress":"24 Red Street","city":"Banesti","state":"Prahova","zipOrPostal":"506734"},"phoneNumber":[{"type":"home","number":["0727 823 989","0723 621 723","0712 212 676"]},{"type":"mobile","number":["378 555 233","678 154 227"]}],"summary":"4 years of management experience","computerSkills":[{"OS":["Windows"],"Office":["Power Point","Access","FoxPro"],"Management":["AllCeo","ManagementTools Suite"],"Tools":["Skype","GMail","Meet","Google Calendar"]}],"projects":[{"name":"Business Retail","start":"2012-02-05","end":"2014-10-11","type":"retail","role":"General Manager","details":"Expand retail business"},{"name":"Selling Point","start":"2011-01-01","end":"2012-02-05","type":"selling","role":"Manager Leader","details":"Manager of selling department"}]}'),
 
-('3', 'Olivia Goy', (99, 34, 11, 78)) ON CONFLICT (manager_id) DO NOTHING;
+('3', 'Olivia Goy', (99, 34, 11, 78), '{"firstName":"Olivia","lastName":"Goy","gender":"Female","dob":"1978-08-04","email":"oliviagoy@gmail.com","age":42,"address":{"streetAddress":"118 National Street","city":"Barcelona","state":"Catalonia","zipOrPostal":"660933"},"phoneNumber":[{"type":"home","number":["0999 3844 3333","0223 1333 4455","0265 7883 4422"]},{"type":"mobile","number":["980 992 122","112 644 212","322 323 642"]}],"summary":"10 years of management experience","computerSkills":[{"OS":["Linux","Windows"],"Office":["MS Word","Power Point"],"Management":["ManPlat1","AllCeo","TeamManagement"],"Tools":["Slack"]}],"projects":[{"name":"Marketing Share","start":"2016-08-02","end":"2021-06-02","type":"administrator","role":"Principal Manager","details":"Marketing share for small companies"},{"name":"Draft Management","start":"2014-06-06","end":"2016-08-02","type":"development","role":"Manager Leader","details":"First e-management platform"},{"name":"Car Management","start":"2005-03-21","end":"2014-06-06","type":"enhancement","role":"Leader of retail","details":"Enhancement of cars management"}]}') ON CONFLICT (manager_id) DO NOTHING;
 
 /*Data for the table `office_has_manager` */
 
 insert into office_has_manager (offices_office_code, managers_manager_id) values 
 
-('1', 1),
+('1', '1'),
 
-('2', 1),
+('2', '1'),
 
-('3', 1),
+('1', '3'),
 
-('4', 2),
+('3', '1'),
 
-('5', 3),
+('4', '2'),
 
-('6', 3),
+('5', '3'),
 
-('7', 2) ON CONFLICT (offices_office_code, managers_manager_id) DO NOTHING;
+('5', '2'),
+
+('6', '3'),
+
+('6', '2'),
+
+('6', '1'),
+
+('7', '2') ON CONFLICT (offices_office_code, managers_manager_id) DO NOTHING;
 
 /*Data for the table `employee` */
 
-insert  into employee(employee_number,last_name,first_name,extension,email,office_code,salary,reports_to,job_title,employee_of_year) values 
+insert  into employee(employee_number,last_name,first_name,extension,email,office_code,salary,reports_to,job_title,employee_of_year,monthly_bonus) values 
 
-(1002,'Murphy','Diane','x5800','dmurphy@classicmodelcars.com','1',120000,NULL,'President',NULL),
+(1002,'Murphy','Diane','x5800','dmurphy@classicmodelcars.com','1',120000,NULL,'President',NULL, ARRAY[450, 210, 222, 123, 110, 0, 0, 0, 560, 440, 315, 125, 0, 900]),
 
-(1056,'Patterson','Mary','x4611','mpatterso@classicmodelcars.com','1',100000,1002,'VP Sales', NULL),
+(1056,'Patterson','Mary','x4611','mpatterso@classicmodelcars.com','1',100000,1002,'VP Sales', NULL, NULL),
 
-(1076,'Firrelli','Jeff','x9273','jfirrelli@classicmodelcars.com','1',100000,1002,'VP Marketing', NULL),
+(1076,'Firrelli','Jeff','x9273','jfirrelli@classicmodelcars.com','1',100000,1002,'VP Marketing', NULL, ARRAY[0, 0, 0, 125, 125, 150, 232, 100, 0]),
 
-(1088,'Patterson','William','x4871','wpatterson@classicmodelcars.com','6',80000,1056,'Sales Manager (APAC)', NULL),
+(1088,'Patterson','William','x4871','wpatterson@classicmodelcars.com','6',80000,1056,'Sales Manager (APAC)', NULL, ARRAY[560, 120, 440, 320, 315, 0, 0, 100, 125, 0, 900]),
 
-(1102,'Bondur','Gerard','x5408','gbondur@classicmodelcars.com','4',80000,1056,'Sale Manager (EMEA)', NULL),
+(1102,'Bondur','Gerard','x5408','gbondur@classicmodelcars.com','4',80000,1056,'Sale Manager (EMEA)', NULL, NULL),
 
-(1143,'Bow','Anthony','x5428','abow@classicmodelcars.com','1',75000,1056,'Sales Manager (NA)',NULL),
+(1143,'Bow','Anthony','x5428','abow@classicmodelcars.com','1',75000,1056,'Sales Manager (NA)',NULL, NULL),
 
-(1165,'Jennings','Leslie','x3291','ljennings@classicmodelcars.com','1',60000,1143,'Sales Rep',ARRAY[2003, 2004]),
+(1165,'Jennings','Leslie','x3291','ljennings@classicmodelcars.com','1',60000,1143,'Sales Rep',ARRAY[2003, 2004], NULL),
 
-(1166,'Thompson','Leslie','x4065','lthompson@classicmodelcars.com','1',60000,1143,'Sales Rep',ARRAY[2003, 2005]),
+(1166,'Thompson','Leslie','x4065','lthompson@classicmodelcars.com','1',60000,1143,'Sales Rep',ARRAY[2003, 2005], NULL),
 
-(1188,'Firrelli','Julie','x2173','jfirrelli@classicmodelcars.com','2',60000,1143,'Sales Rep',ARRAY[2004, 2005]),
+(1188,'Firrelli','Julie','x2173','jfirrelli@classicmodelcars.com','2',60000,1143,'Sales Rep',ARRAY[2004, 2005], NULL),
 
-(1216,'Patterson','Steve','x4334','spatterson@classicmodelcars.com','2',55000,1143,'Sales Rep',ARRAY[2005, 2006]),
+(1216,'Patterson','Steve','x4334','spatterson@classicmodelcars.com','2',55000,1143,'Sales Rep',ARRAY[2005, 2006], NULL),
 
-(1286,'Tseng','Foon Yue','x2248','ftseng@classicmodelcars.com','3',55000,1143,'Sales Rep',ARRAY[2002, 2003, 2004]),
+(1286,'Tseng','Foon Yue','x2248','ftseng@classicmodelcars.com','3',55000,1143,'Sales Rep',ARRAY[2002, 2003, 2004], NULL),
 
-(1323,'Vanauf','George','x4102','gvanauf@classicmodelcars.com','3',55000,1143,'Sales Rep',ARRAY[2000, 2001, 2005]),
+(1323,'Vanauf','George','x4102','gvanauf@classicmodelcars.com','3',55000,1143,'Sales Rep',ARRAY[2000, 2001, 2005], NULL),
 
-(1337,'Bondur','Loui','x6493','lbondur@classicmodelcars.com','4',60000,1102,'Sales Rep',ARRAY[2004, 2007]),
+(1337,'Bondur','Loui','x6493','lbondur@classicmodelcars.com','4',60000,1102,'Sales Rep',ARRAY[2004, 2007], NULL),
 
-(1370,'Hernandez','Gerard','x2028','ghernande@classicmodelcars.com','4',65000,1102,'Sales Rep',ARRAY[2000, 2001]),
+(1370,'Hernandez','Gerard','x2028','ghernande@classicmodelcars.com','4',65000,1102,'Sales Rep',ARRAY[2000, 2001], NULL),
 
-(1401,'Castillo','Pamela','x2759','pcastillo@classicmodelcars.com','4',55000,1102,'Sales Rep',ARRAY[2000, 2001, 2003, 2005]),
+(1401,'Castillo','Pamela','x2759','pcastillo@classicmodelcars.com','4',55000,1102,'Sales Rep',ARRAY[2000, 2001, 2003, 2005], NULL),
 
-(1501,'Bott','Larry','x2311','lbott@classicmodelcars.com','7',50000,1102,'Sales Rep',ARRAY[2004, 2008]),
+(1501,'Bott','Larry','x2311','lbott@classicmodelcars.com','7',50000,1102,'Sales Rep',ARRAY[2004, 2008], NULL),
 
-(1504,'Jones','Barry','x102','bjones@classicmodelcars.com','7',50000,1102,'Sales Rep',ARRAY[2002, 2003, 2005]),
+(1504,'Jones','Barry','x102','bjones@classicmodelcars.com','7',50000,1102,'Sales Rep',ARRAY[2002, 2003, 2005], NULL),
 
-(1611,'Fixter','Andy','x101','afixter@classicmodelcars.com','6',50000,1088,'Sales Rep',ARRAY[2002, 2005]),
+(1611,'Fixter','Andy','x101','afixter@classicmodelcars.com','6',50000,1088,'Sales Rep',ARRAY[2002, 2005], NULL),
 
-(1612,'Marsh','Peter','x102','pmarsh@classicmodelcars.com','6',55000,1088,'Sales Rep',ARRAY[2003, 2005, 2006, 2007]),
+(1612,'Marsh','Peter','x102','pmarsh@classicmodelcars.com','6',55000,1088,'Sales Rep',ARRAY[2003, 2005, 2006, 2007], NULL),
 
-(1619,'King','Tom','x103','tking@classicmodelcars.com','6',60000,1088,'Sales Rep',ARRAY[2002, 2004]),
+(1619,'King','Tom','x103','tking@classicmodelcars.com','6',60000,1088,'Sales Rep',ARRAY[2002, 2004], NULL),
 
-(1621,'Nishi','Mami','x101','mnishi@classicmodelcars.com','5',55000,1056,'Sales Rep',ARRAY[2003, 2005]),
+(1621,'Nishi','Mami','x101','mnishi@classicmodelcars.com','5',55000,1056,'Sales Rep',ARRAY[2003, 2005], NULL),
 
-(1625,'Kato','Yoshimi','x102','ykato@classicmodelcars.com','5',60000,1621,'Sales Rep',ARRAY[2004, 2005, 2006]),
+(1625,'Kato','Yoshimi','x102','ykato@classicmodelcars.com','5',60000,1621,'Sales Rep',ARRAY[2004, 2005, 2006], NULL),
 
-(1702,'Gerard','Martin','x2312','mgerard@classicmodelcars.com','4',50000,1102,'Sales Rep',ARRAY[2005, 2007]) ON CONFLICT (employee_number) DO NOTHING;;
+(1702,'Gerard','Martin','x2312','mgerard@classicmodelcars.com','4',50000,1102,'Sales Rep',ARRAY[2005, 2007], NULL) ON CONFLICT (employee_number) DO NOTHING;;
 
 /*Data for the table `customer` */
 
@@ -645,15 +653,15 @@ insert  into customerdetail(customer_number,address_line_first,address_line_seco
 
 insert  into productline(product_line,code,text_description,html_description,image,created_on) values 
 
-('Classic Cars',599302,'Attention car enthusiasts: Make your wildest car ownership dreams come true. Whether you are looking for classic muscle cars, dream sports cars or movie-inspired miniatures, you will find great choices in this category. These replicas feature superb attention to detail and craftsmanship and offer features such as working steering system, opening forward compartment, opening rear trunk with removable spare wheel, 4-wheel independent spring suspension, and so on. The models range in size from 1:10 to 1:24 scale and include numerous limited edition and several out-of-production vehicles. All models include a certificate of authenticity from their manufacturers and come fully assembled and ready for display in the home or office.',NULL,NULL,'2005-02-03'),
+('Classic Cars',599302,'Attention car enthusiasts: Make your wildest car ownership dreams come true. Whether you are looking for classic muscle cars, dream sports cars or movie-inspired miniatures, you will find great choices in this category. These replicas feature superb attention to detail and craftsmanship and offer features such as working steering system, opening forward compartment, opening rear trunk with removable spare wheel, 4-wheel independent spring suspension, and so on. The models range in size from 1:10 to 1:24 scale and include numerous limited edition and several out-of-production vehicles. All models include a certificate of authenticity from their manufacturers and come fully assembled and ready for display in the home or office.','<productline><name>Classic Cars</name><code>599302</code><capacity supportClass="a, b, c"><a index="200A">200</a><b index="100B">100</b><c index="500C">500<note for="client">This has certain limitations</note></c></capacity><details><power>5000kw</power><type nr_of_lines="5" command="ERP">1</type></details></productline>',NULL,'2005-02-03'),
 
-('Motorcycles',599302,'Our motorcycles are state of the art replicas of classic as well as contemporary motorcycle legends such as Harley Davidson, Ducati and Vespa. Models contain stunning details such as official logos, rotating wheels, working kickstand, front suspension, gear-shift lever, footbrake lever, and drive chain. Materials used include diecast and plastic. The models range in size from 1:10 to 1:50 scale and include numerous limited edition and several out-of-production vehicles. All models come fully assembled and ready for display in the home or office. Most include a certificate of authenticity.',NULL,NULL,'2004-12-12'),
+('Motorcycles',599302,'Our motorcycles are state of the art replicas of classic as well as contemporary motorcycle legends such as Harley Davidson, Ducati and Vespa. Models contain stunning details such as official logos, rotating wheels, working kickstand, front suspension, gear-shift lever, footbrake lever, and drive chain. Materials used include diecast and plastic. The models range in size from 1:10 to 1:50 scale and include numerous limited edition and several out-of-production vehicles. All models come fully assembled and ready for display in the home or office. Most include a certificate of authenticity.','<productline><name>Motorcycles</name><code>599302</code><capacity supportClass="a, b"><a index="250A">200</a><b index="150B">100</b></capacity><details><power>2000kw</power><type nr_of_lines="3" command="OPS">2</type></details></productline>',NULL,'2004-12-12'),
 
 ('Planes',433823,'Unique, diecast airplane and helicopter replicas suitable for collections, as well as home, office or classroom decorations. Models contain stunning details such as official logos and insignias, rotating jet engines and propellers, retractable wheels, and so on. Most come fully assembled and with a certificate of authenticity from their manufacturers.',NULL,NULL,'2004-02-14'),
 
 ('Ships',433823,'The perfect holiday or anniversary gift for executives, clients, friends, and family. These handcrafted model ships are unique, stunning works of art that will be treasured for generations! They come fully assembled and ready for display in the home or office. We guarantee the highest quality, and best value.',NULL,NULL,'2005-12-12'),
 
-('Trains',123333,'Model trains are a rewarding hobby for enthusiasts of all ages. Whether you''re looking for collectible wooden trains, electric streetcars or locomotives, you''ll find a number of great choices for any budget within this category. The interactive aspect of trains makes toy trains perfect for young children. The wooden train sets are ideal for children under the age of 5.',NULL,NULL,'2004-03-03'),
+('Trains',123333,'Model trains are a rewarding hobby for enthusiasts of all ages. Whether you''re looking for collectible wooden trains, electric streetcars or locomotives, you''ll find a number of great choices for any budget within this category. The interactive aspect of trains makes toy trains perfect for young children. The wooden train sets are ideal for children under the age of 5.','<productline><name>Trains</name><code>123333</code><capacity supportClass="a, b, b1, c"><a index="250A">200</a><b index="150B">100<b1 index="300B">300</b1></b><c index="350B">350</c></capacity><details><power>20000kw</power><type nr_of_lines="1" command="ERP">1</type></details></productline>',NULL,'2004-03-03'),
 
 ('Trucks and Buses',569331,'The Truck and Bus models are realistic replicas of buses and specialized trucks produced from the early 1920s to present. The models range in size from 1:12 to 1:50 scale and include numerous limited edition and several out-of-production vehicles. Materials used include tin, diecast and plastic. All models include a certificate of authenticity from their manufacturers and are a perfect ornament for the home and office.',NULL,NULL,'2005-02-25'),
 
@@ -8106,27 +8114,27 @@ insert into payment(customer_number,check_number,payment_date,invoice_amount,cac
 
 /*Data for the table `bank_transaction` */
 
-insert into bank_transaction(transaction_id,bank_name,bank_iban,transfer_amount,customer_number,check_number,caching_date) values 
+insert into bank_transaction(transaction_id,bank_name,bank_iban,transfer_amount,customer_number,check_number,caching_date,status) values 
 
-(1,'Bank Ltd. US','DN44398834N34','6631.36',447,'AO757239','2003-09-15 18:22:54'),
+(1,'Bank Ltd. US','DN44398834N34','6631.36',447,'AO757239','2003-09-15 18:22:54','SUCCESS'),
 
-(2,'Bank Ltd. US','348398H3493HG93','26304.13',447,'OU516561','2004-12-17 16:45:22'),
+(2,'Bank Ltd. US','348398H3493HG93','26304.13',447,'OU516561','2004-12-17 16:45:22','FAILED'),
 
-(3,'Transilvania Bank','8TVN598N454VN84T','9977.85',462,'GC60330','2003-11-08 18:57:25'),
+(3,'Transilvania Bank','8TVN598N454VN84T','9977.85',462,'GC60330','2003-11-08 18:57:25','SUCCESS'),
 
-(4,'5 Stars Bank','8VN8UNT5U45T8','48355.87',462,'PE176846', '2004-11-27 14:30:22'),
+(4,'5 Stars Bank','8VN8UNT5U45T8','48355.87',462,'PE176846', '2004-11-27 14:30:22','SUCCESS'),
 
-(5,'5 Stars Bank','TVU58NU58U84N4YUG','33967.73',398,'AJ478695','2005-02-14 12:09:15'),
+(5,'5 Stars Bank','TVU58NU58U84N4YUG','33967.73',398,'AJ478695','2005-02-14 12:09:15','FAILED'),
 
-(6,'Optimus Bank','8V34VN5U435334','4588.36',333,'NF959653','2005-03-01 12:12:00'),
+(6,'Optimus Bank','8V34VN5U435334','4588.36',333,'NF959653','2005-03-01 12:12:00','UNAUTHORIZED'),
 
-(7,'Optimus Bank','8V34VN5U435334','8987.36',333,'NF959653','2005-03-01 14:00:00'),
+(7,'Optimus Bank','8V34VN5U435334','8987.36',333,'NF959653','2005-03-01 14:00:00','UNAUTHORIZED'),
 
-(8,'Optimus Bank','8V34VN5U435334','2544.36',333,'NF959653','2005-03-01 18:20:10'),
+(8,'Optimus Bank','8V34VN5U435334','2544.36',333,'NF959653','2005-03-01 18:20:10','FAILED'),
 
-(9,'Optimus Bank','8V34VN5U435334','5312.23',333,'NF959653','2005-03-01 19:32:56'),
+(9,'Optimus Bank','8V34VN5U435334','5312.23',333,'NF959653','2005-03-01 19:32:56','RETRIED'),
 
-(10,'BRT Bank','TVNU343T38TUNU3T','52151.81',278,'GP636783', '2003-03-02 12:32:00') ON CONFLICT (transaction_id) DO NOTHING;
+(10,'BRT Bank','TVNU343T38TUNU3T','52151.81',278,'GP636783', '2003-03-02 12:32:00','FAILED') ON CONFLICT (transaction_id) DO NOTHING;
 
 insert into sale(sale_id,fiscal_year,sale,employee_number,trend) values 
 
@@ -8166,7 +8174,13 @@ insert into sale(sale_id,fiscal_year,sale,employee_number,trend) values
 
 (18, 2004, 3884.34, 1504,'DOWN'),
 
-(19, 2004, 5241.44, 1504,'CONSTANT') ON CONFLICT (sale_id) DO NOTHING;
+(19, 2004, 5241.44, 1504,'CONSTANT'),
+
+(20, 2004, 51241.54, 1143,'DOWN'),
+
+(21, 2003, 25241.43, 1143,'DOWN'),
+
+(22, 2005, 52343.12, 1102,'DOWN') ON CONFLICT (sale_id) DO NOTHING;
 
 /*Data for the table `top3product` */
 

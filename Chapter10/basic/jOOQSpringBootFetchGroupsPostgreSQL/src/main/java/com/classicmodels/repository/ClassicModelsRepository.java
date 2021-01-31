@@ -164,7 +164,7 @@ public class ClassicModelsRepository {
                         .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE)).asTable("t"))
                 .on(MANAGER.MANAGER_ID.eq(field(name("managers_manager_id"), Long.class)))
                 .fetchGroups(Manager.class, Office.class);
-        System.out.println("Example 17\n" + prettyPrint(result17));
+        System.out.println("Example 17\n" + prettyPrint(result17));        
 
         Map<Record, Result<Record>> result18
                 = ctx.select(MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME, field("city"), field("country"))
@@ -176,8 +176,7 @@ public class ClassicModelsRepository {
                         .on(MANAGER.MANAGER_ID.eq(field(name("managers_manager_id"), Long.class)))
                         .fetchGroups(new Field[]{MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME},
                         new Field[]{field("city"), field("country")});
-        System.out.println("Example 18\n" + prettyPrint(result18));
-
+        System.out.println("Example 18\n" + prettyPrint(result18));               
     }
 
     private static <K, V> String prettyPrint(Map<K, V> map) {
