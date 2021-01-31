@@ -72,7 +72,7 @@ public class ClassicModelsRepository {
                 .from(OFFICE)
                 .forJSON().path().root("root")
                 .fetchSingle() // there is a single JSON
-                .value1() // this is org.jooq.JSON
+                .value1()      // this is org.jooq.JSON
                 .data();       // this is JSON data as String
     }
 }
