@@ -28,10 +28,8 @@ import static org.jooq.impl.DSL.xmlparseDocument;
 import static org.jooq.impl.DSL.xmlpi;
 import static org.jooq.impl.DSL.xmlquery;
 import static org.jooq.impl.DSL.xmltable;
-import org.jooq.impl.SQLDataType;
 import static org.jooq.impl.SQLDataType.INTEGER;
 import static org.jooq.impl.SQLDataType.VARCHAR;
-import static org.jooq.impl.SQLDataType.XML;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,7 +48,7 @@ public class ClassicModelsRepository {
         // simple example of using xmlelement()
         Result<Record1<XML>> result1 = ctx.select(
                 xmlelement("name", CUSTOMER.CUSTOMER_NAME))
-                .from(CUSTOMER)
+                .from(CUSTOMER)               
                 .fetch();
         System.out.println("Example 1.1:\n" + result1.formatXML());
 
