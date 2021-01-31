@@ -197,6 +197,8 @@
                                 <generate>
                                     <pojos>true</pojos> 
                                     <validationAnnotations>true</validationAnnotations>                            
+                                    
+                                    <deprecationOnUnknownTypes>false</deprecationOnUnknownTypes>
                                 </generate>
                                 
                                 <target>

@@ -17,5 +17,8 @@ public class ClassicModelsService {
         classicModelsRepository.fetchSimpleXml();
         classicModelsRepository.fetchXmlValue();
         classicModelsRepository.xmlTableExample();
+        
+        classicModelsRepository.fetchOfficesAsXMLAuto();
+        classicModelsRepository.fetchOfficesAsXMLPath();
     }
 }
