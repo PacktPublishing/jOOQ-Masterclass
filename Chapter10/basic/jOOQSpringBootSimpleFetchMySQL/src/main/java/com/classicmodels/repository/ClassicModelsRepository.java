@@ -54,8 +54,7 @@ public class ClassicModelsRepository {
                         CUSTOMER.SALES_REP_EMPLOYEE_NUMBER.in(1370L, 1504L, 1611L))
         );
     }
-
-    @Transactional(readOnly = true)
+   
     public void fetchFewFields() {
 
         // Prefer
@@ -79,8 +78,7 @@ public class ClassicModelsRepository {
         // Prefer
         System.out.println("Example 2.3\n"
                 + ctx.select(CUSTOMER.CUSTOMER_NAME, CUSTOMER.CREDIT_LIMIT).from(CUSTOMER)
-                        .fetch()
-                        .into(CUSTOMER.CUSTOMER_NAME, CUSTOMER.CREDIT_LIMIT) // Result<Record2<String, BigDecimal>>                
+                        .fetch()  // Result<Record2<String, BigDecimal>>                
         );
 
         // Avoid
@@ -88,7 +86,7 @@ public class ClassicModelsRepository {
                 + ctx.select().from(CUSTOMER)
                         .fetch()
                         .into(CUSTOMER.CUSTOMER_NAME, CUSTOMER.CREDIT_LIMIT) // Result<Record2<String, BigDecimal>>
-        // .into(field("customer_name", String.class), field("credit_limit", BigDecimal.class))                                        
+                     // .into(field("customer_name", String.class), field("credit_limit", BigDecimal.class))                                        
         );
     }
 
