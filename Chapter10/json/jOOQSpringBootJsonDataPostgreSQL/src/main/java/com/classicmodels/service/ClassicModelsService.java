@@ -16,4 +16,9 @@ public class ClassicModelsService {
         
         return classicModelsRepository.jsonProductlineProductOrderdetail();       
     }
+    
+    public String jsonProductlineProductOrderdetailFluentReturn() {
+        
+        return classicModelsRepository.jsonProductlineProductOrderdetailFluentReturn();
+    }
 }

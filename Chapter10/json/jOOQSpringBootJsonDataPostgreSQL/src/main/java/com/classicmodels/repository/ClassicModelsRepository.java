@@ -77,6 +77,35 @@ public class ClassicModelsRepository {
             Logger.getLogger(ClassicModelsRepository.class.getName()).log(Level.SEVERE, null, ex);
         }
                 
-        return result.get(0).value1().data();
+        return result.get(0).value1().data(); // check the following example to express this return fluently
+    }
+    
+    public String jsonProductlineProductOrderdetailFluentReturn() {
+
+        return ctx.select(
+                jsonObject("root", jsonArrayAgg(
+                        jsonObject(
+                                key("productLine").value(PRODUCTLINE.PRODUCT_LINE),
+                                key("textDescription").value(PRODUCTLINE.TEXT_DESCRIPTION),
+                                key("products").value(select(jsonArrayAgg(
+                                        jsonObject(key("productName").value(PRODUCT.PRODUCT_NAME),
+                                                key("productVendor").value(PRODUCT.PRODUCT_VENDOR),
+                                                key("quantityInStock").value(PRODUCT.QUANTITY_IN_STOCK),
+                                                key("orderdetail")
+                                                        .value(select(jsonArrayAgg(
+                                                                jsonObject(
+                                                                        key("quantityOrdered").value(ORDERDETAIL.QUANTITY_ORDERED),
+                                                                        key("priceEach").value(ORDERDETAIL.PRICE_EACH)))
+                                                                .orderBy(ORDERDETAIL.QUANTITY_ORDERED))
+                                                                .from(ORDERDETAIL)
+                                                                .where(ORDERDETAIL.PRODUCT_ID.eq(PRODUCT.PRODUCT_ID)))))
+                                        .orderBy(PRODUCT.QUANTITY_IN_STOCK))
+                                        .from(PRODUCT)
+                                        .where(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE))
+                                        .orderBy(PRODUCTLINE.PRODUCT_LINE))))))
+                .from(PRODUCTLINE)                
+                .fetchSingle() // there is a single JSON
+                .value1()      // this is org.jooq.JSON
+                .data();       // this is JSON data
     }
 }

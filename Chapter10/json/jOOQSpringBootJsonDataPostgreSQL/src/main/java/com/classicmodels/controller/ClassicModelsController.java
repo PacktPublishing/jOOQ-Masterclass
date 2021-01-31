@@ -15,8 +15,8 @@ public class ClassicModelsController {
     }
 
     @GetMapping(value = "/productlines", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String fetchProductLines() {
+    public String jsonProductlineProductOrderdetailFluentReturn() {
 
-        return classicModelsService.jsonProductlineProductOrderdetail();
+        return classicModelsService.jsonProductlineProductOrderdetailFluentReturn();
     }
 }

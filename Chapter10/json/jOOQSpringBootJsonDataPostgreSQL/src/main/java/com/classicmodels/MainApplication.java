@@ -24,6 +24,7 @@ public class MainApplication {
         return args -> {
 
             classicModelsService.jsonProductlineProductOrderdetail();
+            classicModelsService.jsonProductlineProductOrderdetailFluentReturn();
         };
     }
 }
