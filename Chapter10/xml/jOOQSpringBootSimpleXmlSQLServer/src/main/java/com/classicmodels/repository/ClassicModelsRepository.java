@@ -1,19 +1,10 @@
 package com.classicmodels.repository;
 
-import static jooq.generated.tables.Customer.CUSTOMER;
-import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
-import static jooq.generated.tables.Manager.MANAGER;
 import static jooq.generated.tables.Office.OFFICE;
-import static jooq.generated.tables.OfficeHasManager.OFFICE_HAS_MANAGER;
-import static jooq.generated.tables.Product.PRODUCT;
-import static jooq.generated.tables.Productline.PRODUCTLINE;
 import org.jooq.DSLContext;
 import org.jooq.Record1;
 import org.jooq.Result;
 import org.jooq.XML;
-import static org.jooq.impl.DSL.field;
-import static org.jooq.impl.DSL.name;
-import static org.jooq.impl.DSL.select;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
