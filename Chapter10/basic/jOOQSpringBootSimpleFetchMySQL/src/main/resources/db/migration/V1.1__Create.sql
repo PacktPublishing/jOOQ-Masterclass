@@ -72,6 +72,7 @@ CREATE TABLE `employee` (
   `reports_to` bigint DEFAULT NULL,
   `job_title` varchar(50) NOT NULL, 
   `employee_of_year` varchar(50) DEFAULT NULL,
+  `monthly_bonus` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`employee_number`),
   KEY `reports_to` (`reports_to`),
   KEY `office_code` (`office_code`),
@@ -263,6 +264,7 @@ CREATE TABLE `bank_transaction` (
   `caching_date` timestamp NOT NULL DEFAULT NOW(),
   `customer_number` bigint NOT NULL,
   `check_number` varchar(50) NOT NULL, 
+  `status` varchar(50) NOT NULL, 
   PRIMARY KEY (`transaction_id`),  
   CONSTRAINT `bank_transaction_ibfk_1` FOREIGN KEY (`customer_number`,`check_number`) REFERENCES `payment` (`customer_number`,`check_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;

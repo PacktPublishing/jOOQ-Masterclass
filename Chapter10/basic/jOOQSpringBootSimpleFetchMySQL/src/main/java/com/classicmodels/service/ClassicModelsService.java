@@ -17,5 +17,7 @@ public class ClassicModelsService {
         classicModelsRepository.fetchPlainSQL();
         classicModelsRepository.fetchFewFields();
         classicModelsRepository.fetchAndConvert();
+        classicModelsRepository.avoidExtraSelectsWithPojos();
+        classicModelsRepository.avoidExtraSelectsWithArbitraryTypes();
     }
 }

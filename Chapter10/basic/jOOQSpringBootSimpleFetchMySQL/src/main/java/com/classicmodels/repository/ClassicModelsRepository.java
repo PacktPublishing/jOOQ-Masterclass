@@ -1,15 +1,19 @@
 package com.classicmodels.repository;
 
 import static com.classicmodels.converter.YearMonthConverter.INTEGER_YEARMONTH_CONVERTER;
+import com.classicmodels.pojo.NamePhone;
+import com.classicmodels.pojo.PhoneCreditLimit;
 import java.math.BigDecimal;
 import java.time.YearMonth;
 import java.util.List;
+import java.util.Set;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import org.jooq.DSLContext;
 import org.jooq.ResultQuery;
 import org.jooq.Record;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.w3c.dom.Document;
 
 @Repository
 @Transactional(readOnly = true)
@@ -61,8 +65,17 @@ public class ClassicModelsRepository {
         System.out.println("Example 2.1\n"
                 + ctx.select(CUSTOMER.CUSTOMER_NAME)
                         .from(CUSTOMER).fetch(CUSTOMER.CUSTOMER_NAME) // List<String>
+                
         // or, like this
         // + ctx.fetchValues(CUSTOMER.CUSTOMER_NAME) // List<String>
+                
+        // or, like this
+        // + ctx.select(CUSTOMER.CUSTOMER_NAME)
+        //                .from(CUSTOMER).fetchInto(String.class) // List<String>      
+                
+        // or, like this
+        // + ctx.select(CUSTOMER.CUSTOMER_NAME)
+        //      .from(CUSTOMER).fetch();          // Result<Record1<String>>
         );
 
         // Avoid
@@ -72,8 +85,12 @@ public class ClassicModelsRepository {
         // .fetch(field(""), String.class)
         // .fetch("", String.class)
         // .fetch(0)
+                
+        // also avoid
+        //      + ctx.selectFrom(CUSTOMER)
+        //              .fetch(CUSTOMER.CUSTOMER_NAME) // List<String>
         );
-
+                
         // The above case applies to multiple fields as well        
         // Prefer
         System.out.println("Example 2.3\n"
@@ -89,7 +106,51 @@ public class ClassicModelsRepository {
                      // .into(field("customer_name", String.class), field("credit_limit", BigDecimal.class))                                        
         );
     }
+    
+    public void avoidExtraSelectsWithPojos() {
+        
+        // Avoid two SELECTs        
+        List<NamePhone> result1 = ctx.select(CUSTOMER.CUSTOMER_NAME, CUSTOMER.PHONE)
+                .from(CUSTOMER).fetchInto(NamePhone.class);
+        System.out.println("Example 3.1\n" + result1);        
+        
+        List<PhoneCreditLimit> result2 = ctx.select(CUSTOMER.PHONE, CUSTOMER.CREDIT_LIMIT)
+                .from(CUSTOMER).fetchInto(PhoneCreditLimit.class);
+        System.out.println("Example 3.2\n" + result2);
+        
+        // Prefer one SELECT and map the result as you want
+        var result = ctx.select(CUSTOMER.CUSTOMER_NAME, CUSTOMER.PHONE, CUSTOMER.CREDIT_LIMIT)
+                .from(CUSTOMER).fetch(); // Result<Record3<String, String, BigDecimal>>
+        
+        List<NamePhone> fromResult1 = result.into(NamePhone.class);
+        List<PhoneCreditLimit> fromResult2 = result.into(PhoneCreditLimit.class);
+        
+        System.out.println("Example 3.3\n" + fromResult1);
+        System.out.println("Example 3.4\n" + fromResult2);
+    }
 
+    public void avoidExtraSelectsWithArbitraryTypes() {        
+
+        // Avoid two SELECTs        
+        String result1 = ctx.select(CUSTOMER.CUSTOMER_NAME, CUSTOMER.PHONE)
+                .from(CUSTOMER).fetch().formatJSON();
+        System.out.println("Example 4.1\n" + result1);        
+        
+        Set<BigDecimal> result2 = ctx.select(CUSTOMER.CREDIT_LIMIT)
+                .from(CUSTOMER).fetchSet(CUSTOMER.CREDIT_LIMIT);
+        System.out.println("Example 4.2\n" + result2);
+        
+        // Prefer one SELECT and map the result as you want
+        var result = ctx.select(CUSTOMER.CUSTOMER_NAME, CUSTOMER.PHONE, CUSTOMER.CREDIT_LIMIT)
+                .from(CUSTOMER).fetch(); // Result<Record3<String, String, BigDecimal>>
+        
+        String fromResult1 = result.into(CUSTOMER.CUSTOMER_NAME, CUSTOMER.PHONE).formatJSON();
+        Set<BigDecimal> fromResult2 = result.intoSet(CUSTOMER.CREDIT_LIMIT);
+        
+        System.out.println("Example 4.3\n" + fromResult1);
+        System.out.println("Example 4.4\n" + fromResult2);            
+    }
+    
     public void fetchAndConvert() {
 
         List<YearMonth> result = ctx.select(CUSTOMER.FIRST_BUY_DATE)
@@ -97,6 +158,6 @@ public class ClassicModelsRepository {
                 .where(CUSTOMER.FIRST_BUY_DATE.isNotNull())
                 .fetch(CUSTOMER.FIRST_BUY_DATE, INTEGER_YEARMONTH_CONVERTER);
 
-        System.out.println("Example 3\n" + result);
+        System.out.println("Example 5\n" + result);
     }
 }
