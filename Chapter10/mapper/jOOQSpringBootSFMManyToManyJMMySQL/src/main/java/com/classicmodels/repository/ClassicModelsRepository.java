@@ -13,6 +13,7 @@ import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.OfficeHasManager.OFFICE_HAS_MANAGER;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.field;
+import static org.jooq.impl.DSL.lateral;
 import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.select;
 import org.simpleflatmapper.jdbc.JdbcMapper;
@@ -41,19 +42,17 @@ public class ClassicModelsRepository {
                 .newMapper(SimpleOffice.class); 
     }
 
-    public List<SimpleManager> findManagerAndOffice() {
-
+    public List<SimpleManager> findManagerAndOffice() {        
+                
         try ( ResultSet rs
-                = ctx.select(MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME,
-                        field("offices_officeCode"), field("offices_city"), field("offices_state"))
-                        .from(MANAGER)
-                        .join(select(OFFICE.OFFICE_CODE.as("offices_officeCode"),
-                                OFFICE.CITY.as("offices_city"), OFFICE.STATE.as("offices_state"),
-                                OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID.as("managers_manager_id"))
-                                .from(OFFICE).join(OFFICE_HAS_MANAGER)
-                                .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE)).asTable("t"))
-                        .on(MANAGER.MANAGER_ID.eq(field(name("managers_manager_id"), Long.class)))
-                        .orderBy(MANAGER.MANAGER_ID)
+                = ctx.select(MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME, 
+                field("offices_officeCode"), field("offices_city"), field("offices_state"))
+                        .from(MANAGER, lateral(select(OFFICE.OFFICE_CODE.as("offices_officeCode"),
+                                OFFICE.CITY.as("offices_city"), OFFICE.STATE.as("offices_state"))
+                        .from(OFFICE).join(OFFICE_HAS_MANAGER)
+                        .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))
+                        .where(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID))))
+                .orderBy(MANAGER.MANAGER_ID)
                 
                 /* or, like this
                 = ctx.select(MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME,
@@ -78,19 +77,17 @@ public class ClassicModelsRepository {
                 return Collections.emptyList();
     }
     
-    public List<SimpleOffice> findOfficeAndManager() {
-
+    public List<SimpleOffice> findOfficeAndManager() {        
+                
         try ( ResultSet rs                
-                = ctx.select(OFFICE.OFFICE_CODE, OFFICE.STATE, OFFICE.CITY,                        
-                        field("managers_managerId"), field("managers_managerName"))
-                        .from(OFFICE)
-                        .join(select(MANAGER.MANAGER_ID.as("managers_managerId"),
-                                MANAGER.MANAGER_NAME.as("managers_managerName"),                                
-                                OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE.as("offices_office_code"))
-                                .from(MANAGER).join(OFFICE_HAS_MANAGER)
-                                .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID)).asTable("t"))
-                        .on(OFFICE.OFFICE_CODE.eq(field(name("offices_office_code"), String.class)))
-                        .orderBy(OFFICE.OFFICE_CODE)
+                = ctx.select(OFFICE.OFFICE_CODE, OFFICE.STATE, OFFICE.CITY, 
+                field("managers_managerId"), field("managers_managerName"))
+                        .from(OFFICE, lateral(select(MANAGER.MANAGER_ID.as("managers_managerId"),
+                                MANAGER.MANAGER_NAME.as("managers_managerName"))
+                        .from(MANAGER).join(OFFICE_HAS_MANAGER)
+                        .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID))
+                        .where(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))))
+                .orderBy(OFFICE.OFFICE_CODE)
                 
                 // or, like this
                 /*
