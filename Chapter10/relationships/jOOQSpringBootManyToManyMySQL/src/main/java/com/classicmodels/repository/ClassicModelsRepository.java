@@ -14,7 +14,7 @@ import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.OfficeHasManager.OFFICE_HAS_MANAGER;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.field;
-import static org.jooq.impl.DSL.name;
+import static org.jooq.impl.DSL.lateral;
 import static org.jooq.impl.DSL.select;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,28 +33,26 @@ public class ClassicModelsRepository {
 
         ResultSet rs = ctx.select(MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME,
                 field("officeCode"), field("city"), field("state"))
-                .from(MANAGER)
-                .join(select(OFFICE.OFFICE_CODE.as("officeCode"),
-                        OFFICE.CITY.as("city"), OFFICE.STATE.as("state"),
-                        OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID.as("managers_manager_id"))
+                .from(MANAGER, lateral(select(OFFICE.OFFICE_CODE.as("officeCode"),
+                        OFFICE.CITY.as("city"), OFFICE.STATE.as("state"))
                         .from(OFFICE).join(OFFICE_HAS_MANAGER)
-                        .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE)).asTable("t"))
-                .on(MANAGER.MANAGER_ID.eq(field(name("managers_manager_id"), Long.class)))
+                        .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))
+                        .where(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID))))
                 .orderBy(MANAGER.MANAGER_ID)
                 .fetchResultSet();
 
         List<SimpleBManager> result = Collections.emptyList();
         Map<Long, SimpleBManager> temp = new HashMap<>();
-        
-        try {
+
+        try (rs) {
             while (rs.next()) {
-                long managerId = rs.getLong("manager_id");        
+                long managerId = rs.getLong("manager_id");
 
                 temp.putIfAbsent(managerId,
                         new SimpleBManager(managerId, rs.getString("manager_name")));
-                
+
                 SimpleBOffice office = new SimpleBOffice(
-                        rs.getString("officeCode"), rs.getString("state"), rs.getString("city"));               
+                        rs.getString("officeCode"), rs.getString("state"), rs.getString("city"));
 
                 temp.get(managerId).getOffices().add(office);
             }
@@ -62,9 +60,9 @@ public class ClassicModelsRepository {
             result = new ArrayList<>(temp.values());
 
         } catch (SQLException ex) {
-            System.out.println("ex="+ex);
+            System.out.println("ex=" + ex);
         }
-                 
+
         // trivial display 
         System.out.println("===== Unidirectional =======");
         for (SimpleBManager sm : result) {
@@ -72,23 +70,21 @@ public class ClassicModelsRepository {
             System.out.println("\nManager:");
             System.out.println("===========================");
             System.out.println(sm);
-            System.out.println(sm.getOffices());            
+            System.out.println(sm.getOffices());
         }
-        
+
         return result;
     }
-    
+
     public List<SimpleBManager> fetchManyToManyBidirectional() {
 
         ResultSet rs = ctx.select(MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME,
                 field("officeCode"), field("city"), field("state"))
-                .from(MANAGER)
-                .join(select(OFFICE.OFFICE_CODE.as("officeCode"),
-                        OFFICE.CITY.as("city"), OFFICE.STATE.as("state"),
-                        OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID.as("managers_manager_id"))
+                .from(MANAGER, lateral(select(OFFICE.OFFICE_CODE.as("officeCode"),
+                        OFFICE.CITY.as("city"), OFFICE.STATE.as("state"))
                         .from(OFFICE).join(OFFICE_HAS_MANAGER)
-                        .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE)).asTable("t"))
-                .on(MANAGER.MANAGER_ID.eq(field(name("managers_manager_id"), Long.class)))
+                        .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))
+                        .where(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID))))
                 .orderBy(MANAGER.MANAGER_ID)
                 .fetchResultSet();
 
@@ -96,16 +92,16 @@ public class ClassicModelsRepository {
         Map<Long, SimpleBManager> tempSM = new HashMap<>();
         Map<String, SimpleBOffice> tempSO = new HashMap<>();
 
-        try {
+        try (rs) {
             while (rs.next()) {
                 long managerId = rs.getLong("manager_id");
                 String officeCode = rs.getString("officeCode");
 
                 SimpleBManager manager = tempSM.putIfAbsent(managerId,
                         new SimpleBManager(managerId, rs.getString("manager_name")));
-                
+
                 tempSO.putIfAbsent(officeCode, new SimpleBOffice(
-                        rs.getString("officeCode"), rs.getString("state"), rs.getString("city")));               
+                        rs.getString("officeCode"), rs.getString("state"), rs.getString("city")));
 
                 if (manager != null) {
                     manager.getOffices().add(tempSO.get(officeCode));
@@ -120,13 +116,13 @@ public class ClassicModelsRepository {
             result = new ArrayList<>(tempSM.values());
 
         } catch (SQLException ex) {
-            System.out.println("ex="+ex);
+            System.out.println("ex=" + ex);
         }
-                 
+
         // trivial display 
         System.out.println("\n\n===== Bidirectional =======");
         for (SimpleBManager sm : result) {
-            
+
             System.out.println("\nManager:");
             System.out.println("===========================");
             System.out.println(sm);
@@ -140,7 +136,7 @@ public class ClassicModelsRepository {
                 System.out.println(so.getManagers());
             }
         }
-        
+
         return result;
     }
 }
