@@ -14,7 +14,6 @@ import static jooq.generated.tables.OfficeHasManager.OFFICE_HAS_MANAGER;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.lateral;
-import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.select;
 import org.simpleflatmapper.jdbc.JdbcMapper;
 import org.simpleflatmapper.jdbc.JdbcMapperFactory;
