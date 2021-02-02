@@ -68,7 +68,7 @@ public class ClassicModelsRepository {
         List<SimpleUProductLine> result2 = Collections.emptyList();
         Map<String, SimpleUProductLine> temp = new HashMap<>();
 
-        try {
+        try (rs) {
             while (rs.next()) {
                 String productLineName = rs.getString("product_line");
 
@@ -140,7 +140,7 @@ public class ClassicModelsRepository {
         List<SimpleBProductLine> result2 = Collections.emptyList();
         Map<String, SimpleBProductLine> temp = new HashMap<>();
 
-        try {
+        try (rs) {
             while (rs.next()) {
                 String productLineName = rs.getString("product_line");
 
