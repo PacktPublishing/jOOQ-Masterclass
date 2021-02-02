@@ -275,7 +275,7 @@ public class ClassicModelsRepository {
                 .fetchResultSet();
 
         List<SimpleUCustomer> result71 = new ArrayList<>();
-        try {
+        try (rs71) {
             while (rs71.next()) {
                 result71.add(new SimpleUCustomer(
                         rs71.getString("customer_name"), rs71.getString("phone"), rs71.getFloat("credit_limit"),
@@ -300,7 +300,7 @@ public class ClassicModelsRepository {
                 .fetchResultSet();
 
         List<SimpleBCustomer> result72 = new ArrayList<>();
-        try {
+        try (rs72) {
             while (rs72.next()) {
                 SimpleBCustomer customer = new SimpleBCustomer(
                         rs72.getString("customer_name"), rs72.getString("phone"), rs72.getFloat("credit_limit"));
