@@ -46,6 +46,6 @@ public class ClassicModelsRepository {
                 .from(PRODUCTLINE)
                 .fetchInto(SimpleProductLine.class);
 
-        System.out.println("Example 2 (one-to-many):\n" + result);        
-    }    
+        System.out.println("Example 2 (one-to-many):\n" + result);
+    }   
 }
