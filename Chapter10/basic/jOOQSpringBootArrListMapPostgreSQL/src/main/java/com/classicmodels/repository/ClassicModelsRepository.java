@@ -68,83 +68,89 @@ public class ClassicModelsRepository {
                 .from(DEPARTMENT)
                 .fetchArray(DEPARTMENT.OFFICE_CODE, Integer.class);
         System.out.println("Example 1.3\n" + Arrays.toString(result3));
+        
+        Record3<Integer, String, String>[] result4 = ctx.select(
+                DEPARTMENT.DEPARTMENT_ID, DEPARTMENT.OFFICE_CODE, DEPARTMENT.NAME)
+                .from(DEPARTMENT)
+                .fetchArray();
+        System.out.println("Example 1.4\n" + Arrays.deepToString(result4));
 
-        YearMonth[] result4 = ctx.select(CUSTOMER.FIRST_BUY_DATE)
+        YearMonth[] result5 = ctx.select(CUSTOMER.FIRST_BUY_DATE)
                 .from(CUSTOMER)
                 .fetchArray(CUSTOMER.FIRST_BUY_DATE, INTEGER_YEARMONTH_CONVERTER);
-        System.out.println("Example 1.4\n" + Arrays.toString(result4));
+        System.out.println("Example 1.5\n" + Arrays.toString(result5));
 
-        Object[][] result5 = ctx.select(
+        Object[][] result6 = ctx.select(
                 DEPARTMENT.DEPARTMENT_ID, DEPARTMENT.OFFICE_CODE, DEPARTMENT.NAME)
                 .from(DEPARTMENT)
                 .fetchArrays();
-        System.out.println("Example 1.5\n" + Arrays.deepToString(result5));
-
-        Object[] result6 = ctx.select(DEPARTMENT.OFFICE_CODE, DEPARTMENT.NAME)
-                .from(DEPARTMENT)
-                .where(DEPARTMENT.DEPARTMENT_ID.eq(1))
-                .fetchOneArray();
-        System.out.println("Example 1.6\n" + Arrays.toString(result6));
+        System.out.println("Example 1.6\n" + Arrays.deepToString(result6));
 
         Object[] result7 = ctx.select(DEPARTMENT.OFFICE_CODE, DEPARTMENT.NAME)
                 .from(DEPARTMENT)
                 .where(DEPARTMENT.DEPARTMENT_ID.eq(1))
-                .fetchSingleArray();
+                .fetchOneArray();
         System.out.println("Example 1.7\n" + Arrays.toString(result7));
 
         Object[] result8 = ctx.select(DEPARTMENT.OFFICE_CODE, DEPARTMENT.NAME)
                 .from(DEPARTMENT)
-                .fetchAnyArray();
+                .where(DEPARTMENT.DEPARTMENT_ID.eq(1))
+                .fetchSingleArray();
         System.out.println("Example 1.8\n" + Arrays.toString(result8));
 
+        Object[] result9 = ctx.select(DEPARTMENT.OFFICE_CODE, DEPARTMENT.NAME)
+                .from(DEPARTMENT)
+                .fetchAnyArray();
+        System.out.println("Example 1.9\n" + Arrays.toString(result9));
+
+        Record3<Integer, String, String>[] result10 = ctx.select(
+                DEPARTMENT.DEPARTMENT_ID, DEPARTMENT.OFFICE_CODE, DEPARTMENT.NAME)
+                .from(DEPARTMENT)
+                .fetchArray();
+        System.out.println("Example 1.10\n" + Arrays.toString(result10));
+
+        Record1<String>[] result11 = ctx.select(DEPARTMENT.NAME)
+                .from(DEPARTMENT)
+                .fetchArray();
+        System.out.println("Example 1.11\n" + Arrays.toString(result11));
+
+        Record1<String[]>[] result12 = ctx.select(DEPARTMENT.TOPIC)
+                .from(DEPARTMENT)
+                .fetchArray();
+        System.out.println("Example 1.12\n" + Arrays.toString(result12));
+
         // fetch an array type
-        String[][] result9 = ctx.select(DEPARTMENT.TOPIC)
+        String[][] result13 = ctx.select(DEPARTMENT.TOPIC)
                 .from(DEPARTMENT)
                 .fetchArray(DEPARTMENT.TOPIC);
-        System.out.println("Example 1.9\n" + Arrays.deepToString(result9));
+        System.out.println("Example 1.13\n" + Arrays.deepToString(result13));
 
         // fetch an UDT type
-        EvaluationCriteriaRecord[] result10
+        EvaluationCriteriaRecord[] result14
                 = ctx.select(MANAGER.MANAGER_EVALUATION)
                         .from(MANAGER)
                         .fetchArray(MANAGER.MANAGER_EVALUATION);
-        System.out.println("Example 1.10\n" + Arrays.toString(result10));
+        System.out.println("Example 1.14\n" + Arrays.toString(result14));
+
+        // fetch an UDT type and another type
+        Record2<String, EvaluationCriteriaRecord>[] result15
+                = ctx.select(MANAGER.MANAGER_NAME, MANAGER.MANAGER_EVALUATION)
+                        .from(MANAGER)
+                        .fetchArray();
+        System.out.println("Example 1.15\n" + Arrays.toString(result15));
 
         // fetch embeddable type 
-        OfficeFullAddressRecord[] result11 = ctx.select(OFFICE.OFFICE_FULL_ADDRESS)
+        OfficeFullAddressRecord[] result16 = ctx.select(OFFICE.OFFICE_FULL_ADDRESS)
                 .from(OFFICE)
                 .fetchArray(OFFICE.OFFICE_FULL_ADDRESS);
-        System.out.println("Example 1.11\n" + Arrays.toString(result11));
-     
-        Record3<Integer, String, String>[] result12 = ctx.select(
-                DEPARTMENT.DEPARTMENT_ID, DEPARTMENT.OFFICE_CODE, DEPARTMENT.NAME)
-                .from(DEPARTMENT)
-                .fetchArray();                
-        System.out.println("Example 1.12\n" + Arrays.toString(result12));
-         
-        Record1<String>[] result13 = ctx.select(DEPARTMENT.NAME)
-                .from(DEPARTMENT)                
-                .fetchArray();   
-        System.out.println("Example 1.13\n" + Arrays.toString(result13));
-        
-        Record1<String[]>[] result14 = ctx.select(DEPARTMENT.TOPIC)
-                .from(DEPARTMENT)
-                .fetchArray();        
-        System.out.println("Example 1.14\n" + Arrays.toString(result14));
-                
-        // fetch an UDT type
-        Record2<String, EvaluationCriteriaRecord>[] result15 
-                = ctx.select(MANAGER.MANAGER_NAME, MANAGER.MANAGER_EVALUATION)
-                .from(MANAGER)
-                .fetchArray();
-        System.out.println("Example 1.15\n" + Arrays.toString(result15));
-        
-        // fetch embeddable type
-        Record2<String, OfficeFullAddressRecord>[] result16 
-                = ctx.select(OFFICE.OFFICE_CODE, OFFICE.OFFICE_FULL_ADDRESS)        
-                .from(OFFICE)
-                .fetchArray();         
         System.out.println("Example 1.16\n" + Arrays.toString(result16));
+
+        // fetch embeddable type and another type
+        Record2<String, OfficeFullAddressRecord>[] result17
+                = ctx.select(OFFICE.OFFICE_CODE, OFFICE.OFFICE_FULL_ADDRESS)
+                        .from(OFFICE)
+                        .fetchArray();
+        System.out.println("Example 1.17\n" + Arrays.toString(result17));
     }
 
     public void fetchListExamples() {
@@ -265,7 +271,7 @@ public class ClassicModelsRepository {
 
         Map<Integer, DepartmentRecord> result1 = ctx.selectFrom(DEPARTMENT)
                 .fetchMap(DEPARTMENT.DEPARTMENT_ID);
-        System.out.println("Example 4.1\n" + prettyPrint(result1));
+        System.out.println("Example 4.1\n" + prettyPrint(result1));                
 
         Map<String, Record2<String, BigDecimal>> result2 = ctx.select(
                 concat(CUSTOMER.CONTACT_FIRST_NAME, val(" "),
@@ -278,108 +284,112 @@ public class ClassicModelsRepository {
         Map<Department, DepartmentRecord> result3 = ctx.selectFrom(DEPARTMENT)
                 .fetchMap(Department.class);
         System.out.println("Example 4.3\n" + prettyPrint(result3));
-
-        Map<Record, DepartmentRecord> result4 = ctx.selectFrom(DEPARTMENT)
-                .fetchMap(new Field[]{DEPARTMENT.DEPARTMENT_ID, DEPARTMENT.OFFICE_CODE, DEPARTMENT.NAME});
+        
+        Map<Integer, Department> result4 = ctx.selectFrom(DEPARTMENT)
+                .fetchMap(DEPARTMENT.DEPARTMENT_ID, Department.class);
         System.out.println("Example 4.4\n" + prettyPrint(result4));
 
-        Map<Integer, String> result5 = ctx.select(DEPARTMENT.DEPARTMENT_ID, DEPARTMENT.NAME)
-                .from(DEPARTMENT)
-                .fetchMap(DEPARTMENT.DEPARTMENT_ID, DEPARTMENT.NAME);
+        Map<Record, DepartmentRecord> result5 = ctx.selectFrom(DEPARTMENT)
+                .fetchMap(new Field[]{DEPARTMENT.DEPARTMENT_ID, DEPARTMENT.OFFICE_CODE, DEPARTMENT.NAME});
         System.out.println("Example 4.5\n" + prettyPrint(result5));
 
+        Map<Integer, String> result6 = ctx.select(DEPARTMENT.DEPARTMENT_ID, DEPARTMENT.NAME)
+                .from(DEPARTMENT)
+                .fetchMap(DEPARTMENT.DEPARTMENT_ID, DEPARTMENT.NAME);
+        System.out.println("Example 4.6\n" + prettyPrint(result6));
+
         // mapping one-to-one
-        Map<Record, Record> result6 = ctx.select(CUSTOMER.CONTACT_FIRST_NAME,
+        Map<Record, Record> result7 = ctx.select(CUSTOMER.CONTACT_FIRST_NAME,
                 CUSTOMER.CONTACT_LAST_NAME, CUSTOMERDETAIL.CITY, CUSTOMERDETAIL.COUNTRY)
                 .from(CUSTOMER)
                 .join(CUSTOMERDETAIL)
                 .on(CUSTOMER.CUSTOMER_NUMBER.eq(CUSTOMERDETAIL.CUSTOMER_NUMBER))
                 .fetchMap(new Field[]{CUSTOMER.CONTACT_FIRST_NAME, CUSTOMER.CONTACT_LAST_NAME},
                 new Field[]{CUSTOMERDETAIL.CITY, CUSTOMERDETAIL.COUNTRY});
-        System.out.println("Example 4.6\n" + prettyPrint(result6));
+        System.out.println("Example 4.7\n" + prettyPrint(result7));
 
-        Map<CustomerRecord, CustomerdetailRecord> result7 = ctx.select()
+        Map<CustomerRecord, CustomerdetailRecord> result8 = ctx.select()
                 .from(CUSTOMER)
                 .join(CUSTOMERDETAIL)
                 .on(CUSTOMER.CUSTOMER_NUMBER.eq(CUSTOMERDETAIL.CUSTOMER_NUMBER))
                 .fetchMap(CUSTOMER, CUSTOMERDETAIL);
-        System.out.println("Example 4.7\n" + prettyPrint(result7));
+        System.out.println("Example 4.8\n" + prettyPrint(result8));
 
         // denormalising (flattening)
-        Map<CustomerRecord, Record> result8 = ctx.select()
+        Map<CustomerRecord, Record> result9 = ctx.select()
                 .from(CUSTOMER)
                 .join(CUSTOMERDETAIL)
                 .on(CUSTOMER.CUSTOMER_NUMBER.eq(CUSTOMERDETAIL.CUSTOMER_NUMBER))
                 .fetchMap(CUSTOMER);
-        System.out.println("Example 4.8\n" + prettyPrint(result8));
+        System.out.println("Example 4.9\n" + prettyPrint(result9));
 
-        Map<Customer, Customerdetail> result9 = ctx.select()
+        Map<Customer, Customerdetail> result10 = ctx.select()
                 .from(CUSTOMER)
                 .join(CUSTOMERDETAIL)
                 .on(CUSTOMER.CUSTOMER_NUMBER.eq(CUSTOMERDETAIL.CUSTOMER_NUMBER))
                 .fetchMap(Customer.class, Customerdetail.class);
-        System.out.println("Example 4.9\n" + prettyPrint(result9));
+        System.out.println("Example 4.10\n" + prettyPrint(result10));
 
         // mapping one-to-many
-        Map<Record, Record> result10 = ctx.select(concat(CUSTOMER.CONTACT_FIRST_NAME, val(" "),
+        Map<Record, Record> result11 = ctx.select(concat(CUSTOMER.CONTACT_FIRST_NAME, val(" "),
                 CUSTOMER.CONTACT_LAST_NAME).as("customer_name"), PAYMENT.INVOICE_AMOUNT, PAYMENT.CACHING_DATE)
                 .from(CUSTOMER)
                 .join(PAYMENT)
                 .on(CUSTOMER.CUSTOMER_NUMBER.eq(PAYMENT.CUSTOMER_NUMBER))
                 .fetchMap(new Field[]{PAYMENT.INVOICE_AMOUNT, PAYMENT.CACHING_DATE},
                 new Field[]{field("customer_name", String.class)});
-        System.out.println("Example 4.10\n" + prettyPrint(result10));
-
-        Map<Integer, BigDecimal> result11 = ctx.select(rowNumber().over().as("no"), CUSTOMER.CREDIT_LIMIT)
-                .from(CUSTOMER)
-                .fetchMap(field("no", Integer.class), CUSTOMER.CREDIT_LIMIT);
         System.out.println("Example 4.11\n" + prettyPrint(result11));
 
-        Map<Long, Integer> result12 = ctx.select(
+        Map<Integer, BigDecimal> result12 = ctx.select(rowNumber().over().as("no"), CUSTOMER.CREDIT_LIMIT)
+                .from(CUSTOMER)
+                .fetchMap(field("no", Integer.class), CUSTOMER.CREDIT_LIMIT);
+        System.out.println("Example 4.12\n" + prettyPrint(result12));
+
+        Map<Long, Integer> result13 = ctx.select(
                 ORDERDETAIL.PRODUCT_ID, sum(ORDERDETAIL.QUANTITY_ORDERED).as("sum"))
                 .from(ORDERDETAIL)
                 .groupBy(ORDERDETAIL.PRODUCT_ID)
                 .fetchMap(ORDERDETAIL.PRODUCT_ID, field("sum", Integer.class));
-        System.out.println("Example 4.12\n" + prettyPrint(result12));
+        System.out.println("Example 4.13\n" + prettyPrint(result13));
 
-        Map<String, Object> result13 = ctx.select(DEPARTMENT.NAME,
+        Map<String, Object> result14 = ctx.select(DEPARTMENT.NAME,
                 DEPARTMENT.OFFICE_CODE, DEPARTMENT.PHONE).from(DEPARTMENT)
                 .where(DEPARTMENT.DEPARTMENT_ID.eq(1))
                 .fetchOneMap();
-        System.out.println("Example 4.13\n" + prettyPrint(result13));
-
-        Map<String, Object> result14 = ctx.selectFrom(PRODUCT)
-                .where(PRODUCT.PRODUCT_ID.eq(23L))
-                .fetchSingleMap();
         System.out.println("Example 4.14\n" + prettyPrint(result14));
 
-        Map<String, Object> result15 = ctx.selectFrom(ORDER)
-                .fetchAnyMap();
+        Map<String, Object> result15 = ctx.selectFrom(PRODUCT)
+                .where(PRODUCT.PRODUCT_ID.eq(23L))
+                .fetchSingleMap();
         System.out.println("Example 4.15\n" + prettyPrint(result15));
 
-        List<Map<String, Object>> result16 = ctx.selectFrom(DEPARTMENT)
+        Map<String, Object> result16 = ctx.selectFrom(ORDER)
+                .fetchAnyMap();
+        System.out.println("Example 4.16\n" + prettyPrint(result16));
+
+        List<Map<String, Object>> result17 = ctx.selectFrom(DEPARTMENT)
                 .fetchMaps();
-        System.out.println("Example 4.16\n" + result16);
+        System.out.println("Example 4.17\n" + result17);
 
         // fetch array
-        Map<String, String[]> result17 = ctx.select(DEPARTMENT.NAME, DEPARTMENT.TOPIC)
+        Map<String, String[]> result18 = ctx.select(DEPARTMENT.NAME, DEPARTMENT.TOPIC)
                 .from(DEPARTMENT)
                 .fetchMap(DEPARTMENT.NAME, DEPARTMENT.TOPIC);
-        System.out.println("Example 4.17\n" + prettyPrint(result17));
+        System.out.println("Example 4.18\n" + prettyPrint(result18));
 
         // fetch UDT
-        Map<String, EvaluationCriteriaRecord> result18
+        Map<String, EvaluationCriteriaRecord> result19
                 = ctx.select(MANAGER.MANAGER_NAME, MANAGER.MANAGER_EVALUATION)
                         .from(MANAGER)
                         .fetchMap(MANAGER.MANAGER_NAME, MANAGER.MANAGER_EVALUATION);
-        System.out.println("Example 4.18\n" + prettyPrint(result18));
+        System.out.println("Example 4.19\n" + prettyPrint(result19));
 
         // fetch embeddable type 
-        Map<String, OfficeFullAddressRecord> result19
+        Map<String, OfficeFullAddressRecord> result20
                 = ctx.select(OFFICE.OFFICE_CODE, OFFICE.OFFICE_FULL_ADDRESS)
                         .from(OFFICE)
                         .fetchMap(OFFICE.OFFICE_CODE, OFFICE.OFFICE_FULL_ADDRESS);
-        System.out.println("Example 3.19\n" + prettyPrint(result19));
+        System.out.println("Example 3.20\n" + prettyPrint(result20));
     }
 
     public static <K, V> String prettyPrint(Map<K, V> map) {
