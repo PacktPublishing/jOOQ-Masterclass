@@ -57,7 +57,9 @@ public class ClassicModelsRepository {
                 .fetchGroups(ORDER.CUSTOMER_NUMBER);
         System.out.println("Example 1\n" + prettyPrint(result1));
 
-        Map<Long, List<BigDecimal>> result2 = ctx.selectFrom(BANK_TRANSACTION)
+        Map<Long, List<BigDecimal>> result2 = ctx.select(
+                BANK_TRANSACTION.CUSTOMER_NUMBER, BANK_TRANSACTION.TRANSFER_AMOUNT)
+                .from(BANK_TRANSACTION)
                 .fetchGroups(BANK_TRANSACTION.CUSTOMER_NUMBER, BANK_TRANSACTION.TRANSFER_AMOUNT);
         System.out.println("Example 2\n" + prettyPrint(result2));
 
@@ -157,16 +159,34 @@ public class ClassicModelsRepository {
         System.out.println("Example 16\n" + prettyPrint(result16));
 
         // take advantage of generated equals()/hashCode(), 
-        //<pojosEqualsAndHashCode>true</pojosEqualsAndHashCode>                                                   
+        //<pojosEqualsAndHashCode>true</pojosEqualsAndHashCode>              
         Map<Manager, List<Office>> result17 = ctx.select()
+                .from(MANAGER).crossApply(select().from(OFFICE).join(OFFICE_HAS_MANAGER)
+                .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))
+                .where(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID)))
+                .fetchGroups(Manager.class, Office.class);
+        System.out.println("Example 17\n" + prettyPrint(result17));
+
+        // same thing as the above uery but a little bit more verbose
+        Map<Manager, List<Office>> result18 = ctx.select()
                 .from(MANAGER)
                 .join(select().from(OFFICE).join(OFFICE_HAS_MANAGER)
                         .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE)).asTable("t"))
                 .on(MANAGER.MANAGER_ID.eq(field(name("managers_manager_id"), Long.class)))
                 .fetchGroups(Manager.class, Office.class);
-        System.out.println("Example 17\n" + prettyPrint(result17));        
+        System.out.println("Example 18\n" + prettyPrint(result18));
 
-        Map<Record, Result<Record>> result18
+        Map<Record, Result<Record>> result19
+                = ctx.select(MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME, field("city"), field("country"))
+                        .from(MANAGER).crossApply(select(OFFICE.CITY.as("city"), OFFICE.COUNTRY.as("country"))
+                        .from(OFFICE).join(OFFICE_HAS_MANAGER)
+                        .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))
+                        .where(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID)))
+                        .fetchGroups(new Field[]{MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME},
+                        new Field[]{field("city"), field("country")});
+        System.out.println("Example 19\n" + prettyPrint(result19));
+
+        Map<Record, Result<Record>> result20
                 = ctx.select(MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME, field("city"), field("country"))
                         .from(MANAGER)
                         .join(select(OFFICE.CITY.as("city"), OFFICE.COUNTRY.as("country"),
@@ -176,7 +196,7 @@ public class ClassicModelsRepository {
                         .on(MANAGER.MANAGER_ID.eq(field(name("managers_manager_id"), Long.class)))
                         .fetchGroups(new Field[]{MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME},
                         new Field[]{field("city"), field("country")});
-        System.out.println("Example 18\n" + prettyPrint(result18));               
+        System.out.println("Example 20\n" + prettyPrint(result20));
     }
 
     private static <K, V> String prettyPrint(Map<K, V> map) {
