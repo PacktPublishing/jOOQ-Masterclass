@@ -16,6 +16,7 @@ import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Productline.PRODUCTLINE;
 import org.jooq.DSLContext;
 import org.jooq.Field;
+import org.jooq.Result;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -99,7 +100,7 @@ public class ClassicModelsRepository {
     public void fetchOneToManyBidirectional() {
 
         // approach 1
-        var map = ctx.select(
+        var map = ctx.select( // Map<Record, Result<Record>>
                 PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.TEXT_DESCRIPTION,
                 PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_VENDOR, PRODUCT.QUANTITY_IN_STOCK)
                 .from(PRODUCTLINE)
