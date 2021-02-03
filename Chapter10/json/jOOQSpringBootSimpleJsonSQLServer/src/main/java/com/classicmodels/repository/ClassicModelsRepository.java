@@ -1,5 +1,6 @@
 package com.classicmodels.repository;
 
+import java.util.List;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Manager.MANAGER;
 import static jooq.generated.tables.Payment.PAYMENT;
@@ -41,13 +42,39 @@ public class ClassicModelsRepository {
     public void fetchSimpleJson() {
 
         // simple example of using jsonObject()
-        Result<Record1<JSON>> result1 = ctx.select(jsonObject(
+        Result<Record1<JSON>> result11 = ctx.select(jsonObject(
                 key("customerName").value(CUSTOMER.CUSTOMER_NAME),
                 key("creditLimit").value(CUSTOMER.CREDIT_LIMIT)).as("json_result"))
                 .from(CUSTOMER)
                 .limit(3)
                 .fetch();
-        System.out.println("Example 1.1:\n" + result1);
+        System.out.println("Example 1.1.1.a:\n" + result11);
+        System.out.println("Example 1.1.1.b:\n" + result11.formatJSON());
+        
+        List<String> result12 = ctx.select(jsonObject(
+                key("customerName").value(CUSTOMER.CUSTOMER_NAME),
+                key("creditLimit").value(CUSTOMER.CREDIT_LIMIT)).as("json_result"))
+                .from(CUSTOMER)
+                .limit(3)
+                .fetchInto(String.class);
+        System.out.println("Example 1.1.2:\n" + result12);
+        
+        Result<Record1<JSON>> result13 = ctx.select(jsonObject(
+                jsonEntry("customerName", CUSTOMER.CUSTOMER_NAME),
+                jsonEntry("creditLimit", CUSTOMER.CREDIT_LIMIT)).as("json_result"))
+                .from(CUSTOMER)
+                .limit(3)
+                .fetch();
+        System.out.println("Example 1.1.3.a:\n" + result13);
+        System.out.println("Example 1.1.3.b:\n" + result13.formatJSON());
+        
+        List<String> result14 = ctx.select(jsonObject(
+                jsonEntry("customerName", CUSTOMER.CUSTOMER_NAME),
+                jsonEntry("creditLimit", CUSTOMER.CREDIT_LIMIT)).as("json_result"))
+                .from(CUSTOMER)
+                .limit(3)
+                .fetchInto(String.class);
+        System.out.println("Example 1.1.4:\n" + result14);
 
         // simple example of using jsonEntry()
         JSONEntry customerNameEntry = jsonEntry("customerName", CUSTOMER.CUSTOMER_NAME);
@@ -64,11 +91,17 @@ public class ClassicModelsRepository {
     // if you don't want to use coerce() then consider a converter as in the previous chapter 
     public void fetchJsonValue() {
 
-        Result<Record1<JSON>> result1 = ctx.select(
+        Result<Record1<JSON>> result21 = ctx.select(
                 jsonValue(MANAGER.MANAGER_DETAIL.coerce(JSON.class), "$.email").as("email"))
                 .from(MANAGER)
                 .fetch();
-        System.out.println("Example 2.1:\n" + result1);
+        System.out.println("Example 2.1.1:\n" + result21);
+        
+        List<String> result22 = ctx.select(
+                jsonValue(MANAGER.MANAGER_DETAIL.coerce(JSON.class), "$.email").as("email"))
+                .from(MANAGER)
+                .fetchInto(String.class);
+        System.out.println("Example 2.1.2:\n" + result22);
 
         Result<Record1<JSON>> result2 = ctx.select(
                 jsonValue(MANAGER.MANAGER_DETAIL.coerce(JSON.class), "$.address.city").as("city"))
