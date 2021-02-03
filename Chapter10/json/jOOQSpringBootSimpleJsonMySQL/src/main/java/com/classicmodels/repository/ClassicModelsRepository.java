@@ -51,8 +51,9 @@ public class ClassicModelsRepository {
                 .from(CUSTOMER)
                 .limit(3)
                 .fetch();
-        System.out.println("Example 1.1.1.a:\n" + result11);
-        System.out.println("Example 1.1.1.b:\n" + result11.formatJSON());
+        System.out.println("Example 1.1.1.a:\n" + result11); 
+        System.out.println("Example 1.1.1.b:\n" + result11.get(0).value1().data()); 
+        System.out.println("Example 1.1.1.c:\n" + result11.formatJSON());
         
         List<String> result12 = ctx.select(jsonObject(
                 key("customerName").value(CUSTOMER.CUSTOMER_NAME),
