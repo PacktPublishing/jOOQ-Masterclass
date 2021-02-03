@@ -1,6 +1,7 @@
 package com.classicmodels.repository;
 
 import java.time.LocalDate;
+import java.util.List;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Manager.MANAGER;
 import org.jooq.DSLContext;
@@ -44,33 +45,75 @@ public class ClassicModelsRepository {
     public void fetchSimpleJson() {
 
         // simple example of using jsonObject()
-        Result<Record1<JSON>> result1 = ctx.select(jsonObject(
+        Result<Record1<JSON>> result11 = ctx.select(jsonObject(
                 key("customerName").value(CUSTOMER.CUSTOMER_NAME),
                 key("creditLimit").value(CUSTOMER.CREDIT_LIMIT)).as("json_result"))
                 .from(CUSTOMER)
                 .limit(3)
                 .fetch();
-        System.out.println("Example 1.1:\n" + result1);
+        System.out.println("Example 1.1.1.a:\n" + result11);
+        System.out.println("Example 1.1.1.b:\n" + result11.formatJSON());
+        
+        List<String> result12 = ctx.select(jsonObject(
+                key("customerName").value(CUSTOMER.CUSTOMER_NAME),
+                key("creditLimit").value(CUSTOMER.CREDIT_LIMIT)).as("json_result"))
+                .from(CUSTOMER)
+                .limit(3)
+                .fetchInto(String.class);
+        System.out.println("Example 1.1.2:\n" + result12);
+        
+        Result<Record1<JSON>> result13 = ctx.select(jsonObject(
+                jsonEntry("customerName", CUSTOMER.CUSTOMER_NAME),
+                jsonEntry("creditLimit", CUSTOMER.CREDIT_LIMIT)).as("json_result"))
+                .from(CUSTOMER)
+                .limit(3)
+                .fetch();
+        System.out.println("Example 1.1.3.a:\n" + result13);
+        System.out.println("Example 1.1.3.b:\n" + result13.formatJSON());
+        
+        List<String> result14 = ctx.select(jsonObject(
+                jsonEntry("customerName", CUSTOMER.CUSTOMER_NAME),
+                jsonEntry("creditLimit", CUSTOMER.CREDIT_LIMIT)).as("json_result"))
+                .from(CUSTOMER)
+                .limit(3)
+                .fetchInto(String.class);
+        System.out.println("Example 1.1.4:\n" + result14);
 
-        // simple example of using jsonArray()
-        Result<Record1<JSON>> result2 = ctx.select(jsonArray(concat(CUSTOMER.CONTACT_FIRST_NAME, val(" "),
+        // simple example of using jsonArray()        
+        List<String> result21 = ctx.select(jsonArray(jsonObject(
+                jsonEntry("customerName", CUSTOMER.CUSTOMER_NAME),
+                jsonEntry("creditLimit", CUSTOMER.CREDIT_LIMIT))).as("json_result"))
+                .from(CUSTOMER)
+                .limit(3)
+                .fetchInto(String.class);
+        System.out.println("Example 1.2.1:\n" + result21);
+        
+        List<String> result22 = ctx.select(jsonArray(concat(CUSTOMER.CONTACT_FIRST_NAME, val(" "),
                 CUSTOMER.CONTACT_LAST_NAME), CUSTOMER.CREDIT_LIMIT).as("json_result"))
                 .from(CUSTOMER)
                 .orderBy(CUSTOMER.CREDIT_LIMIT)
-                .fetch();
-        System.out.println("Example 1.2:\n" + result2);
+                .fetchInto(String.class);
+        System.out.println("Example 1.2.2:\n" + result22);
 
         // simple example of using jsonArrayAgg()
-        Result<Record1<JSON>> result3 = ctx.select(jsonArrayAgg(CUSTOMER.CUSTOMER_NAME).as("json_result"))
+        String result31 = ctx.select(jsonArrayAgg(jsonObject(
+                jsonEntry("customerName", CUSTOMER.CUSTOMER_NAME),
+                jsonEntry("creditLimit", CUSTOMER.CREDIT_LIMIT))).as("json_result"))
                 .from(CUSTOMER)
-                .fetch();
-        System.out.println("Example 1.3:\n" + result3);
+                .limit(3)
+                .fetchSingleInto(String.class);
+        System.out.println("Example 1.3.1:\n" + result31);
+        
+        String result32 = ctx.select(jsonArrayAgg(CUSTOMER.CUSTOMER_NAME).as("json_result"))
+                .from(CUSTOMER)
+                .fetchSingleInto(String.class);
+        System.out.println("Example 1.3.2:\n" + result32);
 
-        // simple example of using jsonObjectAgg()
-        Result<Record1<JSON>> result4 = ctx.select(jsonObjectAgg(
+        // simple example of using jsonObjectAgg()               
+        String result4 = ctx.select(jsonObjectAgg(
                 CUSTOMER.CUSTOMER_NAME, CUSTOMER.CREDIT_LIMIT).as("json_result"))
                 .from(CUSTOMER)
-                .fetch();
+                .fetchSingleInto(String.class);
         System.out.println("Example 1.4:\n" + result4);
 
         // simple example of using jsonExists()
@@ -94,11 +137,23 @@ public class ClassicModelsRepository {
     
     public void fetchJsonValue() {
         
-        Result<Record1<JSON>> result1 = ctx.select(
+        Result<Record1<JSON>> result21 = ctx.select(
                 jsonValue(MANAGER.MANAGER_DETAIL, "$.email").as("email"))
                 .from(MANAGER)
                 .fetch();
-        System.out.println("Example 2.1:\n" + result1);
+        System.out.println("Example 2.1.1:\n" + result21);
+        
+        List<String> result22 = ctx.select(
+                jsonValue(MANAGER.MANAGER_DETAIL, "$.email").as("email"))
+                .from(MANAGER)
+                .fetchInto(String.class);
+        System.out.println("Example 2.1.2:\n" + result22);
+        
+        String result23 = ctx.select(jsonArrayAgg(
+                jsonValue(MANAGER.MANAGER_DETAIL, "$.email")).as("email"))
+                .from(MANAGER)
+                .fetchSingleInto(String.class);
+        System.out.println("Example 2.1.3:\n" + result23);
         
         Result<Record1<JSON>> result2 = ctx.select(
                 jsonValue(MANAGER.MANAGER_DETAIL, "$.address.city").as("city"))
