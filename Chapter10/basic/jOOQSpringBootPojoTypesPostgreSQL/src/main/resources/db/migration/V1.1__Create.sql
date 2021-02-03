@@ -182,7 +182,7 @@ CREATE TABLE productline (
   product_line varchar(50) NOT NULL,
   code bigint NOT NULL,
   text_description varchar(4000) DEFAULT NULL,
-  html_description text,
+  html_description xml,
   image bytea,
   created_on date NOT NULL DEFAULT NOW(),
   PRIMARY KEY (product_line, code),
@@ -291,6 +291,7 @@ CREATE TABLE bank_transaction (
   caching_date timestamp NOT NULL DEFAULT NOW(),
   customer_number bigint NOT NULL,
   check_number varchar(50) NOT NULL, 
+  status varchar(50) NOT NULL, 
   PRIMARY KEY (transaction_id),  
   CONSTRAINT bank_transaction_ibfk_1 FOREIGN KEY (customer_number,check_number) REFERENCES payment (customer_number,check_number)
 ) ;

@@ -35,6 +35,7 @@ import com.classicmodels.pojo.SimpleCustomerdetail;
 import com.classicmodels.pojo.SimpleDepartmentDetail;
 import com.classicmodels.pojo.SimpleManagerStatus;
 import com.classicmodels.pojo.SimpleOrder;
+import com.classicmodels.pojo.SimplestCustomer;
 import java.util.Map;
 import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
 import static jooq.generated.tables.Order.ORDER;
@@ -50,25 +51,25 @@ public class ClassicModelsRepository {
     public ClassicModelsRepository(DSLContext ctx) {
         this.ctx = ctx;
     }
-
-    // jOOQ generated POJOs almost like those from Example 1.3 via <pojos>true</pojos> 
+    
     public void fetchSimplePojoExamples() {
 
-        List<SimpleCustomer> result1 = ctx.select(
-                CUSTOMER.CUSTOMER_NAME, CUSTOMER.FIRST_BUY_DATE.coerce(YEARMONTH).as("ym"))
+        List<SimplestCustomer> result1 = ctx.select(
+                CUSTOMER.CUSTOMER_NAME, CUSTOMER.PHONE.as("customerPhone"))
                 .from(CUSTOMER)
-                .fetchInto(SimpleCustomer.class);
+                .fetchInto(SimplestCustomer.class);
         System.out.println("Example 1.1\n" + result1);
 
-        // CUSTOMER.FIRST_BUY_DATE is ignored (it needs the proper alias), so POJOs's "ym"  field is set to null
-        // CUSTOMER.PHONE is ignored
-        List<SimpleCustomer> result2 = ctx.select(
-                CUSTOMER.CUSTOMER_NAME, CUSTOMER.PHONE, CUSTOMER.FIRST_BUY_DATE.coerce(YEARMONTH))
+        // CUSTOMER.PHONE is ignored (it needs the proper alias), so POJOs's "customerPhone"  field is set to null
+        // CUSTOMER.CREDIT_LIMIT is ignored since is not present in the POJO
+        List<SimplestCustomer> result2 = ctx.select(
+                CUSTOMER.CUSTOMER_NAME, CUSTOMER.CREDIT_LIMIT, CUSTOMER.PHONE)
                 .from(CUSTOMER)
-                .fetchInto(SimpleCustomer.class);
+                .fetchInto(SimplestCustomer.class);
         System.out.println("Example 1.2\n" + result2);
 
         // having a proper constructor, we can omit aliases
+        // jOOQ generated POJOs almost like SimpleDepartment via <pojos>true</pojos> 
         List<SimpleDepartment> result3 = ctx.select(
                 DEPARTMENT.NAME, DEPARTMENT.CODE, DEPARTMENT.TOPIC)
                 .from(DEPARTMENT)
@@ -172,7 +173,7 @@ public class ClassicModelsRepository {
 
         // require an exact match between the fetched fields and POJO's fields
         List<ImmutableCustomer> result1 = ctx.select(
-                CUSTOMER.CUSTOMER_NAME, CUSTOMER.FIRST_BUY_DATE.coerce(YEARMONTH).as("ym"))
+                CUSTOMER.CUSTOMER_NAME, CUSTOMER.FIRST_BUY_DATE.coerce(YEARMONTH))
                 .from(CUSTOMER)
                 .fetchInto(ImmutableCustomer.class);
         System.out.println("Example 2.1\n" + result1);
