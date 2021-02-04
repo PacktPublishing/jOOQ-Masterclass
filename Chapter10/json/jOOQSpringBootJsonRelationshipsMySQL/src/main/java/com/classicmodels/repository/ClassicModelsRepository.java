@@ -63,9 +63,9 @@ public class ClassicModelsRepository {
                                         jsonObject(CUSTOMERDETAIL.CITY,
                                                 CUSTOMERDETAIL.ADDRESS_LINE_FIRST, CUSTOMERDETAIL.STATE))
                                         .from(CUSTOMERDETAIL)
-                                        .where(CUSTOMERDETAIL.CUSTOMER_NUMBER.eq(CUSTOMER.CUSTOMER_NUMBER))))))
+                                        .where(CUSTOMERDETAIL.CUSTOMER_NUMBER.eq(CUSTOMER.CUSTOMER_NUMBER)))))
+                        .orderBy(CUSTOMER.CREDIT_LIMIT))
                 .from(CUSTOMER)
-                .orderBy(CUSTOMER.CREDIT_LIMIT)
                 .fetchSingleInto(String.class);
 
         System.out.println("Example 1.1.2 (one-to-one):\n" + result12);
@@ -202,9 +202,9 @@ public class ClassicModelsRepository {
                                                 key("quantityInStock").value(PRODUCT.QUANTITY_IN_STOCK)))
                                         .orderBy(PRODUCT.QUANTITY_IN_STOCK))
                                         .from(PRODUCT)
-                                        .where(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE))))))
+                                        .where(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE)))))
+                        .orderBy(PRODUCTLINE.PRODUCT_LINE))
                 .from(PRODUCTLINE)
-                .orderBy(PRODUCTLINE.PRODUCT_LINE)
                 .fetchSingleInto(String.class);
 
         System.out.println("Example 3.1.2 (one-to-many):\n" + result32);
