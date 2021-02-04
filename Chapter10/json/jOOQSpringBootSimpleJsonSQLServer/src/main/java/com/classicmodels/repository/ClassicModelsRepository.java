@@ -45,8 +45,7 @@ public class ClassicModelsRepository {
         Result<Record1<JSON>> result11 = ctx.select(jsonObject(
                 key("customerName").value(CUSTOMER.CUSTOMER_NAME),
                 key("creditLimit").value(CUSTOMER.CREDIT_LIMIT)).as("json_result"))
-                .from(CUSTOMER)
-                .limit(3)
+                .from(CUSTOMER)                
                 .fetch();
         System.out.println("Example 1.1.1.a:\n" + result11);
         System.out.println("Example 1.1.1.b:\n" + result11.get(0).value1().data()); 
@@ -55,16 +54,14 @@ public class ClassicModelsRepository {
         List<String> result12 = ctx.select(jsonObject(
                 key("customerName").value(CUSTOMER.CUSTOMER_NAME),
                 key("creditLimit").value(CUSTOMER.CREDIT_LIMIT)).as("json_result"))
-                .from(CUSTOMER)
-                .limit(3)
+                .from(CUSTOMER)                
                 .fetchInto(String.class);
         System.out.println("Example 1.1.2:\n" + result12);
         
         Result<Record1<JSON>> result13 = ctx.select(jsonObject(
                 jsonEntry("customerName", CUSTOMER.CUSTOMER_NAME),
                 jsonEntry("creditLimit", CUSTOMER.CREDIT_LIMIT)).as("json_result"))
-                .from(CUSTOMER)
-                .limit(3)
+                .from(CUSTOMER)                
                 .fetch();
         System.out.println("Example 1.1.3.a:\n" + result13);
         System.out.println("Example 1.1.3.b:\n" + result13.formatJSON());
@@ -72,8 +69,7 @@ public class ClassicModelsRepository {
         List<String> result14 = ctx.select(jsonObject(
                 jsonEntry("customerName", CUSTOMER.CUSTOMER_NAME),
                 jsonEntry("creditLimit", CUSTOMER.CREDIT_LIMIT)).as("json_result"))
-                .from(CUSTOMER)
-                .limit(3)
+                .from(CUSTOMER)                
                 .fetchInto(String.class);
         System.out.println("Example 1.1.4:\n" + result14);
 
