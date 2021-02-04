@@ -238,7 +238,7 @@ public class ClassicModelsRepository {
         Result<Record> result2 = ctx.select(table("t").asterisk())
                 .from(MANAGER, lateral(jsonTable(MANAGER.MANAGER_DETAIL, val("$[*]"))
                         .column("id").forOrdinality()
-                        .column("firstName", VARCHAR)
+                        .column("firstName", VARCHAR) // it is better to specify a size as well, VARCHAR(20)
                         .column("lastName", VARCHAR)
                         .column("gender", VARCHAR)
                         .column("dob", DATE)

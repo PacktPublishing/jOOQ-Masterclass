@@ -238,7 +238,7 @@ public class ClassicModelsRepository {
         Result<Record> result3 = ctx.select(table(name("t")).asterisk())
                 .from(MANAGER).crossApply(jsonTable(MANAGER.MANAGER_DETAIL, val("$.projects[*]"))
                         .column("id").forOrdinality()
-                        .column("name", VARCHAR)
+                        .column("name", VARCHAR) // it is better to specify a size as well, VARCHAR(20)
                         .column("start", DATE)
                         .column("end", DATE) 
                         .column("type", VARCHAR)
