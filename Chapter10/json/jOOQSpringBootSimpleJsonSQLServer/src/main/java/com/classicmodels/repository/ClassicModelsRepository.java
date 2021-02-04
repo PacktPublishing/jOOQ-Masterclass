@@ -54,7 +54,8 @@ public class ClassicModelsRepository {
         List<String> result12 = ctx.select(jsonObject(
                 key("customerName").value(CUSTOMER.CUSTOMER_NAME),
                 key("creditLimit").value(CUSTOMER.CREDIT_LIMIT)).as("json_result"))
-                .from(CUSTOMER)                
+                .from(CUSTOMER)       
+                .orderBy(CUSTOMER.CUSTOMER_NAME).limit(3)
                 .fetchInto(String.class);
         System.out.println("Example 1.1.2:\n" + result12);
         

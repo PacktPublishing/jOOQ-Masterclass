@@ -24,6 +24,7 @@ import static org.jooq.impl.DSL.jsonTable;
 import static org.jooq.impl.DSL.key;
 import static org.jooq.impl.DSL.lateral;
 import static org.jooq.impl.DSL.name;
+import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.table;
 import static org.jooq.impl.DSL.val;
 import static org.jooq.impl.SQLDataType.DATE;
@@ -59,6 +60,7 @@ public class ClassicModelsRepository {
                 key("customerName").value(CUSTOMER.CUSTOMER_NAME),
                 key("creditLimit").value(CUSTOMER.CREDIT_LIMIT)).as("json_result"))
                 .from(CUSTOMER)                
+                .orderBy(CUSTOMER.CUSTOMER_NAME).limit(3)
                 .fetchInto(String.class);
         System.out.println("Example 1.1.2:\n" + result12);
         
@@ -97,13 +99,21 @@ public class ClassicModelsRepository {
                 jsonEntry("customerName", CUSTOMER.CUSTOMER_NAME),
                 jsonEntry("creditLimit", CUSTOMER.CREDIT_LIMIT))).as("json_result"))
                 .from(CUSTOMER)                
-                .fetchSingleInto(String.class);
+                .fetchSingleInto(String.class);        
         System.out.println("Example 1.3.1:\n" + result31);
         
         String result32 = ctx.select(jsonArrayAgg(CUSTOMER.CUSTOMER_NAME).as("json_result"))
                 .from(CUSTOMER)
                 .fetchSingleInto(String.class);
         System.out.println("Example 1.3.2:\n" + result32);
+        
+        String result33 = ctx.select(jsonArrayAgg(jsonObject(
+                jsonEntry("customerName", field("customer_name")),
+                jsonEntry("creditLimit", field("credit_limit")))).as("json_result"))
+                .from(select(CUSTOMER.CUSTOMER_NAME, CUSTOMER.CREDIT_LIMIT)
+                .from(CUSTOMER).orderBy(CUSTOMER.CUSTOMER_NAME).limit(3))                     
+                .fetchSingleInto(String.class);
+        System.out.println("Example 1.3.3:\n" + result33);
 
         // simple example of using jsonObjectAgg()               
         String result4 = ctx.select(jsonObjectAgg(
