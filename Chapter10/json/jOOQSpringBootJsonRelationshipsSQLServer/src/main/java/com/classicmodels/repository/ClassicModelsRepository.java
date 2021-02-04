@@ -1,5 +1,6 @@
 package com.classicmodels.repository;
 
+import java.util.List;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
 import static jooq.generated.tables.Manager.MANAGER;
@@ -79,7 +80,7 @@ public class ClassicModelsRepository {
                 .forJSON().path().root("data")
                 .fetch();
 
-        System.out.println("Example 1.3 (one-to-one):\n" + result3.formatJSON());
+        System.out.println("Example 1.3 (one-to-one):\n" + result3.formatJSON());              
 
         Result<Record1<JSON>> result4 = ctx.select(CUSTOMER.CUSTOMER_NAME,
                 CUSTOMER.PHONE, CUSTOMER.CREDIT_LIMIT, CUSTOMERDETAIL.CITY,
