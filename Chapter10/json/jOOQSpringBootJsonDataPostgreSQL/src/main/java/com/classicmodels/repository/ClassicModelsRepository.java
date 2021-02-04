@@ -107,5 +107,8 @@ public class ClassicModelsRepository {
                 .fetchSingle() // there is a single JSON
                 .value1()      // this is org.jooq.JSON
                 .data();       // this is JSON data as String
+        
+                // or, replace the last three lines from above with: .fetchSingleInto(String.class)
+               
     }
 }
