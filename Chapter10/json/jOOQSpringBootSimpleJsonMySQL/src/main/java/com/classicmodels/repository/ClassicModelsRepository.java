@@ -36,13 +36,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional(readOnly = true)
 public class ClassicModelsRepository {
-    
+
     private final DSLContext ctx;
-    
+
     public ClassicModelsRepository(DSLContext ctx) {
         this.ctx = ctx;
     }
-    
+
     public void fetchSimpleJson() {
 
         // simple example of using jsonObject()
@@ -51,30 +51,30 @@ public class ClassicModelsRepository {
                 key("creditLimit").value(CUSTOMER.CREDIT_LIMIT)).as("json_result"))
                 .from(CUSTOMER)
                 .fetch();
-        System.out.println("Example 1.1.1.a:\n" + result11); 
-        System.out.println("Example 1.1.1.b:\n" + result11.get(0).value1().data()); 
+        System.out.println("Example 1.1.1.a:\n" + result11);
+        System.out.println("Example 1.1.1.b:\n" + result11.get(0).value1().data());
         System.out.println("Example 1.1.1.c:\n" + result11.formatJSON());
-        
+
         List<String> result12 = ctx.select(jsonObject(
                 key("customerName").value(CUSTOMER.CUSTOMER_NAME),
                 key("creditLimit").value(CUSTOMER.CREDIT_LIMIT)).as("json_result"))
-                .from(CUSTOMER)                
+                .from(CUSTOMER)
                 .orderBy(CUSTOMER.CUSTOMER_NAME).limit(3)
                 .fetchInto(String.class);
         System.out.println("Example 1.1.2:\n" + result12);
-        
+
         Result<Record1<JSON>> result13 = ctx.select(jsonObject(
                 jsonEntry("customerName", CUSTOMER.CUSTOMER_NAME),
                 jsonEntry("creditLimit", CUSTOMER.CREDIT_LIMIT)).as("json_result"))
-                .from(CUSTOMER)                
+                .from(CUSTOMER)
                 .fetch();
         System.out.println("Example 1.1.3.a:\n" + result13);
         System.out.println("Example 1.1.3.b:\n" + result13.formatJSON());
-        
+
         List<String> result14 = ctx.select(jsonObject(
                 jsonEntry("customerName", CUSTOMER.CUSTOMER_NAME),
                 jsonEntry("creditLimit", CUSTOMER.CREDIT_LIMIT)).as("json_result"))
-                .from(CUSTOMER)                
+                .from(CUSTOMER)
                 .fetchInto(String.class);
         System.out.println("Example 1.1.4:\n" + result14);
 
@@ -82,10 +82,10 @@ public class ClassicModelsRepository {
         List<String> result21 = ctx.select(jsonArray(jsonObject(
                 jsonEntry("customerName", CUSTOMER.CUSTOMER_NAME),
                 jsonEntry("creditLimit", CUSTOMER.CREDIT_LIMIT))).as("json_result"))
-                .from(CUSTOMER)                
+                .from(CUSTOMER)
                 .fetchInto(String.class);
         System.out.println("Example 1.2.1:\n" + result21);
-        
+
         List<String> result22 = ctx.select(jsonArray(concat(CUSTOMER.CONTACT_FIRST_NAME, val(" "),
                 CUSTOMER.CONTACT_LAST_NAME), CUSTOMER.CREDIT_LIMIT).as("json_result"))
                 .from(CUSTOMER)
@@ -97,20 +97,21 @@ public class ClassicModelsRepository {
         String result31 = ctx.select(jsonArrayAgg(jsonObject(
                 jsonEntry("customerName", CUSTOMER.CUSTOMER_NAME),
                 jsonEntry("creditLimit", CUSTOMER.CREDIT_LIMIT))).as("json_result"))
-                .from(CUSTOMER)                
+                .from(CUSTOMER)
                 .fetchSingleInto(String.class);
         System.out.println("Example 1.3.1:\n" + result31);
-        
+
         String result32 = ctx.select(jsonArrayAgg(CUSTOMER.CUSTOMER_NAME).as("json_result"))
                 .from(CUSTOMER)
                 .fetchSingleInto(String.class);
         System.out.println("Example 1.3.2:\n" + result32);
-        
+
         String result33 = ctx.select(jsonArrayAgg(jsonObject(
                 jsonEntry("customerName", field("customer_name")),
-                jsonEntry("creditLimit", field("credit_limit")))).as("json_result"))
+                jsonEntry("creditLimit", field("credit_limit"))))
+                .orderBy(field("credit_limit")).as("json_result"))
                 .from(select(CUSTOMER.CUSTOMER_NAME, CUSTOMER.CREDIT_LIMIT)
-                .from(CUSTOMER).orderBy(CUSTOMER.CUSTOMER_NAME).limit(3))                     
+                        .from(CUSTOMER).orderBy(CUSTOMER.CUSTOMER_NAME).limit(3))
                 .fetchSingleInto(String.class);
         System.out.println("Example 1.3.3:\n" + result33);
 
@@ -120,11 +121,11 @@ public class ClassicModelsRepository {
                 .from(CUSTOMER)
                 .fetchSingleInto(String.class);
         System.out.println("Example 1.4.1:\n" + result41);
-        
+
         String result42 = ctx.select(jsonObjectAgg(
                 field("customer_name", String.class), field("credit_limit")).as("json_result"))
                 .from(select(CUSTOMER.CUSTOMER_NAME, CUSTOMER.CREDIT_LIMIT)
-                .from(CUSTOMER).orderBy(CUSTOMER.CUSTOMER_NAME).limit(3))
+                        .from(CUSTOMER).orderBy(CUSTOMER.CUSTOMER_NAME).limit(3))
                 .fetchSingleInto(String.class);
         System.out.println("Example 1.4.2:\n" + result42);
 
@@ -138,7 +139,7 @@ public class ClassicModelsRepository {
         // simple example of using jsonEntry()
         JSONEntry customerNameEntry = jsonEntry("customerName", CUSTOMER.CUSTOMER_NAME);
         JSONEntry creditLimitEntry = jsonEntry("creditLimit", CUSTOMER.CREDIT_LIMIT);
-        
+
         Result<Record1<JSON>> result6 = ctx.select(jsonObject(
                 customerNameEntry, creditLimitEntry).as("json_result"))
                 .from(CUSTOMER)
@@ -146,45 +147,45 @@ public class ClassicModelsRepository {
                 .fetch();
         System.out.println("Example 1.6:\n" + result6);
     }
-    
+
     public void fetchJsonValue() {
-        
+
         Result<Record1<JSON>> result21 = ctx.select(
                 jsonValue(MANAGER.MANAGER_DETAIL, "$.email").as("email"))
                 .from(MANAGER)
                 .fetch();
         System.out.println("Example 2.1.1:\n" + result21);
-        
+
         List<String> result22 = ctx.select(
                 jsonValue(MANAGER.MANAGER_DETAIL, "$.email").as("email"))
                 .from(MANAGER)
                 .fetchInto(String.class);
         System.out.println("Example 2.1.2:\n" + result22);
-        
+
         String result23 = ctx.select(jsonArrayAgg(
                 jsonValue(MANAGER.MANAGER_DETAIL, "$.email")).as("email"))
                 .from(MANAGER)
                 .fetchSingleInto(String.class);
         System.out.println("Example 2.1.3:\n" + result23);
-        
+
         Result<Record1<JSON>> result2 = ctx.select(
                 jsonValue(MANAGER.MANAGER_DETAIL, "$.address.city").as("city"))
                 .from(MANAGER)
                 .fetch();
         System.out.println("Example 2.2:\n" + result2);
-        
+
         Result<Record1<JSON>> result3 = ctx.select(
                 jsonValue(MANAGER.MANAGER_DETAIL, "$.phoneNumber[*].number[0]").as("homeMobilePhones"))
                 .from(MANAGER)
                 .fetch();
         System.out.println("Example 2.3:\n" + result3);
-        
+
         Result<Record1<JSON>> result4 = ctx.select(
                 jsonValue(MANAGER.MANAGER_DETAIL, "$.phoneNumber[1].number[*]").as("allMobilePhones"))
                 .from(MANAGER)
                 .fetch();
         System.out.println("Example 2.4:\n" + result4);
-        
+
         Result<Record1<JSON>> result5 = ctx.select(
                 jsonValue(MANAGER.MANAGER_DETAIL, "$.email").as("email"))
                 .from(MANAGER)
@@ -192,7 +193,7 @@ public class ClassicModelsRepository {
                         .contains("Principal Manager"))
                 .fetch();
         System.out.println("Example 2.5:\n" + result5);
-        
+
         Result<Record1<JSON>> result6 = ctx.select(
                 jsonValue(MANAGER.MANAGER_DETAIL, "$.email").as("email"))
                 .from(MANAGER)
@@ -200,7 +201,7 @@ public class ClassicModelsRepository {
                         .like("%Principal Manager%"))
                 .fetch();
         System.out.println("Example 2.6:\n" + result6);
-        
+
         Result<Record1<JSON>> result7 = ctx.select(
                 jsonValue(MANAGER.MANAGER_DETAIL, "$.email").as("email"))
                 .from(MANAGER)
@@ -212,9 +213,9 @@ public class ClassicModelsRepository {
                 .fetch();
         System.out.println("Example 2.7:\n" + result7);
     }
-    
+
     public void fetchJsonTable() {
-        
+
         Result<Record> result1 = ctx.select()
                 .from(jsonTable(
                         org.jooq.JSON.valueOf(
@@ -227,7 +228,7 @@ public class ClassicModelsRepository {
                         .as("t"))
                 .fetch();
         System.out.println("Example 3.1:\n" + result1);
-        
+
         Result<Record> result2 = ctx.select(table("t").asterisk())
                 .from(MANAGER, jsonTable(MANAGER.MANAGER_DETAIL, val("$"))
                         .column("id").forOrdinality()
@@ -248,7 +249,7 @@ public class ClassicModelsRepository {
                         .as("t"))
                 .fetch();
         System.out.println("Example 3.2:\n" + result2);
-        
+
         Result<Record> result3 = ctx.select(table("t").asterisk())
                 .from(MANAGER, jsonTable(MANAGER.MANAGER_DETAIL, val("$.projects[*]"))
                         .column("id").forOrdinality()
@@ -323,5 +324,5 @@ public class ClassicModelsRepository {
                 .limit((2))
                 .fetch();
         System.out.println("Example 3.7:\n" + result7);
-    }   
+    }
 }
