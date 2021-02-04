@@ -107,9 +107,10 @@ public class ClassicModelsRepository {
         
         String result33 = ctx.select(jsonArrayAgg(jsonObject(
                 jsonEntry("customerName", field("customer_name")),
-                jsonEntry("creditLimit", field("credit_limit")))).as("json_result"))
+                jsonEntry("creditLimit", field("credit_limit"))))
+                .orderBy(field("credit_limit")).as("json_result"))
                 .from(select(CUSTOMER.CUSTOMER_NAME, CUSTOMER.CREDIT_LIMIT)
-                .from(CUSTOMER).orderBy(CUSTOMER.CUSTOMER_NAME).limit(3))                     
+                        .from(CUSTOMER).orderBy(CUSTOMER.CUSTOMER_NAME).limit(3))
                 .fetchSingleInto(String.class);
         System.out.println("Example 1.3.3:\n" + result33);
 
