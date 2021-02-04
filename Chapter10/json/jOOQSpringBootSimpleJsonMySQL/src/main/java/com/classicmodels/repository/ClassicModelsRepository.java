@@ -114,6 +114,7 @@ public class ClassicModelsRepository {
         String result4 = ctx.select(jsonObjectAgg(
                 CUSTOMER.CUSTOMER_NAME, CUSTOMER.CREDIT_LIMIT).as("json_result"))
                 .from(CUSTOMER)
+                .limit(3)
                 .fetchSingleInto(String.class);
         System.out.println("Example 1.4:\n" + result4);
 
