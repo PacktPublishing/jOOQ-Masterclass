@@ -110,16 +110,23 @@ public class ClassicModelsRepository {
                 jsonEntry("customerName", field("customer_name")),
                 jsonEntry("creditLimit", field("credit_limit")))).as("json_result"))
                 .from(select(CUSTOMER.CUSTOMER_NAME, CUSTOMER.CREDIT_LIMIT)
-                .from(CUSTOMER).limit(3))                     
+                .from(CUSTOMER).orderBy(CUSTOMER.CUSTOMER_NAME).limit(3))                     
                 .fetchSingleInto(String.class);
         System.out.println("Example 1.3.3:\n" + result33);
 
         // simple example of using jsonObjectAgg()               
-        String result4 = ctx.select(jsonObjectAgg(
+        String result41 = ctx.select(jsonObjectAgg(
                 CUSTOMER.CUSTOMER_NAME, CUSTOMER.CREDIT_LIMIT).as("json_result"))
                 .from(CUSTOMER)
                 .fetchSingleInto(String.class);
-        System.out.println("Example 1.4:\n" + result4);
+        System.out.println("Example 1.4.1:\n" + result41);
+        
+        String result42 = ctx.select(jsonObjectAgg(
+                field("customer_name", String.class), field("credit_limit")).as("json_result"))
+                .from(select(CUSTOMER.CUSTOMER_NAME, CUSTOMER.CREDIT_LIMIT)
+                .from(CUSTOMER).orderBy(CUSTOMER.CUSTOMER_NAME).limit(3))
+                .fetchSingleInto(String.class);
+        System.out.println("Example 1.4.2:\n" + result42);
 
         // simple example of using jsonExists()
         Result<Record2<Long, String>> result5 = ctx.select(MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME)
