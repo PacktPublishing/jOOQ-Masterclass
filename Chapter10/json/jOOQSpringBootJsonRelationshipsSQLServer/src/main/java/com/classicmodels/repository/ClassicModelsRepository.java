@@ -1,6 +1,5 @@
 package com.classicmodels.repository;
 
-import java.util.List;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
 import static jooq.generated.tables.Manager.MANAGER;
@@ -69,7 +68,7 @@ public class ClassicModelsRepository {
 
         System.out.println("Example 1.2 (one-to-one):\n" + result2.formatJSON());
 
-        Result<Record1<JSON>> result3 = ctx.select(CUSTOMER.CUSTOMER_NAME,
+        Result<Record1<JSON>> result31 = ctx.select(CUSTOMER.CUSTOMER_NAME,
                 CUSTOMER.PHONE, CUSTOMER.CREDIT_LIMIT, CUSTOMERDETAIL.CITY,
                 CUSTOMERDETAIL.ADDRESS_LINE_FIRST,
                 CUSTOMERDETAIL.STATE)
@@ -80,7 +79,21 @@ public class ClassicModelsRepository {
                 .forJSON().path().root("data")
                 .fetch();
 
-        System.out.println("Example 1.3 (one-to-one):\n" + result3.formatJSON());              
+        System.out.println("Example 1.3.1 (one-to-one):\n" + result31.formatJSON());              
+        
+        String result32 = ctx.select(CUSTOMER.CUSTOMER_NAME,
+                CUSTOMER.PHONE, CUSTOMER.CREDIT_LIMIT, CUSTOMERDETAIL.CITY,
+                CUSTOMERDETAIL.ADDRESS_LINE_FIRST,
+                CUSTOMERDETAIL.STATE)
+                .from(CUSTOMER)
+                .join(CUSTOMERDETAIL)
+                .on(CUSTOMER.CUSTOMER_NUMBER.eq(CUSTOMERDETAIL.CUSTOMER_NUMBER))
+                .orderBy(CUSTOMER.CREDIT_LIMIT)
+                .limit(10)
+                .forJSON().path()
+                .fetchSingleInto(String.class);
+                
+        System.out.println("Example 1.3.2 (one-to-one):\n" + result32);         
 
         Result<Record1<JSON>> result4 = ctx.select(CUSTOMER.CUSTOMER_NAME,
                 CUSTOMER.PHONE, CUSTOMER.CREDIT_LIMIT, CUSTOMERDETAIL.CITY,
@@ -112,7 +125,7 @@ public class ClassicModelsRepository {
                 .fetch();
 
         System.out.println("Example 2.1 (one-to-many):\n" + result1.formatJSON());
-
+               
         Result<Record1<JSON>> result2 = ctx.select(
                 PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.TEXT_DESCRIPTION,
                 PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_VENDOR, PRODUCT.QUANTITY_IN_STOCK)
@@ -125,23 +138,38 @@ public class ClassicModelsRepository {
 
         System.out.println("Example 2.2 (one-to-many):\n" + result2.formatJSON());
 
-        var result3 = ctx.select(
+        var result31 = ctx.select( // Result<Record3<String, String, Object>>
                 PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.TEXT_DESCRIPTION,
                 select(PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_VENDOR, PRODUCT.QUANTITY_IN_STOCK)
                         .from(PRODUCT)
                         .where(PRODUCT.PRODUCT_LINE.eq(PRODUCTLINE.PRODUCT_LINE))
-                        // .limit(5) // limit products
+                        .limit(5) // limit products
                         .forJSON().path().asField("products"))
                 .from(PRODUCTLINE)
-                // .limit(2) // limit product lines
+                .limit(2) // limit product lines
+                // .forJSON().path() // add this if you need a return of type Result<Record1<JSON>>  
                 .fetch();
 
-        System.out.println("Example 2.3 (one-to-many):\n" + result3.formatJSON());
+        System.out.println("Example 2.3.1 (one-to-many):\n" + result31.formatJSON());
+        
+        String result32 = ctx.select( 
+                PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.TEXT_DESCRIPTION,
+                select(PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_VENDOR, PRODUCT.QUANTITY_IN_STOCK)
+                        .from(PRODUCT)
+                        .where(PRODUCT.PRODUCT_LINE.eq(PRODUCTLINE.PRODUCT_LINE))
+                        .limit(2) // limit products
+                        .forJSON().path().asField("products"))
+                .from(PRODUCTLINE)
+                .limit(2) // limit product lines
+                .forJSON().path()
+                .fetchSingleInto(String.class);
+
+        System.out.println("Example 2.3.2 (one-to-many):\n" + result32);
     }
 
     public void manyToManyToJsonManagersOffices() {
 
-        Result<Record1<JSON>> result1 = ctx.select(
+        Result<Record1<JSON>> result31 = ctx.select(
                 OFFICE.OFFICE_CODE.as("officeCode"), OFFICE.CITY, OFFICE.STATE,
                 select(MANAGER.MANAGER_ID.as("managerId"), MANAGER.MANAGER_NAME.as("managerName"))
                         .from(MANAGER)
@@ -153,7 +181,21 @@ public class ClassicModelsRepository {
                 .forJSON().path()
                 .fetch();
 
-        System.out.println("Example 3.1 (many-to-many):\n" + result1.formatJSON());
+        System.out.println("Example 3.1.1 (many-to-many):\n" + result31.formatJSON());
+        
+        String result32 = ctx.select(
+                OFFICE.OFFICE_CODE.as("officeCode"), OFFICE.CITY, OFFICE.STATE,
+                select(MANAGER.MANAGER_ID.as("managerId"), MANAGER.MANAGER_NAME.as("managerName"))
+                        .from(MANAGER)
+                        .join(OFFICE_HAS_MANAGER)
+                        .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID))
+                        .where(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))
+                        .forJSON().path().asField("managers"))
+                .from(OFFICE)
+                .forJSON().path()
+                .fetchSingleInto(String.class);
+
+        System.out.println("Example 3.1.2 (many-to-many):\n" + result32);
 
         Result<Record1<JSON>> result2 = ctx.select(
                 MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME,
@@ -206,7 +248,7 @@ public class ClassicModelsRepository {
 
     public void manyToManyToJsonOfficesManagers() {
 
-        Result<Record1<JSON>> result1 = ctx.select(
+        Result<Record1<JSON>> result41 = ctx.select(
                 MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME,
                 select(OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.STATE)
                         .from(OFFICE)
@@ -218,7 +260,21 @@ public class ClassicModelsRepository {
                 .forJSON().path()
                 .fetch();
 
-        System.out.println("Example 4.1 (many-to-many):\n" + result1.formatJSON());
+        System.out.println("Example 4.1.1 (many-to-many):\n" + result41.formatJSON());
+        
+        String result42 = ctx.select(
+                MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME,
+                select(OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.STATE)
+                        .from(OFFICE)
+                        .join(OFFICE_HAS_MANAGER)
+                        .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))
+                        .where(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID))
+                        .forJSON().path().asField("offices"))
+                .from(MANAGER)
+                .forJSON().path()
+                .fetchSingleInto(String.class);
+
+        System.out.println("Example 4.1.2 (many-to-many):\n" + result42);
 
         Result<Record1<JSON>> result2 = ctx.select(
                 OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.STATE,
