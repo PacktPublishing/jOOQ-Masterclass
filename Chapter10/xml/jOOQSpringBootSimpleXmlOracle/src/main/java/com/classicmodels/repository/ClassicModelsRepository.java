@@ -15,6 +15,7 @@ import static org.jooq.impl.DSL.concat;
 import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.name;
+import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.table;
 import static org.jooq.impl.DSL.val;
 import static org.jooq.impl.DSL.xmlagg;
@@ -114,14 +115,25 @@ public class ClassicModelsRepository {
         System.out.println("Example 1.7:\n" + result7.formatXML());
 
         // simple example of using xmlforest()
-        Result<Record1<XML>> result8 = ctx.select(
+        Result<Record1<XML>> result81 = ctx.select(
                 xmlelement("allContacts", xmlagg(xmlelement("contact",
                         xmlforest(CUSTOMER.CONTACT_FIRST_NAME.as("firstName"),
                                 CUSTOMER.CONTACT_LAST_NAME.as("lastName"),
                                 CUSTOMER.PHONE)))))
                 .from(CUSTOMER)
                 .fetch();
-        System.out.println("Example 1.8:\n" + result8.formatXML());
+        System.out.println("Example 1.8.1:\n" + result81.formatXML());
+        
+        // ordering and limiting   
+        String result82 = ctx.select(
+                xmlelement("allContacts", xmlagg(xmlelement("contact",
+                        xmlforest(field("contact_first_name").as("firstName"),
+                                field("contact_last_name").as("lastName"), field("phone"))))
+                        .orderBy(field("contact_first_name"))))
+                .from(select(CUSTOMER.CONTACT_FIRST_NAME, CUSTOMER.CONTACT_LAST_NAME, CUSTOMER.PHONE)
+                        .from(CUSTOMER).orderBy(CUSTOMER.CONTACT_LAST_NAME).limit(3))
+                .fetchSingleInto(String.class);
+        System.out.println("Example 1.8.2:\n" + result82);
 
         // simple example of using xmlcomment()
         Result<Record1<XML>> result9 = ctx.select(
