@@ -96,7 +96,7 @@ public class ClassicModelsRepository {
                 .from(CUSTOMER)
                 .fetchSingleInto(String.class);
         System.out.println("Example 1.6.2:\n" + result62);
-        
+
         String result63 = ctx.select(xmlelement("names", xmlagg(
                 xmlelement("name", CUSTOMER.CUSTOMER_NAME))))
                 .from(CUSTOMER)
@@ -130,16 +130,17 @@ public class ClassicModelsRepository {
         System.out.println("Example 1.9:\n" + result9.formatXML());
 
         // simple example of using xmlcomment()
-        Result<Record1<XML>> result101 = ctx.select(
+        Result<Record1<XML>> result10 = ctx.select(
                 xmlelement("name", xmlcomment(
                         concat(CUSTOMER.CONTACT_FIRST_NAME,
                                 val(" "), CUSTOMER.CONTACT_LAST_NAME)),
                         CUSTOMER.CUSTOMER_NAME))
                 .from(CUSTOMER)
                 .fetch();
-        System.out.println("Example 1.10.1:\n" + result101.formatXML());
+        System.out.println("Example 1.10:\n" + result10.formatXML());
 
-        Result<Record1<XML>> result102 = ctx.select(
+        // simple example of using xmlcomment()
+        Result<Record1<XML>> result11 = ctx.select(
                 xmlelement("allContacts",
                         xmlcomment("This is a list of customer contacts"),
                         xmlagg(xmlelement("contact",
@@ -148,32 +149,32 @@ public class ClassicModelsRepository {
                                         CUSTOMER.PHONE)))))
                 .from(CUSTOMER)
                 .fetch();
-        System.out.println("Example 1.10.2:\n" + result102.formatXML());
+        System.out.println("Example 1.11:\n" + result11.formatXML());
 
         // simple example of using xmlparseContent()
-        Result<Record1<XML>> result11 = ctx.select(xmlparseContent(
+        Result<Record1<XML>> result12 = ctx.select(xmlparseContent(
                 DEPARTMENT.TOPIC.coerce(String.class)))
                 .from(DEPARTMENT)
                 .fetch();
 
-        System.out.println("Example 1.11:\n" + result11.formatXML());
+        System.out.println("Example 1.12:\n" + result12.formatXML());
 
         // simple example of using xmlparseDocument()
-        Result<Record1<XML>> result12 = ctx.select(xmlparseDocument(
+        Result<Record1<XML>> result13 = ctx.select(xmlparseDocument(
                 PRODUCTLINE.HTML_DESCRIPTION.coerce(String.class)))
                 .from(PRODUCTLINE)
                 .fetch();
 
-        System.out.println("Example 1.12:\n" + result12.formatXML());
+        System.out.println("Example 1.13:\n" + result13.formatXML());
 
         // simple example of using xmlconcat()
-        Result<Record1<XML>> result13 = ctx.select(
+        Result<Record1<XML>> result14 = ctx.select(
                 xmlelement("fullName", xmlconcat(
                         xmlelement("firstName", CUSTOMER.CONTACT_FIRST_NAME),
                         xmlelement("lastName", CUSTOMER.CONTACT_LAST_NAME))))
                 .from(CUSTOMER)
                 .fetch();
-        System.out.println("Example 1.13:\n" + result13.formatXML());
+        System.out.println("Example 1.14:\n" + result14.formatXML());
     }
 
     public void fetchXmlValue() {
