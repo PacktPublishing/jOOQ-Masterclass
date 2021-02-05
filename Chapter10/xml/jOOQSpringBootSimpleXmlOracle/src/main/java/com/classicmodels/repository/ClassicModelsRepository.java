@@ -2,7 +2,6 @@ package com.classicmodels.repository;
 
 import java.util.List;
 import static jooq.generated.tables.Customer.CUSTOMER;
-import static jooq.generated.tables.Department.DEPARTMENT;
 import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Productline.PRODUCTLINE;
 import org.jooq.DSLContext;
