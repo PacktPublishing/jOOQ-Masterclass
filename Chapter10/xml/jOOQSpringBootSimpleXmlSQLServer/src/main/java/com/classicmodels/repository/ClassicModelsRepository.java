@@ -95,10 +95,16 @@ public class ClassicModelsRepository {
                 .fetch();
         System.out.println("Example 1.6:\n" + result6.formatXML());
 
-        Result<Record1<XML>> result7 = ctx.select(OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.COUNTRY)
+        Result<Record1<XML>> result71 = ctx.select(OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.COUNTRY)
                 .from(OFFICE)
                 .forXML().path("office").elements().root("offices")
                 .fetch();
-        System.out.println("Example 1.7:\n" + result7.formatXML());
+        System.out.println("Example 1.7.1:\n" + result71.formatXML());
+        
+        String result72 = ctx.select(OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.COUNTRY)
+                .from(OFFICE)
+                .forXML().path("office").elements().root("offices")
+                .fetchSingleInto(String.class);
+        System.out.println("Example 1.7.2:\n" + result72);
     }
 }

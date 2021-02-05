@@ -154,15 +154,15 @@ public class ClassicModelsRepository {
 
         // simple example of using xmlparseContent()
         Result<Record1<XML>> result12 = ctx.select(xmlparseContent(
-                DEPARTMENT.TOPIC.coerce(String.class)))
-                .from(DEPARTMENT)
+                PRODUCTLINE.HTML_DESCRIPTION.cast(String.class)))
+                .from(PRODUCTLINE)
                 .fetch();
 
         System.out.println("Example 1.12:\n" + result12.formatXML());
 
         // simple example of using xmlparseDocument()
         Result<Record1<XML>> result13 = ctx.select(xmlparseDocument(
-                PRODUCTLINE.HTML_DESCRIPTION.coerce(String.class)))
+                PRODUCTLINE.HTML_DESCRIPTION.cast(String.class)))
                 .from(PRODUCTLINE)
                 .fetch();
 
@@ -403,10 +403,16 @@ public class ClassicModelsRepository {
                 .fetch();
         System.out.println("Example 5.6:\n" + result6.formatXML());
 
-        Result<Record1<XML>> result7 = ctx.select(OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.COUNTRY)
+        Result<Record1<XML>> result71 = ctx.select(OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.COUNTRY)
                 .from(OFFICE)
                 .forXML().path("office").elements().root("offices")
                 .fetch();
-        System.out.println("Example 5.7:\n" + result7.formatXML());
+        System.out.println("Example 1.7.1:\n" + result71.formatXML());
+        
+        String result72 = ctx.select(OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.COUNTRY)
+                .from(OFFICE)
+                .forXML().path("office").elements().root("offices")
+                .fetchSingleInto(String.class);
+        System.out.println("Example 1.7.2:\n" + result72);
     }
 }
