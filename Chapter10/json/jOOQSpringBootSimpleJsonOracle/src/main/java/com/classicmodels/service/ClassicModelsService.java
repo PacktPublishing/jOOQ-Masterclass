@@ -16,6 +16,7 @@ public class ClassicModelsService {
         
         classicModelsRepository.fetchSimpleJson();    
         classicModelsRepository.fetchJsonValue();
+        classicModelsRepository.fetchForJson();
         classicModelsRepository.fetchJsonTable();
     }
 }
