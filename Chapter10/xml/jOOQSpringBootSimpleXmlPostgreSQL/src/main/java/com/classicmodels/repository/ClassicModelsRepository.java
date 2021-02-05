@@ -1,5 +1,6 @@
 package com.classicmodels.repository;
 
+import java.util.List;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Department.DEPARTMENT;
 import static jooq.generated.tables.Productline.PRODUCTLINE;
@@ -9,7 +10,6 @@ import org.jooq.Record;
 import org.jooq.Record2;
 import org.jooq.Result;
 import org.jooq.XML;
-import org.jooq.impl.DSL;
 import static org.jooq.impl.DSL.concat;
 import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.field;
@@ -50,63 +50,96 @@ public class ClassicModelsRepository {
                 xmlelement("name", CUSTOMER.CUSTOMER_NAME))
                 .from(CUSTOMER)
                 .fetch();
-        System.out.println("Example 1.1:\n" + result1.formatXML());
+        System.out.println("Example 1.1.1:\n" + result1);
+        System.out.println("Example 1.1.2:\n" + result1.get(0).value1().data());
+        System.out.println("Example 1.1.3:\n" + result1.formatXML());
+
+        Result<Record1<XML>> result2 = ctx.select(
+                xmlelement("name", CUSTOMER.CUSTOMER_NAME))
+                .from(CUSTOMER)
+                .orderBy(CUSTOMER.CUSTOMER_NAME).limit(3)
+                .fetch();
+        System.out.println("Example 1.2:\n" + result2);
+
+        List<String> result3 = ctx.select(
+                xmlelement("name", CUSTOMER.CUSTOMER_NAME))
+                .from(CUSTOMER)
+                .fetchInto(String.class);
+        System.out.println("Example 1.3:\n" + result3);
 
         // simple example of using xmlattributes()
-        Result<Record1<XML>> result2 = ctx.select(xmlelement("contact",
-                xmlattributes(CUSTOMER.CONTACT_FIRST_NAME, CUSTOMER.CONTACT_LAST_NAME, CUSTOMER.PHONE)))
+        Result<Record1<XML>> result4 = ctx.select(xmlelement("contact",
+                xmlattributes(CUSTOMER.CONTACT_FIRST_NAME,
+                        CUSTOMER.CONTACT_LAST_NAME, CUSTOMER.PHONE)))
                 .from(CUSTOMER)
                 .fetch();
-        System.out.println("Example 1.2:\n" + result2.formatXML());
+        System.out.println("Example 1.4:\n" + result4.formatXML());
 
         // simple example of using xmlattributes()
-        Result<Record1<XML>> result3 = ctx.select(xmlelement("contact",
+        Result<Record1<XML>> result5 = ctx.select(xmlelement("contact",
                 xmlattributes(CUSTOMER.CONTACT_FIRST_NAME.as("firstName"),
                         CUSTOMER.CONTACT_LAST_NAME.as("lastName"),
                         CUSTOMER.PHONE)))
                 .from(CUSTOMER)
                 .fetch();
-        System.out.println("Example 1.3:\n" + result3.formatXML());
+        System.out.println("Example 1.5:\n" + result5.formatXML());
 
-        // simple example of using xmlagg()
-        Result<Record1<XML>> result4 = ctx.select(
+        // simple example of using xmlagg()        
+        Result<Record1<XML>> result61 = ctx.select(xmlagg(
+                xmlelement("name", CUSTOMER.CUSTOMER_NAME)))
+                .from(CUSTOMER)
+                .fetch();
+        System.out.println("Example 1.6.1:\n" + result61);
+
+        String result62 = ctx.select(xmlagg(
+                xmlelement("name", CUSTOMER.CUSTOMER_NAME)))
+                .from(CUSTOMER)
+                .fetchSingleInto(String.class);
+        System.out.println("Example 1.6.2:\n" + result62);
+        
+        String result63 = ctx.select(xmlelement("names", xmlagg(
+                xmlelement("name", CUSTOMER.CUSTOMER_NAME))))
+                .from(CUSTOMER)
+                .fetchSingleInto(String.class);
+        System.out.println("Example 1.6.3:\n" + result63);
+
+        Result<Record1<XML>> result7 = ctx.select(
                 xmlelement("allContacts", xmlagg(xmlelement("contact",
                         xmlattributes(CUSTOMER.CONTACT_FIRST_NAME.as("firstName"),
                                 CUSTOMER.CONTACT_LAST_NAME.as("lastName"),
                                 CUSTOMER.PHONE)))))
                 .from(CUSTOMER)
                 .fetch();
-        System.out.println("Example 1.4:\n" + result4.formatXML());
+        System.out.println("Example 1.7:\n" + result7.formatXML());
 
         // simple example of using xmlforest()
-        Result<Record1<XML>> result5 = ctx.select(
+        Result<Record1<XML>> result8 = ctx.select(
                 xmlelement("allContacts", xmlagg(xmlelement("contact",
                         xmlforest(CUSTOMER.CONTACT_FIRST_NAME.as("firstName"),
                                 CUSTOMER.CONTACT_LAST_NAME.as("lastName"),
                                 CUSTOMER.PHONE)))))
                 .from(CUSTOMER)
                 .fetch();
-        System.out.println("Example 1.5:\n" + result5.formatXML());
+        System.out.println("Example 1.8:\n" + result8.formatXML());
 
         // simple example of using xmlcomment()
-        Result<Record1<XML>> result6 = ctx.select(
+        Result<Record1<XML>> result9 = ctx.select(
                 xmlelement("name", xmlcomment("Customer names"), CUSTOMER.CUSTOMER_NAME))
                 .from(CUSTOMER)
                 .fetch();
-        System.out.println("Example 1.6:\n" + result6.formatXML());
+        System.out.println("Example 1.9:\n" + result9.formatXML());
 
         // simple example of using xmlcomment()
-        Result<Record1<XML>> result7 = ctx.select(
+        Result<Record1<XML>> result101 = ctx.select(
                 xmlelement("name", xmlcomment(
                         concat(CUSTOMER.CONTACT_FIRST_NAME,
                                 val(" "), CUSTOMER.CONTACT_LAST_NAME)),
                         CUSTOMER.CUSTOMER_NAME))
                 .from(CUSTOMER)
                 .fetch();
-        System.out.println("Example 1.7:\n" + result7.formatXML());
+        System.out.println("Example 1.10.1:\n" + result101.formatXML());
 
-        // simple example of using xmlcomment()
-        Result<Record1<XML>> result8 = ctx.select(
+        Result<Record1<XML>> result102 = ctx.select(
                 xmlelement("allContacts",
                         xmlcomment("This is a list of customer contacts"),
                         xmlagg(xmlelement("contact",
@@ -115,44 +148,60 @@ public class ClassicModelsRepository {
                                         CUSTOMER.PHONE)))))
                 .from(CUSTOMER)
                 .fetch();
-        System.out.println("Example 1.8:\n" + result8.formatXML());
+        System.out.println("Example 1.10.2:\n" + result102.formatXML());
 
         // simple example of using xmlparseContent()
-        Result<Record1<XML>> result9 = ctx.select(xmlparseContent(
+        Result<Record1<XML>> result11 = ctx.select(xmlparseContent(
                 DEPARTMENT.TOPIC.coerce(String.class)))
                 .from(DEPARTMENT)
                 .fetch();
 
-        System.out.println("Example 1.9:\n" + result9.formatXML());
+        System.out.println("Example 1.11:\n" + result11.formatXML());
 
         // simple example of using xmlparseDocument()
-        Result<Record1<XML>> result10 = ctx.select(xmlparseDocument(
+        Result<Record1<XML>> result12 = ctx.select(xmlparseDocument(
                 PRODUCTLINE.HTML_DESCRIPTION.coerce(String.class)))
                 .from(PRODUCTLINE)
                 .fetch();
 
-        System.out.println("Example 1.10:\n" + result10.formatXML());
+        System.out.println("Example 1.12:\n" + result12.formatXML());
 
         // simple example of using xmlconcat()
-        Result<Record1<XML>> result11 = ctx.select(
+        Result<Record1<XML>> result13 = ctx.select(
                 xmlelement("fullName", xmlconcat(
                         xmlelement("firstName", CUSTOMER.CONTACT_FIRST_NAME),
                         xmlelement("lastName", CUSTOMER.CONTACT_LAST_NAME))))
                 .from(CUSTOMER)
                 .fetch();
-        System.out.println("Example 1.11:\n" + result11.formatXML());
+        System.out.println("Example 1.13:\n" + result13.formatXML());
     }
 
     public void fetchXmlValue() {
 
         // simple example of using xmlquery()
-        Result<Record1<XML>> result1 = ctx.select(
+        Result<Record1<XML>> result21 = ctx.select(
                 xmlquery("productline/capacity/c[position()=last()]")
                         .passing(PRODUCTLINE.HTML_DESCRIPTION))
                 .from(PRODUCTLINE)
                 .fetch();
 
-        System.out.println("Example 2.1:\n" + result1.formatXML());
+        System.out.println("Example 2.1.1:\n" + result21.formatXML());
+        
+        List<String> result22 = ctx.select(
+                xmlquery("productline/capacity/c[position()=last()]")
+                        .passing(PRODUCTLINE.HTML_DESCRIPTION))
+                .from(PRODUCTLINE)
+                .fetchInto(String.class);
+
+        System.out.println("Example 2.1.2:\n" + result22);
+        
+        String result23 = ctx.select(xmlagg(
+                xmlquery("productline/capacity/c[position()=last()]")
+                        .passing(PRODUCTLINE.HTML_DESCRIPTION)))
+                .from(PRODUCTLINE)
+                .fetchSingleInto(String.class);
+
+        System.out.println("Example 2.1.3:\n" + result23);
 
         // simple example of using xmlquery()        
         Result<Record1<XML>> result2 = ctx.select(xmlquery("//contact/phone").passing(
@@ -183,7 +232,7 @@ public class ClassicModelsRepository {
         // simple example of using xmlpi()        
         Result<Record1<XML>> result5 = ctx.select(xmlpi("php"))
                 .fetch();
-        
+
         System.out.println("Example 2.5:\n" + result5);
     }
 
