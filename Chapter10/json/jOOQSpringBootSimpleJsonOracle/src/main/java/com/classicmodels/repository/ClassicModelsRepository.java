@@ -246,9 +246,22 @@ public class ClassicModelsRepository {
                 .forJSON().auto().root("customers")
                 .fetch();
         System.out.println("Example 3.5:\n" + result5.formatJSON());
+        
+        // auto() -> format the output automatically based on the structure of the SELECT statement
+        Result<Record1<JSON>> result6 = ctx.select(
+                CUSTOMER.CONTACT_FIRST_NAME, CUSTOMER.CREDIT_LIMIT,
+                PAYMENT.INVOICE_AMOUNT, PAYMENT.CACHING_DATE)
+                .from(CUSTOMER)
+                .join(PAYMENT)
+                .on(CUSTOMER.CUSTOMER_NUMBER.eq(PAYMENT.CUSTOMER_NUMBER))
+                .orderBy(CUSTOMER.CREDIT_LIMIT)
+                .limit(5)
+                .forJSON().auto().withoutArrayWrapper()
+                .fetch();
+        System.out.println("Example 3.6:\n" + result6.formatJSON());
 
         // path() -> default usage
-        Result<Record1<JSON>> result6 = ctx.select(
+        Result<Record1<JSON>> result7 = ctx.select(
                 CUSTOMER.CONTACT_FIRST_NAME, CUSTOMER.CREDIT_LIMIT,
                 PAYMENT.INVOICE_AMOUNT, PAYMENT.CACHING_DATE)
                 .from(CUSTOMER)
@@ -258,22 +271,22 @@ public class ClassicModelsRepository {
                 .limit(5)
                 .forJSON().path().root("customers")
                 .fetch();
-        System.out.println("Example 3.6:\n" + result6.formatJSON());
+        System.out.println("Example 3.7:\n" + result7.formatJSON());
 
         // path() -> format nested results by using dot-separated column names or by using nested queries
-        Result<Record1<JSON>> result7 = ctx.select(
+        Result<Record1<JSON>> result8 = ctx.select(
                 CUSTOMER.CONTACT_FIRST_NAME, CUSTOMER.CREDIT_LIMIT,
                 PAYMENT.INVOICE_AMOUNT.as("Payment.Amount"),
                 PAYMENT.CACHING_DATE.as("Payment.CachingDate"))
                 .from(CUSTOMER)
                 .join(PAYMENT)
-                .on(CUSTOMER.CUSTOMER_NUMBER.eq(PAYMENT.CUSTOMER_NUMBER))
+                .on(CUSTOMER.CUSTOMER_NUMBER.eq(PAYMENT.CUSTOMER_NUMBER))               
                 .forJSON().path().root("customers")
                 .fetch();
-        System.out.println("Example 3.7:\n" + result7.formatJSON());
-
+        System.out.println("Example 3.8:\n" + result8.formatJSON());
+        
         // ordering, limiting and extracting JSON as a String        
-        String result8 = ctx.select(
+        String result9 = ctx.select(
                 CUSTOMER.CONTACT_FIRST_NAME, CUSTOMER.CREDIT_LIMIT,
                 PAYMENT.INVOICE_AMOUNT.as("Payment.Amount"),
                 PAYMENT.CACHING_DATE.as("Payment.CachingDate"))
@@ -284,7 +297,7 @@ public class ClassicModelsRepository {
                 .limit(5)
                 .forJSON().path().root("customers")
                 .fetchSingleInto(String.class);
-        System.out.println("Example 3.8:\n" + result8);
+        System.out.println("Example 3.9:\n" + result9);
     }
 
     public void fetchJsonTable() {
