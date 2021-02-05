@@ -126,7 +126,7 @@ public class ClassicModelsRepository {
                 .orderBy(CUSTOMER.CREDIT_LIMIT)
                 .fetch();
 
-        System.out.println("Example 2.1:\n" + result1);
+        System.out.println("Example 2.1:\n" + result1.formatJSON());
 
         // the same thing but using key().value() and mapping to POJO
         List<SimpleCustomer> result2 = ctx.select(
