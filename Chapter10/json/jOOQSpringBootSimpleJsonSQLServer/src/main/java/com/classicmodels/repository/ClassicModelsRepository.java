@@ -159,7 +159,7 @@ public class ClassicModelsRepository {
                 CUSTOMER.CONTACT_LAST_NAME).as("name"), CUSTOMER.CREDIT_LIMIT)
                 .from(CUSTOMER)
                 .orderBy(CUSTOMER.CREDIT_LIMIT)
-                .forJSON().path().root("customer")
+                .forJSON().path().root("customers")
                 .fetch();
         System.out.println("Example 3.4:\n" + result4.formatJSON());
 
@@ -172,7 +172,7 @@ public class ClassicModelsRepository {
                 .on(CUSTOMER.CUSTOMER_NUMBER.eq(PAYMENT.CUSTOMER_NUMBER))
                 .orderBy(CUSTOMER.CREDIT_LIMIT)
                 .limit(5)
-                .forJSON().auto().root("customer")
+                .forJSON().auto().root("customers")
                 .fetch();
         System.out.println("Example 3.5:\n" + result5.formatJSON());
 
@@ -185,7 +185,7 @@ public class ClassicModelsRepository {
                 .on(CUSTOMER.CUSTOMER_NUMBER.eq(PAYMENT.CUSTOMER_NUMBER))
                 .orderBy(CUSTOMER.CREDIT_LIMIT)
                 .limit(5)
-                .forJSON().path().root("customer")
+                .forJSON().path().root("customers")
                 .fetch();
         System.out.println("Example 3.6:\n" + result6.formatJSON());
 
@@ -196,12 +196,24 @@ public class ClassicModelsRepository {
                 PAYMENT.CACHING_DATE.as("Payment.CachingDate"))
                 .from(CUSTOMER)
                 .join(PAYMENT)
+                .on(CUSTOMER.CUSTOMER_NUMBER.eq(PAYMENT.CUSTOMER_NUMBER))               
+                .forJSON().path().root("customers")
+                .fetch();
+        System.out.println("Example 3.7:\n" + result7.formatJSON());
+        
+        // ordering, limiting and extracting JSON as a String        
+        String result8 = ctx.select(
+                CUSTOMER.CONTACT_FIRST_NAME, CUSTOMER.CREDIT_LIMIT,
+                PAYMENT.INVOICE_AMOUNT.as("Payment.Amount"),
+                PAYMENT.CACHING_DATE.as("Payment.CachingDate"))
+                .from(CUSTOMER)
+                .join(PAYMENT)
                 .on(CUSTOMER.CUSTOMER_NUMBER.eq(PAYMENT.CUSTOMER_NUMBER))
                 .orderBy(CUSTOMER.CREDIT_LIMIT)
                 .limit(5)
-                .forJSON().path().root("customer")
-                .fetch();
-        System.out.println("Example 3.7:\n" + result7.formatJSON());
+                .forJSON().path().root("customers")
+                .fetchSingleInto(String.class);
+        System.out.println("Example 3.8:\n" + result8);
     }
 
     public void fetchJsonTable() {
