@@ -312,9 +312,11 @@ public class ClassicModelsRepository {
                 select(PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_VENDOR, PRODUCT.QUANTITY_IN_STOCK)
                         .from(PRODUCT)
                         .where(PRODUCT.PRODUCT_LINE.eq(PRODUCTLINE.PRODUCT_LINE))
+                        .orderBy(PRODUCT.QUANTITY_IN_STOCK)
                         .limit(5) // limit products
                         .forJSON().path().asField("products"))
                 .from(PRODUCTLINE)
+                .orderBy(PRODUCTLINE.PRODUCT_LINE)
                 .limit(2) // limit product lines
                 // .forJSON().path() // add this if you need a return of type Result<Record1<JSON>>  
                 .fetch();
@@ -326,9 +328,11 @@ public class ClassicModelsRepository {
                 select(PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_VENDOR, PRODUCT.QUANTITY_IN_STOCK)
                         .from(PRODUCT)
                         .where(PRODUCT.PRODUCT_LINE.eq(PRODUCTLINE.PRODUCT_LINE))
+                        .orderBy(PRODUCT.QUANTITY_IN_STOCK)
                         .limit(2) // limit products
                         .forJSON().path().asField("products"))
                 .from(PRODUCTLINE)
+                .orderBy(PRODUCTLINE.PRODUCT_LINE)
                 .limit(2) // limit product lines
                 .forJSON().path()
                 .fetchSingleInto(String.class);
