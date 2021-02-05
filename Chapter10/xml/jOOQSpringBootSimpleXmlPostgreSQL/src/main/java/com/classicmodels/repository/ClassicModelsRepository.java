@@ -54,7 +54,7 @@ public class ClassicModelsRepository {
 
         // simple example of using xmlattributes()
         Result<Record1<XML>> result2 = ctx.select(xmlelement("contact",
-                DSL.xmlattributes(CUSTOMER.CONTACT_FIRST_NAME, CUSTOMER.CONTACT_LAST_NAME, CUSTOMER.PHONE)))
+                xmlattributes(CUSTOMER.CONTACT_FIRST_NAME, CUSTOMER.CONTACT_LAST_NAME, CUSTOMER.PHONE)))
                 .from(CUSTOMER)
                 .fetch();
         System.out.println("Example 1.2:\n" + result2.formatXML());
