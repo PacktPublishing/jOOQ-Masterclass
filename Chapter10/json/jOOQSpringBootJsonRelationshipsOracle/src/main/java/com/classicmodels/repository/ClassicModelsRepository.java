@@ -118,7 +118,7 @@ public class ClassicModelsRepository {
                 .fetch();
 
         System.out.println("Example 1.3.1 (one-to-one):\n" + result31.formatJSON());
-        
+
         String result32 = ctx.select(CUSTOMER.CUSTOMER_NAME,
                 CUSTOMER.PHONE, CUSTOMER.CREDIT_LIMIT, CUSTOMERDETAIL.CITY,
                 CUSTOMERDETAIL.ADDRESS_LINE_FIRST,
@@ -130,8 +130,8 @@ public class ClassicModelsRepository {
                 .limit(10)
                 .forJSON().path()
                 .fetchSingleInto(String.class);
-                
-        System.out.println("Example 1.3.2 (one-to-one):\n" + result32);       
+
+        System.out.println("Example 1.3.2 (one-to-one):\n" + result32);
 
         Result<Record1<JSON>> result4 = ctx.select(CUSTOMER.CUSTOMER_NAME,
                 CUSTOMER.PHONE, CUSTOMER.CREDIT_LIMIT, CUSTOMERDETAIL.CITY,
@@ -320,8 +320,8 @@ public class ClassicModelsRepository {
                 .fetch();
 
         System.out.println("Example 3.5.1 (one-to-many):\n" + result51.formatJSON());
-        
-        String result52 = ctx.select( 
+
+        String result52 = ctx.select(
                 PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.TEXT_DESCRIPTION,
                 select(PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_VENDOR, PRODUCT.QUANTITY_IN_STOCK)
                         .from(PRODUCT)
@@ -490,7 +490,7 @@ public class ClassicModelsRepository {
                 .fetch();
 
         System.out.println("Example 5.3.1 (many-to-many):\n" + result31.formatJSON());
-        
+
         String result32 = ctx.select(
                 OFFICE.OFFICE_CODE.as("officeCode"), OFFICE.CITY, OFFICE.STATE,
                 select(MANAGER.MANAGER_ID.as("managerId"), MANAGER.MANAGER_NAME.as("managerName"))
@@ -608,7 +608,7 @@ public class ClassicModelsRepository {
                 .fetch();
 
         System.out.println("Example 6.3.1 (many-to-many):\n" + result31.formatJSON());
-        
+
         String result32 = ctx.select(
                 MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME,
                 select(OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.STATE)
