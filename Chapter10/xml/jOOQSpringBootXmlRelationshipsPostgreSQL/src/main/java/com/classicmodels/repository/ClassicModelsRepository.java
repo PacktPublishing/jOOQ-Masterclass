@@ -100,7 +100,7 @@ public class ClassicModelsRepository {
 
     public void oneToManyToXml() {
 
-        Result<Record1<XML>> result1 = ctx.select(
+        Result<Record1<XML>> result11 = ctx.select(
                 xmlelement("productLine",
                         xmlelement("productLine", PRODUCTLINE.PRODUCT_LINE),
                         xmlelement("textDescription", PRODUCTLINE.TEXT_DESCRIPTION),
@@ -116,7 +116,25 @@ public class ClassicModelsRepository {
                 .orderBy(PRODUCTLINE.PRODUCT_LINE)
                 .fetch();
 
-        System.out.println("Example 2.1 (one-to-many):\n" + result1.formatXML());
+        System.out.println("Example 2.1.1 (one-to-many):\n" + result11.formatXML());
+
+        String result12 = ctx.select(
+                xmlelement("productlines", xmlagg(
+                        xmlelement("productLine",
+                                xmlelement("productLine", PRODUCTLINE.PRODUCT_LINE),
+                                xmlelement("textDescription", PRODUCTLINE.TEXT_DESCRIPTION),
+                                xmlelement("products", field(select(xmlagg(
+                                        xmlelement("product", // optionally, each product wrapped in <product/>
+                                                xmlforest(
+                                                        PRODUCT.PRODUCT_NAME.as("productName"),
+                                                        PRODUCT.PRODUCT_VENDOR.as("productVendor"),
+                                                        PRODUCT.QUANTITY_IN_STOCK.as("quantityInStock")))))
+                                        .from(PRODUCT)
+                                        .where(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE)))))).orderBy(PRODUCTLINE.PRODUCT_LINE)))
+                .from(PRODUCTLINE)
+                .fetchSingleInto(String.class);
+
+        System.out.println("Example 2.1.2 (one-to-many):\n" + result12);
 
         Result<Record1<XML>> result2 = ctx.select(
                 xmlelement("productLine",

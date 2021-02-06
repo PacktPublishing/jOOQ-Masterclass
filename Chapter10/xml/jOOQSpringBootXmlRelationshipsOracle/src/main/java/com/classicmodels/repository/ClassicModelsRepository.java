@@ -166,7 +166,7 @@ public class ClassicModelsRepository {
 
         System.out.println("Example 2.3 (one-to-many):\n" + result3.formatXML());
 
-        Result<Record1<XML>> result4 = ctx.select(
+        Result<Record1<XML>> result41 = ctx.select(
                 xmlelement("productLine",
                         xmlelement("productLine", PRODUCTLINE.PRODUCT_LINE),
                         xmlelement("textDescription", PRODUCTLINE.TEXT_DESCRIPTION),
@@ -182,7 +182,25 @@ public class ClassicModelsRepository {
                 .orderBy(PRODUCTLINE.PRODUCT_LINE)
                 .fetch();
 
-        System.out.println("Example 2.4 (one-to-many):\n" + result4.formatXML());
+        System.out.println("Example 2.4.1 (one-to-many):\n" + result41.formatXML());
+        
+        String result42 = ctx.select(
+                xmlelement("productlines", xmlagg(
+                        xmlelement("productLine",
+                                xmlelement("productLine", PRODUCTLINE.PRODUCT_LINE),
+                                xmlelement("textDescription", PRODUCTLINE.TEXT_DESCRIPTION),
+                                xmlelement("products", field(select(xmlagg(
+                                        xmlelement("product", // optionally, each product wrapped in <product/>
+                                                xmlforest(
+                                                        PRODUCT.PRODUCT_NAME.as("productName"),
+                                                        PRODUCT.PRODUCT_VENDOR.as("productVendor"),
+                                                        PRODUCT.QUANTITY_IN_STOCK.as("quantityInStock")))))
+                                        .from(PRODUCT)
+                                        .where(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE)))))).orderBy(PRODUCTLINE.PRODUCT_LINE)))
+                .from(PRODUCTLINE)
+                .fetchSingleInto(String.class);
+        
+        System.out.println("Example 2.4.2 (one-to-many):\n" + result42);
 
         Result<Record1<XML>> result5 = ctx.select(
                 xmlelement("productLine",
