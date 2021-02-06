@@ -121,7 +121,7 @@ public class ClassicModelsRepository {
                         xmlelement("creditLimit", CUSTOMER.CREDIT_LIMIT),
                         xmlelement("payments", field(select(xmlagg(
                                 xmlelement("payment", // optionally, each payment wrapped in <payment/>
-                                        xmlforest(PAYMENT.CUSTOMER_NUMBER.as("paymentNumber"),
+                                        xmlforest(PAYMENT.CUSTOMER_NUMBER.as("customerNumber"),
                                                 PAYMENT.INVOICE_AMOUNT.as("invoiceAmount"),
                                                 PAYMENT.CACHING_DATE.as("cachingDate"),
                                                 field(select(xmlagg(
