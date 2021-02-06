@@ -33,25 +33,6 @@ public class ClassicModelsRepository {
         this.ctx = ctx;
     }
 
-    public void q() {
-        String result32 = ctx.select( // Result<Record3<String, String, Object>>
-                PRODUCTLINE.PRODUCT_LINE.as("productLine"), 
-                PRODUCTLINE.TEXT_DESCRIPTION.as("textDescription"),
-                select(PRODUCT.PRODUCT_NAME.as("productName"), 
-                        PRODUCT.PRODUCT_VENDOR.as("productVendor"), 
-                        PRODUCT.QUANTITY_IN_STOCK.as("quantityInStock"))
-                        .from(PRODUCT)
-                        .where(PRODUCT.PRODUCT_LINE.eq(PRODUCTLINE.PRODUCT_LINE))                                                
-                        .forXML().path("product").asField("products"))
-                .from(PRODUCTLINE)                
-                .forXML().path("productline").root("productlines")
-                .fetchSingleInto(String.class);
-
-        System.out.println("Example 2.3.2 (one-to-many):\n" + result32);
-    }
-    
-    
-    
     public void arrayToXML() {
 
         Result<Record1<XML>> result = ctx.select(
@@ -172,7 +153,7 @@ public class ClassicModelsRepository {
 
         System.out.println("Example 2.2 (one-to-many):\n" + result2.formatXML());
 
-        var result3 = ctx.select(
+        var result31 = ctx.select( // Result<Record3<String, String, Object>>
                 PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.TEXT_DESCRIPTION,
                 select(PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_VENDOR, PRODUCT.QUANTITY_IN_STOCK)
                         .from(PRODUCT)
@@ -181,9 +162,27 @@ public class ClassicModelsRepository {
                         .forXML().path().asField("products"))
                 .from(PRODUCTLINE)
                 // .limit(2) // limit product lines
+                // .forXML().path() // add this to return Result<Record1<XML>>
                 .fetch();
 
-        System.out.println("Example 2.3 (one-to-many):\n" + result3.formatXML());
+        System.out.println("Example 2.3.1 (one-to-many):\n" + result31.formatXML());
+        
+        String result32 = ctx.select(
+                PRODUCTLINE.PRODUCT_LINE.as("productLine"),
+                PRODUCTLINE.TEXT_DESCRIPTION.as("textDescription"),
+                select(PRODUCT.PRODUCT_NAME.as("productName"),
+                        PRODUCT.PRODUCT_VENDOR.as("productVendor"),
+                        PRODUCT.QUANTITY_IN_STOCK.as("quantityInStock"))
+                        .from(PRODUCT)
+                        .where(PRODUCT.PRODUCT_LINE.eq(PRODUCTLINE.PRODUCT_LINE))
+                        // .limit(5) // limit products
+                        .forXML().path("product").asField("products"))
+                .from(PRODUCTLINE)
+                // .limit(2) // limit product lines
+                .forXML().path("productline").root("productlines")
+                .fetchSingleInto(String.class);
+
+        System.out.println("Example 2.3.2 (one-to-many):\n" + result32);
 
         Result<Record1<XML>> result41 = ctx.select(
                 xmlelement("productLine",
@@ -202,7 +201,7 @@ public class ClassicModelsRepository {
                 .fetch();
 
         System.out.println("Example 2.4.1 (one-to-many):\n" + result41.formatXML());
-        
+
         String result42 = ctx.select(
                 xmlelement("productlines", xmlagg(
                         xmlelement("productLine",
@@ -219,7 +218,7 @@ public class ClassicModelsRepository {
                         .orderBy(PRODUCTLINE.PRODUCT_LINE)))
                 .from(PRODUCTLINE)
                 .fetchSingleInto(String.class);
-        
+
         System.out.println("Example 2.4.2 (one-to-many):\n" + result42);
 
         Result<Record1<XML>> result5 = ctx.select(
