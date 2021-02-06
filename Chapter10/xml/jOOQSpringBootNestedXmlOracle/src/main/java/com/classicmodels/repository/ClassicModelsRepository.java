@@ -162,8 +162,7 @@ public class ClassicModelsRepository {
                                                                                 BANK_TRANSACTION.TRANSFER_AMOUNT.as("transferAmount")))))
                                                                 .from(BANK_TRANSACTION)
                                                                 .where(BANK_TRANSACTION.CUSTOMER_NUMBER.eq(PAYMENT.CUSTOMER_NUMBER)
-                                                                        .and(BANK_TRANSACTION.CHECK_NUMBER.eq(PAYMENT.CHECK_NUMBER)))).as("transactions"))))
-                                        .orderBy(CUSTOMER.CUSTOMER_NAME))
+                                                                        .and(BANK_TRANSACTION.CHECK_NUMBER.eq(PAYMENT.CHECK_NUMBER)))).as("transactions")))))
                                         .from(PAYMENT)
                                         .where(PAYMENT.CUSTOMER_NUMBER.eq(CUSTOMER.CUSTOMER_NUMBER)))),
                                 xmlelement("details", field(select(xmlagg(
