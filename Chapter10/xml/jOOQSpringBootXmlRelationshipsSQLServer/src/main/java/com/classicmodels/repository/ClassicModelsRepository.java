@@ -149,7 +149,7 @@ public class ClassicModelsRepository {
                 .from(PRODUCTLINE)
                 //.limit(2) // limit product lines
                 .forXML().path("productline").root("productlines")
-                .fetchInto(String.class), "");
+                .fetchInto(String.class));
 
         System.out.println("Example 2.3.4 (one-to-many):\n" + result34);
     }
