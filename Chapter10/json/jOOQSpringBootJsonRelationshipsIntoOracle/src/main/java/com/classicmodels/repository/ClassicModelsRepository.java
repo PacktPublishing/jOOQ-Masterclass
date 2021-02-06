@@ -222,7 +222,8 @@ public class ClassicModelsRepository {
                         key("city").value(OFFICE.CITY),
                         key("managers").value(jsonArrayAgg(
                                 jsonObject(key("managerId").value(field("MANAGER_ID")),
-                                        key("managerName").value(field("MANAGER_NAME")))))))
+                                        key("managerName").value(field("MANAGER_NAME"))))
+                        .orderBy(field("MANAGER_ID")))))
                 .from(OFFICE)
                 .join(select(MANAGER.MANAGER_ID.as("MANAGER_ID"),
                         MANAGER.MANAGER_NAME.as("MANAGER_NAME"),
