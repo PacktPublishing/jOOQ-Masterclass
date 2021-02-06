@@ -1,5 +1,6 @@
 package com.classicmodels.repository;
 
+import java.util.stream.Collectors;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
 import static jooq.generated.tables.Manager.MANAGER;
@@ -16,6 +17,7 @@ import static org.jooq.impl.DSL.jsonObject;
 import static org.jooq.impl.DSL.key;
 import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.select;
+import org.jooq.tools.StringUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -154,6 +156,8 @@ public class ClassicModelsRepository {
 
         System.out.println("Example 2.3.1 (one-to-many):\n" + result31.formatJSON());
         
+        // SQL Server serve JSON in slices, so you have to join all slices into the resulted String
+        // or fetch a single slice by using LIMIT (check SQL Server docs for details)
         String result32 = ctx.select( 
                 PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.TEXT_DESCRIPTION,
                 select(PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_VENDOR, PRODUCT.QUANTITY_IN_STOCK)
@@ -169,6 +173,22 @@ public class ClassicModelsRepository {
                 .fetchSingleInto(String.class);
 
         System.out.println("Example 2.3.2 (one-to-many):\n" + result32);
+        
+        String result33 = ctx.select( 
+                PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.TEXT_DESCRIPTION,
+                select(PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_VENDOR, PRODUCT.QUANTITY_IN_STOCK)
+                        .from(PRODUCT)
+                        .where(PRODUCT.PRODUCT_LINE.eq(PRODUCTLINE.PRODUCT_LINE))
+                        .orderBy(PRODUCT.QUANTITY_IN_STOCK)
+                        // .limit(2) // limit products
+                        .forJSON().path().asField("products"))
+                .from(PRODUCTLINE)
+                .orderBy(PRODUCTLINE.PRODUCT_LINE)
+                // .limit(2) // limit product lines
+                .forJSON().path()
+                .fetchInto(String.class).stream().collect(Collectors.joining());
+
+        System.out.println("Example 2.3.3 (one-to-many):\n" + result33);                
     }
 
     public void manyToManyToJsonManagersOffices() {
