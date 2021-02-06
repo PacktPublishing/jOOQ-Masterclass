@@ -178,6 +178,7 @@ public class ClassicModelsRepository {
                         // .limit(5) // limit products
                         .forXML().path("product").asField("products"))
                 .from(PRODUCTLINE)
+                .orderBy(PRODUCTLINE.PRODUCT_LINE)
                 // .limit(2) // limit product lines
                 .forXML().path("productline").root("productlines")
                 .fetchSingleInto(String.class);
