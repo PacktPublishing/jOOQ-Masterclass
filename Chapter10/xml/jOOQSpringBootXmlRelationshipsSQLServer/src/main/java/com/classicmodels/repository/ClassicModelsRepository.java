@@ -1,5 +1,6 @@
 package com.classicmodels.repository;
 
+import java.util.stream.Collectors;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
 import static jooq.generated.tables.Manager.MANAGER;
@@ -9,12 +10,12 @@ import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Productline.PRODUCTLINE;
 import org.jooq.DSLContext;
 import org.jooq.Record1;
-import org.jooq.Record3;
 import org.jooq.Result;
 import org.jooq.XML;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.select;
+import org.jooq.tools.StringUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -98,21 +99,59 @@ public class ClassicModelsRepository {
                 .fetch();
 
         System.out.println("Example 2.3.1 (one-to-many):\n" + result31.formatXML());
-        
-        var result32 = ctx.select( // Result<Record3<String, String, Object>>
-                PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.TEXT_DESCRIPTION,
-                select(PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_VENDOR, PRODUCT.QUANTITY_IN_STOCK)
+
+        // SQL Server serve XML in slices, so you have to join all slices into the resulted String
+        // or fetch a single slice by using LIMIT (check SQL Server docs for details)
+        String result30 = ctx.select(
+                PRODUCTLINE.PRODUCT_LINE.as("productLine"),
+                PRODUCTLINE.TEXT_DESCRIPTION.as("textDescription"),
+                select(PRODUCT.PRODUCT_NAME.as("productName"),
+                        PRODUCT.PRODUCT_VENDOR.as("productVendor"),
+                        PRODUCT.QUANTITY_IN_STOCK.as("quantityInStock"))
                         .from(PRODUCT)
                         .where(PRODUCT.PRODUCT_LINE.eq(PRODUCTLINE.PRODUCT_LINE))
-                        // .limit(5) // limit products
-                        .forXML().path().asField("products"))
+                        .limit(1) // limit products
+                        .forXML().path("product").asField("products"))
                 .from(PRODUCTLINE)
-                // .limit(2) // limit product lines
-                .forXML().path() // add this to return Result<Record1<XML>>
-                .fetch();
+                .limit(1) // limit product lines
+                .forXML().path("productline").root("productlines")
+                .fetchSingleInto(String.class);
 
-        System.out.println("Example 2.3.2 (one-to-many):\n" + result32.get(0).value1().data()
-                +"\n\nxxx="+result32.get(1).value1().data());
+        System.out.println("Example 2.3.0 (one-to-many):\n" + result30);
+        
+        String result32 = ctx.select(
+                PRODUCTLINE.PRODUCT_LINE.as("productLine"),
+                PRODUCTLINE.TEXT_DESCRIPTION.as("textDescription"),
+                select(PRODUCT.PRODUCT_NAME.as("productName"),
+                        PRODUCT.PRODUCT_VENDOR.as("productVendor"),
+                        PRODUCT.QUANTITY_IN_STOCK.as("quantityInStock"))
+                        .from(PRODUCT)
+                        .where(PRODUCT.PRODUCT_LINE.eq(PRODUCTLINE.PRODUCT_LINE))
+                        // .limit(2) // limit products
+                        .forXML().path("product").asField("products"))
+                .from(PRODUCTLINE)
+                //.limit(2) // limit product lines
+                .forXML().path("productline").root("productlines")
+                .fetchInto(String.class).stream().collect(Collectors.joining());
+
+        System.out.println("Example 2.3.2 (one-to-many):\n" + result32);
+
+        String result33 = StringUtils.join(ctx.select(
+                PRODUCTLINE.PRODUCT_LINE.as("productLine"),
+                PRODUCTLINE.TEXT_DESCRIPTION.as("textDescription"),
+                select(PRODUCT.PRODUCT_NAME.as("productName"),
+                        PRODUCT.PRODUCT_VENDOR.as("productVendor"),
+                        PRODUCT.QUANTITY_IN_STOCK.as("quantityInStock"))
+                        .from(PRODUCT)
+                        .where(PRODUCT.PRODUCT_LINE.eq(PRODUCTLINE.PRODUCT_LINE))
+                        // .limit(2) // limit products
+                        .forXML().path("product").asField("products"))
+                .from(PRODUCTLINE)
+                //.limit(2) // limit product lines
+                .forXML().path("productline").root("productlines")
+                .fetchInto(String.class), "");
+
+        System.out.println("Example 2.3.3 (one-to-many):\n" + result33);
     }
 
     public void manyToManyToXmlManagersOffices() {
