@@ -15,7 +15,6 @@ import org.jooq.Result;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.jsonObject;
 import static org.jooq.impl.DSL.jsonArrayAgg;
-import static org.jooq.impl.DSL.jsonbArrayAgg;
 import static org.jooq.impl.DSL.key;
 import static org.jooq.impl.DSL.lateral;
 import static org.jooq.impl.DSL.name;
@@ -228,15 +227,16 @@ public class ClassicModelsRepository {
                 jsonObject(
                         key("productLine").value(PRODUCTLINE.PRODUCT_LINE),
                         key("textDescription").value(PRODUCTLINE.TEXT_DESCRIPTION),
-                        key("products").value(select(jsonbArrayAgg(
+                        key("products").value(select(jsonArrayAgg(
                                 // or, jsonObject(PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_VENDOR, PRODUCT.QUANTITY_IN_STOCK))
                                 jsonObject(key("productName").value(PRODUCT.PRODUCT_NAME),
                                         key("productVendor").value(PRODUCT.PRODUCT_VENDOR),
                                         key("quantityInStock").value(PRODUCT.QUANTITY_IN_STOCK)))
                                 .orderBy(PRODUCT.QUANTITY_IN_STOCK))
                                 .from(PRODUCT)
-                                .where(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE)))))
+                                .where(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE)))))                
                 .from(PRODUCTLINE)
+                .orderBy(PRODUCTLINE.PRODUCT_LINE)
                 .fetch();
 
         System.out.println("Example 3.1.1 (one-to-many):\n" + result31.formatJSON());
