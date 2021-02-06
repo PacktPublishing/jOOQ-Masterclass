@@ -329,11 +329,11 @@ public class ClassicModelsRepository {
                         .from(PRODUCT)
                         .where(PRODUCT.PRODUCT_LINE.eq(PRODUCTLINE.PRODUCT_LINE))
                         .orderBy(PRODUCT.QUANTITY_IN_STOCK)
-                        .limit(2) // limit products
+                        // .limit(2) // limit products
                         .forJSON().path().asField("products"))
                 .from(PRODUCTLINE)
                 .orderBy(PRODUCTLINE.PRODUCT_LINE)
-                .limit(2) // limit product lines
+                //.limit(2) // limit product lines
                 .forJSON().path()
                 .fetchSingleInto(String.class);
 
