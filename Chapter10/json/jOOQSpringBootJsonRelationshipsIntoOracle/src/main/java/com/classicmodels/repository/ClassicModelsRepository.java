@@ -123,8 +123,10 @@ public class ClassicModelsRepository {
                 select(PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_VENDOR, PRODUCT.QUANTITY_IN_STOCK)
                         .from(PRODUCT)
                         .where(PRODUCT.PRODUCT_LINE.eq(PRODUCTLINE.PRODUCT_LINE))
+                        .orderBy(PRODUCT.QUANTITY_IN_STOCK)
                         .forJSON().path().asField("products"))
                 .from(PRODUCTLINE)
+                .orderBy(PRODUCTLINE.PRODUCT_LINE)
                 .fetchInto(SimpleProductLine.class);
 
         System.out.println("Example 2.3 (one-to-many):\n" + result3);
