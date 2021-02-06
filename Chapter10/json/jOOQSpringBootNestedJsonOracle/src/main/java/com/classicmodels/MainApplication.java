@@ -9,6 +9,9 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class MainApplication {
 
+    // if you get, ORA-40478: output value too large (maximum: 4000)
+    // then you should set MAX_STRING_SIZE to EXTENTED instead of STANDARD
+    
     private final ClassicModelsService classicModelsService;
 
     public MainApplication(ClassicModelsService classicModelsService) {

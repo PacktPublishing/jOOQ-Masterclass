@@ -12,7 +12,7 @@ public class SimpleCustomer implements Serializable {
     private String customerName;
     private BigDecimal creditLimit;
     private List<SimplePayment> payments;           
-    private List<SimpleCustomerDetail> details;
+    private SimpleCustomerDetail details;
 
     public String getCustomerName() {
         return customerName;
@@ -38,13 +38,13 @@ public class SimpleCustomer implements Serializable {
         this.payments = payments;
     }
 
-    public List<SimpleCustomerDetail> getDetails() {
+    public SimpleCustomerDetail getDetails() {
         return details;
     }
 
-    public void setDetails(List<SimpleCustomerDetail> details) {
+    public void setDetails(SimpleCustomerDetail details) {
         this.details = details;
-    }
+    }   
 
     @Override
     public int hashCode() {

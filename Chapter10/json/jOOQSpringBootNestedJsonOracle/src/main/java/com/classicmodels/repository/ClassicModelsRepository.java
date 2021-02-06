@@ -40,6 +40,9 @@ public class ClassicModelsRepository {
         this.ctx = ctx;
     }
 
+    // if you get, ORA-40478: output value too large (maximum: 4000)
+    // then you should set MAX_STRING_SIZE to EXTENTED instead of STANDARD
+    
     public void jsonProductlineProductOrderdetail() {
 
         Result<Record1<JSON>> result1 = ctx.select(
@@ -62,6 +65,7 @@ public class ClassicModelsRepository {
                                 .from(PRODUCT)
                                 .where(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE)))))
                 .from(PRODUCTLINE)
+                .orderBy(PRODUCTLINE.PRODUCT_LINE)
                 .fetch();
         System.out.println("Example 1.1:\n" + result1.formatJSON());
 
@@ -86,6 +90,7 @@ public class ClassicModelsRepository {
                                 .from(PRODUCT)
                                 .where(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE))))))
                 .from(PRODUCTLINE)
+                .orderBy(PRODUCTLINE.PRODUCT_LINE)
                 .fetchInto(SimpleProductLine.class);
 
         System.out.println("Example 1.2:\n" + result2);
@@ -167,6 +172,7 @@ public class ClassicModelsRepository {
                                 .from(CUSTOMERDETAIL)
                                 .where(CUSTOMERDETAIL.CUSTOMER_NUMBER.eq(CUSTOMER.CUSTOMER_NUMBER)))))
                 .from(CUSTOMER)
+                .orderBy(CUSTOMER.CREDIT_LIMIT)
                 .fetch();
         System.out.println("Example 2.1:\n" + result1.formatJSON());
 
