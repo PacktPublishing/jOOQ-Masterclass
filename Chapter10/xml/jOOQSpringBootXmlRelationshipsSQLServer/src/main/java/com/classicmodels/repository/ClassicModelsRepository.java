@@ -101,7 +101,7 @@ public class ClassicModelsRepository {
         System.out.println("Example 2.3.1 (one-to-many):\n" + result31.formatXML());
 
         // SQL Server serve XML in slices, so you have to join all slices into the resulted String
-        // or fetch a single slice by using LIMIT (check SQL Server docs for details)
+        // or fetch a single slice (if it is possible) by using LIMIT (check SQL Server docs for details)
         String result32 = ctx.select(
                 PRODUCTLINE.PRODUCT_LINE.as("productLine"),
                 PRODUCTLINE.TEXT_DESCRIPTION.as("textDescription"),
