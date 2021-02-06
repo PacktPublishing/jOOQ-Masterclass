@@ -66,7 +66,7 @@ public class ClassicModelsRepository {
 
     public void xmlCustomerPaymentBankTransactionCustomerdetail() {
 
-        Result<Record1<XML>> result = ctx.select(
+        Result<Record1<XML>> result1 = ctx.select(
                 xmlelement("customer",
                         xmlelement("customerName", CUSTOMER.CUSTOMER_NAME),
                         xmlelement("creditLimit", CUSTOMER.CREDIT_LIMIT),
@@ -95,7 +95,39 @@ public class ClassicModelsRepository {
                 .orderBy(CUSTOMER.CREDIT_LIMIT)
                 .fetch();
 
-        System.out.println("Example 2:\n" + result.formatXML());
+        System.out.println("Example 2.1:\n" + result1.formatXML());
+
+        String result2 = ctx.select(
+                xmlagg(
+                        xmlelement("customer",
+                                xmlelement("customerName", CUSTOMER.CUSTOMER_NAME),
+                                xmlelement("creditLimit", CUSTOMER.CREDIT_LIMIT),
+                                xmlelement("payments", field(select(xmlagg(
+                                        xmlelement("payment", // optionally, each payment wrapped in <payment/>
+                                                xmlforest(PAYMENT.CUSTOMER_NUMBER.as("paymentNumber"),
+                                                        PAYMENT.INVOICE_AMOUNT.as("invoiceAmount"),
+                                                        PAYMENT.CACHING_DATE.as("cachingDate"),
+                                                        field(select(xmlagg(
+                                                                xmlelement("transaction", // optionally, each transaction wrapped in <transaction/>
+                                                                        xmlforest(
+                                                                                BANK_TRANSACTION.BANK_NAME.as("bankName"),
+                                                                                BANK_TRANSACTION.TRANSFER_AMOUNT.as("transferAmount")))))
+                                                                .from(BANK_TRANSACTION)
+                                                                .where(BANK_TRANSACTION.CUSTOMER_NUMBER.eq(PAYMENT.CUSTOMER_NUMBER)
+                                                                        .and(BANK_TRANSACTION.CHECK_NUMBER.eq(PAYMENT.CHECK_NUMBER)))).as("transactions")))))
+                                        .from(PAYMENT)
+                                        .where(PAYMENT.CUSTOMER_NUMBER.eq(CUSTOMER.CUSTOMER_NUMBER))
+                                        .orderBy(CUSTOMER.CUSTOMER_NAME))),
+                                xmlelement("details", field(select(xmlagg(
+                                        xmlforest(CUSTOMERDETAIL.ADDRESS_LINE_FIRST.as("addressLineFirst"),
+                                                CUSTOMERDETAIL.STATE.as("state"))))
+                                        .from(CUSTOMERDETAIL)
+                                        .where(CUSTOMERDETAIL.CUSTOMER_NUMBER.eq(CUSTOMER.CUSTOMER_NUMBER))))))
+                        .orderBy(CUSTOMER.CREDIT_LIMIT))
+                .from(CUSTOMER)
+                .fetchSingleInto(String.class);
+
+        System.out.println("Example 2.2:\n" + result2);
     }
 
     public void xmlOfficeManagerDepartmentEmployeeSale() {
