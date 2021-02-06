@@ -60,9 +60,9 @@ public class ClassicModelsRepository {
                                                         .where(ORDERDETAIL.PRODUCT_ID.eq(PRODUCT.PRODUCT_ID)))))
                                 .orderBy(PRODUCT.QUANTITY_IN_STOCK))
                                 .from(PRODUCT)
-                                .where(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE))
-                                .orderBy(PRODUCTLINE.PRODUCT_LINE))))
+                                .where(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE)))))
                 .from(PRODUCTLINE)
+                .orderBy(PRODUCTLINE.PRODUCT_LINE)
                 .fetch();
 
         System.out.println("Example 1.1:\n" + result1.formatJSON());
@@ -86,9 +86,9 @@ public class ClassicModelsRepository {
                                                         .where(ORDERDETAIL.PRODUCT_ID.eq(PRODUCT.PRODUCT_ID))))))
                                 .orderBy(PRODUCT.QUANTITY_IN_STOCK))
                                 .from(PRODUCT)
-                                .where(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE))
-                                .orderBy(PRODUCTLINE.PRODUCT_LINE)))))
+                                .where(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE))))))
                 .from(PRODUCTLINE)
+                .orderBy(PRODUCTLINE.PRODUCT_LINE)
                 .fetchInto(SimpleProductLine.class);
 
         System.out.println("Example 1.2:\n" + result2);
