@@ -102,7 +102,7 @@ public class ClassicModelsRepository {
 
         // SQL Server serve XML in slices, so you have to join all slices into the resulted String
         // or fetch a single slice by using LIMIT (check SQL Server docs for details)
-        String result30 = ctx.select(
+        String result32 = ctx.select(
                 PRODUCTLINE.PRODUCT_LINE.as("productLine"),
                 PRODUCTLINE.TEXT_DESCRIPTION.as("textDescription"),
                 select(PRODUCT.PRODUCT_NAME.as("productName"),
@@ -117,9 +117,9 @@ public class ClassicModelsRepository {
                 .forXML().path("productline").root("productlines")
                 .fetchSingleInto(String.class);
 
-        System.out.println("Example 2.3.0 (one-to-many):\n" + result30);
+        System.out.println("Example 2.3.2 (one-to-many):\n" + result32);
         
-        String result32 = ctx.select(
+        String result33 = ctx.select(
                 PRODUCTLINE.PRODUCT_LINE.as("productLine"),
                 PRODUCTLINE.TEXT_DESCRIPTION.as("textDescription"),
                 select(PRODUCT.PRODUCT_NAME.as("productName"),
@@ -134,9 +134,9 @@ public class ClassicModelsRepository {
                 .forXML().path("productline").root("productlines")
                 .fetchInto(String.class).stream().collect(Collectors.joining());
 
-        System.out.println("Example 2.3.2 (one-to-many):\n" + result32);
+        System.out.println("Example 2.3.3 (one-to-many):\n" + result33);
 
-        String result33 = StringUtils.join(ctx.select(
+        String result34 = StringUtils.join(ctx.select(
                 PRODUCTLINE.PRODUCT_LINE.as("productLine"),
                 PRODUCTLINE.TEXT_DESCRIPTION.as("textDescription"),
                 select(PRODUCT.PRODUCT_NAME.as("productName"),
@@ -151,7 +151,7 @@ public class ClassicModelsRepository {
                 .forXML().path("productline").root("productlines")
                 .fetchInto(String.class), "");
 
-        System.out.println("Example 2.3.3 (one-to-many):\n" + result33);
+        System.out.println("Example 2.3.4 (one-to-many):\n" + result34);
     }
 
     public void manyToManyToXmlManagersOffices() {
