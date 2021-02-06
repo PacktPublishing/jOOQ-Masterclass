@@ -13,7 +13,8 @@ public class ClassicModelsService {
     }
 
     public void callAll() {
-        
+        classicModelsRepository.q();
+        /*
         classicModelsRepository.arrayToXML();
         classicModelsRepository.UDTToXML();
         
@@ -22,5 +23,6 @@ public class ClassicModelsService {
         
         classicModelsRepository.manyToManyToXmlManagersOffices();
         classicModelsRepository.manyToManyToXmlOfficesManagers();                   
+*/
     }
 }

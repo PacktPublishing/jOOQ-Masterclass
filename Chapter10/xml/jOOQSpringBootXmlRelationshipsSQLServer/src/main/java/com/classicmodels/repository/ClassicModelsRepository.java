@@ -9,6 +9,7 @@ import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Productline.PRODUCTLINE;
 import org.jooq.DSLContext;
 import org.jooq.Record1;
+import org.jooq.Record3;
 import org.jooq.Result;
 import org.jooq.XML;
 import static org.jooq.impl.DSL.field;
@@ -84,7 +85,7 @@ public class ClassicModelsRepository {
 
         System.out.println("Example 2.2 (one-to-many):\n" + result2.formatXML());
 
-        var result3 = ctx.select(
+        var result31 = ctx.select( // Result<Record3<String, String, Object>>
                 PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.TEXT_DESCRIPTION,
                 select(PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_VENDOR, PRODUCT.QUANTITY_IN_STOCK)
                         .from(PRODUCT)
@@ -93,9 +94,25 @@ public class ClassicModelsRepository {
                         .forXML().path().asField("products"))
                 .from(PRODUCTLINE)
                 // .limit(2) // limit product lines
+                // .forXML().path() // add this to return Result<Record1<XML>>
                 .fetch();
 
-        System.out.println("Example 2.3 (one-to-many):\n" + result3.formatXML());
+        System.out.println("Example 2.3.1 (one-to-many):\n" + result31.formatXML());
+        
+        var result32 = ctx.select( // Result<Record3<String, String, Object>>
+                PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.TEXT_DESCRIPTION,
+                select(PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_VENDOR, PRODUCT.QUANTITY_IN_STOCK)
+                        .from(PRODUCT)
+                        .where(PRODUCT.PRODUCT_LINE.eq(PRODUCTLINE.PRODUCT_LINE))
+                        // .limit(5) // limit products
+                        .forXML().path().asField("products"))
+                .from(PRODUCTLINE)
+                // .limit(2) // limit product lines
+                .forXML().path() // add this to return Result<Record1<XML>>
+                .fetch();
+
+        System.out.println("Example 2.3.2 (one-to-many):\n" + result32.get(0).value1().data()
+                +"\n\nxxx="+result32.get(1).value1().data());
     }
 
     public void manyToManyToXmlManagersOffices() {

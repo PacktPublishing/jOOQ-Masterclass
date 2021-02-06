@@ -33,6 +33,25 @@ public class ClassicModelsRepository {
         this.ctx = ctx;
     }
 
+    public void q() {
+        String result32 = ctx.select( // Result<Record3<String, String, Object>>
+                PRODUCTLINE.PRODUCT_LINE.as("productLine"), 
+                PRODUCTLINE.TEXT_DESCRIPTION.as("textDescription"),
+                select(PRODUCT.PRODUCT_NAME.as("productName"), 
+                        PRODUCT.PRODUCT_VENDOR.as("productVendor"), 
+                        PRODUCT.QUANTITY_IN_STOCK.as("quantityInStock"))
+                        .from(PRODUCT)
+                        .where(PRODUCT.PRODUCT_LINE.eq(PRODUCTLINE.PRODUCT_LINE))                                                
+                        .forXML().path("product").asField("products"))
+                .from(PRODUCTLINE)                
+                .forXML().path("productline").root("productlines")
+                .fetchSingleInto(String.class);
+
+        System.out.println("Example 2.3.2 (one-to-many):\n" + result32);
+    }
+    
+    
+    
     public void arrayToXML() {
 
         Result<Record1<XML>> result = ctx.select(
