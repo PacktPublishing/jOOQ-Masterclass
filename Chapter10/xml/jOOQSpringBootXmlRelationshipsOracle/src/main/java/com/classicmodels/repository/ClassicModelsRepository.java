@@ -33,7 +33,7 @@ public class ClassicModelsRepository {
         this.ctx = ctx;
     }
 
-    public void arrayToXML() {
+    public void arrayToXML() {         
 
         Result<Record1<XML>> result = ctx.select(
                 xmlelement("department",
