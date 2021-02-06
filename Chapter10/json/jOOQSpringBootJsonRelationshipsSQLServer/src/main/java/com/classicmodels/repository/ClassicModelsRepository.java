@@ -17,7 +17,6 @@ import static org.jooq.impl.DSL.jsonObject;
 import static org.jooq.impl.DSL.key;
 import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.select;
-import org.jooq.tools.StringUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
