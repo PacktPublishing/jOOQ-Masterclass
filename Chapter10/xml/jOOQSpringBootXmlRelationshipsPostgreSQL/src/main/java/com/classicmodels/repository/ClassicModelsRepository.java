@@ -130,7 +130,8 @@ public class ClassicModelsRepository {
                                                         PRODUCT.PRODUCT_VENDOR.as("productVendor"),
                                                         PRODUCT.QUANTITY_IN_STOCK.as("quantityInStock")))))
                                         .from(PRODUCT)
-                                        .where(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE)))))).orderBy(PRODUCTLINE.PRODUCT_LINE)))
+                                        .where(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE))))))
+                        .orderBy(PRODUCTLINE.PRODUCT_LINE)))
                 .from(PRODUCTLINE)
                 .fetchSingleInto(String.class);
 
