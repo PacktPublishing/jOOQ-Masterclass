@@ -262,7 +262,7 @@ public class ClassicModelsRepository {
                         .as("t"))
                 .fetch();
 
-        System.out.println("Example 3.1:\n" + result1.formatXML());
+        System.out.println("Example 3.1:\n" + result1);
 
         Result<Record> result2 = ctx.select(table("t").asterisk())
                 .from(PRODUCTLINE, xmltable("//productline/details").passing(PRODUCTLINE.HTML_DESCRIPTION)
@@ -274,7 +274,7 @@ public class ClassicModelsRepository {
                         .as("t"))
                 .fetch();
 
-        System.out.println("Example 3.2:\n" + result2.formatXML());
+        System.out.println("Example 3.2:\n" + result2);
 
         // filter result
         Result<Record> result3 = ctx.select(table("t").asterisk())
@@ -288,7 +288,7 @@ public class ClassicModelsRepository {
                 .where(field("command").eq("ERP"))
                 .fetch();
 
-        System.out.println("Example 3.3:\n" + result3.formatXML());
+        System.out.println("Example 3.3:\n" + result3);
 
         // back to XML        
         Result<Record1<XML>> result4 = ctx.select(xmlelement("details",
