@@ -114,8 +114,7 @@ public class ClassicModelsRepository {
                                                         .and(BANK_TRANSACTION.CHECK_NUMBER.eq(PAYMENT.CHECK_NUMBER)))))))
                                 .orderBy(PAYMENT.CACHING_DATE))
                                 .from(PAYMENT)
-                                .where(PAYMENT.CUSTOMER_NUMBER.eq(CUSTOMER.CUSTOMER_NUMBER))
-                                .orderBy(CUSTOMER.CUSTOMER_NAME))),
+                                .where(PAYMENT.CUSTOMER_NUMBER.eq(CUSTOMER.CUSTOMER_NUMBER)))),
                         jsonEntry("details", field(select(
                                 jsonObject(jsonEntry("city", CUSTOMERDETAIL.CITY),
                                         jsonEntry("addressLineFirst", CUSTOMERDETAIL.ADDRESS_LINE_FIRST),
@@ -148,8 +147,7 @@ public class ClassicModelsRepository {
                                                                 .and(BANK_TRANSACTION.CHECK_NUMBER.eq(PAYMENT.CHECK_NUMBER))))))
                                 .orderBy(PAYMENT.CACHING_DATE))
                                 .from(PAYMENT)
-                                .where(PAYMENT.CUSTOMER_NUMBER.eq(CUSTOMER.CUSTOMER_NUMBER))
-                                .orderBy(CUSTOMER.CUSTOMER_NAME)),
+                                .where(PAYMENT.CUSTOMER_NUMBER.eq(CUSTOMER.CUSTOMER_NUMBER))),
                         key("details").value(select(
                                 jsonObject(key("city").value(CUSTOMERDETAIL.CITY),
                                         key("addressLineFirst").value(CUSTOMERDETAIL.ADDRESS_LINE_FIRST),
