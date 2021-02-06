@@ -60,5 +60,7 @@ public class ClassicModelsRepository {
                 .fetchSingle()  // there is a single XML
                 .value1()       // this is an org.jooq.XML
                 .data();        // XML as a String
+        
+                // or, replace the last three lines from above with: .fetchSingleInto(String.class)
     }
 }
