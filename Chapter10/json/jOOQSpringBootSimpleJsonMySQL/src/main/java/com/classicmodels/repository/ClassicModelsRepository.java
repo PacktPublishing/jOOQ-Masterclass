@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Manager.MANAGER;
+import static jooq.generated.tables.Office.OFFICE;
 import org.jooq.DSLContext;
 import org.jooq.JSON;
 import org.jooq.JSONEntry;
@@ -127,7 +128,7 @@ public class ClassicModelsRepository {
                 .from(select(CUSTOMER.CUSTOMER_NAME, CUSTOMER.CREDIT_LIMIT)
                         .from(CUSTOMER).orderBy(CUSTOMER.CUSTOMER_NAME).limit(3))
                 .fetchSingleInto(String.class);
-        System.out.println("Example 1.4.2:\n" + result42);
+        System.out.println("Example 1.4.2:\n" + result42);                       
 
         // simple example of using jsonExists()
         Result<Record2<Long, String>> result5 = ctx.select(MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME)
