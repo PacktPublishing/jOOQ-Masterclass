@@ -10,13 +10,13 @@ import org.jooq.JSONEntry;
 import org.jooq.Record1;
 import org.jooq.Record2;
 import org.jooq.Record;
+import org.jooq.Record3;
 import org.jooq.Result;
 import static org.jooq.impl.DSL.concat;
 import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.jsonArray;
 import static org.jooq.impl.DSL.jsonArrayAgg;
-import static org.jooq.impl.DSL.jsonObject;
 import static org.jooq.impl.DSL.jsonValue;
 import static org.jooq.impl.DSL.jsonEntry;
 import static org.jooq.impl.DSL.jsonExists;
@@ -132,7 +132,9 @@ public class ClassicModelsRepository {
                 .fetchSingleInto(String.class);
         System.out.println("Example 1.4.2:\n" + result42);
 
-        var result43 = ctx.select(
+        // if you want to explicitly add nulls (in case that they are removed by default) 
+        // then rely on nullOnNull() method 
+        Result<Record3<JSON, JSON, JSON>> result43 = ctx.select(
                 jsonObject("cities",jsonArrayAgg(jsonObject("city", OFFICE.CITY).absentOnNull())),
                 jsonObject("countries",jsonArrayAgg(jsonObject("country", OFFICE.COUNTRY).absentOnNull())),
                 jsonObject("states",jsonArrayAgg(jsonObject("state", OFFICE.STATE).absentOnNull())))
