@@ -3,6 +3,7 @@ package com.classicmodels.repository;
 import java.util.List;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Manager.MANAGER;
+import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Payment.PAYMENT;
 import org.jooq.DSLContext;
 import org.jooq.JSON;
@@ -10,16 +11,18 @@ import org.jooq.JSONEntry;
 import org.jooq.Record1;
 import org.jooq.Record2;
 import org.jooq.Record;
+import org.jooq.Record3;
 import org.jooq.Result;
 import static org.jooq.impl.DSL.concat;
 import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.jsonArray;
+import static org.jooq.impl.DSL.jsonArrayAgg;
 import static org.jooq.impl.DSL.jsonObject;
 import static org.jooq.impl.DSL.jsonValue;
-import static org.jooq.impl.DSL.jsonArrayAgg;
 import static org.jooq.impl.DSL.jsonEntry;
 import static org.jooq.impl.DSL.jsonExists;
+import static org.jooq.impl.DSL.jsonObject;
 import static org.jooq.impl.DSL.jsonObjectAgg;
 import static org.jooq.impl.DSL.jsonTable;
 import static org.jooq.impl.DSL.key;
@@ -128,6 +131,16 @@ public class ClassicModelsRepository {
                         .from(CUSTOMER).orderBy(CUSTOMER.CUSTOMER_NAME).limit(3))
                 .fetchSingleInto(String.class);
         System.out.println("Example 1.4.2:\n" + result42);
+        
+        // if you want to explicitly add nulls (in case that they are removed by default) 
+        // then rely on nullOnNull() method 
+        Result<Record3<JSON, JSON, JSON>> result43 = ctx.select(
+                jsonObject("cities",jsonArrayAgg(jsonObject("city", OFFICE.CITY).absentOnNull())),
+                jsonObject("countries",jsonArrayAgg(jsonObject("country", OFFICE.COUNTRY).absentOnNull())),
+                jsonObject("states",jsonArrayAgg(jsonObject("state", OFFICE.STATE).absentOnNull())))
+                .from(OFFICE)
+                .fetch();
+        System.out.println("Example 1.4.3:\n" + result43.formatJSON());
 
         // simple example of using jsonExists()
         Result<Record2<Long, String>> result5 = ctx.select(MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME)
