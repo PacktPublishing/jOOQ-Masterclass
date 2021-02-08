@@ -26,7 +26,7 @@
         <maven.compiler.source>14</maven.compiler.source>
         <maven.compiler.target>14</maven.compiler.target>
         
-        <jooq.version>3.14.4</jooq.version>             
+        <jooq.version>3.14.7</jooq.version>             
         <codehaus.mojo.version>1.0.0</codehaus.mojo.version>
         <maven.compiler.plugin.version>3.3</maven.compiler.plugin.version>
     </properties>
@@ -127,8 +127,7 @@
                         </goals>                                  
                         <configuration>                                                 
                             <!-- Configure the database connection here. -->
-                            <jdbc>
-                                <autoCommit>false</autoCommit>
+                            <jdbc>                             
                                 <driver>${spring.datasource.driverClassName}</driver>
                                 <url>${spring.datasource.url}</url>
                                 <user>${spring.datasource.username}</user>

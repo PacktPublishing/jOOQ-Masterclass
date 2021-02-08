@@ -9,8 +9,6 @@ import org.jooq.Cursor;
 import org.jooq.DSLContext;
 import org.jooq.Record2;
 import org.jooq.RecordMapper;
-import org.jooq.ResultQuery;
-import org.jooq.conf.Settings;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,7 +24,7 @@ public class ClassicModelsRepository {
 
     public void fetchCustomerLazyOneByOne() {
 
-        // By default, SQLServer JDBC retrieves the entire result set at a time. 
+        // By default, SQLServer JDBC relies on adaptive buffering to avoid OOM. 
         // Next, jOOQ scans the fetched ResultSet record by record via fetchNext()
         System.out.println("Example 1:\n");
         try ( Cursor<CustomerRecord> cursor = ctx.selectFrom(CUSTOMER).fetchLazy()) {
@@ -41,7 +39,7 @@ public class ClassicModelsRepository {
 
     public void fetchCustomerLazyFiveByFive() {
 
-        // By default, SQLServer JDBC retrieves the entire result set at a time. 
+        // By default, SQLServer JDBC relies on adaptive buffering to avoid OOM. 
         // Next, jOOQ scans the fetched ResultSet via fetchNext(int number) - here, 5 records at a time
         System.out.println("\nExample 2:\n");
         try ( Cursor<CustomerRecord> cursor = ctx.selectFrom(CUSTOMER).fetchLazy()) {
@@ -54,10 +52,10 @@ public class ClassicModelsRepository {
         }
     }
 
-    @Transactional    
+    @Transactional
     public void fetchCustomerLazyAndUpdate() {
-        
-        // By default, SQLServer JDBC retrieves the entire result set at a time. 
+
+        // By default, SQLServer JDBC relies on adaptive buffering to avoid OOM. 
         // Next, jOOQ scans the fetched ResultSet record by record via fetchNext() and update it based on a condition.
         System.out.println("\nExample 3:\n");
         try ( Cursor<CustomerRecord> cursor = ctx.selectFrom(CUSTOMER).fetchLazy()) {
@@ -73,10 +71,10 @@ public class ClassicModelsRepository {
             }
         }
     }
-    
+
     public void fetchCustomerLazyAndRecordMapper() {
 
-        // By default, SQLServer JDBC retrieves the entire result set at a time. 
+        // By default, SQLServer JDBC relies on adaptive buffering to avoid OOM. 
         // Next, jOOQ scans the fetched ResultSet record by record via fetchNext() and apply a RecordMapper
         System.out.println("\nExample 4:\n");
         try ( Cursor<Record2<BigDecimal, Integer>> cursor
@@ -103,54 +101,5 @@ public class ClassicModelsRepository {
                         System.out.println("Result:" + result);
                     }
                 }
-    }
-    
-    public void fetchExactlyOneRow() {
-
-        // Instruct SQLServer JDBC to retrieve a result set of 1 row at a time from the database cursor. 
-        // Instruct jOOQ to scan a result set of 1 row at a time from the ResultSet. 
-        // So, both SQLServer and jOOQ will fetch exactly one row at a time.
-        System.out.println("\nExample 5.1:\n");
-        try ( Cursor<CustomerRecord> cursor = ctx.selectFrom(CUSTOMER).fetchSize(1).fetchLazy()) {
-
-            while (cursor.hasNext()) {
-                CustomerRecord customer = cursor.fetchNext();
-
-                System.out.println("Customer:\n" + customer);
-            }
-        }
-        
-        // same thing but using explicitly ResultQuery
-        System.out.println("\nExample 5.2:\n");
-        ResultQuery<CustomerRecord> resultQuery = ctx.selectFrom(CUSTOMER).fetchSize(1);        
-        Cursor<CustomerRecord> cursor = resultQuery.fetchLazy();
-        
-        try (cursor) {
-            
-            while (cursor.hasNext()) {
-                CustomerRecord customer = cursor.fetchNext();
-
-                System.out.println("Customer:\n" + customer);
-            }
-        }        
-    }
-    
-    public void fetchExactlyOneRowGlobal() {
-
-        // Instruct SQLServer JDBC to retrieve a result set of 1 row at a time from the database cursor. 
-        // Instruct jOOQ to scan a result set of 1 row at a time from the ResultSet. 
-        // So, both SQLServer and jOOQ will fetch exactly one row at a time.
-        // Global fetchSize() (of course. you can do this setting via @Bean as well).
-        System.out.println("Example 6:\n");
-        try ( Cursor<CustomerRecord> cursor = ctx.configuration().set(
-                new Settings().withFetchSize(1)).dsl()
-                .selectFrom(CUSTOMER).fetchLazy()) {
-
-            while (cursor.hasNext()) {
-                CustomerRecord customer = cursor.fetchNext();
-
-                System.out.println("Customer:\n" + customer);
-            }
-        }
     }
 }

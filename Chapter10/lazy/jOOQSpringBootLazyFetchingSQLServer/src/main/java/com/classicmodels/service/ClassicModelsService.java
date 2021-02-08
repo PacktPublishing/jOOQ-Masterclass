@@ -13,12 +13,10 @@ public class ClassicModelsService {
     }
 
     public void callAll() {
-        
+
         classicModelsRepository.fetchCustomerLazyOneByOne();            // EXAMPLE 1
         classicModelsRepository.fetchCustomerLazyFiveByFive();          // EXAMPLE 2
         classicModelsRepository.fetchCustomerLazyAndUpdate();           // EXAMPLE 3
-        classicModelsRepository.fetchCustomerLazyAndRecordMapper();     // EXAMPLE 4
-        classicModelsRepository.fetchExactlyOneRow();                   // EXAMPLE 5
-        classicModelsRepository.fetchExactlyOneRowGlobal();             // EXAMPLE 6        
+        classicModelsRepository.fetchCustomerLazyAndRecordMapper();     // EXAMPLE 4   
     }
 }
