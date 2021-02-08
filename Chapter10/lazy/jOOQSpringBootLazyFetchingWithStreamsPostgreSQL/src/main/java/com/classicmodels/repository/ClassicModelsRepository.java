@@ -87,23 +87,26 @@ public class ClassicModelsRepository {
                 .forEach(System.out::println);
 
         SimpleSale result1 = ctx.fetchStream("SELECT sale FROM sale") // jOOQ fluent API ends here                                                
-                .collect(Collectors.teeing( // Stream API starts here                           
+                .collect(Collectors.teeing( // Stream API starts here (this is java.​util.​stream.​Stream.collect())                          
                         summingDouble(rs -> rs.getValue("sale", Double.class)),
                         mapping(rs -> rs.getValue("sale", Double.class), toList()),
                         SimpleSale::new));
         System.out.println("Result=" + result1);
 
         SimpleSale result2 = ctx.select(SALE.SALE_)
-                .from(SALE).fetchSize(5).fetchStream() // jOOQ fluent API ends here                                                                
-                .collect(Collectors.teeing( // Stream API starts here                           
+                .from(SALE)
+                .fetchSize(5) // optionally, set the fetch size
+                .fetchStream() // jOOQ fluent API ends here                                                                
+                .filter(rs -> rs.getValue(SALE.SALE_) > 5000) // Stream API starts here (this is java.​util.​stream.​Stream.filter())                                          
+                .collect(Collectors.teeing( // this is java.​util.​stream.​Stream.collect()
                         summingDouble(rs -> rs.getValue(SALE.SALE_)),
                         mapping(rs -> rs.getValue(SALE.SALE_), toList()),
                         SimpleSale::new));
         System.out.println("Result=" + result2);
 
         // if you don't need the stream pipeline then simply don't use fetchStream()
-        SimpleSale result3 = ctx.select(SALE.SALE_).from(SALE).fetchSize(5) // jOOQ fluent API ends here                                                                
-                .collect(Collectors.teeing( // Stream API starts here                           
+        SimpleSale result3 = ctx.select(SALE.SALE_).from(SALE).fetchSize(5) 
+                .collect(Collectors.teeing( // this is org.​jooq.​ResultQuery.collect()
                         summingDouble(rs -> rs.getValue(SALE.SALE_)),
                         mapping(rs -> rs.getValue(SALE.SALE_), toList()),
                         SimpleSale::new));
