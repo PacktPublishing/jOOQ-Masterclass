@@ -87,9 +87,17 @@ public class ClassicModelsRepository {
     }
 
     // lazy fetching (collecting) with collect()    
-    public void lazyCollectingViaFetchStream() {
+    public void lazyCollectingAndFetchStream() {
 
-        SimpleSale result1 = ctx.select(SALE.SALE_)
+        SimpleSale result1 = ctx.fetchStream("SELECT sale FROM sale") // jOOQ fluent API ends here                
+                .filter(rs -> rs.getValue(SALE.SALE_) > 5000) // Stream API starts here (this is java.​util.​stream.​Stream.filter())                                          
+                .collect(Collectors.teeing( // Stream API starts here (this is java.​util.​stream.​Stream.collect())                          
+                        summingDouble(rs -> rs.getValue("sale", Double.class)),
+                        mapping(rs -> rs.getValue("sale", Double.class), toList()),
+                        SimpleSale::new));
+        System.out.println("Result=" + result1);
+
+        SimpleSale result2 = ctx.select(SALE.SALE_)
                 .from(SALE)
                 .fetchStream() // jOOQ fluent API ends here                                                                
                 .filter(rs -> rs.getValue(SALE.SALE_) > 5000) // Stream API starts here (this is java.​util.​stream.​Stream.filter())                                          
@@ -97,16 +105,9 @@ public class ClassicModelsRepository {
                         summingDouble(rs -> rs.getValue(SALE.SALE_)),
                         mapping(rs -> rs.getValue(SALE.SALE_), toList()),
                         SimpleSale::new));
-        System.out.println("Result=" + result1);
-
-        // if you don't need the stream pipeline then simply don't use fetchStream()
-        SimpleSale result2 = ctx.fetchStream("SELECT sale FROM sale") // jOOQ fluent API ends here                
-                .collect(Collectors.teeing( // Stream API starts here (this is java.​util.​stream.​Stream.collect())                          
-                        summingDouble(rs -> rs.getValue("sale", Double.class)),
-                        mapping(rs -> rs.getValue("sale", Double.class), toList()),
-                        SimpleSale::new));
         System.out.println("Result=" + result2);
 
+        // if you don't need the stream pipeline then simply don't use fetchStream()
         SimpleSale result3 = ctx.select(SALE.SALE_).from(SALE)
                 .collect(Collectors.teeing( // this is org.​jooq.​ResultQuery.collect()
                         summingDouble(rs -> rs.getValue(SALE.SALE_)),
@@ -115,8 +116,8 @@ public class ClassicModelsRepository {
         System.out.println("Result=" + result3);
     }
 
-    // lazy fetching groups with streams    
-    public void lazyFetchingGroupsViaFetchStream() {
+    // lazy fetching groups via collect()   
+    public void lazyFetchingGroupsViaCollect() {
 
         Map<Productline, List<Product>> result = ctx.select()
                 .from(PRODUCTLINE)
