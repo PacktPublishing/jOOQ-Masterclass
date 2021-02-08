@@ -15,7 +15,7 @@ public class ClassicModelsService {
         this.classicModelsRepository = classicModelsRepository;
     }
 
-    public List<String> fetchCompanyAsync() {
+    public String fetchCompanyAsync() {
 
         CompletableFuture<String>[] fetchedCf = new CompletableFuture[]{
             classicModelsRepository.fetchManagersAsync(),
@@ -28,13 +28,13 @@ public class ClassicModelsService {
 
         // collect the final result
         return allFetchedCf.thenApply(r -> {
-            List<String> resultList = new ArrayList<>();
+            StringBuilder result = new StringBuilder();
 
             for (CompletableFuture<String> cf : fetchedCf) {
-                resultList.add(cf.join());
+                result.append(cf.join());
             }
 
-            return resultList;
+            return result.toString();
         }).join();
     }
 }
