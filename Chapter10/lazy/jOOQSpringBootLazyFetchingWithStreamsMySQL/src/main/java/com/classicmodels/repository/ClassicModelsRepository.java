@@ -13,6 +13,7 @@ import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Productline.PRODUCTLINE;
+import jooq.generated.tables.pojos.Sale;
 import static jooq.generated.tables.Sale.SALE;
 import jooq.generated.tables.pojos.Product;
 import jooq.generated.tables.pojos.Productline;
@@ -55,7 +56,7 @@ public class ClassicModelsRepository {
         try ( Stream<SaleRecord> stream = ctx.selectFrom(SALE).stream()) {
             stream.filter(rs -> rs.getValue(SALE.SALE_) > 5000)
                     .forEach(System.out::println);
-        }
+        }                                
     }
 
     @Transactional(readOnly = true) // open the database connection
@@ -85,6 +86,9 @@ public class ClassicModelsRepository {
         ctx.selectFrom(SALE).fetchStream()
                 .filter(rs -> rs.getValue(SALE.SALE_) > 5000)
                 .forEach(System.out::println);
+        
+        List<Sale> result = ctx.selectFrom(SALE).fetchStreamInto(Sale.class).collect(toList());
+        System.out.println("Result:\n" + result);
     }
 
     // lazy fetching (collecting) with collect()    
