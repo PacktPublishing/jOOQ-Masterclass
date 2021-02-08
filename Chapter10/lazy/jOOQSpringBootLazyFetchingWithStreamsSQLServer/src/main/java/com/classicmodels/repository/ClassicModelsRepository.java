@@ -15,6 +15,7 @@ import static jooq.generated.tables.Productline.PRODUCTLINE;
 import static jooq.generated.tables.Sale.SALE;
 import jooq.generated.tables.pojos.Product;
 import jooq.generated.tables.pojos.Productline;
+import jooq.generated.tables.pojos.Sale;
 import jooq.generated.tables.records.SaleRecord;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
@@ -74,8 +75,7 @@ public class ClassicModelsRepository {
                 .forEach(System.out::println);
     }
 
-    // lazy fetching with streams
-    @Transactional(readOnly = true)
+    // lazy fetching with streams (fetchStream())    
     public void lazyFetchingViaFetchStream() {
 
         ctx.fetchStream("SELECT sale FROM sale")
@@ -85,40 +85,48 @@ public class ClassicModelsRepository {
         ctx.selectFrom(SALE).fetchStream()
                 .filter(rs -> rs.getValue(SALE.SALE_) > 5000)
                 .forEach(System.out::println);
+        
+        List<Sale> result = ctx.selectFrom(SALE).fetchStreamInto(Sale.class).collect(toList());
+        System.out.println("Result:\n" + result);
+    }
 
-        SimpleSale result1 = ctx.fetchStream("SELECT sale FROM sale") // jOOQ fluent API ends here                                                
-                .collect(Collectors.teeing( // Stream API starts here                           
+    // lazy fetching (collecting) with collect()    
+    public void lazyCollectingAndFetchStream() {
+
+        SimpleSale result1 = ctx.fetchStream("SELECT sale FROM sale") // jOOQ fluent API ends here                
+                .filter(rs -> rs.getValue(SALE.SALE_) > 5000) // Stream API starts here (this is java.​util.​stream.​Stream.filter())                                          
+                .collect(Collectors.teeing( // Stream API starts here (this is java.​util.​stream.​Stream.collect())                          
                         summingDouble(rs -> rs.getValue("sale", Double.class)),
                         mapping(rs -> rs.getValue("sale", Double.class), toList()),
                         SimpleSale::new));
         System.out.println("Result=" + result1);
 
         SimpleSale result2 = ctx.select(SALE.SALE_)
-                .from(SALE).fetchSize(5).fetchStream() // jOOQ fluent API ends here                                                                
-                .collect(Collectors.teeing( // Stream API starts here                           
+                .from(SALE)
+                .fetchStream() // jOOQ fluent API ends here                                                                
+                .filter(rs -> rs.getValue(SALE.SALE_) > 5000) // Stream API starts here (this is java.​util.​stream.​Stream.filter())                                          
+                .collect(Collectors.teeing( // this is java.​util.​stream.​Stream.collect()
                         summingDouble(rs -> rs.getValue(SALE.SALE_)),
                         mapping(rs -> rs.getValue(SALE.SALE_), toList()),
                         SimpleSale::new));
         System.out.println("Result=" + result2);
 
         // if you don't need the stream pipeline then simply don't use fetchStream()
-        SimpleSale result3 = ctx.select(SALE.SALE_).from(SALE).fetchSize(5) // jOOQ fluent API ends here                                                                
-                .collect(Collectors.teeing( // Stream API starts here                           
+        SimpleSale result3 = ctx.select(SALE.SALE_).from(SALE)
+                .collect(Collectors.teeing( // this is org.​jooq.​ResultQuery.collect()
                         summingDouble(rs -> rs.getValue(SALE.SALE_)),
                         mapping(rs -> rs.getValue(SALE.SALE_), toList()),
                         SimpleSale::new));
         System.out.println("Result=" + result3);
     }
 
-    // lazy fetching groups with streams
-    @Transactional(readOnly=true)
-    public void lazyFetchingGroupsViaFetchStream() {
+    // lazy fetching groups via collect()   
+    public void lazyFetchingGroupsViaCollect() {
 
         Map<Productline, List<Product>> result = ctx.select()
                 .from(PRODUCTLINE)
                 .leftOuterJoin(PRODUCT)
                 .on(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE))
-                .fetchSize(5) // optionally, set the fetch size
                 // .fetchStream() // add this only if  you want to add additional operations to the stream pipeline                 
                 .collect(Collectors.groupingBy(rs -> rs.into(Productline.class),
                         Collectors.mapping(rs -> rs.into(Product.class), toList())));

@@ -17,6 +17,7 @@ public class ClassicModelsService {
         classicModelsRepository.eagerAndLazyFetchingWithStreams();
         classicModelsRepository.eagerAndLazyFetchingWithStreamsAndTransactional();
         classicModelsRepository.lazyFetchingViaFetchStream();
-        classicModelsRepository.lazyFetchingGroupsViaFetchStream();
+        classicModelsRepository.lazyCollectingAndFetchStream();
+        classicModelsRepository.lazyFetchingGroupsViaCollect();    
     }
 }
