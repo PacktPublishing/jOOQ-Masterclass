@@ -94,7 +94,7 @@ public class ClassicModelsRepository {
     public void lazyCollectingAndFetchStream() {
 
         SimpleSale result1 = ctx.fetchStream("SELECT sale FROM sale") // jOOQ fluent API ends here                
-                .filter(rs -> rs.getValue(SALE.SALE_) > 5000) // Stream API starts here (this is java.​util.​stream.​Stream.filter())                                          
+                .filter(rs -> rs.getValue("sale", Double.class) > 5000) // Stream API starts here (this is java.​util.​stream.​Stream.filter())                                          
                 .collect(Collectors.teeing( // Stream API starts here (this is java.​util.​stream.​Stream.collect())                          
                         summingDouble(rs -> rs.getValue("sale", Double.class)),
                         mapping(rs -> rs.getValue("sale", Double.class), toList()),
