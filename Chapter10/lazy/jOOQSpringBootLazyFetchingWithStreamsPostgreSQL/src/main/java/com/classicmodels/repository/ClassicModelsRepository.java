@@ -15,6 +15,7 @@ import static jooq.generated.tables.Productline.PRODUCTLINE;
 import static jooq.generated.tables.Sale.SALE;
 import jooq.generated.tables.pojos.Product;
 import jooq.generated.tables.pojos.Productline;
+import jooq.generated.tables.pojos.Sale;
 import jooq.generated.tables.records.SaleRecord;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
@@ -84,6 +85,9 @@ public class ClassicModelsRepository {
         ctx.selectFrom(SALE).fetchStream()
                 .filter(rs -> rs.getValue(SALE.SALE_) > 5000)
                 .forEach(System.out::println);
+        
+        List<Sale> result = ctx.selectFrom(SALE).fetchStreamInto(Sale.class).collect(toList());
+        System.out.println("Result:\n" + result);
     }
 
     // lazy fetching (collecting) with collect()    
