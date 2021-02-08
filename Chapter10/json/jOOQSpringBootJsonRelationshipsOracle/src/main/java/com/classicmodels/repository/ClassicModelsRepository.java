@@ -31,7 +31,7 @@ public class ClassicModelsRepository {
 
     public ClassicModelsRepository(DSLContext ctx) {
         this.ctx = ctx;
-    }
+    }      
 
     // if you get, ORA-40478: output value too large (maximum: 4000)
     // then you should set MAX_STRING_SIZE to EXTENTED instead of STANDARD
