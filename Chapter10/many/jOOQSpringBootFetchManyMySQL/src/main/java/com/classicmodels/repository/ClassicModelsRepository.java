@@ -1,7 +1,6 @@
 package com.classicmodels.repository;
 
 import java.util.List;
-import static jooq.generated.tables.Employee.EMPLOYEE;
 import jooq.generated.tables.pojos.Office;
 import jooq.generated.tables.pojos.Employee;
 import org.jooq.DSLContext;
@@ -28,7 +27,7 @@ public class ClassicModelsRepository {
         System.out.println("Results: " + results);
         System.out.println("Size: " + results.size()); // 2, means 2 result sets
 
-        // fetch each result set to its POJO
+        // map each result set to its POJO
         List<Employee> employees = results.get(0).into(Employee.class);
         List<Office> offices = results.get(1).into(Office.class);
 
