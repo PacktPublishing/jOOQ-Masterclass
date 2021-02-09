@@ -322,8 +322,27 @@ public class ClassicModelsRepository {
                 .fetch();
 
         System.out.println("Example 3.5.1 (one-to-many):\n" + result51.formatJSON());
+        
+        Result<Record1<JSON>> result52 = ctx.select(
+                PRODUCTLINE.PRODUCT_LINE.as("productLine"),
+                PRODUCTLINE.TEXT_DESCRIPTION.as("textDescription"),
+                select(PRODUCT.PRODUCT_NAME.as("productName"),
+                        PRODUCT.PRODUCT_VENDOR.as("productVendor"),
+                        PRODUCT.QUANTITY_IN_STOCK.as("quantityInStock"))
+                        .from(PRODUCT)
+                        .where(PRODUCT.PRODUCT_LINE.eq(PRODUCTLINE.PRODUCT_LINE))
+                        .orderBy(PRODUCT.QUANTITY_IN_STOCK)
+                        .limit(5) // limit products
+                        .forJSON().path().asField("products"))
+                .from(PRODUCTLINE)
+                .orderBy(PRODUCTLINE.PRODUCT_LINE)
+                .limit(2) // limit product lines
+                .forJSON().path()
+                .fetch();
 
-        String result52 = ctx.select(
+        System.out.println("Example 3.5.2 (one-to-many):\n" + result52.formatJSON());
+
+        String result53 = ctx.select(
                 PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.TEXT_DESCRIPTION,
                 select(PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_VENDOR, PRODUCT.QUANTITY_IN_STOCK)
                         .from(PRODUCT)
@@ -337,7 +356,7 @@ public class ClassicModelsRepository {
                 .forJSON().path()
                 .fetchSingleInto(String.class);
 
-        System.out.println("Example 3.5.2 (one-to-many):\n" + result52);
+        System.out.println("Example 3.5.3 (one-to-many):\n" + result53);
     }
 
     public void oneToManyToJsonLimit() {
