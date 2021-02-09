@@ -167,7 +167,22 @@ public class ClassicModelsRepository {
 
         System.out.println("Example 2.3.1 (one-to-many):\n" + result31.formatXML());
         
-        String result32 = ctx.select(
+        Result<Record1<XML>> result32 = ctx.select(
+                PRODUCTLINE.PRODUCT_LINE.as("productLine"),
+                PRODUCTLINE.TEXT_DESCRIPTION.as("textDescription"),
+                select(PRODUCT.PRODUCT_NAME.as("productName"),
+                        PRODUCT.PRODUCT_VENDOR.as("productVendor"),
+                        PRODUCT.QUANTITY_IN_STOCK.as("quantityInStock"))
+                        .from(PRODUCT)
+                        .where(PRODUCT.PRODUCT_LINE.eq(PRODUCTLINE.PRODUCT_LINE))
+                        .forXML().path().asField("products"))
+                .from(PRODUCTLINE)
+                .forXML().path("productline").root("productlines")
+                .fetch();
+
+        System.out.println("Example 2.3.2 (one-to-many):\n" + result32.formatXML());
+        
+        String result33 = ctx.select(
                 PRODUCTLINE.PRODUCT_LINE.as("productLine"),
                 PRODUCTLINE.TEXT_DESCRIPTION.as("textDescription"),
                 select(PRODUCT.PRODUCT_NAME.as("productName"),
@@ -183,7 +198,7 @@ public class ClassicModelsRepository {
                 .forXML().path("productline").root("productlines")
                 .fetchSingleInto(String.class);
 
-        System.out.println("Example 2.3.2 (one-to-many):\n" + result32);
+        System.out.println("Example 2.3.3 (one-to-many):\n" + result33);
 
         Result<Record1<XML>> result41 = ctx.select(
                 xmlelement("productLine",

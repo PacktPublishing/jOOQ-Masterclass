@@ -100,9 +100,24 @@ public class ClassicModelsRepository {
 
         System.out.println("Example 2.3.1 (one-to-many):\n" + result31.formatXML());
 
+        Result<Record1<XML>> result32 = ctx.select(
+                PRODUCTLINE.PRODUCT_LINE.as("productLine"),
+                PRODUCTLINE.TEXT_DESCRIPTION.as("textDescription"),
+                select(PRODUCT.PRODUCT_NAME.as("productName"),
+                        PRODUCT.PRODUCT_VENDOR.as("productVendor"),
+                        PRODUCT.QUANTITY_IN_STOCK.as("quantityInStock"))
+                        .from(PRODUCT)
+                        .where(PRODUCT.PRODUCT_LINE.eq(PRODUCTLINE.PRODUCT_LINE))
+                        .forXML().path().asField("products"))
+                .from(PRODUCTLINE)
+                .forXML().path("productline").root("productlines")
+                .fetch();
+
+        System.out.println("Example 2.3.2 (one-to-many):\n" + result32.formatXML());
+
         // SQL Server serve XML in slices, so you have to join all slices into the resulted String
         // or fetch a single slice (if it is possible) by using LIMIT (check SQL Server docs for details)
-        String result32 = ctx.select(
+        String result33 = ctx.select(
                 PRODUCTLINE.PRODUCT_LINE.as("productLine"),
                 PRODUCTLINE.TEXT_DESCRIPTION.as("textDescription"),
                 select(PRODUCT.PRODUCT_NAME.as("productName"),
@@ -117,9 +132,9 @@ public class ClassicModelsRepository {
                 .forXML().path("productline").root("productlines")
                 .fetchSingleInto(String.class);
 
-        System.out.println("Example 2.3.2 (one-to-many):\n" + result32);
-        
-        String result33 = ctx.select(
+        System.out.println("Example 2.3.3 (one-to-many):\n" + result33);
+
+        String result34 = ctx.select(
                 PRODUCTLINE.PRODUCT_LINE.as("productLine"),
                 PRODUCTLINE.TEXT_DESCRIPTION.as("textDescription"),
                 select(PRODUCT.PRODUCT_NAME.as("productName"),
@@ -135,9 +150,9 @@ public class ClassicModelsRepository {
                 .forXML().path("productline").root("productlines")
                 .fetchInto(String.class).stream().collect(Collectors.joining());
 
-        System.out.println("Example 2.3.3 (one-to-many):\n" + result33);
+        System.out.println("Example 2.3.4 (one-to-many):\n" + result34);
 
-        String result34 = StringUtils.join(ctx.select(
+        String result35 = StringUtils.join(ctx.select(
                 PRODUCTLINE.PRODUCT_LINE.as("productLine"),
                 PRODUCTLINE.TEXT_DESCRIPTION.as("textDescription"),
                 select(PRODUCT.PRODUCT_NAME.as("productName"),
@@ -152,7 +167,7 @@ public class ClassicModelsRepository {
                 .forXML().path("productline").root("productlines")
                 .fetchInto(String.class));
 
-        System.out.println("Example 2.3.4 (one-to-many):\n" + result34);
+        System.out.println("Example 2.3.5 (one-to-many):\n" + result35);
     }
 
     public void manyToManyToXmlManagersOffices() {
