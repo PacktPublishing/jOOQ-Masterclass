@@ -56,9 +56,10 @@ public class ClassicModelsRepository {
                 + ctx.select(inline(0)).fetch()
         );
 
-        // select 1 from dual
+        // A standard SQL way to do "DUAL" would be       
         System.out.println("EXAMPLE 2.3\n"
-                + ctx.select(val(1)).fetch()
+                + ctx.select(val(1).as("one")).fetch() // select 1 "one" from dual
+                + ctx.fetchValue((val(1).as("one"))) // select 1 "one" from dual
         );
         
         // select 1 "A", 'John' "B", 4333 "C", 0 "D" from dual
