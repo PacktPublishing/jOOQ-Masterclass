@@ -143,73 +143,78 @@ public class ClassicModelsRepository {
                 .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1370L)) // must be exactly one
                 .fetchSingle();
         System.out.println("Example 2.1\n" + result1);
+        
+        Employee result2 = ctx.selectFrom(EMPLOYEE)
+                .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1370L)) // must be exactly one
+                .fetchSingleInto(Employee.class);
+        System.out.println("Example 2.2\n" + result2);
 
-        var result2 = ctx.select(EMPLOYEE.EMAIL) // Record1<String>
+        var result3 = ctx.select(EMPLOYEE.EMAIL) // Record1<String>
                 .from(EMPLOYEE)
                 .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1370L)) // must be exactly one
                 .fetchSingle();
-        System.out.println("Example 2.2\n" + result2);
-
-        String result3 = ctx.select(EMPLOYEE.EMAIL)
-                .from(EMPLOYEE)
-                .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1370L)) // must be exactly one
-                .fetchSingle().value1(); // or, into(String.class)
         System.out.println("Example 2.3\n" + result3);
 
         String result4 = ctx.select(EMPLOYEE.EMAIL)
                 .from(EMPLOYEE)
                 .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1370L)) // must be exactly one
-                .fetchSingleInto(String.class);
+                .fetchSingle().value1(); // or, into(String.class)
         System.out.println("Example 2.4\n" + result4);
 
-        YearMonth result5 = ctx.select(CUSTOMER.FIRST_BUY_DATE)
+        String result5 = ctx.select(EMPLOYEE.EMAIL)
+                .from(EMPLOYEE)
+                .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1370L)) // must be exactly one
+                .fetchSingleInto(String.class);
+        System.out.println("Example 2.5\n" + result5);
+
+        YearMonth result6 = ctx.select(CUSTOMER.FIRST_BUY_DATE)
                 .from(CUSTOMER)
                 .where(CUSTOMER.CUSTOMER_NUMBER.eq(112L)) // must be exactly one
                 .fetchSingle(CUSTOMER.FIRST_BUY_DATE, INTEGER_YEARMONTH_CONVERTER);
-        System.out.println("Example 2.5\n" + result5);
+        System.out.println("Example 2.6\n" + result6);
 
-        var result6 = ctx.fetchSingle(EMPLOYEE, EMPLOYEE.EMPLOYEE_NUMBER.eq(1370L)); // EmployeeRecord
-        System.out.println("Example 2.6 \n" + result6);
+        var result7 = ctx.fetchSingle(EMPLOYEE, EMPLOYEE.EMPLOYEE_NUMBER.eq(1370L)); // EmployeeRecord
+        System.out.println("Example 2.7 \n" + result7);
 
-        Employee result7 = ctx.selectFrom(EMPLOYEE)
-                .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1370L)) // must be exactly one
-                .fetchSingleInto(Employee.class);
-        System.out.println("Example 2.7\n" + result7);
-
-        Employee result8 = ctx.select(EMPLOYEE.EMAIL, EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
-                .from(EMPLOYEE)
+        Employee result8 = ctx.selectFrom(EMPLOYEE)
                 .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1370L)) // must be exactly one
                 .fetchSingleInto(Employee.class);
         System.out.println("Example 2.8\n" + result8);
 
-        EmployeeRecord result9 = ctx.selectFrom(EMPLOYEE)
+        Employee result9 = ctx.select(EMPLOYEE.EMAIL, EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
+                .from(EMPLOYEE)
                 .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1370L)) // must be exactly one
-                .fetchSingleInto(EmployeeRecord.class); // like ...fetchSingle();
+                .fetchSingleInto(Employee.class);
         System.out.println("Example 2.9\n" + result9);
 
-        EmployeeRecord result10 = ctx.select(EMPLOYEE.EMAIL, EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
-                .from(EMPLOYEE)
+        EmployeeRecord result10 = ctx.selectFrom(EMPLOYEE)
                 .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1370L)) // must be exactly one
-                .fetchSingleInto(EMPLOYEE);
+                .fetchSingleInto(EmployeeRecord.class); // like ...fetchSingle();
         System.out.println("Example 2.10\n" + result10);
 
-        EmployeeRecord result11 = ctx.selectFrom(EMPLOYEE)
-                .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1370L)) // one or none (null)
+        EmployeeRecord result11 = ctx.select(EMPLOYEE.EMAIL, EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
+                .from(EMPLOYEE)
+                .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1370L)) // must be exactly one
                 .fetchSingleInto(EMPLOYEE);
         System.out.println("Example 2.11\n" + result11);
+
+        EmployeeRecord result12 = ctx.selectFrom(EMPLOYEE)
+                .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1370L)) // one or none (null)
+                .fetchSingleInto(EMPLOYEE);
+        System.out.println("Example 2.12\n" + result12);
         
         // Avoid fetching more data than needed
-        String result12 = ctx.selectFrom(EMPLOYEE)
-                .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1370L)) // must be exactly one
-                .fetchSingle(EMPLOYEE.EMAIL);
-        System.out.println("Example 2.12 (avoid) \n" + result12);
-
-        // Avoid fetching more data than needed
-        String result13 = ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.JOB_TITLE, EMPLOYEE.EMAIL)
-                .from(EMPLOYEE)
+        String result13 = ctx.selectFrom(EMPLOYEE)
                 .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1370L)) // must be exactly one
                 .fetchSingle(EMPLOYEE.EMAIL);
         System.out.println("Example 2.13 (avoid) \n" + result13);
+
+        // Avoid fetching more data than needed
+        String result14 = ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.JOB_TITLE, EMPLOYEE.EMAIL)
+                .from(EMPLOYEE)
+                .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1370L)) // must be exactly one
+                .fetchSingle(EMPLOYEE.EMAIL);
+        System.out.println("Example 2.14 (avoid) \n" + result14);
     }
 
     public void fetchAnyEmployee() {
