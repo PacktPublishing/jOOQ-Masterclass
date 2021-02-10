@@ -1,6 +1,8 @@
 package com.classicmodels.repository;
 
 import static com.classicmodels.converter.YearMonthConverter.YEARMONTH;
+import com.classicmodels.pojo.SimpleProduct;
+import com.classicmodels.pojo.SimpleProductline;
 import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.List;
@@ -140,43 +142,52 @@ public class ClassicModelsRepository {
                 .on(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE))
                 .fetchGroups(Productline.class, Product.class);
         System.out.println("Example 14\n" + prettyPrint(result14));
+        
+        Map<SimpleProductline, List<SimpleProduct>> result15 = ctx.select(
+                PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.CODE,
+                PRODUCT.PRODUCT_ID, PRODUCT.BUY_PRICE)
+                .from(PRODUCTLINE)
+                .leftOuterJoin(PRODUCT)
+                .on(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE))
+                .fetchGroups(SimpleProductline.class, SimpleProduct.class);
+        System.out.println("Example 15\n" + prettyPrint(result15));
 
         // denormalising (flattening)
-        Map<ProductlineRecord, Result<Record>> result15 = ctx.select()
+        Map<ProductlineRecord, Result<Record>> result16 = ctx.select()
                 .from(PRODUCTLINE)
                 .leftOuterJoin(PRODUCT)
                 .on(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE))
                 .fetchGroups(PRODUCTLINE);
-        System.out.println("Example 15\n" + prettyPrint(result15));
+        System.out.println("Example 16\n" + prettyPrint(result16));
 
-        // mapping many-to-many
-        Map<ManagerRecord, Result<OfficeRecord>> result16 = ctx.select()
+        // mapping many-to-many (you can also re-write this using crossApply() as in example 18 below)
+        Map<ManagerRecord, Result<OfficeRecord>> result17 = ctx.select()
                 .from(MANAGER)
                 .join(select().from(OFFICE).join(OFFICE_HAS_MANAGER)
                         .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE)).asTable("t"))
                 .on(MANAGER.MANAGER_ID.eq(field(name("managers_manager_id"), Long.class)))
                 .fetchGroups(MANAGER, OFFICE);
-        System.out.println("Example 16\n" + prettyPrint(result16));
+        System.out.println("Example 17\n" + prettyPrint(result17));
 
         // take advantage of generated equals()/hashCode(), 
         //<pojosEqualsAndHashCode>true</pojosEqualsAndHashCode>              
-        Map<Manager, List<Office>> result17 = ctx.select()
+        Map<Manager, List<Office>> result18 = ctx.select()
                 .from(MANAGER).crossApply(select().from(OFFICE).join(OFFICE_HAS_MANAGER)
                 .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))
                 .where(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID)))
                 .fetchGroups(Manager.class, Office.class);
-        System.out.println("Example 17\n" + prettyPrint(result17));
+        System.out.println("Example 18\n" + prettyPrint(result18));
 
         // same thing as the above uery but a little bit more verbose
-        Map<Manager, List<Office>> result18 = ctx.select()
+        Map<Manager, List<Office>> result19 = ctx.select()
                 .from(MANAGER)
                 .join(select().from(OFFICE).join(OFFICE_HAS_MANAGER)
                         .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE)).asTable("t"))
                 .on(MANAGER.MANAGER_ID.eq(field(name("managers_manager_id"), Long.class)))
                 .fetchGroups(Manager.class, Office.class);
-        System.out.println("Example 18\n" + prettyPrint(result18));
+        System.out.println("Example 19\n" + prettyPrint(result19));
 
-        Map<Record, Result<Record>> result19
+        Map<Record, Result<Record>> result20
                 = ctx.select(MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME, field("city"), field("country"))
                         .from(MANAGER).crossApply(select(OFFICE.CITY.as("city"), OFFICE.COUNTRY.as("country"))
                         .from(OFFICE).join(OFFICE_HAS_MANAGER)
@@ -184,9 +195,9 @@ public class ClassicModelsRepository {
                         .where(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID)))
                         .fetchGroups(new Field[]{MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME},
                         new Field[]{field("city"), field("country")});
-        System.out.println("Example 19\n" + prettyPrint(result19));
+        System.out.println("Example 20\n" + prettyPrint(result20));
 
-        Map<Record, Result<Record>> result20
+        Map<Record, Result<Record>> result21
                 = ctx.select(MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME, field("city"), field("country"))
                         .from(MANAGER)
                         .join(select(OFFICE.CITY.as("city"), OFFICE.COUNTRY.as("country"),
@@ -196,7 +207,7 @@ public class ClassicModelsRepository {
                         .on(MANAGER.MANAGER_ID.eq(field(name("managers_manager_id"), Long.class)))
                         .fetchGroups(new Field[]{MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME},
                         new Field[]{field("city"), field("country")});
-        System.out.println("Example 20\n" + prettyPrint(result20));
+        System.out.println("Example 21\n" + prettyPrint(result21));
     }
 
     private static <K, V> String prettyPrint(Map<K, V> map) {
