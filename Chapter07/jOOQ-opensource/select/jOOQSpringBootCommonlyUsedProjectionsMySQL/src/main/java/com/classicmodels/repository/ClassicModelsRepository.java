@@ -38,7 +38,7 @@ public class ClassicModelsRepository {
         // select 1 as `one` from dual
         System.out.println("EXAMPLE 1.3\n"
                 + ctx.selectOne().fetch()
-        );
+        );                
     }
 
     // EXAMPLE 2
@@ -54,15 +54,16 @@ public class ClassicModelsRepository {
                 + ctx.select(inline(0)).fetch()
         );
 
-        // select 1 from dual
+        // A standard SQL way to do "DUAL" would be       
         System.out.println("EXAMPLE 2.3\n"
-                + ctx.select(val(1)).fetch()
+                + ctx.select(val(1).as("one")).fetch() // select 1 as `one` from dual
+                + ctx.fetchValue((val(1).as("one"))) // select 1 as `one` from dual
         );
         
         // select 1 as `A`, 'John' as `B`, 4333 as `C`, false as `D` from dual
         System.out.println("EXAMPLE 2.4\n"
                 + ctx.select(val(1).as("A"), val("John").as("B"), 
-                        val(4333).as("C"), val(false).as("D")).fetch()
+                        val(4333).as("C"), val(false).as("D")).fetch()                
         );
     }
 
