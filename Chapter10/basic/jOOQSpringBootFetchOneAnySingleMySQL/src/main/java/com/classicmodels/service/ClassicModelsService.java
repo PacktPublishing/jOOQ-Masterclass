@@ -16,7 +16,7 @@ public class ClassicModelsService {
 
         classicModelsRepository.fetchOneEmployee();
         classicModelsRepository.fetchSingleEmployee();
-        classicModelsRepository.fetchAnyEmployee();
+        classicModelsRepository.fetchAnySale();
         
     }
 }
