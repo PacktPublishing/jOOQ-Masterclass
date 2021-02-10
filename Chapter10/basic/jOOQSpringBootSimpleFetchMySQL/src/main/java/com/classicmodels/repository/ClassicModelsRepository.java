@@ -13,7 +13,6 @@ import org.jooq.ResultQuery;
 import org.jooq.Record;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import org.w3c.dom.Document;
 
 @Repository
 @Transactional(readOnly = true)
