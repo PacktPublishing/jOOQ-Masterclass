@@ -182,7 +182,7 @@ public class ClassicModelsRepository {
                         .values(select(max(EMPLOYEE.EMPLOYEE_NUMBER.plus(1))).from(EMPLOYEE),
                                 "Mark", "Janel", "x4443", "markjanel@classicmodelcars.com", "1",
                                 select(avg(EMPLOYEE.SALARY)).from(EMPLOYEE),
-                                1002L, "VP Of Engineering")
+                                1002L, "VP Of Engineering", null, null)
                         .execute()
         );
     }
