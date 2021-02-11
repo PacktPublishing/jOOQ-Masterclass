@@ -67,11 +67,11 @@ public class ClassicModelsRepository {
         );
         
         System.out.println("EXAMPLE 2.4\n"
-                // // select 1 as `A`, 'John' as `B`, 4333 as `C`, false as `D` from dual
+                // select 1 as `A`, 'John' as `B`, 4333 as `C`, false as `D` from dual
                 + ctx.select(val(1).as("A"), val("John").as("B"),
                         val(4333).as("C"), val(false).as("D")).fetch()
-                //  select `t`.`A`, `t`.`B`, `t`.`C`, `t`.`D` from (select null as `A`, null as `B`
-                // , null as `C`, null as `D` from dual where false union all select * from 
+                // select `t`.`A`, `t`.`B`, `t`.`C`, `t`.`D` from (select null as `A`, null as `B`,
+                // null as `C`, null as `D` from dual where false union all select * from 
                 // (values row ('A', 'John', 4333, false)) as `t`) as `t`
                 + ctx.select().from(values(row("A", "John", 4333, false))
                         .as("t", "A", "B", "C", "D")).fetch()
