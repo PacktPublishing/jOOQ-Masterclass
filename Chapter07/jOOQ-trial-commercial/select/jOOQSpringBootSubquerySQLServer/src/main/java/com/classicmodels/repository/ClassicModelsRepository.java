@@ -29,16 +29,9 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 1
     /*
-    select 
-      [classicmodels].[dbo].[employee].[employee_number], 
+    select       
       [classicmodels].[dbo].[employee].[last_name], 
-      [classicmodels].[dbo].[employee].[first_name], 
-      [classicmodels].[dbo].[employee].[extension], 
-      [classicmodels].[dbo].[employee].[email], 
-      [classicmodels].[dbo].[employee].[office_code], 
-      [classicmodels].[dbo].[employee].[salary], 
-      [classicmodels].[dbo].[employee].[reports_to], 
-      [classicmodels].[dbo].[employee].[job_title] 
+      [classicmodels].[dbo].[employee].[first_name]
     from 
       [classicmodels].[dbo].[employee] 
     where 
@@ -54,7 +47,8 @@ public class ClassicModelsRepository {
     public void findlEmployeeInOfficeStartingS() {
 
         System.out.println("EXAMPLE 1.1\n"
-                + ctx.selectFrom(EMPLOYEE)
+                + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
+                        .from(EMPLOYEE)
                         .where(EMPLOYEE.OFFICE_CODE.in(
                                 select(OFFICE.OFFICE_CODE).from(OFFICE).where(OFFICE.CITY.like("S%"))))
                         .fetch()
@@ -67,6 +61,7 @@ public class ClassicModelsRepository {
         sqInner.addConditions(OFFICE.CITY.like("S%"));
 
         SelectQuery sqOuter = ctx.selectQuery();
+        sqOuter.addSelect(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME);
         sqOuter.addFrom(EMPLOYEE);
         sqOuter.addConditions(EMPLOYEE.OFFICE_CODE.in(sqInner));
 

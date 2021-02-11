@@ -33,16 +33,9 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 1
     /*
-    select 
-      "public"."employee"."employee_number", 
+    select       
       "public"."employee"."last_name", 
-      "public"."employee"."first_name", 
-      "public"."employee"."extension", 
-      "public"."employee"."email", 
-      "public"."employee"."office_code", 
-      "public"."employee"."salary", 
-      "public"."employee"."reports_to", 
-      "public"."employee"."job_title" 
+      "public"."employee"."first_name"
     from 
       "public"."employee" 
     where 
@@ -58,7 +51,8 @@ public class ClassicModelsRepository {
     public void findlEmployeeInOfficeStartingS() {
 
         System.out.println("EXAMPLE 1.1\n"
-                + ctx.selectFrom(EMPLOYEE)
+                + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
+                        .from(EMPLOYEE)
                         .where(EMPLOYEE.OFFICE_CODE.in(
                                 select(OFFICE.OFFICE_CODE).from(OFFICE).where(OFFICE.CITY.like("S%"))))
                         .fetch()
@@ -70,7 +64,8 @@ public class ClassicModelsRepository {
         sqInner.addFrom(OFFICE);
         sqInner.addConditions(OFFICE.CITY.like("S%"));
 
-        SelectQuery sqOuter = ctx.selectQuery();       
+        SelectQuery sqOuter = ctx.selectQuery(); 
+        sqOuter.addSelect(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME);
         sqOuter.addFrom(EMPLOYEE);        
         sqOuter.addConditions(EMPLOYEE.OFFICE_CODE.in(sqInner));
 
