@@ -1,10 +1,12 @@
 package com.classicmodels.repository;
 
+import java.math.BigDecimal;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Payment.PAYMENT;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.avg;
+import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.min;
 import static org.jooq.impl.DSL.round;
@@ -43,13 +45,14 @@ public class ClassicModelsRepository {
      */
     public void findSalaryGeAvgPlus25000() {
 
-        System.out.println("EXAMPLE 1\n" +
-                ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
+        System.out.println("EXAMPLE 1\n"
+                + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
                         .from(EMPLOYEE)
-                        .where(EMPLOYEE.SALARY.ge(
-                                select(avg(EMPLOYEE.SALARY).plus(25000)).from(EMPLOYEE).asField()))
-                        .fetch()
-        );
+                        .where(EMPLOYEE.SALARY.coerce(BigDecimal.class)
+                                .ge(field(select(avg(EMPLOYEE.SALARY).plus(25000))
+                                        .from(EMPLOYEE))))
+                                .fetch()
+                        );
     }
 
     // EXAMPLE 2
@@ -74,10 +77,10 @@ public class ClassicModelsRepository {
      */
     public void findMinAndRoundMinInvoiceAmount() {
 
-        System.out.println("EXAMPLE 2\n" +
-                ctx.select(min(PAYMENT.INVOICE_AMOUNT),
-                        round(select(min(PAYMENT.INVOICE_AMOUNT))
-                                .from(PAYMENT).asField(), 0).as("round_min"))
+        System.out.println("EXAMPLE 2\n"
+                + ctx.select(min(PAYMENT.INVOICE_AMOUNT),
+                        round(field(select(min(PAYMENT.INVOICE_AMOUNT))
+                                .from(PAYMENT)), 0).as("round_min"))
                         .from(PAYMENT)
                         .fetch()
         );
@@ -101,9 +104,9 @@ public class ClassicModelsRepository {
      */
     public void findBaseSalary() {
 
-        System.out.println("EXAMPLE 3\n" +
-                ctx.select(EMPLOYEE.SALARY.plus(
-                        select(avg(EMPLOYEE.SALARY)).from(EMPLOYEE).asField()).as("baseSalary"))
+        System.out.println("EXAMPLE 3\n"
+                + ctx.select(EMPLOYEE.SALARY.plus(
+                        field(select(avg(EMPLOYEE.SALARY)).from(EMPLOYEE))).as("baseSalary"))
                         .from(EMPLOYEE)
                         .fetch()
         );
@@ -128,8 +131,8 @@ public class ClassicModelsRepository {
      */
     public void findEmployeeWithSalaryGt() {
 
-        System.out.println("EXAMPLE 4\n" +
-                ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
+        System.out.println("EXAMPLE 4\n"
+                + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
                         .from(EMPLOYEE)
                         .where(EMPLOYEE.SALARY.ge(
                                 select(EMPLOYEE.SALARY).from(EMPLOYEE).
@@ -177,8 +180,8 @@ public class ClassicModelsRepository {
     @Transactional
     public void insertEmployee() {
 
-        System.out.println("EXAMPLE 5 (affected rows): " +
-                + ctx.insertInto(EMPLOYEE)
+        System.out.println("EXAMPLE 5 (affected rows): "
+                + +ctx.insertInto(EMPLOYEE)
                         .values(select(max(EMPLOYEE.EMPLOYEE_NUMBER.plus(1))).from(EMPLOYEE),
                                 "Mark", "Janel", "x4443", "markjanel@classicmodelcars.com", "1",
                                 select(avg(EMPLOYEE.SALARY)).from(EMPLOYEE),
@@ -204,8 +207,8 @@ public class ClassicModelsRepository {
     @Transactional
     public void deletePaymentsOfAtelierGraphique() {
 
-        System.out.println("EXAMPLE 6 (affected rows): " +
-                + ctx.deleteFrom(PAYMENT)
+        System.out.println("EXAMPLE 6 (affected rows): "
+                + +ctx.deleteFrom(PAYMENT)
                         .where(PAYMENT.CUSTOMER_NUMBER.eq(
                                 select(CUSTOMER.CUSTOMER_NUMBER).from(CUSTOMER)
                                         .where(CUSTOMER.CUSTOMER_NAME.eq("Atelier graphique"))
@@ -230,14 +233,14 @@ public class ClassicModelsRepository {
             [classicmodels].[dbo].[employee].[reports_to] = ?
         )
       )    
-    */
+     */
     @Transactional
     public void updateEmployeeSalary() {
-        System.out.println("EXAMPLE 7 (affected rows): " +
-                + ctx.update(EMPLOYEE)
+        System.out.println("EXAMPLE 7 (affected rows): "
+                + +ctx.update(EMPLOYEE)
                         .set(EMPLOYEE.SALARY,
-                                EMPLOYEE.SALARY.plus(select(min(EMPLOYEE.SALARY)).from(EMPLOYEE)
-                                        .where(EMPLOYEE.REPORTS_TO.eq(1002L)).asField()))
+                                EMPLOYEE.SALARY.plus(field(select(min(EMPLOYEE.SALARY)).from(EMPLOYEE)
+                                        .where(EMPLOYEE.REPORTS_TO.eq(1002L)))))
                         .execute()
         );
 
