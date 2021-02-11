@@ -2,15 +2,21 @@ package com.classicmodels.repository;
 
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
+import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Manager.MANAGER;
+import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 import static org.jooq.impl.DSL.count;
+import static org.jooq.impl.DSL.exists;
 import static org.jooq.impl.DSL.inline;
 import static org.jooq.impl.DSL.max;
+import static org.jooq.impl.DSL.row;
 import static org.jooq.impl.DSL.rownum;
+import static org.jooq.impl.DSL.selectOne;
 import static org.jooq.impl.DSL.val;
+import static org.jooq.impl.DSL.values;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,10 +68,14 @@ public class ClassicModelsRepository {
                 + ctx.fetchValue((val(1).as("one"))) // select 1 "one" from dual
         );
         
-        // select 1 "A", 'John' "B", 4333 "C", 0 "D" from dual
         System.out.println("EXAMPLE 2.4\n"
-                + ctx.select(val(1).as("A"), val("John").as("B"), 
+                // select 1 "A", 'John' "B", 4333 "C", 0 "D" from dual
+                + ctx.select(val(1).as("A"), val("John").as("B"),
                         val(4333).as("C"), val(false).as("D")).fetch()
+                // select "t"."A", "t"."B", "t"."C", "t"."D" from 
+                // (select 'A' "A", 'John' "B", 4333 "C", 0 "D" from dual) "t"
+                + ctx.select().from(values(row("A", "John", 4333, false))
+                        .as("t", "A", "B", "C", "D")).fetch()
         );
     }
 
@@ -98,6 +108,20 @@ public class ClassicModelsRepository {
     public void rownumDivMaxRownumOver() {
         System.out.println("EXAMPLE 4 \n"
                 + rownum().div(max(rownum()).over())
+        );
+    }
+    
+    // EXAMPLE 5
+    // real usage of SELECT 1
+    @Transactional
+    public void deleteSales() {
+
+        System.out.println("EXAMPLE 5\n"
+                + ctx.deleteFrom(SALE)
+                        .where(exists(selectOne().from(EMPLOYEE) // or, whereExists()
+                                .where(SALE.EMPLOYEE_NUMBER.eq(EMPLOYEE.EMPLOYEE_NUMBER)
+                                        .and(EMPLOYEE.JOB_TITLE.ne("Sales Rep")))))
+                        .execute()
         );
     }
 }

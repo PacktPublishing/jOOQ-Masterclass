@@ -67,7 +67,7 @@ public class ClassicModelsRepository {
         );
 
         System.out.println("EXAMPLE 2.4\n"
-                // select 1 as `A`, 'John' as `B`, 4333 as `C`, false as `D` from dual
+                // select 1 as "A", 'John' as "B", 4333 as "C", false as "D"
                 + ctx.select(val(1).as("A"), val("John").as("B"),
                         val(4333).as("C"), val(false).as("D")).fetch()
                 // select "t"."A", "t"."B", "t"."C", "t"."D" from (values ('A', 'John', 4333, false)) 
@@ -101,11 +101,12 @@ public class ClassicModelsRepository {
         );
     }
 
+    // EXAMPLE 4
     // real usage of SELECT 1
     @Transactional
     public void deleteSales() {
 
-        System.out.println("EXAMPLE 4.1\n"
+        System.out.println("EXAMPLE 4\n"
                 + ctx.deleteFrom(SALE)
                         .where(exists(selectOne().from(EMPLOYEE) // or, whereExists()
                                 .where(SALE.EMPLOYEE_NUMBER.eq(EMPLOYEE.EMPLOYEE_NUMBER)

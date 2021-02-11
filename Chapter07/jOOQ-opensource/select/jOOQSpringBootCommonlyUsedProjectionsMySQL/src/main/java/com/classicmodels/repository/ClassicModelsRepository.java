@@ -102,11 +102,12 @@ public class ClassicModelsRepository {
         );
     }
 
+    // EXAMPLE 4
     // real usage of SELECT 1
     @Transactional
     public void deleteSales() {
 
-        System.out.println("EXAMPLE 4.1\n"
+        System.out.println("EXAMPLE 4\n"
                 + ctx.deleteFrom(SALE)
                         .where(exists(selectOne().from(EMPLOYEE) // or, whereExists()
                                 .where(SALE.EMPLOYEE_NUMBER.eq(EMPLOYEE.EMPLOYEE_NUMBER)

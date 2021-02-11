@@ -17,5 +17,6 @@ public class ClassicModelsService {
         classicModelsRepository.selectCommonlyUsedValues2();     // EXAMPLE 2
         classicModelsRepository.selectCommonlyUsedValues3();     // EXAMPLE 3
         classicModelsRepository.rownumDivMaxRownumOver();        // EXAMPLE 4
+        classicModelsRepository.deleteSales();                   // EXAMPLE 5
     }
 }
