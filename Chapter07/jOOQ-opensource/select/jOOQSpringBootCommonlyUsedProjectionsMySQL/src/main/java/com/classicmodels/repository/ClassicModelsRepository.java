@@ -64,6 +64,7 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 2.3\n"
                 + ctx.select(val(1).as("one")).fetch() // select 1 as `one` from dual
                 + ctx.fetchValue((val(1).as("one"))) // select 1 as `one` from dual
+                + ctx.select().from(values(row(1)).as("t", "one")).fetch() // select `t`.`one` from (select null as `one` from dual where false union all select * from (values row (1)) as `t`) as `t`
         );
         
         System.out.println("EXAMPLE 2.4\n"

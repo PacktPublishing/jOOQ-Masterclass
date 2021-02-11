@@ -64,6 +64,7 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 2.3\n"
                 + ctx.select(val(1).as("one")).fetch() // select 1 as `one`
                 + ctx.fetchValue((val(1).as("one"))) // select 1 as `one`
+                + ctx.select().from(values(row(1)).as("t", "one")).fetch() // select "t"."one" from (values (1)) as "t" ("one")
         );
 
         System.out.println("EXAMPLE 2.4\n"
