@@ -13,6 +13,8 @@ This is a modified version of the original schema
 
 USE `classicmodels`;
 
+SET SESSION group_concat_max_len = 100000;
+
 /*Data for the table `office` */
 
 insert  into `office`(`office_code`,`city`,`phone`,`address_line_first`,`address_line_second`,`state`,`country`,`postal_code`,`territory`) values 
@@ -29,17 +31,39 @@ insert  into `office`(`office_code`,`city`,`phone`,`address_line_first`,`address
 
 ('6','Sydney','+61 2 9264 2451','5-11 Wentworth Avenue','Floor #2',NULL,'Australia','NSW 2010','APAC'),
 
-('7','London','+44 20 7877 2041','25 Old Broad Street','Level 7',NULL,'UK','EC2N 1HN','EMEA') ON DUPLICATE KEY UPDATE office_code=office_code;
+('7','London','+44 20 7877 2041','25 Old Broad Street','Level 7','N/A','UK','EC2N 1HN','EMEA'),
+
+('8',NULL,'+44 20 1827 21411','25 Hum Street','Level 2',NULL,'USA','EC2N 1HN','EMEA'), 
+
+('9','Bucharest','+44 20 1827 21411','22 DN1','Level 12',NULL,NULL,'EC2N 1HN','NA'), 
+
+('10',NULL,'+44 20 1827 21411','12 Home','Level 22',NULL,NULL,'EC2N 1HN','NA'), 
+
+('11','Paris','+32 12 713 4304','43 Rue 2',NULL,NULL,'France','25017','EMEA'),
+
+('12','Tokyo','+81 33 224 3444','4-1 Kioicho',NULL,'Koil-Ku','Japan','101-6578','Japan') ON DUPLICATE KEY UPDATE office_code=office_code;
+
+/*Data for the table `department` */
+
+insert into `department`(`department_id`,`name`,`phone`,`code`,`office_code`,`topic`) values 
+
+('1','Advertising','-int 4782','1333','1','publicity, promotion'),
+
+('2','Sales','-int 41233','1441','1', 'commerce, trade, sellout, transaction'),
+
+('3','Accounting','-int 8233','2311','2', 'monetary, business'),
+
+('4','Finance','-int 4421','3222','3', 'commerce, fiscal, monetary, business') ON DUPLICATE KEY UPDATE department_id=department_id;
 
 /*Data for the table `manager` */
 
-insert into `manager` (`manager_id`, `manager_name`) values 
+insert into `manager` (`manager_id`, `manager_name`, `manager_evaluation`, `manager_detail`) values 
 
-('1', 'Joana Nimar'),
+('1', 'Joana Nimar', '67, 34, 33, 66', '{"firstName":"Joana","lastName":"Nimar","gender":"Female","dob":"1983-01-01","email":"joananimar@gmail.com","age":30,"address":{"streetAddress":"21 Fake Street","city":"New York City","state":"NY","zipOrPostal":"10021"},"phoneNumber":[{"type":"home","number":["212 555-1234","212 543-0933"]},{"type":"mobile","number":["646 555-4567","644 153-3527","626 231-6743"]}],"summary":"6 years of management experience","computerSkills":[{"OS":["Linux"],"Office":["MS Word","Excel"],"Management":["X10Mangement","ManPlat1","AllCeo"],"Tools":["GMail","Meet"]}],"shareholder":"5%","projects":[{"name":"SBS (aka. Shared Business Services)","start":"2015-08-01","end":"2019-11-21","type":"development","role":"Sr. Manager","details":"Develop a powerful team in a short time"},{"name":"RLCM (aka. Role Lifecycle Management)","start":"2011-03-01","end":"2015-07-01","type":"development","role":"Manager Leader","details":"Increase income"},{"name":"Member-Provider Portal Enhancement","start":"2009-03-01","end":"2011-03-01","type":"enhancement","role":"Technical Leader","details":"Managing the enhancement and defects fixing team"}]}'),
 
-('2', 'Mark Janel'),
+('2', 'Mark Janel', '99, 23, 11, 23', '{"firstName":"Mark","lastName":"Janel","gender":"Male","dob":"1985-03-07","email":"markjanel@yahoo.com","age":37,"address":{"streetAddress":"24 Red Street","city":"Banesti","state":"Prahova","zipOrPostal":"506734"},"phoneNumber":[{"type":"home","number":["0727 823 989","0723 621 723","0712 212 676"]},{"type":"mobile","number":["378 555 233","678 154 227"]}],"summary":"4 years of management experience","computerSkills":[{"OS":["Windows"],"Office":["Power Point","Access","FoxPro"],"Management":["AllCeo","ManagementTools Suite"],"Tools":["Skype","GMail","Meet","Google Calendar"]}],"projects":[{"name":"Business Retail","start":"2012-02-05","end":"2014-10-11","type":"retail","role":"General Manager","details":"Expand retail business"},{"name":"Selling Point","start":"2011-01-01","end":"2012-02-05","type":"selling","role":"Manager Leader","details":"Manager of selling department"}]}'),
 
-('3', 'Olivia Goy') ON DUPLICATE KEY UPDATE manager_id=manager_id;
+('3', 'Olivia Goy', '99, 34, 11, 78', '{"firstName":"Olivia","lastName":"Goy","gender":"Female","dob":"1978-08-04","email":"oliviagoy@gmail.com","age":42,"address":{"streetAddress":"118 National Street","city":"Barcelona","state":"Catalonia","zipOrPostal":"660933"},"phoneNumber":[{"type":"home","number":["0999 3844 3333","0223 1333 4455","0265 7883 4422"]},{"type":"mobile","number":["980 992 122","112 644 212","322 323 642"]}],"summary":"10 years of management experience","computerSkills":[{"OS":["Linux","Windows"],"Office":["MS Word","Power Point"],"Management":["ManPlat1","AllCeo","TeamManagement"],"Tools":["Slack"]}],"projects":[{"name":"Marketing Share","start":"2016-08-02","end":"2021-06-02","type":"administrator","role":"Principal Manager","details":"Marketing share for small companies"},{"name":"Draft Management","start":"2014-06-06","end":"2016-08-02","type":"development","role":"Manager Leader","details":"First e-management platform"},{"name":"Car Management","start":"2005-03-21","end":"2014-06-06","type":"enhancement","role":"Leader of retail","details":"Enhancement of cars management"}]}') ON DUPLICATE KEY UPDATE manager_id=manager_id;
 
 /*Data for the table `office_has_manager` */
 
@@ -49,315 +73,339 @@ insert into `office_has_manager` (`offices_office_code`, `managers_manager_id`) 
 
 ('2', '1'),
 
+('1', '3'),
+
 ('3', '1'),
 
 ('4', '2'),
 
 ('5', '3'),
 
+('5', '2'),
+
 ('6', '3'),
+
+('6', '2'),
+
+('6', '1'),
 
 ('7', '2') ON DUPLICATE KEY UPDATE offices_office_code=offices_office_code;
 
 /*Data for the table `employee` */
 
-insert  into `employee`(`employee_number`,`last_name`,`first_name`,`extension`,`email`,`office_code`,`salary`, `reports_to`,`job_title`) values 
+insert  into `employee`(`employee_number`,`last_name`,`first_name`,`extension`,`email`,`office_code`,`salary`, `reports_to`,`job_title`,`employee_of_year`, `monthly_bonus`) values 
 
-(1002,'Murphy','Diane','x5800','dmurphy@classicmodelcars.com','1',120000,NULL,'President'),
+(1002,'Murphy','Diane','x5800','dmurphy@classicmodelcars.com','1',120000,NULL,'President',NULL,'450, 210, 222, 123, 110, 0, 0, 0, 560, 440, 315, 125, 0, 900'),
 
-(1056,'Patterson','Mary','x4611','mpatterso@classicmodelcars.com','1',100000,1002,'VP Sales'),
+(1056,'Patterson','Mary','x4611','mpatterso@classicmodelcars.com','1',100000,1002,'VP Sales', NULL, NULL),
 
-(1076,'Firrelli','Jeff','x9273','jfirrelli@classicmodelcars.com','1',100000,1002,'VP Marketing'),
+(1076,'Firrelli','Jeff','x9273','jfirrelli@classicmodelcars.com','1',100000,1002,'VP Marketing', NULL,'0, 0, 0, 125, 125, 150, 232, 100, 0'),
 
-(1088,'Patterson','William','x4871','wpatterson@classicmodelcars.com','6',80000,1056,'Sales Manager (APAC)'),
+(1088,'Patterson','William','x4871','wpatterson@classicmodelcars.com','6',80000,1056,'Sales Manager (APAC)', NULL,'560, 120, 440, 320, 315, 0, 0, 100, 125, 0, 900'),
 
-(1102,'Bondur','Gerard','x5408','gbondur@classicmodelcars.com','4',80000,1056,'Sale Manager (EMEA)'),
+(1102,'Bondur','Gerard','x5408','gbondur@classicmodelcars.com','4',80000,1056,'Sale Manager (EMEA)', NULL, NULL),
 
-(1143,'Bow','Anthony','x5428','abow@classicmodelcars.com','1',75000,1056,'Sales Manager (NA)'),
+(1143,'Bow','Anthony','x5428','abow@classicmodelcars.com','1',75000,1056,'Sales Manager (NA)',NULL, NULL),
 
-(1165,'Jennings','Leslie','x3291','ljennings@classicmodelcars.com','1',60000,1143,'Sales Rep'),
+(1165,'Jennings','Leslie','x3291','ljennings@classicmodelcars.com','1',60000,1143,'Sales Rep','2003, 2004', NULL),
 
-(1166,'Thompson','Leslie','x4065','lthompson@classicmodelcars.com','1',60000,1143,'Sales Rep'),
+(1166,'Thompson','Leslie','x4065','lthompson@classicmodelcars.com','1',60000,1143,'Sales Rep','2003, 2005', NULL),
 
-(1188,'Firrelli','Julie','x2173','jfirrelli@classicmodelcars.com','2',60000,1143,'Sales Rep'),
+(1188,'Firrelli','Julie','x2173','jfirrelli@classicmodelcars.com','2',60000,1143,'Sales Rep','2004, 2005', NULL),
 
-(1216,'Patterson','Steve','x4334','spatterson@classicmodelcars.com','2',55000,1143,'Sales Rep'),
+(1216,'Patterson','Steve','x4334','spatterson@classicmodelcars.com','2',55000,1143,'Sales Rep','2005, 2006', NULL),
 
-(1286,'Tseng','Foon Yue','x2248','ftseng@classicmodelcars.com','3',55000,1143,'Sales Rep'),
+(1286,'Tseng','Foon Yue','x2248','ftseng@classicmodelcars.com','3',55000,1143,'Sales Rep','2002, 2003, 2004', NULL),
 
-(1323,'Vanauf','George','x4102','gvanauf@classicmodelcars.com','3',55000,1143,'Sales Rep'),
+(1323,'Vanauf','George','x4102','gvanauf@classicmodelcars.com','3',55000,1143,'Sales Rep','2000, 2001, 2005', NULL),
 
-(1337,'Bondur','Loui','x6493','lbondur@classicmodelcars.com','4',60000,1102,'Sales Rep'),
+(1337,'Bondur','Loui','x6493','lbondur@classicmodelcars.com','4',60000,1102,'Sales Rep','2004, 2007', NULL),
 
-(1370,'Hernandez','Gerard','x2028','ghernande@classicmodelcars.com','4',65000,1102,'Sales Rep'),
+(1370,'Hernandez','Gerard','x2028','ghernande@classicmodelcars.com','4',65000,1102,'Sales Rep','2000, 2001', NULL),
 
-(1401,'Castillo','Pamela','x2759','pcastillo@classicmodelcars.com','4',55000,1102,'Sales Rep'),
+(1401,'Castillo','Pamela','x2759','pcastillo@classicmodelcars.com','4',55000,1102,'Sales Rep','2000, 2001, 2003, 2005', NULL),
 
-(1501,'Bott','Larry','x2311','lbott@classicmodelcars.com','7',50000,1102,'Sales Rep'),
+(1501,'Bott','Larry','x2311','lbott@classicmodelcars.com','7',50000,1102,'Sales Rep','2004, 2008', NULL),
 
-(1504,'Jones','Barry','x102','bjones@classicmodelcars.com','7',50000,1102,'Sales Rep'),
+(1504,'Jones','Barry','x102','bjones@classicmodelcars.com','7',50000,1102,'Sales Rep','2002, 2003, 2005', NULL),
 
-(1611,'Fixter','Andy','x101','afixter@classicmodelcars.com','6',50000,1088,'Sales Rep'),
+(1611,'Fixter','Andy','x101','afixter@classicmodelcars.com','6',50000,1088,'Sales Rep','2002, 2005', NULL),
 
-(1612,'Marsh','Peter','x102','pmarsh@classicmodelcars.com','6',55000,1088,'Sales Rep'),
+(1612,'Marsh','Peter','x102','pmarsh@classicmodelcars.com','6',55000,1088,'Sales Rep','2003, 2005, 2006, 2007', NULL),
 
-(1619,'King','Tom','x103','tking@classicmodelcars.com','6',60000,1088,'Sales Rep'),
+(1619,'King','Tom','x103','tking@classicmodelcars.com','6',60000,1088,'Sales Rep','2002, 2004', NULL),
 
-(1621,'Nishi','Mami','x101','mnishi@classicmodelcars.com','5',55000,1056,'Sales Rep'),
+(1621,'Nishi','Mami','x101','mnishi@classicmodelcars.com','5',55000,1056,'Sales Rep','2003, 2005', NULL),
 
-(1625,'Kato','Yoshimi','x102','ykato@classicmodelcars.com','5',60000,1621,'Sales Rep'),
+(1625,'Kato','Yoshimi','x102','ykato@classicmodelcars.com','5',60000,1621,'Sales Rep','2004, 2005, 2006', NULL),
 
-(1702,'Gerard','Martin','x2312','mgerard@classicmodelcars.com','4',50000,1102,'Sales Rep') ON DUPLICATE KEY UPDATE employee_number=employee_number;
+(1702,'Gerard','Martin','x2312','mgerard@classicmodelcars.com','4',50000,1102,'Sales Rep','2005, 2007', NULL) ON DUPLICATE KEY UPDATE employee_number=employee_number;
 
 /*Data for the table `customer` */
 
-insert  into `customer`(`customer_number`,`customer_name`,`contact_last_name`,`contact_first_name`,`phone`,`sales_rep_employee_number`,`credit_limit`) values 
+insert  into `customer`(`customer_number`,`customer_name`,`contact_last_name`,`contact_first_name`,`phone`,`sales_rep_employee_number`,`credit_limit`,`first_buy_date`) values 
 
-(103,'Atelier graphique','Schmitt','Carine ','40.32.2555',1370,'21000.00'),
+(99,'Australian Home','Paoule','Sart ','40.11.2555',1370,'21000.00',20210),
 
-(112,'Signal Gift Stores','King','Jean','7025551838',1166,'71800.00'),
+(100,'Joliyon','Schmitt','Rue ','10.22.2535',1370,'21000.00',20201),
 
-(114,'Australian Collectors, Co.','Ferguson','Peter','03 9520 4555',1611,'117300.00'),
+(101,'Marquez Xioa','Calor','Sar ','`11.12.2525',1370,'21000.00',21805),
 
-(119,'La Rochelle Gifts','Labrune','Janine ','40.67.8555',1370,'118200.00'),
+(102,'Falafel 3','Hor','Carine ','20.12.2525',1370,'21000.00',21805),
 
-(121,'Baane Mini Imports','Bergulfsen','Jonas ','07-98 9555',1504,'81700.00'),
+(103,'Atelier graphique','Schmitt','Carine ','40.32.2555',1370,'21000.00',20186),
 
-(124,'Mini Gifts Distributors Ltd.','Nelson','Susan','4155551450',1165,'210500.00'),
+(112,'Signal Gift Stores','King','Jean','7025551838',1166,'71800.00',21803),
 
-(125,'Havel & Zbyszek Co','Piestrzeniewicz','Zbyszek ','(26) 642-7555',NULL,'0.00'),
+(114,'Australian Collectors, Co.','Ferguson','Peter','03 9520 4555',1611,'117300.00',20105),
 
-(128,'Blauer See Auto, Co.','Keitel','Roland','+49 69 66 90 2555',1504,'59700.00'),
+(119,'La Rochelle Gifts','Labrune','Janine ','40.67.8555',1370,'118200.00',20140),
 
-(129,'Mini Wheels Co.','Murphy','Julie','6505555787',1165,'64600.00'),
+(121,'Baane Mini Imports','Bergulfsen','Jonas ','07-98 9555',1504,'81700.00',21403),
 
-(131,'Land of Toys Inc.','Lee','Kwai','2125557818',1323,'114900.00'),
+(124,'Mini Gifts Distributors Ltd.','Nelson','Susan','4155551450',1165,'210500.00',20143),
 
-(141,'Euro+ Shopping Channel','Freyre','Diego ','(91) 555 94 44',1370,'227600.00'),
+(125,'Havel & Zbyszek Co','Piestrzeniewicz','Zbyszek ','(26) 642-7555',NULL,'0.00',NULL),
 
-(144,'Volvo Model Replicas, Co','Berglund','Christina ','0921-12 3555',1504,'53100.00'),
+(128,'Blauer See Auto, Co.','Keitel','Roland','+49 69 66 90 2555',1504,'59700.00',20101),
 
-(145,'Danish Wholesale Imports','Petersen','Jytte ','31 12 3555',1401,'83400.00'),
+(129,'Mini Wheels Co.','Murphy','Julie','6505555787',1165,'64600.00',20190),
 
-(146,'Saveley & Henriot, Co.','Saveley','Mary ','78.32.5555',1337,'123900.00'),
+(131,'Land of Toys Inc.','Lee','Kwai','2125557818',1323,'114900.00',20903),
 
-(148,'Dragon Souveniers, Ltd.','Natividad','Eric','+65 221 7555',1621,'103800.00'),
+(141,'Euro+ Shopping Channel','Freyre','Diego ','(91) 555 94 44',1370,'227600.00',20191),
 
-(151,'Muscle Machine Inc','Young','Jeff','2125557413',1286,'138500.00'),
+(144,'Volvo Model Replicas, Co','Berglund','Christina ','0921-12 3555',1504,'53100.00',20192),
 
-(157,'Diecast Classics Inc.','Leong','Kelvin','2155551555',1216,'100600.00'),
+(145,'Danish Wholesale Imports','Petersen','Jytte ','31 12 3555',1401,'83400.00',20405),
 
-(161,'Technics Stores Inc.','Hashimoto','Juri','6505556809',1165,'84600.00'),
+(146,'Saveley & Henriot, Co.','Saveley','Mary ','78.32.5555',1337,'123900.00',20407),
 
-(166,'Handji Gifts& Co','Victorino','Wendy','+65 224 1555',1612,'97900.00'),
+(148,'Dragon Souveniers, Ltd.','Natividad','Eric','+65 221 7555',1621,'103800.00',20505),
 
-(167,'Herkku Gifts','Oeztan','Veysel','+47 2267 3215',1504,'96800.00'),
+(151,'Muscle Machine Inc','Young','Jeff','2125557413',1286,'138500.00',20409),
 
-(168,'American Souvenirs Inc','Franco','Keith','2035557845',1286,'0.00'),
+(157,'Diecast Classics Inc.','Leong','Kelvin','2155551555',1216,'100600.00',20410),
 
-(169,'Porto Imports Co.','de Castro','Isabel ','(1) 356-5555',NULL,'0.00'),
+(161,'Technics Stores Inc.','Hashimoto','Juri','6505556809',1165,'84600.00',21407),
 
-(171,'Daedalus Designs Imports','Rancé','Martine ','20.16.1555',1370,'82900.00'),
+(166,'Handji Gifts& Co','Victorino','Wendy','+65 224 1555',1612,'97900.00',20143),
 
-(172,'La Corne D\'abondance, Co.','Bertrand','Marie','(1) 42.34.2555',1337,'84300.00'),
+(167,'Herkku Gifts','Oeztan','Veysel','+47 2267 3215',1504,'96800.00',20147),
 
-(173,'Cambridge Collectables Co.','Tseng','Jerry','6175555555',1188,'43400.00'),
+(168,'American Souvenirs Inc','Franco','Keith','2035557845',1286,'0.00',20103),
 
-(175,'Gift Depot Inc.','King','Julie','2035552570',1323,'84300.00'),
+(169,'Porto Imports Co.','de Castro','Isabel ','(1) 356-5555',NULL,'0.00',NULL),
 
-(177,'Osaka Souveniers Co.','Kentary','Mory','+81 06 6342 5555',1621,'81200.00'),
+(171,'Daedalus Designs Imports','Rancé','Martine ','20.16.1555',1370,'82900.00',20045),
 
-(181,'Vitachrome Inc.','Frick','Michael','2125551500',1286,'76400.00'),
+(172,'La Corne D''abondance, Co.','Bertrand','Marie','(1) 42.34.2555',1337,'84300.00',20405),
 
-(186,'Toys of Finland, Co.','Karttunen','Matti','90-224 8555',1501,'96500.00'),
+(173,'Cambridge Collectables Co.','Tseng','Jerry','6175555555',1188,'43400.00',20110),
 
-(187,'AV Stores, Co.','Ashworth','Rachel','(171) 555-1555',1501,'136800.00'),
+(175,'Gift Depot Inc.','King','Julie','2035552570',1323,'84300.00',20011),
 
-(189,'Clover Collections, Co.','Cassidy','Dean','+353 1862 1555',1504,'69400.00'),
+(177,'Osaka Souveniers Co.','Kentary','Mory','+81 06 6342 5555',1621,'81200.00',20102),
 
-(198,'Auto-Moto Classics Inc.','Taylor','Leslie','6175558428',1216,'23000.00'),
+(181,'Vitachrome Inc.','Frick','Michael','2125551500',1286,'76400.00',20092),
 
-(201,'UK Collectables, Ltd.','Devon','Elizabeth','(171) 555-2282',1501,'92700.00'),
+(186,'Toys of Finland, Co.','Karttunen','Matti','90-224 8555',1501,'96500.00',20002),
 
-(202,'Canadian Gift Exchange Network','Tamuri','Yoshi ','(604) 555-3392',1323,'90300.00'),
+(187,'AV Stores, Co.','Ashworth','Rachel','(171) 555-1555',1501,'136800.00',20002),
 
-(204,'Online Mini Collectables','Barajas','Miguel','6175557555',1188,'68700.00'),
+(189,'Clover Collections, Co.','Cassidy','Dean','+353 1862 1555',1504,'69400.00',20903),
 
-(205,'Toys4GrownUps.com','Young','Julie','6265557265',1166,'90700.00'),
+(198,'Auto-Moto Classics Inc.','Taylor','Leslie','6175558428',1216,'23000.00',20094),
 
-(206,'Asian Shopping Network, Co','Walker','Brydey','+612 9411 1555',NULL,'0.00'),
+(201,'UK Collectables, Ltd.','Devon','Elizabeth','(171) 555-2282',1501,'92700.00',20905),
 
-(209,'Mini Caravy','Citeaux','Frédérique ','88.60.1555',1370,'53800.00'),
+(202,'Canadian Gift Exchange Network','Tamuri','Yoshi ','(604) 555-3392',1323,'90300.00',20908),
 
-(211,'King Kong Collectables, Co.','Gao','Mike','+852 2251 1555',1621,'58600.00'),
+(204,'Online Mini Collectables','Barajas','Miguel','6175557555',1188,'68700.00',20503),
 
-(216,'Enaco Distributors','Saavedra','Eduardo ','(93) 203 4555',1702,'60300.00'),
+(205,'Toys4GrownUps.com','Young','Julie','6265557265',1166,'90700.00',20504),
 
-(219,'Boards & Toys Co.','Young','Mary','3105552373',1166,'11000.00'),
+(206,'Asian Shopping Network, Co','Walker','Brydey','+612 9411 1555',NULL,'0.00',NULL),
 
-(223,'Natürlich Autos','Kloss','Horst ','0372-555188',NULL,'0.00'),
+(209,'Mini Caravy','Citeaux','Frédérique ','88.60.1555',1370,'53800.00',20506),
 
-(227,'Heintze Collectables','Ibsen','Palle','86 21 3555',1401,'120800.00'),
+(211,'King Kong Collectables, Co.','Gao','Mike','+852 2251 1555',1621,'58600.00',20143),
 
-(233,'Québec Home Shopping Network','Fresnière','Jean ','(514) 555-8054',1286,'48700.00'),
+(216,'Enaco Distributors','Saavedra','Eduardo ','(93) 203 4555',1702,'60300.00',20003),
 
-(237,'ANG Resellers','Camino','Alejandra ','(91) 745 6555',NULL,'0.00'),
+(219,'Boards & Toys Co.','Young','Mary','3105552373',1166,'11000.00',20003),
 
-(239,'Collectable Mini Designs Co.','Thompson','Valarie','7605558146',1166,'105000.00'),
+(223,'Natürlich Autos','Kloss','Horst ','0372-555188',NULL,'0.00',NULL),
 
-(240,'giftsbymail.co.uk','Bennett','Helen ','(198) 555-8888''UK',1501,'93900.00'),
+(227,'Heintze Collectables','Ibsen','Palle','86 21 3555',1401,'120800.00',20103),
 
-(242,'Alpha Cognac','Roulet','Annette ','61.77.6555',1370,'61100.00'),
+(233,'Québec Home Shopping Network','Fresnière','Jean ','(514) 555-8054',1286,'48700.00',20012),
 
-(247,'Messner Shopping Network','Messner','Renate ','069-0555984',NULL,'0.00'),
+(237,'ANG Resellers','Camino','Alejandra ','(91) 745 6555',NULL,'0.00',NULL),
 
-(249,'Amica Models & Co.','Accorti','Paolo ','011-4988555',1401,'113000.00'),
+(239,'Collectable Mini Designs Co.','Thompson','Valarie','7605558146',1166,'105000.00',20111),
 
-(250,'Lyon Souveniers','Da Silva','Daniel','+33 1 46 62 7555',1337,'68100.00'),
+(240,'giftsbymail.co.uk','Bennett','Helen ','(198) 555-8888''UK',1501,'93900.00',20103),
 
-(256,'Auto Associés & Cie.','Tonini','Daniel ','30.59.8555',1370,'77900.00'),
+(242,'Alpha Cognac','Roulet','Annette ','61.77.6555',1370,'61100.00',20121),
 
-(259,'Toms Spezialitäten, Ltd','Pfalzheim','Henriette ','0221-5554327',1504,'120400.00'),
+(247,'Messner Shopping Network','Messner','Renate ','069-0555984',NULL,'0.00',NULL),
 
-(260,'Royal Canadian Collectables, Ltd.','Lincoln','Elizabeth ','(604) 555-4555',1323,'89600.00'),
+(249,'Amica Models & Co.','Accorti','Paolo ','011-4988555',1401,'113000.00',20161),
 
-(273,'Franken Gifts, Co','Franken','Peter ','089-0877555',NULL,'0.00'),
+(250,'Lyon Souveniers','Da Silva','Daniel','+33 1 46 62 7555',1337,'68100.00',20102),
 
-(276,'Anna\'s Decorations, Ltd','O\'Hara','Anna','02 9936 8555',1611,'107800.00'),
+(256,'Auto Associés & Cie.','Tonini','Daniel ','30.59.8555',1370,'77900.00',20163),
 
-(278,'Rovelli Gifts','Rovelli','Giovanni ','035-640555',1401,'119600.00'),
+(259,'Toms Spezialitäten, Ltd','Pfalzheim','Henriette ','0221-5554327',1504,'120400.00',20104),
 
-(282,'Souveniers And Things Co.','Huxley','Adrian','+61 2 9495 8555',1611,'93300.00'),
+(260,'Royal Canadian Collectables, Ltd.','Lincoln','Elizabeth ','(604) 555-4555',1323,'89600.00',20165),
 
-(286,'Marta\'s Replicas Co.','Hernandez','Marta','6175558555',1216,'123700.00'),
+(273,'Franken Gifts, Co','Franken','Peter ','089-0877555',NULL,'0.00',NULL),
 
-(293,'BG&E Collectables','Harrison','Ed','+41 26 425 50 01',NULL,'0.00'),
+(276,'Anna''s Decorations, Ltd','O''Hara','Anna','02 9936 8555',1611,'107800.00',21604),
 
-(298,'Vida Sport, Ltd','Holz','Mihael','0897-034555',1702,'141300.00'),
+(278,'Rovelli Gifts','Rovelli','Giovanni ','035-640555',1401,'119600.00',21611),
 
-(299,'Norway Gifts By Mail, Co.','Klaeboe','Jan','+47 2212 1555',1504,'95100.00'),
+(282,'Souveniers And Things Co.','Huxley','Adrian','+61 2 9495 8555',1611,'93300.00',20106),
 
-(303,'Schuyler Imports','Schuyler','Bradley','+31 20 491 9555',NULL,'0.00'),
+(286,'Marta''s Replicas Co.','Hernandez','Marta','6175558555',1216,'123700.00',20607),
 
-(307,'Der Hund Imports','Andersen','Mel','030-0074555',NULL,'0.00'),
+(293,'BG&E Collectables','Harrison','Ed','+41 26 425 50 01',NULL,'0.00',NULL),
 
-(311,'Oulu Toy Supplies, Inc.','Koskitalo','Pirkko','981-443655',1501,'90500.00'),
+(298,'Vida Sport, Ltd','Holz','Mihael','0897-034555',1702,'141300.00',20161),
 
-(314,'Petit Auto','Dewey','Catherine ','(02) 5554 67',1401,'79900.00'),
+(299,'Norway Gifts By Mail, Co.','Klaeboe','Jan','+47 2212 1555',1504,'95100.00',20161),
 
-(319,'Mini Classics','Frick','Steve','9145554562',1323,'102700.00'),
+(303,'Schuyler Imports','Schuyler','Bradley','+31 20 491 9555',NULL,'0.00',NULL),
 
-(320,'Mini Creations Ltd.','Huang','Wing','5085559555',1188,'94500.00'),
+(307,'Der Hund Imports','Andersen','Mel','030-0074555',NULL,'0.00',NULL),
 
-(321,'Corporate Gift Ideas Co.','Brown','Julie','6505551386',1165,'105000.00'),
+(311,'Oulu Toy Supplies, Inc.','Koskitalo','Pirkko','981-443655',1501,'90500.00',20161),
 
-(323,'Down Under Souveniers, Inc','Graham','Mike','+64 9 312 5555',1612,'88000.00'),
+(314,'Petit Auto','Dewey','Catherine ','(02) 5554 67',1401,'79900.00',20160),
 
-(324,'Stylish Desk Decors, Co.','Brown','Ann ','(171) 555-0297',1501,'77000.00'),
+(319,'Mini Classics','Frick','Steve','9145554562',1323,'102700.00',20001),
 
-(328,'Tekni Collectables Inc.','Brown','William','2015559350',1323,'43000.00'),
+(320,'Mini Creations Ltd.','Huang','Wing','5085559555',1188,'94500.00',20002),
 
-(333,'Australian Gift Network, Co','Calaghan','Ben','61-7-3844-6555',1611,'51600.00'),
+(321,'Corporate Gift Ideas Co.','Brown','Julie','6505551386',1165,'105000.00',20003),
 
-(334,'Suominen Souveniers','Suominen','Kalle','+358 9 8045 555',1501,'98800.00'),
+(323,'Down Under Souveniers, Inc','Graham','Mike','+64 9 312 5555',1612,'88000.00',20004),
 
-(335,'Cramer Spezialitäten, Ltd','Cramer','Philip ','0555-09555',NULL,'0.00'),
+(324,'Stylish Desk Decors, Co.','Brown','Ann ','(171) 555-0297',1501,'77000.00',20005),
 
-(339,'Classic Gift Ideas, Inc','Cervantes','Francisca','2155554695',1188,'81100.00'),
+(328,'Tekni Collectables Inc.','Brown','William','2015559350',1323,'43000.00',20006),
 
-(344,'CAF Imports','Fernandez','Jesus','+34 913 728 555',1702,'59600.00'),
+(333,'Australian Gift Network, Co','Calaghan','Ben','61-7-3844-6555',1611,'51600.00',20101),
 
-(347,'Men \'R\' US Retailers, Ltd.','Chandler','Brian','2155554369',1166,'57700.00'),
+(334,'Suominen Souveniers','Suominen','Kalle','+358 9 8045 555',1501,'98800.00',20103),
 
-(348,'Asian Treasures, Inc.','McKenna','Patricia ','2967 555',NULL,'0.00'),
+(335,'Cramer Spezialitäten, Ltd','Cramer','Philip ','0555-09555',NULL,'0.00',NULL),
 
-(350,'Marseille Mini Autos','Lebihan','Laurence ','91.24.4555',1337,'65000.00'),
+(339,'Classic Gift Ideas, Inc','Cervantes','Francisca','2155554695',1188,'81100.00',20007),
 
-(353,'Reims Collectables','Henriot','Paul ','26.47.1555',1337,'81100.00'),
+(344,'CAF Imports','Fernandez','Jesus','+34 913 728 555',1702,'59600.00',20001),
 
-(356,'SAR Distributors, Co','Kuger','Armand','+27 21 550 3555',NULL,'0.00'),
+(347,'Men ''R'' US Retailers, Ltd.','Chandler','Brian','2155554369',1166,'57700.00',20001),
 
-(357,'GiftsForHim.com','MacKinlay','Wales','64-9-3763555',1612,'77700.00'),
+(348,'Asian Treasures, Inc.','McKenna','Patricia ','2967 555',NULL,'0.00',NULL),
 
-(361,'Kommission Auto','Josephs','Karin','0251-555259',NULL,'0.00'),
+(350,'Marseille Mini Autos','Lebihan','Laurence ','91.24.4555',1337,'65000.00',20030),
 
-(362,'Gifts4AllAges.com','Yoshido','Juri','6175559555',1216,'41900.00'),
+(353,'Reims Collectables','Henriot','Paul ','26.47.1555',1337,'81100.00',20030),
 
-(363,'Online Diecast Creations Co.','Young','Dorothy','6035558647',1216,'114200.00'),
+(356,'SAR Distributors, Co','Kuger','Armand','+27 21 550 3555',NULL,'0.00',NULL),
 
-(369,'Lisboa Souveniers, Inc','Rodriguez','Lino ','(1) 354-2555',NULL,'0.00'),
+(357,'GiftsForHim.com','MacKinlay','Wales','64-9-3763555',1612,'77700.00',20038),
 
-(376,'Precious Collectables','Urs','Braun','0452-076555',1702,'0.00'),
+(361,'Kommission Auto','Josephs','Karin','0251-555259',NULL,'0.00',NULL),
 
-(379,'Collectables For Less Inc.','Nelson','Allen','6175558555',1188,'70700.00'),
+(362,'Gifts4AllAges.com','Yoshido','Juri','6175559555',1216,'41900.00',20010),
 
-(381,'Royale Belge','Cartrain','Pascale ','(071) 23 67 2555',1401,'23500.00'),
+(363,'Online Diecast Creations Co.','Young','Dorothy','6035558647',1216,'114200.00',20310),
 
-(382,'Salzburg Collectables','Pipps','Georg ','6562-9555',1401,'71700.00'),
+(369,'Lisboa Souveniers, Inc','Rodriguez','Lino ','(1) 354-2555',NULL,'0.00',NULL),
 
-(385,'Cruz & Sons Co.','Cruz','Arnold','+63 2 555 3587',1621,'81500.00'),
+(376,'Precious Collectables','Urs','Braun','0452-076555',1702,'0.00',20310),
 
-(386,'L\'ordine Souveniers','Moroni','Maurizio ','0522-556555',1401,'121400.00'),
+(379,'Collectables For Less Inc.','Nelson','Allen','6175558555',1188,'70700.00',20310),
 
-(398,'Tokyo Collectables, Ltd','Shimamura','Akiko','+81 3 3584 0555',1621,'94400.00'),
+(381,'Royale Belge','Cartrain','Pascale ','(071) 23 67 2555',1401,'23500.00',20310),
 
-(406,'Auto Canal+ Petit','Perrier','Dominique','(1) 47.55.6555',1337,'95000.00'),
+(382,'Salzburg Collectables','Pipps','Georg ','6562-9555',1401,'71700.00',20030),
 
-(409,'Stuttgart Collectable Exchange','Müller','Rita ','0711-555361',NULL,'0.00'),
+(385,'Cruz & Sons Co.','Cruz','Arnold','+63 2 555 3587',1621,'81500.00',20310),
 
-(412,'Extreme Desk Decorations, Ltd','McRoy','Sarah','04 499 9555',1612,'86800.00'),
+(386,'L''ordine Souveniers','Moroni','Maurizio ','0522-556555',1401,'121400.00',20310),
 
-(415,'Bavarian Collectables Imports, Co.','Donnermeyer','Michael',' +49 89 61 08 9555',1504,'77000.00'),
+(398,'Tokyo Collectables, Ltd','Shimamura','Akiko','+81 3 3584 0555',1621,'94400.00',20311),
 
-(424,'Classic Legends Inc.','Hernandez','Maria','2125558493',1286,'67500.00'),
+(406,'Auto Canal+ Petit','Perrier','Dominique','(1) 47.55.6555',1337,'95000.00',23312),
 
-(443,'Feuer Online Stores, Inc','Feuer','Alexander ','0342-555176',NULL,'0.00'),
+(409,'Stuttgart Collectable Exchange','Müller','Rita ','0711-555361',NULL,'0.00',NULL),
 
-(447,'Gift Ideas Corp.','Lewis','Dan','2035554407',1323,'49700.00'),
+(412,'Extreme Desk Decorations, Ltd','McRoy','Sarah','04 499 9555',1612,'86800.00',20311),
 
-(448,'Scandinavian Gift Ideas','Larsson','Martha','0695-34 6555',1504,'116400.00'),
+(415,'Bavarian Collectables Imports, Co.','Donnermeyer','Michael',' +49 89 61 08 9555',1504,'77000.00',20012),
 
-(450,'The Sharp Gifts Warehouse','Frick','Sue','4085553659',1165,'77600.00'),
+(424,'Classic Legends Inc.','Hernandez','Maria','2125558493',1286,'67500.00',21010),
 
-(452,'Mini Auto Werke','Mendel','Roland ','7675-3555',1401,'45300.00'),
+(443,'Feuer Online Stores, Inc','Feuer','Alexander ','0342-555176',NULL,'0.00',NULL),
 
-(455,'Super Scale Inc.','Murphy','Leslie','2035559545',1286,'95400.00'),
+(447,'Gift Ideas Corp.','Lewis','Dan','2035554407',1323,'49700.00',20111),
 
-(456,'Microscale Inc.','Choi','Yu','2125551957',1286,'39800.00'),
+(448,'Scandinavian Gift Ideas','Larsson','Martha','0695-34 6555',1504,'116400.00',20102),
 
-(458,'Corrida Auto Replicas, Ltd','Sommer','Martín ','(91) 555 22 82',1702,'104600.00'),
+(450,'The Sharp Gifts Warehouse','Frick','Sue','4085553659',1165,'77600.00',20104),
 
-(459,'Warburg Exchange','Ottlieb','Sven ','0241-039123',NULL,'0.00'),
+(452,'Mini Auto Werke','Mendel','Roland ','7675-3555',1401,'45300.00',20104),
 
-(462,'FunGiftIdeas.com','Benitez','Violeta','5085552555',1216,'85800.00'),
+(455,'Super Scale Inc.','Murphy','Leslie','2035559545',1286,'95400.00',20125),
 
-(465,'Anton Designs, Ltd.','Anton','Carmen','+34 913 728555',NULL,'0.00'),
+(456,'Microscale Inc.','Choi','Yu','2125551957',1286,'39800.00',20120),
 
-(471,'Australian Collectables, Ltd','Clenahan','Sean','61-9-3844-6555',1611,'60300.00'),
+(458,'Corrida Auto Replicas, Ltd','Sommer','Martín ','(91) 555 22 82',1702,'104600.00',20109),
 
-(473,'Frau da Collezione','Ricotti','Franco','+39 022515555',1401,'34800.00'),
+(459,'Warburg Exchange','Ottlieb','Sven ','0241-039123',NULL,'0.00',NULL),
 
-(475,'West Coast Collectables Co.','Thompson','Steve','3105553722',1166,'55400.00'),
+(462,'FunGiftIdeas.com','Benitez','Violeta','5085552555',1216,'85800.00',20112),
 
-(477,'Mit Vergnügen & Co.','Moos','Hanna ','0621-08555',NULL,'0.00'),
+(465,'Anton Designs, Ltd.','Anton','Carmen','+34 913 728555',NULL,'0.00',NULL),
 
-(480,'Kremlin Collectables, Co.','Semenov','Alexander ','+7 812 293 0521',NULL,'0.00'),
+(471,'Australian Collectables, Ltd','Clenahan','Sean','61-9-3844-6555',1611,'60300.00',20107),
 
-(481,'Raanan Stores, Inc','Altagar,G M','Raanan','+ 972 9 959 8555',NULL,'0.00'),
+(473,'Frau da Collezione','Ricotti','Franco','+39 022515555',1401,'34800.00',21502),
 
-(484,'Iberia Gift Imports, Corp.','Roel','José Pedro ','(95) 555 82 82',1702,'65700.00'),
+(475,'West Coast Collectables Co.','Thompson','Steve','3105553722',1166,'55400.00',20104),
 
-(486,'Motor Mint Distributors Inc.','Salazar','Rosa','2155559857',1323,'72600.00'),
+(477,'Mit Vergnügen & Co.','Moos','Hanna ','0621-08555',NULL,'0.00',NULL),
 
-(487,'Signal Collectibles Ltd.','Taylor','Sue','4155554312',1165,'60300.00'),
+(480,'Kremlin Collectables, Co.','Semenov','Alexander ','+7 812 293 0521',NULL,'0.00',NULL),
 
-(489,'Double Decker Gift Stores, Ltd','Smith','Thomas ','(171) 555-7555',1501,'43300.00'),
+(481,'Raanan Stores, Inc','Altagar,G M','Raanan','+ 972 9 959 8555',NULL,'0.00',NULL),
 
-(495,'Diecast Collectables','Franco','Valarie','6175552555',1188,'85100.00'),
+(484,'Iberia Gift Imports, Corp.','Roel','José Pedro ','(95) 555 82 82',1702,'65700.00',20154),
 
-(496,'Kelly\'s Gift Shop','Snowden','Tony','+64 9 5555500',1612,'110000.00') ON DUPLICATE KEY UPDATE customer_number=customer_number;
+(486,'Motor Mint Distributors Inc.','Salazar','Rosa','2155559857',1323,'72600.00',20154),
+
+(487,'Signal Collectibles Ltd.','Taylor','Sue','4155554312',1165,'60300.00',21504),
+
+(489,'Double Decker Gift Stores, Ltd','Smith','Thomas ','(171) 555-7555',1501,'43300.00',20103),
+
+(495,'Diecast Collectables','Franco','Valarie','6175552555',1188,'85100.00',20409),
+
+(496,'Kelly''s Gift Shop','Snowden','Tony','+64 9 5555500',1612,'110000.00',20142) ON DUPLICATE KEY UPDATE customer_number=customer_number;
 
 insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_line_second`,`city`,`state`,`postal_code`,`country`) values 
+
+(99,'43 Rue 2',NULL, 'Paris' ,NULL,'25017','France'),
+
+(100,'51, Avenue 3',NULL, NULL ,NULL,'43000',NULL),
+
+(101,'51, St 5',NULL, NULL ,NULL,'44000','USA'),
+
+(102,'51, St AQ',NULL, 'Bucharest' ,NULL,'12000',NULL),
 
 (103,'54, rue Royale',NULL,'Nantes',NULL,'44000','France'),
 
@@ -499,7 +547,7 @@ insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_li
 
 (323,'162-164 Grafton Road','Level 2','Auckland  ',NULL,NULL,'New Zealand'),
 
-(324,'35 King George',NULL,'London',NULL,'WX3 6FW','UK'),
+(324,'25 Old Broad Street','Level 7','London','N/A','EC2N 1HN','UK'),
 
 (328,'7476 Moss Rd.',NULL,'Newark','NJ','94019','USA'),
 
@@ -605,21 +653,39 @@ insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_li
 
 /*Data for the table `productline` */
 
-insert  into `productline`(`product_line`,`text_description`,`html_description`,`image`) values 
+insert  into `productline`(`product_line`,`code`,`text_description`,`html_description`,`image`) values 
 
-('Classic Cars','Attention car enthusiasts: Make your wildest car ownership dreams come true. Whether you are looking for classic muscle cars, dream sports cars or movie-inspired miniatures, you will find great choices in this category. These replicas feature superb attention to detail and craftsmanship and offer features such as working steering system, opening forward compartment, opening rear trunk with removable spare wheel, 4-wheel independent spring suspension, and so on. The models range in size from 1:10 to 1:24 scale and include numerous limited edition and several out-of-production vehicles. All models include a certificate of authenticity from their manufacturers and come fully assembled and ready for display in the home or office.',NULL,NULL),
+('Classic Cars',599302, 'Attention car enthusiasts: Make your wildest car ownership dreams come true. Whether you are looking for classic muscle cars, dream sports cars or movie-inspired miniatures, you will find great choices in this category. These replicas feature superb attention to detail and craftsmanship and offer features such as working steering system, opening forward compartment, opening rear trunk with removable spare wheel, 4-wheel independent spring suspension, and so on. The models range in size from 1:10 to 1:24 scale and include numerous limited edition and several out-of-production vehicles. All models include a certificate of authenticity from their manufacturers and come fully assembled and ready for display in the home or office.',NULL,NULL),
 
-('Motorcycles','Our motorcycles are state of the art replicas of classic as well as contemporary motorcycle legends such as Harley Davidson, Ducati and Vespa. Models contain stunning details such as official logos, rotating wheels, working kickstand, front suspension, gear-shift lever, footbrake lever, and drive chain. Materials used include diecast and plastic. The models range in size from 1:10 to 1:50 scale and include numerous limited edition and several out-of-production vehicles. All models come fully assembled and ready for display in the home or office. Most include a certificate of authenticity.',NULL,NULL),
+('Motorcycles',599302,'Our motorcycles are state of the art replicas of classic as well as contemporary motorcycle legends such as Harley Davidson, Ducati and Vespa. Models contain stunning details such as official logos, rotating wheels, working kickstand, front suspension, gear-shift lever, footbrake lever, and drive chain. Materials used include diecast and plastic. The models range in size from 1:10 to 1:50 scale and include numerous limited edition and several out-of-production vehicles. All models come fully assembled and ready for display in the home or office. Most include a certificate of authenticity.',NULL,NULL),
 
-('Planes','Unique, diecast airplane and helicopter replicas suitable for collections, as well as home, office or classroom decorations. Models contain stunning details such as official logos and insignias, rotating jet engines and propellers, retractable wheels, and so on. Most come fully assembled and with a certificate of authenticity from their manufacturers.',NULL,NULL),
+('Planes',433823,'Unique, diecast airplane and helicopter replicas suitable for collections, as well as home, office or classroom decorations. Models contain stunning details such as official logos and insignias, rotating jet engines and propellers, retractable wheels, and so on. Most come fully assembled and with a certificate of authenticity from their manufacturers.',NULL,NULL),
 
-('Ships','The perfect holiday or anniversary gift for executives, clients, friends, and family. These handcrafted model ships are unique, stunning works of art that will be treasured for generations! They come fully assembled and ready for display in the home or office. We guarantee the highest quality, and best value.',NULL,NULL),
+('Ships',433823,'The perfect holiday or anniversary gift for executives, clients, friends, and family. These handcrafted model ships are unique, stunning works of art that will be treasured for generations! They come fully assembled and ready for display in the home or office. We guarantee the highest quality, and best value.',NULL,NULL),
 
-('Trains','Model trains are a rewarding hobby for enthusiasts of all ages. Whether you\'re looking for collectible wooden trains, electric streetcars or locomotives, you\'ll find a number of great choices for any budget within this category. The interactive aspect of trains makes toy trains perfect for young children. The wooden train sets are ideal for children under the age of 5.',NULL,NULL),
+('Trains',123333,'Model trains are a rewarding hobby for enthusiasts of all ages. Whether you\'re looking for collectible wooden trains, electric streetcars or locomotives, you\'ll find a number of great choices for any budget within this category. The interactive aspect of trains makes toy trains perfect for young children. The wooden train sets are ideal for children under the age of 5.',NULL,NULL),
 
-('Trucks and Buses','The Truck and Bus models are realistic replicas of buses and specialized trucks produced from the early 1920s to present. The models range in size from 1:12 to 1:50 scale and include numerous limited edition and several out-of-production vehicles. Materials used include tin, diecast and plastic. All models include a certificate of authenticity from their manufacturers and are a perfect ornament for the home and office.',NULL,NULL),
+('Trucks and Buses',569331,'The Truck and Bus models are realistic replicas of buses and specialized trucks produced from the early 1920s to present. The models range in size from 1:12 to 1:50 scale and include numerous limited edition and several out-of-production vehicles. Materials used include tin, diecast and plastic. All models include a certificate of authenticity from their manufacturers and are a perfect ornament for the home and office.',NULL,NULL),
 
-('Vintage Cars','Our Vintage Car models realistically portray automobiles produced from the early 1900s through the 1940s. Materials used include Bakelite, diecast, plastic and wood. Most of the replicas are in the 1:18 and 1:24 scale sizes, which provide the optimum in detail and accuracy. Prices range from $30.00 up to $180.00 for some special limited edition replicas. All models include a certificate of authenticity from their manufacturers and come fully assembled and ready for display in the home or office.',NULL,NULL) ON DUPLICATE KEY UPDATE product_line=product_line;
+('Vintage Cars',223113,'Our Vintage Car models realistically portray automobiles produced from the early 1900s through the 1940s. Materials used include Bakelite, diecast, plastic and wood. Most of the replicas are in the 1:18 and 1:24 scale sizes, which provide the optimum in detail and accuracy. Prices range from $30.00 up to $180.00 for some special limited edition replicas. All models include a certificate of authenticity from their manufacturers and come fully assembled and ready for display in the home or office.',NULL,NULL) ON DUPLICATE KEY UPDATE product_line=product_line;
+
+/*Data for the table `productlinedetail` */
+
+insert  into `productlinedetail`(`product_line`,`code`,`line_capacity`,`line_type`) values 
+
+('Classic Cars',599302,'200A', 1),
+
+('Motorcycles',599302,'150B', 1),
+
+('Planes',433823,'450C',2),
+
+('Ships',433823,'100A',3),
+
+('Trains',123333,'150A',2),
+
+('Trucks and Buses',569331,'566C',2),
+
+('Vintage Cars',223113,'1000A', 3) ON DUPLICATE KEY UPDATE product_line=product_line;
 
 /*Data for the table `product` */
 
@@ -4709,9 +4775,9 @@ insert  into `orderdetail`(`order_id`,`product_id`,`quantity_ordered`,`price_eac
 
 (10275,1,45,'81.35',1),
 
-(10275,3,22,'115.37',4),
+(10275,2,22,'115.37',4),
 
-(10275,4,36,'154.93',3),
+(10275,40,36,'154.93',3),
 
 (10275,31,35,'70.12',9),
 
@@ -5607,9 +5673,9 @@ insert  into `orderdetail`(`order_id`,`product_id`,`quantity_ordered`,`price_eac
 
 (10318,1,46,'84.22',1),
 
-(10318,3,45,'102.29',4),
+(10318,2,45,'102.29',4),
 
-(10318,4,37,'189.79',3),
+(10318,40,37,'189.79',3),
 
 (10318,31,31,'81.95',9),
 
@@ -7497,7 +7563,7 @@ insert  into `orderdetail`(`order_id`,`product_id`,`quantity_ordered`,`price_eac
 
 (10425,94,18,'94.92',2) ON DUPLICATE KEY UPDATE order_id=order_id;
 
-/*Data for the table `payment` */
+/* Data for the table `payment` */
 
 insert  into `payment`(`customer_number`,`check_number`,`payment_date`,`invoice_amount`, `caching_date`) values 
 
@@ -8047,44 +8113,86 @@ insert  into `payment`(`customer_number`,`check_number`,`payment_date`,`invoice_
 
 (496,'MN89921','2004-12-31 09:02:11','52166.00', '2004-12-31 09:02:11') ON DUPLICATE KEY UPDATE customer_number=customer_number;
 
-insert into sale(sale_id,fiscal_year,sale,employee_number) values 
+/*Data for the table `bank_transaction` */
 
-(1, 2003, 5282.64, 1370),
+insert  into `bank_transaction`(`transaction_id`,`bank_name`,`bank_iban`,`transfer_amount`,`customer_number`,`check_number`,`caching_date`,`status`) values 
 
-(2, 2004, 1938.24, 1370),
+(1,'Bank Ltd. US','DN44398834N34','6631.36',447,'AO757239','2003-09-15 18:22:54','SUCCESS'),
 
-(3, 2004, 1676.14, 1370),
+(2,'Bank Ltd. US','348398H3493HG93','26304.13',447,'OU516561','2004-12-17 16:45:22','FAILED'),
 
-(4, 2003, 3213, 1166),
+(3,'Transilvania Bank','8TVN598N454VN84T','9977.85',462,'GC60330','2003-11-08 18:57:25','SUCCESS'),
 
-(5, 2004, 2121.35, 1166),
+(4,'5 Stars Bank','8VN8UNT5U45T8','48355.87',462,'PE176846', '2004-11-27 14:30:22','SUCCESS'),
 
-(6, 2004, 3711.12, 1166),
+(5,'5 Stars Bank','TVU58NU58U84N4YUG','33967.73',398,'AJ478695','2005-02-14 12:09:15','FAILED'),
 
-(7, 2003, 3449.26, 1611),
+(6,'Optimus Bank','8V34VN5U435334','4588.36',333,'NF959653','2005-03-01 12:12:00','UNAUTHORIZED'),
 
-(8, 2003, 4704.92, 1611),
+(7,'Optimus Bank','8V34VN5U435334','8987.36',333,'NF959653','2005-03-01 14:00:00','UNAUTHORIZED'),
 
-(9, 2004, 2974.43, 1611),
+(8,'Optimus Bank','8V34VN5U435334','2544.36',333,'NF959653','2005-03-01 18:20:10','FAILED'),
 
-(10, 2004, 4755.6, 1611),
+(9,'Optimus Bank','8V34VN5U435334','5312.23',333,'NF959653','2005-03-01 19:32:56','RETRIED'),
 
-(11, 2004, 5657.4, 1611),
+(10,'BRT Bank','TVNU343T38TUNU3T','52151.81',278,'GP636783', '2003-03-02 12:32:00','FAILED') ON DUPLICATE KEY UPDATE transaction_id=transaction_id;
 
-(12, 2004, 3660.75, 1370),
+/*Data for the table `sale` */
 
-(13, 2004, 2812.32, 1370),
+insert into sale(sale_id,fiscal_year,sale,employee_number,trend) values 
 
-(14, 2005, 1607.76, 1370),
+(1, 2003, 5282.64, 1370,'UP'),
 
-(15, 2005, 4996.62, 1370),
+(2, 2004, 1938.24, 1370,'UP'),
 
-(16, 2003, 5571.8, 1504),
+(3, 2004, 1676.14, 1370,'DOWN'),
 
-(17, 2003, 1491.38, 1504),
+(4, 2003, 3213, 1166,'DOWN'),
 
-(18, 2004, 3884.34, 1504),
+(5, 2004, 2121.35, 1166,'DOWN'),
 
-(19, 2004, 5241.44, 1504) ON DUPLICATE KEY UPDATE sale_id=sale_id;
+(6, 2004, 3711.12, 1166,'CONSTANT'),
+
+(7, 2003, 3449.26, 1611,'CONSTANT'),
+
+(8, 2003, 4704.92, 1611,'UP'),
+
+(9, 2004, 2974.43, 1611,'CONSTANT'),
+
+(10, 2004, 4755.6, 1611,'UP'),
+
+(11, 2004, 5657.4, 1611,'DOWN'),
+
+(12, 2004, 3660.75, 1370,'DOWN'),
+
+(13, 2004, 2812.32, 1370,'DOWN'),
+
+(14, 2005, 1607.76, 1370,'UP'),
+
+(15, 2005, 4996.62, 1370,'CONSTANT'),
+
+(16, 2003, 5571.8, 1504,'DOWN'),
+
+(17, 2003, 1491.38, 1504,'CONSTANT'),
+
+(18, 2004, 3884.34, 1504,'DOWN'),
+
+(19, 2004, 5241.44, 1504,'CONSTANT'),
+
+(20, 2004, 51241.54, 1143,'DOWN'),
+
+(21, 2003, 25241.43, 1143,'DOWN'),
+
+(22, 2005, 52343.12, 1102,'DOWN') ON DUPLICATE KEY UPDATE sale_id=sale_id;
+
+/*Data for the table `top3product` */
+
+insert into `top3product`(`product_id`,`product_name`) values 
+
+(40, '1992 Ferrari 360 Spider red'),
+
+(1, '1969 Harley Davidson Ultimate Chopper'),
+
+(2, '1952 Alpine Renault 1300') ON DUPLICATE KEY UPDATE product_id=product_id;
 
 /* END */
