@@ -140,6 +140,14 @@ public class ClassicModelsRepository {
                 .from(SALE)
                 .groupBy(SALE.EMPLOYEE_NUMBER)
                 .asTable("saleTable"); // derived table
+        
+        // or, like this (consider this alternative for every usage of asTable())
+        /*
+        var saleTable = table(select(avg(SALE.SALE_).as("avgs"), SALE.EMPLOYEE_NUMBER.as("sen"))
+                .from(SALE)
+                .groupBy(SALE.EMPLOYEE_NUMBER))
+                .as("saleTable"); // derived table
+        */
 
         System.out.println("EXAMPLE 3\n"
                 + ctx.select(SALE.SALE_ID, SALE.SALE_)
