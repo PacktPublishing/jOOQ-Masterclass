@@ -396,13 +396,16 @@ public class ClassicModelsRepository {
       "SYSTEM"."EMPLOYEE"."LAST_NAME", 
       "SYSTEM"."EMPLOYEE"."SALARY" 
     from 
-      "SYSTEM"."EMPLOYEE" fetch next ? rows only    
+      "SYSTEM"."EMPLOYEE" 
+    order by "SYSTEM"."EMPLOYEE"."SALARY"
+    fetch next ? rows only    
     */
     public void findEmployeeLimit() {
 
         System.out.println("EXAMPLE 12\n" +
                 ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
                         .from(EMPLOYEE)
+                        .orderBy(EMPLOYEE.SALARY)
                         .limit(10)
                         .fetch()
         );
@@ -415,13 +418,16 @@ public class ClassicModelsRepository {
       "SYSTEM"."EMPLOYEE"."LAST_NAME", 
       "SYSTEM"."EMPLOYEE"."SALARY" 
     from 
-      "SYSTEM"."EMPLOYEE" offset ? rows fetch next ? rows only    
+      "SYSTEM"."EMPLOYEE" 
+    order by "SYSTEM"."EMPLOYEE"."SALARY"
+    offset ? rows fetch next ? rows only    
     */
     public void findEmployeeLimitOffset() {
 
         System.out.println("EXAMPLE 13\n" +
                 ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
                         .from(EMPLOYEE)
+                        .orderBy(EMPLOYEE.SALARY)
                         .limit(10)
                         .offset(5)
                         .fetch()
@@ -435,13 +441,16 @@ public class ClassicModelsRepository {
       "SYSTEM"."EMPLOYEE"."LAST_NAME", 
       "SYSTEM"."EMPLOYEE"."SALARY" 
     from 
-      "SYSTEM"."EMPLOYEE" offset ? rows fetch next ? rows only    
+      "SYSTEM"."EMPLOYEE" 
+    order by "SYSTEM"."EMPLOYEE"."SALARY"
+    offset ? rows fetch next ? rows only    
     */
     public void findEmployeeLimitAndOffset() {
 
         System.out.println("EXAMPLE 14\n" +
                 ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
                         .from(EMPLOYEE)
+                        .orderBy(EMPLOYEE.SALARY)
                         .limit(5, 10)                        
                         .fetch()
         );

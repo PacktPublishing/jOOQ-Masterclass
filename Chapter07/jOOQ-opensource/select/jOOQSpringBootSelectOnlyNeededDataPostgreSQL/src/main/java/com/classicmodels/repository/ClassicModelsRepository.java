@@ -395,6 +395,7 @@ public class ClassicModelsRepository {
       "public"."employee"."salary"
     from
       "public"."employee"
+    order by "public"."employee"."salary"
     limit ?
      */
     public void findEmployeeLimit() {
@@ -402,6 +403,7 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 12\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
                         .from(EMPLOYEE)
+                        .orderBy(EMPLOYEE.SALARY)
                         .limit(10)
                         .fetch()
         );
@@ -415,6 +417,7 @@ public class ClassicModelsRepository {
       "public"."employee"."salary"
     from
       "public"."employee"
+    order by "public"."employee"."salary"
     limit
       ? offset ?
      */
@@ -423,6 +426,7 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 13\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
                         .from(EMPLOYEE)
+                        .orderBy(EMPLOYEE.SALARY)
                         .limit(10)
                         .offset(5)
                         .fetch()
@@ -437,6 +441,7 @@ public class ClassicModelsRepository {
       "public"."employee"."salary"
     from
       "public"."employee"
+    order by "public"."employee"."salary"
     limit
       ? offset ?
      */
@@ -445,6 +450,7 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 14\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
                         .from(EMPLOYEE)
+                        .orderBy(EMPLOYEE.SALARY)
                         .limit(5, 10)
                         .fetch()
         );

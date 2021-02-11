@@ -393,14 +393,16 @@ public class ClassicModelsRepository {
       [classicmodels].[dbo].[employee].[first_name],
       [classicmodels].[dbo].[employee].[last_name],
       [classicmodels].[dbo].[employee].[salary]
-    from [classicmodels].[dbo].[employee]
-    order by (select 0)    
+    from [classicmodels].[dbo].[employee]    
+    // order by (select 0) -> without explicit ORDER BY
+    order by [classicmodels].[dbo].[employee].[salary]
      */
     public void findEmployeeLimit() {
 
         System.out.println("EXAMPLE 12\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
                         .from(EMPLOYEE)
+                        .orderBy(EMPLOYEE.SALARY)
                         .limit(10)
                         .fetch()
         );
@@ -413,7 +415,8 @@ public class ClassicModelsRepository {
       [classicmodels].[dbo].[employee].[last_name],
       [classicmodels].[dbo].[employee].[salary]
     from [classicmodels].[dbo].[employee]
-    order by (select 0)
+    // order by (select 0) -> without explicit ORDER BY
+    order by [classicmodels].[dbo].[employee].[salary]
     offset ? rows fetch next ? rows only
      */
     public void findEmployeeLimitOffset() {
@@ -421,6 +424,7 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 13\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
                         .from(EMPLOYEE)
+                        .orderBy(EMPLOYEE.SALARY)
                         .limit(10)
                         .offset(5)
                         .fetch()
@@ -434,7 +438,8 @@ public class ClassicModelsRepository {
       [classicmodels].[dbo].[employee].[last_name],
       [classicmodels].[dbo].[employee].[salary]
     from [classicmodels].[dbo].[employee]
-    order by (select 0)    
+    // order by (select 0) -> without explicit ORDER BY   
+    order by [classicmodels].[dbo].[employee].[salary]
     offset ? rows fetch next ? rows only
      */
     public void findEmployeeLimitAndOffset() {
@@ -442,6 +447,7 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 14\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
                         .from(EMPLOYEE)
+                        .orderBy(EMPLOYEE.SALARY)
                         .limit(5, 10)
                         .fetch()
         );
