@@ -24,16 +24,9 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 1
     /*
-    select 
-      "SYSTEM"."EMPLOYEE"."EMPLOYEE_NUMBER", 
+    select       
       "SYSTEM"."EMPLOYEE"."LAST_NAME", 
-      "SYSTEM"."EMPLOYEE"."FIRST_NAME", 
-      "SYSTEM"."EMPLOYEE"."EXTENSION", 
-      "SYSTEM"."EMPLOYEE"."EMAIL", 
-      "SYSTEM"."EMPLOYEE"."OFFICE_CODE", 
-      "SYSTEM"."EMPLOYEE"."SALARY", 
-      "SYSTEM"."EMPLOYEE"."REPORTS_TO", 
-      "SYSTEM"."EMPLOYEE"."JOB_TITLE" 
+      "SYSTEM"."EMPLOYEE"."FIRST_NAME"
     from 
       "SYSTEM"."EMPLOYEE" 
     where 
@@ -49,7 +42,8 @@ public class ClassicModelsRepository {
     public void findSalaryGeAvgPlus25000() {
 
         System.out.println("EXAMPLE 1\n" +
-                ctx.selectFrom(EMPLOYEE)
+                ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
+                        .from(EMPLOYEE)
                         .where(EMPLOYEE.SALARY.ge(
                                 select(avg(EMPLOYEE.SALARY).plus(25000)).from(EMPLOYEE).asField()))
                         .fetch()
@@ -92,7 +86,17 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 3
     /*
-    
+    select 
+      (
+        "SYSTEM"."EMPLOYEE"."SALARY" + (
+          select 
+            avg("SYSTEM"."EMPLOYEE"."SALARY") 
+          from 
+            "SYSTEM"."EMPLOYEE"
+        )
+      ) "baseSalary" 
+    from 
+      "SYSTEM"."EMPLOYEE"    
      */
     public void findBaseSalary() {
 
@@ -107,40 +111,8 @@ public class ClassicModelsRepository {
     // EXAMPLE 4
     /*
     select 
-      (
-        "SYSTEM"."EMPLOYEE"."SALARY" + (
-          select 
-            avg("SYSTEM"."EMPLOYEE"."SALARY") 
-          from 
-            "SYSTEM"."EMPLOYEE"
-        )
-      ) "baseSalary" 
-    from 
-      "SYSTEM"."EMPLOYEE"    
-     */
-    public void findEmployeeWithSalaryGt() {
-
-        System.out.println("EXAMPLE 4\n" +
-                ctx.selectFrom(EMPLOYEE)
-                        .where(EMPLOYEE.SALARY.ge(
-                                select(EMPLOYEE.SALARY).from(EMPLOYEE).
-                                        where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1076L))))
-                        .fetch()
-        );
-    }
-
-    // EXAMPLE 5
-    /*
-    select 
-      "SYSTEM"."EMPLOYEE"."EMPLOYEE_NUMBER", 
-      "SYSTEM"."EMPLOYEE"."LAST_NAME", 
       "SYSTEM"."EMPLOYEE"."FIRST_NAME", 
-      "SYSTEM"."EMPLOYEE"."EXTENSION", 
-      "SYSTEM"."EMPLOYEE"."EMAIL", 
-      "SYSTEM"."EMPLOYEE"."OFFICE_CODE", 
-      "SYSTEM"."EMPLOYEE"."SALARY", 
-      "SYSTEM"."EMPLOYEE"."REPORTS_TO", 
-      "SYSTEM"."EMPLOYEE"."JOB_TITLE" 
+      "SYSTEM"."EMPLOYEE"."LAST_NAME" 
     from 
       "SYSTEM"."EMPLOYEE" 
     where 
@@ -151,27 +123,27 @@ public class ClassicModelsRepository {
           "SYSTEM"."EMPLOYEE" 
         where 
           "SYSTEM"."EMPLOYEE"."EMPLOYEE_NUMBER" = ?
-      )    
+      )      
      */
-    @Transactional
-    public void insertEmployee() {
+    public void findEmployeeWithSalaryGt() {
 
-        System.out.println("EXAMPLE 5 (affected rows): " +
-                + ctx.insertInto(EMPLOYEE)
-                        .values(select(max(EMPLOYEE.EMPLOYEE_NUMBER.plus(1))).from(EMPLOYEE),
-                                "Mark", "Janel", "x4443", "markjanel@classicmodelcars.com", "1",
-                                select(avg(EMPLOYEE.SALARY)).from(EMPLOYEE),
-                                1002L, "VP Of Engineering")
-                        .execute()
+        System.out.println("EXAMPLE 4\n" +
+                ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
+                        .from(EMPLOYEE)
+                        .where(EMPLOYEE.SALARY.ge(
+                                select(EMPLOYEE.SALARY).from(EMPLOYEE).
+                                        where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1076L))))
+                        .fetch()
         );
     }
 
-    // EXAMPLE 6
+    // EXAMPLE 5
     /*
     insert into "SYSTEM"."EMPLOYEE" (
       "EMPLOYEE_NUMBER", "LAST_NAME", "FIRST_NAME", 
       "EXTENSION", "EMAIL", "OFFICE_CODE", 
-      "SALARY", "REPORTS_TO", "JOB_TITLE"
+      "SALARY", "REPORTS_TO", "JOB_TITLE", 
+      "EMPLOYEE_OF_YEAR", "MONTHLY_BONUS"
     ) 
     values 
       (
@@ -185,19 +157,41 @@ public class ClassicModelsRepository {
           from 
             "SYSTEM"."EMPLOYEE"
         ), 
-        ?, 
-        ?, 
-        ?, 
-        ?, 
-        ?, 
+        ?, ?, ?, ?, ?, 
         (
           select 
             avg("SYSTEM"."EMPLOYEE"."SALARY") 
           from 
             "SYSTEM"."EMPLOYEE"
         ), 
-        ?, 
-        ?
+        ?, ?, ?, ?
+      )    
+     */
+    @Transactional
+    public void insertEmployee() {
+        
+        System.out.println("EXAMPLE 5 (affected rows): " +
+                + ctx.insertInto(EMPLOYEE)
+                        .values(select(max(EMPLOYEE.EMPLOYEE_NUMBER.plus(1))).from(EMPLOYEE),
+                                "Mark", "Janel", "x4443", "markjanel@classicmodelcars.com", "1",
+                                select(avg(EMPLOYEE.SALARY)).from(EMPLOYEE),
+                                1002L, "VP Of Engineering", null, null)
+                        .execute()
+        );
+    }
+
+    // EXAMPLE 6
+    /*
+    delete from 
+      "SYSTEM"."PAYMENT" 
+    where 
+      "SYSTEM"."PAYMENT"."CUSTOMER_NUMBER" = (
+        select 
+          "SYSTEM"."CUSTOMER"."CUSTOMER_NUMBER" 
+        from 
+          "SYSTEM"."CUSTOMER" 
+        where 
+          "SYSTEM"."CUSTOMER"."CUSTOMER_NAME" = ?
       )    
      */
     @Transactional
@@ -214,16 +208,18 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 7
     /*
-    delete from 
-      "SYSTEM"."PAYMENT" 
-    where 
-      "SYSTEM"."PAYMENT"."CUSTOMER_NUMBER" = (
-        select 
-          "SYSTEM"."CUSTOMER"."CUSTOMER_NUMBER" 
-        from 
-          "SYSTEM"."CUSTOMER" 
-        where 
-          "SYSTEM"."CUSTOMER"."CUSTOMER_NAME" = ?
+    update 
+      "SYSTEM"."EMPLOYEE" 
+    set 
+      "SYSTEM"."EMPLOYEE"."SALARY" = (
+        "SYSTEM"."EMPLOYEE"."SALARY" + (
+          select 
+            min("SYSTEM"."EMPLOYEE"."SALARY") 
+          from 
+            "SYSTEM"."EMPLOYEE" 
+          where 
+            "SYSTEM"."EMPLOYEE"."REPORTS_TO" = ?
+        )
       )    
     */
     @Transactional

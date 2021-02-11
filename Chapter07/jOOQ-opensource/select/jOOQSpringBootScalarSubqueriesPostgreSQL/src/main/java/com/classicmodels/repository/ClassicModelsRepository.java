@@ -24,16 +24,9 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 1
     /*
-    select
-      "public"."employee"."employee_number",
+    select      
       "public"."employee"."last_name",
-      "public"."employee"."first_name",
-      "public"."employee"."extension",
-      "public"."employee"."email",
-      "public"."employee"."office_code",
-      "public"."employee"."salary",
-      "public"."employee"."reports_to",
-      "public"."employee"."job_title"
+      "public"."employee"."first_name"
     from
       "public"."employee"
     where
@@ -47,7 +40,8 @@ public class ClassicModelsRepository {
     public void findSalaryGeAvgPlus25000() {
 
         System.out.println("EXAMPLE 1\n" +
-                ctx.selectFrom(EMPLOYEE)
+                ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
+                        .from(EMPLOYEE)
                         .where(EMPLOYEE.SALARY.ge(
                                 select(avg(EMPLOYEE.SALARY).plus(25000)).from(EMPLOYEE).asField()))
                         .fetch()
@@ -107,16 +101,9 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 4
     /*
-    select
-      "public"."employee"."employee_number",
+    select      
       "public"."employee"."last_name",
-      "public"."employee"."first_name",
-      "public"."employee"."extension",
-      "public"."employee"."email",
-      "public"."employee"."office_code",
-      "public"."employee"."salary",
-      "public"."employee"."reports_to",
-      "public"."employee"."job_title"
+      "public"."employee"."first_name"
     from
       "public"."employee"
     where
@@ -132,7 +119,8 @@ public class ClassicModelsRepository {
     public void findEmployeeWithSalaryGt() {
 
         System.out.println("EXAMPLE 4\n" +
-                ctx.selectFrom(EMPLOYEE)
+                ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
+                        .from(EMPLOYEE)
                         .where(EMPLOYEE.SALARY.ge(
                                 select(EMPLOYEE.SALARY).from(EMPLOYEE).
                                         where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1076L))))

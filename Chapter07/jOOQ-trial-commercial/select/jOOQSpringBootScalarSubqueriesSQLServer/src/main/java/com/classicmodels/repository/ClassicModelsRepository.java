@@ -24,16 +24,9 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 1
     /*
-    select 
-      [classicmodels].[dbo].[employee].[employee_number], 
+    select       
       [classicmodels].[dbo].[employee].[last_name], 
-      [classicmodels].[dbo].[employee].[first_name], 
-      [classicmodels].[dbo].[employee].[extension], 
-      [classicmodels].[dbo].[employee].[email], 
-      [classicmodels].[dbo].[employee].[office_code], 
-      [classicmodels].[dbo].[employee].[salary], 
-      [classicmodels].[dbo].[employee].[reports_to], 
-      [classicmodels].[dbo].[employee].[job_title] 
+      [classicmodels].[dbo].[employee].[first_name]
     from 
       [classicmodels].[dbo].[employee] 
     where 
@@ -51,7 +44,8 @@ public class ClassicModelsRepository {
     public void findSalaryGeAvgPlus25000() {
 
         System.out.println("EXAMPLE 1\n" +
-                ctx.selectFrom(EMPLOYEE)
+                ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
+                        .from(EMPLOYEE)
                         .where(EMPLOYEE.SALARY.ge(
                                 select(avg(EMPLOYEE.SALARY).plus(25000)).from(EMPLOYEE).asField()))
                         .fetch()
@@ -117,16 +111,9 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 4
     /*
-    select 
-      [classicmodels].[dbo].[employee].[employee_number], 
+    select       
       [classicmodels].[dbo].[employee].[last_name], 
-      [classicmodels].[dbo].[employee].[first_name], 
-      [classicmodels].[dbo].[employee].[extension], 
-      [classicmodels].[dbo].[employee].[email], 
-      [classicmodels].[dbo].[employee].[office_code], 
-      [classicmodels].[dbo].[employee].[salary], 
-      [classicmodels].[dbo].[employee].[reports_to], 
-      [classicmodels].[dbo].[employee].[job_title] 
+      [classicmodels].[dbo].[employee].[first_name]
     from 
       [classicmodels].[dbo].[employee] 
     where 
@@ -142,7 +129,8 @@ public class ClassicModelsRepository {
     public void findEmployeeWithSalaryGt() {
 
         System.out.println("EXAMPLE 4\n" +
-                ctx.selectFrom(EMPLOYEE)
+                ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
+                        .from(EMPLOYEE)
                         .where(EMPLOYEE.SALARY.ge(
                                 select(EMPLOYEE.SALARY).from(EMPLOYEE).
                                         where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1076L))))
