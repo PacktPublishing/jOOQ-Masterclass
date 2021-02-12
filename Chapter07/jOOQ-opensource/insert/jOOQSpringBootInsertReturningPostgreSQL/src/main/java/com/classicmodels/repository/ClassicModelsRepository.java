@@ -170,7 +170,7 @@ public class ClassicModelsRepository {
      */
     public void insertAndReturnMultipleColsProductline() {
 
-        // Result<Record2<String, LocalDate>>
+        // Result<Record3<String, LocalDate, Long>>
         var inserted = ctx.insertInto(PRODUCTLINE, 
                 PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.TEXT_DESCRIPTION, PRODUCTLINE.CODE)
                 .values("Electric Vans", "This new line of electric vans ...", 983423L)
