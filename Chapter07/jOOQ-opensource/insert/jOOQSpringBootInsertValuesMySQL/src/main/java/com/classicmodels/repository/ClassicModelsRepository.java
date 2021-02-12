@@ -45,10 +45,13 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 1
     /*
-    insert into`classicmodels`.`order` (
-      `order_id`,`order_date`,`required_date`,`shipped_date`,`status`,`comments`,`customer_number`)
+    insert into `classicmodels`.`order` (
+      `order_id`, `order_date`, `required_date`, 
+      `shipped_date`, `status`, `comments`, 
+      `customer_number`
+    ) 
     values 
-      (default, ?, ?, ?, ?, ?, ?)
+      (default, ?, ?, ?, ?, ?, ?)    
      */
     public void insertOrderAutoGenKey() {
 
@@ -96,7 +99,10 @@ public class ClassicModelsRepository {
     // EXAMPLE 2
     /*
     insert ignore into `classicmodels`.`order` (
-      `order_id`,`comments`,`order_date`,`required_date`,`shipped_date`,`status`,`customer_number`)
+      `order_id`, `order_date`, `required_date`, 
+      `shipped_date`, `status`, `comments`, 
+      `customer_number`
+    ) 
     values 
       (?, ?, ?, ?, ?, ?, ?)
      */
@@ -138,9 +144,14 @@ public class ClassicModelsRepository {
     // EXAMPLE 3
     /*
     insert into `classicmodels`.`order` (
-      `comments`,`order_date`,`required_date`,`shipped_date`,`status`,`customer_number`)
+      `order_id`, `order_date`, `required_date`, 
+      `shipped_date`, `status`, `comments`, 
+      `customer_number`
+    ) 
     values 
-      (default, ?, ?, ?, ?, ?, ?), (default, ?, ?, ?, ?, ?, ?), (default, ?, ?, ?, ?, ?, ?)
+      (default, ?, ?, ?, ?, ?, ?), 
+      (default, ?, ?, ?, ?, ?, ?), 
+      (default, ?, ?, ?, ?, ?, ?)   
      */
     public void insertMultipleOrderAutoGenKey() {
 
@@ -191,9 +202,14 @@ public class ClassicModelsRepository {
     // EXAMPLE 4
     /*
     insert ignore into `classicmodels`.`order` (
-      `order_id`,`order_date`,`required_date`,`shipped_date`,`status`,`comments`,`customer_number`)
+      `order_id`, `order_date`, `required_date`, 
+      `shipped_date`, `status`, `comments`, 
+      `customer_number`
+    ) 
     values 
-      (?, ?, ?, ?, ?, ?, ?), (?, ?, ?, ?, ?, ?, ?), (?, ?, ?, ?, ?, ?, ?)
+      (?, ?, ?, ?, ?, ?, ?), 
+      (?, ?, ?, ?, ?, ?, ?), 
+      (?, ?, ?, ?, ?, ?, ?)    
      */
     public void insertMultipleOrderManualKey() {
 
@@ -253,8 +269,11 @@ public class ClassicModelsRepository {
     // EXAMPLE 5
     /*
     insert ignore into `classicmodels`.`payment` (
-      `customer_number`,`check_number`,`caching_date`,`payment_date`,`invoice_amount`)
-    values
+      `customer_number`, `check_number`, 
+      `caching_date`, `payment_date`, 
+      `invoice_amount`
+    ) 
+    values 
       (?, ?, ?, ?, ?)
      */
     public void insertPaymentCompositeKey() {
@@ -275,9 +294,12 @@ public class ClassicModelsRepository {
     // EXAMPLE 6
     /*
     insert into `classicmodels`.`sale` (
-      `sale_id`,`fiscal_year`,`sale`,`employee_number`)
-    values
-      (?, ?, ?, ?)
+      `sale_id`, `fiscal_year`, `sale`, 
+      `employee_number`, `hot`, `rate`, 
+      `vat`, `trend`
+    ) 
+    values 
+      (?, ?, ?, ?, ?, ?, ?, ?)   
      */
     public void insertOneSaleRecord() {
 
@@ -321,14 +343,14 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 6.4 (affected rows): "
                 + ctx.insertInto(SALE)
                         .values(sr.getSaleId(), sr.getFiscalYear(), sr.getSale(), sr.getEmployeeNumber(),
-                                null, SaleRate.SILVER, SaleVat.MAX, null)
+                                default_(), SaleRate.SILVER, SaleVat.MAX, default_())
                         .execute()
         );
 
         System.out.println("EXAMPLE 6.5 (affected rows): "
                 + ctx.insertInto(SALE)
                         .values(sr.value1(), sr.value2(), sr.value3(), sr.value4(),
-                                null, SaleRate.SILVER, SaleVat.MAX, null)
+                                default_(), SaleRate.SILVER, SaleVat.MAX, default_())
                         .execute()
         );
 
@@ -354,13 +376,17 @@ public class ClassicModelsRepository {
     // EXAMPLE 7
     /*
     insert into `classicmodels`.`sale` (
-      `sale_id`,`fiscal_year`,`sale`,`employee_number`)
-    values
-      (?, ?, ?, ?), (?, ?, ?, ?)
+      `sale_id`, `fiscal_year`, `sale`, 
+      `employee_number`, `hot`, `rate`, 
+      `vat`, `trend`
+    ) 
+    values 
+      (?, ?, ?, ?, ?, ?, ?, ?), 
+      (?, ?, ?, ?, ?, ?, ?, ?)   
      */
     public void insertTwoSaleRecord() {
 
-        // Record4<Long, Integer, Double, Long>
+        // Record8<Long, Integer, Double, Long, Byte, SaleRate, SaleVat, String>
         SaleRecord sr1 = new SaleRecord(null, 2003, 3443.22, 1370L,
                 null, SaleRate.SILVER, SaleVat.MAX, null);
         SaleRecord sr2 = new SaleRecord(null, 2005, 1221.12, 1504L,
@@ -377,9 +403,14 @@ public class ClassicModelsRepository {
     // EXAMPLE 8  
     /*
     insert into `classicmodels`.`sale` (
-      `sale_id`,`fiscal_year`,`sale`,`employee_number`)
-    values
-      (?, ?, ?, ?), (?, ?, ?, ?), (?, ?, ?, ?)
+      `sale_id`, `fiscal_year`, `sale`, 
+      `employee_number`, `hot`, `rate`, 
+      `vat`, `trend`
+    ) 
+    values 
+      (?, ?, ?, ?, ?, ?, ?, ?), 
+      (?, ?, ?, ?, ?, ?, ?, ?), 
+      (?, ?, ?, ?, ?, ?, ?, ?)    
      */
     public void insertCollectionOfSaleRecord() {
 
@@ -431,9 +462,10 @@ public class ClassicModelsRepository {
     // EXAMPLE 9
     /*
     insert into `classicmodels`.`sale` (
-      `sale_id`,`fiscal_year`,`sale`,`employee_number`)
-    values
-      (?, ?, ?, ?)
+      `fiscal_year`, `sale`, `employee_number`
+    ) 
+    values 
+      (?, ?, ?)   
      */
     public void insertNewRecord() {
 
@@ -485,9 +517,11 @@ public class ClassicModelsRepository {
     // EXAMPLE 10
     /*
     insert into `classicmodels`.`sale` (
-      `sale_id`,`fiscal_year`,`sale`,`employee_number`)
-    values
-      (?, ?, ?, ?)
+      `fiscal_year`, `sale`, `employee_number`, 
+      `hot`, `rate`, `vat`, `trend`
+    ) 
+    values 
+      (?, ?, ?, ?, ?, ?, ?)  
      */
     public void insertRecordAfterResettingPK() {
 
@@ -518,7 +552,7 @@ public class ClassicModelsRepository {
           `vat`, `trend`
         ) 
         values 
-          ((rand() * ?), ?, round(?), ?, default, ?, ?, default)       
+          ((rand() * ?), ?, round(?), ?, default, ?, ?, default)        
          */
         System.out.println("EXAMPLE 11.1 (affected rows): "
                 + ctx.insertInto(SALE)
@@ -562,7 +596,7 @@ public class ClassicModelsRepository {
           '+40 080 000'
         ), 
         ?, ?, default, default
-      )   
+      )     
      */
     public void insertDepartment() {
 
@@ -594,12 +628,7 @@ public class ClassicModelsRepository {
       `status`, `comments`, `customer_number`
     ) 
     select 
-      ?, 
-      ?, 
-      ?, 
-      ?, 
-      ?, 
-      ? 
+      ?, ?, ?, ?, ?, ? 
     from 
       dual 
     where 
@@ -631,7 +660,7 @@ public class ClassicModelsRepository {
                 )
             ) as `t`
         )
-      )    
+      )        
      */
     public void insertOrderBetweenDates() {
 
