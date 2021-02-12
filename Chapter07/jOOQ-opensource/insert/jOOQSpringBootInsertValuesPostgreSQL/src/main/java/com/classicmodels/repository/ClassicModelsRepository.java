@@ -52,10 +52,18 @@ public class ClassicModelsRepository {
 
         /*
         insert into "public"."order" (
-          "order_id","order_date","required_date","shipped_date","status","comments","customer_number")
-        values(
-          nextval('"public"."order_seq"'), cast(? as date),cast(? as date),cast(? as date),?,?,?) 
-        on conflict do nothing
+          "order_id", "order_date", "required_date", 
+          "shipped_date", "status", "comments", 
+          "customer_number"
+        ) 
+        values 
+          (
+            nextval('"public"."order_seq"'), 
+            cast(? as date), 
+            cast(? as date), 
+            cast(? as date), 
+            ?, ?, ?
+          ) on conflict do nothing        
          */
         System.out.println("EXAMPLE 1.1 (affected rows): "
                 + ctx.insertInto(ORDER) // InsertSetStep<OrderRecord>
@@ -69,10 +77,18 @@ public class ClassicModelsRepository {
 
         /*
         insert into "public"."order" (
-          "comments","order_date","required_date","shipped_date","status","customer_number")
-        values(
-          ?,cast(? as date),cast(? as date),cast(? as date),?,?) 
-        on conflict do nothing
+          "comments", "order_date", "required_date", 
+          "shipped_date", "status", "customer_number"
+        ) 
+        values 
+          (
+            ?, 
+            cast(? as date), 
+            cast(? as date), 
+            cast(? as date), 
+            ?, 
+            ?
+          ) on conflict do nothing        
          */
         System.out.println("EXAMPLE 1.2 (affected rows): "
                 + // InsertValuesStep6<OrderRecord, String, LocalDate, LocalDate, LocalDate, String, Long>
@@ -112,10 +128,18 @@ public class ClassicModelsRepository {
     // EXAMPLE 2
     /*
     insert into "public"."order" (
-      "order_id","order_date","required_date","shipped_date","status","comments","customer_number")
-    values
-      (?,cast(? as date),cast(? as date),cast(? as date),?,?,?) 
-    on conflict do nothing
+      "order_id", "order_date", "required_date", 
+      "shipped_date", "status", "comments", 
+      "customer_number"
+    ) 
+    values 
+      (
+        ?, 
+        cast(? as date), 
+        cast(? as date), 
+        cast(? as date), 
+        ?, ?, ?
+      ) on conflict do nothing 
      */
     public void insertOrderManualKey() {
 
@@ -155,12 +179,32 @@ public class ClassicModelsRepository {
     // EXAMPLE 3
     /*
     insert into "public"."order" (
-      "order_id","order_date","required_date","shipped_date","status","comments","customer_number")
-    values
-      (nextval('"public"."order_seq"'),cast(? as date),cast(? as date),cast(? as date),?,?,?),
-      (nextval('"public"."order_seq"'),cast(? as date),cast(? as date),cast(? as date),?,?,?),
-      (nextval('"public"."order_seq"'),cast(? as date),cast(? as date),cast(? as date),?,?,?) 
-    on conflict do nothing
+      "order_id", "order_date", "required_date", 
+      "shipped_date", "status", "comments", 
+      "customer_number"
+    ) 
+    values 
+      (
+        nextval('"public"."order_seq"'), 
+        cast(? as date), 
+        cast(? as date), 
+        cast(? as date), 
+        ?, ?, ?
+      ), 
+      (
+        nextval('"public"."order_seq"'), 
+        cast(? as date), 
+        cast(? as date), 
+        cast(? as date), 
+        ?, ?, ?
+      ), 
+      (
+        nextval('"public"."order_seq"'), 
+        cast(? as date), 
+        cast(? as date), 
+        cast(? as date), 
+        ?, ?, ?
+      ) on conflict do nothing    
      */
     public void insertMultipleOrderAutoGenKey() {
 
@@ -214,12 +258,32 @@ public class ClassicModelsRepository {
     // EXAMPLE 4
     /*
     insert into "public"."order" (
-      "order_id","order_date","required_date","shipped_date","status","comments","customer_number")
-    values
-      (?,cast(? as date),cast(? as date),cast(? as date),?,?,?),
-      (?,cast(? as date),cast(? as date),cast(? as date),?,?,?),
-      (?,cast(? as date),cast(? as date),cast(? as date),?,?,?) 
-    on conflict do nothing
+      "order_id", "order_date", "required_date", 
+      "shipped_date", "status", "comments", 
+      "customer_number"
+    ) 
+    values 
+      (
+        ?, 
+        cast(? as date), 
+        cast(? as date), 
+        cast(? as date), 
+        ?, ?, ?
+      ), 
+      (
+        ?, 
+        cast(? as date), 
+        cast(? as date), 
+        cast(? as date), 
+        ?, ?, ?
+      ), 
+      (
+        ?, 
+        cast(? as date), 
+        cast(? as date), 
+        cast(? as date), 
+        ?, ?, ?
+      ) on conflict do nothing    
      */
     public void insertMultipleOrderManualKey() {
 
@@ -279,10 +343,22 @@ public class ClassicModelsRepository {
     // EXAMPLE 5
     /*
     insert into "public"."payment" (
-      "customer_number","check_number","caching_date","payment_date","invoice_amount")
-    values
-      (?,?,cast(? as timestamp),cast(? as timestamp),?) 
-    on conflict do nothing
+      "customer_number", "check_number", 
+      "caching_date", "payment_date", 
+      "invoice_amount"
+    ) 
+    values 
+      (
+        ?, 
+        ?, 
+        cast(
+          ? as timestamp(6)
+        ), 
+        cast(
+          ? as timestamp(6)
+        ), 
+        ?
+      ) on conflict do nothing    
      */
     public void insertPaymentCompositeKey() {
 
@@ -303,13 +379,16 @@ public class ClassicModelsRepository {
     public void insertOneSaleRecord() {
 
         /*
-        select
-           nextval('"public"."sale_seq"')
         insert into "public"."sale" (
-          "sale_id","fiscal_year","sale","employee_number")
-        values
-          (?, ?, ?, ?) 
-        on conflict do nothing
+          "sale_id", "fiscal_year", "sale", 
+          "employee_number", "hot", "rate", 
+          "vat", "trend"
+        ) 
+        values 
+          (
+            ?, ?, ?, ?, ?, ? :: "public"."rate_type", 
+            ? :: "public"."vat_type", ?
+          ) on conflict do nothing       
          */
         System.out.println("EXAMPLE 6.1 (affected rows): "
                 + ctx.insertInto(SALE)
