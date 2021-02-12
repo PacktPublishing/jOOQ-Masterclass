@@ -10,6 +10,7 @@ import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.concat;
+import static org.jooq.impl.DSL.default_;
 import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -105,7 +106,7 @@ public class ClassicModelsRepository {
                                 CUSTOMER.CONTACT_LAST_NAME, CUSTOMER.PHONE)
                                 .values("Ltd. AirRoads", "Kyle", "Doyle", "+ 44 321 321")
                                 .returningResult(CUSTOMER.CUSTOMER_NUMBER).fetchOne().value1(),
-                                "No. 14 Avenue", null, "Los Angeles", null, null, "USA")
+                                "No. 14 Avenue", default_(), "Los Angeles", default_(), default_(), "USA")
                         .execute()
         );
     }
@@ -193,9 +194,10 @@ public class ClassicModelsRepository {
     public void insertAndReturnMultipleColsProductline() {
 
         // Result<Record2<String, LocalDate>>
-        var inserted = ctx.insertInto(PRODUCTLINE, PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.TEXT_DESCRIPTION)
-                .values("Electric Vans", "This new line of electric vans ...")
-                .values("Turbo N Cars", "This new line of turbo N cars ...")
+        var inserted = ctx.insertInto(PRODUCTLINE, PRODUCTLINE.PRODUCT_LINE, 
+                PRODUCTLINE.TEXT_DESCRIPTION, PRODUCTLINE.CODE)
+                .values("Electric Vans", "This new line of electric vans ...", 983423L)
+                .values("Turbo N Cars", "This new line of turbo N cars ...", 193384L)
                 .onDuplicateKeyIgnore()
                 .returningResult(PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.CREATED_ON)
                 .fetch();
@@ -258,12 +260,13 @@ public class ClassicModelsRepository {
      */
     public void insertAndReturnAllColsProductline() {
 
-        // Result<Record2<String, LocalDate>>
-        var inserted = ctx.insertInto(PRODUCTLINE, PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.TEXT_DESCRIPTION)
-                .values("Master Vans", "This new line of master vans ...")
-                .values("Cool Cars", "This new line of cool cars ...")
+        // Result<Record>
+        var inserted = ctx.insertInto(PRODUCTLINE, PRODUCTLINE.PRODUCT_LINE, 
+                PRODUCTLINE.TEXT_DESCRIPTION, PRODUCTLINE.CODE)
+                .values("Master Vans", "This new line of master vans ...", 983423L)
+                .values("Cool Cars", "This new line of cool cars ...", 193384L)
                 .onDuplicateKeyIgnore()
-                .returning()
+                .returningResult()
                 .fetch();
 
         System.out.println("EXAMPLE 6 (inserted ids and employee numbers): \n" + inserted);
