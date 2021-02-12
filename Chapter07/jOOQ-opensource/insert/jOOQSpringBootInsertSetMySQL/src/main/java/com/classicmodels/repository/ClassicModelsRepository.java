@@ -1,5 +1,7 @@
 package com.classicmodels.repository;
 
+import jooq.generated.enums.SaleRate;
+import jooq.generated.enums.SaleVat;
 import static jooq.generated.tables.Sale.SALE;
 import jooq.generated.tables.records.SaleRecord;
 import org.jooq.DSLContext;
@@ -59,13 +61,17 @@ public class ClassicModelsRepository {
     // EXAMPLE 3
     /*
     insert into `classicmodels`.`sale` (
-       `sale_id`,`fiscal_year`,`sale`,`employee_number`)
-    values
-       (?, ?, ?, ?)
+      `sale_id`, `fiscal_year`, `sale`, 
+      `employee_number`, `hot`, `rate`, 
+      `vat`, `trend`
+    ) 
+    values 
+      (?, ?, ?, ?, ?, ?, ?, ?)    
      */
     public void insertRecordSale() {
 
-        SaleRecord sr = new SaleRecord(null, 2003, 123.32, 1370L);
+        SaleRecord sr = new SaleRecord(null, 
+                2003, 123.32, 1370L, null, SaleRate.SILVER, SaleVat.MAX, null);
 
         System.out.println("EXAMPLE 4 (affected rows): "
                 + ctx.insertInto(SALE)
