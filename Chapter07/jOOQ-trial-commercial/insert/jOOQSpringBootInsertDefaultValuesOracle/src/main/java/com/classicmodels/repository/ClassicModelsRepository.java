@@ -97,13 +97,31 @@ public class ClassicModelsRepository {
       )  
      */
     public void insertSomeDefaultsValInProduct() {
-        System.out.println("EXAMPLE 3 (affected rows): "
+        System.out.println("EXAMPLE 3.1 (affected rows): "
                 + ctx.insertInto(PRODUCT)
                         .columns(PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_SCALE,
                                 PRODUCT.PRODUCT_LINE, PRODUCT.PRODUCT_VENDOR,
                                 PRODUCT.PRODUCT_DESCRIPTION, PRODUCT.QUANTITY_IN_STOCK,
                                 PRODUCT.BUY_PRICE, PRODUCT.MSRP)
                         .values(val("Ultra Jet X1"),
+                                val("1:18"),
+                                defaultValue(PRODUCT.PRODUCT_SCALE),
+                                val("Motor City Art Classics"),
+                                defaultValue(PRODUCT.PRODUCT_DESCRIPTION),
+                                defaultValue(PRODUCT.QUANTITY_IN_STOCK),
+                                val(BigDecimal.valueOf(45.99)), val(BigDecimal.valueOf(67.99))
+                        )
+                        .execute()
+        );
+        
+        System.out.println("EXAMPLE 3.2 (affected rows): "
+                + ctx.insertInto(PRODUCT)
+                        .columns(PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_SCALE,
+                                PRODUCT.PRODUCT_LINE, PRODUCT.PRODUCT_VENDOR,
+                                PRODUCT.PRODUCT_DESCRIPTION, PRODUCT.QUANTITY_IN_STOCK,
+                                PRODUCT.BUY_PRICE, PRODUCT.MSRP)
+                        .values(defaultValue(PRODUCT.PRODUCT_ID),
+                                val("Ultra Jet X1"),
                                 val("1:18"),
                                 defaultValue(PRODUCT.PRODUCT_SCALE),
                                 val("Motor City Art Classics"),
