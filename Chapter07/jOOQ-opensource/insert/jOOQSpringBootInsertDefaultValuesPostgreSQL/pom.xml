@@ -28,7 +28,7 @@
         
         <mysql.connector.java.version>8.0.20</mysql.connector.java.version>                
         <codehaus.mojo.version>1.0.0</codehaus.mojo.version>                
-        <jooq.version>3.14.3</jooq.version>  
+        <jooq.version>3.14.7</jooq.version>  
         <hibernate.validator.version>5.2.4.Final</hibernate.validator.version>
     </properties>
 

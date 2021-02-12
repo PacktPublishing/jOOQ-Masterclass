@@ -7,6 +7,7 @@ import static jooq.generated.tables.Product.PRODUCT;
 import jooq.generated.tables.records.ProductRecord;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.defaultValue;
+import static org.jooq.impl.DSL.default_;
 import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,19 +54,46 @@ public class ClassicModelsRepository {
         default, 
         default, 
         ?, 
-        ?
+        ?,
+        default
       )    
      */
     public void insertSomeDefaultsInProduct() {
 
-        System.out.println("EXAMPLE 2 (affected rows): "
+        System.out.println("EXAMPLE 2.1 (affected rows): "
                 + ctx.insertInto(PRODUCT)
                         .values(PRODUCT_SEQ.nextval(), "Ultra Jet X1", "Planes",
                                 defaultValue(PRODUCT.PRODUCT_SCALE),
                                 "Motor City Art Classics",
                                 defaultValue(PRODUCT.PRODUCT_DESCRIPTION),
                                 defaultValue(PRODUCT.QUANTITY_IN_STOCK),
-                                45.99, 67.99
+                                45.99, 67.99, defaultValue()
+                        )
+                        .execute()
+        );
+        
+        // or, using defaultValues()
+        System.out.println("EXAMPLE 2.2 (affected rows): "
+                + ctx.insertInto(PRODUCT)
+                        .values(defaultValue(), "Ultra Jet X1", "Planes",
+                                defaultValue(PRODUCT.PRODUCT_SCALE),
+                                "Motor City Art Classics",
+                                defaultValue(PRODUCT.PRODUCT_DESCRIPTION),
+                                defaultValue(PRODUCT.QUANTITY_IN_STOCK),
+                                45.99, 67.99, defaultValue()
+                        )
+                        .execute()
+        );
+        
+        // or, using default_()
+        System.out.println("EXAMPLE 2.3 (affected rows): "
+                + ctx.insertInto(PRODUCT)
+                        .values(default_(), "Ultra Jet X1", "Planes",
+                                default_(PRODUCT.PRODUCT_SCALE),
+                                "Motor City Art Classics",
+                                default_(PRODUCT.PRODUCT_DESCRIPTION),
+                                default_(PRODUCT.QUANTITY_IN_STOCK),
+                                45.99, 67.99, default_()
                         )
                         .execute()
         );
