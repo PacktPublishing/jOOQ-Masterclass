@@ -25,6 +25,7 @@ import org.jooq.DSLContext;
 import org.jooq.Query;
 import static org.jooq.impl.DSL.choose;
 import static org.jooq.impl.DSL.coalesce;
+import static org.jooq.impl.DSL.default_;
 import static org.jooq.impl.DSL.inline;
 import static org.jooq.impl.DSL.lower;
 import static org.jooq.impl.DSL.select;
@@ -46,7 +47,7 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 1   
     public void insertOrderAutoGenKey() {
-        
+
         // Consider visiting: https://github.com/jOOQ/jOOQ/issues/1818
         /*
         SET IDENTITY_INSERT [order] ON
@@ -68,7 +69,7 @@ public class ClassicModelsRepository {
           )
 
         SET IDENTITY_INSERT [order] OFF
-        */
+         */
         Query q1 = ctx.query("SET IDENTITY_INSERT [order] ON");
         Query q2 = ctx.insertInto(ORDER) // InsertSetStep<OrderRecord>
                 .values(Math.random() * 10000000, // explicit random primary key
@@ -80,13 +81,13 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 1.1 (affected rows): "
                 + Arrays.toString(ctx.batch(q1, q2, q3).execute())
         );
-        
-       /*
+
+        /*
        insert into [classicmodels].[dbo].[order] (
          [comments],[order_date],[required_date],[shipped_date],[status],[customer_number])
        values
          (?, ?, ?, ?, ?, ?)
-        */
+         */
         System.out.println("EXAMPLE 1.2 (affected rows): "
                 + // InsertValuesStep6<OrderRecord, String, LocalDate, LocalDate, LocalDate, String, Long>
                 ctx.insertInto(ORDER, ORDER.COMMENTS, ORDER.ORDER_DATE, ORDER.REQUIRED_DATE,
@@ -126,7 +127,7 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 2.1 (affected rows): "
                 + ctx.insertInto(OFFICE) // InsertSetStep<OfficeRecord>
                         .values(Math.round(Math.random() * 1000), // random primary key
-                                "Banesti", "+40 323 421", "addr1", "addr2", "PH", "RO", "211 333", "H")
+                                "Banesti", "+40 323 421", "addr1", "addr2", "PH", "RO", "211 333", "H", default_())
                         .onDuplicateKeyIgnore()
                         .execute()
         );
@@ -134,9 +135,9 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 2.2 (affected rows): "
                 + // InsertValuesStep9<OfficeRecord, String, String, String, String, String, String, String, String, String>
                 ctx.insertInto(OFFICE, OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.PHONE, OFFICE.ADDRESS_LINE_FIRST,
-                        OFFICE.ADDRESS_LINE_SECOND, OFFICE.STATE, OFFICE.COUNTRY, OFFICE.POSTAL_CODE, OFFICE.TERRITORY)
+                        OFFICE.ADDRESS_LINE_SECOND, OFFICE.STATE, OFFICE.COUNTRY, OFFICE.POSTAL_CODE, OFFICE.TERRITORY, OFFICE.LOCATION)
                         .values(String.valueOf(Math.round(Math.random() * 1000)), // random primary key
-                                "Banesti", "+40 323 421", "addr1", "addr2", "PH", "RO", "211 333", "H")
+                                "Banesti", "+40 323 421", "addr1", "addr2", "PH", "RO", "211 333", "H", default_())
                         .onDuplicateKeyIgnore()
                         .execute()
         );
@@ -145,9 +146,9 @@ public class ClassicModelsRepository {
                 + // InsertValuesStep9<OfficeRecord, String, String, String, String, String, String, String, String, String>
                 ctx.insertInto(OFFICE)
                         .columns(OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.PHONE, OFFICE.ADDRESS_LINE_FIRST,
-                                OFFICE.ADDRESS_LINE_SECOND, OFFICE.STATE, OFFICE.COUNTRY, OFFICE.POSTAL_CODE, OFFICE.TERRITORY)
+                                OFFICE.ADDRESS_LINE_SECOND, OFFICE.STATE, OFFICE.COUNTRY, OFFICE.POSTAL_CODE, OFFICE.TERRITORY, OFFICE.LOCATION)
                         .values(String.valueOf(Math.round(Math.random() * 1000)), // random primary key
-                                "Banesti", "+40 323 421", "addr1", "addr2", "PH", "RO", "211 333", "H")
+                                "Banesti", "+40 323 421", "addr1", "addr2", "PH", "RO", "211 333", "H", default_())
                         .onDuplicateKeyIgnore()
                         .execute()
         );
@@ -224,11 +225,11 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 4.1 (affected rows): "
                 + ctx.insertInto(OFFICE) // InsertSetStep<OfficeRecord>
                         .values(Math.round(Math.random() * 100),
-                                "Banesti", "+40 323 421", "addr1", "addr2", "PH", "RO", "211 333", "H")
+                                "Banesti", "+40 323 421", "addr1", "addr2", "PH", "RO", "211 333", "H", null)
                         .values(Math.round(Math.random() * 1000),
-                                "Campina", "+41 212 333", "addr1", "addr2", "DB", "RO", "211 311", "M")
+                                "Campina", "+41 212 333", "addr1", "addr2", "DB", "RO", "211 311", "M", null)
                         .values(Math.round(Math.random() * 10000),
-                                "Ploiesti", "+43 22222", "addr1", "addr2", "CO", "RO", "121 333", "UU")
+                                "Ploiesti", "+43 22222", "addr1", "addr2", "CO", "RO", "121 333", "UU", null)
                         .onDuplicateKeyIgnore()
                         .execute()
         );
@@ -304,7 +305,8 @@ public class ClassicModelsRepository {
     public void insertOneSaleRecord() {
 
         /* create a SaleRecord via constructor */
-        // SaleRecord sr = new SaleRecord(null, 2003, 3443.22, 1370L); // Record4<Long, Integer, Double, Long>
+        // SaleRecord sr = new SaleRecord(null, 2003, 3443.22, 1370L,
+        //       false, null, null, "UP"); 
         /* or, creare a SaleRecord via constructor and setters */
         SaleRecord sr = new SaleRecord();
         sr.setFiscalYear(2003);         // or, sr.set(SALE.FISCAL_YEAR, 2003);
@@ -340,8 +342,10 @@ public class ClassicModelsRepository {
     public void insertTwoSaleRecord() {
 
         // Record4<Long, Integer, Double, Long>
-        SaleRecord sr1 = new SaleRecord(null, 2003, 3443.22, 1370L);
-        SaleRecord sr2 = new SaleRecord(null, 2005, 1221.12, 1504L);
+        SaleRecord sr1 = new SaleRecord(null, 2003, 3443.22, 1370L,
+                false, null, null, "UP");
+        SaleRecord sr2 = new SaleRecord(null, 2005, 1221.12, 1504L,
+                false, null, null, "UP");
 
         System.out.println("EXAMPLE 7 (affected rows): "
                 + ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
@@ -362,9 +366,12 @@ public class ClassicModelsRepository {
 
         // consider this collection of SaleRecord
         Collection<SaleRecord> listOfRecord
-                = List.of(new SaleRecord(null, 2003, 3443.22, 1370L),
-                        new SaleRecord(null, 2005, 1221.12, 1504L),
-                        new SaleRecord(null, 2005, 1221.12, 1504L));
+                = List.of(new SaleRecord(null, 2003, 3443.22, 1370L,
+                        false, null, null, "UP"),
+                        new SaleRecord(null, 2005, 1221.12, 1504L,
+                                true, null, null, "UP"),
+                        new SaleRecord(null, 2005, 1221.12, 1504L,
+                                false, null, null, "DOWN"));
 
         /* First Approach */
         // InsertValuesStepN<SaleRecord>
@@ -431,7 +438,7 @@ public class ClassicModelsRepository {
          */
         // This is the Office POJO generated by jOOQ
         Office office = new Office(String.valueOf(Math.round(Math.random() * 10000)),
-                "Ploiesti", "+43 22222", "addr1", "addr2", "CO", "RO", "121 333", "UU");
+                "Ploiesti", "+43 22222", "addr1", "addr2", "CO", "RO", "121 333", "UU", null);
         System.out.println("EXAMPLE 9.2 (affected rows): "
                 + ctx.newRecord(OFFICE, office).insert()
         );
@@ -454,10 +461,10 @@ public class ClassicModelsRepository {
         or.setOfficeCode(String.valueOf(Math.round(Math.random() * 10000)));
         System.out.println("EXAMPLE 9.3 (affected rows): "
                 + ctx.insertInto(OFFICE, OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.PHONE, OFFICE.ADDRESS_LINE_FIRST,
-                        OFFICE.ADDRESS_LINE_SECOND, OFFICE.STATE, OFFICE.COUNTRY, OFFICE.POSTAL_CODE, OFFICE.TERRITORY)
+                        OFFICE.ADDRESS_LINE_SECOND, OFFICE.STATE, OFFICE.COUNTRY, OFFICE.POSTAL_CODE, OFFICE.TERRITORY, OFFICE.LOCATION)
                         .values(or.getOfficeCode(), or.getCity(), or.getPhone(), or.getAddressLineFirst(),
                                 or.getAddressLineSecond(), or.getState(), or.getCountry(), or.getPostalCode(),
-                                or.getTerritory())
+                                or.getTerritory(), default_())
                         .onDuplicateKeyIgnore()
                         .execute()
         );
@@ -527,7 +534,7 @@ public class ClassicModelsRepository {
         from
           @result [r];
          */
-        Sale sale = new Sale(1L, 2005, 343.22, 1504L);
+        Sale sale = new Sale(1L, 2005, 343.22, 1504L, false, null, null, "UP");
         var record = ctx.newRecord(SALE, sale);
         record.reset(SALE.SALE_ID); // reset the current ID and allow DB to generate one
         System.out.println("EXAMPLE 10.1 (affected rows): "
@@ -570,7 +577,7 @@ public class ClassicModelsRepository {
                 + ctx.insertInto(OFFICE)
                         .values(String.valueOf(Math.round(Math.random() * 10000)),
                                 upper("Ploiesti"), "+43 22222", "addr1", lower("ADDR2"),
-                                "CO", "RO", "121 333", "UU")
+                                "CO", "RO", "121 333", "UU", default_())
                         .onDuplicateKeyIgnore()
                         .execute()
         );
