@@ -13,6 +13,7 @@ import static jooq.generated.tables.Product.PRODUCT;
 import jooq.generated.tables.Sale;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
+import org.jooq.Field;
 import static org.jooq.impl.DSL.all;
 import static org.jooq.impl.DSL.any;
 import static org.jooq.impl.DSL.avg;
@@ -62,19 +63,20 @@ public class ClassicModelsRepository {
      */
     public void findEmployeesBySumSales() {
 
-        // Field<?>
-        var sumSales = select(sum(SALE.SALE_))
-                .from(SALE)
-                .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(SALE.EMPLOYEE_NUMBER))
-                .asField("sumSales");
-
-        // or, using DSL.Field(Select)
-        /*
-        var sumSales = field(select(sum(SALE.SALE_))
+        // using type-safe DSL.Field(Select)                
+        Field<BigDecimal> sumSales = field(select(sum(SALE.SALE_))
                 .from(SALE)
                 .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(SALE.EMPLOYEE_NUMBER)))
                 .as("sumSales");
-         */
+        
+        // or, using the non type-safe asField()
+        /*
+        Field<?> sumSales = select(sum(SALE.SALE_))
+                .from(SALE)
+                .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(SALE.EMPLOYEE_NUMBER))
+                .asField("sumSales");      
+        */
+                 
         System.out.println("EXAMPLE 1\n"
                 + ctx.select(EMPLOYEE.EMPLOYEE_NUMBER,
                         EMPLOYEE.FIRST_NAME, EMPLOYEE.JOB_TITLE, sumSales)
@@ -104,18 +106,19 @@ public class ClassicModelsRepository {
     */
     public void findCustomerFullNameCityCountry() {
 
-        // Field<?>
-        var fullName = select(concat(CUSTOMER.CONTACT_FIRST_NAME, val(" "), CUSTOMER.CONTACT_LAST_NAME))
+        // using type-safe DSL.Field(Select)                        
+        Field<String> fullName = field(select(concat(CUSTOMER.CONTACT_FIRST_NAME, val(" "), CUSTOMER.CONTACT_LAST_NAME))
+                .from(CUSTOMER)
+                .where(CUSTOMER.CUSTOMER_NUMBER.eq(CUSTOMERDETAIL.CUSTOMER_NUMBER))).as("fullName");         
+        
+        // or, using the non type-safe asField()
+        /*
+        Field<?> fullName = select(concat(CUSTOMER.CONTACT_FIRST_NAME, val(" "), CUSTOMER.CONTACT_LAST_NAME))
                 .from(CUSTOMER)
                 .where(CUSTOMER.CUSTOMER_NUMBER.eq(CUSTOMERDETAIL.CUSTOMER_NUMBER))
                 .asField("fullName");
-
-        // or, using DSL.Field(Select)
-        /*
-        var fullName = field(select(concat(CUSTOMER.CONTACT_FIRST_NAME, val(" "), CUSTOMER.CONTACT_LAST_NAME))
-                .from(CUSTOMER)
-                .where(CUSTOMER.CUSTOMER_NUMBER.eq(CUSTOMERDETAIL.CUSTOMER_NUMBER))).as("fullName");
-         */
+        */
+        
         System.out.println("EXAMPLE 2\n"
                 + ctx.select(
                         CUSTOMERDETAIL.CITY, CUSTOMERDETAIL.COUNTRY, fullName)
@@ -128,14 +131,14 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 2\n" +
                 ctx.select(
                         CUSTOMERDETAIL.CITY, CUSTOMERDETAIL.COUNTRY,
-                        select(concat(CUSTOMER.CONTACT_FIRST_NAME, val(" "), CUSTOMER.CONTACT_LAST_NAME))
+                        field(select(concat(CUSTOMER.CONTACT_FIRST_NAME, val(" "), CUSTOMER.CONTACT_LAST_NAME))
                                 .from(CUSTOMER)
-                                .where(CUSTOMER.CUSTOMER_NUMBER.eq(CUSTOMERDETAIL.CUSTOMER_NUMBER))
-                                .asField("fullName"))
+                                .where(CUSTOMER.CUSTOMER_NUMBER.eq(CUSTOMERDETAIL.CUSTOMER_NUMBER)))
+                                .as("fullName"))
                         .from(CUSTOMERDETAIL)
                         .fetch()
         );
-         */
+        */
     }
 
     // EXAMPLE 3
@@ -158,9 +161,9 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 3\n"
                 + ctx.select(OFFICE.CITY, OFFICE.ADDRESS_LINE_FIRST,
-                        (selectCount().from(EMPLOYEE)
+                        (field(selectCount().from(EMPLOYEE)
                                 .where(EMPLOYEE.OFFICE_CODE
-                                        .eq(OFFICE.OFFICE_CODE))).asField("employeesNr"))
+                                        .eq(OFFICE.OFFICE_CODE)))).as("employeesNr"))
                         .from(OFFICE)
                         .fetch()
         );
@@ -256,7 +259,7 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 5.1\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
                         .from(EMPLOYEE)
-                        .where(field(select(avg(SALE.SALE_)).from(SALE)).lt(
+                        .where(select(avg(SALE.SALE_)).from(SALE).lt(
                                 (select(sum(SALE.SALE_)).from(SALE)
                                         .where(EMPLOYEE.EMPLOYEE_NUMBER
                                                 .eq(SALE.EMPLOYEE_NUMBER)))))
@@ -288,7 +291,7 @@ public class ClassicModelsRepository {
                 + ctx.selectDistinct(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
                         .from(EMPLOYEE)
                         .join(OFFICE)
-                        .on(field(select(avg(SALE.SALE_)).from(SALE))
+                        .on(select(avg(SALE.SALE_)).from(SALE)
                                 .lt(select(sum(SALE.SALE_)).from(SALE)
                                         .where(EMPLOYEE.EMPLOYEE_NUMBER
                                                 .eq(SALE.EMPLOYEE_NUMBER))))
@@ -320,12 +323,12 @@ public class ClassicModelsRepository {
      */
     public void findOfficeAndEmployeeMaxAndAvgSalary() {
 
-        System.out.println("EXAMPLE 6\n"
+         System.out.println("EXAMPLE 6\n"
                 + ctx.select(OFFICE.CITY, OFFICE.ADDRESS_LINE_FIRST,
-                        (select(max(EMPLOYEE.SALARY)).from(EMPLOYEE)
+                        (field(select(max(EMPLOYEE.SALARY)).from(EMPLOYEE)
                                 .where(EMPLOYEE.OFFICE_CODE
-                                        .eq(OFFICE.OFFICE_CODE))).asField("maxSalary"),
-                        (select(avg(EMPLOYEE.SALARY)).from(EMPLOYEE)).asField("avgSalary"))
+                                        .eq(OFFICE.OFFICE_CODE)))).as("maxSalary"),
+                        (field(select(avg(EMPLOYEE.SALARY)).from(EMPLOYEE))).as("avgSalary"))
                         .from(OFFICE)
                         .fetch()
         );
@@ -720,10 +723,10 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 17 (affected rows): "
                 + ctx.insertInto(BANK_TRANSACTION, BANK_TRANSACTION.BANK_NAME, BANK_TRANSACTION.BANK_IBAN,
                         BANK_TRANSACTION.TRANSFER_AMOUNT, BANK_TRANSACTION.CACHING_DATE,
-                        BANK_TRANSACTION.CUSTOMER_NUMBER, BANK_TRANSACTION.CHECK_NUMBER)
+                        BANK_TRANSACTION.CUSTOMER_NUMBER, BANK_TRANSACTION.CHECK_NUMBER, BANK_TRANSACTION.STATUS)
                         .select(selectDistinct(val("N/A"), val("N/A"), PAYMENT.INVOICE_AMOUNT, 
                                 nvl(PAYMENT.CACHING_DATE, PAYMENT.PAYMENT_DATE), 
-                                PAYMENT.CUSTOMER_NUMBER, PAYMENT.CHECK_NUMBER)
+                                PAYMENT.CUSTOMER_NUMBER, PAYMENT.CHECK_NUMBER, val("SUCCESS"))
                                 .from(PAYMENT)
                                 .leftOuterJoin(BANK_TRANSACTION)
                                 .on(row(PAYMENT.CUSTOMER_NUMBER, PAYMENT.CHECK_NUMBER)
