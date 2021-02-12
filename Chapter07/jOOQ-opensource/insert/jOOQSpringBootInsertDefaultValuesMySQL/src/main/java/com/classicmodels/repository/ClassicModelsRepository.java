@@ -5,7 +5,9 @@ import java.math.BigDecimal;
 import static jooq.generated.tables.Product.PRODUCT;
 import jooq.generated.tables.records.ProductRecord;
 import org.jooq.DSLContext;
+import org.jooq.impl.DSL;
 import static org.jooq.impl.DSL.defaultValue;
+import static org.jooq.impl.DSL.default_;
 import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +27,7 @@ public class ClassicModelsRepository {
     insert into `classicmodels`.`product`
     values
       (
-         default,default,default,default,default,default,default,default,default
+         default,default,default,default,default,default,default,default,default,default
       )
      */
     public void insertAllDefaultsInProduct() {
@@ -41,21 +43,34 @@ public class ClassicModelsRepository {
     /*
     insert into `classicmodels`.`product` (
       `product_id`,`product_name`,`product_line`,`product_scale`,`product_vendor`,
-      `product_description`,`quantity_in_stock`,`buy_price`,`msrp`
+      `product_description`,`quantity_in_stock`,`buy_price`,`msrp`,`specs`
     )
     values
-      (?, ?, ?, default, ?, default, default, ?, ?)
+      (?, ?, ?, default, ?, default, default, ?, ?, default)
      */
     public void insertSomeDefaultsInProduct() {
 
-        System.out.println("EXAMPLE 2 (affected rows): "
+        System.out.println("EXAMPLE 2.1 (affected rows): "
                 + ctx.insertInto(PRODUCT)
-                        .values(null, "Ultra Jet X1", "Planes",
+                        .values(defaultValue(), "Ultra Jet X1", "Planes",
                                 defaultValue(PRODUCT.PRODUCT_SCALE),
                                 "Motor City Art Classics",
                                 defaultValue(PRODUCT.PRODUCT_DESCRIPTION),
                                 defaultValue(PRODUCT.QUANTITY_IN_STOCK),
-                                45.99, 67.99
+                                45.99, 67.99, defaultValue()
+                        )
+                        .execute()
+        );
+        
+        // or, use default_()
+        System.out.println("EXAMPLE 2.2 (affected rows): "
+                + ctx.insertInto(PRODUCT)
+                        .values(default_(), "Ultra Jet X1", "Planes",
+                                default_(PRODUCT.PRODUCT_SCALE),
+                                "Motor City Art Classics",
+                                default_(PRODUCT.PRODUCT_DESCRIPTION),
+                                default_(PRODUCT.QUANTITY_IN_STOCK),
+                                45.99, 67.99, default_()
                         )
                         .execute()
         );
@@ -144,26 +159,26 @@ public class ClassicModelsRepository {
     public void insertDefaultsViaNewRecordInProduct() {
 
         /* approach 1 */
-        /*
+ /*
         insert into `classicmodels`.`product`
         values
           (
              default,default,default,default,default,default,default,default,default
           )
-        */
+         */
         System.out.println("EXAMPLE 6.1 (affected rows): "
                 + ctx.newRecord(PRODUCT).insert()
         );
 
         /* approach 2 */
-        /*
+ /*
         insert into `classicmodels`.`product` (
           `product_name`,`product_line`,`product_scale`,`product_vendor`,`product_description`,
           `quantity_in_stock`,`buy_price`,`msrp`
         )
         values
           (?, ?, ?, ?, ?, ?, ?, ?)
-        */
+         */
         ProductRecord pr1 = new ProductRecord();
         System.out.println("EXAMPLE 6.2 (affected rows): "
                 + ctx.newRecord(PRODUCT, pr1).insert()
