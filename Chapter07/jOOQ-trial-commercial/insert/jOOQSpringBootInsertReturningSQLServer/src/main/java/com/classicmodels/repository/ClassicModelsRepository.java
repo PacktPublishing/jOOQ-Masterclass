@@ -260,13 +260,13 @@ public class ClassicModelsRepository {
      */
     public void insertAndReturnAllColsProductline() {
 
-        // Result<Record>
+        // Result<ProductlineRecord>
         var inserted = ctx.insertInto(PRODUCTLINE, PRODUCTLINE.PRODUCT_LINE, 
                 PRODUCTLINE.TEXT_DESCRIPTION, PRODUCTLINE.CODE)
                 .values("Master Vans", "This new line of master vans ...", 983423L)
                 .values("Cool Cars", "This new line of cool cars ...", 193384L)
                 .onDuplicateKeyIgnore()
-                .returningResult()
+                .returning()
                 .fetch();
 
         System.out.println("EXAMPLE 6 (inserted ids and employee numbers): \n" + inserted);

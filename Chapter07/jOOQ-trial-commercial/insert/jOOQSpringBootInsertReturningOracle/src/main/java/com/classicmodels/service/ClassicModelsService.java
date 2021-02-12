@@ -20,6 +20,7 @@ public class ClassicModelsService {
         classicModelsRepository.insertEmployeeInManagerReturningId();            // EXAMPLE 4
         classicModelsRepository.insertNewManagerReturningId();                   // EXAMPLE 5
         classicModelsRepository.insertAndReturnMultipleColsProductline();        // EXAMPLE 6
-        classicModelsRepository.insertReturningAndSerialInDepartment();          // EXAMPLE 7
+        classicModelsRepository.insertAndReturnAllColsProductline();             // EXAMPLE 7
+        classicModelsRepository.insertReturningAndSerialInDepartment();          // EXAMPLE 8
     }
 }

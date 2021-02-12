@@ -199,7 +199,7 @@ public class ClassicModelsRepository {
      */
     public void insertAndReturnAllColsProductline() {
 
-        // Result<Record2<String, LocalDate>>
+        // Result<ProductlineRecord>
         var inserted = ctx.insertInto(PRODUCTLINE, 
                 PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.TEXT_DESCRIPTION, PRODUCTLINE.CODE)
                 .values("Master Vans", "This new line of master vans ...", 983423L)

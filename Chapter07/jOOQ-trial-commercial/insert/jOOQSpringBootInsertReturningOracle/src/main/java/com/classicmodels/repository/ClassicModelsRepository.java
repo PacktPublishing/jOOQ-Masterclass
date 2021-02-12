@@ -256,7 +256,21 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 6 (inserted ids and employee numbers): \n" + inserted);
     }
 
-    // EXAMPLE 7
+    public void insertAndReturnAllColsProductline() {
+
+        // Result<ProductlineRecord>
+        var inserted = ctx.insertInto(PRODUCTLINE, 
+                PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.TEXT_DESCRIPTION, PRODUCTLINE.CODE)
+                .values("Master Vans", "This new line of master vans ...", 983423L)
+                .values("Cool Cars", "This new line of cool cars ...", 193384L)
+                .onDuplicateKeyIgnore()
+                .returning()
+                .fetch();
+
+        System.out.println("EXAMPLE 7 (inserted ids and employee numbers): \n" + inserted);
+    }
+    
+    // EXAMPLE 8
     /*
     insert into SYSTEM."DEPARTMENT" (
       "NAME", "PHONE", "CODE", "OFFICE_CODE"
@@ -273,6 +287,6 @@ public class ClassicModelsRepository {
                 .returningResult(DEPARTMENT.DEPARTMENT_ID)
                 .fetchOne();
         
-        System.out.println("EXAMPLE 7 (inserted id): \n" + inserted);
+        System.out.println("EXAMPLE 8 (inserted id): \n" + inserted);
     }
 }
