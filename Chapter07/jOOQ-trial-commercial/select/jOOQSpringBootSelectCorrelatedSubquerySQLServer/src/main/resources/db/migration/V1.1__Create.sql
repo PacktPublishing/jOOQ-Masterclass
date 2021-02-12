@@ -88,6 +88,7 @@ CREATE TABLE office (
   [country] varchar(50),
   [postal_code] varchar(15) NOT NULL,
   [territory] varchar(10) NOT NULL,
+  [location] [geometry] DEFAULT NULL,
   PRIMARY KEY ([office_code])
 ) ;
 
@@ -104,6 +105,7 @@ CREATE TABLE employee (
   [reports_to] bigint DEFAULT NULL,
   [job_title] varchar(50) NOT NULL,
   [employee_of_year] varchar(50) DEFAULT NULL,
+  [monthly_bonus] varchar(500) DEFAULT NULL,
   PRIMARY KEY ([employee_number])
 ,
   CONSTRAINT [employees_ibfk_1] FOREIGN KEY ([reports_to]) REFERENCES employee ([employee_number]),
@@ -121,7 +123,8 @@ CREATE TABLE department (
   [phone] varchar(50) NOT NULL,
   [code] smallint DEFAULT 1,
   [office_code] varchar(10) NOT NULL,
-  [topic] varchar(100) NOT NULL,
+  [topic] varchar(100) DEFAULT NULL,  
+  [dep_net_ipv4] varchar(16) DEFAULT NULL,
   PRIMARY KEY ([department_id])
 ,
   CONSTRAINT [department_ibfk_1] FOREIGN KEY ([office_code]) REFERENCES office ([office_code])
@@ -135,10 +138,15 @@ CREATE TABLE sale (
   [fiscal_year] int NOT NULL,  
   [sale] float NOT NULL,  
   [employee_number] bigint DEFAULT NULL,  
-  [hot] bit DEFAULT 0,
+  [hot] bit DEFAULT 0,  
+  [rate] varchar(10) DEFAULT NULL,
+  [vat] varchar(10) DEFAULT NULL,
+  [trend] varchar(10) DEFAULT NULL,
   PRIMARY KEY ([sale_id])
 ,    
-  CONSTRAINT [sales_ibfk_1] FOREIGN KEY ([employee_number]) REFERENCES employee ([employee_number])
+  CONSTRAINT [sales_ibfk_1] FOREIGN KEY ([employee_number]) REFERENCES employee ([employee_number]),
+  CONSTRAINT [enum_rate_check] CHECK ([rate] IN('SILVER', 'GOLD', 'PLATINUM')),
+  CONSTRAINT [enum_vat_check] CHECK ([vat] IN('NONE', 'MIN', 'MAX'))
 ) ;
 
 CREATE INDEX [employee_number] ON sale ([employee_number]);
@@ -153,6 +161,7 @@ CREATE TABLE customer (
   [phone] varchar(50) NOT NULL,
   [sales_rep_employee_number] bigint DEFAULT NULL,
   [credit_limit] decimal(10,2) DEFAULT NULL,
+  [first_buy_date] int DEFAULT NULL,
   PRIMARY KEY ([customer_number])
  ,
   CONSTRAINT [customers_ibfk_1] FOREIGN KEY ([sales_rep_employee_number]) REFERENCES employee ([employee_number])
@@ -179,7 +188,10 @@ PRIMARY KEY ([customer_number])
 CREATE TABLE manager (
   [manager_id] bigint NOT NULL IDENTITY,
   [manager_name] varchar(50) NOT NULL,
-  PRIMARY KEY ([manager_id])
+  [manager_detail] nvarchar(4000),
+  [manager_evaluation] varchar(200) DEFAULT NULL, 
+  PRIMARY KEY ([manager_id]),
+  CONSTRAINT ENSURE_JSON CHECK(ISJSON([manager_detail]) = 1)
 ) ;
 
 /*Table structure for table `office_has_manager` */
@@ -198,7 +210,7 @@ CREATE TABLE productline (
   [product_line] varchar(50) NOT NULL,
   [code] bigint NOT NULL,
   [text_description] varchar(4000) DEFAULT NULL,
-  [html_description] varchar(max),
+  [html_description] xml,
   [image] varbinary(max),
   [created_on] date DEFAULT GETDATE(),
   PRIMARY KEY ([product_line],[code]),
@@ -229,6 +241,7 @@ CREATE TABLE product (
   [product_description] varchar(max) DEFAULT NULL,
   [quantity_in_stock] smallint DEFAULT 0,
   [buy_price] decimal(10,2) DEFAULT 0.0,
+  [specs] varchar(max) DEFAULT NULL,
   [msrp] decimal(10,2) DEFAULT 0.0,
   PRIMARY KEY ([product_id])
  ,
@@ -302,6 +315,7 @@ CREATE TABLE bank_transaction (
   [caching_date] datetime DEFAULT GETDATE(),
   [customer_number] bigint NOT NULL,
   [check_number] varchar(50) NOT NULL, 
+  [status] varchar(50) NOT NULL,
   PRIMARY KEY ([transaction_id]),  
   CONSTRAINT [bank_transaction_ibfk_1] FOREIGN KEY ([customer_number],[check_number]) REFERENCES payment ([customer_number],[check_number])
 ) ;
