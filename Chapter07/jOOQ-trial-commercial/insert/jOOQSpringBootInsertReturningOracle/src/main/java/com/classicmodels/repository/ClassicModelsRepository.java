@@ -2,7 +2,6 @@ package com.classicmodels.repository;
 
 import java.math.BigInteger;
 import static jooq.generated.Sequences.CUSTOMER_SEQ;
-import static jooq.generated.Sequences.MANAGER_SEQ;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
 import static jooq.generated.tables.Department.DEPARTMENT;
@@ -13,6 +12,8 @@ import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.concat;
+import static org.jooq.impl.DSL.defaultValue;
+import static org.jooq.impl.DSL.default_;
 import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -125,7 +126,7 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 3.1 (affected rows): "
                 + ctx.insertInto(CUSTOMERDETAIL)
                         .values(CUSTOMER_SEQ.currval(),
-                                "No. 14 Avenue", null, "Los Angeles", null, null, "USA")
+                                "No. 14 Avenue", default_(), "Los Angeles", default_(), default_(), "USA")
                         .execute());
         
         /*
@@ -151,7 +152,7 @@ public class ClassicModelsRepository {
                                 CUSTOMER.CONTACT_LAST_NAME, CUSTOMER.PHONE)
                                 .values("Ltd. AirRoads", "Kyle", "Doyle", "+ 44 321 321")
                                 .returningResult(CUSTOMER.CUSTOMER_NUMBER).fetchOne().value1(),
-                                "No. 14 Avenue", null, "Los Angeles", null, null, "USA")
+                                "No. 14 Avenue", default_(), "Los Angeles", default_(), default_(), "USA")
                         .execute()
         );       
     }
@@ -194,7 +195,7 @@ public class ClassicModelsRepository {
     public void insertNewManagerReturningId() {
 
         var inserted = ctx.insertInto(MANAGER, MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME)
-                .values(null, val("Karl Frum"))
+                .values(default_(MANAGER.MANAGER_ID), val("Karl Frum"))
                 .returningResult(MANAGER.MANAGER_ID)
                 .fetch();
 
@@ -245,9 +246,10 @@ public class ClassicModelsRepository {
         ctx.deleteFrom(PRODUCTLINE).where(PRODUCTLINE.PRODUCT_LINE.eq("Turbo N Cars")).execute();
         
         // Result<Record2<String, LocalDate>>
-        var inserted = ctx.insertInto(PRODUCTLINE, PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.TEXT_DESCRIPTION)
-                .values("Electric Vans", "This new line of electric vans ...")
-                .values("Turbo N Cars", "This new line of turbo N cars ...")                
+        var inserted = ctx.insertInto(PRODUCTLINE, PRODUCTLINE.PRODUCT_LINE, 
+                PRODUCTLINE.TEXT_DESCRIPTION, PRODUCTLINE.CODE)
+                .values("Electric Vans", "This new line of electric vans ...", 983423L)
+                .values("Turbo N Cars", "This new line of turbo N cars ...", 193384L)                
                 .returningResult(PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.CREATED_ON)
                 .fetch();
 
@@ -255,89 +257,6 @@ public class ClassicModelsRepository {
     }
 
     // EXAMPLE 7
-    /*
-    declare i0 dbms_sql.varchar2_table;
-    i1 dbms_sql.varchar2_table;
-    o0 dbms_sql.varchar2_table;
-    o1 dbms_sql.varchar2_table;
-    o2 dbms_sql.clob_table;
-    o3 dbms_sql.blob_table;
-    o4 dbms_sql.date_table;
-    c0 sys_refcursor;
-    c1 sys_refcursor;
-    c2 sys_refcursor;
-    c3 sys_refcursor;
-    c4 sys_refcursor;
-    begin i0(1) := ?;
-    i0(2) := ?;
-    i1(1) := ?;
-    i1(2) := ?;
-    forall i in 1..i0.count insert into SYSTEM."PRODUCTLINE" (
-      "PRODUCT_LINE", "TEXT_DESCRIPTION"
-    ) 
-    values 
-      (
-        i0(i), 
-        i1(i)
-      ) returning "SYSTEM"."PRODUCTLINE"."PRODUCT_LINE", 
-      "SYSTEM"."PRODUCTLINE"."TEXT_DESCRIPTION", 
-      "SYSTEM"."PRODUCTLINE"."HTML_DESCRIPTION", 
-      "SYSTEM"."PRODUCTLINE"."IMAGE", 
-      "SYSTEM"."PRODUCTLINE"."CREATED_ON" bulk collect into o0, 
-      o1, 
-      o2, 
-      o3, 
-      o4;
-    ? := sql % rowcount;
-    open c0 for 
-    select 
-      * 
-    from 
-      table(o0);
-    open c1 for 
-    select 
-      * 
-    from 
-      table(o1);
-    open c2 for 
-    select 
-      * 
-    from 
-      table(o2);
-    open c3 for 
-    select 
-      * 
-    from 
-      table(o3);
-    open c4 for 
-    select 
-      * 
-    from 
-      table(o4);
-    ? := c0;
-    ? := c1;
-    ? := c2;
-    ? := c3;
-    ? := c4;
-    end;    
-     */
-    public void insertAndReturnAllColsProductline() {
-
-        // delete if exists
-        ctx.deleteFrom(PRODUCTLINE).where(PRODUCTLINE.PRODUCT_LINE.eq("Electric Vans")).execute();
-        ctx.deleteFrom(PRODUCTLINE).where(PRODUCTLINE.PRODUCT_LINE.eq("Turbo N Cars")).execute();
-        
-        // Result<Record2<String, LocalDate>>
-        var inserted = ctx.insertInto(PRODUCTLINE, PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.TEXT_DESCRIPTION)
-                .values("Master Vans", "This new line of master vans ...")
-                .values("Cool Cars", "This new line of cool cars ...")                
-                .returning()
-                .fetch();
-
-        System.out.println("EXAMPLE 7 (inserted ids and employee numbers): \n" + inserted);
-    }
-    
-    // EXAMPLE 8
     /*
     insert into SYSTEM."DEPARTMENT" (
       "NAME", "PHONE", "CODE", "OFFICE_CODE"
@@ -354,6 +273,6 @@ public class ClassicModelsRepository {
                 .returningResult(DEPARTMENT.DEPARTMENT_ID)
                 .fetchOne();
         
-        System.out.println("EXAMPLE 8 (inserted id): \n" + inserted);
+        System.out.println("EXAMPLE 7 (inserted id): \n" + inserted);
     }
 }
