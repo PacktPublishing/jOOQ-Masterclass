@@ -25,7 +25,8 @@
         <java.version>14</java.version>                
         <maven.compiler.source>14</maven.compiler.source>
         <maven.compiler.target>14</maven.compiler.target>
-        
+
+        <jooq.version>3.14.7</jooq.version>        
         <mysql.connector.java.version>8.0.20</mysql.connector.java.version>                
         <codehaus.mojo.version>1.0.0</codehaus.mojo.version>      
         <maven.compiler.plugin.version>3.3</maven.compiler.plugin.version>          
@@ -42,7 +43,8 @@
         </dependency>        
         <dependency>
             <groupId>org.jooq</groupId>
-            <artifactId>jooq</artifactId>         
+            <artifactId>jooq</artifactId>  
+            <version>${jooq.version}</version>       
         </dependency>              
         <dependency>
             <groupId>org.flywaydb</groupId>
