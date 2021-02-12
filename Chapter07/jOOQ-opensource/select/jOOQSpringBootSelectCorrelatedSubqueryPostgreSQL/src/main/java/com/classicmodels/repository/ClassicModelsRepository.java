@@ -691,7 +691,7 @@ public class ClassicModelsRepository {
     insert into "public"."bank_transaction" (
       "bank_name", "bank_iban", "transfer_amount", 
       "caching_date", "customer_number", 
-      "check_number"
+      "check_number", "status"
     ) 
     select 
       distinct ?, 
