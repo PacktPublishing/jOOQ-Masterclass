@@ -69,7 +69,8 @@ public class ClassicModelsRepository {
      */
     public void insertRecordSale() {
 
-        SaleRecord sr = new SaleRecord(null, 2003, 123.32, 1370L);
+        SaleRecord sr = new SaleRecord(null, 2003, 123.32, 1370L,
+                null, null, null, null);
 
         sr.reset(SALE.SALE_ID);
         System.out.println("EXAMPLE 3 (affected rows): "
