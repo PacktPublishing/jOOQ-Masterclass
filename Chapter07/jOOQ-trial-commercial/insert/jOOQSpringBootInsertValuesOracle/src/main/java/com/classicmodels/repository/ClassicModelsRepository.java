@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import static jooq.generated.Routines.getTotalSales;
 import static jooq.generated.tables.Department.DEPARTMENT;
-import static jooq.generated.tables.Office.OFFICE;
+import static jooq.generated.tables.Manager.MANAGER;
 import jooq.generated.tables.Order;
 import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Payment.PAYMENT;
@@ -18,12 +18,13 @@ import static jooq.generated.tables.Sale.SALE;
 import jooq.generated.tables.pojos.Department;
 import jooq.generated.tables.pojos.Sale;
 import jooq.generated.tables.records.SaleRecord;
-import static jooq.generated.udt.Locationtype.LOCATIONTYPE;
-import jooq.generated.udt.records.LocationtypeRecord;
+import static jooq.generated.udt.EvaluationCriteria.EVALUATION_CRITERIA;
+import jooq.generated.udt.records.EvaluationCriteriaRecord;
 import org.jooq.DSLContext;
 import org.jooq.InsertQuery;
 import static org.jooq.impl.DSL.choose;
 import static org.jooq.impl.DSL.coalesce;
+import static org.jooq.impl.DSL.default_;
 import static org.jooq.impl.DSL.inline;
 import static org.jooq.impl.DSL.rand;
 import static org.jooq.impl.DSL.round;
@@ -65,7 +66,7 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 1.1 (affected rows): "
                 + ctx.insertInto(ORDER) // InsertSetStep<OrderRecord>
-                        .values(null, // primary key is auto-generated
+                        .values(default_(), // primary key is auto-generated
                                 LocalDate.of(2003, 2, 12), LocalDate.of(2003, 3, 1),
                                 LocalDate.of(2003, 2, 27), "Shipped",
                                 "New order inserted ...", 363L)
@@ -458,13 +459,14 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 6.2 (affected rows): "
                 + ctx.insertInto(SALE)
                         .values(new SaleRecord()
-                                .values(null, BigInteger.valueOf(2004), 143.31, 1370L)
+                                .values(null, BigInteger.valueOf(2004), 143.31, 1370L, (byte) 0, null, null, "UP")
                                 .valuesRow().fields())
                         .execute()
         );
 
         /* create a SaleRecord via constructor */
-        // SaleRecord sr = new SaleRecord(null, 2003, 3443.22, 1370L); // Record4<Long, Integer, Double, Long>
+        // SaleRecord sr = new SaleRecord(null, BigInteger.valueOf(2003), 3443.22, 1370L,
+        //        (byte) 0, null, null, "UP");
         /* or, creare a SaleRecord via constructor and setters */
         SaleRecord sr = new SaleRecord();
         sr.setFiscalYear(BigInteger.valueOf(2003));         // or, sr.set(SALE.FISCAL_YEAR, BigInteger.valueOf(2003));
@@ -479,13 +481,15 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 6.4 (affected rows): "
                 + ctx.insertInto(SALE)
-                        .values(sr.getSaleId(), sr.getFiscalYear(), sr.getSale(), sr.getEmployeeNumber())
+                        .values(sr.getSaleId(), sr.getFiscalYear(), sr.getSale(), sr.getEmployeeNumber(),
+                                (byte) 0, null, null, "UP")
                         .execute()
         );
 
         System.out.println("EXAMPLE 6.5 (affected rows): "
                 + ctx.insertInto(SALE)
-                        .values(sr.value1(), sr.value2(), sr.value3(), sr.value4())
+                        .values(sr.value1(), sr.value2(), sr.value3(), sr.value4(),
+                                (byte) 0, null, null, "UP")
                         .execute()
         );
 
@@ -533,8 +537,10 @@ public class ClassicModelsRepository {
     public void insertTwoSaleRecord() {
 
         // Record4<Long, Integer, Double, Long>
-        SaleRecord sr1 = new SaleRecord(null, BigInteger.valueOf(2003), 3443.22, 1370L);
-        SaleRecord sr2 = new SaleRecord(null, BigInteger.valueOf(2005), 1221.12, 1504L);
+        SaleRecord sr1 = new SaleRecord(null, BigInteger.valueOf(2003), 3443.22, 1370L,
+                (byte) 0, null, null, "UP");
+        SaleRecord sr2 = new SaleRecord(null, BigInteger.valueOf(2005), 1221.12, 1504L,
+                (byte) 0, null, null, "DOWN");
 
         System.out.println("EXAMPLE 7 (affected rows): "
                 + ctx.insertInto(SALE)
@@ -578,9 +584,12 @@ public class ClassicModelsRepository {
 
         // consider this collection of SaleRecord
         Collection<SaleRecord> listOfRecord
-                = List.of(new SaleRecord(null, BigInteger.valueOf(2003), 3443.22, 1370L),
-                        new SaleRecord(null, BigInteger.valueOf(2005), 1221.12, 1504L),
-                        new SaleRecord(null, BigInteger.valueOf(2005), 1221.12, 1504L));
+                = List.of(new SaleRecord(null, BigInteger.valueOf(2003), 3443.22, 1370L,
+                        (byte) 1, null, null, "UP"),
+                        new SaleRecord(null, BigInteger.valueOf(2005), 1221.12, 1504L,
+                                (byte) 0, null, null, "DOWN"),
+                        new SaleRecord(null, BigInteger.valueOf(2005), 1221.12, 1504L,
+                                (byte) 0, null, null, "UP"));
 
         /* First Approach */
         // InsertValuesStepN<SaleRecord>
@@ -636,7 +645,8 @@ public class ClassicModelsRepository {
         );
 
         // This is the Sale POJO generated by jOOQ
-        Sale sale = new Sale(null, BigInteger.valueOf(2005), 343.22, 1504L);
+        Sale sale = new Sale(null, BigInteger.valueOf(2005), 343.22, 1504L,
+                (byte) 0, null, null, "UP");
         System.out.println("EXAMPLE 9.2 (affected rows): "
                 + ctx.newRecord(SALE, sale).insert()
         );
@@ -654,7 +664,8 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 9.4 (affected rows): "
                 + ctx.newRecord(SALE, SALE.fields())
                         .values(null, BigInteger.valueOf(2004),
-                                salePart.getSale(), salePart.getEmployeeNumber())
+                                salePart.getSale(), salePart.getEmployeeNumber(),
+                                (byte) 0, null, null, "UP")
                         .insert()
         );
 
@@ -666,7 +677,7 @@ public class ClassicModelsRepository {
                         .values(srp.valuesRow().fields())
                         .execute()
         );
-        
+
         System.out.println("EXAMPLE 9.6 (affected rows): "
                 + ctx.executeInsert(srp)
         );
@@ -682,7 +693,8 @@ public class ClassicModelsRepository {
      */
     public void insertRecordAfterResettingPK() {
 
-        Sale sale = new Sale(BigInteger.ONE, BigInteger.valueOf(2005), 343.22, 1504L);
+        Sale sale = new Sale(BigInteger.ONE, BigInteger.valueOf(2005), 343.22, 1504L,
+                (byte) 0, null, null, "UP");
         var record = ctx.newRecord(SALE, sale);
         record.reset(SALE.SALE_ID); // reset the current ID and allow DB to generate one
         System.out.println("EXAMPLE 10.1 (affected rows): "
@@ -732,7 +744,8 @@ public class ClassicModelsRepository {
          */
         System.out.println("EXAMPLE 11.1 (affected rows): "
                 + ctx.insertInto(SALE)
-                        .values(rand().mul(1000), 2004, round(21112.23), 1504L)
+                        .values(rand().mul(1000), 2004, round(21112.23), 1504L,
+                                (byte) 0, default_(), default_(), "UP")
                         .onDuplicateKeyIgnore()
                         .execute()
         );
@@ -767,12 +780,13 @@ public class ClassicModelsRepository {
          */
         System.out.println("EXAMPLE 11.2 (affected rows): "
                 + ctx.insertInto(SALE)
-                        .values(rand().mul(1000), 2004, getTotalSales(2004), 1002L)
+                        .values(rand().mul(1000), 2004, getTotalSales(2004), 1002L,
+                                (byte) 0, default_(), default_(), "UP")
                         .onDuplicateKeyIgnore()
                         .execute()
         );
     }
-    
+
     // EXAMPLE 12
     /*
     insert into "SYSTEM"."DEPARTMENT" (
@@ -802,13 +816,14 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 12 (affected rows): "
                 + ctx.insertInto(DEPARTMENT)
-                        .values(null,
+                        .values(default_(),
                                 department.getName(),
                                 coalesce(
                                         choose().when(val(department.getPhone()).isNull(), inline("+40 080 000"))
                                                 .otherwise(department.getPhone()),
                                         inline("+40 080 000")),
-                                department.getCode(), department.getOfficeCode()
+                                department.getCode(), department.getOfficeCode(),
+                                default_(), default_()
                         )
                         .execute()
         );
@@ -876,7 +891,7 @@ public class ClassicModelsRepository {
                         .execute()
         );
     }
-    
+
     // EXAMPLE 14
     /*
     merge into "SYSTEM"."OFFICE" using (
@@ -904,20 +919,19 @@ public class ClassicModelsRepository {
      */
     public void insertAndUDTRecord() {
 
-        LocationtypeRecord locationtypeRecord = new LocationtypeRecord("Boston", "USA", "EA");
+        EvaluationCriteriaRecord ec = new EvaluationCriteriaRecord(55, 67, 34, 98);
         System.out.println("EXAMPLE 14 (affected rows): "
-                + ctx.insertInto(OFFICE)
-                        .values(Math.round(Math.random() * 10000) + "PK",
-                                locationtypeRecord, "+33 223 12", "addr1", "addr2", "659422", "MA")
-                        .onDuplicateKeyIgnore()
+                + ctx.insertInto(MANAGER)
+                        .values(default_(),
+                                "Farel Ugg", default_(), ec)
                         .execute()
         );
 
         // creating a UDT record alternatives
-        LocationtypeRecord r1 = LOCATIONTYPE.newRecord();
-        //r1.setCity("Boston"); ...
+        EvaluationCriteriaRecord r1 = EVALUATION_CRITERIA.newRecord();
+        // r1.setCommunicationAbility(56); ...
 
-        LocationtypeRecord r2 = ctx.newRecord(LOCATIONTYPE);
-        //r2.setCity("Boston"); ...
+        EvaluationCriteriaRecord r2 = ctx.newRecord(EVALUATION_CRITERIA);
+        // r2.setCommunicationAbility(56); ...
     }
 }
