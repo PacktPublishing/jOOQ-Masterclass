@@ -170,7 +170,7 @@ public class ClassicModelsRepository {
 
     public void manyToManyToXmlManagersOffices() {
 
-        Result<Record1<XML>> result1 = ctx.select(
+        Result<Record1<XML>> result11 = ctx.select(
                 MANAGER.MANAGER_ID.as("managerId"), MANAGER.MANAGER_NAME.as("managerName"),
                 select(OFFICE.OFFICE_CODE.as("officeCode"), OFFICE.CITY, OFFICE.STATE)
                         .from(OFFICE)
@@ -182,7 +182,22 @@ public class ClassicModelsRepository {
                 .forXML().path()
                 .fetch();
 
-        System.out.println("Example 3.1 (many-to-many):\n" + result1.formatXML());
+        System.out.println("Example 3.1.1 (many-to-many):\n" + result11.formatXML());
+        
+        String result12 = ctx.select(
+                MANAGER.MANAGER_ID.as("managerId"), MANAGER.MANAGER_NAME.as("managerName"),
+                select(OFFICE.OFFICE_CODE.as("officeCode"), OFFICE.CITY, OFFICE.STATE)
+                        .from(OFFICE)
+                        .join(OFFICE_HAS_MANAGER)
+                        .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))
+                        .where(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID))
+                        .forXML().path().asField("offices"))
+                .from(MANAGER)
+                .forXML().path()
+                .fetch()
+                .formatXML(XMLFormat.DEFAULT_FOR_RECORDS);
+
+        System.out.println("Example 3.1.2 (many-to-many):\n" + result12);
 
         Result<Record1<XML>> result2 = ctx.select(
                 MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME,

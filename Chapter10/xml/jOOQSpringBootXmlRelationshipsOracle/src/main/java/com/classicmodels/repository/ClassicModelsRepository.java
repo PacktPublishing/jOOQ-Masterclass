@@ -12,6 +12,7 @@ import org.jooq.DSLContext;
 import org.jooq.Record1;
 import org.jooq.Result;
 import org.jooq.XML;
+import org.jooq.XMLFormat;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.lateral;
 import static org.jooq.impl.DSL.name;
@@ -182,7 +183,7 @@ public class ClassicModelsRepository {
 
         System.out.println("Example 2.3.2 (one-to-many):\n" + result32.formatXML());
         
-        String result33 = ctx.select(
+        String result331 = ctx.select(
                 PRODUCTLINE.PRODUCT_LINE.as("productLine"),
                 PRODUCTLINE.TEXT_DESCRIPTION.as("textDescription"),
                 select(PRODUCT.PRODUCT_NAME.as("productName"),
@@ -198,7 +199,26 @@ public class ClassicModelsRepository {
                 .forXML().path("productline").root("productlines")
                 .fetchSingleInto(String.class);
 
-        System.out.println("Example 2.3.3 (one-to-many):\n" + result33);
+        System.out.println("Example 2.3.3.1 (one-to-many):\n" + result331);
+        
+        String result332 = ctx.select(
+                PRODUCTLINE.PRODUCT_LINE.as("productLine"),
+                PRODUCTLINE.TEXT_DESCRIPTION.as("textDescription"),
+                select(PRODUCT.PRODUCT_NAME.as("productName"),
+                        PRODUCT.PRODUCT_VENDOR.as("productVendor"),
+                        PRODUCT.QUANTITY_IN_STOCK.as("quantityInStock"))
+                        .from(PRODUCT)
+                        .where(PRODUCT.PRODUCT_LINE.eq(PRODUCTLINE.PRODUCT_LINE))
+                        // .limit(5) // limit products
+                        .forXML().path("product").asField("products"))
+                .from(PRODUCTLINE)
+                .orderBy(PRODUCTLINE.PRODUCT_LINE)
+                // .limit(2) // limit product lines
+                .forXML().path("productline").root("productlines")
+                .fetch()
+                .formatXML(XMLFormat.DEFAULT_FOR_RECORDS);
+
+        System.out.println("Example 2.3.3.2 (one-to-many):\n" + result332);
 
         Result<Record1<XML>> result41 = ctx.select(
                 xmlelement("productLine",
