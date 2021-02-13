@@ -5,6 +5,7 @@ import org.jooq.DSLContext;
 import org.jooq.Record1;
 import org.jooq.Result;
 import org.jooq.XML;
+import org.jooq.XMLFormat;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,7 +32,7 @@ public class ClassicModelsRepository {
                 .forXML().raw()
                 .fetch();
         System.out.println("Example 1.2:\n" + result2.formatXML());
-        
+
         Result<Record1<XML>> result3 = ctx.select(OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.COUNTRY)
                 .from(OFFICE)
                 .forXML().raw().elements().root("offices")
@@ -67,6 +68,13 @@ public class ClassicModelsRepository {
                 .forXML().auto().elements().root("offices")
                 .fetch();
         System.out.println("Example 1.8:\n" + result8.formatXML());
+
+        String result9 = ctx.select(OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.COUNTRY)
+                .from(OFFICE)
+                .forXML().auto().elements().root("offices")
+                .fetch()
+                .formatXML(XMLFormat.DEFAULT_FOR_RECORDS);
+        System.out.println("Example 1.9:\n" + result9);
     }
 
     public void fetchOfficesAsXMLPath() {
@@ -116,7 +124,8 @@ public class ClassicModelsRepository {
         String result72 = ctx.select(OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.COUNTRY)
                 .from(OFFICE)
                 .forXML().path("office").elements().root("offices")
-                .fetchSingleInto(String.class);
+                .fetch()
+                .formatXML(XMLFormat.DEFAULT_FOR_RECORDS);
         System.out.println("Example 1.7.2:\n" + result72);
     }
 }
