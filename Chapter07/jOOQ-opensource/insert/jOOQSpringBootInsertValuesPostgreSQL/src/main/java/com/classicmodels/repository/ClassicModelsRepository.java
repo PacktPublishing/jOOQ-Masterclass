@@ -637,10 +637,16 @@ public class ClassicModelsRepository {
                         .values(sr.valuesRow().fields())
                         .execute()
         );
+        
+        sr.setSaleId(Math.round(Math.random() * 10000)); // set a new id
+        sr.attach(ctx.configuration()); // attach the record to the current configuration
+        System.out.println("EXAMPLE 9.4 (affected rows): "
+                +sr.insert()
+        );
 
         // this is user-define SalePart POJO (it contains only a part of fields)
         SalePart salePart = new SalePart(5644.32, 1370L);
-        System.out.println("EXAMPLE 9.4 (affected rows): "
+        System.out.println("EXAMPLE 9.5 (affected rows): "
                 + ctx.newRecord(SALE)
                         .values(Math.round(Math.random() * 10000), 2004,
                                 salePart.getSale(), salePart.getEmployeeNumber(),
@@ -652,14 +658,14 @@ public class ClassicModelsRepository {
         srp.from(salePart);      // get the available fields from SalePart        
         srp.setFiscalYear(2004); // fiscal_year cannot be null and doesn't have a default value
         srp.setSaleId(Math.round(Math.random() * 10000));
-        System.out.println("EXAMPLE 9.5 (affected rows): "
+        System.out.println("EXAMPLE 9.6 (affected rows): "
                 + ctx.insertInto(SALE)
                         .values(srp.valuesRow().fields())
                         .execute()
         );
 
         srp.reset(SALE.SALE_ID);
-        System.out.println("EXAMPLE 9.6 (affected rows): "
+        System.out.println("EXAMPLE 9.7 (affected rows): "
                 + ctx.executeInsert(srp)
         );
     }

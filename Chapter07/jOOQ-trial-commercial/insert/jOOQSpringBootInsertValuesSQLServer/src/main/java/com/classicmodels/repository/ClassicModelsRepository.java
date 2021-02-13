@@ -468,6 +468,11 @@ public class ClassicModelsRepository {
                         .onDuplicateKeyIgnore()
                         .execute()
         );
+        
+        or.attach(ctx.configuration()); // attach the record to the current configuration
+        System.out.println("EXAMPLE 9.4 (affected rows): "
+                +or.insert()
+        );
 
         /*
         declare @result table ([sale_id] bigint);
@@ -484,7 +489,7 @@ public class ClassicModelsRepository {
          */
         // this is user-define SalePart POJO (it contains only a part of fields)
         SalePart salePart = new SalePart(5644.32, 1370L);
-        System.out.println("EXAMPLE 9.4 (affected rows): "
+        System.out.println("EXAMPLE 9.5 (affected rows): "
                 + ctx.newRecord(SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
                         .values(2004, salePart.getSale(), salePart.getEmployeeNumber())
                         .into(SALE)
@@ -500,7 +505,7 @@ public class ClassicModelsRepository {
         SaleRecord srp = new SaleRecord();
         srp.from(salePart);      // get the available fields from SalePart
         srp.setFiscalYear(2004); // fiscal_year cannot be null and doesn't have a default value
-        System.out.println("EXAMPLE 9.5 (affected rows): "
+        System.out.println("EXAMPLE 9.6 (affected rows): "
                 + ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
                         .values(srp.getFiscalYear(), srp.getSale(), srp.getEmployeeNumber())
                         .execute()
@@ -513,7 +518,7 @@ public class ClassicModelsRepository {
         values 
           (?, ?, ?)
          */
-        System.out.println("EXAMPLE 9.6 (affected rows): "
+        System.out.println("EXAMPLE 9.7 (affected rows): "
                 + ctx.executeInsert(srp)
         );
     }
