@@ -176,8 +176,11 @@ public class ClassicModelsRepository {
         System.out.println("Example 2.3.2 (one-to-many):\n" + result32.formatJSON());
         
         String result33 = ctx.select(
-                PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.TEXT_DESCRIPTION,
-                select(PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_VENDOR, PRODUCT.QUANTITY_IN_STOCK)
+                PRODUCTLINE.PRODUCT_LINE.as("productLine"),
+                PRODUCTLINE.TEXT_DESCRIPTION.as("textDescription"),
+                select(PRODUCT.PRODUCT_NAME.as("productName"),
+                        PRODUCT.PRODUCT_VENDOR.as("productVendor"),
+                        PRODUCT.QUANTITY_IN_STOCK.as("quantityInStock"))
                         .from(PRODUCT)
                         .where(PRODUCT.PRODUCT_LINE.eq(PRODUCTLINE.PRODUCT_LINE))
                         .orderBy(PRODUCT.QUANTITY_IN_STOCK)
@@ -193,8 +196,11 @@ public class ClassicModelsRepository {
         System.out.println("Example 2.3.3 (one-to-many):\n" + result33);
 
         String result34 = ctx.select(
-                PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.TEXT_DESCRIPTION,
-                select(PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_VENDOR, PRODUCT.QUANTITY_IN_STOCK)
+                PRODUCTLINE.PRODUCT_LINE.as("productLine"),
+                PRODUCTLINE.TEXT_DESCRIPTION.as("textDescription"),
+                select(PRODUCT.PRODUCT_NAME.as("productName"),
+                        PRODUCT.PRODUCT_VENDOR.as("productVendor"),
+                        PRODUCT.QUANTITY_IN_STOCK.as("quantityInStock"))
                         .from(PRODUCT)
                         .where(PRODUCT.PRODUCT_LINE.eq(PRODUCTLINE.PRODUCT_LINE))
                         .orderBy(PRODUCT.QUANTITY_IN_STOCK)
