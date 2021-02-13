@@ -19,6 +19,7 @@ import static jooq.generated.tables.Productline.PRODUCTLINE;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import org.jooq.JSON;
+import org.jooq.JSONFormat;
 import org.jooq.Record1;
 import org.jooq.Result;
 import static org.jooq.impl.DSL.field;
@@ -141,6 +142,31 @@ public class ClassicModelsRepository {
                 .fetchInto(SimpleProductLine.class);
 
         System.out.println("Example 1.4:\n" + result4);
+        
+        // same thing as above but mapping to String
+        String result5 = ctx.select(
+                PRODUCTLINE.PRODUCT_LINE.as("productLine"), PRODUCTLINE.TEXT_DESCRIPTION.as("textDescription"),
+                select(PRODUCT.PRODUCT_NAME.as("productName"), PRODUCT.PRODUCT_VENDOR.as("productVendor"),
+                        PRODUCT.QUANTITY_IN_STOCK.as("quantityInStock"),
+                        select(ORDERDETAIL.QUANTITY_ORDERED.as("quantityOrdered"),
+                                ORDERDETAIL.PRICE_EACH.as("priceEach"))
+                                .from(ORDERDETAIL)
+                                .where(ORDERDETAIL.PRODUCT_ID.eq(PRODUCT.PRODUCT_ID))
+                                .orderBy(ORDERDETAIL.QUANTITY_ORDERED)
+                                .limit(3)
+                                .forJSON().path().asField("orderdetail"))
+                        .from(PRODUCT)
+                        .where(PRODUCT.PRODUCT_LINE.eq(PRODUCTLINE.PRODUCT_LINE))
+                        .orderBy(PRODUCT.QUANTITY_IN_STOCK)
+                        .limit(2)
+                        .forJSON().path().asField("products"))
+                .from(PRODUCTLINE)
+                .orderBy(PRODUCTLINE.PRODUCT_LINE)
+                .limit(1)
+                .forJSON().path().withoutArrayWrapper()                                
+                .fetchSingleInto(String.class); // or, use .formatJSON(JSONFormat.DEFAULT_FOR_RECORDS)
+
+        System.out.println("Example 1.5:\n" + result5);
     }
 
     public void jsonCustomerPaymentBankTransactionCustomerdetail() {
@@ -267,6 +293,38 @@ public class ClassicModelsRepository {
                 .fetchInto(SimpleCustomer.class);
 
         System.out.println("Example 2.4:\n" + result4);
+        
+        // same thing as above but mapping to String
+        String result5 = ctx.select(
+                CUSTOMER.CUSTOMER_NAME.as("customerName"), CUSTOMER.CREDIT_LIMIT.as("creditLimit"),
+                select(PAYMENT.CUSTOMER_NUMBER.as("customerNumber"), PAYMENT.INVOICE_AMOUNT.as("invoiceAmount"),
+                        PAYMENT.CACHING_DATE.as("cachingDate"),
+                        select(BANK_TRANSACTION.BANK_NAME.as("bankName"),
+                                BANK_TRANSACTION.TRANSFER_AMOUNT.as("transferAmount"))
+                                .from(BANK_TRANSACTION)
+                                .where(BANK_TRANSACTION.CUSTOMER_NUMBER.eq(PAYMENT.CUSTOMER_NUMBER)
+                                        .and(BANK_TRANSACTION.CHECK_NUMBER.eq(PAYMENT.CHECK_NUMBER)))
+                                .orderBy(BANK_TRANSACTION.TRANSFER_AMOUNT)
+                                .limit(2) // limit 'transactions'
+                                .forJSON().path().asField("transactions"))
+                        .from(PAYMENT)
+                        .where(PAYMENT.CUSTOMER_NUMBER.eq(CUSTOMER.CUSTOMER_NUMBER))
+                        .orderBy(PAYMENT.CACHING_DATE)
+                        .limit(2) // limit 'payments'
+                        .forJSON().path().asField("payments"),
+                select(CUSTOMERDETAIL.CITY.as("city"),
+                        CUSTOMERDETAIL.ADDRESS_LINE_FIRST.as("addressLineFirst"),
+                        CUSTOMERDETAIL.STATE.as("state"))
+                        .from(CUSTOMERDETAIL)
+                        .where(CUSTOMERDETAIL.CUSTOMER_NUMBER.eq(CUSTOMER.CUSTOMER_NUMBER))
+                        .forJSON().path().asField("details"))
+                .from(CUSTOMER)
+                .orderBy(CUSTOMER.CONTACT_LAST_NAME)
+                .limit(1) 
+                .forJSON().path().withoutArrayWrapper()
+                .fetchSingleInto(String.class); // or, use .formatJSON(JSONFormat.DEFAULT_FOR_RECORDS)
+
+        System.out.println("Example 2.5:\n" + result5);
     }
 
     public void jsonOfficeManagerDepartmentEmployeeSale() {
@@ -396,5 +454,33 @@ public class ClassicModelsRepository {
                 .fetchInto(SimpleOffice.class);
 
         System.out.println("Example 3.4:\n" + result4);
+        
+        // same thing as above but mapping to String
+        String result5 = ctx.select(
+                OFFICE.OFFICE_CODE.as("officeCode"), OFFICE.CITY.as("officeCity"), OFFICE.COUNTRY.as("officeCountry"),
+                select(EMPLOYEE.FIRST_NAME.as("employeeFirstName"), EMPLOYEE.LAST_NAME.as("employeeLastName"), EMPLOYEE.SALARY.as("employeeSalary"),
+                        select(SALE.FISCAL_YEAR.as("fiscalYear"), SALE.SALE_.as("sale"))
+                                .from(SALE)
+                                .where(SALE.EMPLOYEE_NUMBER.eq(EMPLOYEE.EMPLOYEE_NUMBER))
+                                .forJSON().path().asField("sales"))
+                        .from(EMPLOYEE)
+                        .where(EMPLOYEE.OFFICE_CODE.eq(OFFICE.OFFICE_CODE))
+                        .forJSON().path().asField("employees"),
+                select(DEPARTMENT.NAME.as("departmentName"), DEPARTMENT.PHONE.as("departmentPhone"))
+                        .from(DEPARTMENT)
+                        .where(DEPARTMENT.OFFICE_CODE.eq(OFFICE.OFFICE_CODE))
+                        .forJSON().path().asField("departments"),
+                select(MANAGER.MANAGER_ID.as("managerId"), MANAGER.MANAGER_NAME.as("managerName"))
+                        .from(MANAGER)
+                        .join(OFFICE_HAS_MANAGER)
+                        .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID))
+                        .where(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))
+                        .forJSON().path().asField("managers"))
+                .from(OFFICE)           
+                .limit(1)
+                .forJSON().path().withoutArrayWrapper()
+                .fetchSingleInto(String.class); // or, use .formatJSON(JSONFormat.DEFAULT_FOR_RECORDS)
+
+        System.out.println("Example 3.5:\n" + result5);
     }
 }
