@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.List;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Manager.MANAGER;
-import static jooq.generated.tables.Office.OFFICE;
 import org.jooq.DSLContext;
 import org.jooq.JSON;
 import org.jooq.JSONEntry;
