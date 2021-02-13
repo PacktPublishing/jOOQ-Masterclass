@@ -7,6 +7,8 @@ import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import static jooq.generated.tables.Payment.PAYMENT;
+import static jooq.generated.tables.Product.PRODUCT;
+import static jooq.generated.tables.Productline.PRODUCTLINE;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.Comparator;
 import org.jooq.DSLContext;
@@ -15,6 +17,7 @@ import static org.jooq.impl.DSL.asterisk;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.nvl;
 import static org.jooq.impl.DSL.select;
+import static org.jooq.impl.DSL.table;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -455,8 +458,44 @@ public class ClassicModelsRepository {
                         .fetch()
         );
     }
+    
+    public void limit1InJoinedTable() {
 
-    // EXAMPLE 15
+        /*
+        select 
+          "public"."productline"."product_line", 
+          "public"."productline"."code", 
+          "public"."product"."product_name", 
+          "public"."product"."quantity_in_stock", 
+          "public"."product"."product_id" 
+        from 
+          "public"."productline" 
+          join "public"."product" on "public"."product"."product_id" = (
+            select 
+              "public"."product"."product_id" 
+            from 
+              "public"."product" 
+            where 
+              "public"."productline"."product_line" = "public"."product"."product_line" 
+            order by 
+              "public"."product"."product_id" 
+            limit 
+              ?
+          )
+         */
+        System.out.println("EXAMPLE 15\n"
+                + ctx.select(PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.CODE,
+                        PRODUCT.PRODUCT_NAME, PRODUCT.QUANTITY_IN_STOCK, PRODUCT.PRODUCT_ID)
+                        .from(PRODUCTLINE)
+                        .join(PRODUCT)
+                        .on(PRODUCT.PRODUCT_ID.eq(select(PRODUCT.PRODUCT_ID).from(PRODUCT)
+                                .where(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE))
+                                .orderBy(PRODUCT.PRODUCT_ID).limit(1)))
+                        .fetch()
+        );        
+    }
+
+    // EXAMPLE 16
     /*
     select
       "public"."office"."city",
@@ -489,12 +528,12 @@ public class ClassicModelsRepository {
         select.addSelect(CUSTOMER.asterisk().except(CUSTOMER.CONTACT_FIRST_NAME, CUSTOMER.CONTACT_LAST_NAME));
         select.addSelect(PAYMENT.fields());
 
-        System.out.println("EXAMPLE 15\n"
+        System.out.println("EXAMPLE 16\n"
                 + select.fetch()
         );
     }
 
-    // EXAMPLE 16
+    // EXAMPLE 17
     /*    
     select
       "public"."office"."city",
@@ -533,7 +572,7 @@ public class ClassicModelsRepository {
         select.addFrom(PAYMENT);
         select.addSelect(PAYMENT.fields());
 
-        System.out.println("EXAMPLE 16\n"
+        System.out.println("EXAMPLE 17\n"
                 + select.fetch()
         );
     }

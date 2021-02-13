@@ -7,6 +7,8 @@ import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import static jooq.generated.tables.Payment.PAYMENT;
+import static jooq.generated.tables.Product.PRODUCT;
+import static jooq.generated.tables.Productline.PRODUCTLINE;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.Comparator;
 import org.jooq.DSLContext;
@@ -15,6 +17,7 @@ import static org.jooq.impl.DSL.asterisk;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.nvl;
 import static org.jooq.impl.DSL.select;
+import static org.jooq.impl.DSL.table;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -453,7 +456,41 @@ public class ClassicModelsRepository {
         );
     }
 
-    // EXAMPLE 15
+    public void limit1InJoinedTable() {
+
+        /*
+        select 
+          [classicmodels].[dbo].[productline].[product_line], 
+          [classicmodels].[dbo].[productline].[code], 
+          [classicmodels].[dbo].[product].[product_name], 
+          [classicmodels].[dbo].[product].[quantity_in_stock], 
+          [classicmodels].[dbo].[product].[product_id] 
+        from 
+          [classicmodels].[dbo].[productline] 
+          join [classicmodels].[dbo].[product] on [classicmodels].[dbo].[product].[product_id] = (
+            select 
+              top 1 [classicmodels].[dbo].[product].[product_id] 
+            from 
+              [classicmodels].[dbo].[product] 
+            where 
+              [classicmodels].[dbo].[productline].[product_line] = [classicmodels].[dbo].[product].[product_line] 
+            order by 
+              [classicmodels].[dbo].[product].[product_id]
+          )
+         */
+        System.out.println("EXAMPLE 15\n"
+                + ctx.select(PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.CODE,
+                        PRODUCT.PRODUCT_NAME, PRODUCT.QUANTITY_IN_STOCK, PRODUCT.PRODUCT_ID)
+                        .from(PRODUCTLINE)
+                        .join(PRODUCT)
+                        .on(PRODUCT.PRODUCT_ID.eq(select(PRODUCT.PRODUCT_ID).from(PRODUCT)
+                                .where(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE))
+                                .orderBy(PRODUCT.PRODUCT_ID).limit(1)))
+                        .fetch()
+        );       
+    }
+
+    // EXAMPLE 16
     /*
     select top 100
       [classicmodels].[dbo].[office].[city],
@@ -485,12 +522,12 @@ public class ClassicModelsRepository {
         select.addSelect(CUSTOMER.asterisk().except(CUSTOMER.CONTACT_FIRST_NAME, CUSTOMER.CONTACT_LAST_NAME));
         select.addSelect(PAYMENT.fields());
 
-        System.out.println("EXAMPLE 15\n"
+        System.out.println("EXAMPLE 16\n"
                 + select.fetch()
         );
     }
 
-    // EXAMPLE 16
+    // EXAMPLE 17
     /*    
     select top 100
       [classicmodels].[dbo].[office].[city],
@@ -528,7 +565,7 @@ public class ClassicModelsRepository {
         select.addFrom(PAYMENT);
         select.addSelect(PAYMENT.fields());
 
-        System.out.println("EXAMPLE 16\n"
+        System.out.println("EXAMPLE 17\n"
                 + select.fetch()
         );
     }
