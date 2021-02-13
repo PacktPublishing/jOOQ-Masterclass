@@ -85,6 +85,12 @@ public class ClassicModelsRepository {
     values
       (?, ?, default, ?, default, default, ?, ?)
      */
+    ///////////////////////////////////
+    ///////////////////////////////////
+    ////////////////////////////////////
+    ///////////////////////////////////////
+    
+    // NU SUNT TOATE CAMPURILE DE VAZUT AICI SI IN CAPITIOL1!!!!!!!!!!!!!!!!
     public void insertSomeDefaultsValInProduct() {
         System.out.println("EXAMPLE 3.1 (affected rows): "
                 + ctx.insertInto(PRODUCT)

@@ -377,7 +377,7 @@ public class ClassicModelsRepository {
     public void throwExceptionForUpdateWithoutWhereClause() {
 
         try {
-            ctx.configuration().set(new Settings()
+            ctx.configuration().derive(new Settings()
                     .withExecuteUpdateWithoutWhere(ExecuteWithoutWhere.THROW)) // check other options beside THROW
                     .dsl()
                     .update(OFFICE)
