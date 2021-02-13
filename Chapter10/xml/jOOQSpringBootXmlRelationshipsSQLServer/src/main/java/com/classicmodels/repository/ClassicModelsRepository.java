@@ -12,6 +12,7 @@ import org.jooq.DSLContext;
 import org.jooq.Record1;
 import org.jooq.Result;
 import org.jooq.XML;
+import org.jooq.XMLFormat;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.select;
@@ -115,8 +116,6 @@ public class ClassicModelsRepository {
 
         System.out.println("Example 2.3.2 (one-to-many):\n" + result32.formatXML());
 
-        // SQL Server serve XML in slices, so you have to join all slices into the resulted String
-        // or fetch a single slice (if it is possible) by using LIMIT (check SQL Server docs for details)
         String result33 = ctx.select(
                 PRODUCTLINE.PRODUCT_LINE.as("productLine"),
                 PRODUCTLINE.TEXT_DESCRIPTION.as("textDescription"),
@@ -124,13 +123,12 @@ public class ClassicModelsRepository {
                         PRODUCT.PRODUCT_VENDOR.as("productVendor"),
                         PRODUCT.QUANTITY_IN_STOCK.as("quantityInStock"))
                         .from(PRODUCT)
-                        .where(PRODUCT.PRODUCT_LINE.eq(PRODUCTLINE.PRODUCT_LINE))
-                        .limit(1) // limit products
+                        .where(PRODUCT.PRODUCT_LINE.eq(PRODUCTLINE.PRODUCT_LINE))                        
                         .forXML().path("product").asField("products"))
-                .from(PRODUCTLINE)
-                .limit(1) // limit product lines
+                .from(PRODUCTLINE)                
                 .forXML().path("productline").root("productlines")
-                .fetchSingleInto(String.class);
+                .fetch()
+                .formatXML(XMLFormat.DEFAULT_FOR_RECORDS);
 
         System.out.println("Example 2.3.3 (one-to-many):\n" + result33);
 
