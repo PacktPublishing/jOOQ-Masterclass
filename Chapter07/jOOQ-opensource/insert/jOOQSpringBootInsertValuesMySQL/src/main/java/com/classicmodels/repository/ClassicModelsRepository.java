@@ -532,14 +532,23 @@ public class ClassicModelsRepository {
 
         Sale sale = new Sale(1L, 2005, 343.22, 1504L, null, SaleRate.SILVER, SaleVat.MAX, null);
         var record = ctx.newRecord(SALE, sale);
-        record.reset(SALE.SALE_ID); // reset the current ID and allow DB to generate one
+        
+        // reset the current ID and allow DB to generate one
+        record.changed(SALE.SALE_ID, false);
+                
+        // resets both changed flag that tracks record changes and value
+        // record.reset(SALE.SALE_ID); 
+        
         System.out.println("EXAMPLE 10.1 (affected rows): "
                 + record.insert()
         );
 
         SaleRecord sr = new SaleRecord();
         sr.from(sale);
-        sr.reset(SALE.SALE_ID); // reset the current ID and allow DB to generate one        
+                       
+        // resets both changed flag that tracks record changes and value
+        sr.reset(SALE.SALE_ID); 
+        
         System.out.println("EXAMPLE 10.2 (affected rows): "
                 + ctx.insertInto(SALE)
                         .values(sr.valuesRow().fields())

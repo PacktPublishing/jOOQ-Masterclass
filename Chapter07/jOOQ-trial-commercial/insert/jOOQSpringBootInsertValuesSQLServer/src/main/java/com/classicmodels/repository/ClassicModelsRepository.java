@@ -469,6 +469,7 @@ public class ClassicModelsRepository {
                         .execute()
         );
         
+        or.setOfficeCode(String.valueOf(Math.round(Math.random() * 10000)));
         or.attach(ctx.configuration()); // attach the record to the current configuration
         System.out.println("EXAMPLE 9.4 (affected rows): "
                 +or.insert()
@@ -541,7 +542,13 @@ public class ClassicModelsRepository {
          */
         Sale sale = new Sale(1L, 2005, 343.22, 1504L, false, null, null, "UP");
         var record = ctx.newRecord(SALE, sale);
-        record.reset(SALE.SALE_ID); // reset the current ID and allow DB to generate one
+                
+        // reset the current ID and allow DB to generate one
+        record.changed(SALE.SALE_ID, false);
+                
+        // resets both changed flag that tracks record changes and value
+        // record.reset(SALE.SALE_ID); 
+        
         System.out.println("EXAMPLE 10.1 (affected rows): "
                 + record.insert()
         );
@@ -554,7 +561,10 @@ public class ClassicModelsRepository {
          */
         SaleRecord sr = new SaleRecord();
         sr.from(sale);
-        sr.reset(SALE.SALE_ID); // reset the current ID and allow DB to generate one        
+        
+        // resets both changed flag that tracks record changes and value
+        sr.reset(SALE.SALE_ID); 
+        
         System.out.println("EXAMPLE 10.2 (affected rows): "
                 + ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
                         .values(sr.getFiscalYear(), sr.getSale(), sr.getEmployeeNumber())
