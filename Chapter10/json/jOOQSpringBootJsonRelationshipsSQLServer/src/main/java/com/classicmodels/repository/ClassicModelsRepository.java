@@ -10,6 +10,7 @@ import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Productline.PRODUCTLINE;
 import org.jooq.DSLContext;
 import org.jooq.JSON;
+import org.jooq.JSONFormat;
 import org.jooq.Record1;
 import org.jooq.Result;
 import static org.jooq.impl.DSL.field;
@@ -145,11 +146,11 @@ public class ClassicModelsRepository {
                         .from(PRODUCT)
                         .where(PRODUCT.PRODUCT_LINE.eq(PRODUCTLINE.PRODUCT_LINE))
                         .orderBy(PRODUCT.QUANTITY_IN_STOCK)
-                        .limit(5) // limit products
+                        // .limit(5) // limit products
                         .forJSON().path().asField("products"))
                 .from(PRODUCTLINE)
                 .orderBy(PRODUCTLINE.PRODUCT_LINE)
-                .limit(2) // limit product lines
+                // .limit(2) // limit product lines
                 // .forJSON().path() // add this if you need a return of type Result<Record1<JSON>>  
                 .fetch();
 
@@ -164,31 +165,30 @@ public class ClassicModelsRepository {
                         .from(PRODUCT)
                         .where(PRODUCT.PRODUCT_LINE.eq(PRODUCTLINE.PRODUCT_LINE))
                         .orderBy(PRODUCT.QUANTITY_IN_STOCK)
-                        .limit(5) // limit products
+                        // .limit(5) // limit products
                         .forJSON().path().asField("products"))
                 .from(PRODUCTLINE)
                 .orderBy(PRODUCTLINE.PRODUCT_LINE)
-                .limit(2) // limit product lines
+                // .limit(2) // limit product lines
                 .forJSON().path()
                 .fetch();
 
         System.out.println("Example 2.3.2 (one-to-many):\n" + result32.formatJSON());
-
-        // SQL Server serve JSON in slices, so you have to join all slices into the resulted String
-        // or fetch a single slice by using LIMIT (check SQL Server docs for details)
+        
         String result33 = ctx.select(
                 PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.TEXT_DESCRIPTION,
                 select(PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_VENDOR, PRODUCT.QUANTITY_IN_STOCK)
                         .from(PRODUCT)
                         .where(PRODUCT.PRODUCT_LINE.eq(PRODUCTLINE.PRODUCT_LINE))
                         .orderBy(PRODUCT.QUANTITY_IN_STOCK)
-                        .limit(2) // limit products
+                        //.limit(2) // limit products
                         .forJSON().path().asField("products"))
                 .from(PRODUCTLINE)
                 .orderBy(PRODUCTLINE.PRODUCT_LINE)
-                .limit(2) // limit product lines
+                //.limit(2) // limit product lines
                 .forJSON().path()
-                .fetchSingleInto(String.class);
+                .fetch()
+                .formatJSON(JSONFormat.DEFAULT_FOR_RECORDS);                
 
         System.out.println("Example 2.3.3 (one-to-many):\n" + result33);
 
@@ -235,7 +235,8 @@ public class ClassicModelsRepository {
                         .forJSON().path().asField("managers"))
                 .from(OFFICE)
                 .forJSON().path()
-                .fetchSingleInto(String.class);
+                .fetch()
+                .formatJSON(JSONFormat.DEFAULT_FOR_RECORDS);
 
         System.out.println("Example 3.1.2 (many-to-many):\n" + result32);
 
@@ -314,7 +315,8 @@ public class ClassicModelsRepository {
                         .forJSON().path().asField("offices"))
                 .from(MANAGER)
                 .forJSON().path()
-                .fetchSingleInto(String.class);
+                .fetch()
+                .formatJSON(JSONFormat.DEFAULT_FOR_RECORDS);
 
         System.out.println("Example 4.1.2 (many-to-many):\n" + result42);
 
