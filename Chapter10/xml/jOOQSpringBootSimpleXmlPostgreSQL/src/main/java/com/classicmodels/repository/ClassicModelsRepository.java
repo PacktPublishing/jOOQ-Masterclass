@@ -10,6 +10,7 @@ import org.jooq.Record;
 import org.jooq.Record2;
 import org.jooq.Result;
 import org.jooq.XML;
+import org.jooq.XMLFormat;
 import static org.jooq.impl.DSL.concat;
 import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.field;
@@ -53,7 +54,8 @@ public class ClassicModelsRepository {
                 .fetch();
         System.out.println("Example 1.1.1:\n" + result1);
         System.out.println("Example 1.1.2:\n" + result1.get(0).value1().data());
-        System.out.println("Example 1.1.3:\n" + result1.formatXML());
+        System.out.println("Example 1.1.3:\n" + result1.formatXML()); // or, .formatXML(XMLFormat.DEFAULT_FOR_RESULTS)
+        System.out.println("Example 1.1.4:\n" + result1.formatXML(XMLFormat.DEFAULT_FOR_RECORDS));
 
         Result<Record1<XML>> result2 = ctx.select(
                 xmlelement("name", CUSTOMER.CUSTOMER_NAME))
