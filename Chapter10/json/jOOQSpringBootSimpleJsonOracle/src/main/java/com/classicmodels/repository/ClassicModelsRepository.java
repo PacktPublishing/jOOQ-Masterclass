@@ -8,6 +8,7 @@ import static jooq.generated.tables.Payment.PAYMENT;
 import org.jooq.DSLContext;
 import org.jooq.JSON;
 import org.jooq.JSONEntry;
+import org.jooq.JSONFormat;
 import org.jooq.Record1;
 import org.jooq.Record2;
 import org.jooq.Record;
@@ -56,7 +57,8 @@ public class ClassicModelsRepository {
                 .fetch();
         System.out.println("Example 1.1.1.a:\n" + result11);
         System.out.println("Example 1.1.1.b:\n" + result11.get(0).value1().data());
-        System.out.println("Example 1.1.1.c:\n" + result11.formatJSON());
+        System.out.println("Example 1.1.1.c:\n" + result11.formatJSON()); // or, formatJSON(JSONFormat.DEFAULT_FOR_RESULTS)
+        System.out.println("Example 1.1.1.d:\n" + result11.formatJSON(JSONFormat.DEFAULT_FOR_RECORDS));
 
         List<String> result12 = ctx.select(jsonObject(
                 key("customerName").value(CUSTOMER.CUSTOMER_NAME),
@@ -297,9 +299,21 @@ public class ClassicModelsRepository {
                 .forJSON().path().root("customers")
                 .fetch();
         System.out.println("Example 3.8:\n" + result8.formatJSON());
+                
+        String result9 = ctx.select(
+                CUSTOMER.CONTACT_FIRST_NAME, CUSTOMER.CREDIT_LIMIT,
+                PAYMENT.INVOICE_AMOUNT.as("Payment.Amount"),
+                PAYMENT.CACHING_DATE.as("Payment.CachingDate"))
+                .from(CUSTOMER)
+                .join(PAYMENT)
+                .on(CUSTOMER.CUSTOMER_NUMBER.eq(PAYMENT.CUSTOMER_NUMBER))                
+                .forJSON().path().root("customers")
+                .fetch()
+                .formatJSON(JSONFormat.DEFAULT_FOR_RECORDS);
+        System.out.println("Example 3.10:\n" + result9);
         
         // ordering, limiting and extracting JSON as a String        
-        String result9 = ctx.select(
+        String result10 = ctx.select(
                 CUSTOMER.CONTACT_FIRST_NAME, CUSTOMER.CREDIT_LIMIT,
                 PAYMENT.INVOICE_AMOUNT.as("Payment.Amount"),
                 PAYMENT.CACHING_DATE.as("Payment.CachingDate"))
@@ -310,7 +324,7 @@ public class ClassicModelsRepository {
                 .limit(5)
                 .forJSON().path().root("customers")
                 .fetchSingleInto(String.class);
-        System.out.println("Example 3.9:\n" + result9);
+        System.out.println("Example 3.10:\n" + result10);
     }
 
     public void fetchJsonTable() {

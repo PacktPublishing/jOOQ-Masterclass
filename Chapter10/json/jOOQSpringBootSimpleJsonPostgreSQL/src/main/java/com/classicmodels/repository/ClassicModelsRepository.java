@@ -7,6 +7,7 @@ import static jooq.generated.tables.Office.OFFICE;
 import org.jooq.DSLContext;
 import org.jooq.JSON;
 import org.jooq.JSONEntry;
+import org.jooq.JSONFormat;
 import org.jooq.Record1;
 import org.jooq.Record2;
 import org.jooq.Record;
@@ -56,7 +57,8 @@ public class ClassicModelsRepository {
                 .fetch();
         System.out.println("Example 1.1.1.a:\n" + result11);
         System.out.println("Example 1.1.1.b:\n" + result11.get(0).value1().data()); 
-        System.out.println("Example 1.1.1.c:\n" + result11.formatJSON());
+        System.out.println("Example 1.1.1.c:\n" + result11.formatJSON()); // or, formatJSON(JSONFormat.DEFAULT_FOR_RESULTS)
+        System.out.println("Example 1.1.1.d:\n" + result11.formatJSON(JSONFormat.DEFAULT_FOR_RECORDS));
         
         List<String> result12 = ctx.select(jsonObject(
                 key("customerName").value(CUSTOMER.CUSTOMER_NAME),
