@@ -212,6 +212,10 @@ public class ClassicModelsRepository {
      */
     public void insertMultipleOrderAutoGenKey() {
 
+        // Notice that we cannot use default_() because INSERT ... VALUES with multiple rows 
+        // needs to be emulated as INSERT ... SELECT in Oracle, which doesn’t support DEFAULT 
+        // expressions. Of course, you’ll be better off using an implicit default by listing 
+        // only the other ORDER columns explicitly.
         System.out.println("EXAMPLE 3.1 (affected rows): "
                 + ctx.insertInto(ORDER) // InsertSetStep<OrderRecord>
                         .values(null, // primary key is auto-generated
