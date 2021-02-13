@@ -7,6 +7,8 @@ import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import static jooq.generated.tables.Payment.PAYMENT;
+import static jooq.generated.tables.Product.PRODUCT;
+import static jooq.generated.tables.Productline.PRODUCTLINE;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.Comparator;
 import org.jooq.DSLContext;
@@ -15,6 +17,7 @@ import static org.jooq.impl.DSL.asterisk;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.nvl;
 import static org.jooq.impl.DSL.select;
+import static org.jooq.impl.DSL.table;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -100,14 +103,14 @@ public class ClassicModelsRepository {
          */
         System.out.println("EXAMPLE 1.5\n"
                 + ctx.select(ORDER.fields())
-                        .select(ORDERDETAIL.QUANTITY_ORDERED)                        
+                        .select(ORDERDETAIL.QUANTITY_ORDERED)
                         .from(ORDER)
                         .innerJoin(ORDERDETAIL)
                         .on(ORDER.ORDER_ID.eq(ORDERDETAIL.ORDER_ID))
                         .where(ORDER.ORDER_ID.eq(10101L))
                         .fetch()
         );
-        
+
         /*
         select 
           `alias_94178018`.* 
@@ -119,9 +122,9 @@ public class ClassicModelsRepository {
           ) 
         where 
           `classicmodels`.`order`.`order_id` = 10101        
-        */
+         */
         System.out.println("EXAMPLE 1.6\n"
-                + ctx.select(ORDER.customer().asterisk())                        
+                + ctx.select(ORDER.customer().asterisk())
                         .from(ORDER)
                         .where(ORDER.ORDER_ID.eq(10101L))
                         .fetch()
@@ -466,7 +469,80 @@ public class ClassicModelsRepository {
         );
     }
 
-    // EXAMPLE 15
+    // EXAMPLE 15    
+    public void limit1InJoinedTable() {
+
+        /*
+        select 
+          `classicmodels`.`productline`.`product_line`, 
+          `classicmodels`.`productline`.`code`, 
+          `classicmodels`.`product`.`product_name`, 
+          `classicmodels`.`product`.`quantity_in_stock`, 
+          `classicmodels`.`product`.`product_id` 
+        from 
+          `classicmodels`.`productline` 
+          join `classicmodels`.`product` on `classicmodels`.`product`.`product_id` = (
+            select 
+              `classicmodels`.`product`.`product_id` 
+            from 
+              `classicmodels`.`product` 
+            where 
+              `classicmodels`.`productline`.`product_line` = `classicmodels`.`product`.`product_line` 
+            order by 
+              `classicmodels`.`product`.`product_id` 
+            limit 
+              ?
+          )    
+         */
+        System.out.println("EXAMPLE 15.1\n"
+                + ctx.select(PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.CODE,
+                        PRODUCT.PRODUCT_NAME, PRODUCT.QUANTITY_IN_STOCK, PRODUCT.PRODUCT_ID)
+                        .from(PRODUCTLINE)
+                        .join(PRODUCT)
+                        .on(PRODUCT.PRODUCT_ID.eq(select(PRODUCT.PRODUCT_ID).from(PRODUCT)
+                                .where(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE))
+                                .orderBy(PRODUCT.PRODUCT_ID).limit(1)))
+                        .fetch()
+        );
+
+        /*
+        select 
+          `t`.`p`, 
+          `t`.`code`, 
+          `t`.`product_name`, 
+          `t`.`quantity_in_stock`, 
+          `t`.`product_id` 
+        from 
+          (
+            select 
+              `classicmodels`.`productline`.`product_line` as `p`, 
+              `classicmodels`.`productline`.`code`, 
+              `classicmodels`.`product`.`product_name`, 
+              `classicmodels`.`product`.`quantity_in_stock`, 
+              `classicmodels`.`product`.`product_id` 
+            from 
+              `classicmodels`.`productline` 
+              join `classicmodels`.`product` on `classicmodels`.`productline`.`product_line` = `classicmodels`.`product`.`product_line` 
+            order by 
+              `classicmodels`.`productline`.`product_line`
+          ) as `t` 
+        group by 
+          p      
+        */
+        System.out.println("EXAMPLE 15.2\n"
+                + ctx.select()
+                        .from(table(select(PRODUCTLINE.PRODUCT_LINE.as("p"), PRODUCTLINE.CODE,
+                                PRODUCT.PRODUCT_NAME, PRODUCT.QUANTITY_IN_STOCK, PRODUCT.PRODUCT_ID)
+                                .from(PRODUCTLINE)
+                                .join(PRODUCT)
+                                .on(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE))
+                                .orderBy(PRODUCTLINE.PRODUCT_LINE)).as("t")
+                        ).groupBy(field("p"))
+                        .fetch()
+        );
+    }
+
+    // EXAMPLE 16
     /*
     select
       `classicmodels`.`office`.`city`,
@@ -500,12 +576,12 @@ public class ClassicModelsRepository {
         select.addSelect(CUSTOMER.asterisk().except(CUSTOMER.CONTACT_FIRST_NAME, CUSTOMER.CONTACT_LAST_NAME));
         select.addSelect(PAYMENT.fields());
 
-        System.out.println("EXAMPLE 15\n"
+        System.out.println("EXAMPLE 16\n"
                 + select.fetch()
         );
     }
 
-    // EXAMPLE 16
+    // EXAMPLE 17
     /*    
     select
       `classicmodels`.`office`.`city`,
@@ -545,7 +621,7 @@ public class ClassicModelsRepository {
         select.addFrom(PAYMENT);
         select.addSelect(PAYMENT.fields());
 
-        System.out.println("EXAMPLE 16\n"
+        System.out.println("EXAMPLE 17\n"
                 + select.fetch()
         );
     }
