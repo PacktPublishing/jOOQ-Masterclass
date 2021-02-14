@@ -11,10 +11,13 @@ This is a modified version of the original schema for PostgreSQL
 
 /* START */
 DROP TABLE IF EXISTS payment CASCADE;
+DROP TABLE IF EXISTS bank_transaction CASCADE;
 DROP TABLE IF EXISTS orderdetail CASCADE;
 DROP TABLE IF EXISTS "order" CASCADE;
 DROP TABLE IF EXISTS product CASCADE;
 DROP TABLE IF EXISTS productline CASCADE;
+DROP TABLE IF EXISTS top3product CASCADE;
+DROP TABLE IF EXISTS productlinedetail CASCADE;
 DROP TABLE IF EXISTS office_has_manager CASCADE;
 DROP TABLE IF EXISTS manager CASCADE;
 DROP TABLE IF EXISTS customer CASCADE;
@@ -30,6 +33,8 @@ DROP SEQUENCE IF EXISTS order_seq;
 DROP SEQUENCE IF EXISTS sale_seq;
 DROP SEQUENCE IF EXISTS customer_seq;
 
+CREATE EXTENSION IF NOT EXISTS hstore;
+
 /*Table structure for table `office` */
 
 CREATE TABLE office (
@@ -42,6 +47,7 @@ CREATE TABLE office (
   country varchar(50),
   postal_code varchar(15) NOT NULL,
   territory varchar(10) NOT NULL,
+  location point DEFAULT NULL,
   PRIMARY KEY (office_code)
 ) ;
 
@@ -53,6 +59,8 @@ CREATE TABLE department (
   phone varchar(50) NOT NULL,
   code smallint DEFAULT 1,
   office_code varchar(10) NOT NULL,
+  topic text[] DEFAULT NULL,  
+  dep_net_ipv4 inet DEFAULT NULL,
   PRIMARY KEY (department_id)
 ,
   CONSTRAINT department_ibfk_1 FOREIGN KEY (office_code) REFERENCES office (office_code)
@@ -73,6 +81,8 @@ CREATE TABLE employee (
   salary int NOT NULL,
   reports_to bigint DEFAULT NULL,
   job_title varchar(50) NOT NULL,
+  employee_of_year int[] DEFAULT NULL,
+  monthly_bonus int[] DEFAULT NULL,
   PRIMARY KEY (employee_number)
  ,
   CONSTRAINT employees_ibfk_1 FOREIGN KEY (reports_to) REFERENCES employee (employee_number),
@@ -86,12 +96,18 @@ CREATE INDEX office_code ON employee (office_code);
 
 CREATE SEQUENCE sale_seq START 1000000;
 
+CREATE TYPE rate_type AS enum('SILVER', 'GOLD', 'PLATINUM');
+CREATE TYPE vat_type AS enum('NONE', 'MIN', 'MAX');
+
 CREATE TABLE sale (
   sale_id bigint NOT NULL DEFAULT NEXTVAL ('sale_seq'),  
   fiscal_year int NOT NULL,  
   sale float NOT NULL,  
   employee_number bigint DEFAULT NULL,  
   hot boolean DEFAULT FALSE,
+  rate rate_type DEFAULT NULL,
+  vat vat_type DEFAULT NULL,
+  trend varchar(10) DEFAULT NULL,
   PRIMARY KEY (sale_id)
  ,  
   CONSTRAINT sales_ibfk_1 FOREIGN KEY (employee_number) REFERENCES employee (employee_number)
@@ -111,6 +127,7 @@ CREATE TABLE customer (
   phone varchar(50) NOT NULL,  
   sales_rep_employee_number bigint DEFAULT NULL,
   credit_limit decimal(10,2) DEFAULT NULL,
+  first_buy_date int DEFAULT NULL,
   PRIMARY KEY (customer_number)
  ,
   CONSTRAINT customers_ibfk_1 FOREIGN KEY (sales_rep_employee_number) REFERENCES employee (employee_number)
@@ -135,11 +152,16 @@ CREATE TABLE customerdetail (
 
 /*Table structure for table `manager` */
 
+/* Define a type using CREATE TYPE */
+CREATE TYPE evaluation_criteria AS (communication_ability int, ethics int, performance int, employee_input int);
+
 CREATE SEQUENCE manager_seq START 1000000;
 
 CREATE TABLE manager (
   manager_id bigint NOT NULL DEFAULT NEXTVAL ('manager_seq'),
   manager_name varchar(50) NOT NULL,
+  manager_detail json DEFAULT NULL,
+  manager_evaluation evaluation_criteria DEFAULT NULL, 
   PRIMARY KEY (manager_id)
 ) ;
 
@@ -158,16 +180,31 @@ CREATE INDEX fk_offices_has_managers_offices_idx ON office_has_manager (offices_
 
 CREATE TABLE productline (
   product_line varchar(50) NOT NULL,
+  code bigint NOT NULL,
   text_description varchar(4000) DEFAULT NULL,
-  html_description text,
+  html_description xml,
   image bytea,
   created_on date NOT NULL DEFAULT NOW(),
-  PRIMARY KEY (product_line)
+  PRIMARY KEY (product_line, code),
+  CONSTRAINT unique_product_line UNIQUE(product_line)
+) ;
+
+/*Table structure for table `productdetail` */
+
+CREATE TABLE productlinedetail (
+  product_line varchar(50) NOT NULL,
+  code bigint NOT NULL,
+  line_capacity varchar(20) NOT NULL,
+  line_type int DEFAULT 0,
+  PRIMARY KEY (product_line,code),  
+  CONSTRAINT unique_product_line_detail UNIQUE(product_line),
+  CONSTRAINT productlinedetail_ibfk_1 FOREIGN KEY (product_line,code) REFERENCES productline (product_line,code),
+  CONSTRAINT productlinedetail_ibfk_2 FOREIGN KEY (product_line) REFERENCES productline (product_line)
 ) ;
 
 /*Table structure for table `product` */
 
-CREATE SEQUENCE product_seq;
+CREATE SEQUENCE product_seq START 1000000;
 
 CREATE TABLE product (
   product_id bigint NOT NULL DEFAULT NEXTVAL ('product_seq'),
@@ -179,6 +216,7 @@ CREATE TABLE product (
   quantity_in_stock smallint DEFAULT 0,
   buy_price decimal(10,2) DEFAULT 0.0,
   msrp decimal(10,2) DEFAULT 0.0,
+  specs hstore DEFAULT NULL,
   PRIMARY KEY (product_id)
  ,
   CONSTRAINT products_ibfk_1 FOREIGN KEY (product_line) REFERENCES productline (product_line)
@@ -221,6 +259,15 @@ CREATE TABLE orderdetail (
 
 CREATE INDEX product_id ON orderdetail (product_id);
 
+/*Table structure for table `top3product` */
+
+CREATE TABLE top3product (  
+  product_id bigint NOT NULL,
+  product_name varchar(70) DEFAULT NULL,  
+  PRIMARY KEY (product_id),  
+  CONSTRAINT top3product_ibfk_1 FOREIGN KEY (product_id) REFERENCES product (product_id)
+) ;
+
 /*Table structure for table `payment` */
 
 CREATE TABLE payment (
@@ -230,7 +277,56 @@ CREATE TABLE payment (
   invoice_amount decimal(10,2) NOT NULL,
   caching_date timestamp DEFAULT NULL,
   PRIMARY KEY (customer_number,check_number),
+  CONSTRAINT unique_check_number UNIQUE(check_number),
   CONSTRAINT payments_ibfk_1 FOREIGN KEY (customer_number) REFERENCES customer (customer_number)
 ) ;
+
+/* Table structure for table 'bank_transaction' */
+
+CREATE TABLE bank_transaction (
+  transaction_id serial NOT NULL,
+  bank_name varchar(50) NOT NULL,
+  bank_iban varchar(50) NOT NULL,  
+  transfer_amount decimal(10,2) NOT NULL,
+  caching_date timestamp NOT NULL DEFAULT NOW(),
+  customer_number bigint NOT NULL,
+  check_number varchar(50) NOT NULL, 
+  status varchar(50) NOT NULL, 
+  PRIMARY KEY (transaction_id),  
+  CONSTRAINT bank_transaction_ibfk_1 FOREIGN KEY (customer_number,check_number) REFERENCES payment (customer_number,check_number)
+) ;
+
+ALTER SEQUENCE bank_transaction_transaction_id_seq RESTART WITH 100;
+
+/* USER-DEFINED FUNCTIONS */
+
+CREATE OR REPLACE FUNCTION get_avg_sale(len_from int, len_to int) 
+  RETURNS int LANGUAGE plpgsql AS $$ 
+DECLARE avg_count integer; 
+BEGIN 
+  SELECT avg(sale.sale) 
+  INTO   avg_count 
+  FROM   sale 
+  WHERE  sale.sale BETWEEN len_from AND len_to; 
+   
+  RETURN avg_count; 
+END; 
+$$;
+
+CREATE OR REPLACE FUNCTION top_three_sales_per_employee(employee_nr bigint)
+  RETURNS TABLE(sales float) LANGUAGE plpgsql AS $$ 
+BEGIN
+    RETURN QUERY
+    SELECT 
+      "public"."sale"."sale" AS "sales" 
+    FROM 
+      "public"."sale" 
+    WHERE 
+      employee_nr = "public"."sale"."employee_number" 
+    ORDER BY
+      "public"."sale"."sale" DESC
+    LIMIT 3;     
+END; 
+$$;
 
 /* END */

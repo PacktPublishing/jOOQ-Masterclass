@@ -231,6 +231,13 @@ public class ClassicModelsRepository {
                         .where(OFFICE.OFFICE_CODE.eq("1"))
                         .execute()
         );
+        
+        or.setOfficeCode("2");
+        or.setCity("Campina");
+        or.attach(ctx.configuration()); // attach the record to the current configuration
+        System.out.println("EXAMPLE 5.5 (affected rows): "
+                +or.update()
+        );
     }
 
     // EXAMPLE 6
