@@ -333,7 +333,7 @@ public class ClassicModelsRepository {
     public void throwExceptionForDeleteWithoutWhereClause() {
 
         try {
-            ctx.configuration().set(new Settings()
+            ctx.configuration().derive(new Settings()
                     .withExecuteDeleteWithoutWhere(ExecuteWithoutWhere.THROW)) // check other options beside THROW
                     .dsl()
                     .deleteFrom(SALE)
