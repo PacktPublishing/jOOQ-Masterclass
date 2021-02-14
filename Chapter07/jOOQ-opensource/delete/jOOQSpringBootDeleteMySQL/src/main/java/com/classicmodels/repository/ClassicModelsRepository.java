@@ -261,6 +261,11 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 6.3 (affected rows): "
                 + ctx.executeDelete(ctx.newRecord(SALE, sp))
         );
+        
+        pr.attach(ctx.configuration()); // attach the record to the current configuration
+        System.out.println("EXAMPLE 6.4 (affected rows): "
+                +pr.delete()
+        );
     }
 
     // EXAMPLE 7   
@@ -299,7 +304,7 @@ public class ClassicModelsRepository {
     public void throwExceptionForDeleteWithoutWhereClause() {
 
         try {
-            ctx.configuration().set(new Settings()
+            ctx.configuration().derive(new Settings()
                     .withExecuteDeleteWithoutWhere(ExecuteWithoutWhere.THROW))
                     .dsl()
                     .deleteFrom(SALE)

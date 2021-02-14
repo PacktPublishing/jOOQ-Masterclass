@@ -14,10 +14,12 @@ This is a modified version of the original schema for MySQL
 USE `classicmodels`;
 
 DROP TABLE IF EXISTS `payment`;
+DROP TABLE IF EXISTS `bank_transaction`;
 DROP TABLE IF EXISTS `orderdetail`;
 DROP TABLE IF EXISTS `order`;
 DROP TABLE IF EXISTS `product`;
 DROP TABLE IF EXISTS `productline`;
+DROP TABLE IF EXISTS `top3product`;
 DROP TABLE IF EXISTS `productlinedetail`;
 DROP TABLE IF EXISTS `office_has_manager`;
 DROP TABLE IF EXISTS `manager`;
@@ -40,6 +42,7 @@ CREATE TABLE `office` (
   `country` varchar(50),
   `postal_code` varchar(15) NOT NULL,
   `territory` varchar(10) NOT NULL,
+  `location` point DEFAULT NULL,
   PRIMARY KEY (`office_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -49,6 +52,8 @@ CREATE TABLE `department` (
   `phone` varchar(50) NOT NULL,
   `code` smallint DEFAULT 1,
   `office_code` varchar(10) NOT NULL,
+  `topic` varchar(100) DEFAULT NULL,  
+  `dep_net_ipv4` varchar(16) DEFAULT NULL,
   PRIMARY KEY (`department_id`),
   KEY `office_code` (`office_code`),
   CONSTRAINT `department_ibfk_1` FOREIGN KEY (`office_code`) REFERENCES `office` (`office_code`)
@@ -65,7 +70,9 @@ CREATE TABLE `employee` (
   `office_code` varchar(10) NOT NULL,
   `salary` int NOT NULL,
   `reports_to` bigint DEFAULT NULL,
-  `job_title` varchar(50) NOT NULL,
+  `job_title` varchar(50) NOT NULL, 
+  `employee_of_year` varchar(50) DEFAULT NULL,
+  `monthly_bonus` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`employee_number`),
   KEY `reports_to` (`reports_to`),
   KEY `office_code` (`office_code`),
@@ -81,6 +88,9 @@ CREATE TABLE `sale` (
   `sale` float NOT NULL,  
   `employee_number` bigint DEFAULT NULL,  
   `hot` boolean DEFAULT FALSE,  
+  `rate` enum ('SILVER', 'GOLD', 'PLATINUM') DEFAULT NULL,
+  `vat` enum ('NONE', 'MIN', 'MAX') DEFAULT NULL,
+  `trend` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`sale_id`),  
   KEY `employee_number` (`employee_number`),  
   CONSTRAINT `sales_ibfk_1` FOREIGN KEY (`employee_number`) REFERENCES `employee` (`employee_number`)
@@ -96,6 +106,7 @@ CREATE TABLE `customer` (
   `phone` varchar(50) NOT NULL,
   `sales_rep_employee_number` bigint DEFAULT NULL,
   `credit_limit` decimal(10,2) DEFAULT NULL,
+  `first_buy_date` int DEFAULT NULL,
   PRIMARY KEY (`customer_number`),
   KEY `sales_rep_employee_number` (`sales_rep_employee_number`),
   CONSTRAINT `customers_ibfk_1` FOREIGN KEY (`sales_rep_employee_number`) REFERENCES `employee` (`employee_number`)
@@ -121,6 +132,8 @@ CREATE TABLE `customerdetail` (
 CREATE TABLE `manager` (
   `manager_id` bigint NOT NULL AUTO_INCREMENT,
   `manager_name` varchar(50) NOT NULL,
+  `manager_detail` json DEFAULT NULL,
+  `manager_evaluation` varchar(200) DEFAULT NULL, 
   PRIMARY KEY (`manager_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -166,7 +179,8 @@ CREATE TABLE `productlinedetail` (
   `line_type` int DEFAULT 0,
   PRIMARY KEY (`product_line`,`code`),  
   CONSTRAINT unique_product_line_detail UNIQUE(product_line),
-  CONSTRAINT `productlinedetail_ibfk_1` FOREIGN KEY (`product_line`,`code`) REFERENCES `productline` (`product_line`,`code`)
+  CONSTRAINT `productlinedetail_ibfk_1` FOREIGN KEY (`product_line`,`code`) REFERENCES `productline` (`product_line`,`code`),
+  CONSTRAINT `productlinedetail_ibfk_2` FOREIGN KEY (`product_line`) REFERENCES `productline` (`product_line`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
@@ -182,6 +196,7 @@ CREATE TABLE `product` (
   `quantity_in_stock` smallint DEFAULT 0,
   `buy_price` decimal(10,2) DEFAULT 0.0,
   `msrp` decimal(10,2) DEFAULT 0.0,
+  `specs` mediumtext DEFAULT NULL,
   PRIMARY KEY (`product_id`),
   KEY `product_line` (`product_line`),
   CONSTRAINT `products_ibfk_1` FOREIGN KEY (`product_line`) REFERENCES `productline` (`product_line`)
@@ -216,6 +231,16 @@ CREATE TABLE `orderdetail` (
   CONSTRAINT `orderdetails_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+/*Table structure for table `top3product` */
+
+CREATE TABLE `top3product` (  
+  `product_id` bigint NOT NULL,
+  `product_name` varchar(70) DEFAULT NULL,  
+  PRIMARY KEY (`product_id`),
+  KEY `product_id` (`product_id`),
+  CONSTRAINT `top3product_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 /*Table structure for table `payment` */
 
 CREATE TABLE `payment` (
@@ -223,10 +248,25 @@ CREATE TABLE `payment` (
   `check_number` varchar(50) NOT NULL,
   `payment_date` timestamp NOT NULL,
   `invoice_amount` decimal(10,2) NOT NULL,
-  `caching_date` timestamp DEFAULT NULL,
+  `caching_date` timestamp DEFAULT NULL,  
   PRIMARY KEY (`customer_number`,`check_number`),
   CONSTRAINT `unique_check_number` UNIQUE (`check_number`),
-  CONSTRAINT `payments_ibfk_1` FOREIGN KEY (`customer_number`) REFERENCES `customer` (`customer_number`)
+  CONSTRAINT `payments_ibfk_1` FOREIGN KEY (`customer_number`) REFERENCES `customer` (`customer_number`) 
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Table structure for table `bank_transaction` */
+
+CREATE TABLE `bank_transaction` (
+  `transaction_id` bigint NOT NULL AUTO_INCREMENT,
+  `bank_name` varchar(50) NOT NULL,
+  `bank_iban` varchar(50) NOT NULL,  
+  `transfer_amount` decimal(10,2) NOT NULL,
+  `caching_date` timestamp NOT NULL DEFAULT NOW(),
+  `customer_number` bigint NOT NULL,
+  `check_number` varchar(50) NOT NULL, 
+  `status` varchar(50) NOT NULL, 
+  PRIMARY KEY (`transaction_id`),  
+  CONSTRAINT `bank_transaction_ibfk_1` FOREIGN KEY (`customer_number`,`check_number`) REFERENCES `payment` (`customer_number`,`check_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /* USER-DEFINED FUNCTIONS */
