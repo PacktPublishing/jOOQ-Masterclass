@@ -10,6 +10,7 @@ import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Productline.PRODUCTLINE;
 import org.jooq.DSLContext;
 import org.jooq.JSON;
+import org.jooq.JSONFormat;
 import org.jooq.Record1;
 import org.jooq.Result;
 import static org.jooq.impl.DSL.jsonObject;
@@ -57,16 +58,18 @@ public class ClassicModelsRepository {
 
         System.out.println("\nExample (format the result set as JSON) 1.1:\n"
                 + result.formatJSON());
+        System.out.println("\nExample (format the result set as JSON) 1.2:\n"
+                + result.formatJSON(JSONFormat.DEFAULT_FOR_RECORDS));
 
         // There will be a single entry in the result containing the whole JSON under the "root" element.
         // But, if you remove the "root" element then the result will contains one entry per product line.
-        System.out.println("\nExample (iterate the result set) 1.2:\n");
+        System.out.println("\nExample (iterate the result set) 1.3:\n");
         result.forEach(System.out::println);
 
-        System.out.println("\nExample (extract data from result set) 1.3:\n"
+        System.out.println("\nExample (extract data from result set) 1.4:\n"
                 + result.get(0).component1().data()); // the whole JSON data (most probably, this you'll like to return from a REST controller
         
-        System.out.println("\nExample (extract data from result set) 1.4:\n"
+        System.out.println("\nExample (extract data from result set) 1.5:\n"
                 + result.get(0).value1().data()); // the whole JSON data (most probably, this you'll like to return from a REST controller
                 
         // create a Jackson JSON
@@ -109,6 +112,7 @@ public class ClassicModelsRepository {
                 .data();       // this is JSON data as String
         
                 // or, replace the last three lines from above with: .fetchSingleInto(String.class)
+                // or, replace the last three lines with: .fetch().formatJSON(JSONFormat.DEFAULT_FOR_RECORDS)
                
     }
 }
