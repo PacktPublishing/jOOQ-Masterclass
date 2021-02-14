@@ -7,6 +7,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.text.DecimalFormat;
+import static java.util.stream.Collectors.joining;
+import java.util.stream.Stream;
 import static jooq.generated.tables.Department.DEPARTMENT;
 import static jooq.generated.tables.Manager.MANAGER;
 import static jooq.generated.tables.Office.OFFICE;
@@ -83,7 +85,7 @@ public class ClassicModelsRepository {
                         .fetch()
                         .format(txtFormat)
         );
-        
+
         // format UDT
         System.out.println("EXAMPLE 1.5:\n"
                 + ctx.select(MANAGER.MANAGER_ID, MANAGER.MANAGER_EVALUATION)
@@ -91,7 +93,7 @@ public class ClassicModelsRepository {
                         .fetch()
                         .format(txtFormat)
         );
-        
+
         // format embeddable
         System.out.println("EXAMPLE 1.6:\n"
                 + ctx.select(DEPARTMENT.DEPARTMENT_ID, DEPARTMENT.DEPARTMENT_DETAIL)
@@ -138,15 +140,15 @@ public class ClassicModelsRepository {
                         .fetch()
                         .formatJSON(JSONFormat.DEFAULT_FOR_RECORDS)
         );
-        
+
         // format UDT
         System.out.println("EXAMPLE 2.4:\n"
                 + ctx.select(MANAGER.MANAGER_ID, MANAGER.MANAGER_EVALUATION)
                         .from(MANAGER)
                         .fetch()
                         .formatJSON(JSONFormat.DEFAULT_FOR_RECORDS)
-        );
-        
+        );               
+
         // format embeddable
         System.out.println("EXAMPLE 2.5:\n"
                 + ctx.select(DEPARTMENT.DEPARTMENT_ID, DEPARTMENT.DEPARTMENT_DETAIL)
@@ -154,7 +156,7 @@ public class ClassicModelsRepository {
                         .fetch()
                         .formatJSON(JSONFormat.DEFAULT_FOR_RECORDS)
         );
-        
+
         return result.formatJSON(JSONFormat.DEFAULT_FOR_RECORDS);
     }
 
@@ -193,7 +195,7 @@ public class ClassicModelsRepository {
                         .fetch()
                         .formatXML(XMLFormat.DEFAULT_FOR_RECORDS)
         );
-        
+
         // format UDT
         System.out.println("EXAMPLE 3.4:\n"
                 + ctx.select(MANAGER.MANAGER_ID, MANAGER.MANAGER_EVALUATION)
@@ -201,7 +203,7 @@ public class ClassicModelsRepository {
                         .fetch()
                         .formatXML(XMLFormat.DEFAULT_FOR_RECORDS)
         );
-        
+
         // format embeddable
         System.out.println("EXAMPLE 3.5:\n"
                 + ctx.select(DEPARTMENT.DEPARTMENT_ID, DEPARTMENT.DEPARTMENT_DETAIL)
@@ -209,7 +211,7 @@ public class ClassicModelsRepository {
                         .fetch()
                         .formatXML(XMLFormat.DEFAULT_FOR_RECORDS)
         );
-        
+
         return result.formatXML(XMLFormat.DEFAULT_FOR_RECORDS);
     }
 
@@ -247,7 +249,7 @@ public class ClassicModelsRepository {
                         .fetch()
                         .formatHTML()
         );
-        
+                
         // format UDT
         System.out.println("EXAMPLE 4.3:\n"
                 + ctx.select(MANAGER.MANAGER_ID, MANAGER.MANAGER_EVALUATION)
@@ -255,15 +257,33 @@ public class ClassicModelsRepository {
                         .fetch()
                         .formatHTML()
         );
-        
-        // format embeddable
+                
         System.out.println("EXAMPLE 4.4:\n"
+                + Stream.of(ctx.select(MANAGER.MANAGER_NAME, MANAGER.MANAGER_EVALUATION)
+                        .from(MANAGER)
+                        .where(MANAGER.MANAGER_EVALUATION.isNotNull())
+                        .fetchArray())
+                        .map(e -> e.value1().concat(e.value2().formatHTML()))
+                        .collect(joining("<br />"))
+        );
+
+        // format embeddable
+        System.out.println("EXAMPLE 4.5:\n"
                 + ctx.select(DEPARTMENT.DEPARTMENT_ID, DEPARTMENT.DEPARTMENT_DETAIL)
                         .from(DEPARTMENT)
                         .fetch()
                         .formatHTML()
-        );
+        );       
         
+        System.out.println("EXAMPLE 4.6:\n"
+                + Stream.of(ctx.select(DEPARTMENT.OFFICE_CODE, DEPARTMENT.DEPARTMENT_DETAIL)
+                        .from(DEPARTMENT)
+                        .where(DEPARTMENT.DEPARTMENT_DETAIL.isNotNull())
+                        .fetchArray())
+                        .map(e -> e.value1().concat(e.value2().formatHTML()))
+                        .collect(joining("<br />"))
+        );
+
         return result.formatHTML();
     }
 
@@ -282,7 +302,7 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 5.3:\n" + result.formatCSV(false, ';', "N/A")); // no header        
 
         CSVFormat csvFormat = new CSVFormat()
-                .delimiter("|")                
+                .delimiter("|")
                 .nullString("{null}");
         // try out more options
         System.out.println("EXAMPLE 5.4:\n" + result.formatCSV(csvFormat));
@@ -309,7 +329,7 @@ public class ClassicModelsRepository {
                         .fetch()
                         .formatCSV(csvFormat)
         );
-        
+
         // format UDT
         System.out.println("EXAMPLE 5.6:\n"
                 + ctx.select(MANAGER.MANAGER_ID, MANAGER.MANAGER_EVALUATION)
@@ -318,14 +338,23 @@ public class ClassicModelsRepository {
                         .formatCSV(csvFormat)
         );
         
-        // format embeddable
         System.out.println("EXAMPLE 5.7:\n"
+                + Stream.of(ctx.select(MANAGER.MANAGER_NAME, MANAGER.MANAGER_EVALUATION)
+                        .from(MANAGER)
+                        .where(MANAGER.MANAGER_EVALUATION.isNotNull())
+                        .fetchArray())
+                        .map(e -> e.value1().concat(":\n".concat(e.value2().formatCSV(csvFormat))))
+                        .collect(joining("\n"))
+        );
+
+        // format embeddable
+        System.out.println("EXAMPLE 5.8:\n"
                 + ctx.select(DEPARTMENT.DEPARTMENT_ID, DEPARTMENT.DEPARTMENT_DETAIL)
                         .from(DEPARTMENT)
                         .fetch()
                         .formatCSV(csvFormat)
         );
-        
+
         return result.formatCSV(csvFormat);
     }
 
@@ -359,8 +388,8 @@ public class ClassicModelsRepository {
                     .formatChart(bw, cf);
         } catch (IOException ex) {
             // handle exception
-        }        
-        
+        }
+
         return result.formatChart(cf);
     }
 
