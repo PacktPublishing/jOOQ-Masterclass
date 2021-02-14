@@ -88,8 +88,8 @@ public class ClassicModelsRepository {
                 .onKey()
                 .fetch();
 
-        System.out.println("EXAMPLE 1.1:\n" + result.formatJSON()); // or, JSONFormat.DEFAULT_FOR_RESULTS               
-        System.out.println("EXAMPLE 1.2:\n" + result.formatJSON(JSONFormat.DEFAULT_FOR_RECORDS));
+        System.out.println("EXAMPLE 2.1:\n" + result.formatJSON()); // or, JSONFormat.DEFAULT_FOR_RESULTS               
+        System.out.println("EXAMPLE 2.2:\n" + result.formatJSON(JSONFormat.DEFAULT_FOR_RECORDS));
 
         // fetch -> format -> export to file        
         try ( BufferedWriter bw = Files.newBufferedWriter(
@@ -119,8 +119,8 @@ public class ClassicModelsRepository {
                 .onKey()
                 .fetch();
 
-        System.out.println("EXAMPLE 2.1:\n" + result.formatXML()); // or, XMLFormat.DEFAULT_FOR_RESULTS               
-        System.out.println("EXAMPLE 2.2:\n" + result.formatXML(XMLFormat.DEFAULT_FOR_RECORDS));
+        System.out.println("EXAMPLE 3.1:\n" + result.formatXML()); // or, XMLFormat.DEFAULT_FOR_RESULTS               
+        System.out.println("EXAMPLE 3.2:\n" + result.formatXML(XMLFormat.DEFAULT_FOR_RECORDS));
 
         // fetch -> format -> export to file        
         try ( BufferedWriter bw = Files.newBufferedWriter(
@@ -150,7 +150,7 @@ public class ClassicModelsRepository {
                 .onKey()
                 .fetch();
 
-        System.out.println("EXAMPLE 3:\n" + result.formatHTML());
+        System.out.println("EXAMPLE 4:\n" + result.formatHTML());
 
         // fetch -> format -> export to file        
         try ( BufferedWriter bw = Files.newBufferedWriter(
@@ -180,15 +180,15 @@ public class ClassicModelsRepository {
                 .onKey()
                 .fetch();
 
-        System.out.println("EXAMPLE 4.1:\n" + result.formatCSV());
-        System.out.println("EXAMPLE 4.2:\n" + result.formatCSV(true, ';', "N/A"));
-        System.out.println("EXAMPLE 4.3:\n" + result.formatCSV(false, ';', "N/A")); // no header        
+        System.out.println("EXAMPLE 5.1:\n" + result.formatCSV());
+        System.out.println("EXAMPLE 5.2:\n" + result.formatCSV(true, ';', "N/A"));
+        System.out.println("EXAMPLE 5.3:\n" + result.formatCSV(false, ';', "N/A")); // no header        
 
         CSVFormat csvFormat = new CSVFormat()
                 .delimiter("|")
                 .nullString("{null}");
         // try out more options
-        System.out.println("EXAMPLE 4.4:\n" + result.formatCSV(csvFormat));
+        System.out.println("EXAMPLE 5.4:\n" + result.formatCSV(csvFormat));
 
         // fetch -> format -> export to file        
         try ( BufferedWriter bw = Files.newBufferedWriter(
@@ -224,8 +224,8 @@ public class ClassicModelsRepository {
                 .shades('*')
                 .numericFormat(decimalFormat);
 
-        System.out.println("EXAMPLE 5.1:\n" + result.formatChart());
-        System.out.println("EXAMPLE 5.2:\n" + result.formatChart(cf));
+        System.out.println("EXAMPLE 6.1:\n" + result.formatChart());
+        System.out.println("EXAMPLE 6.2:\n" + result.formatChart(cf));
 
         // fetch -> format -> export to file        
         try ( BufferedWriter bw = Files.newBufferedWriter(
@@ -262,8 +262,8 @@ public class ClassicModelsRepository {
                 .values(1, 2, 3)
                 .numericFormat(decimalFormat);
 
-        System.out.println("EXAMPLE 6.1:\n" + result.formatChart());
-        System.out.println("EXAMPLE 6.2:\n" + result.formatChart(cf));
+        System.out.println("EXAMPLE 7.1:\n" + result.formatChart());
+        System.out.println("EXAMPLE 7.2:\n" + result.formatChart(cf));
 
         // fetch -> format -> export to file        
         try ( BufferedWriter bw = Files.newBufferedWriter(
@@ -304,11 +304,11 @@ public class ClassicModelsRepository {
                 ).execute();
 
         String inserts = result.formatInsert(table("product_stats"));
-        System.out.println("EXAMPLE 7.1 (to insert):\n" + inserts);
+        System.out.println("EXAMPLE 8.1 (to insert):\n" + inserts);
 
         ctx.execute(inserts);
 
-        System.out.println("EXAMPLE 7.2 (after insert):\n"
+        System.out.println("EXAMPLE 8.2 (after insert):\n"
                 + (ctx.selectFrom(table("product_stats")).fetch()));
 
         // fetch -> format -> export to file        
