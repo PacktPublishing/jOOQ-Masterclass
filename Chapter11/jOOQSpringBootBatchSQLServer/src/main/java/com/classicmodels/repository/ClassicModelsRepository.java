@@ -23,9 +23,7 @@ import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.Result;
 import org.jooq.conf.Settings;
-import static org.jooq.impl.DSL.default_;
 import static org.jooq.impl.DSL.select;
-import static org.jooq.impl.DSL.val;
 import org.jooq.tools.jdbc.BatchedConnection;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -374,6 +372,16 @@ public class ClassicModelsRepository {
             updates(c);
         });
     }
+    
+    @Transactional
+    public void batchedAndReturn() {
+
+        String result = ctx.batchedResult((Configuration c) -> {
+            return insertsAndReturn(c);
+        });
+        
+        System.out.println("EXAMPLE 6.2: " + result);
+    }
 
     public void insertsAndUpdates(Configuration c) {
 
@@ -445,6 +453,39 @@ public class ClassicModelsRepository {
                 EMPLOYEE.EMAIL, EMPLOYEE.OFFICE_CODE, EMPLOYEE.SALARY, EMPLOYEE.JOB_TITLE)
                 .values(12L, "Ana", "Arica", "x5111", "aarica@classicmodelcars.com", "3", 50000, "Sales Rep")
                 .onConflictDoNothing().execute();
+    }
+    
+    public String insertsAndReturn(Configuration c) {
+
+        DSLContext ctxLocal = c.dsl();
+
+        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
+                .values(2005, 1370L, 1282.64).execute();
+        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
+                .values(2004, 1370L, 3938.24).execute();
+        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
+                .values(2004, 1370L, 4676.14).execute();
+        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
+                .values(2003, 1166L, 2223.0).execute();
+        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
+                .values(2004, 1166L, 4531.35).execute();
+        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
+                .values(2004, 1166L, 6751.33).execute();
+
+        ctxLocal.insertInto(EMPLOYEE, EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.LAST_NAME, EMPLOYEE.FIRST_NAME, EMPLOYEE.EXTENSION,
+                EMPLOYEE.EMAIL, EMPLOYEE.OFFICE_CODE, EMPLOYEE.SALARY, EMPLOYEE.JOB_TITLE)
+                .values(13L, "Toga", "Alison", "x3332", "talison@classicmodelcars.com", "1", 110000, "VP Sales")
+                .onConflictDoNothing().execute();
+        ctxLocal.insertInto(EMPLOYEE, EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.LAST_NAME, EMPLOYEE.FIRST_NAME, EMPLOYEE.EXTENSION,
+                EMPLOYEE.EMAIL, EMPLOYEE.OFFICE_CODE, EMPLOYEE.SALARY, EMPLOYEE.JOB_TITLE)
+                .values(14L, "Marius", "Pologa", "x5332", "mpologa@classicmodelcars.com", "3", 50000, "Sales Rep")
+                .onConflictDoNothing().execute();
+        ctxLocal.insertInto(EMPLOYEE, EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.LAST_NAME, EMPLOYEE.FIRST_NAME, EMPLOYEE.EXTENSION,
+                EMPLOYEE.EMAIL, EMPLOYEE.OFFICE_CODE, EMPLOYEE.SALARY, EMPLOYEE.JOB_TITLE)
+                .values(15L, "Ana", "Arica", "x5111", "aarica@classicmodelcars.com", "3", 50000, "Sales Rep")
+                .onConflictDoNothing().execute();
+        
+        return "success";
     }
 
     public void updates(Configuration c) {

@@ -32,6 +32,7 @@ public class MainApplication {
             classicModelsService.batchCollectionOfObjects();
             classicModelsService.batchedInsertsAndUpdates1();
             classicModelsService.batchedInsertsAndUpdates2();
+            classicModelsService.batchedAndReturn();
             classicModelsService.batchedConnectionUsage();
             classicModelsService.batchedRecords();
             classicModelsService.batchingOneToMany();

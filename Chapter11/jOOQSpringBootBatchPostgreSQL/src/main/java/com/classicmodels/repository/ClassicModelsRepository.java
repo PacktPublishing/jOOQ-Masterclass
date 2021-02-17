@@ -330,7 +330,7 @@ public class ClassicModelsRepository {
 
         sales.forEach(s -> batch.bind(s.getFiscalYear(), s.getEmployeeNumber(), s.getSale()));        
         
-        System.out.println("EXAMPLE 6.2: " + Arrays.toString(batch.execute()));
+        batch.execute();
     }
 
     // use batched()
@@ -347,6 +347,16 @@ public class ClassicModelsRepository {
             inserts(c);
             updates(c);
         });
+    }
+    
+    @Transactional
+    public void batchedAndReturn() {
+
+        String result = ctx.batchedResult((Configuration c) -> {
+            return insertsAndReturn(c);
+        });
+        
+        System.out.println("EXAMPLE 6.2: " + result);
     }
 
     public void insertsAndUpdates(Configuration c) {
@@ -420,6 +430,39 @@ public class ClassicModelsRepository {
                 .values(12L, "Ana", "Arica", "x5111", "aarica@classicmodelcars.com", "3", 50000, "Sales Rep")
                 .onConflictDoNothing().execute();
     }
+    
+    public String insertsAndReturn(Configuration c) {
+
+        DSLContext ctxLocal = c.dsl();
+
+        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
+                .values(2005, 1370L, 1282.64).execute();
+        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
+                .values(2004, 1370L, 3938.24).execute();
+        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
+                .values(2004, 1370L, 4676.14).execute();
+        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
+                .values(2003, 1166L, 2223.0).execute();
+        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
+                .values(2004, 1166L, 4531.35).execute();
+        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
+                .values(2004, 1166L, 6751.33).execute();
+
+        ctxLocal.insertInto(EMPLOYEE, EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.LAST_NAME, EMPLOYEE.FIRST_NAME, EMPLOYEE.EXTENSION,
+                EMPLOYEE.EMAIL, EMPLOYEE.OFFICE_CODE, EMPLOYEE.SALARY, EMPLOYEE.JOB_TITLE)
+                .values(13L, "Toga", "Alison", "x3332", "talison@classicmodelcars.com", "1", 110000, "VP Sales")
+                .onConflictDoNothing().execute();
+        ctxLocal.insertInto(EMPLOYEE, EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.LAST_NAME, EMPLOYEE.FIRST_NAME, EMPLOYEE.EXTENSION,
+                EMPLOYEE.EMAIL, EMPLOYEE.OFFICE_CODE, EMPLOYEE.SALARY, EMPLOYEE.JOB_TITLE)
+                .values(14L, "Marius", "Pologa", "x5332", "mpologa@classicmodelcars.com", "3", 50000, "Sales Rep")
+                .onConflictDoNothing().execute();
+        ctxLocal.insertInto(EMPLOYEE, EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.LAST_NAME, EMPLOYEE.FIRST_NAME, EMPLOYEE.EXTENSION,
+                EMPLOYEE.EMAIL, EMPLOYEE.OFFICE_CODE, EMPLOYEE.SALARY, EMPLOYEE.JOB_TITLE)
+                .values(15L, "Ana", "Arica", "x5111", "aarica@classicmodelcars.com", "3", 50000, "Sales Rep")
+                .onConflictDoNothing().execute();
+        
+        return "success";
+    }
 
     public void updates(Configuration c) {
 
@@ -454,7 +497,7 @@ public class ClassicModelsRepository {
         });
 
         // by default the generated INSERT has 3 placeholders
-        // insert into "classicmodels"."sale" ("sale_id", "fiscal_year", "sale", "trend") values (?, ?, ?, ?)
+        // insert into "public"."sale" ("sale_id", "fiscal_year", "sale", "trend") values (?, ?, ?, ?)
         SaleRecord sr1 = new SaleRecord();
         sr1.setSaleId((long) (Math.random() * 1_000_000L));
         sr1.setFiscalYear(2003);
@@ -462,7 +505,7 @@ public class ClassicModelsRepository {
         sr1.setSale(34493.22);
 
         // by default the generated INSERT has 4 placeholders
-        // insert into "classicmodels"."sale" ("sale_id", "fiscal_year", "sale", "employee_number", "hot") values (?, ?, ?, ?, ?)
+        // insert into "public"."sale" ("sale_id", "fiscal_year", "sale", "employee_number", "hot") values (?, ?, ?, ?, ?)
         SaleRecord sr2 = new SaleRecord();
         sr2.setSaleId((long) (Math.random() * 1_000_000L));
         sr2.setEmployeeNumber(1370L);
@@ -478,7 +521,7 @@ public class ClassicModelsRepository {
         sr2.changed(true);
 
         // a single batch is executed having this INSERT
-        // insert into "classicmodels"."sale" ("sale_id", "fiscal_year", "sale", "employee_number", "hot", "rate", "vat", "trend") values (?, ?, ?, ?, ?, ?, ?, ?)
+        // insert into "public"."sale" ("sale_id", "fiscal_year", "sale", "employee_number", "hot", "rate", "vat", "trend") values (?, ?, ?, ?, ?, ?, ?, ?)
         ctx.batchInsert(sr1, sr2).execute();
     }
 
@@ -488,7 +531,7 @@ public class ClassicModelsRepository {
         try ( BatchedConnection conn = new BatchedConnection(DriverManager.getConnection(
                 "jdbc:postgresql://localhost:5432/classicmodels", "postgres", "root"), 2)) {
 
-            String sql1 = "insert into 'classicmodels'.'sale' ('fiscal_year', 'employee_number', 'sale') "
+            String sql1 = "insert into \"public\".\"sale\" (\"fiscal_year\", \"employee_number\", \"sale\") "
                     + "values (?, ?, ?)";
 
             try ( PreparedStatement stmt = conn.prepareStatement(sql1)) {
@@ -514,7 +557,7 @@ public class ClassicModelsRepository {
             }
 
             // since the following SQL string is different, next statements represents the third batch
-            String sql2 = "insert into 'classicmodels'.'sale' ('fiscal_year', 'employee_number', 'sale', 'trend') "
+            String sql2 = "insert into \"public\".\"sale\" (\"fiscal_year\", \"employee_number\", \"sale\", \"trend\") "
                     + "values (?, ?, ?, ?)";
 
             try ( PreparedStatement stmt = conn.prepareStatement(sql2)) {
@@ -540,8 +583,8 @@ public class ClassicModelsRepository {
         try ( BatchedConnection conn = new BatchedConnection(DriverManager.getConnection(
                 "jdbc:postgresql://localhost:5432/classicmodels", "postgres", "root"), 2)) {
 
-            try ( PreparedStatement stmt = conn.prepareStatement("insert into 'classicmodels'.'sale' ('fiscal_year', 'employee_number', 'sale') "
-                    + "values (?, ?, ?);")) {
+            try ( PreparedStatement stmt = conn.prepareStatement("insert into \"public\".\"sale\" (\"fiscal_year\", \"employee_number\", \"sale\") "
+                    + "values (?, ?, ?)")) {
 
                 // the next 2 statements will become the first batch                        
                 stmt.setInt(1, 2004);
@@ -562,8 +605,8 @@ public class ClassicModelsRepository {
             }
 
             // since the following SQL string is different, next statements represents the third batch
-            try ( PreparedStatement stmt = conn.prepareStatement("insert into 'classicmodels'.'sale' ('fiscal_year', 'employee_number', 'sale', 'trend') "
-                    + "values (?, ?, ?, ?);")) {
+            try ( PreparedStatement stmt = conn.prepareStatement("insert into \"public\".\"sale\" (\"fiscal_year\", \"employee_number\", \"sale\", \"trend\") "
+                    + "values (?, ?, ?, ?)")) {
 
                 stmt.setInt(1, 2004);
                 stmt.setLong(2, 1166L);
