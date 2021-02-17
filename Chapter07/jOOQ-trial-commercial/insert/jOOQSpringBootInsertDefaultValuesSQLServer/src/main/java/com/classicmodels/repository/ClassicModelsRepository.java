@@ -95,6 +95,9 @@ public class ClassicModelsRepository {
                         .execute()
         );
         
+        /*
+        // Works only in SQL Server versions prior to 2005
+        // http://www.sql-server-helper.com/error-messages/msg-339.aspx
         System.out.println("EXAMPLE 3.2 (affected rows): "
                 + ctx.insertInto(PRODUCT)
                         .columns(PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_SCALE,
@@ -112,6 +115,7 @@ public class ClassicModelsRepository {
                         )
                         .execute()
         );
+        */
     }
 
     // EXAMPLE 4
