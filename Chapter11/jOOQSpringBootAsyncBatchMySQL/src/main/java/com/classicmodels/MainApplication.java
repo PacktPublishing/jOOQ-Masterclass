@@ -1,6 +1,8 @@
 package com.classicmodels;
 
 import com.classicmodels.service.ClassicModelsService;
+import java.util.Arrays;
+import java.util.List;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -23,19 +25,8 @@ public class MainApplication {
     public ApplicationRunner init() {
         return args -> {
 
-            classicModelsService.batchInserts();
-            classicModelsService.batchUpdates();
-            classicModelsService.batchDeletes();
-            classicModelsService.batchMerges();
-            classicModelsService.batchStores();
-            classicModelsService.combineBatch();
-            classicModelsService.batchCollectionOfObjects();
-            classicModelsService.batchedInsertsAndUpdates1();
-            classicModelsService.batchedInsertsAndUpdates2();
-            classicModelsService.batchedAndReturn();
-            classicModelsService.batchedConnectionUsage();
-            classicModelsService.batchedRecords();
-            classicModelsService.batchingOneToMany();
+           List<int[]> result = classicModelsService.batchAsync();
+           result.forEach(r -> System.out.println(Arrays.toString(r)));
         };
     }
 }
