@@ -57,6 +57,11 @@ public class ClassicModelsService {
         classicModelsRepository.batchedInsertsAndUpdates2();
     }
     
+    public void batchedAndReturn() {
+        
+        classicModelsRepository.batchedAndReturn();
+    }
+    
     public void batchedRecords() {
         
         classicModelsRepository.batchedRecords();
