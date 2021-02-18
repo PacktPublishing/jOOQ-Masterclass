@@ -1,0 +1,11 @@
+customer_number,customer_name,contact_last_name,contact_first_name,phone,sales_rep_employee_number,credit_limit,first_buy_date,customer_number,address_line_first,address_line_second,city,state,postal_code,country
+11199,Australian Home,Paoule,Sart ,40.11.2555,1370,21000.00,20210,11199,43 Rue 2,"",Paris,"",25017,France
+111100,Joliyon,Schmitt,Rue ,10.22.2535,1370,21000.00,20201,111100,"51, Avenue 3","","","",43000,""
+111101,Marquez Xioa,Calor,Sar ,`11.12.2525,1370,21000.00,21805,111101,"51, St 5","","","",44000,USA
+111102,Falafel 3,Hor,Carine ,20.12.2525,1370,21000.00,21805,111102,"51, St AQ","",Bucharest,"",12000,""
+111103,Atelier graphique,Schmitt,Carine ,40.32.2555,1370,21000.00,20186,111103,"54, rue Royale","",Nantes,"",44000,France
+111112,Signal Gift Stores,King,Jean,7025551838,1166,71800.00,21803,111112,8489 Strong St.,"",Las Vegas,NV,83030,USA
+111114,"Australian Collectors, Co.",Ferguson,Peter,03 9520 4555,1611,117300.00,20105,111114,636 St Kilda Road,Level 3,Melbourne,Victoria,3004,Australia
+111119,La Rochelle Gifts,Labrune,Janine ,40.67.8555,1370,118200.00,20140,111119,"67, rue des Cinquante Otages","",Nantes,"",44000,France
+111121,Baane Mini Imports,Bergulfsen,Jonas ,07-98 9555,1504,81700.00,21403,111121,Erling Skakkes gate 78,"",Stavern,"",4110,Norway
+111124,Mini Gifts Distributors Ltd.,Nelson,Susan,4155551450,1165,210500.00,20143,111124,5677 Strong St.,"",San Rafael,CA,97562,USA

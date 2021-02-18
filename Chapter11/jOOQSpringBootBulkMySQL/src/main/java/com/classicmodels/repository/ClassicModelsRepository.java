@@ -39,6 +39,7 @@ public class ClassicModelsRepository {
                         .values(LocalDate.of(2005, 12, 12), LocalDate.of(2005, 12, 23),
                                 LocalDate.of(2005, 12, 22), "On Hold",
                                 "Order of client ...", 181L)
+                        .onDuplicateKeyIgnore() // or, use onDuplicateKeyUpdate().set(...)
                         .execute()
         );
 
@@ -57,6 +58,7 @@ public class ClassicModelsRepository {
                                                         .and(val(103L).eq(o.CUSTOMER_NUMBER))
                                         )
                         )
+                        .onDuplicateKeyIgnore() // or, use onDuplicateKeyUpdate().set(...)
                         .execute()
         );
     }

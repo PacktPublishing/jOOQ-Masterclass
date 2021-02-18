@@ -1,0 +1,6 @@
+sale_id,fiscal_year,sale,employee_number,hot,rate,vat,trend
+1,2003,5282.64,1370,0,"","",UP
+2,1370,0,"","",UP
+3,2004,1676.14,1370,0,"","",DOWN
+4,2003,3213.0,1166,0,"","",DOWN
+5
