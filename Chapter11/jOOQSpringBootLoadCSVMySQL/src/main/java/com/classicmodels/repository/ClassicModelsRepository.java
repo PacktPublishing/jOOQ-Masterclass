@@ -1,11 +1,8 @@
 package com.classicmodels.repository;
 
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
@@ -19,47 +16,13 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-//@Transactional(readOnly = true)
+@Transactional(readOnly = true)
 public class ClassicModelsRepository {
 
     private final DSLContext ctx;
 
     public ClassicModelsRepository(DSLContext ctx) {
         this.ctx = ctx;
-    }
-
-    public void ex() {
-        /*
-        CSVFormat csvFormat = new CSVFormat()
-                .delimiter("|")
-                .nullString("{null}");
-
-        try ( BufferedWriter bw = Files.newBufferedWriter(
-                Paths.get("allColumnsHeaderCommonSettings.csv"), StandardCharsets.UTF_8,
-                StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE)) {
-            ctx.select(SALE.asterisk())//.except(SALE.SALE_ID))
-                    .from(SALE)
-                    .fetch()
-                    .formatCSV(bw);
-        } catch (IOException ex) {
-            System.out.println("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
-            System.out.println("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq" + ex);
-            System.out.println("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
-        }
-         */
-        try ( BufferedWriter bw = Files.newBufferedWriter(
-                Paths.get("result.csv"), StandardCharsets.UTF_8,
-                StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE)) {
-            ctx.select()
-                    .from(CUSTOMER)
-                    .join(CUSTOMERDETAIL)
-                    .onKey()
-                    .limit(10)
-                    .fetch()
-                    .formatCSV(bw);
-        } catch (IOException ex) {
-            // handle exception
-        }
     }
 
     @Transactional
@@ -200,9 +163,9 @@ public class ClassicModelsRepository {
             int executed = ctx.loadInto(SALE)
                     .onDuplicateKeyUpdate() // bulk cannot be used                                                          
                     .batchAfter(2) // each *batch* has 2 rows
-                    .commitNone() // (default) allow Spring Boot to handle transaction commit
-                    // if you remove @Transactional then auto-commit (see, application.properties) takes action
-                    // if you remove @Transactional and set auto-commit to false then nothing commits
+                    .commitNone()  // (default) allow Spring Boot to handle transaction commit
+                                   // if you remove @Transactional then auto-commit (see, application.properties) takes action
+                                   // if you remove @Transactional and set auto-commit to false then nothing commits
                     .loadCSV(Paths.get("data", "csv", "allColumnsHeaderCommaSeparatorWithDuplicates.csv").toFile(), StandardCharsets.UTF_8)
                     .fieldsCorresponding()
                     .execute()
