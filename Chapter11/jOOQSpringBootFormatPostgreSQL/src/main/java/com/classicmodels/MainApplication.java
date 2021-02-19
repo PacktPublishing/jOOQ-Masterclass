@@ -24,13 +24,13 @@ public class MainApplication {
         return args -> {
 
             classicModelsService.formatResultAsText();
-            classicModelsService.formatResultAsJSON();
+        /*    classicModelsService.formatResultAsJSON();
             classicModelsService.formatResultAsXML();
             classicModelsService.formatResultAsHTML();
             classicModelsService.formatResultAsCSV();
             classicModelsService.formatResultAs1Chart();
             classicModelsService.formatResultAs2Chart();
-            classicModelsService.formatResultAsInserts();
+            classicModelsService.formatResultAsInserts();*/
         };
     }
 }

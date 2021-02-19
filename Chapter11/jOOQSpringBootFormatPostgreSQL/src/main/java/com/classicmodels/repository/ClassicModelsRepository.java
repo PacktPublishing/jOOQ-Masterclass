@@ -73,7 +73,7 @@ public class ClassicModelsRepository {
                     .join(PRODUCT)
                     .onKey()
                     .fetch()
-                    .format(bw, txtFormat);
+                    .format(bw, txtFormat); // or, new TXTFormat().maxRows(25).minColWidth(20)
         } catch (IOException ex) {
             // handle exception
         }
