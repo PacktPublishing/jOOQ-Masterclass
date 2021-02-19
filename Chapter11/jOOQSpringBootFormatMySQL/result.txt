@@ -1,0 +1,30 @@
++--------------------+--------------------+------------------------------+
+|product_line        |          product_id|product_name                  |
++--------------------+--------------------+------------------------------+
+|Classic Cars        |                   2|1952 Alpine Renault 1300      |
+|Classic Cars        |                   5|1972 Alfa Romeo GTA           |
+|Classic Cars        |                   6|1962 LanciaA Delta 16V        |
+|Classic Cars        |                   7|1968 Ford Mustang             |
+|Classic Cars        |                   8|2001 Ferrari Enzo             |
+|Classic Cars        |                  11|1969 Corvair Monza            |
+|Classic Cars        |                  12|1968 Dodge Charger            |
+|Classic Cars        |                  13|1969 Ford Falcon              |
+|Classic Cars        |                  14|1970 Plymouth Hemi Cuda       |
+|Classic Cars        |                  16|1969 Dodge Charger            |
+|Classic Cars        |                  18|1993 Mazda RX-7               |
+|Classic Cars        |                  21|1965 Aston Martin DB5         |
+|Classic Cars        |                  24|1948 Porsche 356-A Roadster   |
+|Classic Cars        |                  25|1995 Honda Civic              |
+|Classic Cars        |                  26|1998 Chrysler Plymouth Prowler|
+|Classic Cars        |                  34|1999 Indy 500 Monte Carlo SS  |
+|Classic Cars        |                  40|1992 Ferrari 360 Spider red   |
+|Classic Cars        |                  41|1985 Toyota Supra             |
+|Classic Cars        |                  43|1969 Dodge Super Bee          |
+|Classic Cars        |                  45|1976 Ford Gran Torino         |
+|Classic Cars        |                  46|1948 Porsche Type 356 Roadster|
+|Classic Cars        |                  49|1970 Triumph Spitfire         |
+|Classic Cars        |                  54|1957 Corvette Convertible     |
+|Classic Cars        |                  55|1957 Ford Thunderbird         |
+|Classic Cars        |                  56|1970 Chevy Chevelle SS 454    |
++--------------------+--------------------+------------------------------+
+|...record(s) truncated...

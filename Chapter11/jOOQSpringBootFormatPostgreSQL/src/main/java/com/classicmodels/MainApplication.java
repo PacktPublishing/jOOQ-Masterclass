@@ -23,10 +23,10 @@ public class MainApplication {
     public ApplicationRunner init() {
         return args -> {
 
-            classicModelsService.formatResultAsText();
-        /*    classicModelsService.formatResultAsJSON();
-            classicModelsService.formatResultAsXML();
-            classicModelsService.formatResultAsHTML();
+           // classicModelsService.formatResultAsText();
+          // classicModelsService.formatResultAsJSON();
+        classicModelsService.formatResultAsXML();
+    /*        classicModelsService.formatResultAsHTML();
             classicModelsService.formatResultAsCSV();
             classicModelsService.formatResultAs1Chart();
             classicModelsService.formatResultAs2Chart();

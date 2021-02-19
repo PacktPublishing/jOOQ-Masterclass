@@ -70,7 +70,7 @@ public class ClassicModelsRepository {
                     .join(PRODUCT)
                     .onKey()
                     .fetch()
-                    .format(bw, txtFormat);
+                    .format(bw, txtFormat); // or, new TXTFormat().maxRows(25).minColWidth(20)
         } catch (IOException ex) {
             // handle exception
         }
@@ -93,18 +93,39 @@ public class ClassicModelsRepository {
 
         // fetch -> format -> export to file        
         try ( BufferedWriter bw = Files.newBufferedWriter(
-                Paths.get("result.json"), StandardCharsets.UTF_8,
+                Paths.get("resultArray.json"), StandardCharsets.UTF_8,
                 StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE)) {
             ctx.select(PRODUCTLINE.PRODUCT_LINE,
                     PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME)
                     .from(PRODUCTLINE)
                     .join(PRODUCT)
-                    .onKey()
+                    .onKey()                    
                     .fetch()
                     .formatJSON(bw, JSONFormat.DEFAULT_FOR_RECORDS);
         } catch (IOException ex) {
             // handle exception
         }
+        
+        JSONFormat jsonFormat = new JSONFormat()
+                .indent(4)      // defaults to 2
+                .header(false)  // default to true
+                .newline("\r")  // "\n" is default
+                .recordFormat(JSONFormat.RecordFormat.OBJECT); // defaults to ARRAY                                
+
+        // fetch -> format -> export to file        
+        try ( BufferedWriter bw = Files.newBufferedWriter(
+                Paths.get("resultObject.json"), StandardCharsets.UTF_8,
+                StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE)) {
+            ctx.select(PRODUCTLINE.PRODUCT_LINE,
+                    PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME)
+                    .from(PRODUCTLINE)
+                    .join(PRODUCT)
+                    .onKey()                    
+                    .fetch()
+                    .formatJSON(bw, jsonFormat);
+        } catch (IOException ex) {
+            // handle exception
+        }               
 
         return result.formatJSON(JSONFormat.DEFAULT_FOR_RECORDS);
     }
@@ -124,7 +145,7 @@ public class ClassicModelsRepository {
 
         // fetch -> format -> export to file        
         try ( BufferedWriter bw = Files.newBufferedWriter(
-                Paths.get("result.xml"), StandardCharsets.UTF_8,
+                Paths.get("resultDefault.xml"), StandardCharsets.UTF_8,
                 StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE)) {
             ctx.select(PRODUCTLINE.PRODUCT_LINE,
                     PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME)
@@ -136,6 +157,27 @@ public class ClassicModelsRepository {
         } catch (IOException ex) {
             // handle exception
         }
+
+        XMLFormat xmlFormat = new XMLFormat()
+                .indent(4)      // defaults to 2
+                .header(false)  // default to true
+                .newline("\r")  // "\n" is default
+                .recordFormat(XMLFormat.RecordFormat.COLUMN_NAME_ELEMENTS); // defaults to VALUE_ELEMENTS_WITH_FIELD_ATTRIBUTE
+        
+        // fetch -> format -> export to file        
+        try ( BufferedWriter bw = Files.newBufferedWriter(
+                Paths.get("resultColumnNameElements.xml"), StandardCharsets.UTF_8,
+                StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE)) {
+            ctx.select(PRODUCTLINE.PRODUCT_LINE,
+                    PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME)
+                    .from(PRODUCTLINE)
+                    .join(PRODUCT)
+                    .onKey()
+                    .fetch()
+                    .formatXML(bw, xmlFormat);
+        } catch (IOException ex) {
+            // handle exception
+        }           
 
         return result.formatXML(XMLFormat.DEFAULT_FOR_RECORDS);
     }

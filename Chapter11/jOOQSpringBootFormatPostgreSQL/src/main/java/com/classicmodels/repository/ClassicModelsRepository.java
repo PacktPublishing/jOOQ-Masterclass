@@ -120,26 +120,47 @@ public class ClassicModelsRepository {
 
         // fetch -> format -> export to file        
         try ( BufferedWriter bw = Files.newBufferedWriter(
-                Paths.get("result.json"), StandardCharsets.UTF_8,
+                Paths.get("resultArray.json"), StandardCharsets.UTF_8,
                 StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE)) {
             ctx.select(PRODUCTLINE.PRODUCT_LINE,
                     PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME)
                     .from(PRODUCTLINE)
                     .join(PRODUCT)
-                    .onKey()
+                    .onKey()                    
                     .fetch()
                     .formatJSON(bw, JSONFormat.DEFAULT_FOR_RECORDS);
         } catch (IOException ex) {
             // handle exception
         }
+        
+        JSONFormat jsonFormat = new JSONFormat()
+                .indent(4)      // defaults to 2
+                .header(false)  // default to true
+                .newline("\r")  // "\n" is default
+                .recordFormat(JSONFormat.RecordFormat.OBJECT); // defaults to ARRAY                                
 
+        // fetch -> format -> export to file        
+        try ( BufferedWriter bw = Files.newBufferedWriter(
+                Paths.get("resultObject.json"), StandardCharsets.UTF_8,
+                StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE)) {
+            ctx.select(PRODUCTLINE.PRODUCT_LINE,
+                    PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME)
+                    .from(PRODUCTLINE)
+                    .join(PRODUCT)
+                    .onKey()                    
+                    .fetch()
+                    .formatJSON(bw, jsonFormat);
+        } catch (IOException ex) {
+            // handle exception
+        }
+        
         // format array
         System.out.println("EXAMPLE 2.3:\n"
                 + ctx.select(DEPARTMENT.DEPARTMENT_ID, DEPARTMENT.TOPIC)
                         .from(DEPARTMENT)
                         .fetch()
                         .formatJSON(JSONFormat.DEFAULT_FOR_RECORDS)
-        );
+        );               
 
         // format UDT
         System.out.println("EXAMPLE 2.4:\n"
@@ -175,7 +196,7 @@ public class ClassicModelsRepository {
 
         // fetch -> format -> export to file        
         try ( BufferedWriter bw = Files.newBufferedWriter(
-                Paths.get("result.xml"), StandardCharsets.UTF_8,
+                Paths.get("resultDefault.xml"), StandardCharsets.UTF_8,
                 StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE)) {
             ctx.select(PRODUCTLINE.PRODUCT_LINE,
                     PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME)
@@ -188,6 +209,27 @@ public class ClassicModelsRepository {
             // handle exception
         }
 
+        XMLFormat xmlFormat = new XMLFormat()
+                .indent(4)      // defaults to 2
+                .header(false)  // default to true
+                .newline("\r")  // "\n" is default
+                .recordFormat(XMLFormat.RecordFormat.COLUMN_NAME_ELEMENTS); // defaults to VALUE_ELEMENTS_WITH_FIELD_ATTRIBUTE
+        
+        // fetch -> format -> export to file        
+        try ( BufferedWriter bw = Files.newBufferedWriter(
+                Paths.get("resultColumnNameElements.xml"), StandardCharsets.UTF_8,
+                StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE)) {
+            ctx.select(PRODUCTLINE.PRODUCT_LINE,
+                    PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME)
+                    .from(PRODUCTLINE)
+                    .join(PRODUCT)
+                    .onKey()
+                    .fetch()
+                    .formatXML(bw, xmlFormat);
+        } catch (IOException ex) {
+            // handle exception
+        }
+        
         // format array
         System.out.println("EXAMPLE 3.3:\n"
                 + ctx.select(DEPARTMENT.DEPARTMENT_ID, DEPARTMENT.TOPIC)
