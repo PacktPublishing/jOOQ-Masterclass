@@ -23,7 +23,7 @@ public class ClassicModelsService {
         classicModelsRepository.loadArraysBulkBatchCommit();
         
         // the following examples throws exceptions
-        // classicModelsRepository.loadArraysonDuplicateKeyError();
-        // classicModelsRepository.loadArraysonErrorAbort();
+        // classicModelsRepository.loadArraysOnDuplicateKeyError();
+        // classicModelsRepository.loadArraysOnErrorAbort();
     }
 }

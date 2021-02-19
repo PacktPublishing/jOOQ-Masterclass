@@ -222,7 +222,7 @@ public class ClassicModelsRepository {
     }
 
     @Transactional
-    public void loadArraysonDuplicateKeyError() {
+    public void loadArraysOnDuplicateKeyError() {
 
         try {
             ctx.loadInto(SALE)
@@ -243,7 +243,7 @@ public class ClassicModelsRepository {
     }
 
     @Transactional
-    public void loadArraysonErrorAbort() {
+    public void loadArraysOnErrorAbort() {
        
         try {
 
