@@ -526,7 +526,32 @@ public class ClassicModelsRepository {
         } catch (IOException ex) {
             // handle exception
         }
-       
+        
+        // format UDT and JSON as INSERT
+        System.out.println("EXAMPLE 8.3:\n"
+                + ctx.select(MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME, 
+                        MANAGER.MANAGER_DETAIL, MANAGER.MANAGER_EVALUATION)
+                        .from(MANAGER)
+                        .fetch()
+                        .formatInsert()
+        );
+      
+        // format array as INSERT
+        System.out.println("EXAMPLE 8.4:\n"
+                + ctx.select(DEPARTMENT.DEPARTMENT_ID, DEPARTMENT.TOPIC)
+                        .from(DEPARTMENT)
+                        .fetch()
+                        .formatInsert()
+        );
+        
+        // format embeddable as INSERT
+        System.out.println("EXAMPLE 8.5:\n"
+                + ctx.select(DEPARTMENT.DEPARTMENT_ID, DEPARTMENT.DEPARTMENT_DETAIL)
+                        .from(DEPARTMENT)
+                        .fetch()
+                        .formatInsert()
+        );
+        
         return inserts;
     }
 }
