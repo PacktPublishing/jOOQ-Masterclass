@@ -223,7 +223,7 @@ public class ClassicModelsRepository {
                 .fetch();
 
         System.out.println("EXAMPLE 5.1:\n" + result.formatCSV());
-        System.out.println("EXAMPLE 5.2:\n" + result.formatCSV(true, ';', "N/A"));
+        System.out.println("EXAMPLE 5.2:\n" + result.formatCSV('\t', "N/A"));
         System.out.println("EXAMPLE 5.3:\n" + result.formatCSV(false, ';', "N/A")); // no header        
 
         CSVFormat csvFormat = new CSVFormat()
