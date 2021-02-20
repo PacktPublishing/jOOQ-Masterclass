@@ -59,7 +59,7 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 1.1.1: " + Arrays.toString(result11));
         
         // batch inserts in a table having auto-generated primary key (several queries)
-        int[] result12 = ctx.configuration().derive(
+        int[] result121 = ctx.configuration().derive(
                 new Settings().withBatchSize(3))
                 .dsl().batch(
                         ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(SALE_SEQ.nextval(), val(2005), val(1370L), val(1282.64)),
@@ -70,7 +70,21 @@ public class ClassicModelsRepository {
                         ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(SALE_SEQ.nextval(), val(2004), val(1166L), val(6751.33))
                 ).execute();
 
-        System.out.println("EXAMPLE 1.1.2: " + Arrays.toString(result12));
+        System.out.println("EXAMPLE 1.1.2.1: " + Arrays.toString(result121));
+        
+        var ids = ctx.fetch(SALE_SEQ.nextvals(6)); // fetch 6 ids               
+        int[] result122 = ctx.configuration().derive(
+                new Settings().withBatchSize(3))
+                .dsl().batch(
+                        ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(ids.get(0).value1(), 2005, 1370L, 1282.64),
+                        ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(ids.get(1).value1(), 2004, 1370L, 3938.24),
+                        ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(ids.get(2).value1(), 2004, 1370L, 4676.14),
+                        ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(ids.get(3).value1(), 2003, 1166L, 2223.0),
+                        ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(ids.get(4).value1(), 2004, 1166L, 4531.35),
+                        ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(ids.get(5).value1(), 2004, 1166L, 6751.33)
+                ).execute();
+
+        System.out.println("EXAMPLE 1.1.2.2: " + Arrays.toString(result121));
 
         // batch inserts in a table having auto-generated primary key (single query)
         int[] result2 = ctx.configuration().derive(
@@ -121,14 +135,14 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 1.4: " + Arrays.toString(result4));
 
         // get 5 ids
-        var ids = ctx.fetch(SALE_SEQ.nextvals(5));                
+        var idsr = ctx.fetch(SALE_SEQ.nextvals(5));                
 
         // records batch inserts
-        SaleRecord sr1 = new SaleRecord(ids.get(0).value1(), 2005, 1223.23, 1370L, null, null, null, null);
-        SaleRecord sr2 = new SaleRecord(ids.get(1).value1(), 2004, 543.33, 1166L, null, null, null, null);
-        SaleRecord sr3 = new SaleRecord(ids.get(2).value1(), 2005, 9022.21, 1370L, null, null, null, null);
-        SaleRecord sr4 = new SaleRecord(ids.get(3).value1(), 2003, 4333.22, 1504L, null, null, null, null);
-        SaleRecord sr5 = new SaleRecord(ids.get(4).value1(), 2003, 8002.22, 1504L, null, null, null, null);
+        SaleRecord sr1 = new SaleRecord(idsr.get(0).value1(), 2005, 1223.23, 1370L, null, null, null, null);
+        SaleRecord sr2 = new SaleRecord(idsr.get(1).value1(), 2004, 543.33, 1166L, null, null, null, null);
+        SaleRecord sr3 = new SaleRecord(idsr.get(2).value1(), 2005, 9022.21, 1370L, null, null, null, null);
+        SaleRecord sr4 = new SaleRecord(idsr.get(3).value1(), 2003, 4333.22, 1504L, null, null, null, null);
+        SaleRecord sr5 = new SaleRecord(idsr.get(4).value1(), 2003, 8002.22, 1504L, null, null, null, null);
 
         int[] result5 = ctx.configuration().derive(
                 new Settings().withBatchSize(3)).dsl()
