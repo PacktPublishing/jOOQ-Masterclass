@@ -25,12 +25,12 @@ public class MainApplication {
 
            // classicModelsService.formatResultAsText();
           // classicModelsService.formatResultAsJSON();
-        classicModelsService.formatResultAsXML();
-    /*        classicModelsService.formatResultAsHTML();
-            classicModelsService.formatResultAsCSV();
-            classicModelsService.formatResultAs1Chart();
-            classicModelsService.formatResultAs2Chart();
-            classicModelsService.formatResultAsInserts();*/
+       // classicModelsService.formatResultAsXML();
+    //       classicModelsService.formatResultAsHTML();
+        //    classicModelsService.formatResultAsCSV();
+      //    classicModelsService.formatResultAs1Chart();
+        ///    classicModelsService.formatResultAs2Chart();
+            classicModelsService.formatResultAsInserts();
         };
     }
 }

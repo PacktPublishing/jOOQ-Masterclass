@@ -126,17 +126,17 @@ public class ClassicModelsRepository {
                     PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME)
                     .from(PRODUCTLINE)
                     .join(PRODUCT)
-                    .onKey()                    
+                    .onKey()
                     .fetch()
                     .formatJSON(bw, JSONFormat.DEFAULT_FOR_RECORDS);
         } catch (IOException ex) {
             // handle exception
         }
-        
+
         JSONFormat jsonFormat = new JSONFormat()
-                .indent(4)      // defaults to 2
-                .header(false)  // default to true
-                .newline("\r")  // "\n" is default
+                .indent(4) // defaults to 2
+                .header(false) // default to true
+                .newline("\r") // "\n" is default
                 .recordFormat(JSONFormat.RecordFormat.OBJECT); // defaults to ARRAY                                
 
         // fetch -> format -> export to file        
@@ -147,20 +147,20 @@ public class ClassicModelsRepository {
                     PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME)
                     .from(PRODUCTLINE)
                     .join(PRODUCT)
-                    .onKey()                    
+                    .onKey()
                     .fetch()
                     .formatJSON(bw, jsonFormat);
         } catch (IOException ex) {
             // handle exception
         }
-        
+
         // format array
         System.out.println("EXAMPLE 2.3:\n"
                 + ctx.select(DEPARTMENT.DEPARTMENT_ID, DEPARTMENT.TOPIC)
                         .from(DEPARTMENT)
                         .fetch()
                         .formatJSON(JSONFormat.DEFAULT_FOR_RECORDS)
-        );               
+        );
 
         // format UDT
         System.out.println("EXAMPLE 2.4:\n"
@@ -168,7 +168,7 @@ public class ClassicModelsRepository {
                         .from(MANAGER)
                         .fetch()
                         .formatJSON(JSONFormat.DEFAULT_FOR_RECORDS)
-        );               
+        );
 
         // format embeddable
         System.out.println("EXAMPLE 2.5:\n"
@@ -196,7 +196,7 @@ public class ClassicModelsRepository {
 
         // fetch -> format -> export to file        
         try ( BufferedWriter bw = Files.newBufferedWriter(
-                Paths.get("resultDefault.xml"), StandardCharsets.UTF_8,
+                Paths.get("resultRecords.xml"), StandardCharsets.UTF_8,
                 StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE)) {
             ctx.select(PRODUCTLINE.PRODUCT_LINE,
                     PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME)
@@ -210,11 +210,11 @@ public class ClassicModelsRepository {
         }
 
         XMLFormat xmlFormat = new XMLFormat()
-                .indent(4)      // defaults to 2
-                .header(false)  // default to true
-                .newline("\r")  // "\n" is default
+                .indent(4) // defaults to 2
+                .header(false) // default to true
+                .newline("\r") // "\n" is default
                 .recordFormat(XMLFormat.RecordFormat.COLUMN_NAME_ELEMENTS); // defaults to VALUE_ELEMENTS_WITH_FIELD_ATTRIBUTE
-        
+
         // fetch -> format -> export to file        
         try ( BufferedWriter bw = Files.newBufferedWriter(
                 Paths.get("resultColumnNameElements.xml"), StandardCharsets.UTF_8,
@@ -229,7 +229,7 @@ public class ClassicModelsRepository {
         } catch (IOException ex) {
             // handle exception
         }
-        
+
         // format array
         System.out.println("EXAMPLE 3.3:\n"
                 + ctx.select(DEPARTMENT.DEPARTMENT_ID, DEPARTMENT.TOPIC)
@@ -243,7 +243,9 @@ public class ClassicModelsRepository {
                 + ctx.select(MANAGER.MANAGER_ID, MANAGER.MANAGER_EVALUATION)
                         .from(MANAGER)
                         .fetch()
-                        .formatXML(XMLFormat.DEFAULT_FOR_RECORDS)
+                        .formatXML(new XMLFormat()
+                                .header(false)
+                                .recordFormat(XMLFormat.RecordFormat.COLUMN_NAME_ELEMENTS))
         );
 
         // format embeddable
@@ -291,21 +293,24 @@ public class ClassicModelsRepository {
                         .fetch()
                         .formatHTML()
         );
-                
+
         // format UDT
         System.out.println("EXAMPLE 4.3:\n"
-                + ctx.select(MANAGER.MANAGER_ID, MANAGER.MANAGER_EVALUATION)
+                + ctx.select(MANAGER.MANAGER_NAME, MANAGER.MANAGER_EVALUATION)
                         .from(MANAGER)
+                        .where(MANAGER.MANAGER_EVALUATION.isNotNull())
                         .fetch()
                         .formatHTML()
         );
-                
+
         System.out.println("EXAMPLE 4.4:\n"
-                + Stream.of(ctx.select(MANAGER.MANAGER_NAME, MANAGER.MANAGER_EVALUATION)
+                + ctx.select(MANAGER.MANAGER_NAME, MANAGER.MANAGER_EVALUATION)
                         .from(MANAGER)
                         .where(MANAGER.MANAGER_EVALUATION.isNotNull())
-                        .fetchArray())
-                        .map(e -> e.value1().concat(e.value2().formatHTML()))
+                        .fetch()
+                        .stream()
+                        .map(e -> "<h1>".concat(e.value1().concat("</h1>"))
+                        .concat(e.value2().formatHTML()))
                         .collect(joining("<br />"))
         );
 
@@ -315,14 +320,16 @@ public class ClassicModelsRepository {
                         .from(DEPARTMENT)
                         .fetch()
                         .formatHTML()
-        );       
-        
+        );
+
         System.out.println("EXAMPLE 4.6:\n"
-                + Stream.of(ctx.select(DEPARTMENT.OFFICE_CODE, DEPARTMENT.DEPARTMENT_DETAIL)
+                + ctx.select(DEPARTMENT.OFFICE_CODE, DEPARTMENT.DEPARTMENT_DETAIL)
                         .from(DEPARTMENT)
                         .where(DEPARTMENT.DEPARTMENT_DETAIL.isNotNull())
-                        .fetchArray())
-                        .map(e -> e.value1().concat(e.value2().formatHTML()))
+                        .fetch()
+                        .stream()
+                        .map(e -> "<h1>".concat(e.value1().concat("</h1>"))
+                        .concat(e.value2().formatHTML()))
                         .collect(joining("<br />"))
         );
 
@@ -333,14 +340,16 @@ public class ClassicModelsRepository {
 
         // Result<Record3<String, String, Long, String>>
         var result = ctx.select(OFFICE.CITY, OFFICE.COUNTRY,
-                DEPARTMENT.DEPARTMENT_ID, DEPARTMENT.NAME)
+                DEPARTMENT.DEPARTMENT_ID.as("dep_id"), DEPARTMENT.NAME.as("dep_name"))
                 .from(OFFICE)
                 .leftJoin(DEPARTMENT)
                 .onKey()
+                .orderBy(OFFICE.CITY)
+                .limit(10)
                 .fetch();
 
         System.out.println("EXAMPLE 5.1:\n" + result.formatCSV());
-        System.out.println("EXAMPLE 5.2:\n" + result.formatCSV(true, ';', "N/A"));
+        System.out.println("EXAMPLE 5.2:\n" + result.formatCSV('\t', "N/A"));
         System.out.println("EXAMPLE 5.3:\n" + result.formatCSV(false, ';', "N/A")); // no header        
 
         CSVFormat csvFormat = new CSVFormat()
@@ -379,7 +388,7 @@ public class ClassicModelsRepository {
                         .fetch()
                         .formatCSV(csvFormat)
         );
-        
+
         System.out.println("EXAMPLE 5.7:\n"
                 + Stream.of(ctx.select(MANAGER.MANAGER_NAME, MANAGER.MANAGER_EVALUATION)
                         .from(MANAGER)
@@ -446,13 +455,13 @@ public class ClassicModelsRepository {
 
         DecimalFormat decimalFormat = new DecimalFormat("#.#");
         ChartFormat cf = new ChartFormat()
-                .showLegends(true, true)
-                .display(ChartFormat.Display.DEFAULT) // try, HUNDRED_PERCENT_STACKED
-                .categoryAsText(true)
-                .type(ChartFormat.Type.AREA)
-                .shades('a', 'b', 'c')
-                .values(1, 2, 3)
-                .numericFormat(decimalFormat);
+                .showLegends(true, true)              // show legends  
+                .display(ChartFormat.Display.DEFAULT) // try also, HUNDRED_PERCENT_STACKED
+                .categoryAsText(true)                 // category as text
+                .type(ChartFormat.Type.AREA)          // area chart type
+                .shades('a', 'b', 'c')                // shades of PRODUCT.BUY_PRICE, PRODUCT.MSRP, avg(ORDERDETAIL.PRICE_EACH)
+                .values(1, 2, 3)                      // value source column numbers
+                .numericFormat(decimalFormat);        // numeric format
 
         System.out.println("EXAMPLE 7.1:\n" + result.formatChart());
         System.out.println("EXAMPLE 7.2:\n" + result.formatChart(cf));
@@ -517,7 +526,7 @@ public class ClassicModelsRepository {
         } catch (IOException ex) {
             // handle exception
         }
-
+       
         return inserts;
     }
 }
