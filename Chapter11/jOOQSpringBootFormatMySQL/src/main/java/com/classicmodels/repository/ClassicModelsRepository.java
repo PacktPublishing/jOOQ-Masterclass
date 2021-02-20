@@ -223,7 +223,7 @@ public class ClassicModelsRepository {
                 .fetch();
 
         System.out.println("EXAMPLE 5.1:\n" + result.formatCSV());
-        System.out.println("EXAMPLE 5.2:\n" + result.formatCSV(true, ';', "N/A"));
+        System.out.println("EXAMPLE 5.2:\n" + result.formatCSV('\t', "N/A"));
         System.out.println("EXAMPLE 5.3:\n" + result.formatCSV(false, ';', "N/A")); // no header        
 
         CSVFormat csvFormat = new CSVFormat()
@@ -296,13 +296,13 @@ public class ClassicModelsRepository {
 
         DecimalFormat decimalFormat = new DecimalFormat("#.#");
         ChartFormat cf = new ChartFormat()
-                .showLegends(true, true)
-                .display(ChartFormat.Display.DEFAULT) // try, HUNDRED_PERCENT_STACKED
-                .categoryAsText(true)
-                .type(ChartFormat.Type.AREA)
-                .shades('a', 'b', 'c')
-                .values(1, 2, 3)
-                .numericFormat(decimalFormat);
+                .showLegends(true, true)              // show legends  
+                .display(ChartFormat.Display.DEFAULT) // try also, HUNDRED_PERCENT_STACKED
+                .categoryAsText(true)                 // category as text
+                .type(ChartFormat.Type.AREA)          // area chart type
+                .shades('a', 'b', 'c')                // shades of PRODUCT.BUY_PRICE, PRODUCT.MSRP, avg(ORDERDETAIL.PRICE_EACH)
+                .values(1, 2, 3)                      // value source column numbers
+                .numericFormat(decimalFormat);        // numeric format
 
         System.out.println("EXAMPLE 7.1:\n" + result.formatChart());
         System.out.println("EXAMPLE 7.2:\n" + result.formatChart(cf));
