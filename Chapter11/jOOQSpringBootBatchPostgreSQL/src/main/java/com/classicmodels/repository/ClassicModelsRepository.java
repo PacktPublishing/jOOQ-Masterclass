@@ -306,7 +306,11 @@ public class ClassicModelsRepository {
                                 .where(EMPLOYEE.SALARY.between(65_000, 80_000)),
                         ctx.update(EMPLOYEE)
                                 .set(EMPLOYEE.SALARY, EMPLOYEE.SALARY.plus(10_000))
-                                .where(EMPLOYEE.SALARY.between(55_000, 60_000))
+                                .where(EMPLOYEE.SALARY.between(55_000, 60_000)),
+                        ctx.deleteFrom(BANK_TRANSACTION).where(BANK_TRANSACTION.TRANSACTION_ID.eq(1)),
+                        ctx.deleteFrom(BANK_TRANSACTION).where(BANK_TRANSACTION.TRANSACTION_ID.eq(2)),
+                        ctx.deleteFrom(BANK_TRANSACTION).where(BANK_TRANSACTION.TRANSACTION_ID.eq(3)),
+                        ctx.deleteFrom(BANK_TRANSACTION).where(BANK_TRANSACTION.TRANSACTION_ID.eq(4))
                 ).execute();
 
         System.out.println("EXAMPLE 6.1: " + Arrays.toString(result1));
