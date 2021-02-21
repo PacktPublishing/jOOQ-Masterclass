@@ -32,9 +32,34 @@ public class ClassicModelsService {
         classicModelsRepository.batchMerges();
     }
 
-    public void batchStores() {
+    public void batchStoresSimple() {
 
-        classicModelsRepository.batchStores();
+        classicModelsRepository.batchStoresSimple();
+    }
+    
+    public void batchStoresPreparedStatement1() {
+        
+        classicModelsRepository.batchStoresPreparedStatement1();
+    }
+    
+    public void batchStoresPreparedStatement2() {
+        
+        classicModelsRepository.batchStoresPreparedStatement2();
+    }
+    
+    public void batchStoresPreparedStatement3() {
+        
+        classicModelsRepository.batchStoresPreparedStatement3();
+    }
+    
+    public void batchStoresPreparedStatement4() {
+        
+        classicModelsRepository.batchStoresPreparedStatement4();
+    }
+    
+    public void batchStoresStaticStatement() {
+        
+        classicModelsRepository.batchStoresStaticStatement();
     }
 
     public void combineBatch() {
