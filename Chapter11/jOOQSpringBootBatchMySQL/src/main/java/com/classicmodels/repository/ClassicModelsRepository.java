@@ -281,20 +281,17 @@ public class ClassicModelsRepository {
     @Transactional
     public void batchMerges3() {
 
-        SaleRecord sr1 = new SaleRecord();
-        sr1.setSaleId((long) (Math.random() * 999999999));
+        SaleRecord sr1 = new SaleRecord();        
         sr1.setFiscalYear(2005);
         sr1.setSale(1223.23);
         sr1.setEmployeeNumber(1370L);
         sr1.setTrend("UP");
         
-        SaleRecord sr2 = new SaleRecord();
-        sr2.setSaleId((long) (Math.random() * 999999999));
+        SaleRecord sr2 = new SaleRecord();        
         sr2.setFiscalYear(2005);
         sr2.setSale(9022.21);
         
-        SaleRecord sr3 = new SaleRecord();
-        sr3.setSaleId((long) (Math.random() * 999999999));
+        SaleRecord sr3 = new SaleRecord();        
         sr3.setFiscalYear(2003);
         sr3.setSale(8002.22);
         sr3.setEmployeeNumber(1504L);        
