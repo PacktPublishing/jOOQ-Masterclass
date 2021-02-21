@@ -1,9 +1,11 @@
 package com.classicmodels.repository;
 
 import com.classicmodels.pojo.SimpleSale;
+import java.math.BigDecimal;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
@@ -17,6 +19,7 @@ import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Productlinedetail.PRODUCTLINEDETAIL;
 import static jooq.generated.tables.Sale.SALE;
+import jooq.generated.tables.records.BankTransactionRecord;
 import jooq.generated.tables.records.SaleRecord;
 import org.jooq.BatchBindStep;
 import org.jooq.Configuration;
@@ -272,13 +275,41 @@ public class ClassicModelsRepository {
     }
 
     @Transactional
-    public void batchMerges() {
+    public void batchMerges1() {
 
         SaleRecord sr1 = new SaleRecord(1L, 2005, 1223.23, 1370L, null, null, null, null);
-        SaleRecord sr2 = new SaleRecord(2L, 2004, 543.33, 1166L, null, null, null, null);
+        SaleRecord sr2 = new SaleRecord(2L, 2004, 543.33, null, null, null, null, null);
         SaleRecord sr3 = new SaleRecord(3L, 2005, 9022.21, 1370L, null, null, null, null);
-        SaleRecord sr4 = new SaleRecord(1000L, 2003, 4333.22, 1504L, null, null, null, null);
+        SaleRecord sr4 = new SaleRecord(10000L, 2003, 4333.22, 1504L, null, null, null, "UP");
+        SaleRecord sr5 = new SaleRecord(99999L, 2003, 8002.22, 1504L, null, null, null, null);
+        
+        // SQL Server doesn't allow us to update ids, so we mark them unchanged 
+        sr1.changed(0, false);
+        sr2.changed(0, false);
+        sr3.changed(0, false);
+        sr4.changed(0, false);
+        sr5.changed(0, false);
+        
+        // There will just 1 batch since the generated SQL with bind variables is the same for all SaleRecords
+        // The order of records is perserved
+        int[] result = ctx.batchMerge(sr1, sr2, sr3, sr4, sr5)
+                .execute();
+
+        System.out.println("EXAMPLE 4.1: " + Arrays.toString(result));
+    }
+
+    @Transactional
+    public void batchMerges2() {
+
+        SaleRecord sr1 = new SaleRecord(1L, 2005, 1223.23, 1370L, null, null, null, null);
+        SaleRecord sr2 = new SaleRecord(2L, 2004, 543.33, null, null, null, null, null);
+        SaleRecord sr3 = new SaleRecord(3L, 2005, 9022.21, 1370L, null, null, null, null);
+        BankTransactionRecord bt1 = new BankTransactionRecord(
+                (long) (Math.random() * 999999), "", "", BigDecimal.ONE, LocalDateTime.now(), 112L, "BO864823", "");
+        SaleRecord sr4 = new SaleRecord(1000L, 2003, 4333.22, 1504L, null, null, null, "UP");
         SaleRecord sr5 = new SaleRecord(9999L, 2003, 8002.22, 1504L, null, null, null, null);
+        BankTransactionRecord bt2 = new BankTransactionRecord(
+                (long) (Math.random() * 999999), "", "", BigDecimal.ONE, LocalDateTime.now(), 112L, "HQ55022", "");
 
         // SQL Server doesn't allow us to update ids, so we mark them unchanged 
         sr1.changed(0, false);
@@ -286,11 +317,44 @@ public class ClassicModelsRepository {
         sr3.changed(0, false);
         sr4.changed(0, false);
         sr5.changed(0, false);
-
-        int[] result4 = ctx.batchMerge(sr1, sr2, sr3, sr4, sr5)
+        bt1.changed(0, false);
+        bt2.changed(0, false);
+        
+        // There will just 2 batches, 1 batch for SaleRecord and 1 batch for BankTransactionRecord
+        // The order of records is not perserved since:
+        // the first batch is for BankTransactionRecord
+        // the first batch is for SaleRecord
+        int[] result = ctx.batchMerge(bt2, sr1, sr2, sr3, bt1, sr4, sr5)
                 .execute();
 
-        System.out.println("EXAMPLE 4.1: " + Arrays.toString(result4));
+        System.out.println("EXAMPLE 4.2: " + Arrays.toString(result));
+    }
+
+    @Transactional
+    public void batchMerges3() {
+
+        SaleRecord sr1 = new SaleRecord();        
+        sr1.setFiscalYear(2005);
+        sr1.setSale(1223.23);
+        sr1.setEmployeeNumber(1370L);
+        sr1.setTrend("UP");
+        
+        SaleRecord sr2 = new SaleRecord();        
+        sr2.setFiscalYear(2005);
+        sr2.setSale(9022.21);
+        
+        SaleRecord sr3 = new SaleRecord();        
+        sr3.setFiscalYear(2003);
+        sr3.setSale(8002.22);
+        sr3.setEmployeeNumber(1504L);        
+
+        // There will 3 batches, 1 batch for each SaleRecord since  
+        // each SaleRecord has a different generated SQL with bind variables
+        // The order of records is perserved        
+        int[] result = ctx.batchMerge(sr1, sr2, sr3)
+                .execute();
+
+        System.out.println("EXAMPLE 4.3: " + Arrays.toString(result));
     }
 
     @Transactional
@@ -320,10 +384,10 @@ public class ClassicModelsRepository {
     @Transactional
     public void batchStoresPreparedStatement1() {
 
-        SaleRecord i1 = new SaleRecord((long) (Math.random() * 999), 2005, 1223.23, 1370L, null, null, null, null);
-        SaleRecord i2 = new SaleRecord((long) (Math.random() * 999), 2005, 9022.21, 1166L, null, null, null, null);
-        SaleRecord i3 = new SaleRecord((long) (Math.random() * 999), 2003, 8002.22, 1504L, null, null, null, null);
-        SaleRecord i4 = new SaleRecord((long) (Math.random() * 999), 2003, 8002.22, 1611L, null, null, null, null);
+        SaleRecord i1 = new SaleRecord((long) (Math.random() * 9999), 2005, 1223.23, 1370L, null, null, null, null);
+        SaleRecord i2 = new SaleRecord((long) (Math.random() * 9999), 2005, 9022.21, 1166L, null, null, null, null);
+        SaleRecord i3 = new SaleRecord((long) (Math.random() * 9999), 2003, 8002.22, 1504L, null, null, null, null);
+        SaleRecord i4 = new SaleRecord((long) (Math.random() * 9999), 2003, 8002.22, 1611L, null, null, null, null);
 
         SaleRecord u1 = ctx.selectFrom(SALE).where(SALE.SALE_ID.eq(1L)).fetchSingle();
         u1.setFiscalYear(2010);
