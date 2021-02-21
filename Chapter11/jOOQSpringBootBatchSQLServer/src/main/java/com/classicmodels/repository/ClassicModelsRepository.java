@@ -141,11 +141,11 @@ public class ClassicModelsRepository {
         sr5.setSale(8002.22);
         sr5.setEmployeeNumber(1504L);
 
-        List<SaleRecord> srs = List.of(sr1, sr2, sr3, sr4, sr5);
+        List<SaleRecord> sales = List.of(sr1, sr2, sr3, sr4, sr5);
 
         int[] result6 = ctx.configuration().derive(
                 new Settings().withBatchSize(3)).dsl()
-                .batchInsert(srs)
+                .batchInsert(sales)
                 // or, .batchInsert(sr1, sr2, sr3, sr4, sr5)
                 .execute();
 

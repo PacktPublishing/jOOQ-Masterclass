@@ -111,11 +111,11 @@ public class ClassicModelsRepository {
         SaleRecord sr4 = new SaleRecord(null, BigInteger.valueOf(2003), 4333.22, 1504L, null, null, null, null);
         SaleRecord sr5 = new SaleRecord(null, BigInteger.valueOf(2003), 8002.22, 1504L, null, null, null, null);
 
-        List<SaleRecord> srs = List.of(sr1, sr2, sr3, sr4, sr5);
+        List<SaleRecord> sales = List.of(sr1, sr2, sr3, sr4, sr5);
 
         int[] result5 = ctx.configuration().derive(
                 new Settings().withBatchSize(3)).dsl()
-                .batchInsert(srs)
+                .batchInsert(sales)
                 // or, .batchInsert(sr1, sr2, sr3, sr4, sr5)
                 .execute();
 
