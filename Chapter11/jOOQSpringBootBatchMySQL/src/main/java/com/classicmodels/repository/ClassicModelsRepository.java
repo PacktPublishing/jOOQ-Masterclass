@@ -103,16 +103,19 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 1.4: " + Arrays.toString(result4));
 
-        // records batch inserts       
+        // records batch inserts          
         SaleRecord sr1 = new SaleRecord(null, 2005, 1223.23, 1370L, null, null, null, null);
         SaleRecord sr2 = new SaleRecord(null, 2004, 543.33, 1166L, null, null, null, null);
         SaleRecord sr3 = new SaleRecord(null, 2005, 9022.21, 1370L, null, null, null, null);
         SaleRecord sr4 = new SaleRecord(null, 2003, 4333.22, 1504L, null, null, null, null);
         SaleRecord sr5 = new SaleRecord(null, 2003, 8002.22, 1504L, null, null, null, null);
+        
+        List<SaleRecord> srs = List.of(sr1, sr2, sr3, sr4, sr5);
 
         int[] result5 = ctx.configuration().derive(
                 new Settings().withBatchSize(3)).dsl()
-                .batchInsert(sr1, sr2, sr3, sr4, sr5)
+                .batchInsert(srs)
+                // or, .batchInsert(sr1, sr2, sr3, sr4, sr5)
                 .execute();
 
         System.out.println("EXAMPLE 1.5: " + Arrays.toString(result5));
@@ -253,7 +256,7 @@ public class ClassicModelsRepository {
         SaleRecord sr1 = new SaleRecord((long) (Math.random() * 99999), 
                 2005, 1223.23, 1370L, null, null, null, null);
 
-        // execute an UPDATE (if you modify the primary key that an INSERT is executed
+        // execute an UPDATE (if you modify the primary key that an INSERT is executed)
         SaleRecord sr2 = ctx.selectFrom(SALE)
                 .where(SALE.SALE_ID.eq(1L))
                 .fetchOne();
