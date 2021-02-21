@@ -27,9 +27,19 @@ public class ClassicModelsService {
         classicModelsRepository.batchDeletes();
     }
 
-    public void batchMerges() {
+    public void batchMerges1() {
 
-        classicModelsRepository.batchMerges();
+        classicModelsRepository.batchMerges1();
+    }
+    
+    public void batchMerges2() {
+
+        classicModelsRepository.batchMerges2();
+    }
+    
+    public void batchMerges3() {
+
+        classicModelsRepository.batchMerges3();
     }
 
     public void batchStoresSimple() {
