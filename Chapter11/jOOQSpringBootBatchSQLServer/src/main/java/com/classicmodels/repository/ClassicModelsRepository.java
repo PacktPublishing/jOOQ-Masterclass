@@ -475,7 +475,7 @@ public class ClassicModelsRepository {
     public void combineBatch() {
 
         // combine batch
-        int[] result1 = ctx.configuration().derive(
+        int[] result = ctx.configuration().derive(
                 new Settings().withBatchSize(3))
                 .dsl().batch(
                         ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(2005, 1370L, 1282.64),
@@ -496,7 +496,7 @@ public class ClassicModelsRepository {
                         ctx.deleteFrom(BANK_TRANSACTION).where(BANK_TRANSACTION.TRANSACTION_ID.eq(4L))
                 ).execute();
 
-        System.out.println("EXAMPLE 6.1: " + Arrays.toString(result1));
+        System.out.println("EXAMPLE 8: " + Arrays.toString(result));
 
     }
 
@@ -542,7 +542,7 @@ public class ClassicModelsRepository {
             return insertsAndReturn(c);
         });
         
-        System.out.println("EXAMPLE 6.2: " + result);
+        System.out.println("EXAMPLE 9: " + result);
     }
 
     public void insertsAndUpdates(Configuration c) {

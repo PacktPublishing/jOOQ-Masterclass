@@ -27,7 +27,12 @@ public class MainApplication {
             classicModelsService.batchUpdates();
             classicModelsService.batchDeletes();
             classicModelsService.batchMerges();
-            classicModelsService.batchStores();
+            classicModelsService.batchStoresSimple();
+            classicModelsService.batchStoresPreparedStatement1();
+            classicModelsService.batchStoresPreparedStatement2();
+            classicModelsService.batchStoresPreparedStatement3();
+            classicModelsService.batchStoresPreparedStatement4();
+            classicModelsService.batchStoresStaticStatement();
             classicModelsService.combineBatch();
             classicModelsService.batchCollectionOfObjects();
             classicModelsService.batchedInsertsAndUpdates1();
