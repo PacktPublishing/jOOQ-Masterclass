@@ -11,6 +11,7 @@ import jooq.generated.tables.records.SaleRecord;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
 import org.jooq.conf.Settings;
+import org.jooq.conf.StatementType;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,31 +25,28 @@ public class ClassicModelsRepository {
         this.ctx = ctx;
     }
 
-    @Transactional
     public void batchUpdateStatements() {
 
         // batch updates (several queries)
-        int[] result1 = ctx.configuration().derive(
-                new Settings().withBatchSize(2))
-                .dsl().batch(
-                        ctx.update(EMPLOYEE)
-                                .set(EMPLOYEE.SALARY, EMPLOYEE.SALARY.plus(1_000))
-                                .where(EMPLOYEE.SALARY.between(100_000, 120_000)),
-                        ctx.update(EMPLOYEE)
-                                .set(EMPLOYEE.SALARY, EMPLOYEE.SALARY.plus(5_000))
-                                .where(EMPLOYEE.SALARY.between(65_000, 80_000)),
-                        ctx.update(EMPLOYEE)
-                                .set(EMPLOYEE.SALARY, EMPLOYEE.SALARY.plus(10_000))
-                                .where(EMPLOYEE.SALARY.between(55_000, 60_000)),
-                        ctx.update(EMPLOYEE)
-                                .set(EMPLOYEE.SALARY, EMPLOYEE.SALARY.plus(15_000))
-                                .where(EMPLOYEE.SALARY.between(50_000, 50_000))) // or simply, eq(50_000)
+        int[] result1 = ctx.batch(
+                ctx.update(EMPLOYEE)
+                        .set(EMPLOYEE.SALARY, EMPLOYEE.SALARY.plus(1_000))
+                        .where(EMPLOYEE.SALARY.between(100_000, 120_000)),
+                ctx.update(EMPLOYEE)
+                        .set(EMPLOYEE.SALARY, EMPLOYEE.SALARY.plus(5_000))
+                        .where(EMPLOYEE.SALARY.between(65_000, 80_000)),
+                ctx.update(EMPLOYEE)
+                        .set(EMPLOYEE.SALARY, EMPLOYEE.SALARY.plus(10_000))
+                        .where(EMPLOYEE.SALARY.between(55_000, 60_000)),
+                ctx.update(EMPLOYEE)
+                        .set(EMPLOYEE.SALARY, EMPLOYEE.SALARY.plus(15_000))
+                        .where(EMPLOYEE.SALARY.between(50_000, 50_000))) // or simply, eq(50_000)
                 .execute();
 
         System.out.println("EXAMPLE 1.1: " + Arrays.toString(result1));
 
-        // batch updates (single query)
-        int[] result2 = ctx.batch(
+        // batch updates (single query) PreparedStatement
+        int[] result21 = ctx.batch(
                 ctx.update(EMPLOYEE)
                         .set(EMPLOYEE.SALARY, EMPLOYEE.SALARY.plus((Integer) null))
                         .where(EMPLOYEE.SALARY.between((Integer) null, (Integer) null)))
@@ -58,42 +56,24 @@ public class ClassicModelsRepository {
                 .bind(15_000, 50_000, 50_000)
                 .execute();
 
-        System.out.println("EXAMPLE 1.2: " + Arrays.toString(result2));
+        System.out.println("EXAMPLE 1.2.1: " + Arrays.toString(result21));
+
+        // batch updates (single query) Statement - this is like EXAMPLE 1.1
+        int[] result22 = ctx.configuration().derive(
+                new Settings().withStatementType(StatementType.STATIC_STATEMENT))
+                .dsl().batch(
+                        ctx.update(EMPLOYEE)
+                                .set(EMPLOYEE.SALARY, EMPLOYEE.SALARY.plus((Integer) null))
+                                .where(EMPLOYEE.SALARY.between((Integer) null, (Integer) null)))
+                .bind(1_000, 100_000, 120_000)
+                .bind(5_000, 65_000, 80_000)
+                .bind(10_000, 55_000, 60_000)
+                .bind(15_000, 50_000, 50_000)
+                .execute();
+
+        System.out.println("EXAMPLE 1.2.2: " + Arrays.toString(result22));
     }
-    
-    public void batchUpdateOrder() {
 
-        // avoid (if possible) - 3 batches
-        int[] result1 = ctx.batch(
-                ctx.update(SALE)
-                        .set(SALE.SALE_, 0.0)
-                        .where(SALE.SALE_ID.eq(10L)),
-                ctx.update(SALE)
-                        .set(SALE.SALE_, 1000.0)
-                        .where(SALE.SALE_ID.eq(11L).and(SALE.SALE_.eq(0.0))),
-                ctx.update(SALE)
-                        .set(SALE.SALE_, 0.0)
-                        .where(SALE.SALE_ID.eq(12L))
-        ).execute();
-
-        System.out.println("EXAMPLE 2.1: " + Arrays.toString(result1));
-
-        // prefer - 2 batches
-        int[] result2 = ctx.batch(                
-                ctx.update(SALE)
-                        .set(SALE.SALE_, 1000.0)
-                        .where(SALE.SALE_ID.eq(11L).and(SALE.SALE_.eq(0.0))),
-                ctx.update(SALE)
-                        .set(SALE.SALE_, 0.0)
-                        .where(SALE.SALE_ID.eq(10L)),
-                ctx.update(SALE)
-                        .set(SALE.SALE_, 0.0)
-                        .where(SALE.SALE_ID.eq(12L))
-        ).execute();
-
-        System.out.println("EXAMPLE 2.2: " + Arrays.toString(result2));
-    }
-    
     public void batchUpdateRecords1() {
 
         List<SaleRecord> sales = ctx.selectFrom(SALE)
@@ -113,7 +93,7 @@ public class ClassicModelsRepository {
         int[] result = ctx.batchUpdate(sales) // or, .batchUpdate(sales.get(0), sales.get(1), sales.get(2))
                 .execute();
 
-        System.out.println("EXAMPLE 3.1: " + Arrays.toString(result));
+        System.out.println("EXAMPLE 2: " + Arrays.toString(result));
     }
 
     public void batchUpdateRecords2() {
@@ -140,10 +120,10 @@ public class ClassicModelsRepository {
 
         // There are two batches, one for SaleRecord and one for BankTransactionRecord.
         // The order of records is not preserved (check the log).
-        int[] result = ctx.batchUpdate(trans.get(1), sales.get(0), sales.get(2), trans.get(0), sales.get(1)) 
+        int[] result = ctx.batchUpdate(trans.get(1), sales.get(0), sales.get(2), trans.get(0), sales.get(1))
                 .execute();
 
-        System.out.println("EXAMPLE 3.2: " + Arrays.toString(result));
+        System.out.println("EXAMPLE 3: " + Arrays.toString(result));
     }
 
     public void batchUpdateRecords3() {
@@ -164,11 +144,10 @@ public class ClassicModelsRepository {
         int[] result = ctx.batchUpdate(sales) // or, .batchUpdate(sales.get(0), sales.get(1), sales.get(2))
                 .execute();
 
-        System.out.println("EXAMPLE 3.3: " + Arrays.toString(result));
+        System.out.println("EXAMPLE 4: " + Arrays.toString(result));
     }
-    
+
     // batch collection of Objects
-    @Transactional
     public void batchUpdateCollectionOfObjects() {
 
         List<SimpleSale> sales = List.of(
@@ -179,9 +158,9 @@ public class ClassicModelsRepository {
 
         BatchBindStep batch = ctx.batch(
                 ctx.update(SALE)
-                .set(SALE.FISCAL_YEAR, (Integer) null)
-                .set(SALE.EMPLOYEE_NUMBER, (Long) null)
-                .set(SALE.SALE_, (Double) null)                     
+                        .set(SALE.FISCAL_YEAR, (Integer) null)
+                        .set(SALE.EMPLOYEE_NUMBER, (Long) null)
+                        .set(SALE.SALE_, (Double) null)
         );
 
         sales.forEach(s -> batch.bind(s.getFiscalYear(), s.getEmployeeNumber(), s.getSale()));
