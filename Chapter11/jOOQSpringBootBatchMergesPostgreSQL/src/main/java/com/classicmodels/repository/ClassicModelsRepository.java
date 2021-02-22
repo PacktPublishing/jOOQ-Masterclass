@@ -56,7 +56,7 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 1.2: " + Arrays.toString(result));
     }
-
+    
     public void batchMerges3() {
 
         SaleRecord sr1 = new SaleRecord();
@@ -82,9 +82,9 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 1.3: " + Arrays.toString(result));
     }
-
-    private long pk() {
-
-        return (long) (Math.random() * 999999999);
+    
+       private int pk() {
+        
+        return (int) (Math.random() * 999999999);
     }
 }
