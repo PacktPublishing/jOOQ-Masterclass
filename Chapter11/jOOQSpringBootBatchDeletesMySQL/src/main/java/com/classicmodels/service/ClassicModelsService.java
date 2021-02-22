@@ -14,8 +14,7 @@ public class ClassicModelsService {
 
     public void callAll() {
 
-        classicModelsRepository.batchDeleteStatements();
-        classicModelsRepository.batchDeleteOrder();
+        classicModelsRepository.batchDeleteStatements();        
         classicModelsRepository.batchDeleteRecords1();
         classicModelsRepository.batchDeleteRecords2();
         classicModelsRepository.batchDeleteRecords3();
