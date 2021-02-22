@@ -15,6 +15,7 @@ import org.jooq.DSLContext;
 import java.util.List;
 import org.jooq.BatchBindStep;
 import org.jooq.conf.Settings;
+import org.jooq.conf.StatementType;
 import static org.jooq.impl.DSL.select;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,14 +29,11 @@ public class ClassicModelsRepository {
     public ClassicModelsRepository(DSLContext ctx) {
         this.ctx = ctx;
     }
-
-    @Transactional
+    
     public void batchDeleteStatements() {
 
         // batch deletes (several queries)
-        int[] result1 = ctx.configuration().derive(
-                new Settings().withBatchSize(2))
-                .dsl().batch(
+        int[] result1 = ctx.batch(
                         ctx.deleteFrom(ORDERDETAIL)
                                 .where(ORDERDETAIL.ORDER_ID.in(
                                         select(ORDER.ORDER_ID).from(ORDER)
@@ -54,44 +52,28 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 1.1: " + Arrays.toString(result1));
 
-        // batch deletes (single query)
-        int[] result2 = ctx.batch(
+        // batch deletes (single query) PreparedStatement
+        int[] result12 = ctx.batch(
                 ctx.deleteFrom(SALE)
                         .where(SALE.SALE_.between((Double) null, (Double) null)))
-                .bind(0, 1000)
-                .bind(2000, 3000)
-                .bind(4000, 5000)
+                .bind(0, 1_000)
+                .bind(2_000, 3_000)
+                .bind(4_000, 5_000)
                 .execute();
 
-        System.out.println("EXAMPLE 1.2: " + Arrays.toString(result2));
-    }
-    
-    @Transactional
-    public void batchDeleteOrder() {
+        System.out.println("EXAMPLE 1.2.1: " + Arrays.toString(result12));
+        
+        int[] result22 = ctx.configuration().derive(
+                new Settings().withStatementType(StatementType.STATIC_STATEMENT))
+                .dsl().batch(
+                ctx.deleteFrom(SALE)
+                        .where(SALE.SALE_.between((Double) null, (Double) null)))
+                .bind(0, 1_000)
+                .bind(2_000, 3_000)
+                .bind(4_000, 5_000)
+                .execute();
 
-        // avoid (if possible) - 3 batches
-        int[] result1 = ctx.batch(
-                ctx.deleteFrom(SALE)
-                        .where(SALE.SALE_ID.eq(BigInteger.valueOf(10))),
-                ctx.deleteFrom(SALE)
-                        .where(SALE.SALE_ID.eq(BigInteger.valueOf(11)).and(SALE.SALE_.eq(0.0))),
-                ctx.deleteFrom(SALE)
-                        .where(SALE.SALE_ID.eq(BigInteger.valueOf(12)))
-        ).execute();
-
-        System.out.println("EXAMPLE 2.1: " + Arrays.toString(result1));
-
-        // prefer - 2 batches
-        int[] result2 = ctx.batch(
-                ctx.deleteFrom(SALE)
-                        .where(SALE.SALE_ID.eq(BigInteger.valueOf(11)).and(SALE.SALE_.eq(0.0))),
-                ctx.deleteFrom(SALE)
-                        .where(SALE.SALE_ID.eq(BigInteger.valueOf(10))),                
-                ctx.deleteFrom(SALE)
-                        .where(SALE.SALE_ID.eq(BigInteger.valueOf(12)))
-        ).execute();
-
-        System.out.println("EXAMPLE 2.2: " + Arrays.toString(result2));
+        System.out.println("EXAMPLE 1.2.2: " + Arrays.toString(result22));  
     }
     
     public void batchDeleteRecords1() {
@@ -110,12 +92,10 @@ public class ClassicModelsRepository {
 
         // There is a single batch since the generated SQL with bind variables is the same for r1-r3.
         // The order of records is preserved.
-        int[] result = ctx.configuration().derive(
-                new Settings().withBatchSize(3)).dsl()
-                .batchDelete(r1, r2, r3)
+        int[] result = ctx.batchDelete(r1, r2, r3)
                 .execute();
 
-        System.out.println("EXAMPLE 3.1: " + Arrays.toString(result));
+        System.out.println("EXAMPLE 2: " + Arrays.toString(result));
     }    
     
     public void batchDeleteRecords2() {
@@ -134,12 +114,10 @@ public class ClassicModelsRepository {
 
         // There are two batches, one for r1 abd r3, and one r2
         // The order of records is not preserved (check the log).
-        int[] result = ctx.configuration().derive(
-                new Settings().withBatchSize(3)).dsl()
-                .batchDelete(r1, r2, r3)
+        int[] result = ctx.batchDelete(r1, r2, r3)
                 .execute();
 
-        System.out.println("EXAMPLE 3.2: " + Arrays.toString(result));
+        System.out.println("EXAMPLE 3: " + Arrays.toString(result));
     }    
     
     public void batchDeleteRecords3() {
@@ -158,12 +136,10 @@ public class ClassicModelsRepository {
 
         // There are three batches, one for r1, one for r2, and one for r3 because the generated SQL with bind variables is not the same.
         // The order of records is preserved.
-        int[] result = ctx.configuration().derive(
-                new Settings().withBatchSize(3)).dsl()
-                .batchDelete(r1, r2, r3)
+        int[] result = ctx.batchDelete(r1, r2, r3)
                 .execute();
 
-        System.out.println("EXAMPLE 3.3: " + Arrays.toString(result));
+        System.out.println("EXAMPLE 4: " + Arrays.toString(result));
     }    
     
     // batch collection of Objects    
