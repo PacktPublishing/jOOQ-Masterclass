@@ -14,10 +14,10 @@ public class ClassicModelsService {
 
     public void callAll() {
 
-        //classicModelsRepository.batchUpdateStatements();
-        //classicModelsRepository.batchUpdateRecords1();
-        //classicModelsRepository.batchUpdateRecords2();
-        //classicModelsRepository.batchUpdateRecords3();
+        classicModelsRepository.batchUpdateStatements();
+        classicModelsRepository.batchUpdateRecords1();
+        classicModelsRepository.batchUpdateRecords2();
+        classicModelsRepository.batchUpdateRecords3();
         classicModelsRepository.batchUpdateCollectionOfObjects();
     }
 }

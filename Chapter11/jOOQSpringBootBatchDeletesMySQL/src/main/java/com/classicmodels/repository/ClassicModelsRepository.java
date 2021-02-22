@@ -1,5 +1,6 @@
 package com.classicmodels.repository;
 
+import com.classicmodels.pojo.SimpleSale;
 import java.util.Arrays;
 import static jooq.generated.tables.BankTransaction.BANK_TRANSACTION;
 import static jooq.generated.tables.Customer.CUSTOMER;
@@ -10,6 +11,8 @@ import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Productlinedetail.PRODUCTLINEDETAIL;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
+import java.util.List;
+import org.jooq.BatchBindStep;
 import org.jooq.conf.Settings;
 import static org.jooq.impl.DSL.select;
 import org.springframework.stereotype.Repository;
@@ -117,7 +120,7 @@ public class ClassicModelsRepository {
     public void batchDeleteRecords2() {
     
         var r1 = ctx.selectFrom(SALE)
-                .where(SALE.SALE_ID.eq(5L))
+                .where(SALE.SALE_ID.eq(6L))
                 .fetchOne();
 
         var r2 = ctx.selectFrom(BANK_TRANSACTION)
@@ -125,7 +128,7 @@ public class ClassicModelsRepository {
                 .fetchOne();
         
         var r3 = ctx.selectFrom(SALE)
-                .where(SALE.SALE_ID.eq(6L))
+                .where(SALE.SALE_ID.eq(7L))
                 .fetchOne();
 
         // There are two batches, one for r1 abd r3, and one r2
@@ -161,4 +164,24 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 3.3: " + Arrays.toString(result));
     }    
+    
+    // batch collection of Objects    
+    public void batchDeleteCollectionOfObjects() {
+
+        List<SimpleSale> sales = List.of(
+                new SimpleSale(2005, 1370L, 1282.64),
+                new SimpleSale(2004, 1370L, 3938.24),
+                new SimpleSale(2004, 1370L, 4676.14)
+        );
+
+        BatchBindStep batch = ctx.batch(
+                ctx.delete(SALE)
+                .where(SALE.FISCAL_YEAR.eq((Integer) null)
+                .and(SALE.EMPLOYEE_NUMBER.eq((Long) null))
+                .and(SALE.SALE_.eq((Double) null)))
+        );
+
+        sales.forEach(s -> batch.bind(s.getFiscalYear(), s.getEmployeeNumber(), s.getSale()));
+        batch.execute();
+    }
 }
