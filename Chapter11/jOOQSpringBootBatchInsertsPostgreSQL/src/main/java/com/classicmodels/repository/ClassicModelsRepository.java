@@ -14,6 +14,7 @@ import jooq.generated.tables.records.SaleRecord;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
 import org.jooq.conf.Settings;
+import org.jooq.conf.StatementType;
 import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,56 +33,64 @@ public class ClassicModelsRepository {
     public void batchInsertStatements() {
 
         // batch inserts in a table having auto-generated primary key (several queries)
-        int[] result1 = ctx.configuration().derive(
-                new Settings().withBatchSize(3))
-                .dsl().batch(
-                        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
-                                .values(2005, 1370L, 1282.64),
-                        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
-                                .values(2004, 1370L, 3938.24),
-                        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
-                                .values(2004, 1370L, 4676.14),
-                        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
-                                .values(2003, 1166L, 2223.0),
-                        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
-                                .values(2004, 1166L, 4531.35),
-                        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
-                                .values(2004, 1166L, 6751.33)
-                ).execute();
+        int[] result1 = ctx.batch(
+                ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
+                        .values(2005, 1370L, 1282.64),
+                ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
+                        .values(2004, 1370L, 3938.24),
+                ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
+                        .values(2004, 1370L, 4676.14),
+                ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
+                        .values(2003, 1166L, 2223.0),
+                ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
+                        .values(2004, 1166L, 4531.35),
+                ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
+                        .values(2004, 1166L, 6751.33)
+        ).execute();
 
         System.out.println("EXAMPLE 1.1: " + Arrays.toString(result1));
-        
+
         // batch inserts in a table having auto-generated primary key (several queries)
-        int[] result2 = ctx.configuration().derive(
-                new Settings().withBatchSize(3))
-                .dsl().batch(
-                        ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(SALE_SEQ.nextval(), val(2005), val(1370L), val(1282.64)),
-                        ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(SALE_SEQ.nextval(), val(2004), val(1370L), val(3938.24)),
-                        ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(SALE_SEQ.nextval(), val(2004), val(1370L), val(4676.14)),
-                        ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(SALE_SEQ.nextval(), val(2003), val(1166L), val(2223.0)),
-                        ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(SALE_SEQ.nextval(), val(2004), val(1166L), val(4531.35)),
-                        ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(SALE_SEQ.nextval(), val(2004), val(1166L), val(6751.33))
-                ).execute();
+        int[] result2 = ctx.batch(
+                ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(SALE_SEQ.nextval(), val(2005), val(1370L), val(1282.64)),
+                ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(SALE_SEQ.nextval(), val(2004), val(1370L), val(3938.24)),
+                ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(SALE_SEQ.nextval(), val(2004), val(1370L), val(4676.14)),
+                ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(SALE_SEQ.nextval(), val(2003), val(1166L), val(2223.0)),
+                ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(SALE_SEQ.nextval(), val(2004), val(1166L), val(4531.35)),
+                ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(SALE_SEQ.nextval(), val(2004), val(1166L), val(6751.33))
+        ).execute();
 
         System.out.println("EXAMPLE 1.2: " + Arrays.toString(result2));
-        
+
         var ids = ctx.fetch(SALE_SEQ.nextvals(6)); // fetch 6 ids               
-        int[] result3 = ctx.configuration().derive(
-                new Settings().withBatchSize(3))
-                .dsl().batch(
-                        ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(ids.get(0).value1(), 2005, 1370L, 1282.64),
-                        ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(ids.get(1).value1(), 2004, 1370L, 3938.24),
-                        ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(ids.get(2).value1(), 2004, 1370L, 4676.14),
-                        ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(ids.get(3).value1(), 2003, 1166L, 2223.0),
-                        ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(ids.get(4).value1(), 2004, 1166L, 4531.35),
-                        ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(ids.get(5).value1(), 2004, 1166L, 6751.33)
-                ).execute();
+        int[] result3 = ctx.batch(
+                ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(ids.get(0).value1(), 2005, 1370L, 1282.64),
+                ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(ids.get(1).value1(), 2004, 1370L, 3938.24),                
+                ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(ids.get(2).value1(), 2004, 1370L, 4676.14),
+                ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(ids.get(3).value1(), 2003, 1166L, 2223.0),
+                ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(ids.get(4).value1(), 2004, 1166L, 4531.35),
+                ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(ids.get(5).value1(), 2004, 1166L, 6751.33)
+        ).execute();
 
         System.out.println("EXAMPLE 1.3: " + Arrays.toString(result3));
 
-        // batch inserts in a table having auto-generated primary key (single query)
-        int[] result4 = ctx.configuration().derive(
-                new Settings().withBatchSize(3))
+        // batch inserts (single query) PreparedStatement
+        int[] result41 = ctx.batch(
+                ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
+                        .values((Integer) null, null, null))
+                .bind(2005, 1370L, 1282.64)
+                .bind(2004, 1370L, 3938.24)
+                .bind(2004, 1370L, 4676.14)
+                .bind(2003, 1166L, 2223.0)
+                .bind(2004, 1166L, 4531.35)
+                .bind(2004, 1166L, 6751.33)
+                .execute();
+
+        System.out.println("EXAMPLE 1.4.1: " + Arrays.toString(result41));
+
+        // batch inserts (single query) Statement
+        int[] result42 = ctx.configuration().derive(
+                new Settings().withStatementType(StatementType.STATIC_STATEMENT))
                 .dsl().batch(
                         ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
                                 .values((Integer) null, null, null))
@@ -93,75 +102,31 @@ public class ClassicModelsRepository {
                 .bind(2004, 1166L, 6751.33)
                 .execute();
 
-        System.out.println("EXAMPLE 1.4: " + Arrays.toString(result4));
-
-        // rely on global batch size (see com.classicmodels.jooq.settings.JooqSetting)
-        int[] result5 = ctx.batch(
-                ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
-                        .values((Integer) null, null, null))
-                .bind(2005, 1370L, 1282.64)
-                .bind(2004, 1370L, 3938.24)
-                .bind(2004, 1370L, 4676.14)
-                .bind(2003, 1166L, 2223.0)
-                .bind(2004, 1166L, 4531.35)
-                .bind(2004, 1166L, 6751.33)
-                .execute();
-
-        System.out.println("EXAMPLE 1.5: " + Arrays.toString(result5));
+        System.out.println("EXAMPLE 1.4.2: " + Arrays.toString(result42));
 
         // batch inserts in a table having manually assigned primary key
-        int[] result6 = ctx.configuration().derive(
-                new Settings().withBatchSize(3))
-                .dsl().batch(
-                        ctx.insertInto(EMPLOYEE, EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.LAST_NAME, EMPLOYEE.FIRST_NAME, EMPLOYEE.EXTENSION,
-                                EMPLOYEE.EMAIL, EMPLOYEE.OFFICE_CODE, EMPLOYEE.SALARY, EMPLOYEE.JOB_TITLE)
-                                .values(10L, "Toga", "Alison", "x3332", "talison@classicmodelcars.com", "1", 110000, "VP Sales")
-                                .onDuplicateKeyIgnore(),
-                        ctx.insertInto(EMPLOYEE, EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.LAST_NAME, EMPLOYEE.FIRST_NAME, EMPLOYEE.EXTENSION,
-                                EMPLOYEE.EMAIL, EMPLOYEE.OFFICE_CODE, EMPLOYEE.SALARY, EMPLOYEE.JOB_TITLE)
-                                .values(11L, "Marius", "Pologa", "x5332", "mpologa@classicmodelcars.com", "3", 50000, "Sales Rep")
-                                .onDuplicateKeyIgnore(),
-                        ctx.insertInto(EMPLOYEE, EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.LAST_NAME, EMPLOYEE.FIRST_NAME, EMPLOYEE.EXTENSION,
-                                EMPLOYEE.EMAIL, EMPLOYEE.OFFICE_CODE, EMPLOYEE.SALARY, EMPLOYEE.JOB_TITLE)
-                                .values(12L, "Ana", "Arica", "x5111", "aarica@classicmodelcars.com", "3", 50000, "Sales Rep")
-                                .onDuplicateKeyIgnore()
-                ).execute();
-
-        System.out.println("EXAMPLE 1.6: " + Arrays.toString(result6));
-    }
-
-    @Transactional
-    public void batchInsertOrder() {
-
-        // avoid (if possible) - 3 batches
-        int[] result1 = ctx.batch(
-                ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
-                        .values(2004, 1370L, 3938.24),
-                ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_)
-                        .values(2005, 1282.64),
-                ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
-                        .values(2004, 1370L, 4676.14)
+        int[] result5 = ctx.batch(
+                ctx.insertInto(EMPLOYEE, EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.LAST_NAME, EMPLOYEE.FIRST_NAME, EMPLOYEE.EXTENSION,
+                        EMPLOYEE.EMAIL, EMPLOYEE.OFFICE_CODE, EMPLOYEE.SALARY, EMPLOYEE.JOB_TITLE)
+                        .values(10L, "Toga", "Alison", "x3332", "talison@classicmodelcars.com", "1", 110000, "VP Sales")
+                        .onDuplicateKeyIgnore(),
+                ctx.insertInto(EMPLOYEE, EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.LAST_NAME, EMPLOYEE.FIRST_NAME, EMPLOYEE.EXTENSION,
+                        EMPLOYEE.EMAIL, EMPLOYEE.OFFICE_CODE, EMPLOYEE.SALARY, EMPLOYEE.JOB_TITLE)
+                        .values(11L, "Marius", "Pologa", "x5332", "mpologa@classicmodelcars.com", "3", 50000, "Sales Rep")
+                        .onDuplicateKeyIgnore(),
+                ctx.insertInto(EMPLOYEE, EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.LAST_NAME, EMPLOYEE.FIRST_NAME, EMPLOYEE.EXTENSION,
+                        EMPLOYEE.EMAIL, EMPLOYEE.OFFICE_CODE, EMPLOYEE.SALARY, EMPLOYEE.JOB_TITLE)
+                        .values(12L, "Ana", "Arica", "x5111", "aarica@classicmodelcars.com", "3", 50000, "Sales Rep")
+                        .onDuplicateKeyIgnore()
         ).execute();
 
-        System.out.println("EXAMPLE 2.1: " + Arrays.toString(result1));
-        
-        // prefer - 2 batches
-        int[] result2 = ctx.batch(
-                ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_)
-                        .values(2005, 1282.64),
-                ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
-                        .values(2004, 1370L, 3938.24),                
-                ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
-                        .values(2004, 1370L, 4676.14)
-        ).execute();
-
-        System.out.println("EXAMPLE 2.2: " + Arrays.toString(result2));
+        System.out.println("EXAMPLE 1.5: " + Arrays.toString(result5));
     }
 
     public void batchInsertRecords1() {
-       
+
         // get 5 ids
-        var idsr = ctx.fetch(SALE_SEQ.nextvals(5));                
+        var idsr = ctx.fetch(SALE_SEQ.nextvals(5));
 
         // records batch inserts
         SaleRecord sr1 = new SaleRecord(idsr.get(0).value1(), 2005, 1223.23, 1370L, null, null, null, null);
@@ -169,24 +134,24 @@ public class ClassicModelsRepository {
         SaleRecord sr3 = new SaleRecord(idsr.get(2).value1(), 2005, 9022.21, 1370L, null, null, null, null);
         SaleRecord sr4 = new SaleRecord(idsr.get(3).value1(), 2003, 4333.22, 1504L, null, null, null, null);
         SaleRecord sr5 = new SaleRecord(idsr.get(4).value1(), 2003, 8002.22, 1504L, null, null, null, null);
-        
+
         List<SaleRecord> sales = List.of(sr5, sr2, sr3, sr4, sr1);
-        
+
         // There is a single batch since the generated SQL with bind variables is the same for sr1-sr5.
         // The order of records is preserved.
         int[] result = ctx.batchInsert(sales)
                 // or, .batchInsert(sr5, sr2, sr3, sr4, sr1)
                 .execute();
 
-        System.out.println("EXAMPLE 3.2: " + Arrays.toString(result));
+        System.out.println("EXAMPLE 2: " + Arrays.toString(result));
     }
 
     public void batchInsertRecords2() {
 
         // get 5 ids
-        var idsr = ctx.fetch(SALE_SEQ.nextvals(5)); 
-        var idbt = ctx.fetch(BANK_TRANSACTION_TRANSACTION_ID_SEQ.nextvals(2)); 
-        
+        var idsr = ctx.fetch(SALE_SEQ.nextvals(5));
+        var idbt = ctx.fetch(BANK_TRANSACTION_TRANSACTION_ID_SEQ.nextvals(2));
+
         SaleRecord sr1 = new SaleRecord(idsr.get(0).value1(), 2005, 1223.23, 1370L, null, null, null, null);
         SaleRecord sr2 = new SaleRecord(idsr.get(1).value1(), 2004, 543.33, 1166L, null, null, null, null);
         SaleRecord sr3 = new SaleRecord(idsr.get(2).value1(), 2005, 9022.21, null, null, null, null, null);
@@ -202,7 +167,7 @@ public class ClassicModelsRepository {
         int[] result = ctx.batchInsert(bt1, sr1, sr2, sr3, sr4, sr5, bt2)
                 .execute();
 
-        System.out.println("EXAMPLE 4: " + Arrays.toString(result));
+        System.out.println("EXAMPLE 3: " + Arrays.toString(result));
     }
 
     public void batchInsertRecords3() {
@@ -227,7 +192,7 @@ public class ClassicModelsRepository {
         int[] result = ctx.batchInsert(sr3, sr2, sr1)
                 .execute();
 
-        System.out.println("EXAMPLE 5: " + Arrays.toString(result));
+        System.out.println("EXAMPLE 4: " + Arrays.toString(result));
     }
 
     // batch collection of Objects
