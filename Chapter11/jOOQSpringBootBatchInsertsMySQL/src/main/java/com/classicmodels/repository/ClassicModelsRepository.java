@@ -61,7 +61,7 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 1.2.1: " + Arrays.toString(result21));
         
-        // batch inserts (single query) Statement
+        // batch inserts (single query) Statement - this is like EXAMPLE 1.1
         int[] result22 = ctx.configuration().derive(
                 new Settings().withStatementType(StatementType.STATIC_STATEMENT))
                 .dsl().batch(
