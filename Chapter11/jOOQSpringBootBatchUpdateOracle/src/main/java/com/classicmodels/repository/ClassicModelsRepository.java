@@ -46,7 +46,7 @@ public class ClassicModelsRepository {
                                 .where(EMPLOYEE.SALARY.between(BigInteger.valueOf(50_000), BigInteger.valueOf(50_000)))) // or simply, eq(BigInteger.valueOf(50_000))
                 .execute();
 
-        System.out.println("EXAMPLE 2.1: " + Arrays.toString(result1));
+        System.out.println("EXAMPLE 1.1: " + Arrays.toString(result1));
 
         // batch updates (single query)
         int[] result2 = ctx.batch(
@@ -58,6 +58,39 @@ public class ClassicModelsRepository {
                 .bind(10_000, 55_000, 60_000)
                 .bind(15_000, 50_000, 50_000)
                 .execute();
+
+        System.out.println("EXAMPLE 1.2: " + Arrays.toString(result2));
+    }
+    
+        public void batchUpdateOrder() {
+
+        // avoid (if possible) - 3 batches
+        int[] result1 = ctx.batch(
+                ctx.update(SALE)
+                        .set(SALE.SALE_, 0.0)
+                        .where(SALE.SALE_ID.eq(BigInteger.valueOf(10))),
+                ctx.update(SALE)
+                        .set(SALE.SALE_, 1000.0)
+                        .where(SALE.SALE_ID.eq(BigInteger.valueOf(11)).and(SALE.SALE_.eq(0.0))),
+                ctx.update(SALE)
+                        .set(SALE.SALE_, 0.0)
+                        .where(SALE.SALE_ID.eq(BigInteger.valueOf(12)))
+        ).execute();
+
+        System.out.println("EXAMPLE 2.1: " + Arrays.toString(result1));
+
+        // prefer - 2 batches
+        int[] result2 = ctx.batch(                
+                ctx.update(SALE)
+                        .set(SALE.SALE_, 1000.0)
+                        .where(SALE.SALE_ID.eq(BigInteger.valueOf(11)).and(SALE.SALE_.eq(0.0))),
+                ctx.update(SALE)
+                        .set(SALE.SALE_, 0.0)
+                        .where(SALE.SALE_ID.eq(BigInteger.valueOf(10))),
+                ctx.update(SALE)
+                        .set(SALE.SALE_, 0.0)
+                        .where(SALE.SALE_ID.eq(BigInteger.valueOf(12)))
+        ).execute();
 
         System.out.println("EXAMPLE 2.2: " + Arrays.toString(result2));
     }

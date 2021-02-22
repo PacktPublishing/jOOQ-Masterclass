@@ -15,6 +15,7 @@ public class ClassicModelsService {
     public void callAll() {
 
         classicModelsRepository.batchUpdateStatements();
+        classicModelsRepository.batchUpdateOrder();
         classicModelsRepository.batchUpdateRecords1();
         classicModelsRepository.batchUpdateRecords2();
         classicModelsRepository.batchUpdateRecords3();
