@@ -162,8 +162,7 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 4: " + Arrays.toString(result));
     }
 
-    // batch collection of Objects
-    @Transactional
+    // batch collection of Objects    
     public void batchInsertCollectionOfObjects() {
 
         List<SimpleSale> sales = List.of(

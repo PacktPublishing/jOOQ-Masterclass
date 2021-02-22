@@ -28,8 +28,7 @@ public class ClassicModelsRepository {
     public ClassicModelsRepository(DSLContext ctx) {
         this.ctx = ctx;
     }
-
-    @Transactional
+    
     public void batchInsertStatements() {
 
         // batch inserts in a table having auto-generated primary key (several queries)
@@ -196,7 +195,6 @@ public class ClassicModelsRepository {
     }
 
     // batch collection of Objects
-    @Transactional
     public void batchInsertCollectionOfObjects() {
 
         List<SimpleSale> sales = List.of(

@@ -25,8 +25,7 @@ public class ClassicModelsRepository {
     public ClassicModelsRepository(DSLContext ctx) {
         this.ctx = ctx;
     }
-
-    @Transactional
+    
     public void batchInsertStatements() {
 
         // batch inserts in a table having auto-generated primary key (several queries)
@@ -147,7 +146,7 @@ public class ClassicModelsRepository {
                 // or, .batchInsert(sr5, sr2, sr3, sr4, sr1)
                 .execute();
 
-        System.out.println("EXAMPLE 5: " + Arrays.toString(result));
+        System.out.println("EXAMPLE 2: " + Arrays.toString(result));
     }
 
     public void batchInsertRecords2() {
@@ -197,7 +196,7 @@ public class ClassicModelsRepository {
         int[] result = ctx.batchInsert(bt1, sr1, sr2, sr3, sr4, sr5, bt2)
                 .execute();
 
-        System.out.println("EXAMPLE 6: " + Arrays.toString(result));
+        System.out.println("EXAMPLE 3: " + Arrays.toString(result));
     }
 
     public void batchInsertRecords3() {
@@ -222,11 +221,10 @@ public class ClassicModelsRepository {
         int[] result = ctx.batchInsert(sr3, sr2, sr1)
                 .execute();
 
-        System.out.println("EXAMPLE 7: " + Arrays.toString(result));
+        System.out.println("EXAMPLE 4: " + Arrays.toString(result));
     }
 
-    // batch collection of Objects
-    @Transactional
+    // batch collection of Objects    
     public void batchInsertCollectionOfObjects() {
 
         List<SimpleSale> sales = List.of(
