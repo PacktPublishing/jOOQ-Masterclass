@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.app</groupId>
+    <artifactId>jOOQSpringBootBatchInsertsPostgreSQL</artifactId>
+    <version>1.0</version>
+    <packaging>jar</packaging>
+
+    <name>jOOQSpringBootBatchInsertsPostgreSQL</name>
+    <description>jOOQ - Spring Boot app</description>    
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.3.6.RELEASE</version>        
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        
+        <java.version>14</java.version>                
+        <maven.compiler.source>14</maven.compiler.source>
+        <maven.compiler.target>14</maven.compiler.target>
+
+        <jooq.version>3.14.7</jooq.version>     
+        <flyway.version>6.5.7</flyway.version>        
+        <codehaus.mojo.version>1.0.0</codehaus.mojo.version>                
+        <hibernate.validator.version>5.2.4.Final</hibernate.validator.version>
+    </properties>
+
+    <dependencies>        
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>        
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq</artifactId>         
+            <version>${jooq.version}</version>
+        </dependency>              
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>${flyway.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>   
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${hibernate.validator.version}</version>
+        </dependency>            
+        <dependency>
+            <groupId>javax.persistence</groupId>
+            <artifactId>javax.persistence-api</artifactId>    
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>                
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.3</version>
+                <configuration>
+                    <compilerArgs>
+                        <arg>--enable-preview</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>properties-maven-plugin</artifactId>
+                <version>${codehaus.mojo.version}</version>
+                <executions>
+                    <execution>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>read-project-properties</goal>
+                        </goals>
+                        <configuration>
+                            <files>                                
+                                <file>src/main/resources/application.properties</file>
+                            </files>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>                
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>migrate</goal>
+                        </goals>
+                    </execution>
+                </executions>                
+                <configuration>
+                    <url>${spring.datasource.url}</url>
+                    <user>${spring.datasource.username}</user>
+                    <password>${spring.datasource.password}</password>  
+                    <locations>
+                        <location>filesystem:src/main/resources/db/migration</location>
+                    </locations>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jooq</groupId>
+                <artifactId>jooq-codegen-maven</artifactId>               
+                <executions>
+                    <execution>
+                        <id>generate-postgresql</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>                
+                <configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.14.0.xsd">                                                 
+                    <!-- Configure the database connection here -->
+                    <jdbc>
+                        <driver>${spring.datasource.driverClassName}</driver>
+                        <url>${spring.datasource.url}</url>
+                        <user>${spring.datasource.username}</user>
+                        <password>${spring.datasource.password}</password>                        
+                    </jdbc>                                        
+
+                    <generator>
+                        <!-- The default code generator. You can override this one, to generate your own code style.
+                        Supported generators:
+                        - org.jooq.codegen.JavaGenerator
+                        - org.jooq.codegen.ScalaGenerator
+                        Defaults to org.jooq.codegen.JavaGenerator -->
+                        <name>org.jooq.codegen.JavaGenerator</name>
+        
+                        <database>         
+                            
+                            <!-- For each type, one embeddable entry is required -->
+                            <embeddables>
+                                <embeddable>
+                                    <schema>classicmodels</schema>
+                                    <name>DEPARTMENT_DETAIL</name>
+                                    <tables>.*\.department</tables>
+                                    <fields>
+                                        <field>
+                                            <expression>NAME</expression>
+                                        </field>                                              
+                                        <field>                                            
+                                            <expression>PHONE</expression>
+                                        </field>                                        
+                                        <field>                                            
+                                            <expression>TOPIC</expression>
+                                        </field>
+                                    </fields>
+                                </embeddable>
+                            </embeddables>  
+                                                                                                                                 
+                            <!-- The database type. The format here is:
+                            org.jooq.meta.[database].[database]Database -->
+                            <name>org.jooq.meta.postgres.PostgresDatabase</name>
+            
+                            <!-- The database schema (or in the absence of schema support, in your RDBMS this
+                            can be the owner, user, database name) to be generated -->
+                            <inputSchema>public</inputSchema>                 
+            
+                            <!-- All elements that are generated from your schema
+                            (A Java regular expression. Use the pipe to separate several expressions)
+                            Watch out for case-sensitivity. Depending on your database, this might be important! -->       
+                            <includes>.*</includes>
+            
+                            <!-- schema version provider -->            
+                            <schemaVersionProvider>SELECT MAX(version) FROM flyway_schema_history</schemaVersionProvider>
+            
+                            <!-- All elements that are excluded from your schema
+                            (A Java regular expression. Use the pipe to separate several expressions).
+                            Excludes match before includes, i.e. excludes have a higher priority -->
+                            <excludes>flyway_schema_history</excludes>                                                                                                                
+                        </database>
+                        
+                        <!-- jOOQ will generate POJOs in your behalf -->
+                        <generate>                            
+                            <pojos>true</pojos>                            
+                            <validationAnnotations>true</validationAnnotations>                            
+                        </generate>
+                        
+                        <target>
+                            <!-- The destination package of your generated classes (within the destination directory) -->
+                            <packageName>jooq.generated</packageName>
+            
+                            <!-- The destination directory of your generated classes. Using Maven directory layout here -->
+                            <directory>target/generated-sources/jooq</directory>
+                        </target>
+                    </generator>    
+                                                                                              
+                    <!-- Instead of providing an inline configuration here, you can specify an external XML configuration file here -->
+                    <!-- <configurationFile>file_path</configurationFile> -->
+                    
+                    <!-- A boolean property (or constant) can be specified here to tell the plugin not to do anything -->
+                    <skip>false</skip>                                        
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
