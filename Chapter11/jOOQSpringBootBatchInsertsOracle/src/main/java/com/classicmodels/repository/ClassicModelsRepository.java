@@ -13,6 +13,7 @@ import jooq.generated.tables.records.SaleRecord;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
 import org.jooq.conf.Settings;
+import org.jooq.conf.StatementType;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,14 +26,11 @@ public class ClassicModelsRepository {
     public ClassicModelsRepository(DSLContext ctx) {
         this.ctx = ctx;
     }
-
-    @Transactional
+    
     public void batchInsertStatements() {
 
         // batch inserts in a table having auto-generated primary key (several queries)
-        int[] result1 = ctx.configuration().derive(
-                new Settings().withBatchSize(3))
-                .dsl().batch(
+        int[] result1 = ctx.batch(
                         ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
                                 .values(BigInteger.valueOf(2005), 1370L, 1282.64),
                         ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
@@ -49,8 +47,8 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 1.1: " + Arrays.toString(result1));
 
-        // batch inserts in a table having auto-generated primary key (single query)
-        int[] result2 = ctx.configuration().derive(
+        // batch inserts (single query) PreparedStatement
+        int[] result21 = ctx.configuration().derive(
                 new Settings().withBatchSize(3))
                 .dsl().batch(
                         ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
@@ -63,12 +61,14 @@ public class ClassicModelsRepository {
                 .bind(2004, 1166L, 6751.33)
                 .execute();
 
-        System.out.println("EXAMPLE 1.2: " + Arrays.toString(result2));
-
-        // rely on global batch size (see com.classicmodels.jooq.settings.JooqSetting)
-        int[] result3 = ctx.batch(
-                ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
-                        .values((BigInteger) null, null, null))
+        System.out.println("EXAMPLE 1.2.1: " + Arrays.toString(result21));
+        
+        // batch inserts (single query) Statement
+        int[] result22 = ctx.configuration().derive(
+                new Settings().withStatementType(StatementType.STATIC_STATEMENT))
+                .dsl().batch(
+                        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
+                                .values((BigInteger) null, null, null))
                 .bind(2005, 1370L, 1282.64)
                 .bind(2004, 1370L, 3938.24)
                 .bind(2004, 1370L, 4676.14)
@@ -77,12 +77,10 @@ public class ClassicModelsRepository {
                 .bind(2004, 1166L, 6751.33)
                 .execute();
 
-        System.out.println("EXAMPLE 1.3: " + Arrays.toString(result3));
-
+        System.out.println("EXAMPLE 1.2.2: " + Arrays.toString(result22));
+        
         // batch inserts in a table having manually assigned primary key
-        int[] result4 = ctx.configuration().derive(
-                new Settings().withBatchSize(3))
-                .dsl().batch(
+        int[] result3 = ctx.batch(
                         ctx.insertInto(EMPLOYEE, EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.LAST_NAME, EMPLOYEE.FIRST_NAME, EMPLOYEE.EXTENSION,
                                 EMPLOYEE.EMAIL, EMPLOYEE.OFFICE_CODE, EMPLOYEE.SALARY, EMPLOYEE.JOB_TITLE)
                                 .values(10L, "Toga", "Alison", "x3332", "talison@classicmodelcars.com", "1", BigInteger.valueOf(110000), "VP Sales")
@@ -97,35 +95,7 @@ public class ClassicModelsRepository {
                                 .onDuplicateKeyIgnore()
                 ).execute();
 
-        System.out.println("EXAMPLE 1.4: " + Arrays.toString(result4));
-    }
-
-    @Transactional
-    public void batchInsertOrder() {
-
-        // avoid (if possible) - 3 batches
-        int[] result1 = ctx.batch(
-                ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
-                        .values(BigInteger.valueOf(2004), 1370L, 3938.24),
-                ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_)
-                        .values(BigInteger.valueOf(2005), 1282.64),
-                ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
-                        .values(BigInteger.valueOf(2004), 1370L, 4676.14)
-        ).execute();
-
-        System.out.println("EXAMPLE 2.1: " + Arrays.toString(result1));
-        
-        // prefer - 2 batches
-        int[] result2 = ctx.batch(
-                ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_)
-                        .values(BigInteger.valueOf(2005), 1282.64),
-                ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
-                        .values(BigInteger.valueOf(2004), 1370L, 3938.24),                
-                ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
-                        .values(BigInteger.valueOf(2004), 1370L, 4676.14)
-        ).execute();
-
-        System.out.println("EXAMPLE 2.2: " + Arrays.toString(result2));
+        System.out.println("EXAMPLE 1.3: " + Arrays.toString(result3));
     }
 
     public void batchInsertRecords1() {
@@ -144,7 +114,7 @@ public class ClassicModelsRepository {
                 // or, .batchInsert(sr5, sr2, sr3, sr4, sr1)
                 .execute();
 
-        System.out.println("EXAMPLE 3: " + Arrays.toString(result));
+        System.out.println("EXAMPLE 2: " + Arrays.toString(result));
     }
 
     public void batchInsertRecords2() {
@@ -153,18 +123,18 @@ public class ClassicModelsRepository {
         SaleRecord sr2 = new SaleRecord(null, BigInteger.valueOf(2004), 543.33, 1166L, null, null, null, null);
         SaleRecord sr3 = new SaleRecord(null, BigInteger.valueOf(2005), 9022.21, null, null, null, null, null);
         BankTransactionRecord bt1 = new BankTransactionRecord(
-                null, "", "", BigDecimal.ZERO, LocalDateTime.now(), 114L, "NP603840", "");
+                null, "N/A", "N/A", BigDecimal.ZERO, LocalDateTime.now(), 114L, "NP603840", "N/A");
         SaleRecord sr4 = new SaleRecord(null, BigInteger.valueOf(2003), 4333.22, 1504L, null, null, null, null);
         SaleRecord sr5 = new SaleRecord(null, BigInteger.valueOf(2003), 8002.22, 1504L, null, null, null, "UP");
         BankTransactionRecord bt2 = new BankTransactionRecord(
-                null, "", "", BigDecimal.ZERO, LocalDateTime.now(), 114L, "NP603840", "");
+                null, "N/A", "N/A", BigDecimal.ZERO, LocalDateTime.now(), 114L, "NP603840", "N/A");
 
         // There are two batches, one for SaleRecord and one for BankTransactionRecord.
         // The order of records is not preserved (check the log).
         int[] result = ctx.batchInsert(bt1, sr1, sr2, sr3, sr4, sr5, bt2)
                 .execute();
 
-        System.out.println("EXAMPLE 4: " + Arrays.toString(result));
+        System.out.println("EXAMPLE 3: " + Arrays.toString(result));
     }
 
     public void batchInsertRecords3() {
@@ -189,7 +159,7 @@ public class ClassicModelsRepository {
         int[] result = ctx.batchInsert(sr3, sr2, sr1)
                 .execute();
 
-        System.out.println("EXAMPLE 5: " + Arrays.toString(result));
+        System.out.println("EXAMPLE 4: " + Arrays.toString(result));
     }
 
     // batch collection of Objects
