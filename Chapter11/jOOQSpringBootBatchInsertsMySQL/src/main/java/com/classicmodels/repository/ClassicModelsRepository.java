@@ -140,7 +140,7 @@ public class ClassicModelsRepository {
         // There is a single batch since the generated SQL with bind variables is the same for sr1-sr5.
         // The order of records is preserved.
         int[] result = ctx.batchInsert(sales)
-                // or, .batchInsert(sr1, sr2, sr3, sr4, sr5)
+                // or, .batchInsert(sr5, sr2, sr3, sr4, sr1)
                 .execute();
 
         System.out.println("EXAMPLE 3: " + Arrays.toString(result));
