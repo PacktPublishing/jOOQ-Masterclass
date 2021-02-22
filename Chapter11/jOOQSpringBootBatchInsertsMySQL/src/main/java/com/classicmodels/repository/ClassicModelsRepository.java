@@ -99,6 +99,34 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 1.4: " + Arrays.toString(result4));
     }
 
+    @Transactional
+    public void batchInsertOrder() {
+
+        // avoid (if possible) - 3 batches
+        int[] result1 = ctx.batch(
+                ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
+                        .values(2004, 1370L, 3938.24),
+                ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_)
+                        .values(2005, 1282.64),
+                ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
+                        .values(2004, 1370L, 4676.14)
+        ).execute();
+
+        System.out.println("EXAMPLE 2.1: " + Arrays.toString(result1));
+        
+        // prefer - 2 batches
+        int[] result2 = ctx.batch(
+                ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_)
+                        .values(2005, 1282.64),
+                ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
+                        .values(2004, 1370L, 3938.24),                
+                ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
+                        .values(2004, 1370L, 4676.14)
+        ).execute();
+
+        System.out.println("EXAMPLE 2.2: " + Arrays.toString(result2));
+    }
+
     public void batchInsertRecords1() {
 
         SaleRecord sr1 = new SaleRecord(null, 2005, 1223.23, 1370L, null, null, null, null);
@@ -115,7 +143,7 @@ public class ClassicModelsRepository {
                 // or, .batchInsert(sr1, sr2, sr3, sr4, sr5)
                 .execute();
 
-        System.out.println("EXAMPLE 2: " + Arrays.toString(result));
+        System.out.println("EXAMPLE 3: " + Arrays.toString(result));
     }
 
     public void batchInsertRecords2() {
@@ -135,7 +163,7 @@ public class ClassicModelsRepository {
         int[] result = ctx.batchInsert(bt1, sr1, sr2, sr3, sr4, sr5, bt2)
                 .execute();
 
-        System.out.println("EXAMPLE 3: " + Arrays.toString(result));
+        System.out.println("EXAMPLE 4: " + Arrays.toString(result));
     }
 
     public void batchInsertRecords3() {
@@ -160,7 +188,7 @@ public class ClassicModelsRepository {
         int[] result = ctx.batchInsert(sr3, sr2, sr1)
                 .execute();
 
-        System.out.println("EXAMPLE 4: " + Arrays.toString(result));
+        System.out.println("EXAMPLE 5: " + Arrays.toString(result));
     }
 
     // batch collection of Objects

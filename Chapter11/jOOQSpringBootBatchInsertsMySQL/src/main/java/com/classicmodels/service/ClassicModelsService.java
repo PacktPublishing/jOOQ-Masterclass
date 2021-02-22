@@ -15,6 +15,7 @@ public class ClassicModelsService {
     public void callAll() {
 
         classicModelsRepository.batchInsertStatements();
+        classicModelsRepository.batchInsertOrder();
         classicModelsRepository.batchInsertRecords1();
         classicModelsRepository.batchInsertRecords2();
         classicModelsRepository.batchInsertRecords3();
