@@ -97,22 +97,42 @@ public class ClassicModelsRepository {
     }
 
     public void batchInsertRecords1() {
+     
+        // records batch inserts (single query, bind values)
+        SaleRecord sr11 = new SaleRecord(null, BigInteger.valueOf(2005), 1223.23, 1370L, null, null, null, null);
+        SaleRecord sr12 = new SaleRecord(null, BigInteger.valueOf(2004), 543.33, 1166L, null, null, null, null);
+        SaleRecord sr13 = new SaleRecord(null, BigInteger.valueOf(2005), 9022.21, 1370L, null, null, null, null);
+        SaleRecord sr14 = new SaleRecord(null, BigInteger.valueOf(2003), 4333.22, 1504L, null, null, null, null);
+        SaleRecord sr15 = new SaleRecord(null, BigInteger.valueOf(2003), 8002.22, 1504L, null, null, null, null);
 
-        SaleRecord sr1 = new SaleRecord(null, BigInteger.valueOf(2005), 1223.23, 1370L, null, null, null, null);
-        SaleRecord sr2 = new SaleRecord(null, BigInteger.valueOf(2004), 543.33, 1166L, null, null, null, null);
-        SaleRecord sr3 = new SaleRecord(null, BigInteger.valueOf(2005), 9022.21, null, null, null, null, null);
-        SaleRecord sr4 = new SaleRecord(null, BigInteger.valueOf(2003), 4333.22, 1504L, null, null, null, null);
-        SaleRecord sr5 = new SaleRecord(null, BigInteger.valueOf(2003), 8002.22, 1504L, null, null, null, "UP");
+        List<SaleRecord> sales1 = List.of(sr15, sr12, sr13, sr14, sr11);
 
-        List<SaleRecord> sales = List.of(sr5, sr2, sr3, sr4, sr1);
-
-        // There is a single batch since the generated SQL with bind variables is the same for sr1-sr5.
+        // There is a single batch since the generated SQL with bind variables is the same for sr11-sr15.
         // The order of records is preserved.
-        int[] result = ctx.batchInsert(sales)
-                // or, .batchInsert(sr5, sr2, sr3, sr4, sr1)
+        int[] result1 = ctx.batchInsert(sales1)
+                // or, .batchInsert(sr15, sr12, sr13, sr14, sr11)
                 .execute();
 
-        System.out.println("EXAMPLE 2: " + Arrays.toString(result));
+        System.out.println("EXAMPLE 2.1: " + Arrays.toString(result1));
+
+        // records batch inserts (multiple query, inlined values)
+        SaleRecord sr21 = new SaleRecord(null, BigInteger.valueOf(2005), 1223.23, 1370L, null, null, null, null);
+        SaleRecord sr22 = new SaleRecord(null, BigInteger.valueOf(2004), 543.33, 1166L, null, null, null, null);
+        SaleRecord sr23 = new SaleRecord(null, BigInteger.valueOf(2005), 9022.21, 1370L, null, null, null, null);
+        SaleRecord sr24 = new SaleRecord(null, BigInteger.valueOf(2003), 4333.22, 1504L, null, null, null, null);
+        SaleRecord sr25 = new SaleRecord(null, BigInteger.valueOf(2003), 8002.22, 1504L, null, null, null, null);
+
+        List<SaleRecord> sales2 = List.of(sr25, sr22, sr23, sr24, sr21);
+
+        // There is a single batch since the generated SQL with bind variables is the same for sr11-sr15.
+        // The order of records is preserved.
+        int[] result2 = ctx.configuration().derive(
+                new Settings().withStatementType(StatementType.STATIC_STATEMENT))
+                .dsl().batchInsert(sales2)
+                // or, .batchInsert(sr25, sr22, sr23, sr24, sr21)
+                .execute();
+
+        System.out.println("EXAMPLE 2.2: " + Arrays.toString(result2));
     }
 
     public void batchInsertRecords2() {
