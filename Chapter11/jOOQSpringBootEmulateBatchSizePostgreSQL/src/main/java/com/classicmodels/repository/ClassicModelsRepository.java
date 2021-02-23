@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 // This code result in:
-// java.sql.SQLIntegrityConstraintViolationException: Duplicate entry '1' for key 'sale.PRIMARY'
+// duplicate key value violates unique constraint "sale_pkey"
 
 @Repository
 public class ClassicModelsRepository {

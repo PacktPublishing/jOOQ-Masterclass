@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 
 // This code result in:
-// java.sql.SQLIntegrityConstraintViolationException: Duplicate entry '1' for key 'sale.PRIMARY'
+// Duplicate entry '1' for key 'sale.PRIMARY'
 
 @Service
 public class ClassicModelsService {

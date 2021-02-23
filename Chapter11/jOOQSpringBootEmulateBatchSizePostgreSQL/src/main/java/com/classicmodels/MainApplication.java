@@ -20,7 +20,7 @@ public class MainApplication {
     }
 
     // This code result in:
-    // java.sql.SQLIntegrityConstraintViolationException: Duplicate entry '1' for key 'sale.PRIMARY'
+    // duplicate key value violates unique constraint "sale_pkey"
     
     @Bean
     public ApplicationRunner init() {
