@@ -97,6 +97,7 @@ public class ClassicModelsRepository {
                 .execute();
         
         // Records batch updates (multiple query, inlined values)
+        // Order of records is always preserved entirely
         // ctx.configuration().derive(
         //        new Settings().withStatementType(StatementType.STATIC_STATEMENT))
         //        .dsl().batchUpdate(sales) ...
