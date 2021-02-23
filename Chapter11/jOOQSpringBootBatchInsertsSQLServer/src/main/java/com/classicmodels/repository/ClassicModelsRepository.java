@@ -47,9 +47,7 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 1.1: " + Arrays.toString(result1));
 
         // batch inserts (single query) PreparedStatement
-        int[] result21 = ctx.configuration().derive(
-                new Settings().withBatchSize(3))
-                .dsl().batch(
+        int[] result21 = ctx.batch(
                         ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
                                 .values((Integer) null, null, null))
                 .bind(2005, 1370L, 1282.64)
@@ -79,9 +77,7 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 1.2.2: " + Arrays.toString(result22));        
 
         // batch inserts in a table having manually assigned primary key
-        int[] result3 = ctx.configuration().derive(
-                new Settings().withBatchSize(3))
-                .dsl().batch(
+        int[] result3 = ctx.batch(
                         ctx.insertInto(EMPLOYEE, EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.LAST_NAME, EMPLOYEE.FIRST_NAME, EMPLOYEE.EXTENSION,
                                 EMPLOYEE.EMAIL, EMPLOYEE.OFFICE_CODE, EMPLOYEE.SALARY, EMPLOYEE.JOB_TITLE)
                                 .values(10L, "Toga", "Alison", "x3332", "talison@classicmodelcars.com", "1", 110000, "VP Sales")
@@ -98,9 +94,7 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 1.3: " + Arrays.toString(result3));
 
-        int[] result4 = ctx.configuration().derive(
-                new Settings().withBatchSize(3))
-                .dsl().batch(
+        int[] result4 = ctx.batch(
                         ctx.query("SET IDENTITY_INSERT [sale] ON"),
                         ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
                                 .values(pk(), 2005, 1370L, 1282.64),

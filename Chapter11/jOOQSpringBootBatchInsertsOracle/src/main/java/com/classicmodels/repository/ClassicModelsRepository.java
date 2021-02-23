@@ -48,9 +48,7 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 1.1: " + Arrays.toString(result1));
 
         // batch inserts (single query) PreparedStatement
-        int[] result21 = ctx.configuration().derive(
-                new Settings().withBatchSize(3))
-                .dsl().batch(
+        int[] result21 = ctx.batch(
                         ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
                                 .values((BigInteger) null, null, null))
                 .bind(2005, 1370L, 1282.64)
