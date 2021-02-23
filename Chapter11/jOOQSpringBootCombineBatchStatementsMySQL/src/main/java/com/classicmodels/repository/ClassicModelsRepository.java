@@ -5,7 +5,6 @@ import static jooq.generated.tables.BankTransaction.BANK_TRANSACTION;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
-import org.jooq.conf.Settings;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,9 +21,7 @@ public class ClassicModelsRepository {
     public void combineBatch() {
 
         // combine batch
-        int[] result = ctx.configuration().derive(
-                new Settings().withBatchSize(3))
-                .dsl().batch(
+        int[] result = ctx.batch(
                         ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(2005, 1370L, 1282.64),
                         ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(2004, 1370L, 3938.24),
                         ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(2004, 1370L, 4676.14),
@@ -45,7 +42,7 @@ public class ClassicModelsRepository {
                         ctx.deleteFrom(BANK_TRANSACTION).where(BANK_TRANSACTION.TRANSACTION_ID.eq(4L))
                 ).execute();
 
-        System.out.println("EXAMPLE 1: " + Arrays.toString(result));
+        System.out.println("EXAMPLE: " + Arrays.toString(result));
 
     }
 }
