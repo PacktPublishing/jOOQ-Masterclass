@@ -44,7 +44,9 @@ public class ClassicModelsRepository {
         // Records batch merges (multiple query, inlined values)
         // Order of records is always preserved entirely
         // ctx.configuration().derive(
-        //        new Settings().withStatementType(StatementType.STATIC_STATEMENT))
+        //        new Settings()
+        //           .withStatementType(StatementType.STATIC_STATEMENT)
+        //           .withRenderOutputForSQLServerReturningClause(Boolean.FALSE))
         //        .dsl().batchMerge(...) ...
         
         System.out.println("EXAMPLE 1.1: " + Arrays.toString(result));

@@ -98,7 +98,9 @@ public class ClassicModelsRepository {
         // Records batch updates (multiple query, inlined values)
         // Order of records is always preserved entirely
         // ctx.configuration().derive(
-        //        new Settings().withStatementType(StatementType.STATIC_STATEMENT))
+        //        new Settings()
+        //          .withStatementType(StatementType.STATIC_STATEMENT)
+        //          .withRenderOutputForSQLServerReturningClause(Boolean.FALSE))
         //        .dsl().batchUpdate(sales) ...
 
         System.out.println("EXAMPLE 2: " + Arrays.toString(result));
