@@ -93,7 +93,7 @@ public class ClassicModelsRepository {
         // There is a single batch since the generated SQL with bind variables is the same for r1-r3.
         // The order of records is preserved.
         
-        // Records batch deletes single query, bind values)
+        // Records batch deletes (single query, bind values)
         int[] result = ctx.batchDelete(r1, r2, r3)
                 .execute();
         
