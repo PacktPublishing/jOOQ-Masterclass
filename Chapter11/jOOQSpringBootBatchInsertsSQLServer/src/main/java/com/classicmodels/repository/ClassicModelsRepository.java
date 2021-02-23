@@ -145,6 +145,7 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 2.1: " + Arrays.toString(result1));
         
         // Records batch inserts (multiple query, inlined values)
+        // Order of records is always preserved entirely
         int[] result2 = ctx.configuration().derive(
                 new Settings().withStatementType(StatementType.STATIC_STATEMENT))
                 .dsl().batchInsert(sales)

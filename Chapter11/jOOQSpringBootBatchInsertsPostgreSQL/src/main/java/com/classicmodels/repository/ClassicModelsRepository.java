@@ -127,7 +127,7 @@ public class ClassicModelsRepository {
         // get 10 ids
         var idsr = ctx.fetch(SALE_SEQ.nextvals(10));
 
-        // records batch inserts (single query, bind values)
+        // Records batch inserts (single query, bind values)
         SaleRecord sr11 = new SaleRecord(idsr.get(0).value1(), 2005, 1223.23, 1370L, null, null, null, null);
         SaleRecord sr12 = new SaleRecord(idsr.get(1).value1(), 2004, 543.33, 1166L, null, null, null, null);
         SaleRecord sr13 = new SaleRecord(idsr.get(2).value1(), 2005, 9022.21, 1370L, null, null, null, null);
@@ -144,7 +144,8 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 2.1: " + Arrays.toString(result1));
 
-        // records batch inserts (multiple query, inlined values)
+        // Records batch inserts (multiple query, inlined values)
+        // Order of records is always preserved entirely
         SaleRecord sr21 = new SaleRecord(idsr.get(5).value1(), 2005, 1223.23, 1370L, null, null, null, null);
         SaleRecord sr22 = new SaleRecord(idsr.get(6).value1(), 2004, 543.33, 1166L, null, null, null, null);
         SaleRecord sr23 = new SaleRecord(idsr.get(7).value1(), 2005, 9022.21, 1370L, null, null, null, null);
@@ -153,8 +154,6 @@ public class ClassicModelsRepository {
 
         List<SaleRecord> sales2 = List.of(sr25, sr22, sr23, sr24, sr21);
 
-        // There is a single batch since the generated SQL with bind variables is the same for sr11-sr15.
-        // The order of records is preserved.
         int[] result2 = ctx.configuration().derive(
                 new Settings().withStatementType(StatementType.STATIC_STATEMENT))
                 .dsl().batchInsert(sales2)
