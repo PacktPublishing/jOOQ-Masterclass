@@ -92,7 +92,7 @@ public class ClassicModelsRepository {
         // There is a single batch since the generated SQL with bind variables is the same for sr1-sr5.
         // The order of records is preserved.
         
-        // Records batch updates single query, bind values)
+        // Records batch updates (single query, bind values)
         int[] result = ctx.batchUpdate(sales) // or, .batchUpdate(sales.get(0), sales.get(1), sales.get(2))
                 .execute();
         
