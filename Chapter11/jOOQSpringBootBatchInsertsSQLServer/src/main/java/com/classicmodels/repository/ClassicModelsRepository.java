@@ -109,7 +109,7 @@ public class ClassicModelsRepository {
     }
    
     public void batchInsertRecords1() {
-
+        
         SaleRecord sr1 = new SaleRecord();
         SaleRecord sr2 = new SaleRecord();
         SaleRecord sr3 = new SaleRecord();
@@ -136,11 +136,22 @@ public class ClassicModelsRepository {
 
         // There is a single batch since the generated SQL with bind variables is the same for sr1-sr5.
         // The order of records is preserved.
-        int[] result = ctx.batchInsert(sales)
+        
+        // Records batch inserts (single query, bind values)
+        int[] result1 = ctx.batchInsert(sales)
                 // or, .batchInsert(sr5, sr2, sr3, sr4, sr1)
                 .execute();
 
-        System.out.println("EXAMPLE 2: " + Arrays.toString(result));
+        System.out.println("EXAMPLE 2.1: " + Arrays.toString(result1));
+        
+        // Records batch inserts (multiple query, inlined values)
+        int[] result2 = ctx.configuration().derive(
+                new Settings().withStatementType(StatementType.STATIC_STATEMENT))
+                .dsl().batchInsert(sales)
+                // or, .batchInsert(sr5, sr2, sr3, sr4, sr1)
+                .execute();
+
+        System.out.println("EXAMPLE 2.2: " + Arrays.toString(result2));
     }
 
     public void batchInsertRecords2() {
