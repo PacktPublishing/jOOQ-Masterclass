@@ -29,8 +29,17 @@ public class ClassicModelsRepository {
 
         // There will just 1 batch since the generated SQL with bind variables is the same for all SaleRecords
         // The order of records is perserved
+        
+        // Records batch merges (single query, bind values)
         int[] result = ctx.batchMerge(sr1, sr2, sr3, sr4, sr5)
                 .execute();
+        
+        // Records batch merges (multiple query, inlined values)
+        // Order of records is always preserved entirely
+        // ctx.configuration().derive(
+        //        new Settings().withStatementType(StatementType.STATIC_STATEMENT))
+        //        .dsl().batchMerge(...) ...
+
 
         System.out.println("EXAMPLE 1.1: " + Arrays.toString(result));
     }
