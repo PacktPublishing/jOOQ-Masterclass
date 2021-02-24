@@ -193,6 +193,7 @@ public class ClassicModelsRepository {
             String sql1 = "insert into \"SYSTEM\".\"SALE\" (\"SYSTEM\".\"SALE\".\"FISCAL_YEAR\", \"SYSTEM\".\"SALE\".\"EMPLOYEE_NUMBER\", \"SYSTEM\".\"SALE\".\"SALE\") "
                     + "values (?, ?, ?)";
 
+            // the next 2 statements will become the first batch                        
             try ( PreparedStatement stmt = conn.prepareStatement(sql1)) {
                 stmt.setInt(1, 2004);
                 stmt.setLong(2, 1166L);
