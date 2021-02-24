@@ -25,31 +25,31 @@ public class ClassicModelsRepository {
     public ClassicModelsRepository(DSLContext ctx) {
         this.ctx = ctx;
     }
-    
+
     public void batchInsertStatements() {
 
         // batch inserts in a table having auto-generated primary key (several queries)
         int[] result1 = ctx.batch(
-                        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
-                                .values(2005, 1370L, 1282.64),
-                        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
-                                .values(2004, 1370L, 3938.24),
-                        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
-                                .values(2004, 1370L, 4676.14),
-                        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
-                                .values(2003, 1166L, 2223.0),
-                        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
-                                .values(2004, 1166L, 4531.35),
-                        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
-                                .values(2004, 1166L, 6751.33)
-                ).execute();
+                ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
+                        .values(2005, 1370L, 1282.64),
+                ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
+                        .values(2004, 1370L, 3938.24),
+                ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
+                        .values(2004, 1370L, 4676.14),
+                ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
+                        .values(2003, 1166L, 2223.0),
+                ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
+                        .values(2004, 1166L, 4531.35),
+                ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
+                        .values(2004, 1166L, 6751.33)
+        ).execute();
 
         System.out.println("EXAMPLE 1.1: " + Arrays.toString(result1));
 
         // batch inserts (single query) PreparedStatement
         int[] result21 = ctx.batch(
-                        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
-                                .values((Integer) null, null, null))
+                ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
+                        .values((Integer) null, null, null))
                 .bind(2005, 1370L, 1282.64)
                 .bind(2004, 1370L, 3938.24)
                 .bind(2004, 1370L, 4676.14)
@@ -59,7 +59,7 @@ public class ClassicModelsRepository {
                 .execute();
 
         System.out.println("EXAMPLE 1.2.1: " + Arrays.toString(result21));
-        
+
         // batch inserts (single query) Statement - this is like EXAMPLE 1.1
         int[] result22 = ctx.configuration().derive(
                 new Settings().withStatementType(StatementType.STATIC_STATEMENT))
@@ -75,7 +75,7 @@ public class ClassicModelsRepository {
                 .execute();
 
         System.out.println("EXAMPLE 1.2.2: " + Arrays.toString(result22));
-        
+
         // batch inserts in a table having manually assigned primary key
         int[] result3 = ctx.configuration().derive(
                 new Settings().withBatchSize(3))
@@ -95,7 +95,7 @@ public class ClassicModelsRepository {
                 ).execute();
 
         System.out.println("EXAMPLE 1.3: " + Arrays.toString(result3));
-    }    
+    }
 
     public void batchInsertRecords1() {
 
@@ -196,5 +196,41 @@ public class ClassicModelsRepository {
 
         sales.forEach(s -> batch.bind(s.getFiscalYear(), s.getEmployeeNumber(), s.getSale()));
         batch.execute();
+    }
+
+    public void forceNumberOfBatches() {
+
+        // by default the generated INSERT has 3 placeholders
+        // insert into `classicmodels`.`sale` (`fiscal_year`, `sale`, `trend`) values (?, ?, ?)
+        SaleRecord sr1 = new SaleRecord();
+        sr1.setSaleId(pk());
+        sr1.setFiscalYear(2003);
+        sr1.setTrend("UP");
+        sr1.setSale(34493.22);
+
+        // by default the generated INSERT has 4 placeholders
+        // insert into `classicmodels`.`sale` (`fiscal_year`, `sale`, `employee_number`, `hot`) values (?, ?, ?, ?)
+        SaleRecord sr2 = new SaleRecord();
+        sr2.setSaleId(pk());
+        sr2.setEmployeeNumber(1370L);
+        sr2.setSale(4522.34);
+        sr2.setFiscalYear(2005);
+        sr2.setHot((byte) 1);
+
+        // in this context, there will be 2 batches, but we can force a single batch if
+        // we force a insert having the same string, and for this we can
+        // enforce all INSERT statements to be the same by 
+        // seting all changed flags of each individual record to true
+        sr1.changed(true);
+        sr2.changed(true);
+
+        // a single batch is executed having this INSERT
+        // insert into `classicmodels`.`sale` (`sale_id`, `fiscal_year`, `sale`, `employee_number`, `hot`, `rate`, `vat`, `trend`) values (?, ?, ?, ?, ?, ?, ?, ?)
+        ctx.batchInsert(sr1, sr2).execute();
+    }
+    
+    private long pk() {
+        
+        return (long) (Math.random() * 99999999);
     }
 }

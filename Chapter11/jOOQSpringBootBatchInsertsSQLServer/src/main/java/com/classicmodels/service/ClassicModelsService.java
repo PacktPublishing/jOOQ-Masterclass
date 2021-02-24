@@ -18,5 +18,6 @@ public class ClassicModelsService {
         classicModelsRepository.batchInsertRecords1();
         classicModelsRepository.batchInsertRecords2();
         classicModelsRepository.batchInsertRecords3();
+        classicModelsRepository.forceNumberOfBatches();
     }
 }
