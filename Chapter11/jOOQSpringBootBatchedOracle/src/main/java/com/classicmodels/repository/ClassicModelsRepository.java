@@ -182,36 +182,10 @@ public class ClassicModelsRepository {
                 record.store();
             });
         });
-
-        // by default the generated INSERT has 3 placeholders
-        // insert into `classicmodels`.`sale` (`fiscal_year`, `sale`, `trend`) values (?, ?, ?)
-        SaleRecord sr1 = new SaleRecord();
-        sr1.setFiscalYear(BigInteger.valueOf(2003));
-        sr1.setTrend("UP");
-        sr1.setSale(34493.22);
-
-        // by default the generated INSERT has 4 placeholders
-        // insert into `classicmodels`.`sale` (`fiscal_year`, `sale`, `employee_number`, `hot`) values (?, ?, ?, ?)
-        SaleRecord sr2 = new SaleRecord();
-        sr2.setEmployeeNumber(1370L);
-        sr2.setSale(4522.34);
-        sr2.setFiscalYear(BigInteger.valueOf(2005));
-        sr2.setHot((byte) 1);
-
-        // in this context, there will be 2 batches, but we can force a single batch if
-        // we force a insert having the same string, and for this we can
-        // enforce all INSERT statements to be the same by 
-        // seting all changed flags of each individual record to true
-        sr1.changed(true);
-        sr2.changed(true);
-
-        // a single batch is executed having this INSERT
-        // insert into `classicmodels`.`sale` (`sale_id`, `fiscal_year`, `sale`, `employee_number`, `hot`, `rate`, `vat`, `trend`) values (?, ?, ?, ?, ?, ?, ?, ?)
-        ctx.batchInsert(sr1, sr2).execute();
     }
 
     // use BatchedConnection    
-public void batchedConnectionUsage() {
+    public void batchedConnectionUsage() {
 
         try ( BatchedConnection conn = new BatchedConnection(DriverManager.getConnection(
                 "jdbc:oracle:thin:@localhost:1521:xe", "SYSTEM", "root"), 2)) {
@@ -311,8 +285,7 @@ public void batchedConnectionUsage() {
         }
     }
 
-    // batching relationships
-    @Transactional
+    // batching relationships   
     public void batchingOneToMany() {
 
         // avoid this approach since you can optimize the number of batches by ordering inserts (executes 4 batches)
