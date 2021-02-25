@@ -13,6 +13,7 @@ import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import org.jooq.LoaderError;
 import org.jooq.Query;
+import org.jooq.Source;
 import org.jooq.exception.DataAccessException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,6 +43,45 @@ public class ClassicModelsRepository {
                     // .batchNone()             - default
                     // .commitNone()            - default
                     .loadCSV(Paths.get("data", "csv", "allColumnsHeaderCommaSeparator.csv").toFile(), StandardCharsets.UTF_8)
+                    .fieldsCorresponding()
+                    .execute();
+
+        } catch (IOException ex) {
+            Logger.getLogger(ClassicModelsRepository.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    @Transactional
+    public void loadCSVDefaultsFromString() {
+
+        // import a CSV-string having        
+        //     - all columns of 'sale' table
+        //     - comma separator     
+        
+        String strcsv = """
+                        sale_id,fiscal_year,sale,employee_number,hot,rate,vat,trend
+                        1,2003,5282.64,1370,0,"","",UP
+                        2,2004,1938.24,1370,0,"","",UP
+                        3,2004,1676.14,1370,0,"","",DOWN
+                        4,2003,3213.0,1166,0,"","",DOWN
+                        5,2004,2121.35,1166,0,"","",DOWN                        
+                        """;
+       
+        try {
+            ctx.loadInto(SALE)                   
+                    .loadCSV(strcsv)
+                    .fieldsCorresponding()
+                    .execute();
+
+        } catch (IOException ex) {
+            Logger.getLogger(ClassicModelsRepository.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        byte[] strcsvbytes = strcsv.getBytes();        
+        try {
+            ctx.loadInto(SALE)                 
+                    .onDuplicateKeyIgnore()
+                    .loadCSV(Source.of(strcsvbytes))
                     .fieldsCorresponding()
                     .execute();
 
@@ -121,7 +161,7 @@ public class ClassicModelsRepository {
                     .ignoreRows(0) // this is a CSV file with no header and ignoreRows() is by default 1
                     .separator('|')
                     .nullString("{null}")
-                    .quote('"') // this is the default quote (") 
+                    .quote('"') // this is the default quote (")                     
                     .execute()
                     .errors();
 

@@ -13,12 +13,15 @@ public class ClassicModelsService {
     }
 
     public void callAll() {
-        classicModelsRepository.cleanUpSaleTable();
-        classicModelsRepository.loadCSVDefaults();
+     //   classicModelsRepository.cleanUpSaleTable();
+     //   classicModelsRepository.loadCSVDefaults();
+        
+        //classicModelsRepository.cleanUpSaleTable();
+        //classicModelsRepository.loadCSVOnlyCertainFields();
         
         classicModelsRepository.cleanUpSaleTable();
-        classicModelsRepository.loadCSVOnlyCertainFields();
-        
+        classicModelsRepository.loadCSVDefaultsFromString();
+       /* 
         classicModelsRepository.loadCSVInTwoTables();
         
         classicModelsRepository.cleanUpSaleTable();
@@ -41,6 +44,6 @@ public class ClassicModelsService {
         // classicModelsRepository.loadCSVonDuplicateKeyError();
         
          classicModelsRepository.cleanUpSaleTable();
-         classicModelsRepository.loadCSVonErrorAbort();
+         classicModelsRepository.loadCSVonErrorAbort();*/
     }
 }

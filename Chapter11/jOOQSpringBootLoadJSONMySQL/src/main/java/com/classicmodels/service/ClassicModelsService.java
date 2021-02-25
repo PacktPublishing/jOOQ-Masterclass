@@ -16,6 +16,9 @@ public class ClassicModelsService {
 
         classicModelsRepository.cleanUpSaleTable();
         classicModelsRepository.loadJSONDefaults();
+        
+        classicModelsRepository.cleanUpSaleTable();
+        classicModelsRepository.loadJSONDefaultsFromString();
 
         classicModelsRepository.cleanUpSaleTable();
         classicModelsRepository.loadJSONOnlyCertainFields();

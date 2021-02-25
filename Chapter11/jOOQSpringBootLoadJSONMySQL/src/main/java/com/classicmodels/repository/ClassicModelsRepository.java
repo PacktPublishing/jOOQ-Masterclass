@@ -13,6 +13,7 @@ import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import org.jooq.LoaderError;
 import org.jooq.Query;
+import org.jooq.Source;
 import org.jooq.exception.DataAccessException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,6 +42,143 @@ public class ClassicModelsRepository {
                     // .batchNone()             - default
                     // .commitNone()            - default
                     .loadJSON(Paths.get("data", "json", "jsonWithFields.json").toFile(), StandardCharsets.UTF_8)
+                    .fieldsCorresponding()
+                    .execute();
+
+        } catch (IOException ex) {
+            Logger.getLogger(ClassicModelsRepository.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Transactional
+    public void loadJSONDefaultsFromString() {
+
+        // import a JSON-string having
+        //     - "fields" (contains header information as exported by jOOQ)
+        //     - all columns of 'sale' table        
+        
+        String strjson = """
+                        {
+                          "fields": [
+                            {
+                              "schema": "classicmodels",
+                              "table": "sale",
+                              "name": "sale_id",
+                              "type": "BIGINT"
+                            },
+                            {
+                              "schema": "classicmodels",
+                              "table": "sale",
+                              "name": "fiscal_year",
+                              "type": "INTEGER"
+                            },
+                            {
+                              "schema": "classicmodels",
+                              "table": "sale",
+                              "name": "sale",
+                              "type": "FLOAT"
+                            },
+                            {
+                              "schema": "classicmodels",
+                              "table": "sale",
+                              "name": "employee_number",
+                              "type": "BIGINT"
+                            },
+                            {
+                              "schema": "classicmodels",
+                              "table": "sale",
+                              "name": "hot",
+                              "type": "TINYINT"
+                            },
+                            {
+                              "schema": "classicmodels",
+                              "table": "sale",
+                              "name": "rate",
+                              "type": "SALE_RATE"
+                            },
+                            {
+                              "schema": "classicmodels",
+                              "table": "sale",
+                              "name": "vat",
+                              "type": "SALE_VAT"
+                            },
+                            {
+                              "schema": "classicmodels",
+                              "table": "sale",
+                              "name": "trend",
+                              "type": "VARCHAR"
+                            }
+                          ],
+                          "records": [
+                            [
+                              1,
+                              2003,
+                              5282.64,
+                              1370,
+                              0,
+                              null,
+                              null,
+                              "UP"
+                            ],
+                            [
+                              2,
+                              2004,
+                              1938.24,
+                              1370,
+                              0,
+                              null,
+                              null,
+                              "UP"
+                            ],
+                            [
+                              3,
+                              2004,
+                              1676.14,
+                              1370,
+                              0,
+                              null,
+                              null,
+                              "DOWN"
+                            ],
+                            [
+                              4,
+                              2003,
+                              3213,
+                              1166,
+                              0,
+                              null,
+                              null,
+                              "DOWN"
+                            ],
+                            [
+                              5,
+                              2004,
+                              2121.35,
+                              1166,
+                              0,
+                              null,
+                              null,
+                              "DOWN"
+                            ]
+                         ]
+                        }
+                        """;
+       
+        try {
+            ctx.loadInto(SALE)                   
+                    .loadJSON(strjson)
+                    .fieldsCorresponding()
+                    .execute();
+
+        } catch (IOException ex) {
+            Logger.getLogger(ClassicModelsRepository.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        byte[] strjsonbytes = strjson.getBytes();        
+        try {
+            ctx.loadInto(SALE)                 
+                    .onDuplicateKeyIgnore()
+                    .loadJSON(Source.of(strjsonbytes))
                     .fieldsCorresponding()
                     .execute();
 
