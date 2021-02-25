@@ -12,6 +12,8 @@ import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import org.jooq.LoaderError;
+import org.jooq.Query;
+import org.jooq.exception.DataAccessException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -163,9 +165,9 @@ public class ClassicModelsRepository {
             int executed = ctx.loadInto(SALE)
                     .onDuplicateKeyUpdate() // bulk cannot be used                                                          
                     .batchAfter(2) // each *batch* has 2 rows
-                    .commitNone()  // (default) allow Spring Boot to handle transaction commit
-                                   // if you remove @Transactional then auto-commit (see, application.properties) takes action
-                                   // if you remove @Transactional and set auto-commit to false then nothing commits
+                    .commitNone() // (default) allow Spring Boot to handle transaction commit
+                    // if you remove @Transactional then auto-commit (see, application.properties) takes action
+                    // if you remove @Transactional and set auto-commit to false then nothing commits
                     .loadCSV(Paths.get("data", "csv", "allColumnsHeaderCommaSeparatorWithDuplicates.csv").toFile(), StandardCharsets.UTF_8)
                     .fieldsCorresponding()
                     .execute()
@@ -175,7 +177,7 @@ public class ClassicModelsRepository {
 
         } catch (IOException ex) {
             Logger.getLogger(ClassicModelsRepository.class.getName()).log(Level.SEVERE, null, ex);
-        }       
+        }
     }
 
     @Transactional
@@ -205,7 +207,7 @@ public class ClassicModelsRepository {
 
     @Transactional
     public void loadCSVBulkBatchCommit() {
-        
+
         // import a CSV having
         //     - header (first line)
         //     - all columns of 'sale' table
@@ -260,15 +262,31 @@ public class ClassicModelsRepository {
         try {
 
             List<LoaderError> errors = ctx.loadInto(SALE)
-                    .onErrorAbort() // or, continue via onErrorIgnore()
                     .bulkNone() // dont' bulk (default)
-                    .batchNone() // don't batch (default)                  
+                    .batchNone() // don't batch (default)
+                    .onErrorAbort() // or, continue via onErrorIgnore()
                     .loadCSV(Paths.get("data", "csv", "allColumnsHeaderCommaSeparatorCorruptedData.csv").toFile(), StandardCharsets.UTF_8)
                     .fieldsCorresponding()
                     .execute()
                     .errors();
 
             System.out.println("Errors: " + errors);
+
+            for (LoaderError error : errors) {
+                // The exception that caused the error
+                DataAccessException exception = error.exception();
+
+                // The row that caused the error
+                int rowIndex = error.rowIndex();
+                String[] row = error.row();
+
+                // The query that caused the error
+                Query query = error.query();
+
+                System.out.println("ERROR: " + exception
+                        + " ROW:" + rowIndex + ":(" + Arrays.toString(row) + ")"
+                        + " QUERY: " + query.getSQL());
+            }
 
         } catch (IOException ex) {
             Logger.getLogger(ClassicModelsRepository.class.getName()).log(Level.SEVERE, null, ex);

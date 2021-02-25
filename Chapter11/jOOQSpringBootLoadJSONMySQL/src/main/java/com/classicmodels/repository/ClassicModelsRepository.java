@@ -12,6 +12,8 @@ import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import org.jooq.LoaderError;
+import org.jooq.Query;
+import org.jooq.exception.DataAccessException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -225,16 +227,32 @@ public class ClassicModelsRepository {
         //     - corrupted data
         try {
 
-            List<LoaderError> errors = ctx.loadInto(SALE)
-                    .onErrorAbort() // or, continue via onErrorIgnore()
+            List<LoaderError> errors = ctx.loadInto(SALE)                    
                     .bulkNone() // dont' bulk (default)
-                    .batchNone() // don't batch (default)                  
+                    .batchNone() // don't batch (default)
+                    .onErrorAbort() // or, continue via onErrorIgnore()
                     .loadJSON(Paths.get("data", "json", "jsonWithFieldsAndCorruptedData.json").toFile(), StandardCharsets.UTF_8)
                     .fieldsCorresponding()
                     .execute()
                     .errors();
 
             System.out.println("Errors: " + errors);
+            
+            for (LoaderError error : errors) {
+                // The exception that caused the error
+                DataAccessException exception = error.exception();
+
+                // The row that caused the error
+                int rowIndex = error.rowIndex();
+                String[] row = error.row();
+
+                // The query that caused the error
+                Query query = error.query();
+
+                System.out.println("ERROR: " + exception
+                        + " ROW:" + rowIndex + ":(" + Arrays.toString(row) + ")"
+                        + " QUERY: " + query.getSQL());
+            }
 
         } catch (IOException ex) {
             Logger.getLogger(ClassicModelsRepository.class.getName()).log(Level.SEVERE, null, ex);

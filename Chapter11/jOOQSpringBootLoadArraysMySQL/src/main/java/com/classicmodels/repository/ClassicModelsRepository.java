@@ -10,6 +10,8 @@ import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import org.jooq.LoaderError;
+import org.jooq.Query;
+import org.jooq.exception.DataAccessException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -130,14 +132,14 @@ public class ClassicModelsRepository {
 
     @Transactional
     public void loadArraysOnDuplicateKeyUpdate() {
-       
+
         try {
             int executed = ctx.loadInto(SALE)
                     .onDuplicateKeyUpdate() // bulk cannot be used                                                          
                     .batchAfter(2) // each *batch* has 2 rows
-                    .commitNone()  // (default) allow Spring Boot to handle transaction commit
-                                   // if you remove @Transactional then auto-commit (see, application.properties) takes action
-                                   // if you remove @Transactional and set auto-commit to false then nothing commits
+                    .commitNone() // (default) allow Spring Boot to handle transaction commit
+                    // if you remove @Transactional then auto-commit (see, application.properties) takes action
+                    // if you remove @Transactional and set auto-commit to false then nothing commits
                     .loadArrays(
                             new Object[]{1, 2005, 582.64, 1370, 0, "", "", "UP"},
                             new Object[]{2, 2005, 138.24, 1370, 0, "", "", " CONSTANT"},
@@ -156,7 +158,7 @@ public class ClassicModelsRepository {
 
     @Transactional
     public void loadArraysOnDuplicateKeyIgnore() {
-        
+
         try {
             int ignored = ctx.loadInto(SALE)
                     .onDuplicateKeyIgnore() // bulk cannot be used                  
@@ -210,7 +212,7 @@ public class ClassicModelsRepository {
                             new Object[]{2005, 646.12, 1166, 0, "", "", "DOWN"},
                             new Object[]{2003, 1746.12, 1504, 0, "", "", "DOWN"}
                     )
-                    .fields(SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.HOT, SALE.RATE, SALE.VAT, SALE.TREND)                    
+                    .fields(SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.HOT, SALE.RATE, SALE.VAT, SALE.TREND)
                     .execute()
                     .stored();
 
@@ -234,7 +236,7 @@ public class ClassicModelsRepository {
                             new Object[]{2, 2005, 138.24, 1370, 0, "", "", " CONSTANT"},
                             new Object[]{3, 2005, 176.14, 1370, 0, "", "", "DOWN"}
                     )
-                    .fields(SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.HOT, SALE.RATE, SALE.VAT, SALE.TREND)                    
+                    .fields(SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.HOT, SALE.RATE, SALE.VAT, SALE.TREND)
                     .execute();
 
         } catch (IOException ex) {
@@ -244,21 +246,37 @@ public class ClassicModelsRepository {
 
     @Transactional
     public void loadArraysOnErrorAbort() {
-       
+
         try {
 
             List<LoaderError> errors = ctx.loadInto(SALE)
-                    .onErrorAbort() // or, continue via onErrorIgnore()
                     .bulkNone() // dont' bulk (default)
-                    .batchNone() // don't batch (default)                  
+                    .batchNone() // don't batch (default)
+                    .onErrorAbort() // or, continue via onErrorIgnore()
                     .loadArrays(
                             new Object[]{1},
                             new Object[]{0, "", "", " CONSTANT"},
                             new Object[]{3, 2005, 176.14, 1370, 0, "", "", "DOWN"}
                     )
-                    .fields(SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.HOT, SALE.RATE, SALE.VAT, SALE.TREND)                    
+                    .fields(SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.HOT, SALE.RATE, SALE.VAT, SALE.TREND)
                     .execute()
                     .errors();
+
+            for (LoaderError error : errors) {
+                // The exception that caused the error
+                DataAccessException exception = error.exception();
+
+                // The row that caused the error
+                int rowIndex = error.rowIndex();
+                String[] row = error.row();
+
+                // The query that caused the error
+                Query query = error.query();
+
+                System.out.println("ERROR: " + exception
+                        + " ROW:" + rowIndex + ":(" + Arrays.toString(row) + ")"
+                        + " QUERY: " + query.getSQL());
+            }
 
             System.out.println("Errors: " + errors);
 

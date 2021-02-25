@@ -40,7 +40,7 @@ public class ClassicModelsService {
         // classicModelsRepository.cleanUpSaleTable();
         // classicModelsRepository.loadCSVonDuplicateKeyError();
         
-        // classicModelsRepository.cleanUpSaleTable();
-        // classicModelsRepository.loadCSVonErrorAbort();
+         classicModelsRepository.cleanUpSaleTable();
+         classicModelsRepository.loadCSVonErrorAbort();
     }
 }

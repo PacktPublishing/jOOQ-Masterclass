@@ -14,9 +14,11 @@ import jooq.generated.tables.records.CustomerdetailRecord;
 import jooq.generated.tables.records.SaleRecord;
 import org.jooq.DSLContext;
 import org.jooq.LoaderError;
+import org.jooq.Query;
 import org.jooq.Result;
 import org.jooq.Record;
 import org.jooq.Record3;
+import org.jooq.exception.DataAccessException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -266,16 +268,32 @@ public class ClassicModelsRepository {
         SaleRecord r3 = new SaleRecord(3L, 2003, 1746.14, 1370L, null, null, null, "DOWN");
         
         try {
-            List<LoaderError> errors = ctx.loadInto(SALE)
-                    .onErrorAbort() // or, continue via onErrorIgnore()
+            List<LoaderError> errors = ctx.loadInto(SALE)                   
                     .bulkNone() // dont' bulk (default)
-                    .batchNone() // don't batch (default)                  
+                    .batchNone() // don't batch (default)
+                    .onErrorAbort() // or, continue via onErrorIgnore()
                     .loadRecords(r1, r2, r3)
                     .fieldsCorresponding()
                     .execute()
                     .errors();
 
             System.out.println("Errors: " + errors);
+            
+            for (LoaderError error : errors) {
+                // The exception that caused the error
+                DataAccessException exception = error.exception();
+
+                // The row that caused the error
+                int rowIndex = error.rowIndex();
+                String[] row = error.row();
+
+                // The query that caused the error
+                Query query = error.query();
+
+                System.out.println("ERROR: " + exception
+                        + " ROW:" + rowIndex + ":(" + Arrays.toString(row) + ")"
+                        + " QUERY: " + query.getSQL());
+            }
 
         } catch (IOException ex) {
             Logger.getLogger(ClassicModelsRepository.class.getName()).log(Level.SEVERE, null, ex);
