@@ -116,6 +116,8 @@ public class ClassicModelsRepository {
                     .fields(null, SALE.FISCAL_YEAR, SALE.SALE_, null, null, null, null, SALE.TREND)
                     .onRowEnd(ll -> {
                         System.out.println("Just processed row: " + Arrays.toString(ll.row()));
+                        System.out.format("Executed: %d, ignored: %d, processed: %d, stored: %d\n",
+                                ll.executed(), ll.ignored(), ll.processed(), ll.stored());
                     })
                     .execute();
 
