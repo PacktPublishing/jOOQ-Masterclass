@@ -165,7 +165,7 @@ public class ClassicModelsRepository {
                     .execute()
                     .errors();
 
-            System.out.println("Errorsxxx: " + errors);
+            System.out.println("Errors: " + errors);
 
         } catch (IOException ex) {
             Logger.getLogger(ClassicModelsRepository.class.getName()).log(Level.SEVERE, null, ex);
