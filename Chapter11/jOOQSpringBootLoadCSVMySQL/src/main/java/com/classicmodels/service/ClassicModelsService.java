@@ -31,6 +31,9 @@ public class ClassicModelsService {
         classicModelsRepository.loadCSVRowListeners();
 
         classicModelsRepository.cleanUpSaleTable();
+        classicModelsRepository.loadCSVCommitNone();
+        
+        classicModelsRepository.cleanUpSaleTable();
         classicModelsRepository.loadCSVOnDuplicateKeyUpdate();
 
         classicModelsRepository.cleanUpSaleTable();

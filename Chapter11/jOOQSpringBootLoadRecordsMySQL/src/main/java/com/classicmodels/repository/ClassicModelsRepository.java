@@ -165,6 +165,38 @@ public class ClassicModelsRepository {
     }
 
     @Transactional
+    public void loadRecordsOnCommitNone() {
+       
+        SaleRecord r1 = new SaleRecord(1L, 2005, 582.64, 1370L, null, null, null, "UP");
+        SaleRecord r2 = new SaleRecord(2L, 2005, 138.24, 1370L, null, null, null, "CONSTANT");
+        SaleRecord r3 = new SaleRecord(3L, 2005, 176.14, 1370L, null, null, null, "DOWN");
+        
+        try {
+            int executed = ctx.loadInto(SALE)
+                    //.onDuplicateKeyIgnore() // for testing commit/rollback operations described below comment this line
+                    .batchAfter(2) // each *batch* has 2 rows
+                    .commitNone() // (default, so it can be omitted) allow Spring Boot to handle transaction commit/rollback
+                   
+                    // -> By default, @Transactional commits the transaction at the end of this method 
+                    //   (if something goes wrong then @Transactional rollback the entire payload (all batches))
+                    // -> If you remove @Transactional then auto-commit (see, application.properties) takes action 
+                    //   (if something goes wrong then nothing is rolled back but if you commented onDuplicateKeyIgnore()
+                    //    then loading is aborted immediately)
+                    // -> If you remove @Transactional and set auto-commit to false then nothing commits
+                    
+                    .loadRecords(r1, r2, r3)
+                    .fieldsCorresponding()
+                    .execute()
+                    .executed();
+
+            System.out.println("Executed: " + executed);
+
+        } catch (IOException ex) {
+            Logger.getLogger(ClassicModelsRepository.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    @Transactional
     public void loadRecordsOnDuplicateKeyUpdate() {
        
         SaleRecord r1 = new SaleRecord(1L, 2005, 582.64, 1370L, null, null, null, "UP");
@@ -173,11 +205,7 @@ public class ClassicModelsRepository {
         
         try {
             int executed = ctx.loadInto(SALE)
-                    .onDuplicateKeyUpdate() // bulk cannot be used                                                          
-                    .batchAfter(2) // each *batch* has 2 rows
-                    .commitNone()  // (default) allow Spring Boot to handle transaction commit
-                                   // if you remove @Transactional then auto-commit (see, application.properties) takes action
-                                   // if you remove @Transactional and set auto-commit to false then nothing commits
+                    .onDuplicateKeyUpdate() 
                     .loadRecords(r1, r2, r3)
                     .fieldsCorresponding()
                     .execute()

@@ -18,6 +18,7 @@ public class ClassicModelsService {
         classicModelsRepository.loadRecordsOnlyCertainFields();
         classicModelsRepository.loadRecordsInTwoTables();
         classicModelsRepository.loadRecordsRowListeners();
+        classicModelsRepository.loadRecordsOnCommitNone();
         classicModelsRepository.loadRecordsOnDuplicateKeyUpdate();
         classicModelsRepository.loadRecordsOnDuplicateKeyIgnore();
         classicModelsRepository.loadRecordsBulkBatchCommit();

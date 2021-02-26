@@ -308,7 +308,7 @@ public class ClassicModelsRepository {
         //     - duplicated IDs
         try {
             int executed = ctx.loadInto(SALE)
-                    //.onDuplicateKeyIgnore() // for testing commit/rollback operations described below comment this line
+                    .onDuplicateKeyIgnore() // for testing commit/rollback operations described below comment this line
                     .batchAfter(2) // each *batch* has 2 rows
                     .commitNone() // (default, so it can be omitted) allow Spring Boot to handle transaction commit/rollback
                    

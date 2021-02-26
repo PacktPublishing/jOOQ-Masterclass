@@ -130,15 +130,43 @@ public class ClassicModelsRepository {
     }
 
     @Transactional
+    public void loadArraysCommitNone() {
+
+        try {
+            int executed = ctx.loadInto(SALE)
+                    .onDuplicateKeyIgnore() // for testing commit/rollback operations described below comment this line
+                    .batchAfter(2) // each *batch* has 2 rows
+                    .commitNone() // (default, so it can be omitted) allow Spring Boot to handle transaction commit/rollback
+                   
+                    // -> By default, @Transactional commits the transaction at the end of this method 
+                    //   (if something goes wrong then @Transactional rollback the entire payload (all batches))
+                    // -> If you remove @Transactional then auto-commit (see, application.properties) takes action 
+                    //   (if something goes wrong then nothing is rolled back but if you commented onDuplicateKeyIgnore()
+                    //    then loading is aborted immediately)
+                    // -> If you remove @Transactional and set auto-commit to false then nothing commits
+                    
+                    .loadArrays(
+                            new Object[]{1, 2005, 582.64, 1370, 0, "", "", "UP"},
+                            new Object[]{2, 2005, 138.24, 1370, 0, "", "", " CONSTANT"},
+                            new Object[]{3, 2005, 176.14, 1370, 0, "", "", "DOWN"}
+                    )
+                    .fields(SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.HOT, SALE.RATE, SALE.VAT, SALE.TREND)
+                    .execute()
+                    .executed();
+
+            System.out.println("Executed: " + executed);
+
+        } catch (IOException ex) {
+            Logger.getLogger(ClassicModelsRepository.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    @Transactional
     public void loadArraysOnDuplicateKeyUpdate() {
 
         try {
             int executed = ctx.loadInto(SALE)
-                    .onDuplicateKeyUpdate() // bulk cannot be used                                                          
-                    .batchAfter(2) // each *batch* has 2 rows
-                    .commitNone() // (default) allow Spring Boot to handle transaction commit
-                    // if you remove @Transactional then auto-commit (see, application.properties) takes action
-                    // if you remove @Transactional and set auto-commit to false then nothing commits
+                    .onDuplicateKeyUpdate()
                     .loadArrays(
                             new Object[]{1, 2005, 582.64, 1370, 0, "", "", "UP"},
                             new Object[]{2, 2005, 138.24, 1370, 0, "", "", " CONSTANT"},
