@@ -19,7 +19,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-@Transactional(readOnly = true)
 public class ClassicModelsRepository {
 
     private final DSLContext ctx;
@@ -27,7 +26,7 @@ public class ClassicModelsRepository {
     public ClassicModelsRepository(DSLContext ctx) {
         this.ctx = ctx;
     }
-        
+
     @Transactional
     public void loadJSONDefaults() {
 
@@ -51,12 +50,28 @@ public class ClassicModelsRepository {
     }
 
     @Transactional
+    public void loadJSONDefaultsInlineFields() {
+
+        // import a JSON having
+        //     - no "fields" header
+        //     - all columns of 'sale' table inlined       
+        try {
+            ctx.loadInto(SALE)
+                    .loadJSON(Paths.get("data", "json", "jsonWithInlineFields.json").toFile(), StandardCharsets.UTF_8)
+                    .fieldsCorresponding()                    
+                    .execute();
+
+        } catch (IOException ex) {
+            Logger.getLogger(ClassicModelsRepository.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Transactional
     public void loadJSONDefaultsFromString() {
 
         // import a JSON-string having
         //     - "fields" (contains header information as exported by jOOQ)
         //     - all columns of 'sale' table        
-        
         String strjson = """
                         {
                           "fields": [
@@ -163,9 +178,9 @@ public class ClassicModelsRepository {
                          ]
                         }
                         """;
-       
+
         try {
-            ctx.loadInto(SALE)                   
+            ctx.loadInto(SALE)
                     .loadJSON(strjson)
                     .fieldsCorresponding()
                     .execute();
@@ -173,10 +188,10 @@ public class ClassicModelsRepository {
         } catch (IOException ex) {
             Logger.getLogger(ClassicModelsRepository.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        byte[] strjsonbytes = strjson.getBytes();        
+
+        byte[] strjsonbytes = strjson.getBytes();
         try {
-            ctx.loadInto(SALE)                 
+            ctx.loadInto(SALE)
                     .onDuplicateKeyIgnore()
                     .loadJSON(Source.of(strjsonbytes))
                     .fieldsCorresponding()
@@ -197,6 +212,26 @@ public class ClassicModelsRepository {
             int processed = ctx.loadInto(SALE)
                     .loadJSON(Paths.get("data", "json", "jsonWithoutFields.json").toFile(), StandardCharsets.UTF_8)
                     .fields(null, SALE.FISCAL_YEAR, SALE.SALE_, null, null, null, null, SALE.TREND)
+                    .execute()
+                    .processed(); // optional
+
+            System.out.println("Processed: " + processed);
+
+        } catch (IOException ex) {
+            Logger.getLogger(ClassicModelsRepository.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    @Transactional
+    public void loadJSONOnlyCertainInlineFields() {
+
+        // import a JSON having
+        //     - no "fields" header
+        //     - all columns of 'sale' table inlined                    
+        try {
+            int processed = ctx.loadInto(SALE)
+                    .loadJSON(Paths.get("data", "json", "jsonWithInlineFields.json").toFile(), StandardCharsets.UTF_8)
+                    .fields(null, null, null, SALE.SALE_, null, null, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER)
                     .execute()
                     .processed(); // optional
 
@@ -241,7 +276,7 @@ public class ClassicModelsRepository {
             Logger.getLogger(ClassicModelsRepository.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-   
+
     @Transactional
     public void loadJSONRowListeners() {
 
@@ -275,19 +310,19 @@ public class ClassicModelsRepository {
             int executed = ctx.loadInto(SALE)
                     .onDuplicateKeyUpdate() // bulk cannot be used                                                          
                     .batchAfter(2) // each *batch* has 2 rows
-                    .commitNone()  // (default) allow Spring Boot to handle transaction commit
-                                   // if you remove @Transactional then auto-commit (see, application.properties) takes action
-                                   // if you remove @Transactional and set auto-commit to false then nothing commits
+                    .commitNone() // (default) allow Spring Boot to handle transaction commit
+                    // if you remove @Transactional then auto-commit (see, application.properties) takes action
+                    // if you remove @Transactional and set auto-commit to false then nothing commits
                     .loadJSON(Paths.get("data", "json", "jsonWithFieldsAndDuplicates.json").toFile(), StandardCharsets.UTF_8)
                     .fieldsCorresponding()
                     .execute()
-                    .executed();
+                    .processed();
 
             System.out.println("Executed: " + executed);
 
         } catch (IOException ex) {
             Logger.getLogger(ClassicModelsRepository.class.getName()).log(Level.SEVERE, null, ex);
-        }       
+        }
     }
 
     @Transactional
@@ -316,7 +351,7 @@ public class ClassicModelsRepository {
 
     @Transactional
     public void loadJSONBulkBatchCommit() {
-        
+
         // import a JSON having
         //     - "fields" (contains header information as exported by jOOQ)
         //     - all columns of 'sale' table                                      
@@ -339,7 +374,7 @@ public class ClassicModelsRepository {
 
     @Transactional
     public void loadJSONonDuplicateKeyError() {
-        
+
         // import a JSON having
         //     - "fields" (contains header information as exported by jOOQ)
         //     - all columns of 'sale' table                                      
@@ -367,7 +402,7 @@ public class ClassicModelsRepository {
         //     - corrupted data
         try {
 
-            List<LoaderError> errors = ctx.loadInto(SALE)                    
+            List<LoaderError> errors = ctx.loadInto(SALE)
                     .bulkNone() // dont' bulk (default)
                     .batchNone() // don't batch (default)
                     .onErrorAbort() // or, continue via onErrorIgnore()
@@ -377,7 +412,7 @@ public class ClassicModelsRepository {
                     .errors();
 
             System.out.println("Errors: " + errors);
-            
+
             for (LoaderError error : errors) {
                 // The exception that caused the error
                 DataAccessException exception = error.exception();

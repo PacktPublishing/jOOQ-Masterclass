@@ -12,25 +12,31 @@ public class ClassicModelsService {
         this.classicModelsRepository = classicModelsRepository;
     }
 
-    public void callAll() {
-
+    public void callAll() {                
+    
+/*
         classicModelsRepository.cleanUpSaleTable();
         classicModelsRepository.loadJSONDefaults();
-        
+     */   
+     //   classicModelsRepository.cleanUpSaleTable();
+      //  classicModelsRepository.loadJSONDefaultsInlineFields();
+       /* 
         classicModelsRepository.cleanUpSaleTable();
         classicModelsRepository.loadJSONDefaultsFromString();
+*/
+     //   classicModelsRepository.cleanUpSaleTable();
+     //   classicModelsRepository.loadJSONOnlyCertainFields();
+     
+     //   classicModelsRepository.cleanUpSaleTable();
+      //  classicModelsRepository.loadJSONOnlyCertainInlineFields();
+  //      classicModelsRepository.loadJSONInTwoTables();
 
-        classicModelsRepository.cleanUpSaleTable();
-        classicModelsRepository.loadJSONOnlyCertainFields();
-
-        classicModelsRepository.loadJSONInTwoTables();
-
-        classicModelsRepository.cleanUpSaleTable();
-        classicModelsRepository.loadJSONRowListeners();
+//        classicModelsRepository.cleanUpSaleTable();
+  //      classicModelsRepository.loadJSONRowListeners();
 
         classicModelsRepository.cleanUpSaleTable();
         classicModelsRepository.loadJSONOnDuplicateKeyUpdate();
-
+/*
         classicModelsRepository.cleanUpSaleTable();
         classicModelsRepository.loadJSONOnDuplicateKeyIgnore();
 
@@ -42,6 +48,6 @@ public class ClassicModelsService {
         
         // classicModelsRepository.loadJSONonDuplicateKeyError();
         // classicModelsRepository.cleanUpSaleTable();
-        // classicModelsRepository.loadJSONonErrorAbort();
+        // classicModelsRepository.loadJSONonErrorAbort();*/
     }
 }
