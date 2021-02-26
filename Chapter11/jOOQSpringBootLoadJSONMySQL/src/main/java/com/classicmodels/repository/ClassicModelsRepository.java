@@ -300,6 +300,38 @@ public class ClassicModelsRepository {
     }
 
     @Transactional
+    public void loadJSONCommitNone() {
+
+        // import a JSON having
+        //     - "fields" (contains header information as exported by jOOQ)
+        //     - all columns of 'sale' table         
+        //     - duplicated IDs
+        try {
+            int executed = ctx.loadInto(SALE)
+                    //.onDuplicateKeyIgnore() // for testing commit/rollback operations described below comment this line
+                    .batchAfter(2) // each *batch* has 2 rows
+                    .commitNone() // (default, so it can be omitted) allow Spring Boot to handle transaction commit/rollback
+                   
+                    // -> By default, @Transactional commits the transaction at the end of this method 
+                    //   (if something goes wrong then @Transactional rollback the entire payload (all batches))
+                    // -> If you remove @Transactional then auto-commit (see, application.properties) takes action 
+                    //   (if something goes wrong then nothing is rolled back but if you commented onDuplicateKeyIgnore()
+                    //    then loading is aborted immediately)
+                    // -> If you remove @Transactional and set auto-commit to false then nothing commits
+                    
+                    .loadJSON(Paths.get("data", "json", "jsonWithFieldsAndDuplicates.json").toFile(), StandardCharsets.UTF_8)
+                    .fieldsCorresponding()
+                    .execute()
+                    .executed();
+
+            System.out.println("Executed: " + executed);
+
+        } catch (IOException ex) {
+            Logger.getLogger(ClassicModelsRepository.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    @Transactional
     public void loadJSONOnDuplicateKeyUpdate() {
 
         // import a JSON having
@@ -308,15 +340,11 @@ public class ClassicModelsRepository {
         //     - duplicated IDs
         try {
             int executed = ctx.loadInto(SALE)
-                    .onDuplicateKeyUpdate() // bulk cannot be used                                                          
-                    .batchAfter(2) // each *batch* has 2 rows
-                    .commitNone() // (default) allow Spring Boot to handle transaction commit
-                    // if you remove @Transactional then auto-commit (see, application.properties) takes action
-                    // if you remove @Transactional and set auto-commit to false then nothing commits
+                    .onDuplicateKeyUpdate() 
                     .loadJSON(Paths.get("data", "json", "jsonWithFieldsAndDuplicates.json").toFile(), StandardCharsets.UTF_8)
                     .fieldsCorresponding()
                     .execute()
-                    .processed();
+                    .executed();
 
             System.out.println("Executed: " + executed);
 
