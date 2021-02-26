@@ -161,11 +161,11 @@ public class ClassicModelsRepository {
                     .ignoreRows(0) // this is a CSV file with no header and ignoreRows() is by default 1
                     .separator('|')
                     .nullString("{null}")
-                    .quote('"') // this is the default quote (")                     
+                    .quote('*') // this is the default quote (")                     
                     .execute()
                     .errors();
 
-            System.out.println("Errors: " + errors);
+            System.out.println("Errorsxxx: " + errors);
 
         } catch (IOException ex) {
             Logger.getLogger(ClassicModelsRepository.class.getName()).log(Level.SEVERE, null, ex);
