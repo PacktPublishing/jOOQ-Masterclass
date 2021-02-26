@@ -33,16 +33,16 @@ public class ClassicModelsService {
 
 //        classicModelsRepository.cleanUpSaleTable();
   //      classicModelsRepository.loadJSONRowListeners();
-  
+/*  
   classicModelsRepository.cleanUpSaleTable();
   classicModelsRepository.loadJSONCommitNone();
 
         classicModelsRepository.cleanUpSaleTable();
-        classicModelsRepository.loadJSONOnDuplicateKeyUpdate();
-/*
+        classicModelsRepository.loadJSONOnDuplicateKeyUpdate();*/
+
         classicModelsRepository.cleanUpSaleTable();
         classicModelsRepository.loadJSONOnDuplicateKeyIgnore();
-
+/*
         classicModelsRepository.cleanUpSaleTable();
         classicModelsRepository.loadJSONBulkBatchCommit();
 

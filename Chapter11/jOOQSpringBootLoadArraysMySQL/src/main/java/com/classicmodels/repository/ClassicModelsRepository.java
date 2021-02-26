@@ -190,7 +190,7 @@ public class ClassicModelsRepository {
             int ignored = ctx.loadInto(SALE)
                     .onDuplicateKeyIgnore() // bulk cannot be used                  
                     .batchAfter(2) // each *batch* has 2 rows
-                    .commitAll() // commit all batches at once
+                    .commitEach() // commit after each batch
                     .loadArrays(
                             new Object[]{1, 2005, 582.64, 1370, 0, "", "", "UP"},
                             new Object[]{2, 2005, 138.24, 1370, 0, "", "", " CONSTANT"},

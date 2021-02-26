@@ -363,8 +363,8 @@ public class ClassicModelsRepository {
         try {
             int ignored = ctx.loadInto(SALE)
                     .onDuplicateKeyIgnore() // bulk cannot be used                  
-                    .batchAfter(5) // each *batch* has 5 rows
-                    .commitAll() // commit all batches at once
+                    .batchAfter(3) // each *batch* has 3 rows
+                    .commitEach() // commit each batch
                     .loadJSON(Paths.get("data", "json", "jsonWithFieldsAndDuplicates.json").toFile(), StandardCharsets.UTF_8)
                     .fieldsCorresponding()
                     .execute()

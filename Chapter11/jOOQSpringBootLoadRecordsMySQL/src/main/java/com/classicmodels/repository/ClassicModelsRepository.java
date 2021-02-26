@@ -63,7 +63,7 @@ public class ClassicModelsRepository {
                     // .bulkNone()              - default
                     // .batchNone()             - default
                     // .commitNone()            - default
-                    .loadRecords(result2)
+                    .loadRecords(result2) // or, add here directly: ctx.select(SALE.asterisk().except(SALE.SALE_ID)).from(SALE)
                     .fieldsCorresponding()                    
                     .execute();
 
@@ -96,7 +96,7 @@ public class ClassicModelsRepository {
         
         try {
             int processed = ctx.loadInto(SALE)
-                    .loadRecords(ctx.selectFrom(SALE).fetchStream())
+                    .loadRecords(ctx.selectFrom(SALE).fetch())
                     .fields(null, SALE.FISCAL_YEAR, SALE.SALE_, null, null, null, null, SALE.TREND)
                     .execute()
                     .processed(); // optional
@@ -107,7 +107,7 @@ public class ClassicModelsRepository {
             Logger.getLogger(ClassicModelsRepository.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+        
     @Transactional
     public void loadRecordsInTwoTables() {
 
@@ -229,7 +229,7 @@ public class ClassicModelsRepository {
             int ignored = ctx.loadInto(SALE)
                     .onDuplicateKeyIgnore() // bulk cannot be used                  
                     .batchAfter(2) // each *batch* has 2 rows
-                    .commitAll() // commit all batches at once
+                    .commitEach() // commit after each batch
                     .loadRecords(r1, r2, r3)
                     .fieldsCorresponding()
                     .execute()
