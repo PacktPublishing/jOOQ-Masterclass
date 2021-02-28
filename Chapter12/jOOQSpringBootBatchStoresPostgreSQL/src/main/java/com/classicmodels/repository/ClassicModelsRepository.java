@@ -4,6 +4,7 @@ import java.util.Arrays;
 import static jooq.generated.tables.Sale.SALE;
 import jooq.generated.tables.records.SaleRecord;
 import org.jooq.DSLContext;
+import org.jooq.Result;
 import org.jooq.conf.Settings;
 import org.jooq.conf.StatementType;
 import org.springframework.stereotype.Repository;
@@ -34,10 +35,28 @@ public class ClassicModelsRepository {
             sr2.setFiscalYear(2006);
         }
 
-        int[] result = ctx.batchStore(sr1, sr2)
+        int[] result1 = ctx.batchStore(sr1, sr2)
                 .execute();
 
-        System.out.println("EXAMPLE 1: " + Arrays.toString(result));
+        System.out.println("EXAMPLE 1.1: " + Arrays.toString(result1));
+        
+        // update all records and add a few more
+        Result<SaleRecord> sales = ctx.selectFrom(SALE).fetch();
+        
+        // update all sales
+        sales.forEach(sale -> {
+            sale.setTrend("UP");
+        });
+        
+        // add more new sales
+        sales.add(new SaleRecord(pk(), 2004, 1323.23, 1370L, null, null, null, null));
+        sales.add(new SaleRecord(pk(), 2002, 1243.25, 1504L, null, null, null, null));
+        sales.add(new SaleRecord(pk(), 2003, 3323.26, 1504L, null, null, null, null));
+        
+        int[] result2 = ctx.batchStore(sales)
+                .execute();
+
+        System.out.println("EXAMPLE 1.2: " + Arrays.toString(result2));        
     }
     
     public void batchStoresPreparedStatement1() {
