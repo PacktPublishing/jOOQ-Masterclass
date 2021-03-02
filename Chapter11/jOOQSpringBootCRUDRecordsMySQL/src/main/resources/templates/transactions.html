@@ -7,9 +7,19 @@
     <body>                
         <h3>All bank transactions</h3>
         <div th:if="${all != null}">       
-            <table>                                         
+            <table>                       
+                <tr>
+                    <th>Id</th>
+                    <th>Bank Name</th>
+                    <th>Bank IBAN</th>
+                    <th>Transfer amount</th>
+                    <th>Caching Date</th>
+                    <th>Customer Number</th>
+                    <th>Check Number</th>
+                    <th>Status</th>
+                </tr>
                 <tr th:if="${all.empty}">
-                    <td colspan="10"> No Transactions Available </td>
+                    <td colspan="9"> No Transactions Available </td>
                 </tr>
                 <tr th:each="t : ${all}">
                     <td><span th:text="${t.transactionId}">ID</span></td>            
@@ -19,12 +29,11 @@
                     <td><span th:text="${t.cachingDate}">Caching Date</span></td>            
                     <td><span th:text="${t.customerNumber}">Customer Number</span></td>            
                     <td><span th:text="${t.checkNumber}">Check Number</span></td>            
-                    <td><span th:text="${t.status}">Status</span></td>            
-                    <td><span th:text="${t.uin}">UIN</span></td>    
+                    <td><span th:text="${t.status}">Status</span></td>                                
                     <td><a th:href="@{/editbankname/{id}(id=${t.transactionId})}">Modify</a></td>                    
                 </tr>
                 <tr>
-                    <td colspan="10" style="text-align: center;">
+                    <td colspan="9" style="text-align: center;">
                         <a href="/newbanktransaction">Insert new bank transaction</a>
                     </td>
                 </tr>
