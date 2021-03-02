@@ -488,8 +488,10 @@ CREATE TABLE bank_transaction (
   caching_date timestamp DEFAULT SYSTIMESTAMP,
   customer_number number(10) NOT NULL,
   check_number varchar2(50) NOT NULL, 
-  status varchar(50) NOT NULL,
+  status varchar(50) NOT NULL DEFAULT 'SUCCESS',
+  uin varchar(50) NOT NULL,
   PRIMARY KEY (transaction_id),  
+  CONSTRAINT unique_uin UNIQUE (uin),
   CONSTRAINT bank_transaction_ibfk_1 FOREIGN KEY (customer_number,check_number) REFERENCES payment (customer_number,check_number)
 ) ;
 
