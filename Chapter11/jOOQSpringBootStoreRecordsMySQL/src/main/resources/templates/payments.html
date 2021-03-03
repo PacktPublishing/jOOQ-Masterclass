@@ -64,7 +64,7 @@
                     <td><span th:text="${t.paymentDate}">Payment Date</span></td>            
                     <td><span th:text="${t.invoiceAmount}">Invoice Amount</span></td>            
                     <td><span th:text="${t.cachingDate}">Caching Date</span></td> 
-                    <td><a th:href="@{/load/{nr}/{ch}(nr=${t.customerNumber},ch=${t.checkNumber})}">Load</a></td> 
+                    <td><a th:href="@{/payment/{nr}/{ch}(nr=${t.customerNumber},ch=${t.checkNumber})}">Load</a></td> 
                 </tr>                
             </table>            
         </div>

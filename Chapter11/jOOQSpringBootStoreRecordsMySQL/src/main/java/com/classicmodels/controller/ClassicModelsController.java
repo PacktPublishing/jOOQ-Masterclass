@@ -27,45 +27,41 @@ public class ClassicModelsController {
     }
 
     // load all payments for customer 103
-    @GetMapping("/all")
-    public String fetchAllPayment(Model model) {
+    @GetMapping("/payments")
+    public String loadAllPayment(Model model) {
 
         model.addAttribute(ALL_PAYMENT_ATTR,
-                classicModelsService.fetchAllPayment103());
+                classicModelsService.loadAllPayment103());
 
-        PaymentRecord pr = new PaymentRecord();
-        pr.setCustomerNumber(103L);
-        
-        model.addAttribute(PAYMENT_ATTR, pr);
+        if (!model.containsAttribute(PAYMENT_ATTR)) {
+            PaymentRecord pr = new PaymentRecord();
+            pr.setCustomerNumber(103L);
+
+            model.addAttribute(PAYMENT_ATTR, pr);
+        }
 
         return "payments";
     }
 
-    @GetMapping("/load/{nr}/{ch}")
+    @GetMapping("/payment/{nr}/{ch}")
     public String loadPayment(@PathVariable(name = "nr") Long nr,
             @PathVariable(name = "ch") String ch, Model model) {
 
         model.addAttribute(PAYMENT_ATTR,
                 classicModelsService.loadPayment(nr, ch));
 
-        return "payments";
+        return "redirect:/payments";
     }
 
     @PostMapping("/store")
-    public String storePayment(SessionStatus sessionStatus, 
+    public String storePayment(SessionStatus sessionStatus,
             @ModelAttribute(PAYMENT_ATTR) PaymentRecord pr) {
 
         classicModelsService.storePayment(pr);
 
         sessionStatus.setComplete();
 
-        return "redirect:all";
-    }
-
-    @GetMapping(value = "/")
-    public String indexPage() {
-
-        return "index";
+        return "redirect:payments";
     }
 
     @InitBinder

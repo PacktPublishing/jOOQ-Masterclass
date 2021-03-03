@@ -25,7 +25,7 @@ public class ClassicModelsRepository {
                 .fetch();
     }
 
-    public PaymentRecord loadPayment(Long nr, String ch) {
+    public PaymentRecord fetchPayment(Long nr, String ch) {
 
         return ctx.selectFrom(PAYMENT)
                 .where(row(PAYMENT.CUSTOMER_NUMBER, PAYMENT.CHECK_NUMBER)

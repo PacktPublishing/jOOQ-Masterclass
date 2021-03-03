@@ -14,14 +14,14 @@ public class ClassicModelsService {
         this.classicModelsRepository = classicModelsRepository;
     }
 
-    public Result<PaymentRecord> fetchAllPayment103() {
+    public Result<PaymentRecord> loadAllPayment103() {
 
         return classicModelsRepository.fetchAllPayment103();
     }
     
     public PaymentRecord loadPayment(Long nr, String ch) {
 
-        return classicModelsRepository.loadPayment(nr, ch);
+        return classicModelsRepository.fetchPayment(nr, ch);
     }
 
     public int storePayment(PaymentRecord pr) {
