@@ -22,11 +22,12 @@ public class ClassicModelsController {
     }
 
     // load all payments for customer 103
-    @GetMapping("/all")
-    public String fetchAllPayment(Model model) {
+    @GetMapping("/payments")
+    public String loadAllPayment(Model model) {
 
         model.addAttribute(ALL_PAYMENT_ATTR,
-                classicModelsService.fetchAllPayment103());
+                classicModelsService.loadAllPayment103());
+                
         model.addAttribute(PAYMENT_ATTR,
                 new Payment(103L, null, null, null, null));
 
@@ -38,13 +39,7 @@ public class ClassicModelsController {
 
         classicModelsService.mergePayment(p);
 
-        return "redirect:all";
-    }
-
-    @GetMapping(value = "/")
-    public String indexPage() {
-
-        return "index";
+        return "redirect:payments";
     }
 
     @InitBinder

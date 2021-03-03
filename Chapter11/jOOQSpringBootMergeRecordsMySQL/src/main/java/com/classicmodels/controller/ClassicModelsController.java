@@ -28,10 +28,8 @@ public class ClassicModelsController {
         model.addAttribute(ALL_PAYMENT_ATTR,
                 classicModelsService.loadAllPayment103());
 
-        if (!model.containsAttribute(PAYMENT_ATTR)) {
-            model.addAttribute(PAYMENT_ATTR,
-                    new PaymentRecord(103L, null, null, null, null));
-        }
+        model.addAttribute(PAYMENT_ATTR,
+                new PaymentRecord(103L, null, null, null, null));
 
         return "payments";
     }

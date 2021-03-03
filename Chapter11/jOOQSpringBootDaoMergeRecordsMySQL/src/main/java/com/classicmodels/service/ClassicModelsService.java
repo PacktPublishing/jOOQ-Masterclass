@@ -15,7 +15,7 @@ public class ClassicModelsService {
         this.classicModelsRepository = classicModelsRepository;
     }
 
-    public List<Payment> fetchAllPayment103() {
+    public List<Payment> loadAllPayment103() {
 
         return classicModelsRepository.fetchAllPayment103();
     }
