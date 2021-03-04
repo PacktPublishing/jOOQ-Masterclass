@@ -14,12 +14,12 @@ public class ClassicModelsService {
         this.classicModelsRepository = classicModelsRepository;
     }
 
-    public Result<BankTransactionRecord> fetchAllBankTransactionOfCertainPayment() {
+    public Result<BankTransactionRecord> loadAllBankTransactionOfCertainPayment() {
 
         return classicModelsRepository.fetchAllBankTransactionOfCertainPayment();
     }
 
-    public BankTransactionRecord fetchBankTransaction(Long id) {
+    public BankTransactionRecord loadBankTransaction(Long id) {
 
         return classicModelsRepository.fetchBankTransaction(id);
     }

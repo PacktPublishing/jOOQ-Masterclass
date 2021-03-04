@@ -246,7 +246,7 @@ CREATE TABLE `top3product` (
 CREATE TABLE `payment` (
   `customer_number` bigint NOT NULL,
   `check_number` varchar(50) NOT NULL,
-  `payment_date` timestamp NOT NULL,
+  `payment_date` timestamp NOT NULL DEFAULT NOW(),
   `invoice_amount` decimal(10,2) NOT NULL,
   `caching_date` timestamp DEFAULT NULL,  
   PRIMARY KEY (`customer_number`,`check_number`),
