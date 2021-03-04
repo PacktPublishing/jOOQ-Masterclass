@@ -21,7 +21,7 @@ public class ClassicModelsController {
     protected static final String ALL_BANK_TRANSACTION_ATTR = "all";
     protected static final String BANK_TRANSACTION_ATTR = "bt";
     protected static final String NEW_BANK_TRANSACTION_ATTR = "nbt";
-    protected static final String DELETE_OR_UPDATE_BANK_TRANSACTION_ATTR = "dubt";
+    protected static final String INSERT_DELETE_OR_UPDATE_BANK_TRANSACTION_ATTR = "dubt";
 
     private final ClassicModelsService classicModelsService;
 
@@ -30,22 +30,22 @@ public class ClassicModelsController {
     }
 
     // load all bank transactions of a certain payment (333/NF959653)
-    @GetMapping("/all")
-    public String fetchAllBankTransactionOfCertainPayment(SessionStatus sessionStatus, Model model) {
+    @GetMapping("/transactions")
+    public String loadAllBankTransactionOfCertainPayment(SessionStatus sessionStatus, Model model) {
 
         sessionStatus.setComplete();
 
         model.addAttribute(ALL_BANK_TRANSACTION_ATTR,
-                classicModelsService.fetchAllBankTransactionOfCertainPayment());
+                classicModelsService.loadAllBankTransactionOfCertainPayment());
 
         return "transactions";
     }
 
     // load the bank transaction to be edited and start edit the bank name    
     @GetMapping("/editbankname/{id}")
-    public String fetchBankTransaction(@PathVariable(name = "id") Long id, Model model) {
+    public String loadBankTransaction(@PathVariable(name = "id") Long id, Model model) {
 
-        model.addAttribute(BANK_TRANSACTION_ATTR, classicModelsService.fetchBankTransaction(id));
+        model.addAttribute(BANK_TRANSACTION_ATTR, classicModelsService.loadBankTransaction(id));
 
         return "redirect:/editbankname";
     }
@@ -67,7 +67,7 @@ public class ClassicModelsController {
             RedirectAttributes redirectAttributes, SessionStatus sessionStatus) {
 
         classicModelsService.updateBankTransaction(bt);
-        redirectAttributes.addFlashAttribute(DELETE_OR_UPDATE_BANK_TRANSACTION_ATTR, bt);
+        redirectAttributes.addFlashAttribute(INSERT_DELETE_OR_UPDATE_BANK_TRANSACTION_ATTR, bt);
 
         sessionStatus.setComplete();
 
@@ -84,16 +84,16 @@ public class ClassicModelsController {
     }
 
     @PostMapping("/new")
-    public String newBank(@ModelAttribute BankTransaction btr,
+    public String newBank(@ModelAttribute BankTransaction bt,
             RedirectAttributes redirectAttributes) {
 
-        btr.setCustomerNumber(333L);
-        btr.setCheckNumber("NF959653");
+        bt.setCustomerNumber(333L);
+        bt.setCheckNumber("NF959653");
 
-        classicModelsService.newBankTransaction(btr);
-        redirectAttributes.addFlashAttribute(NEW_BANK_TRANSACTION_ATTR, btr);
+        classicModelsService.newBankTransaction(bt);
+        redirectAttributes.addFlashAttribute(INSERT_DELETE_OR_UPDATE_BANK_TRANSACTION_ATTR, bt);
 
-        return "redirect:all";
+        return "redirect:success";
     }
 
     // delete transaction        
@@ -101,17 +101,18 @@ public class ClassicModelsController {
     public String deleteBankTransaction(SessionStatus sessionStatus, Model model,
             RedirectAttributes redirectAttributes) {
 
-        BankTransaction btr = (BankTransaction) model.getAttribute(BANK_TRANSACTION_ATTR);
+        if (model.containsAttribute(BANK_TRANSACTION_ATTR)) {
 
-        if (btr != null) {
-            classicModelsService.deleteBankTransaction(btr);
+            BankTransaction bt = (BankTransaction) model.getAttribute(BANK_TRANSACTION_ATTR);
+            classicModelsService.deleteBankTransaction(bt);
+            sessionStatus.setComplete();
+
+            redirectAttributes.addFlashAttribute(INSERT_DELETE_OR_UPDATE_BANK_TRANSACTION_ATTR, bt);
+
+            return "redirect:/success";
         }
 
-        sessionStatus.setComplete();
-
-        redirectAttributes.addFlashAttribute(DELETE_OR_UPDATE_BANK_TRANSACTION_ATTR, btr);
-
-        return "redirect:/success";
+        return "redirect:/transactions";
     }
 
     @GetMapping("/cancel")
@@ -119,17 +120,17 @@ public class ClassicModelsController {
 
         sessionStatus.setComplete();
 
-        return "redirect:all";
+        return "redirect:transactions";
     }
 
     @GetMapping("/reset/{page}")
     public String refresh(@PathVariable(name = "page") String page, Model model) {
 
-        BankTransaction btr = (BankTransaction) model.getAttribute(BANK_TRANSACTION_ATTR);
-
-        if (btr != null) {
-            model.addAttribute(BANK_TRANSACTION_ATTR, 
-                    classicModelsService.fetchBankTransaction(btr.getTransactionId()));
+        if (model.containsAttribute(BANK_TRANSACTION_ATTR)) {
+            model.addAttribute(BANK_TRANSACTION_ATTR,
+                    classicModelsService.loadBankTransaction(
+                            ((BankTransaction) model.getAttribute(BANK_TRANSACTION_ATTR))
+                                    .getTransactionId()));
         }
 
         return "redirect:/" + page;
