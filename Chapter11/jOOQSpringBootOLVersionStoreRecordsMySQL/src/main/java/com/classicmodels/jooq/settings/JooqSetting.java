@@ -9,8 +9,8 @@ public class JooqSetting {
 
     @Bean
     public Settings jooqSettings() {
-        return new Settings()
-                .withExecuteWithOptimisticLocking(true);
-                // .withExecuteWithOptimisticLockingExcludeUnversioned(true) // disable optimistic locking, unless versioned (numeric/timestamp) is not used
+        return new Settings()       
+                .withUpdateRecordVersion(true) // this is default, so it can be omitted                
+                .withExecuteWithOptimisticLocking(true);                
     }
 }
