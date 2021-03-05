@@ -89,7 +89,8 @@ public class ClassicModelsRepository {
                 .fetchAny();
                   
         // both output the same result
-        System.out.println("EXAMPLE 2.1.1:\n" + oneResult.formatJSON(new JSONFormat().recordFormat(JSONFormat.RecordFormat.OBJECT))); // or, JSONFormat.DEFAULT_FOR_RESULTS               
+        System.out.println("EXAMPLE 2.1.1:\n" + oneResult.formatJSON()); // or, JSONFormat.DEFAULT_FOR_RESULTS               
+        // System.out.println("EXAMPLE 2.1.1:\n" + oneResult.formatJSON(new JSONFormat().recordFormat(JSONFormat.RecordFormat.OBJECT)));
         System.out.println("EXAMPLE 2.2.1:\n" + oneResult.formatJSON(JSONFormat.DEFAULT_FOR_RECORDS));
 
         // Result<Record3<String, Long, String>>
@@ -152,8 +153,9 @@ public class ClassicModelsRepository {
                 .onKey()
                 .fetchAny();
         
-        // // both output the same result 
+        // both output the same result 
         System.out.println("EXAMPLE 3.1.1:\n" + oneResult.formatXML()); // or, XMLFormat.DEFAULT_FOR_RESULTS               
+        // System.out.println("EXAMPLE 3.1.1:\n" + oneResult.formatXML(new XMLFormat().recordFormat(XMLFormat.RecordFormat.COLUMN_NAME_ELEMENTS))); 
         System.out.println("EXAMPLE 3.2.1:\n" + oneResult.formatXML(XMLFormat.DEFAULT_FOR_RECORDS));
         
         // Result<Record3<String, Long, String>>
