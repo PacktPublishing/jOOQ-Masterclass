@@ -50,14 +50,31 @@ public class ClassicModelsRepository {
     }
 
     @Transactional
-    public void loadJSONDefaultsInlineFields() {
+    public void loadJSONDefaultsInlineFields1() {
 
         // import a JSON having
         //     - no "fields" header
         //     - all columns of 'sale' table inlined       
         try {
             ctx.loadInto(SALE)
-                    .loadJSON(Paths.get("data", "json", "jsonWithInlineFields.json").toFile(), StandardCharsets.UTF_8)
+                    .loadJSON(Paths.get("data", "json", "jsonWithInlineFields1.json").toFile(), StandardCharsets.UTF_8)
+                    .fieldsCorresponding()                    
+                    .execute();
+
+        } catch (IOException ex) {
+            Logger.getLogger(ClassicModelsRepository.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    @Transactional
+    public void loadJSONDefaultsInlineFields2() {
+
+        // import a JSON having
+        //     - no "fields" header
+        //     - all columns of 'sale' table inlined       
+        try {
+            ctx.loadInto(SALE)
+                    .loadJSON(Paths.get("data", "json", "jsonWithInlineFields2.json").toFile(), StandardCharsets.UTF_8)
                     .fieldsCorresponding()                    
                     .execute();
 
@@ -223,14 +240,14 @@ public class ClassicModelsRepository {
     }
     
     @Transactional
-    public void loadJSONOnlyCertainInlineFields() {
+    public void loadJSONOnlyCertainInlineFields1() {
 
         // import a JSON having
         //     - no "fields" header
         //     - all columns of 'sale' table inlined                    
         try {
             int processed = ctx.loadInto(SALE)
-                    .loadJSON(Paths.get("data", "json", "jsonWithInlineFields.json").toFile(), StandardCharsets.UTF_8)
+                    .loadJSON(Paths.get("data", "json", "jsonWithInlineFields1.json").toFile(), StandardCharsets.UTF_8)
                     .fields(null, null, null, SALE.SALE_, null, null, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER)
                     .execute()
                     .processed(); // optional
@@ -242,6 +259,26 @@ public class ClassicModelsRepository {
         }
     }
 
+    @Transactional
+    public void loadJSONOnlyCertainInlineFields2() {
+
+        // import a JSON having
+        //     - no "fields" header
+        //     - all columns of 'sale' table inlined                    
+        try {
+            int processed = ctx.loadInto(SALE)
+                    .loadJSON(Paths.get("data", "json", "jsonWithInlineFields2.json").toFile(), StandardCharsets.UTF_8)
+                    .fields(null, null, null, SALE.SALE_, null, null, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER)
+                    .execute()
+                    .processed(); // optional
+
+            System.out.println("Processed: " + processed);
+
+        } catch (IOException ex) {
+            Logger.getLogger(ClassicModelsRepository.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     @Transactional
     public void loadJSONInTwoTables() {
 
