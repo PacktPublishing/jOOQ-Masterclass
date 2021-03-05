@@ -80,6 +80,7 @@ public class ClassicModelsRepository {
 
     public String formatResultAsJSON() {
         
+        // <Record3<String, Long, String>
         var oneResult = ctx.select(PRODUCTLINE.PRODUCT_LINE,
                 PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME)
                 .from(PRODUCTLINE)
@@ -88,7 +89,7 @@ public class ClassicModelsRepository {
                 .fetchAny();
                   
         // both output the same result
-        System.out.println("EXAMPLE 2.1.1:\n" + oneResult.formatJSON()); // or, JSONFormat.DEFAULT_FOR_RESULTS               
+        System.out.println("EXAMPLE 2.1.1:\n" + oneResult.formatJSON(new JSONFormat().recordFormat(JSONFormat.RecordFormat.OBJECT))); // or, JSONFormat.DEFAULT_FOR_RESULTS               
         System.out.println("EXAMPLE 2.2.1:\n" + oneResult.formatJSON(JSONFormat.DEFAULT_FOR_RECORDS));
 
         // Result<Record3<String, Long, String>>
@@ -143,6 +144,18 @@ public class ClassicModelsRepository {
 
     public String formatResultAsXML() {
 
+        // <Record3<String, Long, String>
+        var oneResult = ctx.select(PRODUCTLINE.PRODUCT_LINE,
+                PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME)
+                .from(PRODUCTLINE)
+                .join(PRODUCT)
+                .onKey()
+                .fetchAny();
+        
+        // // both output the same result 
+        System.out.println("EXAMPLE 3.1.1:\n" + oneResult.formatXML()); // or, XMLFormat.DEFAULT_FOR_RESULTS               
+        System.out.println("EXAMPLE 3.2.1:\n" + oneResult.formatXML(XMLFormat.DEFAULT_FOR_RECORDS));
+        
         // Result<Record3<String, Long, String>>
         var result = ctx.select(PRODUCTLINE.PRODUCT_LINE,
                 PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME)
@@ -151,8 +164,8 @@ public class ClassicModelsRepository {
                 .onKey()
                 .fetch();
 
-        System.out.println("EXAMPLE 3.1:\n" + result.formatXML()); // or, XMLFormat.DEFAULT_FOR_RESULTS               
-        System.out.println("EXAMPLE 3.2:\n" + result.formatXML(XMLFormat.DEFAULT_FOR_RECORDS));
+        System.out.println("EXAMPLE 3.1.2:\n" + result.formatXML()); // or, XMLFormat.DEFAULT_FOR_RESULTS               
+        System.out.println("EXAMPLE 3.2.2:\n" + result.formatXML(XMLFormat.DEFAULT_FOR_RECORDS));
 
         // fetch -> format -> export to file        
         try ( BufferedWriter bw = Files.newBufferedWriter(
