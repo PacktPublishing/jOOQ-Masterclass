@@ -79,6 +79,17 @@ public class ClassicModelsRepository {
     }
 
     public String formatResultAsJSON() {
+        
+        var oneResult = ctx.select(PRODUCTLINE.PRODUCT_LINE,
+                PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME)
+                .from(PRODUCTLINE)
+                .join(PRODUCT)
+                .onKey()
+                .fetchAny();
+                  
+        // both output the same result
+        System.out.println("EXAMPLE 2.1.1:\n" + oneResult.formatJSON()); // or, JSONFormat.DEFAULT_FOR_RESULTS               
+        System.out.println("EXAMPLE 2.2.1:\n" + oneResult.formatJSON(JSONFormat.DEFAULT_FOR_RECORDS));
 
         // Result<Record3<String, Long, String>>
         var result = ctx.select(PRODUCTLINE.PRODUCT_LINE,
@@ -88,8 +99,8 @@ public class ClassicModelsRepository {
                 .onKey()
                 .fetch();
 
-        System.out.println("EXAMPLE 2.1:\n" + result.formatJSON()); // or, JSONFormat.DEFAULT_FOR_RESULTS               
-        System.out.println("EXAMPLE 2.2:\n" + result.formatJSON(JSONFormat.DEFAULT_FOR_RECORDS));
+        System.out.println("EXAMPLE 2.1.2:\n" + result.formatJSON()); // or, JSONFormat.DEFAULT_FOR_RESULTS               
+        System.out.println("EXAMPLE 2.2.2:\n" + result.formatJSON(JSONFormat.DEFAULT_FOR_RECORDS));
 
         // fetch -> format -> export to file        
         try ( BufferedWriter bw = Files.newBufferedWriter(
