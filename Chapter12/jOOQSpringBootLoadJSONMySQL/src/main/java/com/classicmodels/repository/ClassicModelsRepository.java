@@ -84,6 +84,23 @@ public class ClassicModelsRepository {
     }
 
     @Transactional
+    public void loadJSONDefaultsInlineFields3() {
+
+        // import a JSON having
+        //     - no "fields" header
+        //     - columns of 'sale' table inlined (some missing columns)
+        try {
+            ctx.loadInto(SALE)
+                    .loadJSON(Paths.get("data", "json", "jsonWithInlineFields3.json").toFile(), StandardCharsets.UTF_8)
+                    .fields(SALE.SALE_, SALE.SALE_ID, SALE.FISCAL_YEAR)                    
+                    .execute();
+
+        } catch (IOException ex) {
+            Logger.getLogger(ClassicModelsRepository.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    @Transactional
     public void loadJSONDefaultsFromString() {
 
         // import a JSON-string having
@@ -220,15 +237,35 @@ public class ClassicModelsRepository {
     }
 
     @Transactional
-    public void loadJSONOnlyCertainFields() {
+    public void loadJSONOnlyCertainFields1() {
 
         // import a JSON having
         //     - no "fields" header
         //     - all columns of 'sale' table                        
         try {
             int processed = ctx.loadInto(SALE)
-                    .loadJSON(Paths.get("data", "json", "jsonWithoutFields.json").toFile(), StandardCharsets.UTF_8)
+                    .loadJSON(Paths.get("data", "json", "jsonWithoutFields1.json").toFile(), StandardCharsets.UTF_8)
                     .fields(null, SALE.FISCAL_YEAR, SALE.SALE_, null, null, null, null, SALE.TREND)
+                    .execute()
+                    .processed(); // optional
+
+            System.out.println("Processed: " + processed);
+
+        } catch (IOException ex) {
+            Logger.getLogger(ClassicModelsRepository.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    @Transactional
+    public void loadJSONOnlyCertainFields2() {
+
+        // import a JSON having
+        //     - no "fields" header
+        //     - columns of 'sale' table (some missing columns)                        
+        try {
+            int processed = ctx.loadInto(SALE)
+                    .loadJSON(Paths.get("data", "json", "jsonWithoutFields2.json").toFile(), StandardCharsets.UTF_8)
+                    .fields(SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.SALE_)                    
                     .execute()
                     .processed(); // optional
 

@@ -22,12 +22,18 @@ public class ClassicModelsService {
         
         classicModelsRepository.cleanUpSaleTable();
         classicModelsRepository.loadJSONDefaultsInlineFields2();
+        
+        classicModelsRepository.cleanUpSaleTable();
+        classicModelsRepository.loadJSONDefaultsInlineFields3();
 
         classicModelsRepository.cleanUpSaleTable();
         classicModelsRepository.loadJSONDefaultsFromString();
 
         classicModelsRepository.cleanUpSaleTable();
-        classicModelsRepository.loadJSONOnlyCertainFields();
+        classicModelsRepository.loadJSONOnlyCertainFields1();
+        
+        classicModelsRepository.cleanUpSaleTable();
+        classicModelsRepository.loadJSONOnlyCertainFields2();
 
         classicModelsRepository.cleanUpSaleTable();
         classicModelsRepository.loadJSONOnlyCertainInlineFields1();
