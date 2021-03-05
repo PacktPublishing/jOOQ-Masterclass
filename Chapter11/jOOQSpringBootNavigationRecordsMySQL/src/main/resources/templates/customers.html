@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Customers</title>        
+        <link th:href="@{/style.css}" rel="stylesheet" />
+    </head>
+    <body>                
+        <h3>Customers</h3>
+
+        <fieldset style="width: 90%; margin: auto;">            
+            <legend>CUSTOMERS</legend>           
+            <div th:if="${customers != null}">                       
+                <div th:if="${customers.empty}">
+                    No Customers Are Available
+                </div>                
+                <div class="div-table" th:each="c : ${customers}">
+                    <div class="div-table-row">
+                        <form class="tr" action="#" th:action="@{/customerdetail}" method="post">                        
+                            <div class="div-table-col" th:text="${c.customerNumber}"/>
+                            <input type="hidden" th:name="customerNumber" th:value="${c.customerNumber}"/>
+
+                            <div class="div-table-col" th:text="${c.customerName}"/>
+                            <input type="hidden" th:name="customerName" th:value="${c.customerName}"/>
+
+                            <div class="div-table-col" th:text="${c.creditLimit}"/>
+                            <input type="hidden" th:name="creditLimit" th:value="${c.creditLimit}"/>
+
+                            <div class="div-table-col">...</div>  
+                            <div class="div-table-col"><input class="td" type="submit" value="View Customer Detail"/></div>                               
+                        </form>
+                    </div>
+                </div>
+            </div>            
+        </fieldset>
+    </body>
+</html>

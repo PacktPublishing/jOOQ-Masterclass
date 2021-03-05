@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Customer Detail</title>        
+        <link th:href="@{/style.css}" rel="stylesheet" />
+    </head>
+    <body>                
+        <h3>Customer Detail</h3>
+
+        <fieldset style="width: 90%; margin: auto;">            
+            <legend>CUSTOMER DETAIL</legend>           
+            <div th:if="${customerdetail == null}">
+                No Customer Detail Is Available
+            </div>
+            <div th:if="${customerdetail != null}">                                                       
+                <div class="div-table" th:each="c : ${customerdetail}">
+                    <div class="div-table-row">                     
+                        <div class="div-table-col" th:text="${c.customerNumber}"/>
+                        <input type="hidden" th:name="customerNumber" th:value="${c.customerNumber}"/>
+
+                        <div class="div-table-col" th:text="${c.addressLineFirst}"/>
+                        <input type="hidden" th:name="addressLineFirst" th:value="${c.addressLineFirst}"/>
+
+                        <div class="div-table-col" th:text="${c.city}"/>
+                        <input type="hidden" th:name="city" th:value="${c.city}"/>
+
+                        <div class="div-table-col">...</div>                         
+                    </div>
+                </div>
+            </div>          
+        </fieldset>
+    </body>
+</html>
