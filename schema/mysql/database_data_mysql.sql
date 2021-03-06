@@ -8195,4 +8195,14 @@ insert into `top3product`(`product_id`,`product_name`) values
 
 (2, '1952 Alpine Renault 1300') ON DUPLICATE KEY UPDATE product_id=product_id;
 
+/*Data for the table `token` */
+
+insert into `token`(`token_id`,`sale_id`,`amount`) values 
+
+(1, 1, 1500),
+
+(2, 1, 2687.55),
+
+(3, 1, 1095.09) ON DUPLICATE KEY UPDATE token_id=token_id;
+
 /* END */

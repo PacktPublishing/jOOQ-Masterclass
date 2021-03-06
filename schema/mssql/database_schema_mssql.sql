@@ -69,6 +69,8 @@ IF OBJECT_ID('customer', 'U') IS NOT NULL
   DROP TABLE customer;
 IF OBJECT_ID('sale', 'U') IS NOT NULL 
   DROP TABLE sale;
+  IF OBJECT_ID('token', 'U') IS NOT NULL 
+  DROP TABLE token;
 IF OBJECT_ID('employee', 'U') IS NOT NULL 
   DROP TABLE employee;
   IF OBJECT_ID('department', 'U') IS NOT NULL 
@@ -150,6 +152,17 @@ CREATE TABLE sale (
 ) ;
 
 CREATE INDEX [employee_number] ON sale ([employee_number]);
+
+CREATE TABLE [token] (
+  [token_id] bigint NOT NULL IDENTITY,
+  [sale_id] bigint NOT NULL,
+  [amount] float NOT NULL,    
+  PRIMARY KEY ([token_id])
+ ,  
+  CONSTRAINT [tokens_ibfk_1] FOREIGN KEY ([sale_id]) REFERENCES sale ([sale_id]) ON DELETE CASCADE ON UPDATE CASCADE
+) ;
+
+CREATE INDEX [token_id] ON token ([token_id]);
 
 /*Table structure for table `customer` */
 

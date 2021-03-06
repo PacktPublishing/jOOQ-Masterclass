@@ -8202,4 +8202,14 @@ select 1, '1969 Harley Davidson Ultimate Chopper' from dual union all
 
 select 2, '1952 Alpine Renault 1300' from dual;
 
+/*Data for the table `token` */
+
+insert /*+ ignore_row_on_dupkey_index(token(token_id)) */ into token(token_id,sale_id,amount)
+
+select 1, 1, 1500 from dual union all
+
+select 2, 1, 2687.55 from dual union all
+
+select 3, 1, 1095.09) from dual;
+
 /* END */

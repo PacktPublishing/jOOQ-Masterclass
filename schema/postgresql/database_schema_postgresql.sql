@@ -131,7 +131,6 @@ CREATE TABLE token (
 
 CREATE INDEX token_id ON token (token_id);
 
-
 /*Table structure for table `customer` */
 
 CREATE SEQUENCE customer_seq START 1000000;

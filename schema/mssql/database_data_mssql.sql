@@ -8270,4 +8270,19 @@ insert into top3product(product_id,product_name) values
 end try
 begin catch
 end catch
+
+/*Data for the table `token` */
+
+begin try
+insert into token(token_id,sale_id,amount) values 
+
+(1, 1, 1500),
+
+(2, 1, 2687.55),
+
+(3, 1, 1095.09)
+end try
+begin catch
+end catch
+
 /* END */
