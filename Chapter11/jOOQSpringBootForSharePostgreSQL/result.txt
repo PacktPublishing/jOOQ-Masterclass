@@ -1,0 +1,30 @@
++--------------------+--------------------+-------------------------------------------+
+|product_line        |          product_id|product_name                               |
++--------------------+--------------------+-------------------------------------------+
+|Vintage Cars        |                  80|1936 Mercedes Benz 500k Roadster           |
+|Vintage Cars        |                  29|1932 Model A Ford J-Coupe                  |
+|Vintage Cars        |                  33|1928 Mercedes-Benz SSK                     |
+|Vintage Cars        |                  61|1939 Chevrolet Deluxe Coupe                |
+|Vintage Cars        |                  64|1938 Cadillac V-16 Presidential Limousine  |
+|Vintage Cars        |                  19|1937 Lincoln Berline                       |
+|Vintage Cars        |                  20|1936 Mercedes-Benz 500K Special Roadster   |
+|Classic Cars        |                   2|1952 Alpine Renault 1300                   |
+|Classic Cars        |                   6|1962 LanciaA Delta 16V                     |
+|Trucks and Buses    |                   9|1958 Setra Bus                             |
+|Trucks and Buses    |                  17|1940 Ford Pickup Truck                     |
+|Trucks and Buses    |                  30|1926 Ford Fire Engine                      |
+|Vintage Cars        |                  35|1913 Ford Model T Speedster                |
+|Vintage Cars        |                  36|1934 Ford V8 Coupe                         |
+|Vintage Cars        |                  38|18th Century Vintage Horse Carriage        |
+|Vintage Cars        |                  44|1917 Maxwell Touring Car                   |
+|Trucks and Buses    |                  52|1940s Ford truck                           |
+|Vintage Cars        |                  53|1939 Cadillac Limousine                    |
+|Trucks and Buses    |                  65|1962 Volkswagen Microbus                   |
+|Vintage Cars        |                  82|1936 Chrysler Airflow                      |
+|Trucks and Buses    |                  85|1980’s GM Manhattan Express                |
+|Trucks and Buses    |                  90|1996 Peterbilt 379 Stake Bed with Outrigger|
+|Classic Cars        |                 103|1982 Camaro Z28                            |
+|Classic Cars        |                  11|1969 Corvair Monza                         |
+|Trucks and Buses    |                  15|1957 Chevy Pickup                          |
++--------------------+--------------------+-------------------------------------------+
+|...record(s) truncated...
