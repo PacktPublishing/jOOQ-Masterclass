@@ -1,19 +1,15 @@
 package com.classicmodels.repository;
 
 import java.util.logging.Logger;
-import static jooq.generated.tables.Productline.PRODUCTLINE;
-import static jooq.generated.tables.Productlinedetail.PRODUCTLINEDETAIL;
-import jooq.generated.tables.records.ProductlineRecord;
-import jooq.generated.tables.records.ProductlinedetailRecord;
+import static jooq.generated.tables.Employee.EMPLOYEE;
+import static jooq.generated.tables.Sale.SALE;
+import jooq.generated.tables.records.SaleRecord;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
-
-// This app ends with an exception: 
-        // MySQLTransactionRollbackException: Lock wait timeout exceeded; try restarting transaction
 
 @Repository
 public class ClassicModelsRepository {
@@ -41,21 +37,17 @@ public class ClassicModelsRepository {
 
                     log.info("Starting first transaction (A) ...");
 
-                    ProductlinedetailRecord plr = ctx.selectFrom(PRODUCTLINEDETAIL)
-                            .where(PRODUCTLINEDETAIL.PRODUCT_LINE.eq("Classic Cars"))
-                            .forShare()
+                    SaleRecord sr = ctx.selectFrom(SALE)
+                            .where(SALE.SALE_ID.eq(1L))
+                            .forUpdate()
                             .fetchSingle();
 
                     try {
-                        log.info("Holding in place first transaction (A) for 10s ...");
-                        Thread.sleep(10000);
+                        log.info("Holding in place first transaction (A) for 60s ...");
+                        Thread.sleep(60000);
                     } catch (InterruptedException ex) {
                         Thread.currentThread().interrupt();
                     }
-
-                    log.info("First transaction (A) attempts to update the product ...");
-                    plr.setLineCapacity("566B"); // this cannot be done, transaction (B) holds the lock                                        
-                    plr.update();
                 }
             });
 
@@ -73,22 +65,20 @@ public class ClassicModelsRepository {
                         TransactionStatus status) {
 
                     log.info("Starting second transaction (B) ...");
+                    log.info("Second transaction (B) successfully updates the product name ...");
 
-                    ProductlinedetailRecord plr = ctx.selectFrom(PRODUCTLINEDETAIL)
-                            .where(PRODUCTLINEDETAIL.PRODUCT_LINE.eq("Classic Cars"))
-                            //.forShare()
-                            .fetchSingle(); // get the lock
+                    ctx.update(EMPLOYEE)
+                            .set(EMPLOYEE.EMAIL, "ghernandez@yahoo.com")
+                            .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1370L))
+                            .execute();
 
-                    try {
-                        log.info("Holding in place second transaction (B) for 10s ...");
-                        Thread.sleep(10000);
-                    } catch (InterruptedException ex) {
-                        Thread.currentThread().interrupt();
-                    }
+                    log.info("Second transaction (B) attempts to update the product PK but it must wait for transaction (A) to release the lock  ...");
+                    log.info("Waiting ... ... ... ... ... ... ... ... ... ");
 
-                    log.info("Second transaction (B) attempts to update the product ...");
-                    plr.setLineType(2); // this cannot be done, transaction (A) holds the lock                    
-                    plr.update();
+                    ctx.update(EMPLOYEE)
+                            .set(EMPLOYEE.EMPLOYEE_NUMBER, 9999L)
+                            .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1370L))
+                            .execute();
                 }
             });
 

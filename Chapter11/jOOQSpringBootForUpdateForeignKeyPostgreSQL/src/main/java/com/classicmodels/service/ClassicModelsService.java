@@ -3,9 +3,6 @@ package com.classicmodels.service;
 import com.classicmodels.repository.ClassicModelsRepository;
 import org.springframework.stereotype.Service;
 
-// This app ends with an exception: 
-        // MySQLTransactionRollbackException: Lock wait timeout exceeded; try restarting transaction
-
 @Service
 public class ClassicModelsService {
 

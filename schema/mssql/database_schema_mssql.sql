@@ -144,7 +144,7 @@ CREATE TABLE sale (
   [trend] varchar(10) DEFAULT NULL,
   PRIMARY KEY ([sale_id])
 ,    
-  CONSTRAINT [sales_ibfk_1] FOREIGN KEY ([employee_number]) REFERENCES employee ([employee_number]),
+  CONSTRAINT [sales_ibfk_1] FOREIGN KEY ([employee_number]) REFERENCES employee ([employee_number]) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT [enum_rate_check] CHECK ([rate] IN('SILVER', 'GOLD', 'PLATINUM')),
   CONSTRAINT [enum_vat_check] CHECK ([vat] IN('NONE', 'MIN', 'MAX'))
 ) ;
@@ -164,7 +164,7 @@ CREATE TABLE customer (
   [first_buy_date] int DEFAULT NULL,
   PRIMARY KEY ([customer_number])
  ,
-  CONSTRAINT [customers_ibfk_1] FOREIGN KEY ([sales_rep_employee_number]) REFERENCES employee ([employee_number])
+  CONSTRAINT [customers_ibfk_1] FOREIGN KEY ([sales_rep_employee_number]) REFERENCES employee ([employee_number]) ON DELETE CASCADE ON UPDATE CASCADE
 ) ;
 
 CREATE INDEX [sales_rep_employee_number] ON customer ([sales_rep_employee_number]);
