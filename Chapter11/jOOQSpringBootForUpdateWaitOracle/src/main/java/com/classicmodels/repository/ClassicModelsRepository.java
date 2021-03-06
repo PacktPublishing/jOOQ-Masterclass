@@ -66,7 +66,7 @@ public class ClassicModelsRepository {
 
                     ctx.selectFrom(PRODUCT)
                             .forUpdate()
-                            // Keep in mind that tA keep the lock of this resource for 10s,
+                            // Keep in mind that tA has the lock of this resource for 10s,
                             // so, in order for tB to acquire this resource, it must wait for more than 10s.
                             // .wait(5) // ORA-30006: resource busy; acquire with WAIT timeout expired
                             .wait(15)   // lock is successfully acquired
