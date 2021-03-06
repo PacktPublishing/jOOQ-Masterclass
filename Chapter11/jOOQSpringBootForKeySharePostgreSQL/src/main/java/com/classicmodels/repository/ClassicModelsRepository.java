@@ -1,18 +1,19 @@
 package com.classicmodels.repository;
 
 import java.util.logging.Logger;
-import static jooq.generated.tables.Order.ORDER;
-import static jooq.generated.tables.Product.PRODUCT;
-import static jooq.generated.tables.Sale.SALE;
-import jooq.generated.tables.records.OrderRecord;
-import jooq.generated.tables.records.ProductRecord;
-import jooq.generated.tables.records.SaleRecord;
+import static jooq.generated.tables.Productline.PRODUCTLINE;
+import static jooq.generated.tables.Productlinedetail.PRODUCTLINEDETAIL;
+import jooq.generated.tables.records.ProductlineRecord;
+import jooq.generated.tables.records.ProductlinedetailRecord;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
+
+// This app ends with an exception: 
+        // MySQLTransactionRollbackException: Lock wait timeout exceeded; try restarting transaction
 
 @Repository
 public class ClassicModelsRepository {
@@ -40,11 +41,10 @@ public class ClassicModelsRepository {
 
                     log.info("Starting first transaction (A) ...");
 
-                    SaleRecord sr = ctx.selectFrom(SALE)
-                            .where(SALE.SALE_ID.eq(1L))
+                    ProductlinedetailRecord plr = ctx.selectFrom(PRODUCTLINEDETAIL)
+                            .where(PRODUCTLINEDETAIL.PRODUCT_LINE.eq("Classic Cars"))
+                            .forShare()
                             .fetchSingle();
-                    sr.setSale(5644.33);
-                    sr.update();
 
                     try {
                         log.info("Holding in place first transaction (A) for 10s ...");
@@ -54,11 +54,8 @@ public class ClassicModelsRepository {
                     }
 
                     log.info("First transaction (A) attempts to update the product ...");
-                    OrderRecord or = ctx.selectFrom(ORDER)
-                            .where(ORDER.ORDER_ID.eq(10100L))
-                            .fetchSingle();
-                    or.setCustomerNumber(131L); // this cannot be done, transaction (B) holds the lock                                        
-                    or.update();
+                    plr.setLineCapacity("566B"); // this cannot be done, transaction (B) holds the lock                                        
+                    plr.update();
                 }
             });
 
@@ -77,11 +74,10 @@ public class ClassicModelsRepository {
 
                     log.info("Starting second transaction (B) ...");
 
-                    OrderRecord or = ctx.selectFrom(ORDER)
-                            .where(ORDER.ORDER_ID.eq(10100L))
-                            .fetchSingle();
-                    or.setCustomerNumber(145L);
-                    or.update();
+                    ProductlinedetailRecord plr = ctx.selectFrom(PRODUCTLINEDETAIL)
+                            .where(PRODUCTLINEDETAIL.PRODUCT_LINE.eq("Classic Cars"))
+                            //.forShare()
+                            .fetchSingle(); // get the lock
 
                     try {
                         log.info("Holding in place second transaction (B) for 10s ...");
@@ -91,11 +87,8 @@ public class ClassicModelsRepository {
                     }
 
                     log.info("Second transaction (B) attempts to update the product ...");
-                    SaleRecord sr = ctx.selectFrom(SALE) // this cannot be done, transaction (A) holds the lock
-                            .where(SALE.SALE_ID.eq(1L))
-                            .fetchSingle();
-                    sr.setSale(1234.44);
-                    sr.update();
+                    plr.setLineType(2); // this cannot be done, transaction (A) holds the lock                    
+                    plr.update();
                 }
             });
 
