@@ -12,7 +12,7 @@ public class ClassicModelsService {
         this.classicModelsRepository = classicModelsRepository;
     }
 
-    public void fetchProductsViaTwoTransactions() {
+    public void fetchProductsViaTwoTransactions() throws InterruptedException {
 
         classicModelsRepository.fetchProductsViaTwoTransactions();
     }
