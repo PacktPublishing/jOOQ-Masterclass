@@ -39,7 +39,7 @@ public class ClassicModelsRepository {
 
                     SaleRecord sr = ctx.selectFrom(SALE)
                             .where(SALE.SALE_ID.eq(2L))
-                            .forShare() 
+                            .forKeyShare()
                             .fetchSingle();
 
                     try {
@@ -70,11 +70,20 @@ public class ClassicModelsRepository {
                         TransactionStatus status) {
 
                     log.info("Starting second transaction (B) ...");
-                    log.info("Second transaction (B) cannot UPDATE as long as transaction (A) holds the SHARE lock ...");
+                    log.info("Second transaction (B) can UPDATE successfully as long as it doesn't modify key values ...");
                     ctx.update(SALE)
                             .set(SALE.SALE_, SALE.SALE_.plus(1000))
                             .where(SALE.SALE_ID.eq(2L))
                             .execute();
+                    
+                    /*
+                    // This will have to wait for transaction (A) to release the lock since
+                    // it attempts to update SALE_ID
+                    ctx.update(SALE)
+                            .set(SALE.SALE_ID, SALE.SALE_ID.plus(50))
+                            .where(SALE.SALE_ID.eq(2L))
+                            .execute();
+                    */
                 }
             });
 

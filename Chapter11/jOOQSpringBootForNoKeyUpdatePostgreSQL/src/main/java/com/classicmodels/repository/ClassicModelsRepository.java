@@ -39,7 +39,7 @@ public class ClassicModelsRepository {
 
                     SaleRecord sr = ctx.selectFrom(SALE)
                             .where(SALE.SALE_ID.eq(2L))
-                            .forShare() 
+                            .forNoKeyUpdate()
                             .fetchSingle();
 
                     try {
@@ -48,17 +48,17 @@ public class ClassicModelsRepository {
                     } catch (InterruptedException ex) {
                         Thread.currentThread().interrupt();
                     }
-                    
+
                     ctx.insertInto(TOKEN)
                             .set(TOKEN.SALE_ID, sr.getSaleId())
-                            .set(TOKEN.AMOUNT, 1200.5)                            
+                            .set(TOKEN.AMOUNT, 1200.5)
                             .execute();
                 }
             });
 
             log.info("First transaction (A) committed!");
         });
-        
+
         Thread tB = new Thread(() -> {
             template.setPropagationBehavior(
                     TransactionDefinition.PROPAGATION_REQUIRES_NEW);
@@ -70,11 +70,13 @@ public class ClassicModelsRepository {
                         TransactionStatus status) {
 
                     log.info("Starting second transaction (B) ...");
-                    log.info("Second transaction (B) cannot UPDATE as long as transaction (A) holds the SHARE lock ...");
-                    ctx.update(SALE)
-                            .set(SALE.SALE_, SALE.SALE_.plus(1000))
+                    log.info("Second transaction (B) can aquire a FOR KEY SHARE lock ...");
+                    ctx.selectFrom(SALE)
                             .where(SALE.SALE_ID.eq(2L))
-                            .execute();
+                            .forKeyShare()
+                            .fetchSingle();
+                    
+                    log.info("Second transaction (B) has acquired FOR KEY SHARE lock ...");
                 }
             });
 
@@ -92,13 +94,16 @@ public class ClassicModelsRepository {
                         TransactionStatus status) {
 
                     log.info("Starting third transaction (C) ...");
-                    log.info("Third transaction (C) cannot DELETE as long as transaction (A) holds the SHARE lock ...");
-                    ctx.delete(SALE)
+                    log.info("Third transaction (C) cannot aquire a FOR SHARE lock until transaction (A) releases its lock ...");
+                    ctx.selectFrom(SALE)
                             .where(SALE.SALE_ID.eq(2L))
-                            .execute();
+                            .forShare()
+                            .fetchSingle();
+                    
+                    log.info("Third transaction (C) has acquired FOR SHARE lock ...");
                 }
-            });         
-             
+            });
+
             log.info("Third transaction (C) committed!");
         });
 
