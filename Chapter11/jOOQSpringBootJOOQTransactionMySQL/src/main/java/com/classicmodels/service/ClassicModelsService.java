@@ -12,33 +12,19 @@ public class ClassicModelsService {
         this.classicModelsRepository = classicModelsRepository;
     }
 
-    public void fetchNoTransaction() {
+    public void dontRollbackJOOQTransaction() {
 
-        classicModelsRepository.fetchNoTransaction();
+        classicModelsRepository.dontRollbackJOOQTransaction();
     }
     
-    public void fetchReadOnlyTransaction() {
+    
+    public void nestedJOOQTransaction() {
         
-        classicModelsRepository.fetchReadOnlyTransaction();
+        classicModelsRepository.nestedJOOQTransaction();
     }
     
-    public void fetchJOOQTransaction() {
+    public void nestedDontRollbackOuterJOOQTransaction() {
         
-        classicModelsRepository.fetchJOOQTransaction();
-    }      
-    
-    public void updateNoTransaction() {
-        
-        classicModelsRepository.updateNoTransaction();
+        classicModelsRepository.nestedDontRollbackOuterJOOQTransaction();
     }
-        
-    public void updateWithTransaction() {
-        
-        classicModelsRepository.updateWithTransaction();
-    }
-    
-    public void updateWithJOOQTransaction() {
-        
-        classicModelsRepository.updateWithJOOQTransaction();
-    }    
 }

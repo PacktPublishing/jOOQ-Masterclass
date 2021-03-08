@@ -23,12 +23,9 @@ public class MainApplication {
     public ApplicationRunner init() {
         return args -> {
 
-            classicModelsService.fetchNoTransaction();
-            classicModelsService.fetchReadOnlyTransaction();
-            classicModelsService.fetchJOOQTransaction();
-            classicModelsService.updateNoTransaction();
-            classicModelsService.updateWithTransaction();
-            classicModelsService.updateWithJOOQTransaction();
+            classicModelsService.dontRollbackJOOQTransaction();
+            // classicModelsService.nestedJOOQTransaction();
+            // classicModelsService.nestedDontRollbackOuterJOOQTransaction();
         };
     }
 }
