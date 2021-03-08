@@ -1,16 +1,14 @@
 package com.classicmodels.repository;
 
 import java.util.logging.Logger;
-import jooq.generated.tables.pojos.Sale;
+import jooq.generated.tables.Sale;
 import static jooq.generated.tables.Sale.SALE;
 import static jooq.generated.tables.Token.TOKEN;
 import jooq.generated.tables.records.SaleRecord;
 import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
 @Repository
@@ -50,24 +48,6 @@ public class ClassicModelsRepository {
         // The database connection is still open, so avoid time-consuming tasks here      
     } // At this point, the transaction committed and the connection is back in the pool 
 
-    // PREFER
-    public void fetchReadOnlyTransactionTemplate() {
-
-        // The transaction and the database connection is not opened so far
-        
-        template.setReadOnly(true);
-        template.execute(new TransactionCallbackWithoutResult() {
-
-            @Override
-            protected void doInTransactionWithoutResult(TransactionStatus status) {
-                
-                ctx.selectFrom(SALE).fetchAny(); // uses the existent connection
-            }            
-        });
-        
-        // At this point, the transaction committed and the connection is back in the pool 
-    }    
-    
     // PREFER
     public void fetchJOOQTransaction() {
 
@@ -139,37 +119,6 @@ public class ClassicModelsRepository {
         // The DELETE is executed successfully
         // The INSERT causes an error
         // Rolling back JDBC transaction on current connection
-        // At this point, the connection is back to pool and transaction was roll backed                       
-    }
-        
-    // PREFER    
-    public void updateWithTransactionTemplate() {
-
-        // The transaction and the database connection is not opened so far
-    
-        template.setReadOnly(true);
-        template.execute(new TransactionCallbackWithoutResult() {
-
-            @Override
-            protected void doInTransactionWithoutResult(TransactionStatus status) {
-
-                ctx.delete(SALE)
-                        .where(SALE.SALE_ID.eq(2L))
-                        .execute();
-
-                // The database connection is still open, so avoid time-consuming tasks here      
-                ctx.insertInto(TOKEN)
-                        .set(TOKEN.SALE_ID, 2L)
-                        .set(TOKEN.TOKEN_ID, 4L)
-                        .set(TOKEN.AMOUNT, 1000d)
-                        .execute();
-                
-                // The DELETE is executed successfully
-                // The INSERT causes an error
-                // Rolling back JDBC transaction on current connection
-            }
-        });
-        
         // At this point, the connection is back to pool and transaction was roll backed                       
     }
 

@@ -24,15 +24,11 @@ public class MainApplication {
         return args -> {
 
             classicModelsService.fetchNoTransaction();
-            /*
             classicModelsService.fetchReadOnlyTransaction();
-            classicModelsService.fetchReadOnlyTransactionTemplate();
             classicModelsService.fetchJOOQTransaction();
             classicModelsService.updateNoTransaction();
             classicModelsService.updateWithTransaction();
-            classicModelsService.updateWithTransactionTemplate();
             classicModelsService.updateWithJOOQTransaction();
-            */
         };
     }
 }

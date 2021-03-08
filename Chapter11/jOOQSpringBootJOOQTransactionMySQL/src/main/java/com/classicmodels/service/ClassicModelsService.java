@@ -22,11 +22,6 @@ public class ClassicModelsService {
         classicModelsRepository.fetchReadOnlyTransaction();
     }
     
-    public void fetchReadOnlyTransactionTemplate() {
-        
-        classicModelsRepository.fetchReadOnlyTransactionTemplate();
-    }
-    
     public void fetchJOOQTransaction() {
         
         classicModelsRepository.fetchJOOQTransaction();
@@ -42,11 +37,6 @@ public class ClassicModelsService {
         classicModelsRepository.updateWithTransaction();
     }
     
-    public void updateWithTransactionTemplate() {
-        
-        classicModelsRepository.updateWithTransactionTemplate();
-    }
-            
     public void updateWithJOOQTransaction() {
         
         classicModelsRepository.updateWithJOOQTransaction();
