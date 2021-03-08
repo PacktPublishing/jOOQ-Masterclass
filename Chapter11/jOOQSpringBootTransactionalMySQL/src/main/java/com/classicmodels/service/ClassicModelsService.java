@@ -12,9 +12,9 @@ public class ClassicModelsService {
         this.classicModelsRepository = classicModelsRepository;
     }
 
-    public void fetchNoTransaction() {
+    public void fetchWithNoTransaction() {
 
-        classicModelsRepository.fetchNoTransaction();
+        classicModelsRepository.fetchWithNoTransaction();
     }
     
     public void fetchReadOnlyTransaction() {
@@ -51,4 +51,19 @@ public class ClassicModelsService {
         
         classicModelsRepository.updateWithJOOQTransaction();
     }    
+    
+    public void fetchAndStreamWithTransactional() {
+        
+        classicModelsRepository.fetchAndStreamWithTransactional();
+    }
+    
+    public void fetchAndStreamWithJOOQTransaction() {
+        
+        classicModelsRepository.fetchAndStreamWithJOOQTransaction();
+    }
+    
+    public void fetchAndStreamWithTransactionTemplate() {
+        
+        classicModelsRepository.fetchAndStreamWithTransactionTemplate();
+    }
 }

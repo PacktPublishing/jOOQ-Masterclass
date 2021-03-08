@@ -23,7 +23,7 @@ public class MainApplication {
     public ApplicationRunner init() {
         return args -> {
 
-            classicModelsService.fetchNoTransaction();
+            classicModelsService.fetchWithNoTransaction();
             /*
             classicModelsService.fetchReadOnlyTransaction();
             classicModelsService.fetchReadOnlyTransactionTemplate();
@@ -32,6 +32,9 @@ public class MainApplication {
             classicModelsService.updateWithTransaction();
             classicModelsService.updateWithTransactionTemplate();
             classicModelsService.updateWithJOOQTransaction();
+            classicModelsService.fetchAndStreamWithTransactional();
+            classicModelsService.fetchAndStreamWithJOOQTransaction();
+            classicModelsService.fetchAndStreamWithTransactionTemplate();
             */
         };
     }

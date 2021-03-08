@@ -6,10 +6,12 @@ import static jooq.generated.tables.Sale.SALE;
 import static jooq.generated.tables.Token.TOKEN;
 import jooq.generated.tables.records.SaleRecord;
 import org.jooq.DSLContext;
+import org.jooq.Result;
 import org.jooq.impl.DSL;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -25,14 +27,17 @@ public class ClassicModelsRepository {
         this.ctx = ctx;
         this.template = template;
     }
-
+ 
     // AVOID
-    public void fetchNoTransaction() {
+    public void fetchWithNoTransaction() {
 
-        // Fetching JDBC Connection from DataSource
-        
+        // Fetching JDBC Connection from DataSource (transaction 1)       
         ctx.selectFrom(SALE).fetchAny();
-
+        // There is no Spring transaction executed
+        // At this point, the connection is back in the pool                
+        
+        // Fetching JDBC Connection from DataSource (transaction 2)        
+        ctx.selectFrom(TOKEN).fetchAny();        
         // There is no Spring transaction executed
         // At this point, the connection is back in the pool                
     }
@@ -45,7 +50,8 @@ public class ClassicModelsRepository {
 
         // The database connection is open, so avoid time-consuming tasks 
         
-        ctx.selectFrom(SALE).fetchAny(); // uses the existent connection
+        ctx.selectFrom(SALE).fetchAny();  // uses the existent connection
+        ctx.selectFrom(TOKEN).fetchAny(); // uses the existent connection       
 
         // The database connection is still open, so avoid time-consuming tasks here      
     } // At this point, the transaction committed and the connection is back in the pool 
@@ -61,7 +67,8 @@ public class ClassicModelsRepository {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus status) {
                 
-                ctx.selectFrom(SALE).fetchAny(); // uses the existent connection
+                ctx.selectFrom(SALE).fetchAny();  // uses the existent connection
+                ctx.selectFrom(TOKEN).fetchAny(); // uses the existent connection
             }            
         });
         
@@ -79,6 +86,7 @@ public class ClassicModelsRepository {
                         
             DSL.using(configuration).selectFrom(SALE).fetchAny();
             // or, configuration.dsl().selectFrom(SALE).fetchAny();
+            DSL.using(configuration).selectFrom(TOKEN).fetchAny();
 
             // The transaction is running and the database connection is open
             // Implicit commit executed here
@@ -199,4 +207,69 @@ public class ClassicModelsRepository {
 
         // At this point, the connection is back to pool and transaction was roll backed                       
     }       
+    
+    // AVOID (this can lead to a long running transaction)
+    @Transactional
+    public void fetchAndStreamWithTransactional() {
+
+        ctx.insertInto(SALE)
+                .set(SALE.SALE_, 100000d)
+                .set(SALE.FISCAL_YEAR, 2021)
+                .set(SALE.EMPLOYEE_NUMBER, 1370L)
+                .execute();
+        
+        ctx.selectFrom(SALE)
+                .fetch() // jOOQ fetches the whole result set into memory via the database connection opened by @Transactional
+                .stream() // stream over the in-memory result set (database connection is active)
+                .filter(rs -> rs.getValue(SALE.SALE_) > 5000)
+                // .map(), ... more time-consuming pipeline operations holds the transaction open
+                .forEach(System.out::println);
+    }
+
+    // PREFER
+    public void fetchAndStreamWithJOOQTransaction() {
+
+        Result<SaleRecord> result = ctx.transactionResult(configuration -> {
+            
+            ctx.insertInto(SALE)
+                .set(SALE.SALE_, 100000d)
+                .set(SALE.FISCAL_YEAR, 2021)
+                .set(SALE.EMPLOYEE_NUMBER, 1370L)
+                .execute();
+            
+            return DSL.using(configuration).selectFrom(SALE)
+                    .fetch();
+        });
+        
+        result.stream() // stream over the in-memory result set (database connection is closed)
+                .filter(rs -> rs.getValue(SALE.SALE_) > 5000)
+                // .map(), ... more time-consuming pipeline operations, but the transaction is closed
+                .forEach(System.out::println);
+    }
+    
+    // PREFER    
+    public void fetchAndStreamWithTransactionTemplate() {
+
+        // The transaction and the database connection is not opened so far
+         Result<SaleRecord> result = template.execute(new TransactionCallback<Result<SaleRecord>>() {
+
+            @Override
+            public Result<SaleRecord> doInTransaction(TransactionStatus ts) {
+
+                ctx.insertInto(SALE)
+                        .set(SALE.SALE_, 100000d)
+                        .set(SALE.FISCAL_YEAR, 2021)
+                        .set(SALE.EMPLOYEE_NUMBER, 1370L)
+                        .execute();
+
+                return ctx.selectFrom(SALE)
+                        .fetch();
+            }
+        });
+        
+        result.stream() // stream over the in-memory result set (database connection is closed)
+                .filter(rs -> rs.getValue(SALE.SALE_) > 5000)
+                // .map(), ... more time-consuming pipeline operations, but the transaction is closed
+                .forEach(System.out::println);
+    }
 }
