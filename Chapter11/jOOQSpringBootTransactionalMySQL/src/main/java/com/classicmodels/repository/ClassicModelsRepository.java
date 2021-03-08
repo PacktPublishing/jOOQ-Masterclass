@@ -76,8 +76,9 @@ public class ClassicModelsRepository {
         ctx.transaction(configuration -> {
 
             // The transaction is running and the database connection is open
-            
+                        
             DSL.using(configuration).selectFrom(SALE).fetchAny();
+            // or, configuration.dsl().selectFrom(SALE).fetchAny();
 
             // The transaction is running and the database connection is open
             // Implicit commit executed here

@@ -20,7 +20,7 @@ public class ClassicModelsRepository {
         ctx.transaction(configuration -> {
 
             try {
-                DSL.using(configuration).delete(SALE)
+                DSL.using(configuration).delete(SALE) // or, configuration.dsl()
                         .where(SALE.SALE_ID.eq(1L))
                         .execute();
 
@@ -37,16 +37,16 @@ public class ClassicModelsRepository {
 
     public void nestedJOOQTransaction() {
 
-        ctx.transaction(outer -> {
+        ctx.transaction(outer -> { 
 
-            DSL.using(outer).delete(SALE)
+            DSL.using(outer).delete(SALE) // or, outer.dsl()
                     .where(SALE.SALE_ID.eq(1L))
                     .execute();
 
             // savepoint created
             DSL.using(outer)
                     .transaction(inner -> {
-                        DSL.using(inner).insertInto(TOKEN)
+                        DSL.using(inner).insertInto(TOKEN) // or, inner.dsl()
                                 .set(TOKEN.SALE_ID, 1L)
                                 .set(TOKEN.TOKEN_ID, 1L)
                                 .set(TOKEN.AMOUNT, 1000d)
