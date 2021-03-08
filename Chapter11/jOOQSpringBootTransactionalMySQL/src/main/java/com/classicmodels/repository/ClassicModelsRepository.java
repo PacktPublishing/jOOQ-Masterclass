@@ -1,10 +1,13 @@
 package com.classicmodels.repository;
 
 import java.util.logging.Logger;
+import static jooq.generated.tables.Employee.EMPLOYEE;
 import jooq.generated.tables.pojos.Sale;
 import static jooq.generated.tables.Sale.SALE;
 import static jooq.generated.tables.Token.TOKEN;
+import jooq.generated.tables.records.EmployeeRecord;
 import jooq.generated.tables.records.SaleRecord;
+import org.jooq.Cursor;
 import org.jooq.DSLContext;
 import org.jooq.Result;
 import org.jooq.impl.DSL;
@@ -212,16 +215,14 @@ public class ClassicModelsRepository {
     @Transactional
     public void fetchAndStreamWithTransactional() {
 
-        ctx.insertInto(SALE)
-                .set(SALE.SALE_, 100000d)
-                .set(SALE.FISCAL_YEAR, 2021)
-                .set(SALE.EMPLOYEE_NUMBER, 1370L)
-                .execute();
+        ctx.update(EMPLOYEE)
+                .set(EMPLOYEE.SALARY, EMPLOYEE.SALARY.plus(1000))
+                .execute();   
         
-        ctx.selectFrom(SALE)
+        ctx.selectFrom(EMPLOYEE)
                 .fetch() // jOOQ fetches the whole result set into memory via the database connection opened by @Transactional
                 .stream() // stream over the in-memory result set (database connection is active)
-                .filter(rs -> rs.getValue(SALE.SALE_) > 5000)
+                .filter(rs -> rs.getValue(EMPLOYEE.SALARY) > 5000)
                 // .map(), ... more time-consuming pipeline operations holds the transaction open
                 .forEach(System.out::println);
     }
@@ -229,20 +230,18 @@ public class ClassicModelsRepository {
     // PREFER
     public void fetchAndStreamWithJOOQTransaction() {
 
-        Result<SaleRecord> result = ctx.transactionResult(configuration -> {
+        Result<EmployeeRecord> result = ctx.transactionResult(configuration -> {
             
-            ctx.insertInto(SALE)
-                .set(SALE.SALE_, 100000d)
-                .set(SALE.FISCAL_YEAR, 2021)
-                .set(SALE.EMPLOYEE_NUMBER, 1370L)
-                .execute();
+            DSL.using(configuration).update(EMPLOYEE)
+                .set(EMPLOYEE.SALARY, EMPLOYEE.SALARY.plus(1000))
+                .execute();   
             
-            return DSL.using(configuration).selectFrom(SALE)
+            return DSL.using(configuration).selectFrom(EMPLOYEE)
                     .fetch();
         });
         
         result.stream() // stream over the in-memory result set (database connection is closed)
-                .filter(rs -> rs.getValue(SALE.SALE_) > 5000)
+                .filter(rs -> rs.getValue(EMPLOYEE.SALARY) > 5000)
                 // .map(), ... more time-consuming pipeline operations, but the transaction is closed
                 .forEach(System.out::println);
     }
@@ -251,25 +250,23 @@ public class ClassicModelsRepository {
     public void fetchAndStreamWithTransactionTemplate() {
 
         // The transaction and the database connection is not opened so far
-         Result<SaleRecord> result = template.execute(new TransactionCallback<Result<SaleRecord>>() {
+         Result<EmployeeRecord> result = template.execute(new TransactionCallback<Result<EmployeeRecord>>() {
 
             @Override
-            public Result<SaleRecord> doInTransaction(TransactionStatus ts) {
+            public Result<EmployeeRecord> doInTransaction(TransactionStatus ts) {
 
-                ctx.insertInto(SALE)
-                        .set(SALE.SALE_, 100000d)
-                        .set(SALE.FISCAL_YEAR, 2021)
-                        .set(SALE.EMPLOYEE_NUMBER, 1370L)
+                ctx.update(EMPLOYEE)
+                        .set(EMPLOYEE.SALARY, EMPLOYEE.SALARY.plus(1000))
                         .execute();
 
-                return ctx.selectFrom(SALE)
+                return ctx.selectFrom(EMPLOYEE)
                         .fetch();
             }
         });
         
         result.stream() // stream over the in-memory result set (database connection is closed)
-                .filter(rs -> rs.getValue(SALE.SALE_) > 5000)
+                .filter(rs -> rs.getValue(EMPLOYEE.SALARY) > 5000)
                 // .map(), ... more time-consuming pipeline operations, but the transaction is closed
                 .forEach(System.out::println);
-    }
+    }            
 }
