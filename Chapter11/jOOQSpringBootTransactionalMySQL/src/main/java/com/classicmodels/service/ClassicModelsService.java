@@ -65,5 +65,5 @@ public class ClassicModelsService {
     public void fetchAndStreamWithTransactionTemplate() {
         
         classicModelsRepository.fetchAndStreamWithTransactionTemplate();
-    }
+    }        
 }

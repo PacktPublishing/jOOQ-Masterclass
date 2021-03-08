@@ -34,7 +34,7 @@ public class MainApplication {
             classicModelsService.updateWithJOOQTransaction();
             classicModelsService.fetchAndStreamWithTransactional();
             classicModelsService.fetchAndStreamWithJOOQTransaction();
-            classicModelsService.fetchAndStreamWithTransactionTemplate();
+            classicModelsService.fetchAndStreamWithTransactionTemplate();            
             */
         };
     }
