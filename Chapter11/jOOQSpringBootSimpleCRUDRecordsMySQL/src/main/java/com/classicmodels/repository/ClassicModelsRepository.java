@@ -6,8 +6,10 @@ import org.jooq.DSLContext;
 import org.jooq.conf.Settings;
 import org.jooq.conf.UpdateUnchangedRecords;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
+@Transactional(readOnly = true)
 public class ClassicModelsRepository {
 
     private final DSLContext ctx;
@@ -45,6 +47,7 @@ public class ClassicModelsRepository {
         System.out.println("Changed record: " + sr.changed());
     }
     
+    @Transactional
     public void insertNewRecord() {
 
         SaleRecord sr = new SaleRecord();
@@ -116,6 +119,7 @@ public class ClassicModelsRepository {
         // =====================================================================             
     }
 
+    @Transactional
     public void updateRecord() {
         
         // The fetched record is auto-attached to the current configuration by jOOQ
@@ -165,6 +169,7 @@ public class ClassicModelsRepository {
         System.out.println("The updated record is:\n " + sr);                     
     }
     
+    @Transactional
     public void mergeRecord() {
                 
         SaleRecord srLoaded = ctx.selectFrom(SALE)
@@ -214,6 +219,7 @@ public class ClassicModelsRepository {
         System.out.println("The merged record is:\n " + sr);             
     }
     
+    @Transactional
     public void storeRecord() {
         
         SaleRecord srLoaded = ctx.selectFrom(SALE)
@@ -246,6 +252,7 @@ public class ClassicModelsRepository {
         System.out.println("The stored record is:\n " + srNew);         
     }
     
+    @Transactional
     public void storeRecordAfterUpdatePrimaryKey() {
         
         SaleRecord sr = ctx.selectFrom(SALE)
