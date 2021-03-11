@@ -86,6 +86,8 @@ public class ClassicModelsRepository {
         
         anotherSr.insert();
         
+        System.out.println("The inserted record ID: " + anotherSr.getSaleId());
+                
         // =====================================================================
                 
         // By default, re-inserting a record that didn't changed result in an insert that relies on the default values.
@@ -136,8 +138,25 @@ public class ClassicModelsRepository {
         
         // =====================================================================
         
-        // detach 'sr' from current configuration, no more INSERT can be done without reattaching it
-        sr.detach();
+        // Insert without returning the generated primary key
+        DSLContext derivedCtxNoReturnId = ctx.configuration().derive(new Settings()
+                .withReturnIdentityOnUpdatableRecord(false)).dsl();
+        
+        SaleRecord srNoReturnId = derivedCtxNoReturnId.newRecord(SALE);
+        
+        srNoReturnId.setFiscalYear(2021);
+        srNoReturnId.setSale(4500.25);
+        srNoReturnId.setEmployeeNumber(1504L);
+        
+        srNoReturnId.insert();
+        
+        System.out.println("The inserted record ID (should be null): " + srNoReturnId.getSaleId());        
+        
+        // =====================================================================
+        
+        // detach 'sr' from current configuration, no more DML operations 
+        // can be done without reattaching it (this doesn't affect other attached records)
+        sr.detach();        
         
         // =====================================================================             
     }
