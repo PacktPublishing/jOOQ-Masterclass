@@ -33,18 +33,26 @@ public class ClassicModelsRepository {
         // *sr* and *sOrg* are not the same object
         SaleRecord srOrg = sr.original();
         System.out.println("Original record:\n " + srOrg + " [" + srOrg.changed() + "]");
+        int fiscalYear = sr.original(SALE.FISCAL_YEAR); // int fiscalYear = (int) sr.original("fiscal_year");
+        System.out.println("Original fiscal year:\n " + fiscalYear);
                  
         // reset the record
-        sr.reset(); // restore *sr* to the original content
+        sr.reset(); // restore *sr* to the original content and changed to false
         System.out.println("Reseted record:\n " + sr + " [" + sr.changed() + "]");
+        // reset a certain field
+        sr.reset(SALE.FISCAL_YEAR); // sr.reset("fiscal_year");
         
         // refersh the record (execute a SELECT to load it from the database)
         sr.refresh();
         System.out.println("Refreshed record:\n " + sr + " [" + sr.changed() + "]");
+        // refresh certain fields
+        sr.refresh(SALE.FISCAL_YEAR, SALE.SALE_);  // sr.refresh("fiscal_year", "sale");
         
         // mark it as changed (all fields)
         sr.changed(true);
         System.out.println("Changed record: " + sr.changed());
+        // mark certain fields
+        sr.changed(SALE.FISCAL_YEAR, true); // sr.changed("fiscal_year", false);
     }
     
     @Transactional
@@ -275,5 +283,5 @@ public class ClassicModelsRepository {
         sr.store();        
         
         System.out.println("The stored record is:\n " + sr);                    
-    }
+    }        
 }
