@@ -1,9 +1,7 @@
 package com.classicmodels.repository;
 
-import static jooq.generated.tables.Dummy.DUMMY;
 import static jooq.generated.tables.Sale.SALE;
 import static jooq.generated.tables.Token.TOKEN;
-import jooq.generated.tables.records.DummyRecord;
 import jooq.generated.tables.records.SaleRecord;
 import jooq.generated.tables.records.TokenRecord;
 import org.jooq.DSLContext;

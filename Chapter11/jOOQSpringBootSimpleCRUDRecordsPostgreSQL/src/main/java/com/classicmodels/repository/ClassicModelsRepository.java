@@ -109,8 +109,11 @@ public class ClassicModelsRepository {
         sr.insert();
         
         // Re-inserting the same data by creating a new record (*sr* and *srCopy* are not the same object!)
-        SaleRecord srCopy1 = sr.copy();
-        srCopy1.insert();               
+        SaleRecord srCopy1 = sr.copy();        
+        srCopy1.insert();  
+        
+        // or, shortly        
+        // sr.copy().insert();
         
         // A little bit more verbose
         SaleRecord srCopy2 = ctx.newRecord(SALE, sr);     
@@ -191,7 +194,7 @@ public class ClassicModelsRepository {
                 .fetchSingle();                
         
         sr.setFiscalYear(2000);
-        sr.setSale(1111.11);
+        sr.setSale(1111.25);        
         
         sr.update(); // this updates *sr* to reflect the modifications
         
@@ -208,6 +211,7 @@ public class ClassicModelsRepository {
         // Force again, but this time update only two fields (only these fields are rendered in UPDATE)
         sr.changed(SALE.FISCAL_YEAR, true); // this field will be part of the rendered UPDATE
         sr.changed(SALE.SALE_, true);       // this field will be part of the rendered UPDATE
+        sr.update();
         System.out.println("The updated record ID: " + sr.getSaleId());
         
         // =====================================================================
@@ -216,7 +220,11 @@ public class ClassicModelsRepository {
         sr.setFiscalYear(2020);
         sr.setSale(0.0);
         
-        System.out.println("Record before referesh:\n " + sr);        
+        // In this case reset() and refresh() produces the same result, so
+        // you should prefer reset() which acts in memory
+        System.out.println("Record before reset/referesh:\n " + sr);        
+        sr.reset();   // reset *sr* to the original values (in memory)
+        System.out.println("Record after reset:\n " + sr);        
         sr.refresh(); // a SELECT is executed to fetch the latest record from the database
         System.out.println("Record after referesh:\n " + sr);        
         
@@ -257,7 +265,7 @@ public class ClassicModelsRepository {
                 .where(SALE.SALE_ID.eq(1L))
                 .fetchSingle();                
                 
-        sr.delete();                
+        sr.delete();                        
     }
     
     @Transactional 
