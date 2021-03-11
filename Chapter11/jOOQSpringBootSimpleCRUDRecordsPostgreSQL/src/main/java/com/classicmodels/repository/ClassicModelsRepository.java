@@ -266,22 +266,7 @@ public class ClassicModelsRepository {
                 .fetchSingle();                
                 
         sr.delete();                        
-    }
-    
-    @Transactional 
-    public void deleteRecordReturnAllFields() {
-        
-        DSLContext derivedCtx = ctx.configuration().derive(new Settings()
-                .withReturnAllOnUpdatableRecord(true)).dsl();
-        
-        TokenRecord tr = derivedCtx.selectFrom(TOKEN)
-                .where(TOKEN.TOKEN_ID.eq(1L))
-                .fetchSingle();
-                                       
-        tr.delete();
-        
-        System.out.println("Updated on: "+tr.getUpdatedOn());
-    }
+    }       
         
     @Transactional
     public void mergeRecord() {
