@@ -212,6 +212,7 @@ CREATE TABLE token (
   token_id number(20) NOT NULL,    
   sale_id number(20) NOT NULL,
   amount float NOT NULL,    
+  updated_on timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (token_id)
  ,  
   CONSTRAINT tokens_ibfk_1 FOREIGN KEY (sale_id) REFERENCES sale (sale_id) ON DELETE CASCADE ON UPDATE CASCADE
@@ -507,7 +508,7 @@ CREATE TABLE top3product (
 CREATE TABLE payment (
   customer_number number(10) NOT NULL,
   check_number varchar2(50) NOT NULL,
-  payment_date timestamp NOT NULL,
+  payment_date timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   invoice_amount number(10,2) NOT NULL,
   caching_date timestamp DEFAULT NULL,
   PRIMARY KEY (customer_number,check_number),

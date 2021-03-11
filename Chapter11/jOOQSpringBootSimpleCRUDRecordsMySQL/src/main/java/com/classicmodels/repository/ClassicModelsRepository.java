@@ -1,7 +1,9 @@
 package com.classicmodels.repository;
 
 import static jooq.generated.tables.Sale.SALE;
+import static jooq.generated.tables.Token.TOKEN;
 import jooq.generated.tables.records.SaleRecord;
+import jooq.generated.tables.records.TokenRecord;
 import org.jooq.DSLContext;
 import org.jooq.conf.Settings;
 import org.jooq.conf.UpdateUnchangedRecords;
@@ -126,6 +128,22 @@ public class ClassicModelsRepository {
         
         // =====================================================================             
     }
+    
+    @Transactional 
+    public void insertRecordReturnAllFields() {
+        
+        TokenRecord tr = new TokenRecord();
+        tr.setSaleId(1L);
+        tr.setAmount(340.43);
+        
+        DSLContext derivedCtx = ctx.configuration().derive(new Settings()
+                .withReturnAllOnUpdatableRecord(true)).dsl();
+        derivedCtx.attach(tr); // or, tr.attach(derivedCtx.configuration());
+
+        tr.insert();
+        
+        System.out.println("Inserted on: "+tr.getUpdatedOn());
+    }
 
     @Transactional
     public void updateRecord() {
@@ -175,6 +193,50 @@ public class ClassicModelsRepository {
         derivedCtx.attach(sr); // or, sr.attach(derivedCtx.configuration());        
         sr.update();        
         System.out.println("The updated record is:\n " + sr);                     
+    }
+    
+    @Transactional 
+    public void updateRecordReturnAllFields() {
+        
+        DSLContext derivedCtx = ctx.configuration().derive(new Settings()
+                .withReturnAllOnUpdatableRecord(true)).dsl();
+        
+        TokenRecord tr = derivedCtx.selectFrom(TOKEN)
+                .where(TOKEN.TOKEN_ID.eq(1L))
+                .fetchSingle();
+                
+        tr.setAmount(999.99);
+                       
+        tr.update();
+        
+        System.out.println("Updated on: "+tr.getUpdatedOn());
+    }
+    
+    @Transactional
+    public void deleteRecord() {
+        
+        // The fetched record is auto-attached to the current configuration by jOOQ
+        // so, there is no need to manually attach *sr*
+        SaleRecord sr = ctx.selectFrom(SALE)
+                .where(SALE.SALE_ID.eq(1L))
+                .fetchSingle();                
+                
+        sr.delete();                
+    }
+    
+    @Transactional 
+    public void deleteRecordReturnAllFields() {
+        
+        DSLContext derivedCtx = ctx.configuration().derive(new Settings()
+                .withReturnAllOnUpdatableRecord(true)).dsl();
+        
+        TokenRecord tr = derivedCtx.selectFrom(TOKEN)
+                .where(TOKEN.TOKEN_ID.eq(1L))
+                .fetchSingle();
+                                       
+        tr.delete();
+        
+        System.out.println("Updated on: "+tr.getUpdatedOn());
     }
     
     @Transactional

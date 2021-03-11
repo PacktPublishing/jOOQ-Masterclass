@@ -26,6 +26,7 @@ DROP TABLE IF EXISTS `manager`;
 DROP TABLE IF EXISTS `customerdetail`;
 DROP TABLE IF EXISTS `customer`;
 DROP TABLE IF EXISTS `sale`;
+DROP TABLE IF EXISTS `token`;
 DROP TABLE IF EXISTS `employee`;
 DROP TABLE IF EXISTS `department`;
 DROP TABLE IF EXISTS `office`;
@@ -93,7 +94,19 @@ CREATE TABLE `sale` (
   `trend` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`sale_id`),  
   KEY `employee_number` (`employee_number`),  
-  CONSTRAINT `sales_ibfk_1` FOREIGN KEY (`employee_number`) REFERENCES `employee` (`employee_number`)
+  CONSTRAINT `sales_ibfk_1` FOREIGN KEY (`employee_number`) REFERENCES `employee` (`employee_number`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Table structure for table `token` */
+
+CREATE TABLE `token` (
+  `token_id` bigint NOT NULL AUTO_INCREMENT,    
+  `sale_id` bigint NOT NULL,
+  `amount` float NOT NULL,   
+  `created_on` date DEFAULT (CURRENT_DATE),  
+  PRIMARY KEY (`token_id`)
+ ,  
+  CONSTRAINT `tokens_ibfk_1` FOREIGN KEY (`sale_id`) REFERENCES `sale` (`sale_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Table structure for table `customer` */
@@ -109,7 +122,7 @@ CREATE TABLE `customer` (
   `first_buy_date` int DEFAULT NULL,
   PRIMARY KEY (`customer_number`),
   KEY `sales_rep_employee_number` (`sales_rep_employee_number`),
-  CONSTRAINT `customers_ibfk_1` FOREIGN KEY (`sales_rep_employee_number`) REFERENCES `employee` (`employee_number`)
+  CONSTRAINT `customers_ibfk_1` FOREIGN KEY (`sales_rep_employee_number`) REFERENCES `employee` (`employee_number`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Table structure for table `customerdetail` */
@@ -246,9 +259,11 @@ CREATE TABLE `top3product` (
 CREATE TABLE `payment` (
   `customer_number` bigint NOT NULL,
   `check_number` varchar(50) NOT NULL,
-  `payment_date` timestamp NOT NULL,
+  `payment_date` timestamp NOT NULL DEFAULT NOW(),
   `invoice_amount` decimal(10,2) NOT NULL,
   `caching_date` timestamp DEFAULT NULL,  
+  `version` int DEFAULT 0,
+  `modified` timestamp NOT NULL DEFAULT NOW(),
   PRIMARY KEY (`customer_number`,`check_number`),
   CONSTRAINT `unique_check_number` UNIQUE (`check_number`),
   CONSTRAINT `payments_ibfk_1` FOREIGN KEY (`customer_number`) REFERENCES `customer` (`customer_number`)
@@ -264,8 +279,8 @@ CREATE TABLE `bank_transaction` (
   `caching_date` timestamp NOT NULL DEFAULT NOW(),
   `customer_number` bigint NOT NULL,
   `check_number` varchar(50) NOT NULL, 
-  `status` varchar(50) NOT NULL, 
-  PRIMARY KEY (`transaction_id`),  
+  `status` varchar(50) NOT NULL DEFAULT 'SUCCESS',   
+  PRIMARY KEY (`transaction_id`),    
   CONSTRAINT `bank_transaction_ibfk_1` FOREIGN KEY (`customer_number`,`check_number`) REFERENCES `payment` (`customer_number`,`check_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 

@@ -38,7 +38,7 @@ public class ClassicModelsRepository {
         var insertedId = ctx.insertInto(SALE)
                 .values(default_(), 2004, 2311.42, 1370L, 
                         default_(), SaleRate.SILVER, SaleVat.NONE, default_())
-                .returningResult(SALE.SALE_ID)
+                .returningResult(SALE.SALE_ID) // or, returning() to return whole fields
                 .fetchOne();
 
         System.out.println("EXAMPLE 1 (inserted id):\n" + insertedId); // as Long, insertedId.value1()

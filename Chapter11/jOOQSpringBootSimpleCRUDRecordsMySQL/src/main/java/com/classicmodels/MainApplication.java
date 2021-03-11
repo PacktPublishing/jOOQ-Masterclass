@@ -29,6 +29,7 @@ public class MainApplication {
             classicModelsService.resetOrginalChangedRefresh();
             classicModelsService.storeRecord();
             classicModelsService.storeRecordAfterUpdatePrimaryKey();
+            classicModelsService.deleteRecord();
         };
     }
 }

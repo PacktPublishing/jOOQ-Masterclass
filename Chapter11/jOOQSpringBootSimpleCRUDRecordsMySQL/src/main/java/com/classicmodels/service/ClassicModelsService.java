@@ -15,11 +15,19 @@ public class ClassicModelsService {
     public void insertNewRecord() {
         
         classicModelsRepository.insertNewRecord();
-    }
+        classicModelsRepository.insertRecordReturnAllFields();
+    }    
     
     public void updateRecord() {
         
         classicModelsRepository.updateRecord();
+        classicModelsRepository.updateRecordReturnAllFields();
+    }
+    
+    public void deleteRecord() {
+        
+        classicModelsRepository.deleteRecord();
+        classicModelsRepository.deleteRecordReturnAllFields();
     }
     
     public void mergeRecord() {

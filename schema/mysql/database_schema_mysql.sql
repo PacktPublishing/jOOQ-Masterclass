@@ -102,7 +102,8 @@ CREATE TABLE `sale` (
 CREATE TABLE `token` (
   `token_id` bigint NOT NULL AUTO_INCREMENT,    
   `sale_id` bigint NOT NULL,
-  `amount` float NOT NULL,    
+  `amount` float NOT NULL,   
+  `updated_on` timestamp NOT NULL DEFAULT NOW(),
   PRIMARY KEY (`token_id`)
  ,  
   CONSTRAINT `tokens_ibfk_1` FOREIGN KEY (`sale_id`) REFERENCES `sale` (`sale_id`) ON DELETE CASCADE ON UPDATE CASCADE
