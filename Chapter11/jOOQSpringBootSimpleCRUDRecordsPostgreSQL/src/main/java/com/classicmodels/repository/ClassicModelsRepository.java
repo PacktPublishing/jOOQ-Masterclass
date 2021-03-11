@@ -72,20 +72,7 @@ public class ClassicModelsRepository {
         // sr.insert(SALE.FISCAL_YEAR, SALE.SALE_); // Insert a subset of fields (SALE.EMPLOYEE_NUMBER() is omitted)
         
         System.out.println("The inserted record ID: " + sr.getSaleId());
-        
-        // =====================================================================
-        
-        // We can avoid the explicit call of attach() by creating the record via DSLContext.newRecord()
-        // So, more simple is to do this:
-        
-        SaleRecord anotherSr = ctx.newRecord(SALE);
-        
-        anotherSr.setFiscalYear(2021);
-        anotherSr.setSale(4500.25);
-        anotherSr.setEmployeeNumber(1504L);
-        
-        anotherSr.insert();
-        
+
         // =====================================================================
                 
         // By default, re-inserting a record that didn't changed result in an insert that relies on the default values.
@@ -145,13 +132,14 @@ public class ClassicModelsRepository {
     @Transactional 
     public void insertRecordReturnAllFields() {
         
-        DSLContext derivedCtx = ctx.configuration().derive(new Settings()
-                .withReturnAllOnUpdatableRecord(true)).dsl();
-        
-        TokenRecord tr = derivedCtx.newRecord(TOKEN); // attached automatically
+        TokenRecord tr = new TokenRecord();
         tr.setSaleId(1L);
         tr.setAmount(340.43);
-                        
+        
+        DSLContext derivedCtx = ctx.configuration().derive(new Settings()
+                .withReturnAllOnUpdatableRecord(true)).dsl();
+        derivedCtx.attach(tr); // or, tr.attach(derivedCtx.configuration());
+
         tr.insert();
         
         System.out.println("Inserted on: "+tr.getUpdatedOn());
@@ -235,7 +223,22 @@ public class ClassicModelsRepository {
                 
         sr.delete();                
     }
+    
+    @Transactional 
+    public void deleteRecordReturnAllFields() {
         
+        DSLContext derivedCtx = ctx.configuration().derive(new Settings()
+                .withReturnAllOnUpdatableRecord(true)).dsl();
+        
+        TokenRecord tr = derivedCtx.selectFrom(TOKEN)
+                .where(TOKEN.TOKEN_ID.eq(1L))
+                .fetchSingle();
+                                       
+        tr.delete();
+        
+        System.out.println("Updated on: "+tr.getUpdatedOn());
+    }
+    
     @Transactional
     public void mergeRecord() {
                 
@@ -245,11 +248,13 @@ public class ClassicModelsRepository {
         srLoaded.setFiscalYear(2005);
         srLoaded.changed(SALE.SALE_, true); // this field is just marked as changed, so it will be rendered in SQL
         
-        SaleRecord srNew = ctx.newRecord(SALE);
+        SaleRecord srNew = new SaleRecord();
         srNew.setFiscalYear(2000);
         srNew.setSale(100.25);
         srNew.setEmployeeNumber(1370L);
-                
+        
+        ctx.attach(srNew);
+        
         // *srLoaded* will be updated
         srLoaded.merge();
         
@@ -293,7 +298,7 @@ public class ClassicModelsRepository {
         srLoaded.setFiscalYear(2005);
         srLoaded.changed(SALE.SALE_, true); // this field is just marked as changed, so it will be rendered in SQL
         
-        SaleRecord srNew = ctx.newRecord(SALE);
+        SaleRecord srNew = new SaleRecord();
         srNew.setFiscalYear(2000);
         srNew.setSale(100.25);
         srNew.setEmployeeNumber(1370L);

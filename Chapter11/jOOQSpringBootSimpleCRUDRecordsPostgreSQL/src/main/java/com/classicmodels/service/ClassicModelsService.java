@@ -26,7 +26,8 @@ public class ClassicModelsService {
     
     public void deleteRecord() {
         
-        classicModelsRepository.deleteRecord();        
+        classicModelsRepository.deleteRecord();
+        classicModelsRepository.deleteRecordReturnAllFields();
     }
     
     public void mergeRecord() {
