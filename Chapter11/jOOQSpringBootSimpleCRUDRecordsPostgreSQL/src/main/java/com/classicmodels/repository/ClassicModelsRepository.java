@@ -72,7 +72,22 @@ public class ClassicModelsRepository {
         // sr.insert(SALE.FISCAL_YEAR, SALE.SALE_); // Insert a subset of fields (SALE.EMPLOYEE_NUMBER() is omitted)
         
         System.out.println("The inserted record ID: " + sr.getSaleId());
-
+        
+        // =====================================================================
+        
+        // We can avoid the explicit call of attach() by creating the record via DSLContext.newRecord()
+        // So, more simple is to do this:
+        
+        SaleRecord anotherSr = ctx.newRecord(SALE);
+        
+        anotherSr.setFiscalYear(2021);
+        anotherSr.setSale(4500.25);
+        anotherSr.setEmployeeNumber(1504L);
+        
+        anotherSr.insert();
+        
+        System.out.println("The inserted record ID: " + anotherSr.getSaleId());
+                
         // =====================================================================
                 
         // By default, re-inserting a record that didn't changed result in an insert that relies on the default values.
@@ -123,8 +138,25 @@ public class ClassicModelsRepository {
         
         // =====================================================================
         
-        // detach 'sr' from current configuration, no more INSERT can be done without reattaching it
-        sr.detach();
+        // Insert without returning the generated primary key
+        DSLContext derivedCtxNoReturnId = ctx.configuration().derive(new Settings()
+                .withReturnIdentityOnUpdatableRecord(false)).dsl();
+        
+        SaleRecord srNoReturnId = derivedCtxNoReturnId.newRecord(SALE);
+        
+        srNoReturnId.setFiscalYear(2021);
+        srNoReturnId.setSale(4500.25);
+        srNoReturnId.setEmployeeNumber(1504L);
+        
+        srNoReturnId.insert();
+        
+        System.out.println("The inserted record ID (should be null): " + srNoReturnId.getSaleId());        
+        
+        // =====================================================================
+        
+        // detach 'sr' from current configuration, no more DML operations 
+        // can be done without reattaching it (this doesn't affect other attached records)
+        sr.detach();        
         
         // =====================================================================             
     }
@@ -132,14 +164,13 @@ public class ClassicModelsRepository {
     @Transactional 
     public void insertRecordReturnAllFields() {
         
-        TokenRecord tr = new TokenRecord();
-        tr.setSaleId(1L);
-        tr.setAmount(340.43);
-        
         DSLContext derivedCtx = ctx.configuration().derive(new Settings()
                 .withReturnAllOnUpdatableRecord(true)).dsl();
-        derivedCtx.attach(tr); // or, tr.attach(derivedCtx.configuration());
-
+        
+        TokenRecord tr = derivedCtx.newRecord(TOKEN); // attached automatically
+        tr.setSaleId(1L);
+        tr.setAmount(340.43);
+                        
         tr.insert();
         
         System.out.println("Inserted on: "+tr.getUpdatedOn());
@@ -238,7 +269,7 @@ public class ClassicModelsRepository {
         
         System.out.println("Updated on: "+tr.getUpdatedOn());
     }
-    
+        
     @Transactional
     public void mergeRecord() {
                 
@@ -248,13 +279,11 @@ public class ClassicModelsRepository {
         srLoaded.setFiscalYear(2005);
         srLoaded.changed(SALE.SALE_, true); // this field is just marked as changed, so it will be rendered in SQL
         
-        SaleRecord srNew = new SaleRecord();
+        SaleRecord srNew = ctx.newRecord(SALE);
         srNew.setFiscalYear(2000);
         srNew.setSale(100.25);
         srNew.setEmployeeNumber(1370L);
-        
-        ctx.attach(srNew);
-        
+                
         // *srLoaded* will be updated
         srLoaded.merge();
         
@@ -298,7 +327,7 @@ public class ClassicModelsRepository {
         srLoaded.setFiscalYear(2005);
         srLoaded.changed(SALE.SALE_, true); // this field is just marked as changed, so it will be rendered in SQL
         
-        SaleRecord srNew = new SaleRecord();
+        SaleRecord srNew = ctx.newRecord(SALE);
         srNew.setFiscalYear(2000);
         srNew.setSale(100.25);
         srNew.setEmployeeNumber(1370L);
