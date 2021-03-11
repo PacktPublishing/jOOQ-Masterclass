@@ -31,4 +31,9 @@ public class ClassicModelsService {
         
         classicModelsRepository.deleteProductViajOOQDao();
     }
+    
+    public void recordToPojo() {
+        
+        classicModelsRepository.recordToPojo();
+    }
 }

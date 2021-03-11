@@ -29,6 +29,7 @@ public class MainApplication {
             classicModelsService.updateProductViajOOQDao();
             classicModelsService.mergeProductViajOOQDao();
             classicModelsService.deleteProductViajOOQDao();
+            classicModelsService.recordToPojo();
         };
     }
 }
