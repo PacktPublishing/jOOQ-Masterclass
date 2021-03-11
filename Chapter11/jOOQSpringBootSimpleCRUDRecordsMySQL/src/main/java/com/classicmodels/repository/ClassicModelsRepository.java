@@ -112,12 +112,17 @@ public class ClassicModelsRepository {
         SaleRecord srCopy1 = sr.copy();
         srCopy1.insert();               
         
-        // A more verbose approach
-        SaleRecord srCopy2 = new SaleRecord();        
-        srCopy2.from(sr);
+        // A little bit more verbose
+        SaleRecord srCopy2 = ctx.newRecord(SALE, sr);     
         srCopy2.changed(SALE.SALE_ID, false);
-        ctx.attach(srCopy2);        
         srCopy2.insert();
+        
+        // A more verbose approach
+        SaleRecord srCopy3 = new SaleRecord();        
+        srCopy3.from(sr);
+        srCopy3.changed(SALE.SALE_ID, false);
+        ctx.attach(srCopy3);        
+        srCopy3.insert();
      
         // =====================================================================
         
