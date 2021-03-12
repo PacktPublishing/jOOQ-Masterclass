@@ -46,6 +46,7 @@ public class ClassicModelsService {
     
     public void storeRecordAfterUpdatePrimaryKey() {
         
-        classicModelsRepository.storeRecordAfterUpdatePrimaryKey();
+        classicModelsRepository.storeRecordAfterUpdatePrimaryKeyViaInsert();
+        classicModelsRepository.storeRecordAfterUpdatePrimaryKeyViaUpdate();
     }
 }

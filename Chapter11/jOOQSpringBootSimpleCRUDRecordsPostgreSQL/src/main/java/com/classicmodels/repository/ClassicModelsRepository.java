@@ -29,24 +29,24 @@ public class ClassicModelsRepository {
         // modify the *sr* record in-memory
         sr.setFiscalYear(2002);
         sr.setSale(222222.22);
-        System.out.println("Modified record:\n " + sr + " [" + sr.changed() + "]");
+        System.out.println("Modified record:\n" + sr + " [" + sr.changed() + "]");
                        
         // get the *sr* before modifications (as it come from the database)
         // *sr* and *sOrg* are not the same object
         SaleRecord srOrg = sr.original();
-        System.out.println("Original record:\n " + srOrg + " [" + srOrg.changed() + "]");
+        System.out.println("Original record:\n" + srOrg + " [" + srOrg.changed() + "]");
         int fiscalYear = sr.original(SALE.FISCAL_YEAR); // int fiscalYear = (int) sr.original("fiscal_year");
-        System.out.println("Original fiscal year:\n " + fiscalYear);
+        System.out.println("Original fiscal year:\n" + fiscalYear);
                  
         // reset the record
         sr.reset(); // restore *sr* to the original content and changed to false
-        System.out.println("Reseted record:\n " + sr + " [" + sr.changed() + "]");
+        System.out.println("Reseted record:\n" + sr + " [" + sr.changed() + "]");
         // reset a certain field
         sr.reset(SALE.FISCAL_YEAR); // sr.reset("fiscal_year");
         
         // refersh the record (execute a SELECT to load it from the database)
         sr.refresh();
-        System.out.println("Refreshed record:\n " + sr + " [" + sr.changed() + "]");
+        System.out.println("Refreshed record:\n" + sr + " [" + sr.changed() + "]");
         // refresh certain fields
         sr.refresh(SALE.FISCAL_YEAR, SALE.SALE_);  // sr.refresh("fiscal_year", "sale");
         
@@ -108,9 +108,13 @@ public class ClassicModelsRepository {
         sr.changed(SALE.SALE_, true);
         sr.insert();
         
+        System.out.println("The inserted record ID: " + sr.getSaleId());
+        
         // Re-inserting the same data by creating a new record (*sr* and *srCopy* are not the same object!)
         SaleRecord srCopy1 = sr.copy();        
         srCopy1.insert();  
+        
+        System.out.println("The inserted srCopy1:\n" + srCopy1);
         
         // or, shortly        
         // sr.copy().insert();
@@ -120,19 +124,23 @@ public class ClassicModelsRepository {
         srCopy2.changed(SALE.SALE_ID, false);
         srCopy2.insert();
         
+        System.out.println("The inserted srCopy2:\n" + srCopy2);
+        
         // A more verbose approach
         SaleRecord srCopy3 = new SaleRecord();        
         srCopy3.from(sr);
         srCopy3.changed(SALE.SALE_ID, false);
         ctx.attach(srCopy3);        
         srCopy3.insert();
+        
+        System.out.println("The inserted srCopy3:\n" + srCopy3);
      
         // =====================================================================
         
         // Modify the *sr* record in-memory to insert a new row with different data without creating a new record                        
         sr.setFiscalYear(2005);
         sr.setSale(101010.11);
-        System.out.println("Modified record:\n " + sr + " [" + sr.changed() + "]");
+        System.out.println("Modified record:\n" + sr + " [" + sr.changed() + "]");
         sr.insert(); // insert a new row with different data without creating a new record                        
         
         // =====================================================================
@@ -143,6 +151,8 @@ public class ClassicModelsRepository {
                 .withInsertUnchangedRecords(false)).dsl();
         derivedCtx.attach(sr); // or, sr.attach(derivedCtx.configuration());
         sr.insert();
+        
+        System.out.println("Prevent unchanded records to be inserted.");
         
         // =====================================================================
         
@@ -181,7 +191,7 @@ public class ClassicModelsRepository {
                         
         tr.insert();
         
-        System.out.println("Inserted on: "+tr.getUpdatedOn());
+        System.out.println("Inserted on: " + tr.getUpdatedOn());
     }
 
     @Transactional
@@ -198,12 +208,15 @@ public class ClassicModelsRepository {
         
         sr.update(); // this updates *sr* to reflect the modifications
         
+        System.out.println("The updated record ID: " + sr.getSaleId());
+        
         // =====================================================================
         
         // Calling update() again is pointless, there is nothing to update and jOOQ knows it
         // but, we can force an update by marking its fields as changed
         sr.changed(true); // update all fields
         sr.update();
+        
         System.out.println("The updated record ID: " + sr.getSaleId());
         
         // =====================================================================
@@ -212,6 +225,7 @@ public class ClassicModelsRepository {
         sr.changed(SALE.FISCAL_YEAR, true); // this field will be part of the rendered UPDATE
         sr.changed(SALE.SALE_, true);       // this field will be part of the rendered UPDATE
         sr.update();
+        
         System.out.println("The updated record ID: " + sr.getSaleId());
         
         // =====================================================================
@@ -222,11 +236,11 @@ public class ClassicModelsRepository {
         
         // In this case reset() and refresh() produces the same result, so
         // you should prefer reset() which acts in memory
-        System.out.println("Record before reset/referesh:\n " + sr);        
+        System.out.println("Record before reset/referesh:\n" + sr);        
         sr.reset();   // reset *sr* to the original values (in memory)
-        System.out.println("Record after reset:\n " + sr);        
+        System.out.println("Record after reset:\n" + sr);        
         sr.refresh(); // a SELECT is executed to fetch the latest record from the database
-        System.out.println("Record after referesh:\n " + sr);        
+        System.out.println("Record after referesh:\n" + sr);        
         
         // =====================================================================
         
@@ -236,7 +250,8 @@ public class ClassicModelsRepository {
                 .withUpdateUnchangedRecords(UpdateUnchangedRecords.SET_NON_PRIMARY_KEY_TO_RECORD_VALUES)).dsl();
         derivedCtx.attach(sr); // or, sr.attach(derivedCtx.configuration());        
         sr.update();        
-        System.out.println("The updated record is:\n " + sr);                     
+        
+        System.out.println("The updated record is:\n" + sr);                     
     }
     
     @Transactional 
@@ -265,28 +280,36 @@ public class ClassicModelsRepository {
                 .where(SALE.SALE_ID.eq(1L))
                 .fetchSingle();                
                 
+        System.out.println("Record to be deleted is:\n" + sr);
+        
         sr.delete();                        
-    }       
+        
+        System.out.println("Deleted record is:\n" + sr);
+    }
         
     @Transactional
     public void mergeRecord() {
                 
-        SaleRecord srLoaded = ctx.selectFrom(SALE)
+        SaleRecord srFetched = ctx.selectFrom(SALE)
                 .where(SALE.SALE_ID.eq(1L))
                 .fetchSingle();                
-        srLoaded.setFiscalYear(2005);
-        srLoaded.changed(SALE.SALE_, true); // this field is just marked as changed, so it will be rendered in SQL
+        srFetched.setFiscalYear(2005);
+        srFetched.changed(SALE.SALE_, true); // this field is just marked as changed, so it will be rendered in SQL
         
         SaleRecord srNew = ctx.newRecord(SALE);
         srNew.setFiscalYear(2000);
         srNew.setSale(100.25);
         srNew.setEmployeeNumber(1370L);
                 
-        // *srLoaded* will be updated
-        srLoaded.merge();
+        // *srFetched* will be updated
+        srFetched.merge();
+        
+        System.out.println("The merged record is (UPDATE):\n" + srFetched);         
         
         // *srNew* will be inserted
         srNew.merge();
+        
+        System.out.println("The merged record is (INSERT):\n" + srNew);         
         
         // =====================================================================
         
@@ -300,10 +323,14 @@ public class ClassicModelsRepository {
         // since TREND is not part of merge() this will not merge anything
         sr.merge(SALE.FISCAL_YEAR, SALE.SALE_); 
         
+        System.out.println("The merged record is (certain fields):\n" + sr);         
+        
         // this merge TREND as well
         sr.changed(SALE.FISCAL_YEAR, true); // if we don't mark this field as changed it will be ignored even if is mentioned in the following merge()
         sr.changed(SALE.SALE_, true);       // if we don't mark this field as changed it will be ignored even if is mentioned in the following merge()
         sr.merge(SALE.FISCAL_YEAR, SALE.SALE_, SALE.TREND); 
+        
+        System.out.println("The merged record is (certain fields):\n" + sr);         
         
         // =====================================================================
         
@@ -313,31 +340,45 @@ public class ClassicModelsRepository {
                 .withUpdateUnchangedRecords(UpdateUnchangedRecords.SET_NON_PRIMARY_KEY_TO_RECORD_VALUES)).dsl();
         derivedCtx.attach(sr); // or, sr.attach(derivedCtx.configuration());        
         sr.merge();        
-        System.out.println("The merged record is:\n " + sr);             
+        
+        System.out.println("The merged record is:\n" + sr);             
     }
     
     @Transactional
     public void storeRecord() {
-        
-        SaleRecord srLoaded = ctx.selectFrom(SALE)
-                .where(SALE.SALE_ID.eq(1L))
-                .fetchSingle();                
-        srLoaded.setFiscalYear(2005);
-        srLoaded.changed(SALE.SALE_, true); // this field is just marked as changed, so it will be rendered in SQL
-        
+                        
         SaleRecord srNew = ctx.newRecord(SALE);
         srNew.setFiscalYear(2000);
         srNew.setSale(100.25);
         srNew.setEmployeeNumber(1370L);
-        
-        ctx.attach(srNew);
-        
-        // *srLoaded* will be updated (jOOQ decide to execute an update)
-        srLoaded.store();
-        
+                        
         // *srNew* will be inserted (jOOQ decide to execute an insert)
-        srNew.store();                        
+        srNew.store(); // render an INSERT      
         
+        System.out.println("The stored record is (INSERT):\n" + srNew);         
+        
+        // =====================================================================
+        
+        SaleRecord srFetched = ctx.selectFrom(SALE)
+                .where(SALE.SALE_ID.eq(1L))
+                .fetchSingle();                
+        srFetched.setFiscalYear(2005);
+        srFetched.changed(SALE.SALE_, true); // this field is just marked as changed, so it will be rendered in SQL
+        
+        // *srFetched* will be updated (jOOQ decide to execute an update)
+        srFetched.store(); // render an UPDATE
+        
+        System.out.println("The stored record is (UPDATE):\n" + srFetched);         
+        
+        // =====================================================================
+
+        // modify the primary key
+        srFetched.setSaleId((long) (Math.random() * 999999999L));
+        
+        srFetched.store(); // render an INSERT
+        
+        System.out.println("The stored record is (INSERT caused by primary key modification):\n" + srFetched);         
+                
         // =====================================================================
         
         // Force an update via Settings.withUpdateUnchangedRecords(UpdateUnchangedRecords)  
@@ -345,12 +386,13 @@ public class ClassicModelsRepository {
         DSLContext derivedCtx = ctx.configuration().derive(new Settings()
                 .withUpdateUnchangedRecords(UpdateUnchangedRecords.SET_NON_PRIMARY_KEY_TO_RECORD_VALUES)).dsl();
         derivedCtx.attach(srNew); // or, sr.attach(derivedCtx.configuration());        
-        srNew.store();        
-        System.out.println("The stored record is:\n " + srNew);         
+        srNew.store(); // render an UPDATE        
+        
+        System.out.println("The stored record is (forced UPDATE):\n" + srNew);         
     }
     
     @Transactional
-    public void storeRecordAfterUpdatePrimaryKey() {
+    public void storeRecordAfterUpdatePrimaryKeyViaInsert() {
         
         SaleRecord sr = ctx.selectFrom(SALE)
                 .where(SALE.SALE_ID.eq(1L))
@@ -362,15 +404,26 @@ public class ClassicModelsRepository {
         // Because the primary key was modified this executes an INSERT
         sr.store();
         
+        System.out.println("The stored record is (INSERT caused by the primary key modification):\n" + sr);                    
+    }
+        
+    @Transactional
+    public void storeRecordAfterUpdatePrimaryKeyViaUpdate() {
+        
+        DSLContext derivedCtx = ctx.configuration().derive(new Settings()
+                .withUpdatablePrimaryKeys(true)).dsl();
+        
+        SaleRecord sr = derivedCtx.selectFrom(SALE)
+                .where(SALE.SALE_ID.eq(2L))
+                .fetchSingle();      
+        
         // Forcing an UPDATE can be done via Settings.isUpdatablePrimaryKeys() 
         // By default, isUpdatablePrimaryKeys() return false
         sr.setSaleId((long) (Math.random() * 999999999L));
-        sr.setFiscalYear(2007);        
-        DSLContext derivedCtx = ctx.configuration().derive(new Settings()
-                .withUpdatablePrimaryKeys(true)).dsl();
-        derivedCtx.attach(sr); // or, sr.attach(derivedCtx.configuration());        
+        sr.setFiscalYear(2007);
+        
         sr.store();        
         
-        System.out.println("The stored record is:\n " + sr);                    
+        System.out.println("The stored record is (force UPDATE of primary key):\n" + sr);                    
     }        
 }
