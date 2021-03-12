@@ -84,11 +84,8 @@ public class ClassicModelsController {
     }
 
     @PostMapping("/new")
-    public String newBank(@ModelAttribute BankTransaction bt,
-            RedirectAttributes redirectAttributes) {
-
-        bt.setCustomerNumber(333L);
-        bt.setCheckNumber("NF959653");
+    public String newBankTransaction(@ModelAttribute BankTransaction bt,
+            RedirectAttributes redirectAttributes) {        
 
         classicModelsService.newBankTransaction(bt);
         redirectAttributes.addFlashAttribute(INSERT_DELETE_OR_UPDATE_BANK_TRANSACTION_ATTR, bt);
