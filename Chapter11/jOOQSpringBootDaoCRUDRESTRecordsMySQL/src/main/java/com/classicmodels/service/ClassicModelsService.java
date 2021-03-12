@@ -24,18 +24,18 @@ public class ClassicModelsService {
         return classicModelsRepository.fetchBankTransaction(id);
     }
 
-    public void newBankTransaction(BankTransaction ntb) {
+    public void newBankTransaction(BankTransaction bt) {
 
-        classicModelsRepository.newBankTransaction(ntb);
+        classicModelsRepository.newBankTransaction(bt);
     }
 
-    public void updateBankTransaction(BankTransaction utb) {
+    public void updateBankTransaction(BankTransaction bt) {
 
-        classicModelsRepository.updateBankTransaction(utb);
+        classicModelsRepository.updateBankTransaction(bt);
     }
 
-    public void deleteBankTransaction(BankTransaction dtb) {
+    public void deleteBankTransaction(BankTransaction bt) {
 
-        classicModelsRepository.deleteBankTransaction(dtb);
+        classicModelsRepository.deleteBankTransaction(bt);
     }
 }

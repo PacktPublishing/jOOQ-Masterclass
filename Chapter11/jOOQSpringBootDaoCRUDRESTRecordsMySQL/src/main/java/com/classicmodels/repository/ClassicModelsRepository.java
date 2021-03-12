@@ -39,20 +39,20 @@ public class ClassicModelsRepository {
     }
 
     @Transactional
-    public void newBankTransaction(BankTransaction ntb) {
+    public void newBankTransaction(BankTransaction bt) {
 
-        bankTransactionRepository.insert(ntb);
+        bankTransactionRepository.insert(bt);
     }
 
     @Transactional
-    public void updateBankTransaction(BankTransaction utb) {
+    public void updateBankTransaction(BankTransaction bt) {
 
-        bankTransactionRepository.update(utb);
+        bankTransactionRepository.update(bt);
     }
 
     @Transactional
-    public void deleteBankTransaction(BankTransaction dtb) {
+    public void deleteBankTransaction(BankTransaction bt) {
 
-        bankTransactionRepository.delete(dtb);
+        bankTransactionRepository.delete(bt);
     }
 }
