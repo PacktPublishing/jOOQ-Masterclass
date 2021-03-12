@@ -66,7 +66,7 @@ public class ClassicModelsController {
     public String updateBankTransfer(@ModelAttribute(BANK_TRANSACTION_ATTR) BankTransactionRecord btr,
             RedirectAttributes redirectAttributes, SessionStatus sessionStatus) {
 
-        int updated = classicModelsService.updateBankTransaction(btr);
+        classicModelsService.updateBankTransaction(btr);
         redirectAttributes.addFlashAttribute(INSERT_DELETE_OR_UPDATE_BANK_TRANSACTION_ATTR, btr);
 
         sessionStatus.setComplete();
@@ -84,13 +84,10 @@ public class ClassicModelsController {
     }
 
     @PostMapping("/new")
-    public String newBank(@ModelAttribute BankTransactionRecord btr,
+    public String newBankTransaction(@ModelAttribute BankTransactionRecord btr,
             RedirectAttributes redirectAttributes) {
-
-        btr.setCustomerNumber(333L);
-        btr.setCheckNumber("NF959653");
-
-        int inserted = classicModelsService.newBankTransaction(btr);
+       
+        classicModelsService.newBankTransaction(btr);
         redirectAttributes.addFlashAttribute(INSERT_DELETE_OR_UPDATE_BANK_TRANSACTION_ATTR, btr);
 
         return "redirect:success";
@@ -104,7 +101,7 @@ public class ClassicModelsController {
         if (model.containsAttribute(BANK_TRANSACTION_ATTR)) {
 
             BankTransactionRecord btr = (BankTransactionRecord) model.getAttribute(BANK_TRANSACTION_ATTR);
-            int deleted = classicModelsService.deleteBankTransaction(btr);
+            classicModelsService.deleteBankTransaction(btr);
             sessionStatus.setComplete();
 
             redirectAttributes.addFlashAttribute(INSERT_DELETE_OR_UPDATE_BANK_TRANSACTION_ATTR, btr);
@@ -124,7 +121,7 @@ public class ClassicModelsController {
     }
 
     @GetMapping("/reset/{page}")
-    public String refresh(@PathVariable(name = "page") String page, Model model) {
+    public String reset(@PathVariable(name = "page") String page, Model model) {
 
         if (model.containsAttribute(BANK_TRANSACTION_ATTR)) {
             ((BankTransactionRecord) model.getAttribute(BANK_TRANSACTION_ATTR)).reset();

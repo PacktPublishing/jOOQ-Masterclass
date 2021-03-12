@@ -28,30 +28,28 @@ public class ClassicModelsRepository {
 
     public BankTransactionRecord fetchBankTransaction(Long id) {
 
-        BankTransactionRecord result = ctx.selectFrom(BANK_TRANSACTION)
+        return ctx.selectFrom(BANK_TRANSACTION)
                 .where(BANK_TRANSACTION.TRANSACTION_ID.eq(id))
                 .fetchOne();
-
-        return result;
     }
 
     @Transactional
-    public int newBankTransaction(BankTransactionRecord ntb) {
+    public int newBankTransaction(BankTransactionRecord btr) {
 
-        ctx.attach(ntb);
-        //or, like this ntb.attach(ctx.configuration());
-        return ntb.insert();
+        ctx.attach(btr); //or, like this btr.attach(ctx.configuration());
+        
+        return btr.insert();
     }
 
     @Transactional
-    public int updateBankTransaction(BankTransactionRecord utb) {
+    public int updateBankTransaction(BankTransactionRecord btr) {
 
-        return utb.update();
+        return btr.update();
     }
 
     @Transactional
-    public int deleteBankTransaction(BankTransactionRecord dtb) {
+    public int deleteBankTransaction(BankTransactionRecord btr) {
 
-        return dtb.delete();
+        return btr.delete();
     }
 }

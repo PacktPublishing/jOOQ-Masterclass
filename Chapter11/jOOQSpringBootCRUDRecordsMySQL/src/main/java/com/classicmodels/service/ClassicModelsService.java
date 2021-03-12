@@ -24,18 +24,28 @@ public class ClassicModelsService {
         return classicModelsRepository.fetchBankTransaction(id);
     }
 
-    public int newBankTransaction(BankTransactionRecord ntb) {
+    public void newBankTransaction(BankTransactionRecord btr) {
 
-        return classicModelsRepository.newBankTransaction(ntb);
+        // we should know to which payment this transaction belongs
+        btr.setCustomerNumber(333L);
+        btr.setCheckNumber("NF959653");
+
+        int inserted = classicModelsRepository.newBankTransaction(btr);
+        
+        // take decision based on *inserted* value        
     }
 
-    public int updateBankTransaction(BankTransactionRecord utb) {
+    public void updateBankTransaction(BankTransactionRecord btr) {
 
-        return classicModelsRepository.updateBankTransaction(utb);
+        int updated = classicModelsRepository.updateBankTransaction(btr);
+        
+        // take decision based on *updated* value        
     }
 
-    public int deleteBankTransaction(BankTransactionRecord dtb) {
+    public void deleteBankTransaction(BankTransactionRecord btr) {
 
-        return classicModelsRepository.deleteBankTransaction(dtb);
+        int deleted = classicModelsRepository.deleteBankTransaction(btr);
+        
+        // take decision based on *deleted* value        
     }
 }
