@@ -23,8 +23,9 @@ public class MainApplication {
     public ApplicationRunner init() {
         return args -> {
 
-            classicModelsService.dontRollbackJOOQTransaction();
-            // classicModelsService.nestedJOOQTransaction();
+            // classicModelsService.rollbackJOOQTransaction();
+            // classicModelsService.dontRollbackJOOQTransaction();
+            classicModelsService.nestedJOOQTransaction();
             // classicModelsService.nestedDontRollbackOuterJOOQTransaction();
         };
     }

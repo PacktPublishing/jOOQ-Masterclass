@@ -14,6 +14,24 @@ public class ClassicModelsRepository {
     public ClassicModelsRepository(DSLContext ctx) {
         this.ctx = ctx;        
     }
+    
+    public void rollbackJOOQTransaction() {
+
+        ctx.transaction(configuration -> {
+            
+                DSL.using(configuration).delete(SALE) // or, configuration.dsl()
+                        .where(SALE.SALE_ID.eq(1L))
+                        .execute();
+
+                DSL.using(configuration).insertInto(TOKEN)                    
+                        .set(TOKEN.SALE_ID, 1L)
+                        .set(TOKEN.AMOUNT, 1000d)
+                        .execute();
+
+                // at this moment transaction should commit, but the error caused by                 
+                // the previous INSERT will lead to a rollback
+        });
+    }
 
     public void dontRollbackJOOQTransaction() {
 
@@ -24,9 +42,8 @@ public class ClassicModelsRepository {
                         .where(SALE.SALE_ID.eq(1L))
                         .execute();
 
-                DSL.using(configuration).insertInto(TOKEN)
+                DSL.using(configuration).insertInto(TOKEN)                        
                         .set(TOKEN.SALE_ID, 1L)
-                        .set(TOKEN.TOKEN_ID, 1L)
                         .set(TOKEN.AMOUNT, 1000d)
                         .execute();
             } catch (RuntimeException e) {
@@ -40,15 +57,14 @@ public class ClassicModelsRepository {
         ctx.transaction(outer -> { 
 
             DSL.using(outer).delete(SALE) // or, outer.dsl()
-                    .where(SALE.SALE_ID.eq(1L))
+                    .where(SALE.SALE_ID.eq(2L))
                     .execute();
 
             // savepoint created
             DSL.using(outer)
                     .transaction(inner -> {
                         DSL.using(inner).insertInto(TOKEN) // or, inner.dsl()
-                                .set(TOKEN.SALE_ID, 1L)
-                                .set(TOKEN.TOKEN_ID, 1L)
+                                .set(TOKEN.SALE_ID, 1L)                                
                                 .set(TOKEN.AMOUNT, 1000d)
                                 .execute();
                     });
@@ -68,8 +84,7 @@ public class ClassicModelsRepository {
                     DSL.using(outer)
                             .transaction(inner -> {
                                 DSL.using(inner).insertInto(TOKEN)
-                                        .set(TOKEN.SALE_ID, 1L)
-                                        .set(TOKEN.TOKEN_ID, 1L)
+                                        .set(TOKEN.SALE_ID, 1L)                                        
                                         .set(TOKEN.AMOUNT, 1000d)
                                         .execute();
                             });

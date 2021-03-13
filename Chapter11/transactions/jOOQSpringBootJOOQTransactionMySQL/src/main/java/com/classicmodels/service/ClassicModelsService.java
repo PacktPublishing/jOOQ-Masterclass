@@ -11,6 +11,11 @@ public class ClassicModelsService {
     public ClassicModelsService(ClassicModelsRepository classicModelsRepository) {
         this.classicModelsRepository = classicModelsRepository;
     }
+    
+    public void rollbackJOOQTransaction() {
+        
+        classicModelsRepository.rollbackJOOQTransaction();
+    }
 
     public void dontRollbackJOOQTransaction() {
 
