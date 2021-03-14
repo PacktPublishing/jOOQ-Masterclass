@@ -16,7 +16,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@SessionAttributes({ClassicModelsController.PAYMENT_ATTR, ClassicModelsController.ALL_PAYMENT_ATTR})
+@SessionAttributes({ClassicModelsController.PAYMENT_ATTR})
 public class ClassicModelsController {
 
     protected static final String ALL_PAYMENT_ATTR = "all";
