@@ -7,7 +7,6 @@ import static jooq.generated.tables.Sale.SALE;
 import static jooq.generated.tables.Token.TOKEN;
 import jooq.generated.tables.records.EmployeeRecord;
 import jooq.generated.tables.records.SaleRecord;
-import org.jooq.Cursor;
 import org.jooq.DSLContext;
 import org.jooq.Result;
 import org.jooq.impl.DSL;
