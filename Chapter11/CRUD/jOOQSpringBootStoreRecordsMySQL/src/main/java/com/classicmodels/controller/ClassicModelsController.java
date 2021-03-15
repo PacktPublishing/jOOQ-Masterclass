@@ -1,6 +1,7 @@
 package com.classicmodels.controller;
 
 import com.classicmodels.service.ClassicModelsService;
+import java.math.BigDecimal;
 import java.util.UUID;
 import jooq.generated.tables.records.PaymentRecord;
 import org.springframework.stereotype.Controller;
@@ -38,6 +39,7 @@ public class ClassicModelsController {
             PaymentRecord pr = new PaymentRecord();
             pr.setCustomerNumber(103L);
             pr.setCheckNumber(UUID.randomUUID().toString().substring(0, 8).toUpperCase());
+            pr.setInvoiceAmount(BigDecimal.ONE);
 
             model.addAttribute(PAYMENT_ATTR, pr);
         }
