@@ -11,6 +11,7 @@ public class JooqSetting {
     public Settings jooqSettings() {
         return new Settings()       
                 .withUpdateRecordTimestamp(true) // this is default, so it can be omitted                
-                .withExecuteWithOptimisticLocking(true);                
+                .withExecuteWithOptimisticLocking(true)
+                .withExecuteWithOptimisticLockingExcludeUnversioned(true);                
     }
 }
