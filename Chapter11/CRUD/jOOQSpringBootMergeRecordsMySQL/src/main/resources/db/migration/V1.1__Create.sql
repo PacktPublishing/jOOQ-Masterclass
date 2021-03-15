@@ -262,7 +262,7 @@ CREATE TABLE `payment` (
   `payment_date` timestamp NOT NULL DEFAULT NOW(),
   `invoice_amount` decimal(10,2) NOT NULL,
   `caching_date` timestamp DEFAULT NULL,  
-  `version` int DEFAULT 0,
+  `version` int NOT NULL DEFAULT 0,
   `modified` timestamp NOT NULL DEFAULT NOW(),
   PRIMARY KEY (`customer_number`,`check_number`),
   CONSTRAINT `unique_check_number` UNIQUE (`check_number`),
