@@ -1,6 +1,7 @@
 package com.classicmodels.controller;
 
 import com.classicmodels.service.ClassicModelsService;
+import java.math.BigDecimal;
 import jooq.generated.tables.records.PaymentRecord;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,7 +30,7 @@ public class ClassicModelsController {
                 classicModelsService.loadAllPayment103());
 
         model.addAttribute(PAYMENT_ATTR,
-                new PaymentRecord(103L, null, null, null, null));
+                new PaymentRecord(103L, null, null, BigDecimal.ONE, null));
 
         return "payments";
     }
