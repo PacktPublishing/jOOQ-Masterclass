@@ -75,7 +75,7 @@ public class ClassicModelsRepository {
                             .join(PRODUCT)
                             .onKey()
                             // lock only rows from PRODUCT
-                            .forUpdate()//.of(PRODUCT.PRODUCT_NAME) // if of() is removed then the lock 
+                            .forUpdate().of(PRODUCT.PRODUCT_NAME) // if of() is removed then the lock 
                             .fetch();                             // cannot be acquired since tA holds the lock                            
                                                                   // on PRODUCTLINE rows and forUpdate() attempts                    
                 }                                                 // to lock both tables
