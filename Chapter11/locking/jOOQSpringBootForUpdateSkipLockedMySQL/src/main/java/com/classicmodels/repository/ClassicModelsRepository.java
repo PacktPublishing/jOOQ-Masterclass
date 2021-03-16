@@ -38,6 +38,7 @@ public class ClassicModelsRepository {
                     log.info("Starting first transaction (A) ...");
 
                     Result<ProductRecord> products1 = ctx.selectFrom(PRODUCT)
+                            .where(PRODUCT.PRODUCT_DESCRIPTION.eq("PENDING"))
                             .orderBy(PRODUCT.PRODUCT_ID)
                             .limit(3)
                             .forUpdate()
@@ -72,6 +73,7 @@ public class ClassicModelsRepository {
                     log.info("Starting second transaction (B) ...");
 
                     Result<ProductRecord> products2 = ctx.selectFrom(PRODUCT)
+                            .where(PRODUCT.PRODUCT_DESCRIPTION.eq("PENDING"))
                             .orderBy(PRODUCT.PRODUCT_ID)
                             .limit(3)
                             .forUpdate()
