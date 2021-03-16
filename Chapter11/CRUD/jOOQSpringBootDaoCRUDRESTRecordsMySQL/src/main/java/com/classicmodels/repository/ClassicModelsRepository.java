@@ -33,7 +33,7 @@ public class ClassicModelsRepository {
 
         BankTransaction result = ctx.selectFrom(BANK_TRANSACTION)
                 .where(BANK_TRANSACTION.TRANSACTION_ID.eq(id))
-                .fetchOneInto(BankTransaction.class);
+                .fetchSingleInto(BankTransaction.class);
 
         return result;
     }

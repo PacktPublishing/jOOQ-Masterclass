@@ -20,7 +20,7 @@ public class ClassicModelsRepository {
 
         var product = ctx.selectFrom(PRODUCT)
                 .where(PRODUCT.PRODUCT_ID.eq(id))
-                .fetchOne();
+                .fetchSingle();
 
         return product;
     }

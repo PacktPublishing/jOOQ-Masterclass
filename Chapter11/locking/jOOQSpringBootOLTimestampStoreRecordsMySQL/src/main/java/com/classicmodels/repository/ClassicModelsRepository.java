@@ -30,7 +30,7 @@ public class ClassicModelsRepository {
         return ctx.selectFrom(PAYMENT)
                 .where(row(PAYMENT.CUSTOMER_NUMBER, PAYMENT.CHECK_NUMBER)
                         .eq(row(nr, ch)))
-                .fetchOne();
+                .fetchSingle();
     }
 
     @Transactional
@@ -43,10 +43,7 @@ public class ClassicModelsRepository {
     }
     
     public void refreshPayment(PaymentRecord pr) {
-        
-        ctx.attach(pr);
-        // or, pr.attach(ctx.configuration());
-        
+                  
         pr.refresh();
     }
 }   

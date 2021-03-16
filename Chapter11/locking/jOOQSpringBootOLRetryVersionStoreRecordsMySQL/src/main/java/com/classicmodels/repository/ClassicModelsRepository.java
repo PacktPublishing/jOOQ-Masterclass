@@ -34,7 +34,7 @@ public class ClassicModelsRepository {
         return ctx.selectFrom(PAYMENT)
                 .where(row(PAYMENT.CUSTOMER_NUMBER, PAYMENT.CHECK_NUMBER)
                         .eq(row(nr, ch)))
-                .fetchOne();
+                .fetchSingle();
     }
 
     @Transactional
