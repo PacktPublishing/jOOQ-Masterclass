@@ -37,7 +37,7 @@ public class ClassicModelsRepository {
 
                     ctx.selectFrom(PRODUCT)
                             .forUpdate()
-                            .noWait() // acquire the lock immediately
+                            .noWait() // acquire the lock immediately or fails immediately
                             .fetch();
 
                     try {
