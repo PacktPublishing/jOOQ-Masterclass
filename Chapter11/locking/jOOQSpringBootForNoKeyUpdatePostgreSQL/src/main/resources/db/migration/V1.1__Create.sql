@@ -123,14 +123,14 @@ CREATE SEQUENCE token_seq START 1000000;
 CREATE TABLE token (
   token_id bigint NOT NULL DEFAULT NEXTVAL ('sale_seq'),    
   sale_id bigint NOT NULL,
-  amount float NOT NULL,    
+  amount float NOT NULL,   
+  updated_on timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (token_id)
  ,  
   CONSTRAINT tokens_ibfk_1 FOREIGN KEY (sale_id) REFERENCES sale (sale_id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ;
 
 CREATE INDEX token_id ON token (token_id);
-
 
 /*Table structure for table `customer` */
 
@@ -290,9 +290,11 @@ CREATE TABLE top3product (
 CREATE TABLE payment (
   customer_number bigint NOT NULL,
   check_number varchar(50) NOT NULL,
-  payment_date timestamp NOT NULL,
+  payment_date timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   invoice_amount decimal(10,2) NOT NULL,
   caching_date timestamp DEFAULT NULL,
+  version int NOT NULL DEFAULT 0,
+  modified timestamp NOT NULL DEFAULT NOW(),
   PRIMARY KEY (customer_number,check_number),
   CONSTRAINT unique_check_number UNIQUE(check_number),
   CONSTRAINT payments_ibfk_1 FOREIGN KEY (customer_number) REFERENCES customer (customer_number)

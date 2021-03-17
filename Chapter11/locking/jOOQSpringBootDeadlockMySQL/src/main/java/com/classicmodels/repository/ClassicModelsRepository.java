@@ -2,10 +2,8 @@ package com.classicmodels.repository;
 
 import java.util.logging.Logger;
 import static jooq.generated.tables.Order.ORDER;
-import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Sale.SALE;
 import jooq.generated.tables.records.OrderRecord;
-import jooq.generated.tables.records.ProductRecord;
 import jooq.generated.tables.records.SaleRecord;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
