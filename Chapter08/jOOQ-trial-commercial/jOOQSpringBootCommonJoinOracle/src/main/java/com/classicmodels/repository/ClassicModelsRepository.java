@@ -32,6 +32,7 @@ public class ClassicModelsRepository {
     public void fetchEmployeeNameOfficeCityInnerJoin() {
 
         // 1.1 and 1.2 render the same SQL
+        // force INNER to be rendered: ctx.configuration().set(new Settings().withRenderOptionalInnerKeyword(RenderOptionalKeyword.ON)).dsl() ...
         System.out.println("EXAMPLE 1.1 (INNER JOIN)\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, OFFICE.CITY)
                         .from(EMPLOYEE)
@@ -73,6 +74,7 @@ public class ClassicModelsRepository {
     // EXAMPLE 2 - typical LEFT OUTER JOIN
     public void fetchEmployeeNameSaleLeftOuterJoin() {
 
+        // force OUTER to be avoided: ctx.configuration().set(new Settings().withRenderOptionalOuterKeyword(RenderOptionalKeyword.OFF)).dsl() 
         System.out.println("EXAMPLE 2 (LEFT OUTER JOIN)\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, SALE.SALE_)
                         .from(EMPLOYEE)
