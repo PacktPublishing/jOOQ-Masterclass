@@ -49,7 +49,7 @@ public class ClassicModelsRepository {
         );
     }
     
-    // EXAMPLE 3 - SEMI JOIN via LEFT JOIN (but, DON'T do this since this is actually a JOIN)
+    // EXAMPLE 3 - SEMI JOIN via LEFT JOIN and IS NOT NULL
     // It just doesn’t communicate the intent of an Anti Join at all
     public void badEmployeeCustomerViaLeftJoinAndIsNotNull() {
 
@@ -220,7 +220,7 @@ public class ClassicModelsRepository {
         );
     }
     
-    // EXAMPLE 9 - ANTI JOIN via LEFT JOIN (but, DON'T do this since this is actually a JOIN)
+    // EXAMPLE 9 - ANTI JOIN via LEFT JOIN and IS NULL
     // It just doesn’t communicate the intent of an Anti Join at all
     public void badEmployeeCustomerViaLeftJoinAndIsNull() {
 
