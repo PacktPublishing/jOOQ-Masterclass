@@ -44,8 +44,7 @@ public class ClassicModelsRepository {
                                 .on(EMPLOYEE.OFFICE_CODE.eq(OFFICE.OFFICE_CODE)))
                         .fetch()
         );
-
-        // 1.3 and 1.4 render the same SQL
+      
         System.out.println("EXAMPLE 1.3\n"
                 + ctx.select()
                         .from(MANAGER)

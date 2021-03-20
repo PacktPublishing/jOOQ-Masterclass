@@ -11,6 +11,7 @@ import jooq.generated.tables.Sale;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.concat;
+import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.sum;
 import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
@@ -156,5 +157,22 @@ public class ClassicModelsRepository {
                         .orderBy(SALE.EMPLOYEE_NUMBER)
                         .fetch()
         );
+        
     }
+    
+        public void q() {
+            
+            /*
+            SELECT e1.employee_id, e1.manager_id, e2.employee_id
+   FROM employees e1, employees e2
+   WHERE e1.manager_id(+) = e2.employee_id
+   ORDER BY e1.employee_id, e1.manager_id, e2.employee_id;
+            */
+            
+            ctx.select(field("e1.first_name"), field("e2.first_name"))
+                    .from(EMPLOYEE.as("e1"), EMPLOYEE.as("e2"))
+                    .where(field("e1.first_name").plus().eq(field("e2.first_name")))
+                    .orderBy(field("e1.first_name"))
+                    .fetch();
+        }    
 }

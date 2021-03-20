@@ -181,7 +181,7 @@ CREATE TABLE sale (
   trend varchar2(10) DEFAULT NULL,
   PRIMARY KEY (sale_id)
 ,  
-  CONSTRAINT sales_ibfk_1 FOREIGN KEY (employee_number) REFERENCES employee (employee_number) ON UPDATE CASCADE,
+  CONSTRAINT sales_ibfk_1 FOREIGN KEY (employee_number) REFERENCES employee (employee_number),
   CONSTRAINT enum_rate_check CHECK (rate IN('SILVER', 'GOLD', 'PLATINUM')),
   CONSTRAINT enum_vat_check CHECK (vat IN('NONE', 'MIN', 'MAX'))
 ) ;
@@ -206,19 +206,17 @@ BEGIN
 END;
 /
 
-/*Table structure for table `token` */
+/*Table structure for table token */
 
 CREATE TABLE token (
   token_id number(20) NOT NULL,    
   sale_id number(20) NOT NULL,
   amount float NOT NULL,    
-  updated_on timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_on timestamp DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (token_id)
  ,  
-  CONSTRAINT tokens_ibfk_1 FOREIGN KEY (sale_id) REFERENCES sale (sale_id) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT tokens_ibfk_1 FOREIGN KEY (sale_id) REFERENCES sale (sale_id) ON DELETE CASCADE
 ) ;
-
-CREATE INDEX token_id ON token (token_id);
 
 -- Generate ID using sequence and trigger
 BEGIN
@@ -251,7 +249,7 @@ CREATE TABLE customer (
   first_buy_date int DEFAULT NULL,
   PRIMARY KEY (customer_number)
  ,
-  CONSTRAINT customers_ibfk_1 FOREIGN KEY (sales_rep_employee_number) REFERENCES employee (employee_number) ON UPDATE CASCADE
+  CONSTRAINT customers_ibfk_1 FOREIGN KEY (sales_rep_employee_number) REFERENCES employee (employee_number)
 ) ;
 
 -- Generate ID using sequence and trigger
@@ -508,11 +506,11 @@ CREATE TABLE top3product (
 CREATE TABLE payment (
   customer_number number(10) NOT NULL,
   check_number varchar2(50) NOT NULL,
-  payment_date timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  payment_date timestamp DEFAULT CURRENT_TIMESTAMP,
   invoice_amount number(10,2) NOT NULL,
   caching_date timestamp DEFAULT NULL,
-  version int NOT NULL DEFAULT 0,
-  modified timestamp NOT NULL DEFAULT NOW(),
+  version int DEFAULT 0,
+  modified timestamp DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (customer_number,check_number),
   CONSTRAINT unique_check_number UNIQUE (check_number),
   CONSTRAINT payments_ibfk_1 FOREIGN KEY (customer_number) REFERENCES customer (customer_number)
@@ -528,7 +526,7 @@ CREATE TABLE bank_transaction (
   caching_date timestamp DEFAULT SYSTIMESTAMP,
   customer_number number(10) NOT NULL,
   check_number varchar2(50) NOT NULL, 
-  status varchar(50) NOT NULL DEFAULT 'SUCCESS',
+  status varchar(50) DEFAULT 'SUCCESS',
   PRIMARY KEY (transaction_id),  
   CONSTRAINT bank_transaction_ibfk_1 FOREIGN KEY (customer_number,check_number) REFERENCES payment (customer_number,check_number)
 ) ;
@@ -612,4 +610,5 @@ BEGIN
     RETURN table_result;
 END;
 /
+/* END */
 /* END */

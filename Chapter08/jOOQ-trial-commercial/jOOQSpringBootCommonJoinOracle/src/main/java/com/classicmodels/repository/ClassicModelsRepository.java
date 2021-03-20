@@ -49,7 +49,6 @@ public class ClassicModelsRepository {
                         .fetch()
         );
 
-        // 1.3 and 1.4 render the same SQL
         System.out.println("EXAMPLE 1.3\n"
                 + ctx.select()
                         .from(MANAGER)
@@ -71,28 +70,49 @@ public class ClassicModelsRepository {
         );
     }
 
-    // EXAMPLE 2 - typical LEFT OUTER JOIN
+    // EXAMPLES 2.1 and 2.2 - LEFT OUTER JOIN
     public void fetchEmployeeNameSaleLeftOuterJoin() {
 
+        // EXAMPLE 2.1 - typical LEFT OUTER JOIN
         // force OUTER to be avoided: ctx.configuration().set(new Settings().withRenderOptionalOuterKeyword(RenderOptionalKeyword.OFF)).dsl() 
-        System.out.println("EXAMPLE 2 (LEFT OUTER JOIN)\n"
+        System.out.println("EXAMPLE 2.1 (LEFT OUTER JOIN)\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, SALE.SALE_)
                         .from(EMPLOYEE)
                         .leftOuterJoin(SALE)
                         .on(EMPLOYEE.EMPLOYEE_NUMBER.eq(SALE.EMPLOYEE_NUMBER))
                         .fetch()
         );
+
+        // EXAMPLE 2.2 - Oracle LEFT OUTER JOIN style via (+)
+        System.out.println("EXAMPLE 2.2 (LEFT OUTER JOIN)\n"
+                + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, SALE.SALE_)
+                        .from(EMPLOYEE, SALE)
+                        .where(SALE.EMPLOYEE_NUMBER.plus().eq(EMPLOYEE.EMPLOYEE_NUMBER))
+                        // by swapping SALE with EMPLOYEE in WHERE, we obtain a RIGHT OUTER JOIN
+                        // .where(EMPLOYEE.EMPLOYEE_NUMBER.plus().eq(SALE.EMPLOYEE_NUMBER)) 
+                        .fetch()
+        );
     }
 
-    // EXAMPLE 3 - typical LEFT OUTER JOIN (EXCLUSIVE)
+    // EXAMPLES 3.1 and 3.2 - LEFT OUTER JOIN (EXCLUSIVE)
     public void fetchEmployeeNameSaleLeftOuterJoinExclusive() {
 
-        System.out.println("EXAMPLE 3 (LEFT OUTER JOIN (EXCLUSIVE))\n"
+        // EXAMPLE 3.1 - typical LEFT OUTER JOIN (EXCLUSIVE)
+        System.out.println("EXAMPLE 3.1 (LEFT OUTER JOIN (EXCLUSIVE))\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, SALE.SALE_)
                         .from(EMPLOYEE)
                         .leftOuterJoin(SALE)
                         .on(EMPLOYEE.EMPLOYEE_NUMBER.eq(SALE.EMPLOYEE_NUMBER))
                         .where(SALE.EMPLOYEE_NUMBER.isNull())
+                        .fetch()
+        );
+
+        // EXAMPLE 3.2 - Oracle LEFT OUTER JOIN (EXCLUSIVE) style via (+)
+        System.out.println("EXAMPLE 3.2 (LEFT OUTER JOIN (EXCLUSIVE))\n"
+                + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, SALE.SALE_)
+                        .from(EMPLOYEE, SALE)
+                        .where(SALE.EMPLOYEE_NUMBER.plus().eq(EMPLOYEE.EMPLOYEE_NUMBER)
+                                .and(SALE.EMPLOYEE_NUMBER.isNull()))
                         .fetch()
         );
     }

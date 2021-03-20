@@ -8210,6 +8210,6 @@ select 1, 1, 1500 from dual union all
 
 select 2, 1, 2687.55 from dual union all
 
-select 3, 1, 1095.09) from dual;
+select 3, 1, 1095.09 from dual;
 
 /* END */
