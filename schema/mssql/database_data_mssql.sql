@@ -740,7 +740,7 @@ insert  into product(product_id,product_name,product_line,product_scale,product_
 
 (5,'1972 Alfa Romeo GTA','Classic Cars','1:10','Motor City Art Classics','PENDING',3252,'85.68','136.00'),
 
-(6,'1962 LanciaA Delta 16V','Classic Cars','1:10','PENDING',6791,'103.42','147.74'),
+(6,'1962 LanciaA Delta 16V','Classic Cars','1:10','Welly Diecast Productions', 'PENDING',6791,'103.42','147.74'),
 
 (7,'1968 Ford Mustang','Classic Cars','1:12','Autoart Studio Design','Hood, doors and trunk all open to reveal highly detailed interior features. Steering wheel actually turns the front wheels. Color dark green.',68,'95.34','194.57'),
 
@@ -8273,6 +8273,7 @@ end catch
 
 /*Data for the table `token` */
 
+SET IDENTITY_INSERT [token] ON
 begin try
 insert into token(token_id,sale_id,amount) values 
 
@@ -8284,5 +8285,7 @@ insert into token(token_id,sale_id,amount) values
 end try
 begin catch
 end catch
+SET IDENTITY_INSERT [token] OFF;
 
 /* END */
+

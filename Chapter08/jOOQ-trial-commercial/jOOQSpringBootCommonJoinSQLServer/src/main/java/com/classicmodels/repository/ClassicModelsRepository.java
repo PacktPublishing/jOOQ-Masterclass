@@ -5,6 +5,9 @@ import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Manager.MANAGER;
 import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.OfficeHasManager.OFFICE_HAS_MANAGER;
+import static jooq.generated.tables.Order.ORDER;
+import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
+import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.field;
@@ -17,9 +20,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional(readOnly = true)
 public class ClassicModelsRepository {
-
+    
     private final DSLContext ctx;
-
+    
     public ClassicModelsRepository(DSLContext ctx) {
         this.ctx = ctx;
     }
@@ -36,7 +39,7 @@ public class ClassicModelsRepository {
                         .on(EMPLOYEE.OFFICE_CODE.eq(OFFICE.OFFICE_CODE))
                         .fetch()
         );
-
+        
         System.out.println("EXAMPLE 1.2 (INNER JOIN)\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, OFFICE.CITY)
                         .from(EMPLOYEE
@@ -54,7 +57,7 @@ public class ClassicModelsRepository {
                         .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))
                         .fetch()
         );
-
+        
         System.out.println("EXAMPLE 1.4\n"
                 + ctx.select()
                         .from(MANAGER
@@ -62,6 +65,18 @@ public class ClassicModelsRepository {
                                         .innerJoin(OFFICE)
                                         .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE)))
                                 .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID)))
+                        .fetch()
+        );
+
+        // specify the order of joins via FORCE ORDER
+        System.out.println("EXAMPLE 1.5\n"
+                + ctx.select(PRODUCT.PRODUCT_ID, ORDER.ORDER_ID)
+                        .from(PRODUCT)
+                        .innerJoin(ORDERDETAIL)
+                        .on(ORDERDETAIL.PRODUCT_ID.eq(PRODUCT.PRODUCT_ID))
+                        .innerJoin(ORDER)
+                        .on(ORDER.ORDER_ID.eq(ORDERDETAIL.ORDER_ID))
+                        .option("OPTION (FORCE ORDER)")
                         .fetch()
         );
     }
@@ -81,7 +96,7 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 3 - typical LEFT OUTER JOIN (EXCLUSIVE)
     public void fetchEmployeeNameSaleLeftOuterJoinExclusive() {
-
+        
         System.out.println("EXAMPLE 3 (LEFT OUTER JOIN (EXCLUSIVE))\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, SALE.SALE_)
                         .from(EMPLOYEE)
@@ -94,7 +109,7 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 4 - typical RIGHT OUTER JOIN
     public void fetchEmployeeNameSaleRightOuterJoin() {
-
+        
         System.out.println("EXAMPLE 4 (RIGHT OUTER JOIN)\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, SALE.SALE_)
                         .from(EMPLOYEE)
@@ -106,7 +121,7 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 5 - typical RIGHT OUTER JOIN (EXCLUSIVE)
     public void fetchEmployeeNameSaleRightOuterJoinExclusive() {
-
+        
         System.out.println("EXAMPLE 5 (RIGHT OUTER JOIN (EXCLUSIVE))\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, SALE.SALE_)
                         .from(EMPLOYEE)
@@ -119,7 +134,7 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 6 - FULL OUTER JOIN
     public void fetchOfficeCustomerdetailFullOuterJoin() {
-
+        
         System.out.println("EXAMPLE 6 (FULL OUTER JOIN)\n"
                 + ctx.select(OFFICE.CITY, OFFICE.COUNTRY, OFFICE.OFFICE_CODE,
                         CUSTOMERDETAIL.CITY, CUSTOMERDETAIL.COUNTRY, CUSTOMERDETAIL.CUSTOMER_NUMBER)
@@ -129,10 +144,10 @@ public class ClassicModelsRepository {
                         .fetch()
         );
     }
-    
+
     // EXAMPLE 7 - FULL OUTER JOIN (EXCLUSIVE)
     public void fetchOfficeCustomerdetailFullOuterJoinExclusive() {
-
+        
         System.out.println("EXAMPLE 7 (FULL OUTER JOIN (EXCLUSIVE))\n"
                 + ctx.select(OFFICE.CITY, OFFICE.COUNTRY, OFFICE.OFFICE_CODE,
                         CUSTOMERDETAIL.CITY, CUSTOMERDETAIL.COUNTRY, CUSTOMERDETAIL.CUSTOMER_NUMBER)
@@ -143,16 +158,16 @@ public class ClassicModelsRepository {
                         .fetch()
         );
     }
-    
+
     // EXAMPLE 8 - emulate FULL OUTER JOIN via UNION    
     public void fetchOfficeCustomerdetailFullOuterJoinViaUnion() {
-
+        
         System.out.println("EXAMPLE 8 (FULL OUTER JOIN via UNION)\n"
                 + ctx.select(OFFICE.CITY, OFFICE.COUNTRY, OFFICE.OFFICE_CODE,
                         CUSTOMERDETAIL.CITY, CUSTOMERDETAIL.COUNTRY, CUSTOMERDETAIL.CUSTOMER_NUMBER)
                         .from(OFFICE)
                         .leftOuterJoin(CUSTOMERDETAIL)
-                        .on(OFFICE.CITY.eq(CUSTOMERDETAIL.CITY))                        
+                        .on(OFFICE.CITY.eq(CUSTOMERDETAIL.CITY))
                         .union(select(OFFICE.CITY, OFFICE.COUNTRY, OFFICE.OFFICE_CODE,
                                 CUSTOMERDETAIL.CITY, CUSTOMERDETAIL.COUNTRY, CUSTOMERDETAIL.CUSTOMER_NUMBER)
                                 .from(OFFICE)
@@ -165,7 +180,7 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 9 - emulate FULL OUTER JOIN (EXCLUSIVE) via UNION
     public void fetchOfficeCustomerdetailFullOuterJoinExclusiveViaUnion() {
-
+        
         System.out.println("EXAMPLE 9 (FULL OUTER JOIN (EXCLUSIVE) via UNION)\n"
                 + ctx.select(OFFICE.CITY, OFFICE.COUNTRY, OFFICE.OFFICE_CODE,
                         CUSTOMERDETAIL.CITY, CUSTOMERDETAIL.COUNTRY, CUSTOMERDETAIL.CUSTOMER_NUMBER)
@@ -182,10 +197,10 @@ public class ClassicModelsRepository {
                         .fetch()
         );
     }
-    
+
     // EXAMPLE 10
     public void crossJoinFirst2EmployeeFirst2Office() {
-
+        
         System.out.println("EXAMPLE 10\n"
                 + ctx.select()
                         .from(
@@ -199,16 +214,16 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 11
     public void innerJoinFirst5EmployeeFirst5Office() {
-
+        
         System.out.println("EXAMPLE 11\n"
                 + ctx.select()
                         .from(
-                                select(EMPLOYEE.OFFICE_CODE.as("a"), 
+                                select(EMPLOYEE.OFFICE_CODE.as("a"),
                                         EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME).from(EMPLOYEE)
                                         .orderBy(EMPLOYEE.SALARY)
                                         .limit(5)
                                         .asTable("at")
-                                        .innerJoin(select(OFFICE.OFFICE_CODE.as("b"), 
+                                        .innerJoin(select(OFFICE.OFFICE_CODE.as("b"),
                                                 OFFICE.CITY, OFFICE.COUNTRY).from(OFFICE)
                                                 .orderBy(OFFICE.COUNTRY)
                                                 .limit(5).asTable("bt"))
@@ -217,11 +232,11 @@ public class ClassicModelsRepository {
                         .fetch()
         );
     }
-    
+
     // EXAMPLE 12
     @Transactional
     public void insertOfficesInEachCountryOfCustomer() {
-
+        
         System.out.println("EXAMPLE 12\n"
                 + ctx.insertInto(OFFICE)
                         .select(selectDistinct(CUSTOMERDETAIL.CUSTOMER_NUMBER.coerce(String.class),

@@ -6,6 +6,9 @@ import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Manager.MANAGER;
 import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.OfficeHasManager.OFFICE_HAS_MANAGER;
+import static jooq.generated.tables.Order.ORDER;
+import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
+import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.any;
@@ -67,6 +70,17 @@ public class ClassicModelsRepository {
                                         .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE)))
                                 .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID)))
                         .fetch()
+        );
+
+        // specify the order of joins via /*+LEADING(a b)*/ Oracle hint
+        System.out.println("EXAMPLE 1.5\n"
+                + ctx.select(PRODUCT.PRODUCT_ID, ORDER.ORDER_ID)
+                        .hint("/*+LEADING(SYSTEM.ORDERDETAIL SYSTEM.PRODUCT)*/")
+                        .from(PRODUCT)
+                        .innerJoin(ORDERDETAIL)
+                        .on(ORDERDETAIL.PRODUCT_ID.eq(PRODUCT.PRODUCT_ID))
+                        .innerJoin(ORDER)
+                        .on(ORDER.ORDER_ID.eq(ORDERDETAIL.ORDER_ID)).fetch()
         );
     }
 

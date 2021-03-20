@@ -315,7 +315,7 @@ CREATE TABLE payment (
   [invoice_amount] decimal(10,2) NOT NULL,
   [caching_date] datetime DEFAULT NULL,
   [version] int NOT NULL DEFAULT 0,
-  [modified] datetime NOT NULL DEFAULT NOW(),
+  [modified] datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY ([customer_number],[check_number]),
   CONSTRAINT [unique_check_number] UNIQUE([check_number]),
   CONSTRAINT [payments_ibfk_1] FOREIGN KEY ([customer_number]) REFERENCES customer ([customer_number])
