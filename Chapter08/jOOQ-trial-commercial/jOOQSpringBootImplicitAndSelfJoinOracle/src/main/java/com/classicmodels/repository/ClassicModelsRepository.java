@@ -28,13 +28,21 @@ public class ClassicModelsRepository {
     }
 
     /* Implicit JOIN */
-    // EXAMPLE 1 - non-ANSI JOIN syntax - better avoid it
+    // EXAMPLES 1.1 and 1.2 - non-ANSI JOIN syntax - better avoid it
     public void implicitJoinOfficeEmployeeViaWhere() {
 
-        System.out.println("EXAMPLE 1\n"
+        System.out.println("EXAMPLE 1.1\n"
                 + ctx.select(OFFICE.OFFICE_CODE, EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
                         .from(OFFICE, EMPLOYEE)
                         .where(OFFICE.OFFICE_CODE.eq(EMPLOYEE.OFFICE_CODE))
+                        .orderBy(OFFICE.OFFICE_CODE)
+                        .fetch()
+        );
+
+        System.out.println("EXAMPLE 1.2 (using Oracle (+))\n"
+                + ctx.select(OFFICE.OFFICE_CODE, EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
+                        .from(OFFICE, EMPLOYEE)
+                        .where(OFFICE.OFFICE_CODE.plus().eq(EMPLOYEE.OFFICE_CODE))
                         .orderBy(OFFICE.OFFICE_CODE)
                         .fetch()
         );
@@ -123,7 +131,7 @@ public class ClassicModelsRepository {
                         .fetch()
         );
     }
-    
+
     // EXAMPLE 8
     public void selfJoinComparingEmployeeViaNavigationMethod() {
 
@@ -135,8 +143,8 @@ public class ClassicModelsRepository {
                         .fetch()
         );
     }
-    
-        // EXAMPLE 9
+
+    // EXAMPLE 9
     public void selfJoinThreeTimes() {
 
         Sale s1 = SALE.as("s1");
@@ -157,22 +165,6 @@ public class ClassicModelsRepository {
                         .orderBy(SALE.EMPLOYEE_NUMBER)
                         .fetch()
         );
-        
+
     }
-    
-        public void q() {
-            
-            /*
-            SELECT e1.employee_id, e1.manager_id, e2.employee_id
-   FROM employees e1, employees e2
-   WHERE e1.manager_id(+) = e2.employee_id
-   ORDER BY e1.employee_id, e1.manager_id, e2.employee_id;
-            */
-            
-            ctx.select(field("e1.first_name"), field("e2.first_name"))
-                    .from(EMPLOYEE.as("e1"), EMPLOYEE.as("e2"))
-                    .where(field("e1.first_name").plus().eq(field("e2.first_name")))
-                    .orderBy(field("e1.first_name"))
-                    .fetch();
-        }    
 }

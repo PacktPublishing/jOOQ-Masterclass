@@ -22,7 +22,6 @@ public class ClassicModelsService {
         classicModelsRepository.selfJoinEmployee();                                     // EXAMPLE 6
         classicModelsRepository.selfJoinEmployeeViaNavigationMethod();                  // EXAMPLE 7
         classicModelsRepository.selfJoinComparingEmployeeViaNavigationMethod();         // EXAMPLE 8
-        classicModelsRepository.selfJoinThreeTimes();                                   // EXAMPLE 9
-        classicModelsRepository.q();
+        classicModelsRepository.selfJoinThreeTimes();                                   // EXAMPLE 9 
     }
 }
