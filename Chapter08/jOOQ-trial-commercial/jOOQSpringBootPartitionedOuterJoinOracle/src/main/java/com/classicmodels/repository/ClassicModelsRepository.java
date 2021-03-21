@@ -9,6 +9,7 @@ import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.nvl;
 import static org.jooq.impl.DSL.row;
 import static org.jooq.impl.DSL.select;
+import static org.jooq.impl.DSL.selectDistinct;
 import static org.jooq.impl.DSL.sum;
 import static org.jooq.impl.DSL.values;
 import org.springframework.stereotype.Repository;
@@ -23,12 +24,12 @@ public class ClassicModelsRepository {
     public ClassicModelsRepository(DSLContext ctx) {
         this.ctx = ctx;
     }
-    
+
     /*
     Partitioned outer joins is specific to Oracle and it allow us to do the same 
     "densifying" of data using a convenient syntax and an efficient execution plan.
     */
-
+    
     // Fill Gaps in Sparse Data
     public void partitionedOuterJoinExamples() {
 
@@ -44,9 +45,9 @@ public class ClassicModelsRepository {
                         .fetch()
         );
 
-        System.out.println("EXAMPLE 2:\n"
+        System.out.println("EXAMPLE 2.1:\n"
                 + ctx.select(SALE.FISCAL_YEAR, EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME,
-                        sum(nvl(SALE.SALE_, 0.0d)))
+                        sum(nvl(SALE.SALE_, 0.0d)).as("SALES"))
                         .from(EMPLOYEE)
                         .leftOuterJoin(SALE).partitionBy(SALE.FISCAL_YEAR)
                         .on(EMPLOYEE.EMPLOYEE_NUMBER.eq(SALE.EMPLOYEE_NUMBER))
@@ -56,6 +57,21 @@ public class ClassicModelsRepository {
                         .fetch()
         );
 
+        // Example 2 alternative without partitioned (you can easily adapt for examples 1 and 3)
+        System.out.println("EXAMPLE 2.2:\n"
+                + ctx.select(field("FY"), EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME,
+                        sum(nvl(SALE.SALE_, 0.0d)).as("SALES"))
+                        .from(EMPLOYEE)
+                        .crossJoin(selectDistinct(SALE.FISCAL_YEAR.as("FY")).from(SALE))
+                        .leftOuterJoin(SALE)
+                        .on(EMPLOYEE.EMPLOYEE_NUMBER.eq(SALE.EMPLOYEE_NUMBER)
+                                .and(field("fy").eq(SALE.FISCAL_YEAR)))
+                        .where(EMPLOYEE.JOB_TITLE.eq("Sales Rep"))
+                        .groupBy(field("FY"), EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
+                        .orderBy(1, 2)
+                        .fetch()
+        );
+    
         System.out.println("EXAMPLE 3:\n"
                 + ctx.select(field("TB.YEAR"), EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME,
                         sum(nvl(SALE.SALE_, 0.0d)))
