@@ -137,7 +137,7 @@ public class ClassicModelsRepository {
                                         .leftAntiJoin(ORDERDETAIL)
                                         .on(field("OID").eq(ORDERDETAIL.ORDER_ID)
                                                 .and(field("P").eq(ORDERDETAIL.PRODUCT_ID))))
-                                .on(val(1).eq(val(1))))
+                                .on(trueCondition())) // or, val(1).eq(val(1))
                         .fetch()
         );
     }
