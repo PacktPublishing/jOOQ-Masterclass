@@ -691,17 +691,17 @@ insert  into `productlinedetail`(`product_line`,`code`,`line_capacity`,`line_typ
 
 insert  into `product`(`product_id`,`product_name`,`product_line`,`product_scale`,`product_vendor`,`product_description`,`quantity_in_stock`,`buy_price`,`msrp`) values 
 
-(1,'1969 Harley Davidson Ultimate Chopper','Motorcycles','1:10','Min Lin Diecast','This replica features working kickstand, front suspension, gear-shift lever, footbrake lever, drive chain, wheels and steering. All parts are particularly delicate due to their precise scale and require special care and attention.',7933,'48.81','95.70'),
+(1,'1969 Harley Davidson Ultimate Chopper','Motorcycles','1:10','Min Lin Diecast','PENDING',7933,'48.81','95.70'),
 
-(2,'1952 Alpine Renault 1300','Classic Cars','1:10','Classic Metal Creations','Turnable front wheels; steering function; detailed interior; detailed engine; opening hood; opening trunk; opening doors; and detailed chassis.',7305,'98.58','214.30'),
+(2,'1952 Alpine Renault 1300','Classic Cars','1:10','Classic Metal Creations','PENDING',7305,'98.58','214.30'),
 
-(3,'1996 Moto Guzzi 1100i','Motorcycles','1:10','Highway 66 Mini Classics','Official Moto Guzzi logos and insignias, saddle bags located on side of motorcycle, detailed engine, working steering, working suspension, two leather seats, luggage rack, dual exhaust pipes, small saddle bag located on handle bars, two-tone paint with chrome accents, superior die-cast detail , rotating wheels , working kick stand, diecast metal with plastic parts and baked enamel finish.',6625,'68.99','118.94'),
+(3,'1996 Moto Guzzi 1100i','Motorcycles','1:10','Highway 66 Mini Classics','PENDING',6625,'68.99','118.94'),
 
-(4,'2003 Harley-Davidson Eagle Drag Bike','Motorcycles','1:10','Red Start Diecast','Model features, official Harley Davidson logos and insignias, detachable rear wheelie bar, heavy diecast metal with resin parts, authentic multi-color tampo-printed graphics, separate engine drive belts, free-turning front fork, rotating tires and rear racing slick, certificate of authenticity, detailed engine, display stand\r\n, precision diecast replica, baked enamel finish, 1:10 scale model, removable fender, seat and tank cover piece for displaying the superior detail of the v-twin engine',5582,'91.02','193.66'),
+(4,'2003 Harley-Davidson Eagle Drag Bike','Motorcycles','1:10','Red Start Diecast','PENDING',5582,'91.02','193.66'),
 
-(5,'1972 Alfa Romeo GTA','Classic Cars','1:10','Motor City Art Classics','Features include: Turnable front wheels; steering function; detailed interior; detailed engine; opening hood; opening trunk; opening doors; and detailed chassis.',3252,'85.68','136.00'),
+(5,'1972 Alfa Romeo GTA','Classic Cars','1:10','Motor City Art Classics','PENDING',3252,'85.68','136.00'),
 
-(6,'1962 LanciaA Delta 16V','Classic Cars','1:10','Second Gear Diecast','Features include: Turnable front wheels; steering function; detailed interior; detailed engine; opening hood; opening trunk; opening doors; and detailed chassis.',6791,'103.42','147.74'),
+(6,'1962 LanciaA Delta 16V','Classic Cars','1:10','Second Gear Diecast','PENDING',6791,'103.42','147.74'),
 
 (7,'1968 Ford Mustang','Classic Cars','1:12','Autoart Studio Design','Hood, doors and trunk all open to reveal highly detailed interior features. Steering wheel actually turns the front wheels. Color dark green.',68,'95.34','194.57'),
 
@@ -8183,7 +8183,15 @@ insert into sale(sale_id,fiscal_year,sale,employee_number,trend) values
 
 (21, 2003, 25241.43, 1143,'DOWN'),
 
-(22, 2005, 52343.12, 1102,'DOWN') ON DUPLICATE KEY UPDATE sale_id=sale_id;
+(22, 2000, 12434.22, 1370,'DOWN'),
+
+(23, 2007, 9008.22, 1504,'DOWN'),
+
+(24, 2007, 150399.34, 1611,'DOWN'),
+
+(25, 2005, 52343.12, 1102,'DOWN')
+
+ON DUPLICATE KEY UPDATE sale_id=sale_id;
 
 /*Data for the table `top3product` */
 
@@ -8194,5 +8202,15 @@ insert into `top3product`(`product_id`,`product_name`) values
 (1, '1969 Harley Davidson Ultimate Chopper'),
 
 (2, '1952 Alpine Renault 1300') ON DUPLICATE KEY UPDATE product_id=product_id;
+
+/*Data for the table `token` */
+
+insert into `token`(`token_id`,`sale_id`,`amount`) values 
+
+(1, 1, 1500),
+
+(2, 1, 2687.55),
+
+(3, 1, 1095.09) ON DUPLICATE KEY UPDATE token_id=token_id;
 
 /* END */

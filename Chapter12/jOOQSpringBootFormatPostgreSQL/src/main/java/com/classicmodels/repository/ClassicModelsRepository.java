@@ -56,12 +56,13 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 1.1:\n" + result.format());
         System.out.println("EXAMPLE 1.2:\n" + result.format(5)); // format first 5 records
+        System.out.println("EXAMPLE 1.3:\n" + result.format(result.size())); // format all
 
         TXTFormat txtFormat = new TXTFormat()
                 .maxRows(25)
                 .minColWidth(20);
         // try out more options
-        System.out.println("EXAMPLE 1.3:\n" + result.format(txtFormat));
+        System.out.println("EXAMPLE 1.4:\n" + result.format(txtFormat));
 
         // fetch -> format -> export to file        
         try ( BufferedWriter bw = Files.newBufferedWriter(
@@ -79,7 +80,7 @@ public class ClassicModelsRepository {
         }
 
         // format array
-        System.out.println("EXAMPLE 1.4:\n"
+        System.out.println("EXAMPLE 1.5:\n"
                 + ctx.select(DEPARTMENT.DEPARTMENT_ID, DEPARTMENT.TOPIC)
                         .from(DEPARTMENT)
                         .fetch()
@@ -87,7 +88,7 @@ public class ClassicModelsRepository {
         );
 
         // format UDT
-        System.out.println("EXAMPLE 1.5:\n"
+        System.out.println("EXAMPLE 1.6:\n"
                 + ctx.select(MANAGER.MANAGER_ID, MANAGER.MANAGER_EVALUATION)
                         .from(MANAGER)
                         .fetch()
@@ -95,7 +96,7 @@ public class ClassicModelsRepository {
         );
 
         // format embeddable
-        System.out.println("EXAMPLE 1.6:\n"
+        System.out.println("EXAMPLE 1.7:\n"
                 + ctx.select(DEPARTMENT.DEPARTMENT_ID, DEPARTMENT.DEPARTMENT_DETAIL)
                         .from(DEPARTMENT)
                         .fetch()

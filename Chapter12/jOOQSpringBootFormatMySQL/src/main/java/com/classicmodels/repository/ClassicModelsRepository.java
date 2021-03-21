@@ -53,12 +53,13 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 1.1:\n" + result.format());
         System.out.println("EXAMPLE 1.2:\n" + result.format(5)); // format first 5 records
+        System.out.println("EXAMPLE 1.3:\n" + result.format(result.size())); // format all
 
         TXTFormat txtFormat = new TXTFormat()
                 .maxRows(25)
                 .minColWidth(20);
         // try out more options
-        System.out.println("EXAMPLE 1.3:\n" + result.format(txtFormat));
+        System.out.println("EXAMPLE 1.4:\n" + result.format(txtFormat));
 
         // fetch -> format -> export to file        
         try ( BufferedWriter bw = Files.newBufferedWriter(
