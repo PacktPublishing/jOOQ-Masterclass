@@ -9,6 +9,7 @@ import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
+import static org.jooq.impl.DSL.select;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -80,6 +81,13 @@ public class ClassicModelsRepository {
                         .from(EMPLOYEE.naturalFullOuterJoin(SALE))
                         .where(EMPLOYEE.EMPLOYEE_NUMBER.isNull()
                                 .or(SALE.EMPLOYEE_NUMBER.isNull()))
+                        .fetch()
+        );
+        
+        // https://www.reddit.com/r/PostgreSQL/comments/lotcxf/is_there_such_a_thing_that_can_join_two/
+        System.out.println("EXAMPLE 4.3:\n"
+                + ctx.select().from(select().from(CUSTOMER).asTable("t1")
+                        .naturalFullOuterJoin(select().from(CUSTOMERDETAIL).asTable("t2")))
                         .fetch()
         );
     }
