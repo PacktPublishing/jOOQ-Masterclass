@@ -8180,7 +8180,13 @@ insert into sale(sale_id,fiscal_year,sale,employee_number,trend) values
 
 (21, 2003, 25241.43, 1143,'DOWN'),
 
-(22, 2005, 52343.12, 1102,'DOWN') ON CONFLICT (sale_id) DO NOTHING;
+(22, 2000, 12434.22, 1370,'DOWN'),
+
+(23, 2007, 9008.22, 1504,'DOWN'),
+
+(24, 2007, 150399.34, 1611,'DOWN'),
+
+(25, 2005, 52343.12, 1102,'DOWN') ON CONFLICT (sale_id) DO NOTHING;
 
 /*Data for the table `top3product` */
 

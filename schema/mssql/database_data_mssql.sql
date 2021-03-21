@@ -8251,7 +8251,19 @@ insert  into sale(sale_id,fiscal_year,sale,employee_number,trend) values
 
 (18, 2004, 3884.34, 1504,'DOWN'),
 
-(19, 2004, 5241.44, 1504,'CONSTANT') 
+(19, 2004, 5241.44, 1504,'CONSTANT') ,
+
+(20, 2004, 51241.54, 1143,'DOWN'),
+
+(21, 2003, 25241.43, 1143,'DOWN'),
+
+(22, 2000, 12434.22, 1370,'DOWN'),
+
+(23, 2007, 9008.22, 1504,'DOWN'),
+
+(24, 2007, 150399.34, 1611,'DOWN'),
+
+(25, 2005, 52343.12, 1102,'DOWN')
 end try
 begin catch
 end catch
