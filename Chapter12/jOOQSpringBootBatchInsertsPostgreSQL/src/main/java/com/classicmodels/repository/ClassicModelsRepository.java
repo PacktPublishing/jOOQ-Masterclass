@@ -74,7 +74,7 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 1.2: " + Arrays.toString(result2));
 
-        var ids = ctx.fetch(SALE_SEQ.nextvals(3)); // fetch 3 ids               
+        var ids = ctx.fetch(EMPLOYEE_SEQ.nextvals(3)); // fetch 3 ids               
         int[] result3 = ctx.batch(
                 ctx.insertInto(EMPLOYEE, EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.LAST_NAME, EMPLOYEE.FIRST_NAME,
                         EMPLOYEE.EXTENSION, EMPLOYEE.EMAIL, EMPLOYEE.OFFICE_CODE, EMPLOYEE.SALARY,
