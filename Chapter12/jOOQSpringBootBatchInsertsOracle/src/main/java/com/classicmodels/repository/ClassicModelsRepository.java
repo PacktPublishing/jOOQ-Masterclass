@@ -6,6 +6,7 @@ import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import static jooq.generated.Sequences.SALE_SEQ;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Sale.SALE;
 import jooq.generated.tables.records.BankTransactionRecord;
@@ -14,6 +15,7 @@ import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
 import org.jooq.conf.Settings;
 import org.jooq.conf.StatementType;
+import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +32,7 @@ public class ClassicModelsRepository {
     public void batchInsertStatements() {
 
         // batch inserts in a table having auto-generated primary key (several queries)
-        int[] result1 = ctx.batch(
+        int[] result11 = ctx.batch(
                 ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
                         .values(BigInteger.valueOf(2005), 1370L, 1282.64),
                 ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
@@ -45,7 +47,32 @@ public class ClassicModelsRepository {
                         .values(BigInteger.valueOf(2004), 1166L, 6751.33)
         ).execute();
 
-        System.out.println("EXAMPLE 1.1: " + Arrays.toString(result1));
+        System.out.println("EXAMPLE 1.1.1: " + Arrays.toString(result11));
+        
+        // using nextval()
+        int[] result12 = ctx.batch(
+                ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
+                        .values(SALE_SEQ.nextval(), val(BigInteger.valueOf(2005)), val(1370L), val(1282.64)),
+                ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
+                        .values(SALE_SEQ.nextval(), val(BigInteger.valueOf(2004)), val(1370L), val(3938.24)),
+                ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
+                        .values(SALE_SEQ.nextval(), val(BigInteger.valueOf(2004)), val(1370L), val(4676.14)) 
+        ).execute();
+
+        System.out.println("EXAMPLE 1.1.2: " + Arrays.toString(result12));
+        
+        // pre-fetch IDs
+        var ids = ctx.fetch(SALE_SEQ.nextvals(3));
+        int[] result13 = ctx.batch(
+                ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
+                        .values(ids.get(0).value1(), BigInteger.valueOf(2005), 1370L, 1282.64),
+                ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
+                        .values(ids.get(1).value1(), BigInteger.valueOf(2004), 1370L, 3938.24),
+                ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
+                        .values(ids.get(2).value1(), BigInteger.valueOf(2004), 1370L, 4676.14) 
+        ).execute();
+
+        System.out.println("EXAMPLE 1.1.3: " + Arrays.toString(result13));
 
         // batch inserts (single query) PreparedStatement
         int[] result21 = ctx.batch(
