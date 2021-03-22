@@ -84,6 +84,12 @@ EXCEPTION
 END;
 /
 BEGIN
+   EXECUTE IMMEDIATE 'DROP TABLE "TOKEN" CASCADE CONSTRAINTS';
+EXCEPTION
+   WHEN OTHERS THEN NULL;
+END;
+/
+BEGIN
    EXECUTE IMMEDIATE 'DROP TABLE "SALE" CASCADE CONSTRAINTS';
 EXCEPTION
    WHEN OTHERS THEN NULL;
@@ -197,6 +203,36 @@ CREATE OR REPLACE TRIGGER sale_seq_tr
  WHEN (NEW.sale_id IS NULL)
 BEGIN
  SELECT sale_seq.NEXTVAL INTO :NEW.sale_id FROM DUAL;
+END;
+/
+
+/*Table structure for table token */
+
+CREATE TABLE token (
+  token_id number(20) NOT NULL,    
+  sale_id number(20) NOT NULL,
+  amount float NOT NULL,    
+  updated_on timestamp DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (token_id)
+ ,  
+  CONSTRAINT tokens_ibfk_1 FOREIGN KEY (sale_id) REFERENCES sale (sale_id) ON DELETE CASCADE
+) ;
+
+-- Generate ID using sequence and trigger
+BEGIN
+   EXECUTE IMMEDIATE 'DROP SEQUENCE "TOKEN_SEQ"';
+EXCEPTION
+   WHEN OTHERS THEN NULL;
+END;
+/
+
+CREATE SEQUENCE token_seq START WITH 1000000 INCREMENT BY 1;
+
+CREATE OR REPLACE TRIGGER token_seq_tr
+ BEFORE INSERT ON token FOR EACH ROW
+ WHEN (NEW.token_id IS NULL)
+BEGIN
+ SELECT token_seq.NEXTVAL INTO :NEW.token_id FROM DUAL;
 END;
 /
 
@@ -470,9 +506,11 @@ CREATE TABLE top3product (
 CREATE TABLE payment (
   customer_number number(10) NOT NULL,
   check_number varchar2(50) NOT NULL,
-  payment_date timestamp NOT NULL,
+  payment_date timestamp DEFAULT CURRENT_TIMESTAMP,
   invoice_amount number(10,2) NOT NULL,
   caching_date timestamp DEFAULT NULL,
+  version int DEFAULT 0,
+  modified timestamp DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (customer_number,check_number),
   CONSTRAINT unique_check_number UNIQUE (check_number),
   CONSTRAINT payments_ibfk_1 FOREIGN KEY (customer_number) REFERENCES customer (customer_number)
@@ -488,7 +526,7 @@ CREATE TABLE bank_transaction (
   caching_date timestamp DEFAULT SYSTIMESTAMP,
   customer_number number(10) NOT NULL,
   check_number varchar2(50) NOT NULL, 
-  status varchar(50) NOT NULL,
+  status varchar(50) DEFAULT 'SUCCESS',
   PRIMARY KEY (transaction_id),  
   CONSTRAINT bank_transaction_ibfk_1 FOREIGN KEY (customer_number,check_number) REFERENCES payment (customer_number,check_number)
 ) ;
@@ -572,4 +610,5 @@ BEGIN
     RETURN table_result;
 END;
 /
+/* END */
 /* END */
