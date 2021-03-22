@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import static jooq.generated.Sequences.BANK_TRANSACTION_TRANSACTION_ID_SEQ;
+import static jooq.generated.Sequences.EMPLOYEE_SEQ;
 import static jooq.generated.Sequences.SALE_SEQ;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Sale.SALE;
@@ -49,26 +50,50 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 1.1: " + Arrays.toString(result1));
 
-        // batch inserts in a table having auto-generated primary key (several queries)
+        // batch inserts via SEQUENCE in a table having non-auto-generated primary key (several queries)
         int[] result2 = ctx.batch(
-                ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(SALE_SEQ.nextval(), val(2005), val(1370L), val(1282.64)),
-                ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(SALE_SEQ.nextval(), val(2004), val(1370L), val(3938.24)),
-                ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(SALE_SEQ.nextval(), val(2004), val(1370L), val(4676.14)),
-                ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(SALE_SEQ.nextval(), val(2003), val(1166L), val(2223.0)),
-                ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(SALE_SEQ.nextval(), val(2004), val(1166L), val(4531.35)),
-                ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(SALE_SEQ.nextval(), val(2004), val(1166L), val(6751.33))
+                ctx.insertInto(EMPLOYEE, EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.LAST_NAME, EMPLOYEE.FIRST_NAME,
+                        EMPLOYEE.EXTENSION, EMPLOYEE.EMAIL, EMPLOYEE.OFFICE_CODE, EMPLOYEE.SALARY,
+                        EMPLOYEE.REPORTS_TO, EMPLOYEE.JOB_TITLE)
+                        .values(EMPLOYEE_SEQ.nextval(),
+                                val("Lionel"), val("Andre"), val("x8990"), val("landre@gmail.com"), val("1"),
+                                val(57000), val(1143L), val("Sales Rep")),
+                ctx.insertInto(EMPLOYEE, EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.LAST_NAME, EMPLOYEE.FIRST_NAME,
+                        EMPLOYEE.EXTENSION, EMPLOYEE.EMAIL, EMPLOYEE.OFFICE_CODE, EMPLOYEE.SALARY,
+                        EMPLOYEE.REPORTS_TO, EMPLOYEE.JOB_TITLE)
+                        .values(EMPLOYEE_SEQ.nextval(),
+                                val("Ion"), val("Dulgheru"), val("x4444"), val("idulgheru@yahoo.com"), val("1"),
+                                val(50000), val(1143L), val("Sales Rep")),
+                ctx.insertInto(EMPLOYEE, EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.LAST_NAME, EMPLOYEE.FIRST_NAME,
+                        EMPLOYEE.EXTENSION, EMPLOYEE.EMAIL, EMPLOYEE.OFFICE_CODE, EMPLOYEE.SALARY,
+                        EMPLOYEE.REPORTS_TO, EMPLOYEE.JOB_TITLE)
+                        .values(EMPLOYEE_SEQ.nextval(),
+                                val("Valyin"), val("Suola"), val("x3230"), val("vsuola@gmail.com"), val("1"),
+                                val(55000), val(1143L), val("Sales Rep"))
         ).execute();
 
         System.out.println("EXAMPLE 1.2: " + Arrays.toString(result2));
 
-        var ids = ctx.fetch(SALE_SEQ.nextvals(6)); // fetch 6 ids               
+        var ids = ctx.fetch(SALE_SEQ.nextvals(3)); // fetch 3 ids               
         int[] result3 = ctx.batch(
-                ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(ids.get(0).value1(), 2005, 1370L, 1282.64),
-                ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(ids.get(1).value1(), 2004, 1370L, 3938.24),
-                ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(ids.get(2).value1(), 2004, 1370L, 4676.14),
-                ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(ids.get(3).value1(), 2003, 1166L, 2223.0),
-                ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(ids.get(4).value1(), 2004, 1166L, 4531.35),
-                ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(ids.get(5).value1(), 2004, 1166L, 6751.33)
+                ctx.insertInto(EMPLOYEE, EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.LAST_NAME, EMPLOYEE.FIRST_NAME,
+                        EMPLOYEE.EXTENSION, EMPLOYEE.EMAIL, EMPLOYEE.OFFICE_CODE, EMPLOYEE.SALARY,
+                        EMPLOYEE.REPORTS_TO, EMPLOYEE.JOB_TITLE)
+                        .values(ids.get(0).value1(),
+                                "Lionel", "Andre", "x8990", "landre@gmail.com", "1",
+                                57000, 1143L, "Sales Rep"),
+                ctx.insertInto(EMPLOYEE, EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.LAST_NAME, EMPLOYEE.FIRST_NAME,
+                        EMPLOYEE.EXTENSION, EMPLOYEE.EMAIL, EMPLOYEE.OFFICE_CODE, EMPLOYEE.SALARY,
+                        EMPLOYEE.REPORTS_TO, EMPLOYEE.JOB_TITLE)
+                        .values(ids.get(1).value1(),
+                                "Ion", "Dulgheru", "x4444", "idulgheru@yahoo.com", "1",
+                                50000, 1143L, "Sales Rep"),
+                ctx.insertInto(EMPLOYEE, EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.LAST_NAME, EMPLOYEE.FIRST_NAME,
+                        EMPLOYEE.EXTENSION, EMPLOYEE.EMAIL, EMPLOYEE.OFFICE_CODE, EMPLOYEE.SALARY,
+                        EMPLOYEE.REPORTS_TO, EMPLOYEE.JOB_TITLE)
+                        .values(ids.get(2).value1(),
+                                "Valyin", "Suola", "x3230", "vsuola@gmail.com", "1",
+                                55000, 1143L, "Sales Rep")
         ).execute();
 
         System.out.println("EXAMPLE 1.3: " + Arrays.toString(result3));
@@ -103,7 +128,7 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 1.4.2: " + Arrays.toString(result42));
 
-        // batch inserts in a table having manually assigned primary key
+        // batch inserts in a table having non-auto-generated primary key (hardcoded keys)
         int[] result5 = ctx.batch(
                 ctx.insertInto(EMPLOYEE, EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.LAST_NAME, EMPLOYEE.FIRST_NAME, EMPLOYEE.EXTENSION,
                         EMPLOYEE.EMAIL, EMPLOYEE.OFFICE_CODE, EMPLOYEE.SALARY, EMPLOYEE.JOB_TITLE)

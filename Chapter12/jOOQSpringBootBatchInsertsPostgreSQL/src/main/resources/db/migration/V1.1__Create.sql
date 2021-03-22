@@ -23,6 +23,7 @@ DROP TABLE IF EXISTS manager CASCADE;
 DROP TABLE IF EXISTS customer CASCADE;
 DROP TABLE IF EXISTS customerdetail CASCADE;
 DROP TABLE IF EXISTS sale CASCADE;
+DROP TABLE IF EXISTS token CASCADE;
 DROP TABLE IF EXISTS employee CASCADE;
 DROP TABLE IF EXISTS department CASCADE;
 DROP TABLE IF EXISTS office CASCADE;
@@ -92,6 +93,8 @@ CREATE TABLE employee (
 CREATE INDEX reports_to ON employee (reports_to);
 CREATE INDEX office_code ON employee (office_code);
 
+CREATE SEQUENCE employee_seq START 100000 INCREMENT 10 MINVALUE 100000 MAXVALUE 10000000 OWNED BY employee.employee_number;
+
 /*Table structure for table `sale` */
 
 CREATE SEQUENCE sale_seq START 1000000;
@@ -110,10 +113,26 @@ CREATE TABLE sale (
   trend varchar(10) DEFAULT NULL,
   PRIMARY KEY (sale_id)
  ,  
-  CONSTRAINT sales_ibfk_1 FOREIGN KEY (employee_number) REFERENCES employee (employee_number)
+  CONSTRAINT sales_ibfk_1 FOREIGN KEY (employee_number) REFERENCES employee (employee_number) ON UPDATE CASCADE
 ) ;
 
 CREATE INDEX employee_number ON sale (employee_number);
+
+/*Table structure for table `token` */
+
+CREATE SEQUENCE token_seq START 1000000;
+
+CREATE TABLE token (
+  token_id bigint NOT NULL DEFAULT NEXTVAL ('sale_seq'),    
+  sale_id bigint NOT NULL,
+  amount float NOT NULL,   
+  updated_on timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (token_id)
+ ,  
+  CONSTRAINT tokens_ibfk_1 FOREIGN KEY (sale_id) REFERENCES sale (sale_id) ON DELETE CASCADE ON UPDATE CASCADE
+) ;
+
+CREATE INDEX token_id ON token (token_id);
 
 /*Table structure for table `customer` */
 
@@ -130,7 +149,7 @@ CREATE TABLE customer (
   first_buy_date int DEFAULT NULL,
   PRIMARY KEY (customer_number)
  ,
-  CONSTRAINT customers_ibfk_1 FOREIGN KEY (sales_rep_employee_number) REFERENCES employee (employee_number)
+  CONSTRAINT customers_ibfk_1 FOREIGN KEY (sales_rep_employee_number) REFERENCES employee (employee_number) ON UPDATE CASCADE
 ) ;
 
 CREATE INDEX sales_rep_employee_number ON customer (sales_rep_employee_number);
@@ -273,9 +292,11 @@ CREATE TABLE top3product (
 CREATE TABLE payment (
   customer_number bigint NOT NULL,
   check_number varchar(50) NOT NULL,
-  payment_date timestamp NOT NULL,
+  payment_date timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   invoice_amount decimal(10,2) NOT NULL,
   caching_date timestamp DEFAULT NULL,
+  version int NOT NULL DEFAULT 0,
+  modified timestamp NOT NULL DEFAULT NOW(),
   PRIMARY KEY (customer_number,check_number),
   CONSTRAINT unique_check_number UNIQUE(check_number),
   CONSTRAINT payments_ibfk_1 FOREIGN KEY (customer_number) REFERENCES customer (customer_number)
@@ -291,8 +312,8 @@ CREATE TABLE bank_transaction (
   caching_date timestamp NOT NULL DEFAULT NOW(),
   customer_number bigint NOT NULL,
   check_number varchar(50) NOT NULL, 
-  status varchar(50) NOT NULL, 
-  PRIMARY KEY (transaction_id),  
+  status varchar(50) NOT NULL DEFAULT 'SUCCESS',   
+  PRIMARY KEY (transaction_id),    
   CONSTRAINT bank_transaction_ibfk_1 FOREIGN KEY (customer_number,check_number) REFERENCES payment (customer_number,check_number)
 ) ;
 

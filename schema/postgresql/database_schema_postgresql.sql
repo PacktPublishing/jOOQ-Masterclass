@@ -93,7 +93,7 @@ CREATE TABLE employee (
 CREATE INDEX reports_to ON employee (reports_to);
 CREATE INDEX office_code ON employee (office_code);
 
-CREATE SEQUENCE employee_seq START 100000 INCREMENT 10 MINVALUE 100000 OWNED BY employee.employee_number;
+CREATE SEQUENCE employee_seq START 100000 INCREMENT 10 MINVALUE 100000 MAXVALUE 10000000 OWNED BY employee.employee_number;
 
 /*Table structure for table `sale` */
 
