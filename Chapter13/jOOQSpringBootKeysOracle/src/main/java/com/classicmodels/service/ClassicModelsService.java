@@ -22,5 +22,7 @@ public class ClassicModelsService {
         classicModelsRepository.getSequenceInfo();
         classicModelsRepository.currentSequenceVal();        
         classicModelsRepository.nextSequenceVal();
+        
+        classicModelsRepository.selDelInsAndReturnRowID();
     }
 }

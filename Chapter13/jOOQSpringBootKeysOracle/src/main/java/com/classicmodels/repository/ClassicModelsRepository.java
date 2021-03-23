@@ -13,6 +13,7 @@ import org.jooq.conf.Settings;
 import static org.jooq.impl.DSL.default_;
 import static org.jooq.impl.DSL.row;
 import static org.jooq.impl.DSL.val;
+import static org.jooq.util.oracle.OracleDSL.rowid;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -115,10 +116,10 @@ public class ClassicModelsRepository {
     @Transactional
     public void getSequenceInfo() {
 
-        Field<Integer> start = EMPLOYEE_SEQ.getStartWith();
-        Field<Integer> min = EMPLOYEE_SEQ.getMinvalue();
-        Field<Integer> max = EMPLOYEE_SEQ.getMaxvalue();
-        Field<Integer> inc = EMPLOYEE_SEQ.getIncrementBy();
+        Field<Long> start = EMPLOYEE_SEQ.getStartWith();
+        Field<Long> min = EMPLOYEE_SEQ.getMinvalue();
+        Field<Long> max = EMPLOYEE_SEQ.getMaxvalue();
+        Field<Long> inc = EMPLOYEE_SEQ.getIncrementBy();
 
         System.out.println("SEQUENCE: " + "\nName:" + EMPLOYEE_SEQ.getName() + "\n"
                 + "Start: " + start + "\nMin: " + min + "\nMax: " + max + "\nInc:" + inc);
@@ -211,5 +212,30 @@ public class ClassicModelsRepository {
                             BigInteger.valueOf(57000), 1143L, "Sales Rep")
                     .execute();
         }
+    }   
+    
+    public void selDelInsAndReturnRowID() {
+        
+        var sel = ctx.select(rowid(), SALE.FISCAL_YEAR)
+                .from(SALE)
+                .where(SALE.SALE_ID.eq(BigInteger.ONE))
+                .fetchOne();
+        
+        System.out.println("RowID after select:\n" + sel);
+        
+        var del = ctx.deleteFrom(SALE)
+                .where(SALE.SALE_ID.eq(BigInteger.ONE))
+                .returningResult(rowid())
+                .fetchOne();
+        
+        System.out.println("RowID after delete:\n" + del);
+        
+        var ins = ctx.insertInto(SALE)
+                .values(default_(), 2004, 2311.42, 1370L,
+                        default_(), default_(), default_(), default_())
+                .returningResult(SALE.SALE_ID, rowid())
+                .fetchOne();
+        
+        System.out.println("RowID after insert:\n" + ins);
     }
 }

@@ -148,7 +148,7 @@ END;
 /
 
 CREATE TABLE employee (
-  employee_number number(7) NOT NULL,
+  employee_number number(10) NOT NULL,
   last_name varchar2(50) NOT NULL,
   first_name varchar2(50) NOT NULL,
   extension varchar2(10) NOT NULL,
@@ -167,6 +167,16 @@ CREATE TABLE employee (
 
 CREATE INDEX reports_to ON employee (reports_to);
 CREATE INDEX office_code ON employee (office_code);
+
+-- Generate ID using sequence
+BEGIN
+   EXECUTE IMMEDIATE 'DROP SEQUENCE "EMPLOYEE_SEQ"';
+EXCEPTION
+   WHEN OTHERS THEN NULL;
+END;
+/
+
+CREATE SEQUENCE employee_seq START WITH 100000 INCREMENT BY 10 MINVALUE 100000 MAXVALUE 10000000000;
 
 /*Table structure for table `sale` */
 
