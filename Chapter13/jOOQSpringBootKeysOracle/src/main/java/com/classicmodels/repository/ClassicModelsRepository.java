@@ -104,13 +104,22 @@ public class ClassicModelsRepository {
                 .where(PRODUCTLINE.PRODUCT_LINE.eq("Classic Cars")
                         .and(PRODUCTLINE.CODE.eq(599302L)))
                 .fetchSingle();
-        System.out.println("Result:\n" + result1);
+        System.out.println("Result 1:\n" + result1);
 
         var result2 = ctx.selectFrom(PRODUCTLINE)
                 .where(row(PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.CODE)
                         .eq(row("Classic Cars", 599302L)))
                 .fetchSingle();
-        System.out.println("Result:\n" + result2);
+        System.out.println("Result 2:\n" + result2);
+        
+        // using in() (similar, you can use notIn(), and so on)
+        var result3 = ctx.selectFrom(PRODUCTLINE)
+                .where(row(PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.CODE)                        
+                        .in(row("Classic Cars", 599302L),
+                            row("Trains", 123333L),
+                            row("Motorcycles", 599302L)))
+                .fetch();
+        System.out.println("Result 3:\n" + result3);
     }
 
     @Transactional
