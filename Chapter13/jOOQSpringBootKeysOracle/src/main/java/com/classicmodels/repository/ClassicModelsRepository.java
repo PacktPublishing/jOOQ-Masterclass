@@ -1,9 +1,8 @@
 package com.classicmodels.repository;
 
+import java.math.BigInteger;
 import static jooq.generated.Sequences.EMPLOYEE_SEQ;
 import static jooq.generated.Sequences.SALE_SEQ;
-import jooq.generated.enums.RateType;
-import jooq.generated.enums.VatType;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Productline.PRODUCTLINE;
 import static jooq.generated.tables.Sale.SALE;
@@ -38,7 +37,7 @@ public class ClassicModelsRepository {
 
         SaleRecord srNoReturnId = derivedCtx.newRecord(SALE);
 
-        srNoReturnId.setFiscalYear(2021);
+        srNoReturnId.setFiscalYear(BigInteger.valueOf(2021));
         srNoReturnId.setSale(4500.25);
         srNoReturnId.setEmployeeNumber(1504L);
 
@@ -54,13 +53,13 @@ public class ClassicModelsRepository {
                 .withUpdatablePrimaryKeys(true)).dsl();
 
         SaleRecord sr = derivedCtx.selectFrom(SALE)
-                .where(SALE.SALE_ID.eq(2L))
+                .where(SALE.SALE_ID.eq(BigInteger.valueOf(2)))
                 .fetchSingle();
 
         // Forcing an UPDATE can be done via Settings.isUpdatablePrimaryKeys() 
         // By default, isUpdatablePrimaryKeys() return false
-        sr.setSaleId((long) (Math.random() * 999999999L));
-        sr.setFiscalYear(2007);
+        sr.setSaleId(BigInteger.valueOf((int) (Math.random() * 99999L)));
+        sr.setFiscalYear(BigInteger.valueOf(2007));
 
         sr.store();
 
@@ -68,7 +67,7 @@ public class ClassicModelsRepository {
 
         // update primary key via query
         ctx.update(SALE)
-                .set(SALE.SALE_ID, sr.getSaleId() + 1)
+                .set(SALE.SALE_ID, sr.getSaleId().add(BigInteger.ONE))
                 .where(SALE.SALE_ID.eq(sr.getSaleId()))
                 .execute();
     }
@@ -80,19 +79,16 @@ public class ClassicModelsRepository {
 
         var insertedId = ctx.insertInto(SALE)
                 .values(default_(), 2004, 2311.42, 1370L,
-                        default_(), RateType.SILVER, VatType.NONE, default_())
+                        default_(), default_(), default_(), default_())
                 .returningResult(SALE.SALE_ID)
                 .fetchOne();
 
         System.out.println("Inserted ID:\n" + insertedId);
 
-        var insertedIds = ctx.insertInto(SALE)
-                .values(default_(), 2004, 2311.42, 1370L,
-                        default_(), RateType.PLATINUM, VatType.NONE, default_())
-                .values(default_(), 2003, 900.21, 1504L,
-                        default_(), RateType.SILVER, VatType.NONE, default_())
-                .values(default_(), 2005, 1232.2, 1166L,
-                        default_(), RateType.GOLD, VatType.MIN, default_())
+        var insertedIds = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
+                .values(BigInteger.valueOf(2004), 2311.42, 1370L)
+                .values(BigInteger.valueOf(2003), 900.21, 1504L)
+                .values(BigInteger.valueOf(2005), 1232.2, 1166L)
                 .returningResult(SALE.SALE_ID)
                 .fetch();
 
@@ -119,10 +115,10 @@ public class ClassicModelsRepository {
     @Transactional
     public void getSequenceInfo() {
 
-        Field<Long> start = EMPLOYEE_SEQ.getStartWith();
-        Field<Long> min = EMPLOYEE_SEQ.getMinvalue();
-        Field<Long> max = EMPLOYEE_SEQ.getMaxvalue();
-        Field<Long> inc = EMPLOYEE_SEQ.getIncrementBy();
+        Field<Integer> start = EMPLOYEE_SEQ.getStartWith();
+        Field<Integer> min = EMPLOYEE_SEQ.getMinvalue();
+        Field<Integer> max = EMPLOYEE_SEQ.getMaxvalue();
+        Field<Integer> inc = EMPLOYEE_SEQ.getIncrementBy();
 
         System.out.println("SEQUENCE: " + "\nName:" + EMPLOYEE_SEQ.getName() + "\n"
                 + "Start: " + start + "\nMin: " + min + "\nMax: " + max + "\nInc:" + inc);
@@ -136,13 +132,13 @@ public class ClassicModelsRepository {
     }
 
     @Transactional
-    public void currentSequenceVal1() {
+    public void currentSequenceVal() {
 
-        // Avoid: ERROR: CURRVAL of sequence "sale_seq" is not yet defined in this session
+        // Avoid: ERROR: ORA-08002: sequence SALE_SEQ.CURRVAL is not yet defined in this session
         // SALE_SEQ.nextval(); - you can call this, but an INSERT will also call NEXTVAL
         ctx.insertInto(SALE)
                 .values(default_(), 2020, 900.25, 1611L,
-                        default_(), RateType.GOLD, VatType.MIN, default_())
+                        default_(), default_(), default_(), default_())
                 .execute();
 
         // PAY ATTENTION TO THE FACT THAT, MEANWHILE, A CONCURRENT TRANSACTION CAN MODIFY THE CURRENT VALUE
@@ -159,7 +155,7 @@ public class ClassicModelsRepository {
         // UPDATE the SALE having as ID the fetched *cr* 
         // (it is possible that this is not the current value anymore)
         ctx.update(SALE)
-                .set(SALE.FISCAL_YEAR, 2005)
+                .set(SALE.FISCAL_YEAR, BigInteger.valueOf(2005))
                 .where(SALE.SALE_ID.eq(cr))
                 .execute();
 
@@ -174,25 +170,7 @@ public class ClassicModelsRepository {
         ctx.deleteFrom(SALE)
                 .where(SALE.SALE_ID.eq(ctx.select(SALE_SEQ.currval()).fetchSingle().value1()))
                 .execute();
-    }
-
-    @Transactional
-    public void currentSequenceVal2() {
-
-        // Avoid: ERROR: CURRVAL of sequence "sale_seq" is not yet defined in this session
-        // SALE_SEQ.nextval(); - you can call this, but an INSERT will also call NEXTVAL
-        ctx.insertInto(SALE)
-                .values(default_(), 2030, 900.25, 1611L,
-                        default_(), RateType.GOLD, VatType.MIN, default_())
-                .execute();
-
-        // This updates the record having the current value, which can be
-        // other than the primary key of the previous INSERT (e.g., concurrent transaction performed an INSERT)
-        ctx.update(SALE)
-                .set(SALE.FISCAL_YEAR, 2040)
-                .where(SALE.SALE_ID.eq(SALE_SEQ.currval()))
-                .execute();
-    }
+    }  
 
     @Transactional
     public void nextSequenceVal() {
@@ -202,7 +180,7 @@ public class ClassicModelsRepository {
         // to call currval() or nextval(). Simply omit the PK and let the database 
         // to generate it.
         ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
-                .values(2005, 1370L, 1282.64);
+                .values(BigInteger.valueOf(2005), 1370L, 1282.64D);
 
         // But, for SEQUENCE owned by non-auto-generated rows, you have to rely on nextval()/nextvals()
         // For instance, you can INSERT 10 employees via *EMPLOYEE_SEQ.nextval()* 
@@ -212,7 +190,7 @@ public class ClassicModelsRepository {
                     EMPLOYEE.REPORTS_TO, EMPLOYEE.JOB_TITLE)
                     .values(EMPLOYEE_SEQ.nextval(),
                             val("Lionel"), val("Andre"), val("x8990"), val("landre@gmail.com"), val("1"),
-                            val(57000), val(1143L), val("Sales Rep"))
+                            val(BigInteger.valueOf(57000)), val(1143L), val("Sales Rep"))
                     .execute();
         }
 
@@ -222,7 +200,7 @@ public class ClassicModelsRepository {
         // This is also useful for Records to pre-set IDs:
         // EmployeeRecord er = new EmployeeRecord(ids.get(0).value1(), 
         //        "Lionel", "Andre", "x8990", "landre@gmail.com", "1", 
-        //                57000, 1143L, "Sales Rep", null, null);        
+        //                BigInteger.valueOf(57000), 1143L, "Sales Rep", null, null);        
         for (int i = 0; i < ids.size(); i++) {
 
             ctx.insertInto(EMPLOYEE, EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.LAST_NAME, EMPLOYEE.FIRST_NAME,
@@ -230,7 +208,7 @@ public class ClassicModelsRepository {
                     EMPLOYEE.REPORTS_TO, EMPLOYEE.JOB_TITLE)
                     .values(ids.get(i).value1(), // if you need Field<?> then ids.get(i).field1()
                             "Lionel", "Andre", "x8990", "landre@gmail.com", "1",
-                            57000, 1143L, "Sales Rep")
+                            BigInteger.valueOf(57000), 1143L, "Sales Rep")
                     .execute();
         }
     }
