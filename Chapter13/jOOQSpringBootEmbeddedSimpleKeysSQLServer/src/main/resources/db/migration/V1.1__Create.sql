@@ -91,7 +91,7 @@ CREATE TABLE office (
   [postal_code] varchar(15) NOT NULL,
   [territory] varchar(10) NOT NULL,
   [location] [geometry] DEFAULT NULL,
-  PRIMARY KEY ([office_code])
+  CONSTRAINT [office_pk] PRIMARY KEY ([office_code])
 ) ;
 
 /*Table structure for table `employee` */
@@ -108,14 +108,11 @@ CREATE TABLE employee (
   [job_title] varchar(50) NOT NULL,
   [employee_of_year] varchar(50) DEFAULT NULL,
   [monthly_bonus] varchar(500) DEFAULT NULL,
-  PRIMARY KEY ([employee_number])
+  CONSTRAINT [employee_pk] PRIMARY KEY ([employee_number])
 ,
-  CONSTRAINT [employees_ibfk_1] FOREIGN KEY ([reports_to]) REFERENCES employee ([employee_number]),
-  CONSTRAINT [employees_ibfk_2] FOREIGN KEY ([office_code]) REFERENCES office ([office_code])
+  CONSTRAINT [employee_employee_fk] FOREIGN KEY ([reports_to]) REFERENCES employee ([employee_number]),
+  CONSTRAINT [employee_office_fk] FOREIGN KEY ([office_code]) REFERENCES office ([office_code])
 ) ;
-
-CREATE INDEX [reports_to] ON employee ([reports_to]);
-CREATE INDEX [office_code] ON employee ([office_code]);
 
 /*Table structure for table `department` */
 
@@ -127,12 +124,10 @@ CREATE TABLE department (
   [office_code] varchar(10) NOT NULL,
   [topic] varchar(100) DEFAULT NULL,  
   [dep_net_ipv4] varchar(16) DEFAULT NULL,
-  PRIMARY KEY ([department_id])
+  CONSTRAINT [department_pk] PRIMARY KEY ([department_id])
 ,
-  CONSTRAINT [department_ibfk_1] FOREIGN KEY ([office_code]) REFERENCES office ([office_code])
+  CONSTRAINT [department_office_fk] FOREIGN KEY ([office_code]) REFERENCES office ([office_code])
 ) ;
-
-CREATE INDEX [department_id] ON department ([department_id]);
 
 /*Table structure for table `sale` */
 CREATE TABLE sale (
@@ -150,8 +145,6 @@ CREATE TABLE sale (
   CONSTRAINT [enum_rate_check] CHECK ([rate] IN('SILVER', 'GOLD', 'PLATINUM')),
   CONSTRAINT [enum_vat_check] CHECK ([vat] IN('NONE', 'MIN', 'MAX'))
 ) ;
-
-CREATE INDEX [employee_number] ON sale ([employee_number]);
 
 CREATE TABLE [token] (
   [token_id] bigint NOT NULL IDENTITY,
@@ -174,12 +167,10 @@ CREATE TABLE customer (
   [sales_rep_employee_number] bigint DEFAULT NULL,
   [credit_limit] decimal(10,2) DEFAULT NULL,
   [first_buy_date] int DEFAULT NULL,
-  PRIMARY KEY ([customer_number])
+  CONSTRAINT [customer_pk] PRIMARY KEY ([customer_number])
  ,
-  CONSTRAINT [customers_ibfk_1] FOREIGN KEY ([sales_rep_employee_number]) REFERENCES employee ([employee_number]) ON UPDATE CASCADE
+  CONSTRAINT [customer_employee_fk] FOREIGN KEY ([sales_rep_employee_number]) REFERENCES employee ([employee_number]) ON UPDATE CASCADE
 ) ;
-
-CREATE INDEX [sales_rep_employee_number] ON customer ([sales_rep_employee_number]);
 
 /* Table structure for table `customerdetail` */
 CREATE TABLE customerdetail (
@@ -190,9 +181,9 @@ CREATE TABLE customerdetail (
   [state] varchar(50) DEFAULT NULL,
   [postal_code] varchar(15) DEFAULT NULL,
   [country] varchar(50),
-PRIMARY KEY ([customer_number])
- ,
- CONSTRAINT [customers_details_ibfk_1] FOREIGN KEY ([customer_number]) REFERENCES customer ([customer_number])
+  CONSTRAINT [customerdetail_pk] PRIMARY KEY ([customer_number])
+  ,
+  CONSTRAINT [customerdetail_customer_fk] FOREIGN KEY ([customer_number]) REFERENCES customer ([customer_number])
 ) ; 
 
 /*Table structure for table `manager` */
@@ -202,19 +193,19 @@ CREATE TABLE manager (
   [manager_name] varchar(50) NOT NULL,
   [manager_detail] nvarchar(4000),
   [manager_evaluation] varchar(200) DEFAULT NULL, 
-  PRIMARY KEY ([manager_id]),
+  CONSTRAINT [manager_pk] PRIMARY KEY ([manager_id]),
   CONSTRAINT ENSURE_JSON CHECK(ISJSON([manager_detail]) = 1)
 ) ;
 
 /*Table structure for table `office_has_manager` */
 
 CREATE TABLE office_has_manager (
-  [offices_office_code] varchar(10) REFERENCES office ([office_code]) ON UPDATE NO ACTION ON DELETE NO ACTION,
-  [managers_manager_id] bigint REFERENCES manager ([manager_id]) ON UPDATE NO ACTION ON DELETE NO ACTION,
-  CONSTRAINT [offices_managers_pkey] PRIMARY KEY ([offices_office_code], [managers_manager_id]) 
+  [offices_office_code] varchar(10) NOT NULL,
+  [managers_manager_id] bigint NOT NULL,
+  CONSTRAINT office_manager_uk UNIQUE (offices_office_code, managers_manager_id),
+  CONSTRAINT [office_fk] FOREIGN KEY ([offices_office_code]) REFERENCES office ([office_code]) ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT [manager_fk] FOREIGN KEY ([managers_manager_id]) REFERENCES manager ([manager_id]) ON UPDATE NO ACTION ON DELETE NO ACTION  
 );
-
-CREATE INDEX [idx_offices_has_managers_id] ON office_has_manager([managers_manager_id], [offices_office_code]);
 
 /*Table structure for table `productline` */
 
@@ -225,8 +216,8 @@ CREATE TABLE productline (
   [html_description] xml,
   [image] varbinary(max),
   [created_on] date DEFAULT GETDATE(),
-  PRIMARY KEY ([product_line],[code]),
-  CONSTRAINT [unique_product_line] UNIQUE([product_line])
+  CONSTRAINT [productline_pk] PRIMARY KEY ([product_line],[code]),
+  CONSTRAINT [productline_uk] UNIQUE([product_line])
 );
 
 /*Table structure for table `productdetail` */
@@ -236,10 +227,9 @@ CREATE TABLE productlinedetail (
   [code] bigint NOT NULL,
   [line_capacity] varchar(20) NOT NULL,
   [line_type] int DEFAULT 0,
-  PRIMARY KEY ([product_line],[code]),  
-  CONSTRAINT [unique_product_line_detail] UNIQUE([product_line]),
-  CONSTRAINT [productlinedetail_ibfk_1] FOREIGN KEY ([product_line],[code]) REFERENCES productline ([product_line],[code]),
-  CONSTRAINT [productlinedetail_ibfk_2] FOREIGN KEY ([product_line]) REFERENCES productline ([product_line])
+  CONSTRAINT [productlinedetail_uk] UNIQUE([product_line]),
+  CONSTRAINT [productlinedetail_pk] PRIMARY KEY ([product_line],[code]),    
+  CONSTRAINT [productlinedetail_productline_fk] FOREIGN KEY ([product_line],[code]) REFERENCES productline ([product_line],[code])  
 );
 
 /*Table structure for table `product` */
@@ -248,6 +238,7 @@ CREATE TABLE product (
   [product_id] bigint NOT NULL IDENTITY,
   [product_name] varchar(70) DEFAULT NULL,
   [product_line] varchar(50) DEFAULT NULL,
+  [code] bigint NOT NULL,
   [product_scale] varchar(10) DEFAULT NULL,
   [product_vendor] varchar(50) DEFAULT NULL,
   [product_description] varchar(max) DEFAULT NULL,
@@ -255,12 +246,10 @@ CREATE TABLE product (
   [buy_price] decimal(10,2) DEFAULT 0.0,
   [specs] varchar(max) DEFAULT NULL,
   [msrp] decimal(10,2) DEFAULT 0.0,
-  PRIMARY KEY ([product_id])
+  CONSTRAINT [product_pk] PRIMARY KEY ([product_id])
  ,
-  CONSTRAINT [products_ibfk_1] FOREIGN KEY ([product_line]) REFERENCES productline ([product_line])
+  CONSTRAINT [product_productline_fk] FOREIGN KEY ([product_line],[code]) REFERENCES productline ([product_line],[code])
 ) ;
-
-CREATE INDEX [product_line] ON product ([product_line]);
 
 /*Table structure for table `order` */
 
@@ -272,36 +261,33 @@ CREATE TABLE [order] (
   [status] varchar(15) NOT NULL,
   [comments] varchar(max),
   [customer_number] bigint NOT NULL,
-  PRIMARY KEY ([order_id])
+  CONSTRAINT [order_pk] PRIMARY KEY ([order_id])
  ,
-  CONSTRAINT [orders_ibfk_1] FOREIGN KEY ([customer_number]) REFERENCES customer ([customer_number])
+  CONSTRAINT [order_customer_fk] FOREIGN KEY ([customer_number]) REFERENCES customer ([customer_number])
 ) ;
-
-CREATE INDEX [customer_number] ON [order] ([customer_number]);
 
 /*Table structure for table `orderdetail` */
 
 CREATE TABLE orderdetail (
+  [orderdetail_id] bigint NOT NULL IDENTITY,
   [order_id] bigint NOT NULL,
   [product_id] bigint NOT NULL,
   [quantity_ordered] int NOT NULL,
   [price_each] decimal(10,2) NOT NULL,
   [order_line_number] smallint NOT NULL,
-  PRIMARY KEY ([order_id],[product_id])
+  CONSTRAINT [orderdetail_pk] PRIMARY KEY ([orderdetail_id])
  ,
-  CONSTRAINT [orderdetails_ibfk_1] FOREIGN KEY ([order_id]) REFERENCES [order] ([order_id]),
-  CONSTRAINT [orderdetails_ibfk_2] FOREIGN KEY ([product_id]) REFERENCES product ([product_id])
+  CONSTRAINT [orderdetail_order_fk] FOREIGN KEY ([order_id]) REFERENCES [order] ([order_id]),
+  CONSTRAINT [orderdetail_product_fk] FOREIGN KEY ([product_id]) REFERENCES product ([product_id])
 ) ;
-
-CREATE INDEX [product_id] ON orderdetail ([product_id]);
 
 /*Table structure for table `top3product` */
 
 CREATE TABLE top3product (  
   product_id bigint NOT NULL,
   product_name varchar(70) DEFAULT NULL,  
-  PRIMARY KEY (product_id),  
-  CONSTRAINT top3product_ibfk_1 FOREIGN KEY (product_id) REFERENCES product (product_id)
+  CONSTRAINT [top3product_pk] PRIMARY KEY (product_id),  
+  CONSTRAINT [top3product_product_fk] FOREIGN KEY (product_id) REFERENCES product (product_id)
 ) ;
 
 /*Table structure for table `payment` */
@@ -314,9 +300,9 @@ CREATE TABLE payment (
   [caching_date] datetime DEFAULT NULL,
   [version] int NOT NULL DEFAULT 0,
   [modified] datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY ([customer_number],[check_number]),
-  CONSTRAINT [unique_check_number] UNIQUE([check_number]),
-  CONSTRAINT [payments_ibfk_1] FOREIGN KEY ([customer_number]) REFERENCES customer ([customer_number])
+  CONSTRAINT [payment_pk] PRIMARY KEY ([customer_number],[check_number]),
+  CONSTRAINT [check_number_uk] UNIQUE([check_number]),
+  CONSTRAINT [payment_customer_fk] FOREIGN KEY ([customer_number]) REFERENCES customer ([customer_number])
 ) ;
 
 /* Table structure for table 'bank_transaction' */
@@ -330,8 +316,8 @@ CREATE TABLE bank_transaction (
   [customer_number] bigint NOT NULL,
   [check_number] varchar(50) NOT NULL, 
   [status] varchar(50) NOT NULL DEFAULT 'SUCCESS',
-  PRIMARY KEY ([transaction_id]),  
-  CONSTRAINT [bank_transaction_ibfk_1] FOREIGN KEY ([customer_number],[check_number]) REFERENCES payment ([customer_number],[check_number])
+  CONSTRAINT [bank_transaction_pk] PRIMARY KEY ([transaction_id]),  
+  CONSTRAINT [bank_transaction_customer_fk] FOREIGN KEY ([customer_number],[check_number]) REFERENCES payment ([customer_number],[check_number])
 ) ;
 
 /* END */

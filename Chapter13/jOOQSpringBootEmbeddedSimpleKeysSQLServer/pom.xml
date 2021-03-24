@@ -182,13 +182,13 @@
                                             <embeddable>
                                                 <expression>.*_pk</expression>
                                                 <recordClass>                                                    
-                                                    <expression>$0_Embeddable_Record</expression>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+                                                    <expression>$0_Embedded_Record</expression>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
                                                     <transform>PASCAL</transform>
                                                 </recordClass>  
                                                 <pojoClass>
-                                                    <expression>$0_Embeddable</expression>                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+                                                    <expression>$0_Embedded</expression>                                                                                                                                                                                                                                                                                                                                                                                                                                                       
                                                     <transform>PASCAL</transform>
-                                                </pojoClass>                                                                                           
+                                                </pojoClass>                                                                                                
                                             </embeddable>
                                         </embeddables>                                        
                                     </matchers>
