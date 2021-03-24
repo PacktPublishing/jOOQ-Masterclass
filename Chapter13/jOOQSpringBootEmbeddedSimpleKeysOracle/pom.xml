@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.app</groupId>
-    <artifactId>jOOQSpringBootEmbeddableKeysOracle</artifactId>
+    <artifactId>jOOQSpringBootEmbeddedSimpleKeysOracle</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQSpringBootEmbeddableKeysOracle</name>
+    <name>jOOQSpringBootEmbeddedSimpleKeysOracle</name>
     <description>jOOQ - Spring Boot app</description>    
 
     <parent>
@@ -192,8 +192,26 @@
                                     (default is 5 seconds) -->
                                     <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>
                                     
-                                    <embeddablePrimaryKeys>SALE.SALE_ID</embeddablePrimaryKeys>
+                                    <embeddablePrimaryKeys>sale_pk|token_pk</embeddablePrimaryKeys>
                                 </database>
+                                
+                                <strategy>
+                                    <matchers>                                      
+                                        <embeddables>
+                                            <embeddable>
+                                                <expression>.*_pk</expression>
+                                                <recordClass>                                                    
+                                                    <expression>$0_Embedded_Record</expression>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+                                                    <transform>PASCAL</transform>
+                                                </recordClass>  
+                                                <pojoClass>
+                                                    <expression>$0_Embedded</expression>                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+                                                    <transform>PASCAL</transform>
+                                                </pojoClass>                                                                                                
+                                            </embeddable>
+                                        </embeddables>                                        
+                                    </matchers>
+                                </strategy>
                                 
                                 <!-- jOOQ will generate POJOs in your behalf -->
                                 <generate>

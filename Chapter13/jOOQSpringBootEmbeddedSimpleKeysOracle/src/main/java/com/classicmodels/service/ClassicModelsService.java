@@ -14,6 +14,8 @@ public class ClassicModelsService {
 
     public void callAll() {
 
-        // classicModelsRepository
+        classicModelsRepository.fetchSale();
+        classicModelsRepository.fetchToken();
+        classicModelsRepository.fetchSaleAndToken();
     }
 }
