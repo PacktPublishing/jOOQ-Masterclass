@@ -1,6 +1,5 @@
 package com.classicmodels.repository;
 
-import java.math.BigInteger;
 import java.util.List;
 import jooq.generated.embeddables.pojos.ProductlinePkEmbedded;
 import jooq.generated.embeddables.records.ProductlinePkEmbeddedRecord;
