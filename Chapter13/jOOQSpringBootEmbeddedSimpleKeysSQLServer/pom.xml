@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.app</groupId>
-    <artifactId>jOOQSpringBootEmbeddableKeysSQLServer</artifactId>
+    <artifactId>jOOQSpringBootEmbeddedSimpleKeysSQLServer</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQSpringBootEmbeddableKeysSQLServer</name>
+    <name>jOOQSpringBootEmbeddedSimpleKeysSQLServer</name>
     <description>jOOQ - Spring Boot app</description>    
 
     <parent>
