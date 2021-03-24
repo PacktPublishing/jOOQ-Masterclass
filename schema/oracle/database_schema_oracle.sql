@@ -275,8 +275,6 @@ BEGIN
 END;
 /
 
-CREATE INDEX sales_rep_employee_number ON customer (sales_rep_employee_number);
-
 /*Table structure for table `customerdetail` */
 
 CREATE TABLE customerdetail (
@@ -500,7 +498,7 @@ EXCEPTION
 END;
 /
 
-CREATE SEQUENCE orderdetail_seq START WITH 100 INCREMENT BY 1;
+CREATE SEQUENCE orderdetail_seq START WITH 1 INCREMENT BY 1;
 
 CREATE OR REPLACE TRIGGER orderdetail_seq_tr
  BEFORE INSERT ON "ORDERDETAIL" FOR EACH ROW

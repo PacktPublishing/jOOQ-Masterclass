@@ -44,7 +44,7 @@ CREATE TABLE `office` (
   `postal_code` varchar(15) NOT NULL,
   `territory` varchar(10) NOT NULL,
   `location` point DEFAULT NULL,
-  PRIMARY KEY (`office_code`)
+  CONSTRAINT `office_pk` PRIMARY KEY (`office_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `department` (
@@ -55,9 +55,8 @@ CREATE TABLE `department` (
   `office_code` varchar(10) NOT NULL,
   `topic` varchar(100) DEFAULT NULL,  
   `dep_net_ipv4` varchar(16) DEFAULT NULL,
-  PRIMARY KEY (`department_id`),
-  KEY `office_code` (`office_code`),
-  CONSTRAINT `department_ibfk_1` FOREIGN KEY (`office_code`) REFERENCES `office` (`office_code`)
+  CONSTRAINT `department_pk` PRIMARY KEY (`department_id`),  
+  CONSTRAINT `department_office_fk` FOREIGN KEY (`office_code`) REFERENCES `office` (`office_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Table structure for table `employee` */
@@ -74,11 +73,9 @@ CREATE TABLE `employee` (
   `job_title` varchar(50) NOT NULL, 
   `employee_of_year` varchar(50) DEFAULT NULL,
   `monthly_bonus` varchar(500) DEFAULT NULL,
-  PRIMARY KEY (`employee_number`),
-  KEY `reports_to` (`reports_to`),
-  KEY `office_code` (`office_code`),
-  CONSTRAINT `employees_ibfk_1` FOREIGN KEY (`reports_to`) REFERENCES `employee` (`employee_number`),
-  CONSTRAINT `employees_ibfk_2` FOREIGN KEY (`office_code`) REFERENCES `office` (`office_code`)
+  CONSTRAINT `employee_pk` PRIMARY KEY (`employee_number`),
+  CONSTRAINT `employee_employee_fk` FOREIGN KEY (`reports_to`) REFERENCES `employee` (`employee_number`),
+  CONSTRAINT `employee_office_fk` FOREIGN KEY (`office_code`) REFERENCES `office` (`office_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Table structure for table `sale` */
@@ -92,9 +89,8 @@ CREATE TABLE `sale` (
   `rate` enum ('SILVER', 'GOLD', 'PLATINUM') DEFAULT NULL,
   `vat` enum ('NONE', 'MIN', 'MAX') DEFAULT NULL,
   `trend` varchar(10) DEFAULT NULL,
-  PRIMARY KEY (`sale_id`),  
-  KEY `employee_number` (`employee_number`),  
-  CONSTRAINT `sales_ibfk_1` FOREIGN KEY (`employee_number`) REFERENCES `employee` (`employee_number`) ON UPDATE CASCADE
+  CONSTRAINT `sale_pk` PRIMARY KEY (`sale_id`),    
+  CONSTRAINT `sale_employee_fk` FOREIGN KEY (`employee_number`) REFERENCES `employee` (`employee_number`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Table structure for table `token` */
@@ -104,9 +100,9 @@ CREATE TABLE `token` (
   `sale_id` bigint NOT NULL,
   `amount` float NOT NULL,   
   `updated_on` timestamp NOT NULL DEFAULT NOW(),
-  PRIMARY KEY (`token_id`)
+  CONSTRAINT `token_pk` PRIMARY KEY (`token_id`)
  ,  
-  CONSTRAINT `tokens_ibfk_1` FOREIGN KEY (`sale_id`) REFERENCES `sale` (`sale_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `token_sale_fk` FOREIGN KEY (`sale_id`) REFERENCES `sale` (`sale_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Table structure for table `customer` */
@@ -120,9 +116,8 @@ CREATE TABLE `customer` (
   `sales_rep_employee_number` bigint DEFAULT NULL,
   `credit_limit` decimal(10,2) DEFAULT NULL,
   `first_buy_date` int DEFAULT NULL,
-  PRIMARY KEY (`customer_number`),
-  KEY `sales_rep_employee_number` (`sales_rep_employee_number`),
-  CONSTRAINT `customers_ibfk_1` FOREIGN KEY (`sales_rep_employee_number`) REFERENCES `employee` (`employee_number`) ON UPDATE CASCADE
+  CONSTRAINT `customer_pk` PRIMARY KEY (`customer_number`), 
+  CONSTRAINT `customer_employee_fk` FOREIGN KEY (`sales_rep_employee_number`) REFERENCES `employee` (`employee_number`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Table structure for table `customerdetail` */
@@ -135,9 +130,8 @@ CREATE TABLE `customerdetail` (
   `state` varchar(50) DEFAULT NULL,
   `postal_code` varchar(15) DEFAULT NULL,
   `country` varchar(50),
-  PRIMARY KEY (`customer_number`),
-  KEY `customer_number` (`customer_number`),
-  CONSTRAINT `customers_details_ibfk_1` FOREIGN KEY (`customer_number`) REFERENCES `customer` (`customer_number`)  
+  CONSTRAINT `customerdetail_pk` PRIMARY KEY (`customer_number`),  
+  CONSTRAINT `customerdetail_customer_fk` FOREIGN KEY (`customer_number`) REFERENCES `customer` (`customer_number`)  
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Table structure for table `manager` */
@@ -147,7 +141,7 @@ CREATE TABLE `manager` (
   `manager_name` varchar(50) NOT NULL,
   `manager_detail` json DEFAULT NULL,
   `manager_evaluation` varchar(200) DEFAULT NULL, 
-  PRIMARY KEY (`manager_id`)
+  CONSTRAINT `manager_pk` PRIMARY KEY (`manager_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Table structure for table `office_has_manager` */
@@ -155,19 +149,9 @@ CREATE TABLE `manager` (
 CREATE TABLE `office_has_manager` (
   `offices_office_code` varchar(10) NOT NULL,
   `managers_manager_id` bigint NOT NULL,
-  PRIMARY KEY (`offices_office_code`, `managers_manager_id`),
-  INDEX `fk_offices_has_managers_managers1_idx` (`managers_manager_id` ASC) VISIBLE,
-  INDEX `fk_offices_has_managers_offices_idx` (`offices_office_code` ASC) VISIBLE,
-  CONSTRAINT `fk_offices_has_managers_offices`
-    FOREIGN KEY (`offices_office_code`)
-    REFERENCES `office` (`office_code`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_offices_has_managers_managers1`
-    FOREIGN KEY (`managers_manager_id`)
-    REFERENCES `manager` (`manager_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION
+  CONSTRAINT `office_manager_uk` UNIQUE (`offices_office_code`, `managers_manager_id`),
+  CONSTRAINT `office_fk` FOREIGN KEY (`offices_office_code`) REFERENCES office (`office_code`) ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT `manager_fk` FOREIGN KEY (`managers_manager_id`) REFERENCES manager (`manager_id`) ON UPDATE NO ACTION ON DELETE NO ACTION  
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Table structure for table `productline` */
@@ -179,8 +163,8 @@ CREATE TABLE `productline` (
   `html_description` mediumtext DEFAULT NULL,
   `image` mediumblob DEFAULT NULL,
   `created_on` date DEFAULT (CURRENT_DATE),
-  PRIMARY KEY (`product_line`,`code`),
-  CONSTRAINT unique_product_line UNIQUE(product_line)
+  CONSTRAINT `productline_pk` PRIMARY KEY (`product_line`,`code`),
+  CONSTRAINT productline_uk UNIQUE(product_line)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Table structure for table `productdetail` */
@@ -190,12 +174,10 @@ CREATE TABLE `productlinedetail` (
   `code` bigint NOT NULL,
   `line_capacity` varchar(20) NOT NULL,
   `line_type` int DEFAULT 0,
-  PRIMARY KEY (`product_line`,`code`),  
-  CONSTRAINT unique_product_line_detail UNIQUE(product_line),
-  CONSTRAINT `productlinedetail_ibfk_1` FOREIGN KEY (`product_line`,`code`) REFERENCES `productline` (`product_line`,`code`),
-  CONSTRAINT `productlinedetail_ibfk_2` FOREIGN KEY (`product_line`) REFERENCES `productline` (`product_line`)
+  CONSTRAINT `productlinedetail_pk` PRIMARY KEY (`product_line`,`code`),  
+  CONSTRAINT `productlinedetail_uk` UNIQUE(product_line),
+  CONSTRAINT `productlinedetail_productline_fk` FOREIGN KEY (`product_line`,`code`) REFERENCES `productline` (`product_line`,`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
 
 /*Table structure for table `product` */
 
@@ -203,6 +185,7 @@ CREATE TABLE `product` (
   `product_id` bigint NOT NULL AUTO_INCREMENT,
   `product_name` varchar(70) DEFAULT NULL,
   `product_line` varchar(50) DEFAULT NULL,
+  `code` bigint NOT NULL,
   `product_scale` varchar(10) DEFAULT NULL,
   `product_vendor` varchar(50) DEFAULT NULL,
   `product_description` text DEFAULT NULL,
@@ -210,9 +193,8 @@ CREATE TABLE `product` (
   `buy_price` decimal(10,2) DEFAULT 0.0,
   `msrp` decimal(10,2) DEFAULT 0.0,
   `specs` mediumtext DEFAULT NULL,
-  PRIMARY KEY (`product_id`),
-  KEY `product_line` (`product_line`),
-  CONSTRAINT `products_ibfk_1` FOREIGN KEY (`product_line`) REFERENCES `productline` (`product_line`)
+  CONSTRAINT `product_pk` PRIMARY KEY (`product_id`),  
+  CONSTRAINT `product_productline_fk` FOREIGN KEY (`product_line`,`code`) REFERENCES `productline` (`product_line`,`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Table structure for table `order` */
@@ -225,23 +207,22 @@ CREATE TABLE `order` (
   `status` varchar(15) NOT NULL,
   `comments` text,
   `customer_number` bigint NOT NULL,
-  PRIMARY KEY (`order_id`),
-  KEY `customer_number` (`customer_number`),
-  CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`customer_number`) REFERENCES `customer` (`customer_number`)
+  CONSTRAINT `order_pk` PRIMARY KEY (`order_id`),
+  CONSTRAINT `order_customer_fk` FOREIGN KEY (`customer_number`) REFERENCES `customer` (`customer_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Table structure for table `orderdetail` */
 
 CREATE TABLE `orderdetail` (
+  `orderdetail_id` bigint NOT NULL AUTO_INCREMENT,
   `order_id` bigint NOT NULL,
   `product_id` bigint NOT NULL,
   `quantity_ordered` int NOT NULL,
   `price_each` decimal(10,2) NOT NULL,
   `order_line_number` smallint NOT NULL,
-  PRIMARY KEY (`order_id`,`product_id`),
-  KEY `product_id` (`product_id`),
-  CONSTRAINT `orderdetails_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `order` (`order_id`),
-  CONSTRAINT `orderdetails_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`)
+  CONSTRAINT `orderdetail_pk` PRIMARY KEY (`orderdetail_id`),
+  CONSTRAINT `orderdetail_order_fk` FOREIGN KEY (`order_id`) REFERENCES `order` (`order_id`),
+  CONSTRAINT `orderdetail_product_fk` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Table structure for table `top3product` */
@@ -249,9 +230,8 @@ CREATE TABLE `orderdetail` (
 CREATE TABLE `top3product` (  
   `product_id` bigint NOT NULL,
   `product_name` varchar(70) DEFAULT NULL,  
-  PRIMARY KEY (`product_id`),
-  KEY `product_id` (`product_id`),
-  CONSTRAINT `top3product_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`)
+  CONSTRAINT `top3product_pk` PRIMARY KEY (`product_id`),
+  CONSTRAINT `top3product_product_fk` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Table structure for table `payment` */
@@ -264,9 +244,9 @@ CREATE TABLE `payment` (
   `caching_date` timestamp DEFAULT NULL,  
   `version` int NOT NULL DEFAULT 0,
   `modified` timestamp NOT NULL DEFAULT NOW(),
-  PRIMARY KEY (`customer_number`,`check_number`),
-  CONSTRAINT `unique_check_number` UNIQUE (`check_number`),
-  CONSTRAINT `payments_ibfk_1` FOREIGN KEY (`customer_number`) REFERENCES `customer` (`customer_number`)
+  CONSTRAINT `payment_pk` PRIMARY KEY (`customer_number`,`check_number`),
+  CONSTRAINT `check_number_uk` UNIQUE (`check_number`),
+  CONSTRAINT `payment_customer_fk` FOREIGN KEY (`customer_number`) REFERENCES `customer` (`customer_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Table structure for table `bank_transaction` */
@@ -280,8 +260,8 @@ CREATE TABLE `bank_transaction` (
   `customer_number` bigint NOT NULL,
   `check_number` varchar(50) NOT NULL, 
   `status` varchar(50) NOT NULL DEFAULT 'SUCCESS',   
-  PRIMARY KEY (`transaction_id`),    
-  CONSTRAINT `bank_transaction_ibfk_1` FOREIGN KEY (`customer_number`,`check_number`) REFERENCES `payment` (`customer_number`,`check_number`)
+  CONSTRAINT `bank_transaction_pk` PRIMARY KEY (`transaction_id`),    
+  CONSTRAINT `bank_transaction_customer_fk` FOREIGN KEY (`customer_number`,`check_number`) REFERENCES `payment` (`customer_number`,`check_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /* USER-DEFINED FUNCTIONS */
