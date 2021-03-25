@@ -19,29 +19,29 @@ alter session set nls_date_format = 'yyyy-MM-dd';
 
 insert /*+ ignore_row_on_dupkey_index(office(office_code)) */ into office(office_code,city,phone,address_line_first,address_line_second,state,country,postal_code,territory) 
 
- select '1','San Francisco','+1 650 219 4782','100 Market Street','Suite 300','CA','USA','94080','NA' from dual union all 
+select '1','San Francisco','+1 650 219 4782','100 Market Street','Suite 300','CA','USA','AZ934VB','NA' from dual union all
 
- select '2','Boston','+1 215 837 0825','1550 Court Place','Suite 102','MA','USA','02107','NA' from dual union all 
+select '2','Boston','+1 215 837 0825','1550 Court Place','Suite 102','MA','USA','XX021SS','NA' from dual union all
 
- select '3','NYC','+1 212 555 3000','523 East 53rd Street','apt. 5A','NY','USA','10022','NA' from dual union all 
+select '3','NYC','+1 212 555 3000','523 East 53rd Street','apt. 5A','NY','USA','AA100CV','NA' from dual union all
 
- select '4','Paris','+33 14 723 4404','43 Rue Jouffroy D''abbans',NULL,NULL,'France','75017','EMEA' from dual union all 
+select '4','Paris','+33 14 723 4404','43 Rue Jouffroy D''abbans',NULL,NULL,'France','MN750CV','EMEA' from dual union all
 
- select '5','Tokyo','+81 33 224 5000','4-1 Kioicho',NULL,'Chiyoda-Ku','Japan','102-8578','Japan' from dual union all 
+select '5','Tokyo','+81 33 224 5000','4-1 Kioicho',NULL,'Chiyoda-Ku','Japan','RT102TT','Japan' from dual union all
 
- select '6','Sydney','+61 2 9264 2451','5-11 Wentworth Avenue','Floor --2',NULL,'Australia','NSW 2010','APAC' from dual union all 
+select '6','Sydney','+61 2 9264 2451','5-11 Wentworth Avenue','Floor --2',NULL,'Australia','XC344VD','APAC' from dual union all
 
- select '7','London','+44 20 7877 2041','25 Old Broad Street','Level 7','N/A','UK','EC2N 1HN','EMEA' from dual union all 
- 
- select '8',NULL,'+44 20 1827 21411','25 Hum Street','Level 2',NULL,'USA','EC2N 1HN','EMEA' from dual union all 
+select '7','London','+44 20 7877 2041','25 Old Broad Street','Level 7','N/A','UK','CV555RR','EMEA' from dual union all
 
- select '9','Bucharest','+44 20 1827 21411','22 DN1','Level 12',NULL,NULL,'EC2N 1HN','NA' from dual union all
+select '8',NULL,'+44 20 1827 21411','25 Hum Street','Level 2',NULL,'USA','CV555RR','EMEA' from dual union all
 
- select '10',NULL,'+44 20 1827 21411','12 Home','Level 22',NULL,NULL,'EC2N 1HN','NA' from dual union all
- 
- select '11','Paris','+32 12 713 4304','43 Rue 2',NULL,NULL,'France','97562','EMEA' from dual union all
+select '9','Bucharest','+44 20 1827 21411','22 DN1','Level 12',NULL,NULL,'CV555RR','NA' from dual union all
 
- select '12','Tokyo','+81 33 224 3444','4-1 Kioicho',NULL,'Koil-Ku','Japan','101-6578','Japan' from dual;
+select '10',NULL,'+44 20 1827 21411','12 Home','Level 22',NULL,NULL,'CV555RR','NA' from dual union all
+
+select '11','Paris','+32 12 713 4304','43 Rue 2',NULL,NULL,'France','DT975HH','EMEA' from dual union all
+
+select '12','Tokyo','+81 33 224 3444','4-1 Kioicho',NULL,'Koil-Ku','Japan','DD578YU','Japan' from dual;
 
 /*Data for the table `department` */
 

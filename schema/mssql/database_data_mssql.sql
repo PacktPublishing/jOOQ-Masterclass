@@ -16,29 +16,29 @@ This is a modified version of the original schema
 begin try
 insert  into office(office_code,city,phone,address_line_first,address_line_second,state,country,postal_code,territory) values 
 
-('1','San Francisco','+1 650 219 4782','100 Market Street','Suite 300','CA','USA','94080','NA'),
+('1','San Francisco','+1 650 219 4782','100 Market Street','Suite 300','CA','USA','AZ934VB','NA'),
 
-('2','Boston','+1 215 837 0825','1550 Court Place','Suite 102','MA','USA','02107','NA'),
+('2','Boston','+1 215 837 0825','1550 Court Place','Suite 102','MA','USA','XX021SS','NA'),
 
-('3','NYC','+1 212 555 3000','523 East 53rd Street','apt. 5A','NY','USA','10022','NA'),
+('3','NYC','+1 212 555 3000','523 East 53rd Street','apt. 5A','NY','USA','AA100CV','NA'),
 
-('4','Paris','+33 14 723 4404','43 Rue Jouffroy D''abbans',NULL,NULL,'France','75017','EMEA'),
+('4','Paris','+33 14 723 4404','43 Rue Jouffroy D''abbans',NULL,NULL,'France','MN750CV','EMEA'),
 
-('5','Tokyo','+81 33 224 5000','4-1 Kioicho',NULL,'Chiyoda-Ku','Japan','102-8578','Japan'),
+('5','Tokyo','+81 33 224 5000','4-1 Kioicho',NULL,'Chiyoda-Ku','Japan','RT102TT','Japan'),
 
-('6','Sydney','+61 2 9264 2451','5-11 Wentworth Avenue','Floor --2',NULL,'Australia','NSW 2010','APAC'),
+('6','Sydney','+61 2 9264 2451','5-11 Wentworth Avenue','Floor --2',NULL,'Australia','XC344VD','APAC'),
 
-('7','London','+44 20 7877 2041','25 Old Broad Street','Level 7','N/A','UK','EC2N 1HN','EMEA'),
+('7','London','+44 20 7877 2041','25 Old Broad Street','Level 7','N/A','UK','CV555RR','EMEA'),
 
-('8',NULL,'+44 20 1827 21411','25 Hum Street','Level 2',NULL,'USA','EC2N 1HN','EMEA'), 
+('8',NULL,'+44 20 1827 21411','25 Hum Street','Level 2',NULL,'USA','CV555RR','EMEA'), 
 
-('9','Bucharest','+44 20 1827 21411','22 DN1','Level 12',NULL,NULL,'EC2N 1HN','NA'), 
+('9','Bucharest','+44 20 1827 21411','22 DN1','Level 12',NULL,NULL,'CV555RR','NA'), 
 
-('10',NULL,'+44 20 1827 21411','12 Home','Level 22',NULL,NULL,'EC2N 1HN','NA'), 
+('10',NULL,'+44 20 1827 21411','12 Home','Level 22',NULL,NULL,'CV555RR','NA'), 
 
-('11','Paris','+32 12 713 4304','43 Rue 2',NULL,NULL,'France','97562','EMEA'),
+('11','Paris','+32 12 713 4304','43 Rue 2',NULL,NULL,'France','DT975HH','EMEA'),
 
-('12','Tokyo','+81 33 224 3444','4-1 Kioicho',NULL,'Koil-Ku','Japan','101-6578','Japan')
+('12','Tokyo','+81 33 224 3444','4-1 Kioicho',NULL,'Koil-Ku','Japan','DD578YU','Japan')
 end try
 begin catch
 end catch;
