@@ -56,6 +56,7 @@ CREATE TABLE `department` (
   `topic` varchar(100) DEFAULT NULL,  
   `dep_net_ipv4` varchar(16) DEFAULT NULL,
   CONSTRAINT `department_pk` PRIMARY KEY (`department_id`),  
+  CONSTRAINT `department_code_uk` UNIQUE (`code`),
   CONSTRAINT `department_office_fk` FOREIGN KEY (`office_code`) REFERENCES `office` (`office_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -117,6 +118,7 @@ CREATE TABLE `customer` (
   `credit_limit` decimal(10,2) DEFAULT NULL,
   `first_buy_date` int DEFAULT NULL,
   CONSTRAINT `customer_pk` PRIMARY KEY (`customer_number`), 
+  CONSTRAINT `customer_name_uk` UNIQUE (`customer_name`),
   CONSTRAINT `customer_employee_fk` FOREIGN KEY (`sales_rep_employee_number`) REFERENCES `employee` (`employee_number`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 

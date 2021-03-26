@@ -53,7 +53,29 @@ insert into `department`(`department_id`,`name`,`phone`,`code`,`office_code`,`to
 
 ('3','Accounting','-int 8233','2311','2', 'monetary, business'),
 
-('4','Finance','-int 4421','3222','3', 'commerce, fiscal, monetary, business') ON DUPLICATE KEY UPDATE department_id=department_id;
+('4','Finance','-int 4421','3229','3', 'commerce, fiscal, monetary, business'), 
+
+('5','Sales','-int 34443','6554','2', 'commerce, sellout, transaction'),
+
+('6','Sales','-int 7664','1234','4', NULL),
+
+('7','Marketing','-int 1266','9090','4', 'market, research, advertising'),
+
+('8','Marketing','-int 4543','4544','5', 'market, research, advertising'),
+
+('9','Assembly','-int 8777','5455','6', 'gathering, construction, joining'),
+
+('10','Accounting','-int 6765','4555','6', 'monetary, business'),
+
+('11','Finance','-int 1111','7876','7', 'commerce, fiscal, monetary, business'), 
+
+('12','Logistics','-int 4421','3222','8', 'facilities, supplies'), 
+
+('13','Logistics','-int 7453','7884','9', 'facilities, supplies'), 
+
+('14','Logistics','-int 3433','6777','12','facilities, supplies'), 
+
+('15','HR','-int 2323','7888','12', 'people, interview, hiring') ON DUPLICATE KEY UPDATE department_id=department_id;
 
 /*Data for the table `manager` */
 
