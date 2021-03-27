@@ -6,6 +6,7 @@ import jooq.generated.tables.records.SaleRecord;
 import org.jooq.DSLContext;
 import org.jooq.Query;
 import org.jooq.conf.Settings;
+import static org.jooq.impl.DSL.default_;
 import static org.jooq.impl.DSL.row;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,6 +61,16 @@ public class ClassicModelsRepository {
                 .fetch();
 
         System.out.println("Inserted IDs:\n" + insertedIds);                
+        
+        // use lastID()
+        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
+                .values(2002, 5411.42, 1504L)
+                .execute();
+        
+        // if you cannot provide an identity
+        var lastId = ctx.lastID();
+        
+        System.out.println("Last ID: " + lastId);
     }
     
     /* Insert IDENTITY values */

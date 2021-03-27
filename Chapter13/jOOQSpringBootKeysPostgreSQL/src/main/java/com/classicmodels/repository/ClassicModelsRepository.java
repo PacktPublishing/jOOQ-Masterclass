@@ -97,6 +97,17 @@ public class ClassicModelsRepository {
                 .fetch();
 
         System.out.println("Inserted IDs:\n" + insertedIds);
+        
+        // use lastID()
+        ctx.insertInto(SALE)
+                .values(default_(), 2002, 9876.96, 1504L, 
+                        default_(), SaleRate.SILVER, SaleVat.NONE, default_())
+                .execute();
+        
+        // if you cannot provide an identity
+        var lastId = ctx.lastID();
+        
+        System.out.println("Last ID: " + lastId);
     }
 
     /* Compare composed keys */
