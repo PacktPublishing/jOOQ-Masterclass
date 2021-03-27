@@ -30,6 +30,21 @@ public class ClassicModelsRepository {
     /* Primary keys and updatable records */
     
     @Transactional
+    public void returnIdentitiesOnUpdatableRecord() {
+
+        SaleRecord srNoReturnId = ctx.newRecord(SALE);
+
+        srNoReturnId.setFiscalYear(2021);
+        srNoReturnId.setSale(4500.25);
+        srNoReturnId.setEmployeeNumber(1504L);
+
+        srNoReturnId.insert();
+
+        System.out.println("The inserted record ID: " + srNoReturnId.getSaleId());
+        System.out.println("The inserted record 'sale_index' IDENTITY: " + srNoReturnId.getSaleIndex());
+    }
+    
+    @Transactional
     public void suppressPrimaryKeyReturnOnUpdatableRecord() {
 
         // Insert without returning the generated primary key
@@ -45,6 +60,7 @@ public class ClassicModelsRepository {
         srNoReturnId.insert();
 
         System.out.println("The inserted record ID (should be null): " + srNoReturnId.getSaleId());
+        System.out.println("The inserted record 'sale_index' IDENTITY should be null: " + srNoReturnId.getSaleIndex());
     }
 
     @Transactional
@@ -80,19 +96,16 @@ public class ClassicModelsRepository {
 
         var insertedId = ctx.insertInto(SALE)
                 .values(default_(), 2004, 2311.42, 1370L,
-                        default_(), RateType.SILVER, VatType.NONE, default_())
+                        default_(), RateType.SILVER, VatType.NONE, default_(), default_())
                 .returningResult(SALE.SALE_ID)
                 .fetchOne();
 
         System.out.println("Inserted ID:\n" + insertedId);
 
-        var insertedIds = ctx.insertInto(SALE)
-                .values(default_(), 2004, 2311.42, 1370L,
-                        default_(), RateType.PLATINUM, VatType.NONE, default_())
-                .values(default_(), 2003, 900.21, 1504L,
-                        default_(), RateType.SILVER, VatType.NONE, default_())
-                .values(default_(), 2005, 1232.2, 1166L,
-                        default_(), RateType.GOLD, VatType.MIN, default_())
+        var insertedIds = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
+                .values(2004, 2311.42, 1370L)
+                .values(2003, 900.21, 1504L)
+                .values(2005, 1232.2, 1166L)
                 .returningResult(SALE.SALE_ID)
                 .fetch();
 
@@ -101,7 +114,7 @@ public class ClassicModelsRepository {
         // use lastID()
         ctx.insertInto(SALE)
                 .values(default_(), 2002, 9876.96, 1504L, 
-                        default_(), SaleRate.SILVER, SaleVat.NONE, default_())
+                        default_(), RateType.SILVER, VatType.NONE, default_(), default_())
                 .execute();
         
         // if you cannot provide an identity
@@ -162,7 +175,7 @@ public class ClassicModelsRepository {
         // SALE_SEQ.nextval(); - you can call this, but an INSERT will also call NEXTVAL
         ctx.insertInto(SALE)
                 .values(default_(), 2020, 900.25, 1611L,
-                        default_(), RateType.GOLD, VatType.MIN, default_())
+                        default_(), RateType.GOLD, VatType.MIN, default_(), default_())
                 .execute();
 
         // PAY ATTENTION TO THE FACT THAT, MEANWHILE, A CONCURRENT TRANSACTION CAN MODIFY THE CURRENT VALUE
@@ -203,7 +216,7 @@ public class ClassicModelsRepository {
         // SALE_SEQ.nextval(); - you can call this, but an INSERT will also call NEXTVAL
         ctx.insertInto(SALE)
                 .values(default_(), 2030, 900.25, 1611L,
-                        default_(), RateType.GOLD, VatType.MIN, default_())
+                        default_(), RateType.GOLD, VatType.MIN, default_(),  default_())
                 .execute();
 
         // This updates the record having the current value, which can be

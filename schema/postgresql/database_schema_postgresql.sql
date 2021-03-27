@@ -115,6 +115,7 @@ CREATE TABLE sale (
   rate rate_type DEFAULT NULL,
   vat vat_type DEFAULT NULL,
   trend varchar(10) DEFAULT NULL,
+  sale_index bigint GENERATED ALWAYS AS IDENTITY,
   CONSTRAINT sale_pk PRIMARY KEY (sale_id)
  ,  
   CONSTRAINT sale_employee_fk FOREIGN KEY (employee_number) REFERENCES employee (employee_number) ON UPDATE CASCADE

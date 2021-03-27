@@ -155,28 +155,7 @@
                         Defaults to org.jooq.codegen.JavaGenerator -->
                         <name>org.jooq.codegen.JavaGenerator</name>
         
-                        <database>         
-                            
-                            <!-- For each type, one embeddable entry is required -->
-                            <embeddables>
-                                <embeddable>
-                                    <schema>classicmodels</schema>
-                                    <name>DEPARTMENT_DETAIL</name>
-                                    <tables>.*\.department</tables>
-                                    <fields>
-                                        <field>
-                                            <expression>NAME</expression>
-                                        </field>                                              
-                                        <field>                                            
-                                            <expression>PHONE</expression>
-                                        </field>                                        
-                                        <field>                                            
-                                            <expression>TOPIC</expression>
-                                        </field>
-                                    </fields>
-                                </embeddable>
-                            </embeddables>  
-                                                                                                                                 
+                        <database>                                                                                                                                                                                                 
                             <!-- The database type. The format here is:
                             org.jooq.meta.[database].[database]Database -->
                             <name>org.jooq.meta.postgres.PostgresDatabase</name>
