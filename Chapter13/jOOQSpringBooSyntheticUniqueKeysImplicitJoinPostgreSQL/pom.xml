@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.app</groupId>
-    <artifactId>jOOQSpringBooSyntheticKeysImplicitJoinPostgreSQL</artifactId>
+    <artifactId>jOOQSpringBooSyntheticUniqueKeysImplicitJoinPostgreSQL</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQSpringBooSyntheticKeysImplicitJoinPostgreSQL</name>
+    <name>jOOQSpringBooSyntheticUniqueKeysImplicitJoinPostgreSQL</name>
     <description>jOOQ - Spring Boot app</description>    
 
     <parent>
@@ -180,18 +180,18 @@
                             <excludes>flyway_schema_history</excludes>                                   
                             
                             <!-- Prepare the synthetic keys -->
-                            <syntheticObjects>                                
-                                <primaryKeys>
-                                    <primaryKey>
-                                        <name>office_master_pk</name>                                        
+                            <syntheticObjects>                                                                
+                                <uniqueKeys>
+                                    <uniqueKey>
+                                        <name>office_master_uk</name>                                        
                                         <tables>office_master</tables>
                                         <fields>
                                             <field>country</field>
                                             <field>state</field>
                                             <field>city</field>
                                         </fields>
-                                    </primaryKey>                                     
-                                </primaryKeys>
+                                    </uniqueKey>                         
+                                </uniqueKeys>
                                 <foreignKeys>
                                     <foreignKey>  
                                         <name>customer_office_master_fk</name>                                                                       
