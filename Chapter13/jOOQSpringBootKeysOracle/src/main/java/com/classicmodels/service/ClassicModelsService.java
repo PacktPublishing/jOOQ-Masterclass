@@ -14,6 +14,7 @@ public class ClassicModelsService {
 
     public void callAll() {
 
+        classicModelsRepository.returnIdentitiesOnUpdatableRecord();
         classicModelsRepository.suppressPrimaryKeyReturnOnUpdatableRecord();
         classicModelsRepository.updatePrimaryKeyOnUpdatableRecord();
         classicModelsRepository.insertAndReturnPrimaryKey();

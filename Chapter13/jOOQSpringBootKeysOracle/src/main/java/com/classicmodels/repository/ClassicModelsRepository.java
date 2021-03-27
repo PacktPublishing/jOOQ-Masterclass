@@ -6,6 +6,7 @@ import static jooq.generated.Sequences.SALE_SEQ;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Productline.PRODUCTLINE;
 import static jooq.generated.tables.Sale.SALE;
+import static jooq.generated.tables.Token.TOKEN;
 import jooq.generated.tables.records.SaleRecord;
 import org.jooq.DSLContext;
 import org.jooq.Field;
@@ -30,6 +31,21 @@ public class ClassicModelsRepository {
     /* Primary keys and updatable records */
     
     @Transactional
+    public void returnIdentitiesOnUpdatableRecord() {
+
+        SaleRecord srNoReturnId = ctx.newRecord(SALE);
+
+        srNoReturnId.setFiscalYear(BigInteger.valueOf(2021));
+        srNoReturnId.setSale(4500.25);
+        srNoReturnId.setEmployeeNumber(1504L);
+
+        srNoReturnId.insert();
+
+        System.out.println("The inserted record ID: " + srNoReturnId.getSaleId());
+        System.out.println("The inserted record 'sale_index' IDENTITY: " + srNoReturnId.getSaleIndex());
+    }
+    
+    @Transactional
     public void suppressPrimaryKeyReturnOnUpdatableRecord() {
 
         // Insert without returning the generated primary key
@@ -45,6 +61,7 @@ public class ClassicModelsRepository {
         srNoReturnId.insert();
 
         System.out.println("The inserted record ID (should be null): " + srNoReturnId.getSaleId());
+        System.out.println("The inserted record 'sale_index' IDENTITY should be null: " + srNoReturnId.getSaleIndex());
     }
 
     @Transactional
@@ -80,7 +97,7 @@ public class ClassicModelsRepository {
 
         var insertedId = ctx.insertInto(SALE)
                 .values(default_(), 2004, 2311.42, 1370L,
-                        default_(), default_(), default_(), default_())
+                        default_(), default_(), default_(), default_(), default_())
                 .returningResult(SALE.SALE_ID)
                 .fetchOne();
 
@@ -93,18 +110,7 @@ public class ClassicModelsRepository {
                 .returningResult(SALE.SALE_ID)
                 .fetch();
 
-        System.out.println("Inserted IDs:\n" + insertedIds);
-        
-        // use lastID()
-        ctx.insertInto(SALE)
-                .values(default_(), 2002, 9876.96, 1504L, 
-                        default_(), SaleRate.SILVER, SaleVat.NONE, default_())
-                .execute();
-        
-        // if you cannot provide an identity
-        var lastId = ctx.lastID();
-        
-        System.out.println("Last ID: " + lastId);
+        System.out.println("Inserted IDs:\n" + insertedIds);                
     }
 
     /* Compare composed keys */
@@ -159,7 +165,7 @@ public class ClassicModelsRepository {
         // SALE_SEQ.nextval(); - you can call this, but an INSERT will also call NEXTVAL
         ctx.insertInto(SALE)
                 .values(default_(), 2020, 900.25, 1611L,
-                        default_(), default_(), default_(), default_())
+                        default_(), default_(), default_(), default_(), default_())
                 .execute();
 
         // PAY ATTENTION TO THE FACT THAT, MEANWHILE, A CONCURRENT TRANSACTION CAN MODIFY THE CURRENT VALUE
@@ -252,8 +258,8 @@ public class ClassicModelsRepository {
         
         var ins = ctx.insertInto(SALE)
                 .values(default_(), 2004, 2311.42, 1370L,
-                        default_(), default_(), default_(), default_())
-                .returningResult(SALE.SALE_ID, rowid())
+                        default_(), default_(), default_(), default_(), default_())
+                .returningResult(SALE.SALE_ID, SALE.SALE_INDEX, rowid())
                 .fetchOne();
         
         System.out.println("RowID after insert:\n" + ins);

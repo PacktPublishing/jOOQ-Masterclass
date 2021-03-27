@@ -47,35 +47,35 @@ select '12','Tokyo','+81 33 224 3444','4-1 Kioicho',NULL,'Koil-Ku','Japan','DD57
 
 insert /*+ ignore_row_on_dupkey_index(department(department_id)) */ into department(department_id,name,phone,code,office_code,topic) 
 
-select '1','Advertising','-int 4782','1333','1','publicity, promotion' from dual union all
+select '1','Advertising','-int 4782','1333','1',topicArr('publicity', 'promotion') from dual union all
 
-select '2','Sales','-int 41233','1441','1', 'commerce, trade, sellout, transaction' from dual union all
+select '2','Sales','-int 41233','1441','1', topicArr('commerce', 'trade', 'sellout', 'transaction') from dual union all
 
-select '3','Accounting','-int 8233','2311','2', 'monetary, business' from dual union all
+select '3','Accounting','-int 8233','2311','2', topicArr('monetary', 'business') from dual union all
 
-select '4','Finance','-int 4421','3229','3', 'commerce, fiscal, monetary, business' from dual union all
+select '4','Finance','-int 4421','3229','3', topicArr('commerce', 'fiscal', 'monetary', 'business') from dual union all
 
-select '5','Sales','-int 34443','6554','2', 'commerce, sellout, transaction' from dual union all
+select '5','Sales','-int 34443','6554','2', topicArr('commerce', 'sellout', 'transaction') from dual union all
 
 select '6','Sales','-int 7664','1234','4', NULL from dual union all
 
-select '7','Marketing','-int 1266','9090','4', 'market, research, advertising' from dual union all
+select '7','Marketing','-int 1266','9090','4', topicArr('market', 'research', 'advertising') from dual union all
 
-select '8','Marketing','-int 4543','4544','5', 'market, research, advertising' from dual union all
+select '8','Marketing','-int 4543','4544','5', topicArr('market', 'research', 'advertising') from dual union all
 
-select '9','Assembly','-int 8777','5455','6', 'gathering, construction, joining' from dual union all
+select '9','Assembly','-int 8777','5455','6', topicArr('gathering', 'construction', 'joining') from dual union all
 
-select '10','Accounting','-int 6765','4555','6', 'monetary, business' from dual union all
+select '10','Accounting','-int 6765','4555','6', topicArr('monetary', 'business') from dual union all
 
-select '11','Finance','-int 1111','7876','7', 'commerce, fiscal, monetary, business' from dual union all
+select '11','Finance','-int 1111','7876','7', topicArr('commerce', 'fiscal', 'monetary', 'business') from dual union all
 
-select '12','Logistics','-int 4421','3222','8', 'facilities, supplies' from dual union all
+select '12','Logistics','-int 4421','3222','8', topicArr('facilities', 'supplies') from dual union all
 
-select '13','Logistics','-int 7453','7884','9', 'facilities, supplies' from dual union all
+select '13','Logistics','-int 7453','7884','9', topicArr('facilities', 'supplies') from dual union all
 
-select '14','Logistics','-int 3433','6777','12','facilities, supplies' from dual union all
+select '14','Logistics','-int 3433','6777','12',topicArr('facilities', 'supplies') from dual union all
 
-select '15','HR','-int 2323','7888','12', 'people, interview, hiring' from dual;
+select '15','HR','-int 2323','7888','12', topicArr('people', 'interview', 'hiring') from dual;
 
 /*Data for the table `manager` */
 
