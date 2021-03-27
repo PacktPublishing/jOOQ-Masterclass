@@ -186,6 +186,7 @@ CREATE TABLE sale (
   rate varchar2(10) DEFAULT NULL,
   vat varchar2(10) DEFAULT NULL,
   trend varchar2(10) DEFAULT NULL,
+  sale_index number(10) NOT NULL,
   CONSTRAINT sale_pk PRIMARY KEY (sale_id)
 ,  
   CONSTRAINT sale_employee_fk FOREIGN KEY (employee_number) REFERENCES employee (employee_number),
@@ -208,6 +209,24 @@ CREATE OR REPLACE TRIGGER sale_seq_tr
  WHEN (NEW.sale_id IS NULL)
 BEGIN
  SELECT sale_seq.NEXTVAL INTO :NEW.sale_id FROM DUAL;
+END;
+/
+
+-- Generate an IDENTITY, non-primary key
+BEGIN
+   EXECUTE IMMEDIATE 'DROP SEQUENCE "SALE_INDEX_SEQ"';
+EXCEPTION
+   WHEN OTHERS THEN NULL;
+END;
+/
+
+CREATE SEQUENCE sale_index_seq START WITH 1 INCREMENT BY 1;
+
+CREATE OR REPLACE TRIGGER sale_index_seq_tr
+ BEFORE INSERT ON sale FOR EACH ROW
+ WHEN (NEW.sale_index IS NULL)
+BEGIN
+ SELECT sale_index_seq.NEXTVAL INTO :NEW.sale_index FROM DUAL;
 END;
 /
 
