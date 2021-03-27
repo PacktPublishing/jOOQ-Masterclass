@@ -125,7 +125,7 @@ CREATE TABLE sale (
 CREATE SEQUENCE token_seq START 1000000;
 
 CREATE TABLE token (
-  token_id bigint NOT NULL DEFAULT NEXTVAL ('sale_seq'),    
+  token_id bigint NOT NULL DEFAULT NEXTVAL ('token_seq'),    
   sale_id bigint NOT NULL,
   amount float NOT NULL,   
   updated_on timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,

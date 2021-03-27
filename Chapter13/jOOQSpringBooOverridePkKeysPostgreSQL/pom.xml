@@ -189,7 +189,7 @@
                                             <field>phone</field>
                                         </fields>
                                     </primaryKey>
-                                </primaryKeys>
+                                </primaryKeys>                               
                             </syntheticObjects>                                                           
                             
                             <!-- This flag will also replace synthetic primary keys, if it matches. -->
