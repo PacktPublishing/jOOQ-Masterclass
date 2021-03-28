@@ -46,7 +46,7 @@
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.jooq.trial-java-8</groupId>
+            <groupId>org.jooq</groupId>
             <artifactId>jooq</artifactId>         
             <version>${jooq.version}</version>
         </dependency>              
@@ -125,7 +125,7 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.jooq.trial-java-8</groupId>
+                <groupId>org.jooq</groupId>
                 <artifactId>jooq-codegen-maven</artifactId> 
                 <version>${jooq.version}</version>              
                 <executions>
