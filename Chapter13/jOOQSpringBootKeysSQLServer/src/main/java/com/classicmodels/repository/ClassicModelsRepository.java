@@ -6,7 +6,6 @@ import jooq.generated.tables.records.SaleRecord;
 import org.jooq.DSLContext;
 import org.jooq.Query;
 import org.jooq.conf.Settings;
-import static org.jooq.impl.DSL.default_;
 import static org.jooq.impl.DSL.row;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +21,7 @@ public class ClassicModelsRepository {
     }
 
     /* Primary keys and updatable records */
-    
+      
     @Transactional
     public void suppressPrimaryKeyReturnOnUpdatableRecord() {
 
@@ -38,7 +37,7 @@ public class ClassicModelsRepository {
 
         srNoReturnId.insert();
 
-        System.out.println("The inserted record ID (should be null): " + srNoReturnId.getSaleId());
+        System.out.println("The inserted record ID (should be null): " + srNoReturnId.getSaleId());        
     }
 
     /* Insert and return primary key */
@@ -110,5 +109,5 @@ public class ClassicModelsRepository {
                             row("Motorcycles", 599302L)))
                 .fetch();
         System.out.println("Result 3:\n" + result3);
-    }    
+    }            
 }

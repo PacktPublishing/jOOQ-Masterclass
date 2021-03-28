@@ -114,6 +114,12 @@ CREATE TABLE employee (
   CONSTRAINT [employee_office_fk] FOREIGN KEY ([office_code]) REFERENCES office ([office_code])
 ) ;
 
+DROP SEQUENCE IF EXISTS employee_seq;
+GO
+
+CREATE SEQUENCE employee_seq START WITH 100000 INCREMENT BY 10 MINVALUE 100000 MAXVALUE 10000000000;
+GO
+
 /*Table structure for table `department` */
 
 CREATE TABLE department (
@@ -131,6 +137,12 @@ CREATE TABLE department (
 ) ;
 
 /*Table structure for table `sale` */
+DROP SEQUENCE IF EXISTS sale_seq;
+GO
+
+CREATE SEQUENCE sale_seq START WITH 1 INCREMENT BY 1;
+GO
+
 CREATE TABLE sale (
   [sale_id] bigint NOT NULL IDENTITY,  
   [fiscal_year] int NOT NULL,  
@@ -140,6 +152,7 @@ CREATE TABLE sale (
   [rate] varchar(10) DEFAULT NULL,
   [vat] varchar(10) DEFAULT NULL,
   [trend] varchar(10) DEFAULT NULL,
+  [sale_index] bigint NOT NULL DEFAULT (NEXT VALUE FOR sale_seq),
   CONSTRAINT [sale_pk] PRIMARY KEY ([sale_id])
 ,    
   CONSTRAINT [sale_employee_fk] FOREIGN KEY ([employee_number]) REFERENCES employee ([employee_number]) ON UPDATE CASCADE,

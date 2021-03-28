@@ -17,6 +17,6 @@ public class ClassicModelsService {
         classicModelsRepository.suppressPrimaryKeyReturnOnUpdatableRecord();        
         classicModelsRepository.insertAndReturnPrimaryKey();
         classicModelsRepository.insertIdentity();
-        classicModelsRepository.compareComposedPrimaryKey();
+        classicModelsRepository.compareComposedPrimaryKey();        
     }
 }
