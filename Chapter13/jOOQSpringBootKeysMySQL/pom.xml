@@ -46,7 +46,7 @@
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.jooq</groupId>
+            <groupId>org.jooq.trial-java-8</groupId>
             <artifactId>jooq</artifactId>         
             <version>${jooq.version}</version>
         </dependency>              
@@ -125,8 +125,9 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.jooq</groupId>
-                <artifactId>jooq-codegen-maven</artifactId>               
+                <groupId>org.jooq.trial-java-8</groupId>
+                <artifactId>jooq-codegen-maven</artifactId> 
+                <version>${jooq.version}</version>              
                 <executions>
                     <execution>
                         <id>generate-mysql</id>
@@ -180,6 +181,15 @@
                                     <!-- Give enough time to jOOQ to trigger the queries needed for generating sources 
                                     (default is 5 seconds) -->
                                     <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>
+                                    
+                                    <syntheticObjects>
+                                        <identities>
+                                            <identity>                                                
+                                                <tables>sale</tables>
+                                                <fields>sale_index</fields>
+                                            </identity>
+                                        </identities>
+                                    </syntheticObjects> 
                                 </database>
                                                                 
                                 <!-- jOOQ will generate POJOs in your behalf -->

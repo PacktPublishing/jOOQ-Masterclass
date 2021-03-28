@@ -23,7 +23,7 @@ public class ClassicModelsRepository {
         this.ctx = ctx;
     }
 
-    /* Primary keys and updatable records */
+    /* Primary keys and updatable records */        
     
     @Transactional
     public void suppressPrimaryKeyReturnOnUpdatableRecord() {
@@ -40,7 +40,7 @@ public class ClassicModelsRepository {
 
         srNoReturnId.insert();
 
-        System.out.println("The inserted record ID (should be null): " + srNoReturnId.getSaleId());
+        System.out.println("The inserted record ID (should be null): " + srNoReturnId.getSaleId());       
     }
 
     @Transactional
@@ -76,7 +76,7 @@ public class ClassicModelsRepository {
         
         var insertedId = ctx.insertInto(SALE)
                 .values(default_(), 2004, 2311.42, 1370L, 
-                        default_(), SaleRate.SILVER, SaleVat.NONE, default_())
+                        default_(), SaleRate.SILVER, SaleVat.NONE, default_(), default_())
                 .returningResult(SALE.SALE_ID)
                 .fetchOne();
         
@@ -84,11 +84,11 @@ public class ClassicModelsRepository {
         
         var insertedIds = ctx.insertInto(SALE)
                 .values(default_(), 2004, 2311.42, 1370L,
-                        default_(), SaleRate.PLATINUM, SaleVat.NONE, default_())
+                        default_(), SaleRate.PLATINUM, SaleVat.NONE, default_(), default_())
                 .values(default_(), 2003, 900.21, 1504L,
-                        default_(), SaleRate.SILVER, SaleVat.NONE, default_())
+                        default_(), SaleRate.SILVER, SaleVat.NONE, default_(), default_())
                 .values(default_(), 2005, 1232.2, 1166L,
-                        default_(), SaleRate.GOLD, SaleVat.MIN, default_())
+                        default_(), SaleRate.GOLD, SaleVat.MIN, default_(), default_())
                 .returningResult(SALE.SALE_ID)
                 .fetch();
         
@@ -97,7 +97,7 @@ public class ClassicModelsRepository {
         // use lastID()
         ctx.insertInto(SALE)
                 .values(default_(), 2002, 9876.96, 1504L, 
-                        default_(), SaleRate.SILVER, SaleVat.NONE, default_())
+                        default_(), SaleRate.SILVER, SaleVat.NONE, default_(), default_())
                 .execute();
         
         // if you cannot provide an identity

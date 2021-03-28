@@ -90,6 +90,7 @@ CREATE TABLE `sale` (
   `rate` enum ('SILVER', 'GOLD', 'PLATINUM') DEFAULT NULL,
   `vat` enum ('NONE', 'MIN', 'MAX') DEFAULT NULL,
   `trend` varchar(10) DEFAULT NULL,
+  `sale_index` bigint DEFAULT 1,
   CONSTRAINT `sale_pk` PRIMARY KEY (`sale_id`),    
   CONSTRAINT `sale_employee_fk` FOREIGN KEY (`employee_number`) REFERENCES `employee` (`employee_number`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -289,5 +290,4 @@ BEGIN
 	RETURN (customerLevel);
 END$$
 DELIMITER ;
-
 /* END */
