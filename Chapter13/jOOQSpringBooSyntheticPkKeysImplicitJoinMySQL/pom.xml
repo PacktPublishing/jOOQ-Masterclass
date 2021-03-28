@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.app</groupId>
-    <artifactId>jOOQSpringBootKeysMySQL</artifactId>
+    <artifactId>jOOQSpringBooSyntheticPkKeysImplicitJoinMySQL</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQSpringBootKeysMySQL</name>
+    <name>jOOQSpringBooSyntheticPkKeysImplicitJoinMySQL</name>
     <description>jOOQ - Spring Boot app</description>    
 
     <parent>
@@ -46,7 +46,7 @@
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.jooq</groupId>
+            <groupId>org.jooq.trial-java-8</groupId>
             <artifactId>jooq</artifactId>         
             <version>${jooq.version}</version>
         </dependency>              
@@ -125,7 +125,7 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.jooq</groupId>
+                <groupId>org.jooq.trial-java-8</groupId>
                 <artifactId>jooq-codegen-maven</artifactId> 
                 <version>${jooq.version}</version>              
                 <executions>
@@ -180,7 +180,39 @@
                                     
                                     <!-- Give enough time to jOOQ to trigger the queries needed for generating sources 
                                     (default is 5 seconds) -->
-                                    <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>                                                                      
+                                    <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>
+                                                                        
+                                    <!-- Prepare the synthetic keys -->
+                                    <syntheticObjects>                                
+                                        <primaryKeys>
+                                            <primaryKey>
+                                                <name>office_master_pk</name>                                        
+                                                <tables>office_master</tables>
+                                                <fields>
+                                                    <field>country</field>
+                                                    <field>state</field>
+                                                    <field>city</field>
+                                                </fields>
+                                            </primaryKey>                                     
+                                        </primaryKeys>
+                                        <foreignKeys>
+                                            <foreignKey>  
+                                                <name>customer_office_master_fk</name>                                                                       
+                                                <tables>customer_master</tables>
+                                                <fields>
+                                                    <field>country</field>
+                                                    <field>state</field>
+                                                    <field>city</field>
+                                                </fields>
+                                                <referencedTable>office_master</referencedTable>                                        
+                                                <referencedFields>
+                                                    <field>country</field>
+                                                    <field>state</field>
+                                                    <field>city</field>
+                                                </referencedFields>
+                                            </foreignKey>
+                                        </foreignKeys>                                
+                                    </syntheticObjects>                                        
                                 </database>
                                                                 
                                 <!-- jOOQ will generate POJOs in your behalf -->
