@@ -1,14 +1,10 @@
 package com.classicmodels.repository;
 
-import jooq.generated.enums.SaleRate;
-import jooq.generated.enums.SaleVat;
-import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import static jooq.generated.tables.Productline.PRODUCTLINE;
 import static jooq.generated.tables.Sale.SALE;
 import jooq.generated.tables.records.SaleRecord;
 import org.jooq.DSLContext;
 import org.jooq.conf.Settings;
-import static org.jooq.impl.DSL.default_;
 import static org.jooq.impl.DSL.row;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -74,30 +70,25 @@ public class ClassicModelsRepository {
     @Transactional
     public void insertAndReturnPrimaryKey() {
         
-        var insertedId = ctx.insertInto(SALE)
-                .values(default_(), 2004, 2311.42, 1370L, 
-                        default_(), SaleRate.SILVER, SaleVat.NONE, default_(), default_())
+        var insertedId = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
+                .values(2004, 2311.42, 1370L)
                 .returningResult(SALE.SALE_ID)
                 .fetchOne();
         
         System.out.println("Inserted ID:\n" + insertedId);
         
-        var insertedIds = ctx.insertInto(SALE)
-                .values(default_(), 2004, 2311.42, 1370L,
-                        default_(), SaleRate.PLATINUM, SaleVat.NONE, default_(), default_())
-                .values(default_(), 2003, 900.21, 1504L,
-                        default_(), SaleRate.SILVER, SaleVat.NONE, default_(), default_())
-                .values(default_(), 2005, 1232.2, 1166L,
-                        default_(), SaleRate.GOLD, SaleVat.MIN, default_(), default_())
+        var insertedIds = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
+                .values(2004, 2311.42, 1370L)
+                .values(2003, 900.21, 1504L)
+                .values(2005, 1232.2, 1166L)
                 .returningResult(SALE.SALE_ID)
                 .fetch();
         
         System.out.println("Inserted IDs:\n" + insertedIds);
         
         // use lastID()
-        ctx.insertInto(SALE)
-                .values(default_(), 2002, 9876.96, 1504L, 
-                        default_(), SaleRate.SILVER, SaleVat.NONE, default_(), default_())
+        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
+                .values(2002, 9876.96, 1504L)
                 .execute();
         
         // if you cannot provide an identity

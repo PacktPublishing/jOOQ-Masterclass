@@ -6,12 +6,10 @@ import static jooq.generated.Sequences.SALE_SEQ;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Productline.PRODUCTLINE;
 import static jooq.generated.tables.Sale.SALE;
-import static jooq.generated.tables.Token.TOKEN;
 import jooq.generated.tables.records.SaleRecord;
 import org.jooq.DSLContext;
 import org.jooq.Field;
 import org.jooq.conf.Settings;
-import static org.jooq.impl.DSL.default_;
 import static org.jooq.impl.DSL.row;
 import static org.jooq.impl.DSL.val;
 import static org.jooq.util.oracle.OracleDSL.rowid;
@@ -95,9 +93,8 @@ public class ClassicModelsRepository {
     @Transactional
     public void insertAndReturnPrimaryKey() {
 
-        var insertedId = ctx.insertInto(SALE)
-                .values(default_(), 2004, 2311.42, 1370L,
-                        default_(), default_(), default_(), default_(), default_())
+        var insertedId = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
+                .values(BigInteger.valueOf(2004), 2311.42, 1370L)
                 .returningResult(SALE.SALE_ID)
                 .fetchOne();
 
@@ -163,9 +160,8 @@ public class ClassicModelsRepository {
 
         // Avoid: ERROR: ORA-08002: sequence SALE_SEQ.CURRVAL is not yet defined in this session
         // SALE_SEQ.nextval(); - you can call this, but an INSERT will also call NEXTVAL
-        ctx.insertInto(SALE)
-                .values(default_(), 2020, 900.25, 1611L,
-                        default_(), default_(), default_(), default_(), default_())
+        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
+                .values(BigInteger.valueOf(2020), 900.25, 1611L)
                 .execute();
 
         // PAY ATTENTION TO THE FACT THAT, MEANWHILE, A CONCURRENT TRANSACTION CAN MODIFY THE CURRENT VALUE
@@ -256,9 +252,8 @@ public class ClassicModelsRepository {
         
         System.out.println("RowID after delete:\n" + del);
         
-        var ins = ctx.insertInto(SALE)
-                .values(default_(), 2004, 2311.42, 1370L,
-                        default_(), default_(), default_(), default_(), default_())
+        var ins = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
+                .values(BigInteger.valueOf(2004), 2311.42, 1370L)
                 .returningResult(SALE.SALE_ID, SALE.SALE_INDEX, rowid())
                 .fetchOne();
         

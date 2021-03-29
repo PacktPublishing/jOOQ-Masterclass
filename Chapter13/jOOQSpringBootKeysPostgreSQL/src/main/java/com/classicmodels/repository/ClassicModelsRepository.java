@@ -2,8 +2,6 @@ package com.classicmodels.repository;
 
 import static jooq.generated.Sequences.EMPLOYEE_SEQ;
 import static jooq.generated.Sequences.SALE_SEQ;
-import jooq.generated.enums.RateType;
-import jooq.generated.enums.VatType;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Productline.PRODUCTLINE;
 import static jooq.generated.tables.Sale.SALE;
@@ -11,7 +9,6 @@ import jooq.generated.tables.records.SaleRecord;
 import org.jooq.DSLContext;
 import org.jooq.Field;
 import org.jooq.conf.Settings;
-import static org.jooq.impl.DSL.default_;
 import static org.jooq.impl.DSL.row;
 import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
@@ -94,9 +91,8 @@ public class ClassicModelsRepository {
     @Transactional
     public void insertAndReturnPrimaryKey() {
 
-        var insertedId = ctx.insertInto(SALE)
-                .values(default_(), 2004, 2311.42, 1370L,
-                        default_(), RateType.SILVER, VatType.NONE, default_(), default_())
+        var insertedId = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
+                .values(2004, 2311.42, 1370L)
                 .returningResult(SALE.SALE_ID)
                 .fetchOne();
 
@@ -112,9 +108,8 @@ public class ClassicModelsRepository {
         System.out.println("Inserted IDs:\n" + insertedIds);
         
         // use lastID()
-        ctx.insertInto(SALE)
-                .values(default_(), 2002, 9876.96, 1504L, 
-                        default_(), RateType.SILVER, VatType.NONE, default_(), default_())
+        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
+                .values(2002, 9876.96, 1504L)
                 .execute();
         
         // if you cannot provide an identity
@@ -173,9 +168,8 @@ public class ClassicModelsRepository {
 
         // Avoid: ERROR: CURRVAL of sequence "sale_seq" is not yet defined in this session
         // SALE_SEQ.nextval(); - you can call this, but an INSERT will also call NEXTVAL
-        ctx.insertInto(SALE)
-                .values(default_(), 2020, 900.25, 1611L,
-                        default_(), RateType.GOLD, VatType.MIN, default_(), default_())
+        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
+                .values(2020, 900.25, 1611L)
                 .execute();
 
         // PAY ATTENTION TO THE FACT THAT, MEANWHILE, A CONCURRENT TRANSACTION CAN MODIFY THE CURRENT VALUE
@@ -214,9 +208,8 @@ public class ClassicModelsRepository {
 
         // Avoid: ERROR: CURRVAL of sequence "sale_seq" is not yet defined in this session
         // SALE_SEQ.nextval(); - you can call this, but an INSERT will also call NEXTVAL
-        ctx.insertInto(SALE)
-                .values(default_(), 2030, 900.25, 1611L,
-                        default_(), RateType.GOLD, VatType.MIN, default_(),  default_())
+        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
+                .values(2030, 900.25, 1611L)
                 .execute();
 
         // This updates the record having the current value, which can be
