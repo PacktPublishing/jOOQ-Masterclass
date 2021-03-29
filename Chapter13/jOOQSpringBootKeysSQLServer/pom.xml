@@ -175,10 +175,25 @@
                                     
                                 </database>
                                                         
-                                <!-- jOOQ will generate POJOs in your behalf -->
+                                <!-- Rename the generated DAOs classes -->                      
+                                <strategy>
+                                    <matchers>
+                                        <tables>
+                                            <table>                                                
+                                                <daoClass>
+                                                    <expression>$0_Repository</expression>
+                                                    <transform>PASCAL</transform>                                                                                      
+                                                </daoClass>
+                                            </table>
+                                        </tables>
+                                    </matchers>
+                                </strategy>
+                                
+                                <!-- jOOQ will generate POJOs and DAOs in your behalf -->
                                 <generate>
-                                    <pojos>true</pojos> 
-                                    <validationAnnotations>true</validationAnnotations>                                                                
+                                    <daos>true</daos>                                   
+                                    <validationAnnotations>true</validationAnnotations>                            
+                                    <springAnnotations>true</springAnnotations>   
                                 </generate>
                                 
                                 <target>

@@ -6,6 +6,8 @@ import static jooq.generated.Sequences.SALE_SEQ;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Productline.PRODUCTLINE;
 import static jooq.generated.tables.Sale.SALE;
+import jooq.generated.tables.daos.SaleRepository;
+import jooq.generated.tables.pojos.Sale;
 import jooq.generated.tables.records.SaleRecord;
 import org.jooq.DSLContext;
 import org.jooq.Field;
@@ -21,9 +23,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class ClassicModelsRepository {
 
     private final DSLContext ctx;
+    private final SaleRepository saleRepository;
 
-    public ClassicModelsRepository(DSLContext ctx) {
+    public ClassicModelsRepository(DSLContext ctx, SaleRepository saleRepository) {
         this.ctx = ctx;
+        this.saleRepository = saleRepository;
     }
 
     /* Insert and return primary key */
@@ -55,6 +59,7 @@ public class ClassicModelsRepository {
     @Transactional
     public void insertAndReturnPrimaryKey() {
         
+        // insert record
         SaleRecord sr = ctx.newRecord(SALE);
 
         sr.setFiscalYear(BigInteger.valueOf(2021));
@@ -64,6 +69,16 @@ public class ClassicModelsRepository {
         sr.insert();
 
         System.out.println("The inserted record ID: " + sr.getSaleId());
+        
+        // insert POJO
+        Sale s = new Sale();
+        s.setFiscalYear(BigInteger.valueOf(2020));
+        s.setSale(643.23);
+        s.setEmployeeNumber(1370L);
+        
+        saleRepository.insert(s);
+        
+        System.out.println("The inserted POJO ID: " + s.getSaleId());
     }
     
     @Transactional

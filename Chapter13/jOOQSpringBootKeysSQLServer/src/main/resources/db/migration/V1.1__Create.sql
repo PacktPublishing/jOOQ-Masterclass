@@ -334,5 +334,28 @@ CREATE TABLE bank_transaction (
   CONSTRAINT [bank_transaction_pk] PRIMARY KEY ([transaction_id]),  
   CONSTRAINT [bank_transaction_customer_fk] FOREIGN KEY ([customer_number],[check_number]) REFERENCES payment ([customer_number],[check_number])
 ) ;
+GO
 
+-- VIEWS
+CREATE VIEW customer_master AS
+SELECT [classicmodels].[dbo].[customer].[customer_name],
+       [classicmodels].[dbo].[customer].[credit_limit],
+       [classicmodels].[dbo].[customerdetail].[city],
+       [classicmodels].[dbo].[customerdetail].[country],
+       [classicmodels].[dbo].[customerdetail].[address_line_first],
+       [classicmodels].[dbo].[customerdetail].[postal_code],
+       [classicmodels].[dbo].[customerdetail].[state]
+FROM [classicmodels].[dbo].[customer]
+JOIN [classicmodels].[dbo].[customerdetail] ON [classicmodels].[dbo].[customerdetail].[customer_number] = [classicmodels].[dbo].[customer].[customer_number]
+WHERE [classicmodels].[dbo].[customer].[first_buy_date] IS NOT NULL;
+GO
+
+CREATE VIEW office_master AS
+SELECT [classicmodels].[dbo].[office].[office_code],
+       [classicmodels].[dbo].[office].[city],
+       [classicmodels].[dbo].[office].[country],
+       [classicmodels].[dbo].[office].[state],
+       [classicmodels].[dbo].[office].[phone]
+FROM [classicmodels].[dbo].[office]
+WHERE [classicmodels].[dbo].[office].[city] IS NOT NULL
 /* END */
