@@ -68,6 +68,9 @@ public class ClassicModelsRepository {
                 .values(2002, 5411.42, 1504L)
                 .execute();
         
+        // PAY ATTENTION TO THE FACT THAT, MEANWHILE, A CONCURRENT TRANSACTION CAN MODIFY THE CURRENT VALUE
+        // SO, THERE IS NO GUARANTEE THAT THE BELOW FETCHED *lastId* IS THE PRIMARY KEY OF THE PREVIOUS INSERT
+                
         // if you cannot provide an identity
         var lastId = ctx.lastID();
         

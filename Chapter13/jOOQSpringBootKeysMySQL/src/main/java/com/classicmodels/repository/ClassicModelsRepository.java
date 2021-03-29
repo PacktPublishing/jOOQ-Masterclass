@@ -5,7 +5,6 @@ import static jooq.generated.tables.Sale.SALE;
 import jooq.generated.tables.records.SaleRecord;
 import org.jooq.DSLContext;
 import org.jooq.conf.Settings;
-import org.jooq.impl.DSL;
 import static org.jooq.impl.DSL.row;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -93,7 +92,10 @@ public class ClassicModelsRepository {
         ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
                 .values(2002, 9876.96, 1504L)
                 .execute();
-        
+
+        // PAY ATTENTION TO THE FACT THAT, MEANWHILE, A CONCURRENT TRANSACTION CAN MODIFY THE CURRENT VALUE
+        // SO, THERE IS NO GUARANTEE THAT THE BELOW FETCHED *lastId* IS THE PRIMARY KEY OF THE PREVIOUS INSERT
+                
         // if you cannot provide an identity
         var lastId = ctx.lastID();
         
