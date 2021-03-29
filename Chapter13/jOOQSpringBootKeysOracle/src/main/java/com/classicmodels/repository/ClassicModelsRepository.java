@@ -93,13 +93,15 @@ public class ClassicModelsRepository {
     @Transactional
     public void insertAndReturnPrimaryKey() {
 
+        // Record1<BigInteger>
         var insertedId = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
                 .values(BigInteger.valueOf(2004), 2311.42, 1370L)
                 .returningResult(SALE.SALE_ID)
-                .fetchOne();
+                .fetchOne(); // get directly the BigInteger value, .fetchOne().value1();
 
         System.out.println("Inserted ID:\n" + insertedId);
 
+        // Result<Record1<BigInteger>>
         var insertedIds = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
                 .values(BigInteger.valueOf(2004), 2311.42, 1370L)
                 .values(BigInteger.valueOf(2003), 900.21, 1504L)
