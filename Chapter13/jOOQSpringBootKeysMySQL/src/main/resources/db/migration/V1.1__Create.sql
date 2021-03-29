@@ -290,4 +290,26 @@ BEGIN
 	RETURN (customerLevel);
 END$$
 DELIMITER ;
+
+-- VIEWS
+CREATE OR REPLACE VIEW customer_master AS
+SELECT `classicmodels`.`customer`.`customer_name`,
+       `classicmodels`.`customer`.`credit_limit`,
+       `classicmodels`.`customerdetail`.`city`,
+       `classicmodels`.`customerdetail`.`country`,
+       `classicmodels`.`customerdetail`.`address_line_first`,
+       `classicmodels`.`customerdetail`.`postal_code`,
+       `classicmodels`.`customerdetail`.`state`
+FROM `classicmodels`.`customer`
+JOIN `classicmodels`.`customerdetail` ON `classicmodels`.`customerdetail`.`customer_number` = `classicmodels`.`customer`.`customer_number`
+WHERE `classicmodels`.`customer`.`first_buy_date` IS NOT NULL;
+
+CREATE OR REPLACE VIEW office_master AS
+SELECT `classicmodels`.`office`.`office_code`,
+       `classicmodels`.`office`.`city`,
+       `classicmodels`.`office`.`country`,
+       `classicmodels`.`office`.`state`,
+       `classicmodels`.`office`.`phone`
+FROM `classicmodels`.`office`
+WHERE `classicmodels`.`office`.`city` IS NOT NULL
 /* END */

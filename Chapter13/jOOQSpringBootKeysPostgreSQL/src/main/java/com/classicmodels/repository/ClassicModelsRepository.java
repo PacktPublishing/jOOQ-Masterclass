@@ -24,21 +24,72 @@ public class ClassicModelsRepository {
         this.ctx = ctx;
     }
 
+    /* Insert and return primary key */
+    
+    @Transactional
+    public void insertIntoAndReturnPrimaryKey() {
+
+        // Record1<Long>
+        var insertedId = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
+                .values(2004, 2311.42, 1370L)
+                .returningResult(SALE.SALE_ID)
+                .fetchOne(); // get directly the long value, .fetchOne().value1();
+
+        System.out.println("Inserted ID:\n" + insertedId);
+
+        // Result<Record1<Long>>
+        var insertedIds = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
+                .values(2004, 2311.42, 1370L)
+                .values(2003, 900.21, 1504L)
+                .values(2005, 1232.2, 1166L)
+                .returningResult(SALE.SALE_ID)
+                .fetch();
+
+        System.out.println("Inserted IDs:\n" + insertedIds);
+        
+        // use lastID()
+        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
+                .values(2002, 9876.96, 1504L)
+                .execute();
+        
+        // PAY ATTENTION TO THE FACT THAT, MEANWHILE, A CONCURRENT TRANSACTION CAN MODIFY THE CURRENT VALUE
+        // SO, THERE IS NO GUARANTEE THAT THE BELOW FETCHED *lastId* IS THE PRIMARY KEY OF THE PREVIOUS INSERT
+        
+        // if you cannot provide an identity
+        var lastId = ctx.lastID();
+        
+        System.out.println("Last ID: " + lastId);
+    }
+    
     /* Primary keys and updatable records */
+    
+    @Transactional
+    public void insertAndReturnPrimaryKey() {
+        
+        SaleRecord sr = ctx.newRecord(SALE);
+
+        sr.setFiscalYear(2021);
+        sr.setSale(4500.25);
+        sr.setEmployeeNumber(1504L);
+
+        sr.insert();
+
+        System.out.println("The inserted record ID: " + sr.getSaleId());
+    }
     
     @Transactional
     public void returnIdentitiesOnUpdatableRecord() {
 
-        SaleRecord srNoReturnId = ctx.newRecord(SALE);
+        SaleRecord sr = ctx.newRecord(SALE);
 
-        srNoReturnId.setFiscalYear(2021);
-        srNoReturnId.setSale(4500.25);
-        srNoReturnId.setEmployeeNumber(1504L);
+        sr.setFiscalYear(2021);
+        sr.setSale(4500.25);
+        sr.setEmployeeNumber(1504L);
 
-        srNoReturnId.insert();
+        sr.insert();
 
-        System.out.println("The inserted record ID: " + srNoReturnId.getSaleId());
-        System.out.println("The inserted record 'sale_index' IDENTITY: " + srNoReturnId.getSaleIndex());
+        System.out.println("The inserted record ID: " + sr.getSaleId());
+        System.out.println("The inserted record 'sale_index' IDENTITY: " + sr.getSaleIndex());
     }
     
     @Transactional
@@ -84,44 +135,7 @@ public class ClassicModelsRepository {
                 .set(SALE.SALE_ID, sr.getSaleId() + 1)
                 .where(SALE.SALE_ID.eq(sr.getSaleId()))
                 .execute();
-    }
-
-    /* Insert and return primary key */
-    
-    @Transactional
-    public void insertAndReturnPrimaryKey() {
-
-        // Record1<Long>
-        var insertedId = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
-                .values(2004, 2311.42, 1370L)
-                .returningResult(SALE.SALE_ID)
-                .fetchOne(); // get directly the long value, .fetchOne().value1();
-
-        System.out.println("Inserted ID:\n" + insertedId);
-
-        // Result<Record1<Long>>
-        var insertedIds = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
-                .values(2004, 2311.42, 1370L)
-                .values(2003, 900.21, 1504L)
-                .values(2005, 1232.2, 1166L)
-                .returningResult(SALE.SALE_ID)
-                .fetch();
-
-        System.out.println("Inserted IDs:\n" + insertedIds);
-        
-        // use lastID()
-        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
-                .values(2002, 9876.96, 1504L)
-                .execute();
-        
-        // PAY ATTENTION TO THE FACT THAT, MEANWHILE, A CONCURRENT TRANSACTION CAN MODIFY THE CURRENT VALUE
-        // SO, THERE IS NO GUARANTEE THAT THE BELOW FETCHED *lastId* IS THE PRIMARY KEY OF THE PREVIOUS INSERT
-        
-        // if you cannot provide an identity
-        var lastId = ctx.lastID();
-        
-        System.out.println("Last ID: " + lastId);
-    }
+    }    
 
     /* Compare composed keys */
     

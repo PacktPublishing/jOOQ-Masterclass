@@ -14,10 +14,11 @@ public class ClassicModelsService {
 
     public void callAll() {
 
+        classicModelsRepository.insertIntoAndReturnPrimaryKey();
+        classicModelsRepository.insertAndReturnPrimaryKey();
         classicModelsRepository.returnIdentitiesOnUpdatableRecord();
         classicModelsRepository.suppressPrimaryKeyReturnOnUpdatableRecord();
-        classicModelsRepository.updatePrimaryKeyOnUpdatableRecord();
-        classicModelsRepository.insertAndReturnPrimaryKey();
+        classicModelsRepository.updatePrimaryKeyOnUpdatableRecord();        
         classicModelsRepository.compareComposedPrimaryKey();
 
         classicModelsRepository.getSequenceInfo();

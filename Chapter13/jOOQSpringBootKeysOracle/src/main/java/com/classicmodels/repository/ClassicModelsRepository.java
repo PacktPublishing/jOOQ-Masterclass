@@ -26,21 +26,59 @@ public class ClassicModelsRepository {
         this.ctx = ctx;
     }
 
+    /* Insert and return primary key */
+    
+    @Transactional
+    public void insertIntoAndReturnPrimaryKey() {
+
+        // Record1<BigInteger>
+        var insertedId = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
+                .values(BigInteger.valueOf(2004), 2311.42, 1370L)
+                .returningResult(SALE.SALE_ID)
+                .fetchOne(); // get directly the BigInteger value, .fetchOne().value1();
+
+        System.out.println("Inserted ID:\n" + insertedId);
+
+        // Result<Record1<BigInteger>>
+        var insertedIds = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
+                .values(BigInteger.valueOf(2004), 2311.42, 1370L)
+                .values(BigInteger.valueOf(2003), 900.21, 1504L)
+                .values(BigInteger.valueOf(2005), 1232.2, 1166L)
+                .returningResult(SALE.SALE_ID)
+                .fetch();
+
+        System.out.println("Inserted IDs:\n" + insertedIds);                
+    }
+    
     /* Primary keys and updatable records */
+    
+    @Transactional
+    public void insertAndReturnPrimaryKey() {
+        
+        SaleRecord sr = ctx.newRecord(SALE);
+
+        sr.setFiscalYear(BigInteger.valueOf(2021));
+        sr.setSale(4500.25);
+        sr.setEmployeeNumber(1504L);
+
+        sr.insert();
+
+        System.out.println("The inserted record ID: " + sr.getSaleId());
+    }
     
     @Transactional
     public void returnIdentitiesOnUpdatableRecord() {
 
-        SaleRecord srNoReturnId = ctx.newRecord(SALE);
+        SaleRecord sr = ctx.newRecord(SALE);
 
-        srNoReturnId.setFiscalYear(BigInteger.valueOf(2021));
-        srNoReturnId.setSale(4500.25);
-        srNoReturnId.setEmployeeNumber(1504L);
+        sr.setFiscalYear(BigInteger.valueOf(2021));
+        sr.setSale(4500.25);
+        sr.setEmployeeNumber(1504L);
 
-        srNoReturnId.insert();
+        sr.insert();
 
-        System.out.println("The inserted record ID: " + srNoReturnId.getSaleId());
-        System.out.println("The inserted record 'sale_index' IDENTITY: " + srNoReturnId.getSaleIndex());
+        System.out.println("The inserted record ID: " + sr.getSaleId());
+        System.out.println("The inserted record 'sale_index' IDENTITY: " + sr.getSaleIndex());
     }
     
     @Transactional
@@ -86,31 +124,7 @@ public class ClassicModelsRepository {
                 .set(SALE.SALE_ID, sr.getSaleId().add(BigInteger.ONE))
                 .where(SALE.SALE_ID.eq(sr.getSaleId()))
                 .execute();
-    }
-
-    /* Insert and return primary key */
-    
-    @Transactional
-    public void insertAndReturnPrimaryKey() {
-
-        // Record1<BigInteger>
-        var insertedId = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
-                .values(BigInteger.valueOf(2004), 2311.42, 1370L)
-                .returningResult(SALE.SALE_ID)
-                .fetchOne(); // get directly the BigInteger value, .fetchOne().value1();
-
-        System.out.println("Inserted ID:\n" + insertedId);
-
-        // Result<Record1<BigInteger>>
-        var insertedIds = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
-                .values(BigInteger.valueOf(2004), 2311.42, 1370L)
-                .values(BigInteger.valueOf(2003), 900.21, 1504L)
-                .values(BigInteger.valueOf(2005), 1232.2, 1166L)
-                .returningResult(SALE.SALE_ID)
-                .fetch();
-
-        System.out.println("Inserted IDs:\n" + insertedIds);                
-    }
+    }   
 
     /* Compare composed keys */
     

@@ -14,9 +14,10 @@ public class ClassicModelsService {
     
     public void callAll() {
         
-        classicModelsRepository.suppressPrimaryKeyReturnOnUpdatableRecord();
-        classicModelsRepository.updatePrimaryKeyOnUpdatableRecord();
+        classicModelsRepository.insertIntoAndReturnPrimaryKey();
         classicModelsRepository.insertAndReturnPrimaryKey();
+        classicModelsRepository.suppressPrimaryKeyReturnOnUpdatableRecord();
+        classicModelsRepository.updatePrimaryKeyOnUpdatableRecord();        
         classicModelsRepository.compareComposedPrimaryKey();
     }
 }
