@@ -14,7 +14,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.6.RELEASE</version>        
+        <version>2.3.3.RELEASE</version>        
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -178,10 +178,25 @@
                             <excludes>flyway_schema_history</excludes>                                                                                                                
                         </database>
                         
+                        <!-- Rename the generated DAOs classes -->                      
+                        <strategy>
+                            <matchers>
+                                <tables>
+                                    <table>                                              
+                                        <daoClass>
+                                            <expression>$0_Repository</expression>
+                                            <transform>PASCAL</transform>                                                                                      
+                                        </daoClass>
+                                    </table>
+                                </tables>
+                            </matchers>
+                        </strategy>
+                                
                         <!-- jOOQ will generate POJOs in your behalf -->
                         <generate>                            
-                            <pojos>true</pojos>                            
-                            <validationAnnotations>true</validationAnnotations>                            
+                            <daos>true</daos>                   
+                            <validationAnnotations>true</validationAnnotations>    
+                            <springAnnotations>true</springAnnotations>                         
                         </generate>
                         
                         <target>
