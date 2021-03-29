@@ -20,30 +20,10 @@ public class ClassicModelsRepository {
         this.ctx = ctx;
     }
 
-    /* Primary keys and updatable records */
-      
-    @Transactional
-    public void suppressPrimaryKeyReturnOnUpdatableRecord() {
-
-        // Insert without returning the generated primary key
-        DSLContext derivedCtx = ctx.configuration().derive(new Settings()
-                .withReturnIdentityOnUpdatableRecord(false)).dsl();
-
-        SaleRecord srNoReturnId = derivedCtx.newRecord(SALE);
-
-        srNoReturnId.setFiscalYear(2021);
-        srNoReturnId.setSale(4500.25);
-        srNoReturnId.setEmployeeNumber(1504L);
-
-        srNoReturnId.insert();
-
-        System.out.println("The inserted record ID (should be null): " + srNoReturnId.getSaleId());        
-    }
-
     /* Insert and return primary key */
     
     @Transactional
-    public void insertAndReturnPrimaryKey() {
+    public void insertIntoAndReturnPrimaryKey() {
 
         // Record1<Long>
         var insertedId = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
@@ -76,6 +56,40 @@ public class ClassicModelsRepository {
         
         System.out.println("Last ID: " + lastId);
     }
+    
+    /* Primary keys and updatable records */
+    
+    @Transactional
+    public void insertAndReturnPrimaryKey() {
+        
+        SaleRecord sr = ctx.newRecord(SALE);
+
+        sr.setFiscalYear(2021);
+        sr.setSale(4500.25);
+        sr.setEmployeeNumber(1504L);
+
+        sr.insert();
+
+        System.out.println("The inserted record ID (should not be null): " + sr.getSaleId());        
+    }
+      
+    @Transactional
+    public void suppressPrimaryKeyReturnOnUpdatableRecord() {
+
+        // Insert without returning the generated primary key
+        DSLContext derivedCtx = ctx.configuration().derive(new Settings()
+                .withReturnIdentityOnUpdatableRecord(false)).dsl();
+
+        SaleRecord srNoReturnId = derivedCtx.newRecord(SALE);
+
+        srNoReturnId.setFiscalYear(2021);
+        srNoReturnId.setSale(4500.25);
+        srNoReturnId.setEmployeeNumber(1504L);
+
+        srNoReturnId.insert();
+
+        System.out.println("The inserted record ID (should be null): " + srNoReturnId.getSaleId());        
+    }    
     
     /* Insert IDENTITY values */
     
