@@ -181,12 +181,13 @@ public class ClassicModelsRepository {
     @Transactional
     public void getSequenceInfo() {
 
+        String name = EMPLOYEE_SEQ.getName();
         Field<Long> start = EMPLOYEE_SEQ.getStartWith();
         Field<Long> min = EMPLOYEE_SEQ.getMinvalue();
         Field<Long> max = EMPLOYEE_SEQ.getMaxvalue();
         Field<Long> inc = EMPLOYEE_SEQ.getIncrementBy();
 
-        System.out.println("SEQUENCE: " + "\nName:" + EMPLOYEE_SEQ.getName() + "\n"
+        System.out.println("SEQUENCE: " + "\nName:" + name + "\n"
                 + "Start: " + start + "\nMin: " + min + "\nMax: " + max + "\nInc:" + inc);
 
         var vals = ctx.select(EMPLOYEE_SEQ.nextval(), EMPLOYEE_SEQ.currval()).fetchSingle();
@@ -234,6 +235,16 @@ public class ClassicModelsRepository {
         // between them a concurrent transaction can affect the current value
         ctx.deleteFrom(SALE)
                 .where(SALE.SALE_ID.eq(ctx.select(SALE_SEQ.currval()).fetchSingle().value1()))
+                .execute();
+        
+        // this is not prone to the same issue because there will be a single DELETE
+        ctx.update(SALE)
+                .set(SALE.FISCAL_YEAR, 2005)
+                .where(SALE.SALE_ID.eq(SALE_SEQ.currval()))
+                .execute();
+        
+        ctx.deleteFrom(SALE)
+                .where(SALE.SALE_ID.eq(SALE_SEQ.currval()))
                 .execute();
     }
 
