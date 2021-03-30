@@ -30,12 +30,21 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 1.1:\n" + result1);
         
-        List<EmbeddedProductlinePk> result2 = ctx.select(PRODUCTLINE.PRODUCTLINE_PK)
+        // Result<Record1<EmbeddedProductlinePkRecord>>
+        var result2 = ctx.select(PRODUCTLINE.PRODUCTLINE_PK)
+                .from(PRODUCTLINE)
+                .where(PRODUCTLINE.IMAGE.isNull())
+                .fetch();
+        
+        System.out.println("EXAMPLE 1.2:\n" + result2.get(0).value1().getProductLine() 
+                + ", " +  result2.get(0).value1().getCode());
+        
+        List<EmbeddedProductlinePk> result3 = ctx.select(PRODUCTLINE.PRODUCTLINE_PK)
                 .from(PRODUCTLINE)
                 .where(PRODUCTLINE.IMAGE.isNull())
                 .fetchInto(EmbeddedProductlinePk.class);
         
-        System.out.println("EXAMPLE 1.2:\n" + result2);
+        System.out.println("EXAMPLE 1.3:\n" + result3);
     }
 
     public void fetchProductlineAndDetail() {
