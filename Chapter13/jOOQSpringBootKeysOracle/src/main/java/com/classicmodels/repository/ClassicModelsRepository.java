@@ -284,11 +284,29 @@ public class ClassicModelsRepository {
         
         System.out.println("RowID after delete:\n" + del);
         
-        var ins = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
+        var ins1 = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
+                .values(BigInteger.valueOf(2004), 2311.42, 1370L)
+                .returningResult(SALE.SALE_ID, rowid())
+                .fetchOne();        
+        
+        var ins2 = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
                 .values(BigInteger.valueOf(2004), 2311.42, 1370L)
                 .returningResult(SALE.SALE_ID, SALE.SALE_INDEX, rowid())
                 .fetchOne();
         
-        System.out.println("RowID after insert:\n" + ins);
+        System.out.println("RowID after insert (1):\n" + ins1);
+        System.out.println("RowID after insert (2):\n" + ins2);
+        
+        String rowid = ins2.value3();
+        var result = ctx.selectFrom(SALE)
+                .where(rowid().eq(rowid))
+                .fetch();                
+        
+        System.out.println("Fetched:\n" + result);
+        
+        ctx.update(SALE)
+                .set(SALE.EMPLOYEE_NUMBER, 1504L)
+                .where(rowid().eq(rowid))
+                .execute();
     }
 }
