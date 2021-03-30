@@ -1,8 +1,8 @@
 package com.classicmodels.repository;
 
 import java.math.BigInteger;
-import jooq.generated.embeddables.pojos.SalePkEmbedded;
-import jooq.generated.embeddables.records.SalePkEmbeddedRecord;
+import jooq.generated.embeddables.pojos.EmbeddedSalePk;
+import jooq.generated.embeddables.records.EmbeddedSalePkRecord;
 import jooq.generated.tables.pojos.Sale;
 import static jooq.generated.tables.Sale.SALE;
 import static jooq.generated.tables.Token.TOKEN;
@@ -35,17 +35,17 @@ public class ClassicModelsRepository {
         // Record2<Double, Integer>
         var result2 = ctx.select(SALE.SALE_, SALE.FISCAL_YEAR)
                 .from(SALE)
-                .where(SALE.SALE_PK.eq(new SalePkEmbeddedRecord(BigInteger.ONE)))                
+                .where(SALE.SALE_PK.eq(new EmbeddedSalePkRecord(BigInteger.ONE)))                
                 .fetchSingle();
         
         System.out.println("EXAMPLE 2:\n");
         System.out.println("Sale: " + result2.value1());
         System.out.println("Fiscal year: " + result1.value2());                
         
-        SalePkEmbedded result3 = ctx.select(SALE.SALE_PK)
+        EmbeddedSalePk result3 = ctx.select(SALE.SALE_PK)
                 .from(SALE)
                 .where(SALE.SALE_.gt(5000d))                
-                .fetchAnyInto(SalePkEmbedded.class);
+                .fetchAnyInto(EmbeddedSalePk.class);
         
         System.out.println("EXAMPLE 3:\n");
         System.out.println("PK: " + result3.getSaleId());        
@@ -63,7 +63,7 @@ public class ClassicModelsRepository {
     
     public void fetchToken() {
         
-        // Record3<TokenPkEmbeddedRecord, SalePkEmbeddedRecord, Double>
+        // Record3<EmbeddedTokenPkRecord, EmbeddedSalePkRecord, Double>
         var result = ctx.select(TOKEN.TOKEN_PK, TOKEN.TOKEN_SALE_FK, TOKEN.AMOUNT)
                 .from(TOKEN)
                 .where(TOKEN.AMOUNT.gt(1000d))
