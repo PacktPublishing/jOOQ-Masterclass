@@ -237,7 +237,7 @@ public class ClassicModelsRepository {
                 .where(SALE.SALE_ID.eq(ctx.select(SALE_SEQ.currval()).fetchSingle().value1()))
                 .execute();
         
-        // this is not prone to the same issue because there will be a single DELETE
+        // this is not prone to the same issue because there will be a single UPDATE/DELETE
         ctx.update(SALE)
                 .set(SALE.FISCAL_YEAR, 2005)
                 .where(SALE.SALE_ID.eq(SALE_SEQ.currval()))

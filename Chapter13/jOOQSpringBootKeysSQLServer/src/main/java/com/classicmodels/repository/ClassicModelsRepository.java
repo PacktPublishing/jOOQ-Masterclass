@@ -3,6 +3,7 @@ package com.classicmodels.repository;
 import static jooq.generated.Sequences.EMPLOYEE_SEQ;
 import static jooq.generated.Sequences.SALE_SEQ;
 import static jooq.generated.tables.Employee.EMPLOYEE;
+import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Productline.PRODUCTLINE;
 import static jooq.generated.tables.Sale.SALE;
 import jooq.generated.tables.daos.SaleRepository;
@@ -115,13 +116,14 @@ public class ClassicModelsRepository {
     
     public void insertIdentity() {
         
-        Query q1 = ctx.query("SET IDENTITY_INSERT [sale] ON");
-        Query q2 = ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
-                .values(5555L, 2004, 2311.42, 1370L)
+        Query q1 = ctx.query("SET IDENTITY_INSERT [product] ON");
+        Query q2 = ctx.insertInto(PRODUCT, PRODUCT.PRODUCT_ID, 
+                PRODUCT.PRODUCT_LINE, PRODUCT.CODE, PRODUCT.PRODUCT_NAME)
+                .values(5555L, "Classic Cars", 599302L, "Super TX Audi")
                 .onDuplicateKeyIgnore(); // this will lead to a MERGE
-        Query q3 = ctx.query("SET IDENTITY_INSERT [sale] OFF");
+        Query q3 = ctx.query("SET IDENTITY_INSERT [product] OFF");
 
-        ctx.batch(q1, q2, q3).execute();
+        ctx.batch(q1, q2, q3).execute();        
     }
     
     @Transactional
@@ -181,6 +183,16 @@ public class ClassicModelsRepository {
         // between them a concurrent transaction can affect the current value
         ctx.deleteFrom(SALE)
                 .where(SALE.SALE_ID.eq(ctx.select(SALE_SEQ.currval()).fetchSingle().value1()))
+                .execute();
+        
+        // this is not prone to the same issue because there will be a single UPDATE/DELETE
+        ctx.update(SALE)
+                .set(SALE.FISCAL_YEAR, 2005)
+                .where(SALE.SALE_ID.eq(SALE_SEQ.currval()))
+                .execute();
+        
+        ctx.deleteFrom(SALE)
+                .where(SALE.SALE_ID.eq(SALE_SEQ.currval()))
                 .execute();
     }  
 
