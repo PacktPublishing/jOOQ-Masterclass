@@ -114,6 +114,12 @@ CREATE TABLE employee (
   CONSTRAINT [employee_office_fk] FOREIGN KEY ([office_code]) REFERENCES office ([office_code])
 ) ;
 
+DROP SEQUENCE IF EXISTS employee_seq;
+GO
+
+CREATE SEQUENCE employee_seq START WITH 100000 INCREMENT BY 10 MINVALUE 100000 MAXVALUE 10000000000;
+GO
+
 /*Table structure for table `department` */
 
 CREATE TABLE department (
@@ -123,13 +129,20 @@ CREATE TABLE department (
   [code] smallint DEFAULT 1,
   [office_code] varchar(10) NOT NULL,
   [topic] varchar(100) DEFAULT NULL,  
-  [dep_net_ipv4] varchar(16) DEFAULT NULL,
-  CONSTRAINT [department_pk] PRIMARY KEY ([department_id])
+  [dep_net_ipv4] varchar(16) DEFAULT NULL, 
+  CONSTRAINT [department_pk] PRIMARY KEY ([department_id]),
+  CONSTRAINT [department_code_uk] UNIQUE ([code])
 ,
   CONSTRAINT [department_office_fk] FOREIGN KEY ([office_code]) REFERENCES office ([office_code])
 ) ;
 
 /*Table structure for table `sale` */
+DROP SEQUENCE IF EXISTS sale_seq;
+GO
+
+CREATE SEQUENCE sale_seq START WITH 1 INCREMENT BY 1;
+GO
+
 CREATE TABLE sale (
   [sale_id] bigint NOT NULL IDENTITY,  
   [fiscal_year] int NOT NULL,  
@@ -139,6 +152,7 @@ CREATE TABLE sale (
   [rate] varchar(10) DEFAULT NULL,
   [vat] varchar(10) DEFAULT NULL,
   [trend] varchar(10) DEFAULT NULL,
+  [sale_index] bigint NOT NULL DEFAULT (NEXT VALUE FOR sale_seq),
   CONSTRAINT [sale_pk] PRIMARY KEY ([sale_id])
 ,    
   CONSTRAINT [sale_employee_fk] FOREIGN KEY ([employee_number]) REFERENCES employee ([employee_number]) ON UPDATE CASCADE,
@@ -167,7 +181,8 @@ CREATE TABLE customer (
   [sales_rep_employee_number] bigint DEFAULT NULL,
   [credit_limit] decimal(10,2) DEFAULT NULL,
   [first_buy_date] int DEFAULT NULL,
-  CONSTRAINT [customer_pk] PRIMARY KEY ([customer_number])
+  CONSTRAINT [customer_pk] PRIMARY KEY ([customer_number]),
+  CONSTRAINT [customer_name_uk] UNIQUE ([customer_name])
  ,
   CONSTRAINT [customer_employee_fk] FOREIGN KEY ([sales_rep_employee_number]) REFERENCES employee ([employee_number]) ON UPDATE CASCADE
 ) ;
@@ -319,5 +334,28 @@ CREATE TABLE bank_transaction (
   CONSTRAINT [bank_transaction_pk] PRIMARY KEY ([transaction_id]),  
   CONSTRAINT [bank_transaction_customer_fk] FOREIGN KEY ([customer_number],[check_number]) REFERENCES payment ([customer_number],[check_number])
 ) ;
+GO
 
+-- VIEWS
+CREATE VIEW customer_master AS
+SELECT [classicmodels].[dbo].[customer].[customer_name],
+       [classicmodels].[dbo].[customer].[credit_limit],
+       [classicmodels].[dbo].[customerdetail].[city],
+       [classicmodels].[dbo].[customerdetail].[country],
+       [classicmodels].[dbo].[customerdetail].[address_line_first],
+       [classicmodels].[dbo].[customerdetail].[postal_code],
+       [classicmodels].[dbo].[customerdetail].[state]
+FROM [classicmodels].[dbo].[customer]
+JOIN [classicmodels].[dbo].[customerdetail] ON [classicmodels].[dbo].[customerdetail].[customer_number] = [classicmodels].[dbo].[customer].[customer_number]
+WHERE [classicmodels].[dbo].[customer].[first_buy_date] IS NOT NULL;
+GO
+
+CREATE VIEW office_master AS
+SELECT [classicmodels].[dbo].[office].[office_code],
+       [classicmodels].[dbo].[office].[city],
+       [classicmodels].[dbo].[office].[country],
+       [classicmodels].[dbo].[office].[state],
+       [classicmodels].[dbo].[office].[phone]
+FROM [classicmodels].[dbo].[office]
+WHERE [classicmodels].[dbo].[office].[city] IS NOT NULL
 /* END */

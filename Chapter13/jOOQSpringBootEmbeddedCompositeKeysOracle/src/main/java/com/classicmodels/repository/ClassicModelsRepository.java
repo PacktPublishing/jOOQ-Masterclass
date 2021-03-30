@@ -53,9 +53,9 @@ public class ClassicModelsRepository {
 
     public void fetchProductlineAndProduct() {
 
-        // Result<Record3<ProductlinePkEmbeddedRecord, ProductPkEmbeddedRecord, String>>
+        // Result<Record3<ProductlinePkEmbeddedRecord, Long, String>>
         var result = ctx.select(PRODUCTLINE.PRODUCTLINE_PK,
-                PRODUCT.PRODUCT_PK, PRODUCT.PRODUCT_NAME)
+                PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME)
                 .from(PRODUCTLINE)
                 .join(PRODUCT)
                 .on(PRODUCTLINE.PRODUCTLINE_PK.eq(PRODUCT.PRODUCT_PRODUCTLINE_FK))

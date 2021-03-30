@@ -173,7 +173,7 @@
                                     (default is 5 seconds) -->
                                     <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>
                                                                         
-                                    <embeddablePrimaryKeys>productline_pk|product_pk</embeddablePrimaryKeys>                                      
+                                    <embeddablePrimaryKeys>productline_pk</embeddablePrimaryKeys>                                      
                                 </database>
                                        
                                 <strategy>
