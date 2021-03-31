@@ -423,257 +423,257 @@ select 496,'Kelly''s Gift Shop','Snowden','Tony','+64 9 5555500',1612,'110000.00
 
 insert /*+ ignore_row_on_dupkey_index(customerdetail(customer_number)) */ into customerdetail(customer_number,address_line_first,address_line_second,city,state,postal_code,country) 
 
- select 99,'43 Rue 2',NULL, 'Paris' ,NULL,'25017','France' from dual union all
+select 99,'43 Rue 2',NULL, 'Paris' ,NULL,'25017','France' from dual union all
 
- select 100,'51, Avenue 3',NULL, NULL ,NULL,'43000',NULL from dual union all
+select 100,'51, Avenue 3',NULL, NULL ,NULL,'43000',NULL from dual union all
 
- select 101,'51, St 5',NULL, NULL ,NULL,'44000','USA' from dual union all
+select 101,'51, St 5',NULL, NULL ,NULL,'44000','USA' from dual union all
 
- select 102,'51, St AQ',NULL, 'Bucharest' ,NULL,'12000',NULL from dual union all
+select 102,'51, St AQ',NULL, 'Bucharest' ,NULL,'12000',NULL from dual union all
 
- select 103,'54, rue Royale',NULL,'Nantes',NULL,'44000','France' from dual union all
+select 103,'54, rue Royale',NULL,'Nantes',NULL,'44000','France' from dual union all
 
- select 112,'8489 Strong St.',NULL,'Las Vegas','NV','75017','USA' from dual union all
+select 112,'8489 Strong St.',NULL,'Las Vegas','NV','75017','USA' from dual union all
 
- select 114,'636 St Kilda Road','Level 3','Melbourne','Victoria','3004','Australia' from dual union all
+select 114,'636 St Kilda Road','Level 3','Melbourne','Victoria','3004','Australia' from dual union all
 
- select 119,'67, rue des Cinquante Otages',NULL,'Nantes',NULL,'44000','France' from dual union all
+select 119,'67, rue des Cinquante Otages',NULL,'Nantes',NULL,'44000','France' from dual union all
 
- select 121,'Erling Skakkes gate 78',NULL,'Stavern',NULL,'4110','Norway' from dual union all
+select 121,'Erling Skakkes gate 78',NULL,'Stavern',NULL,'4110','Norway' from dual union all
 
- select 124,'5677 Strong St.',NULL,'San Rafael','CA','97562','USA' from dual union all
+select 124,'5677 Strong St.',NULL,'San Rafael','CA','97562','USA' from dual union all
 
- select 125,'ul. Filtrowa 68',NULL,'Warszawa',NULL,'01-012','Poland' from dual union all
+select 125,'ul. Filtrowa 68',NULL,'Warszawa',NULL,'01-012','Poland' from dual union all
 
- select 128,'Lyonerstr. 34',NULL,'Frankfurt',NULL,'60528','Germany' from dual union all
+select 128,'Lyonerstr. 34',NULL,'Frankfurt',NULL,'60528','Germany' from dual union all
 
- select 129,'5557 North Pendale Street',NULL,'San Francisco','CA','94217','USA' from dual union all
+select 129,'5557 North Pendale Street',NULL,'San Francisco','CA','AZ934VB','USA' from dual union all
 
- select 131,'897 Long Airport Avenue',NULL,'NYC','NY','10022','USA' from dual union all
+select 131,'897 Long Airport Avenue',NULL,'NYC','NY','AA100CV','USA' from dual union all
 
- select 141,'C/ Moralzarzal, 86',NULL,'Madrid',NULL,'28034','Spain' from dual union all
+select 141,'C/ Moralzarzal, 86',NULL,'Madrid',NULL,'28034','Spain' from dual union all
 
- select 144,'Berguvsvägen  8',NULL,'Luleå',NULL,'S-958 22','Sweden' from dual union all
+select 144,'Berguvsvägen  8',NULL,'Luleå',NULL,'S-958 22','Sweden' from dual union all
 
- select 145,'Vinbæltet 34',NULL,'Kobenhavn',NULL,'1734','Denmark' from dual union all
+select 145,'Vinbæltet 34',NULL,'Kobenhavn',NULL,'1734','Denmark' from dual union all
 
- select 146,'2, rue du Commerce',NULL,'Lyon',NULL,'69004','France' from dual union all
+select 146,'2, rue du Commerce',NULL,'Lyon',NULL,'69004','France' from dual union all
 
- select 148,'Bronz Sok.','Bronz Apt. 3/6 Tesvikiye','Singapore',NULL,'079903','Singapore' from dual union all
+select 148,'Bronz Sok.','Bronz Apt. 3/6 Tesvikiye','Singapore',NULL,'079903','Singapore' from dual union all
 
- select 151,'4092 Furth Circle','Suite 400','NYC','NY','10022','USA' from dual union all
+select 151,'4092 Furth Circle','Suite 400','NYC','NY','AA100CV','USA' from dual union all
 
- select 157,'7586 Pompton St.',NULL,'Allentown','PA','70267','USA' from dual union all
+select 157,'7586 Pompton St.',NULL,'Allentown','PA','70267','USA' from dual union all
 
- select 161,'9408 Furth Circle',NULL,'Burlingame','CA','94217','USA' from dual union all
+select 161,'9408 Furth Circle',NULL,'Burlingame','CA','94217','USA' from dual union all
 
- select 166,'106 Linden Road Sandown','2nd Floor','Singapore',NULL,'069045','Singapore' from dual union all
+select 166,'106 Linden Road Sandown','2nd Floor','Singapore',NULL,'069045','Singapore' from dual union all
 
- select 167,'Brehmen St. 121','PR 334 Sentrum','Bergen',NULL,'N 5804','Norway  ' from dual union all
+select 167,'Brehmen St. 121','PR 334 Sentrum','Bergen',NULL,'N 5804','Norway  ' from dual union all
 
- select 168,'149 Spinnaker Dr.','Suite 101','New Haven','CT','97823','USA' from dual union all
+select 168,'149 Spinnaker Dr.','Suite 101','New Haven','CT','97823','USA' from dual union all
 
- select 169,'Estrada da saúde n. 58',NULL,'Lisboa',NULL,'1756','Portugal' from dual union all
+select 169,'Estrada da saúde n. 58',NULL,'Lisboa',NULL,'1756','Portugal' from dual union all
 
- select 171,'184, chaussée de Tournai',NULL,'Lille',NULL,'59000','France' from dual union all
+select 171,'184, chaussée de Tournai',NULL,'Lille',NULL,'59000','France' from dual union all
 
- select 172,'265, boulevard Charonne',NULL,'Paris',NULL,'75012','France' from dual union all
+select 172,'265, boulevard Charonne',NULL,'Paris',NULL,'75012','France' from dual union all
 
- select 173,'4658 Baden Av.',NULL,'Cambridge','MA','51247','USA' from dual union all
+select 173,'4658 Baden Av.',NULL,'Cambridge','MA','51247','USA' from dual union all
 
- select 175,'25593 South Bay Ln.',NULL,'Bridgewater','CT','97562','USA' from dual union all
+select 175,'25593 South Bay Ln.',NULL,'Bridgewater','CT','97562','USA' from dual union all
 
- select 177,'1-6-20 Dojima',NULL,'Kita-ku','Osaka',' 530-0003','Japan' from dual union all
+select 177,'1-6-20 Dojima',NULL,'Kita-ku','Osaka',' 530-0003','Japan' from dual union all
 
- select 181,'2678 Kingston Rd.','Suite 101','NYC','NY','10022','USA' from dual union all
+select 181,'2678 Kingston Rd.','Suite 101','NYC','NY','AA100CV','USA' from dual union all
 
- select 186,'Keskuskatu 45',NULL,'Helsinki',NULL,'21240','Finland' from dual union all
+select 186,'Keskuskatu 45',NULL,'Helsinki',NULL,'21240','Finland' from dual union all
 
- select 187,'Fauntleroy Circus',NULL,'Manchester',NULL,'EC2 5NT','UK' from dual union all
+select 187,'Fauntleroy Circus',NULL,'Manchester',NULL,'EC2 5NT','UK' from dual union all
 
- select 189,'25 Maiden Lane','Floor No. 4','Dublin',NULL,'2','Ireland' from dual union all
+select 189,'25 Maiden Lane','Floor No. 4','Dublin',NULL,'2','Ireland' from dual union all
 
- select 198,'16780 Pompton St.',NULL,'Brickhaven','MA','58339','USA' from dual union all
+select 198,'16780 Pompton St.',NULL,'Brickhaven','MA','58339','USA' from dual union all
 
- select 201,'12, Berkeley Gardens Blvd',NULL,'Liverpool',NULL,'WX1 6LT','UK' from dual union all
+select 201,'12, Berkeley Gardens Blvd',NULL,'Liverpool',NULL,'WX1 6LT','UK' from dual union all
 
- select 202,'1900 Oak St.',NULL,'Vancouver','BC','V3F 2K1','Canada' from dual union all
+select 202,'1900 Oak St.',NULL,'Vancouver','BC','V3F 2K1','Canada' from dual union all
 
- select 204,'7635 Spinnaker Dr.',NULL,'Brickhaven','MA','58339','USA' from dual union all
+select 204,'7635 Spinnaker Dr.',NULL,'Brickhaven','MA','58339','USA' from dual union all
 
- select 205,'78934 Hillside Dr.',NULL,'Pasadena','CA','90003','USA' from dual union all
+select 205,'78934 Hillside Dr.',NULL,'Pasadena','CA','90003','USA' from dual union all
 
- select 206,'Suntec Tower Three','8 Temasek','Singapore',NULL,'038988','Singapore' from dual union all
+select 206,'Suntec Tower Three','8 Temasek','Singapore',NULL,'038988','Singapore' from dual union all
 
- select 209,'24, place Kléber',NULL,'Strasbourg',NULL,'67000','France' from dual union all
+select 209,'24, place Kléber',NULL,'Strasbourg',NULL,'67000','France' from dual union all
 
- select 211,'Bank of China Tower','1 Garden Road','Central Hong Kong',NULL,NULL,'Hong Kong' from dual union all
+select 211,'Bank of China Tower','1 Garden Road','Central Hong Kong',NULL,NULL,'Hong Kong' from dual union all
 
- select 216,'Rambla de Cataluña, 23',NULL,'Barcelona',NULL,'08022','Spain' from dual union all
+select 216,'Rambla de Cataluña, 23',NULL,'Barcelona',NULL,'08022','Spain' from dual union all
 
- select 219,'4097 Douglas Av.',NULL,'Glendale','CA','92561','USA' from dual union all
+select 219,'4097 Douglas Av.',NULL,'Glendale','CA','92561','USA' from dual union all
 
- select 223,'Taucherstraße 10',NULL,'Cunewalde',NULL,'01307','Germany' from dual union all
+select 223,'Taucherstraße 10',NULL,'Cunewalde',NULL,'01307','Germany' from dual union all
 
- select 227,'Smagsloget 45',NULL,'Århus',NULL,'8200','Denmark' from dual union all
+select 227,'Smagsloget 45',NULL,'Århus',NULL,'8200','Denmark' from dual union all
 
- select 233,'43 rue St. Laurent',NULL,'Montréal','Québec','H1J 1C3','Canada' from dual union all
+select 233,'43 rue St. Laurent',NULL,'Montréal','Québec','H1J 1C3','Canada' from dual union all
 
- select 237,'Gran Vía, 1',NULL,'Madrid',NULL,'28001','Spain' from dual union all
+select 237,'Gran Vía, 1',NULL,'Madrid',NULL,'28001','Spain' from dual union all
 
- select 239,'361 Furth Circle',NULL,'San Diego','CA','91217','USA' from dual union all
+select 239,'361 Furth Circle',NULL,'San Diego','CA','91217','USA' from dual union all
 
- select 240,'Garden House','Crowther Way 23','Cowes','Isle of Wight','PO31 7PJ','UK' from dual union all
+select 240,'Garden House','Crowther Way 23','Cowes','Isle of Wight','PO31 7PJ','UK' from dual union all
 
- select 242,'1 rue Alsace-Lorraine',NULL,'Toulouse',NULL,'31000','France' from dual union all
+select 242,'1 rue Alsace-Lorraine',NULL,'Toulouse',NULL,'31000','France' from dual union all
 
- select 247,'Magazinweg 7',NULL,'Frankfurt',NULL,'60528','Germany' from dual union all
+select 247,'Magazinweg 7',NULL,'Frankfurt',NULL,'60528','Germany' from dual union all
 
- select 249,'Via Monte Bianco 34',NULL,'Torino',NULL,'10100','Italy' from dual union all
+select 249,'Via Monte Bianco 34',NULL,'Torino',NULL,'10100','Italy' from dual union all
 
- select 250,'27 rue du Colonel Pierre Avia',NULL,'Paris',NULL,'75508','France' from dual union all
+select 250,'27 rue du Colonel Pierre Avia',NULL,'Paris',NULL,'75508','France' from dual union all
 
- select 256,'67, avenue de l''Europe',NULL,'Versailles',NULL,'78000','France' from dual union all
+select 256,'67, avenue de l''Europe',NULL,'Versailles',NULL,'78000','France' from dual union all
 
- select 259,'Mehrheimerstr. 369',NULL,'Köln',NULL,'50739','Germany' from dual union all
+select 259,'Mehrheimerstr. 369',NULL,'Köln',NULL,'50739','Germany' from dual union all
 
- select 260,'23 Tsawassen Blvd.',NULL,'Tsawassen','BC','T2F 8M4','Canada' from dual union all
+select 260,'23 Tsawassen Blvd.',NULL,'Tsawassen','BC','T2F 8M4','Canada' from dual union all
 
- select 273,'Berliner Platz 43',NULL,'München',NULL,'80805','Germany' from dual union all
+select 273,'Berliner Platz 43',NULL,'München',NULL,'80805','Germany' from dual union all
 
- select 276,'201 Miller Street','Level 15','North Sydney','NSW','2060','Australia' from dual union all
+select 276,'201 Miller Street','Level 15','North Sydney','NSW','2060','Australia' from dual union all
 
- select 278,'Via Ludovico il Moro 22',NULL,'Bergamo',NULL,'24100','Italy' from dual union all
+select 278,'Via Ludovico il Moro 22',NULL,'Bergamo',NULL,'24100','Italy' from dual union all
 
- select 282,'Monitor Money Building','815 Pacific Hwy','Chatswood','NSW','2067','Australia' from dual union all
+select 282,'Monitor Money Building','815 Pacific Hwy','Chatswood','NSW','2067','Australia' from dual union all
 
- select 286,'39323 Spinnaker Dr.',NULL,'Cambridge','MA','51247','USA' from dual union all
+select 286,'39323 Spinnaker Dr.',NULL,'Cambridge','MA','51247','USA' from dual union all
 
- select 293,'Rte des Arsenaux 41 ',NULL,'Fribourg',NULL,'1700','Switzerland' from dual union all
+select 293,'Rte des Arsenaux 41 ',NULL,'Fribourg',NULL,'1700','Switzerland' from dual union all
 
- select 298,'Grenzacherweg 237',NULL,'Genève',NULL,'1203','Switzerland' from dual union all
+select 298,'Grenzacherweg 237',NULL,'Genève',NULL,'1203','Switzerland' from dual union all
 
- select 299,'Drammensveien 126A','PB 211 Sentrum','Oslo',NULL,'N 0106','Norway  ' from dual union all
+select 299,'Drammensveien 126A','PB 211 Sentrum','Oslo',NULL,'N 0106','Norway  ' from dual union all
 
- select 303,'Kingsfordweg 151',NULL,'Amsterdam',NULL,'1043 GR','Netherlands' from dual union all
+select 303,'Kingsfordweg 151',NULL,'Amsterdam',NULL,'1043 GR','Netherlands' from dual union all
 
- select 307,'Obere Str. 57',NULL,'Berlin',NULL,'12209','Germany' from dual union all
+select 307,'Obere Str. 57',NULL,'Berlin',NULL,'12209','Germany' from dual union all
 
- select 311,'Torikatu 38',NULL,'Oulu',NULL,'90110','Finland' from dual union all
+select 311,'Torikatu 38',NULL,'Oulu',NULL,'90110','Finland' from dual union all
 
- select 314,'Rue Joseph-Bens 532',NULL,'Bruxelles',NULL,'B-1180','Belgium' from dual union all
+select 314,'Rue Joseph-Bens 532',NULL,'Bruxelles',NULL,'B-1180','Belgium' from dual union all
 
- select 319,'3758 North Pendale Street',NULL,'White Plains','NY','24067','USA' from dual union all
+select 319,'3758 North Pendale Street',NULL,'White Plains','NY','24067','USA' from dual union all
 
- select 320,'4575 Hillside Dr.',NULL,'New Bedford','MA','50553','USA' from dual union all
+select 320,'4575 Hillside Dr.',NULL,'New Bedford','MA','50553','USA' from dual union all
 
- select 321,'7734 Strong St.',NULL,'San Francisco','CA','94217','USA' from dual union all
+select 321,'7734 Strong St.',NULL,'San Francisco','CA','AZ934VB','USA' from dual union all
 
- select 323,'162-164 Grafton Road','Level 2','Auckland  ',NULL,NULL,'New Zealand' from dual union all
+select 323,'162-164 Grafton Road','Level 2','Auckland  ',NULL,NULL,'New Zealand' from dual union all
 
- select 324,'25 Old Broad Street','Level 7','London','N/A','EC2N 1HN','UK' from dual union all
+select 324,'25 Old Broad Street','Level 7','London','N/A','CV555RR','UK' from dual union all
 
- select 328,'7476 Moss Rd.',NULL,'Newark','NJ','94019','USA' from dual union all
+select 328,'7476 Moss Rd.',NULL,'Newark','NJ','94019','USA' from dual union all
 
- select 333,'31 Duncan St. West End',NULL,'South Brisbane','Queensland','4101','Australia' from dual union all
+select 333,'31 Duncan St. West End',NULL,'South Brisbane','Queensland','4101','Australia' from dual union all
 
- select 334,'Software Engineering Center','SEC Oy','Espoo',NULL,'FIN-02271','Finland' from dual union all
+select 334,'Software Engineering Center','SEC Oy','Espoo',NULL,'FIN-02271','Finland' from dual union all
 
- select 335,'Maubelstr. 90',NULL,'Brandenburg',NULL,'14776','Germany' from dual union all
+select 335,'Maubelstr. 90',NULL,'Brandenburg',NULL,'14776','Germany' from dual union all
 
- select 339,'782 First Street',NULL,'Philadelphia','PA','71270','USA' from dual union all
+select 339,'782 First Street',NULL,'Philadelphia','PA','71270','USA' from dual union all
 
- select 344,'Merchants House','27-30 Merchant''s Quay','Madrid',NULL,'28023','Spain' from dual union all
+select 344,'Merchants House','27-30 Merchant''s Quay','Madrid',NULL,'28023','Spain' from dual union all
 
- select 347,'6047 Douglas Av.',NULL,'Los Angeles','CA','91003','USA' from dual union all
+select 347,'6047 Douglas Av.',NULL,'Los Angeles','CA','91003','USA' from dual union all
 
- select 348,'8 Johnstown Road',NULL,'Cork','Co. Cork',NULL,'Ireland' from dual union all
+select 348,'8 Johnstown Road',NULL,'Cork','Co. Cork',NULL,'Ireland' from dual union all
 
- select 350,'12, rue des Bouchers',NULL,'Marseille',NULL,'13008','France' from dual union all
+select 350,'12, rue des Bouchers',NULL,'Marseille',NULL,'13008','France' from dual union all
 
- select 353,'59 rue de l''Abbaye',NULL,'Reims',NULL,'51100','France' from dual union all
+select 353,'59 rue de l''Abbaye',NULL,'Reims',NULL,'51100','France' from dual union all
 
- select 356,'1250 Pretorius Street',NULL,'Hatfield','Pretoria','0028','South Africa' from dual union all
+select 356,'1250 Pretorius Street',NULL,'Hatfield','Pretoria','0028','South Africa' from dual union all
 
- select 357,'199 Great North Road',NULL,'Auckland',NULL,NULL,'New Zealand' from dual union all
+select 357,'199 Great North Road',NULL,'Auckland',NULL,NULL,'New Zealand' from dual union all
 
- select 361,'Luisenstr. 48',NULL,'Münster',NULL,'44087','Germany' from dual union all
+select 361,'Luisenstr. 48',NULL,'Münster',NULL,'44087','Germany' from dual union all
 
- select 362,'8616 Spinnaker Dr.',NULL,'Boston','MA','51003','USA' from dual union all
+select 362,'8616 Spinnaker Dr.',NULL,'Boston','MA','XX021SS','USA' from dual union all
 
- select 363,'2304 Long Airport Avenue',NULL,'Nashua','NH','62005','USA' from dual union all
+select 363,'2304 Long Airport Avenue',NULL,'Nashua','NH','62005','USA' from dual union all
 
- select 369,'Jardim das rosas n. 32',NULL,'Lisboa',NULL,'1675','Portugal' from dual union all
+select 369,'Jardim das rosas n. 32',NULL,'Lisboa',NULL,'1675','Portugal' from dual union all
 
- select 376,'Hauptstr. 29',NULL,'Bern',NULL,'3012','Switzerland' from dual union all
+select 376,'Hauptstr. 29',NULL,'Bern',NULL,'3012','Switzerland' from dual union all
 
- select 379,'7825 Douglas Av.',NULL,'Brickhaven','MA','58339','USA' from dual union all
+select 379,'7825 Douglas Av.',NULL,'Brickhaven','MA','58339','USA' from dual union all
 
- select 381,'Boulevard Tirou, 255',NULL,'Charleroi',NULL,'B-6000','Belgium' from dual union all
+select 381,'Boulevard Tirou, 255',NULL,'Charleroi',NULL,'B-6000','Belgium' from dual union all
 
- select 382,'Geislweg 14',NULL,'Salzburg',NULL,'5020','Austria' from dual union all
+select 382,'Geislweg 14',NULL,'Salzburg',NULL,'5020','Austria' from dual union all
 
- select 385,'15 McCallum Street','NatWest Center #13-03','Makati City',NULL,'1227 MM','Philippines' from dual union all
+select 385,'15 McCallum Street','NatWest Center #13-03','Makati City',NULL,'1227 MM','Philippines' from dual union all
 
- select 386,'Strada Provinciale 124',NULL,'Reggio Emilia',NULL,'42100','Italy' from dual union all
+select 386,'Strada Provinciale 124',NULL,'Reggio Emilia',NULL,'42100','Italy' from dual union all
 
- select 398,'2-2-8 Roppongi',NULL,'Minato-ku','Tokyo','106-0032','Japan' from dual union all
+select 398,'2-2-8 Roppongi',NULL,'Minato-ku','Tokyo','106-0032','Japan' from dual union all
 
- select 406,'25, rue Lauriston',NULL,'Paris',NULL,'75016','France' from dual union all
+select 406,'25, rue Lauriston',NULL,'Paris',NULL,'75016','France' from dual union all
 
- select 409,'Adenauerallee 900',NULL,'Stuttgart',NULL,'70563','Germany' from dual union all
+select 409,'Adenauerallee 900',NULL,'Stuttgart',NULL,'70563','Germany' from dual union all
 
- select 412,'101 Lambton Quay','Level 11','Wellington',NULL,NULL,'New Zealand' from dual union all
+select 412,'101 Lambton Quay','Level 11','Wellington',NULL,NULL,'New Zealand' from dual union all
 
- select 415,'Hansastr. 15',NULL,'Munich',NULL,'80686','Germany' from dual union all
+select 415,'Hansastr. 15',NULL,'Munich',NULL,'80686','Germany' from dual union all
 
- select 424,'5905 Pompton St.','Suite 750','NYC','NY','10022','USA' from dual union all
+select 424,'5905 Pompton St.','Suite 750','NYC','NY','AA100CV','USA' from dual union all
 
- select 443,'Heerstr. 22',NULL,'Leipzig',NULL,'04179','Germany' from dual union all
+select 443,'Heerstr. 22',NULL,'Leipzig',NULL,'04179','Germany' from dual union all
 
- select 447,'2440 Pompton St.',NULL,'Glendale','CT','97561','USA' from dual union all
+select 447,'2440 Pompton St.',NULL,'Glendale','CT','97561','USA' from dual union all
 
- select 448,'Åkergatan 24',NULL,'Bräcke',NULL,'S-844 67','Sweden' from dual union all
+select 448,'Åkergatan 24',NULL,'Bräcke',NULL,'S-844 67','Sweden' from dual union all
 
- select 450,'3086 Ingle Ln.',NULL,'San Jose','CA','94217','USA' from dual union all
+select 450,'3086 Ingle Ln.',NULL,'San Jose','CA','94217','USA' from dual union all
 
- select 452,'Kirchgasse 6',NULL,'Graz',NULL,'8010','Austria' from dual union all
+select 452,'Kirchgasse 6',NULL,'Graz',NULL,'8010','Austria' from dual union all
 
- select 455,'567 North Pendale Street',NULL,'New Haven','CT','97823','USA' from dual union all
+select 455,'567 North Pendale Street',NULL,'New Haven','CT','97823','USA' from dual union all
 
- select 456,'5290 North Pendale Street','Suite 200','NYC','NY','10022','USA' from dual union all
+select 456,'5290 North Pendale Street','Suite 200','NYC','NY','AA100CV','USA' from dual union all
 
- select 458,'C/ Araquil, 67',NULL,'Madrid',NULL,'28023','Spain' from dual union all
+select 458,'C/ Araquil, 67',NULL,'Madrid',NULL,'28023','Spain' from dual union all
 
- select 459,'Walserweg 21',NULL,'Aachen',NULL,'52066','Germany' from dual union all
+select 459,'Walserweg 21',NULL,'Aachen',NULL,'52066','Germany' from dual union all
 
- select 462,'1785 First Street',NULL,'New Bedford','MA','50553','USA' from dual union all
+select 462,'1785 First Street',NULL,'New Bedford','MA','50553','USA' from dual union all
 
- select 465,'c/ Gobelas, 19-1 Urb. La Florida',NULL,'Madrid',NULL,'28023','Spain' from dual union all
+select 465,'c/ Gobelas, 19-1 Urb. La Florida',NULL,'Madrid',NULL,'28023','Spain' from dual union all
 
- select 471,'7 Allen Street',NULL,'Glen Waverly','Victoria','3150','Australia' from dual union all
+select 471,'7 Allen Street',NULL,'Glen Waverly','Victoria','3150','Australia' from dual union all
 
- select 473,'20093 Cologno Monzese','Alessandro Volta 16','Milan',NULL,NULL,'Italy' from dual union all
+select 473,'20093 Cologno Monzese','Alessandro Volta 16','Milan',NULL,NULL,'Italy' from dual union all
 
- select 475,'3675 Furth Circle',NULL,'Burbank','CA','94019','USA' from dual union all
+select 475,'3675 Furth Circle',NULL,'Burbank','CA','94019','USA' from dual union all
 
- select 477,'Forsterstr. 57',NULL,'Mannheim',NULL,'68306','Germany' from dual union all
+select 477,'Forsterstr. 57',NULL,'Mannheim',NULL,'68306','Germany' from dual union all
 
- select 480,'2 Pobedy Square',NULL,'Saint Petersburg',NULL,'196143','Russia' from dual union all
+select 480,'2 Pobedy Square',NULL,'Saint Petersburg',NULL,'196143','Russia' from dual union all
 
- select 481,'3 Hagalim Blv.',NULL,'Herzlia',NULL,'47625','Israel' from dual union all
+select 481,'3 Hagalim Blv.',NULL,'Herzlia',NULL,'47625','Israel' from dual union all
 
- select 484,'C/ Romero, 33',NULL,'Sevilla',NULL,'41101','Spain' from dual union all
+select 484,'C/ Romero, 33',NULL,'Sevilla',NULL,'41101','Spain' from dual union all
 
- select 486,'11328 Douglas Av.',NULL,'Philadelphia','PA','71270','USA' from dual union all
+select 486,'11328 Douglas Av.',NULL,'Philadelphia','PA','71270','USA' from dual union all
 
- select 487,'2793 Furth Circle',NULL,'Brisbane','CA','94217','USA' from dual union all
+select 487,'2793 Furth Circle',NULL,'Brisbane','CA','94217','USA' from dual union all
 
- select 489,'120 Hanover Sq.',NULL,'London',NULL,'WA1 1DP','UK' from dual union all
+select 489,'120 Hanover Sq.',NULL,'London',NULL,'WA1 1DP','UK' from dual union all
 
- select 495,'6251 Ingle Ln.',NULL,'Boston','MA','51003','USA' from dual union all
+select 495,'6251 Ingle Ln.',NULL,'Boston','MA','XX021SS','USA' from dual union all
 
- select 496,'Arenales 1938 3''A''',NULL,'Auckland  ',NULL,NULL,'New Zealand' from dual;
+select 496,'Arenales 1938 3''A''',NULL,'Auckland  ',NULL,NULL,'New Zealand' from dual;
 
 /* Data 
 
