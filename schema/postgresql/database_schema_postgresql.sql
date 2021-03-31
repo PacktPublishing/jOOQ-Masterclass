@@ -56,7 +56,8 @@ CREATE TABLE office (
   postal_code postal_code NOT NULL,
   territory varchar(10) NOT NULL,
   location point DEFAULT NULL,
-  CONSTRAINT office_pk PRIMARY KEY (office_code)
+  CONSTRAINT office_pk PRIMARY KEY (office_code),
+  CONSTRAINT office_postal_code_uk UNIQUE (postal_code)
 ) ;
 
 /*Table structure for table `department` */
@@ -70,7 +71,7 @@ CREATE TABLE department (
   topic text[] DEFAULT NULL,  
   dep_net_ipv4 inet DEFAULT NULL,
   CONSTRAINT department_pk PRIMARY KEY (department_id),
-  CONSTRAINT department_code_uk UNIQUE (code) 
+  CONSTRAINT department_code_uk UNIQUE (code)
 ,
   CONSTRAINT department_office_fk FOREIGN KEY (office_code) REFERENCES office (office_code)
 ) ;
@@ -115,7 +116,6 @@ CREATE TABLE sale (
   rate rate_type DEFAULT NULL,
   vat vat_type DEFAULT NULL,
   trend varchar(10) DEFAULT NULL,
-  sale_index bigint GENERATED ALWAYS AS IDENTITY,
   CONSTRAINT sale_pk PRIMARY KEY (sale_id)
  ,  
   CONSTRAINT sale_employee_fk FOREIGN KEY (employee_number) REFERENCES employee (employee_number) ON UPDATE CASCADE
@@ -126,7 +126,7 @@ CREATE TABLE sale (
 CREATE SEQUENCE token_seq START 1000000;
 
 CREATE TABLE token (
-  token_id bigint NOT NULL DEFAULT NEXTVAL ('token_seq'),    
+  token_id bigint NOT NULL DEFAULT NEXTVAL ('sale_seq'),    
   sale_id bigint NOT NULL,
   amount float NOT NULL,   
   updated_on timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -149,7 +149,7 @@ CREATE TABLE customer (
   credit_limit decimal(10,2) DEFAULT NULL,
   first_buy_date int DEFAULT NULL,
   CONSTRAINT customer_pk PRIMARY KEY (customer_number),
-  CONSTRAINT customer_name_uk UNIQUE (customer_name) 
+  CONSTRAINT customer_name_uk UNIQUE (customer_name)
  ,
   CONSTRAINT customer_employee_fk FOREIGN KEY (sales_rep_employee_number) REFERENCES employee (employee_number) ON UPDATE CASCADE
 ) ;
@@ -164,7 +164,8 @@ CREATE TABLE customerdetail (
   state varchar(50) DEFAULT NULL,
   postal_code varchar(15) DEFAULT NULL,
   country varchar(50),
-  CONSTRAINT customerdetail_pk PRIMARY KEY (customer_number)
+  CONSTRAINT customerdetail_pk PRIMARY KEY (customer_number),
+  CONSTRAINT customer_address_line_first_uk UNIQUE (address_line_first)
   ,  
   CONSTRAINT customerdetail_customer_fk FOREIGN KEY (customer_number) REFERENCES customer (customer_number)  
 ) ;
@@ -358,11 +359,11 @@ JOIN "public"."customerdetail" ON "public"."customerdetail"."customer_number" = 
 WHERE "public"."customer"."first_buy_date" IS NOT NULL;
 
 CREATE OR REPLACE VIEW office_master AS
-SELECT "public"."office"."office_code",
-       "public"."office"."city",
+SELECT "public"."office"."city",
        "public"."office"."country",
        "public"."office"."state",
-       "public"."office"."phone"
+       "public"."office"."phone",
+       "public"."office"."postal_code"
 FROM "public"."office"
-WHERE "public"."office"."city" IS NOT NULL
+WHERE "public"."office"."city" IS NOT NULL;
 /* END */

@@ -33,15 +33,15 @@ select '6','Sydney','+61 2 9264 2451','5-11 Wentworth Avenue','Floor --2',NULL,'
 
 select '7','London','+44 20 7877 2041','25 Old Broad Street','Level 7','N/A','UK','CV555RR','EMEA' from dual union all
 
-select '8',NULL,'+44 20 1827 21411','25 Hum Street','Level 2',NULL,'USA','CV555RR','EMEA' from dual union all
+select '8',NULL,'+44 20 1827 21411','25 Hum Street','Level 2',NULL,'USA','CV556RR','EMEA' from dual union all
 
-select '9','Bucharest','+44 20 1827 21411','22 DN1','Level 12',NULL,NULL,'CV555RR','NA' from dual union all
+select '9','Bucharest','+44 20 1827 21411','22 DN1','Level 12',NULL,NULL,'CV557RR','NA' from dual union all
 
-select '10',NULL,'+44 20 1827 21411','12 Home','Level 22',NULL,NULL,'CV555RR','NA' from dual union all
+select '10',NULL,'+44 20 1827 21411','12 Home','Level 22',NULL,NULL,'CV558RR','NA' from dual union all
 
 select '11','Paris','+32 12 713 4304','43 Rue 2',NULL,NULL,'France','DT975HH','EMEA' from dual union all
 
-select '12','Tokyo','+81 33 224 3444','4-1 Kioicho',NULL,'Koil-Ku','Japan','DD578YU','Japan' from dual;
+select '12','Tokyo','+81 33 224 3444','4-2 Kioicho',NULL,'Koil-Ku','Japan','DD578YU','Japan' from dual;
 
 /*Data for the table `department` */
 

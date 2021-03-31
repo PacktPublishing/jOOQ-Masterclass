@@ -186,9 +186,7 @@
                                         <name>office_master_uk</name>                                        
                                         <tables>office_master</tables>
                                         <fields>
-                                            <field>country</field>
-                                            <field>state</field>
-                                            <field>city</field>
+                                            <field>postal_code</field>                                           
                                         </fields>
                                     </uniqueKey>                         
                                 </uniqueKeys>
@@ -197,15 +195,11 @@
                                         <name>customer_office_master_fk</name>                                                                       
                                         <tables>customer_master</tables>
                                         <fields>
-                                            <field>country</field>
-                                            <field>state</field>
-                                            <field>city</field>
+                                            <field>postal_code</field>                                            
                                         </fields>
                                         <referencedTable>office_master</referencedTable>                                        
                                         <referencedFields>
-                                            <field>country</field>
-                                            <field>state</field>
-                                            <field>city</field>
+                                            <field>postal_code</field>                                            
                                         </referencedFields>
                                     </foreignKey>
                                 </foreignKeys>                                

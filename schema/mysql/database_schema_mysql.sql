@@ -44,7 +44,8 @@ CREATE TABLE `office` (
   `postal_code` varchar(15) NOT NULL,
   `territory` varchar(10) NOT NULL,
   `location` point DEFAULT NULL,
-  CONSTRAINT `office_pk` PRIMARY KEY (`office_code`)
+  CONSTRAINT `office_pk` PRIMARY KEY (`office_code`),
+  CONSTRAINT `office_postal_code_uk` UNIQUE (`postal_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `department` (
@@ -134,6 +135,7 @@ CREATE TABLE `customerdetail` (
   `postal_code` varchar(15) DEFAULT NULL,
   `country` varchar(50),
   CONSTRAINT `customerdetail_pk` PRIMARY KEY (`customer_number`),  
+  CONSTRAINT customerdetail_address_line_first_uk UNIQUE (address_line_first),
   CONSTRAINT `customerdetail_customer_fk` FOREIGN KEY (`customer_number`) REFERENCES `customer` (`customer_number`)  
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -305,11 +307,11 @@ JOIN `classicmodels`.`customerdetail` ON `classicmodels`.`customerdetail`.`custo
 WHERE `classicmodels`.`customer`.`first_buy_date` IS NOT NULL;
 
 CREATE OR REPLACE VIEW office_master AS
-SELECT `classicmodels`.`office`.`office_code`,
-       `classicmodels`.`office`.`city`,
+SELECT `classicmodels`.`office`.`city`,
        `classicmodels`.`office`.`country`,
        `classicmodels`.`office`.`state`,
-       `classicmodels`.`office`.`phone`
+       `classicmodels`.`office`.`phone`,
+	   `classicmodels`.`office`.`postal_code`
 FROM `classicmodels`.`office`
-WHERE `classicmodels`.`office`.`city` IS NOT NULL
+WHERE `classicmodels`.`office`.`city` IS NOT NULL;
 /* END */

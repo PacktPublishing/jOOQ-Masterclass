@@ -128,7 +128,8 @@ CREATE TABLE office (
   postal_code varchar2(15) NOT NULL,
   territory varchar2(10) NOT NULL,
   location sdo_geometry DEFAULT NULL,
-  CONSTRAINT office_pk PRIMARY KEY (office_code)
+  CONSTRAINT office_pk PRIMARY KEY (office_code),
+  CONSTRAINT office_postal_code_uk UNIQUE (postal_code)
 ) ;
 
 /*Table structure for table `employee` */
@@ -305,7 +306,8 @@ CREATE TABLE customerdetail (
   state varchar2(50) DEFAULT NULL,
   postal_code varchar2(15) DEFAULT NULL,
   country varchar2(50),
-  CONSTRAINT customerdetail_pk PRIMARY KEY (customer_number)
+  CONSTRAINT customerdetail_pk PRIMARY KEY (customer_number),
+  CONSTRAINT customerdetail_address_line_first_uk UNIQUE (address_line_first)
  ,
   CONSTRAINT customerdetail_customer_fk FOREIGN KEY (customer_number) REFERENCES customer (customer_number)
 ) ; 
@@ -662,11 +664,11 @@ JOIN "SYSTEM"."CUSTOMERDETAIL" ON "SYSTEM"."CUSTOMERDETAIL"."CUSTOMER_NUMBER" = 
 WHERE "SYSTEM"."CUSTOMER"."FIRST_BUY_DATE" IS NOT NULL;
 
 CREATE OR REPLACE VIEW OFFICE_MASTER AS
-SELECT "SYSTEM"."OFFICE"."OFFICE_CODE",
-       "SYSTEM"."OFFICE"."CITY",
+SELECT "SYSTEM"."OFFICE"."CITY",
        "SYSTEM"."OFFICE"."COUNTRY",
        "SYSTEM"."OFFICE"."STATE",
-       "SYSTEM"."OFFICE"."PHONE"
+       "SYSTEM"."OFFICE"."PHONE",
+	   "SYSTEM"."OFFICE"."POSTAL_CODE"
 FROM "SYSTEM"."OFFICE"
 WHERE "SYSTEM"."OFFICE"."CITY" IS NOT NULL;
 
