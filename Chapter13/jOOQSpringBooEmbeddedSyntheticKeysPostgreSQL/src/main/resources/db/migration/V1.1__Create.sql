@@ -70,7 +70,7 @@ CREATE TABLE department (
   topic text[] DEFAULT NULL,  
   dep_net_ipv4 inet DEFAULT NULL,
   CONSTRAINT department_pk PRIMARY KEY (department_id),
-  CONSTRAINT department_code_uk UNIQUE (code)
+  CONSTRAINT department_code_uk UNIQUE (code) 
 ,
   CONSTRAINT department_office_fk FOREIGN KEY (office_code) REFERENCES office (office_code)
 ) ;
@@ -115,6 +115,7 @@ CREATE TABLE sale (
   rate rate_type DEFAULT NULL,
   vat vat_type DEFAULT NULL,
   trend varchar(10) DEFAULT NULL,
+  sale_index bigint GENERATED ALWAYS AS IDENTITY,
   CONSTRAINT sale_pk PRIMARY KEY (sale_id)
  ,  
   CONSTRAINT sale_employee_fk FOREIGN KEY (employee_number) REFERENCES employee (employee_number) ON UPDATE CASCADE
@@ -125,7 +126,7 @@ CREATE TABLE sale (
 CREATE SEQUENCE token_seq START 1000000;
 
 CREATE TABLE token (
-  token_id bigint NOT NULL DEFAULT NEXTVAL ('sale_seq'),    
+  token_id bigint NOT NULL DEFAULT NEXTVAL ('token_seq'),    
   sale_id bigint NOT NULL,
   amount float NOT NULL,   
   updated_on timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -148,7 +149,7 @@ CREATE TABLE customer (
   credit_limit decimal(10,2) DEFAULT NULL,
   first_buy_date int DEFAULT NULL,
   CONSTRAINT customer_pk PRIMARY KEY (customer_number),
-  CONSTRAINT customer_name_uk UNIQUE (customer_name)
+  CONSTRAINT customer_name_uk UNIQUE (customer_name) 
  ,
   CONSTRAINT customer_employee_fk FOREIGN KEY (sales_rep_employee_number) REFERENCES employee (employee_number) ON UPDATE CASCADE
 ) ;
@@ -363,5 +364,5 @@ SELECT "public"."office"."office_code",
        "public"."office"."state",
        "public"."office"."phone"
 FROM "public"."office"
-WHERE "public"."office"."city" IS NOT NULL
+WHERE "public"."office"."city" IS NOT NULL;
 /* END */
