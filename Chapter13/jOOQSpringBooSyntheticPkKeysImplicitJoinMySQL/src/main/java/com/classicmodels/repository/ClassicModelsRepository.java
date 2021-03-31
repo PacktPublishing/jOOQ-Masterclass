@@ -63,6 +63,6 @@ public class ClassicModelsRepository {
                 .orderBy(CUSTOMER_MASTER.CUSTOMER_NAME)
                 .fetch();
 
-        System.out.println("Result 3:\n" + result3);
+        System.out.println("Result 3:\n" + result3);                
     }
 }

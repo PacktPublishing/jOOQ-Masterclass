@@ -135,7 +135,7 @@
                         <goals>
                             <goal>generate</goal>
                         </goals>                                  
-                        <configuration>                                                 
+                        <configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.14.0.xsd">                                                 
                             <!-- Configure the database connection here. -->
                             <jdbc>
                                 <driver>${spring.datasource.driverClassName}</driver>
@@ -183,9 +183,9 @@
                                     <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>
                                                                         
                                     <!-- Prepare the synthetic keys -->
-                                    <syntheticObjects>                                
+                                    <syntheticObjects>                                                                        
                                         <primaryKeys>
-                                            <primaryKey>
+                                            <primaryKey>                                                
                                                 <name>office_master_pk</name>                                        
                                                 <tables>office_master</tables>
                                                 <fields>
