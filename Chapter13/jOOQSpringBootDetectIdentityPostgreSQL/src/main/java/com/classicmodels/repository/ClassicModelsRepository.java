@@ -17,6 +17,20 @@ public class ClassicModelsRepository {
     }
 
     @Transactional
+    public void returnIdentitiesOnInsertInto() {
+        
+        var result = ctx.insertInto(PRODUCT)
+                .set(PRODUCT.PRODUCT_LINE, "Vintage Cars")
+                .set(PRODUCT.CODE, 223113L)
+                .set(PRODUCT.PRODUCT_NAME, "Rolls-Royce Dawn Drophead")
+                .returningResult(PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_UID)
+                .fetch();
+        
+        System.out.println("The inserted record ID: " + result.get(0).value1());               
+        System.out.println("The inserted record 'product_uid' IDENTITY: " + result.get(0).value2());
+    }
+    
+    @Transactional
     public void returnIdentitiesOnUpdatableRecord() {
 
         ProductRecord pr = ctx.newRecord(PRODUCT);
