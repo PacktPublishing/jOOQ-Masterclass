@@ -91,7 +91,8 @@ CREATE TABLE office (
   [postal_code] varchar(15) NOT NULL,
   [territory] varchar(10) NOT NULL,
   [location] [geometry] DEFAULT NULL,
-  CONSTRAINT [office_pk] PRIMARY KEY ([office_code])
+  CONSTRAINT [office_pk] PRIMARY KEY ([office_code]),
+  CONSTRAINT [office_postal_code_uk] UNIQUE ([postal_code])
 ) ;
 
 /*Table structure for table `employee` */
@@ -196,7 +197,8 @@ CREATE TABLE customerdetail (
   [state] varchar(50) DEFAULT NULL,
   [postal_code] varchar(15) DEFAULT NULL,
   [country] varchar(50),
-  CONSTRAINT [customerdetail_pk] PRIMARY KEY ([customer_number])
+  CONSTRAINT [customerdetail_pk] PRIMARY KEY ([customer_number]),
+  CONSTRAINT [customerdetail_address_line_first_uk] UNIQUE ([address_line_first])
   ,
   CONSTRAINT [customerdetail_customer_fk] FOREIGN KEY ([customer_number]) REFERENCES customer ([customer_number])
 ) ; 
@@ -351,11 +353,11 @@ WHERE [classicmodels].[dbo].[customer].[first_buy_date] IS NOT NULL;
 GO
 
 CREATE VIEW office_master AS
-SELECT [classicmodels].[dbo].[office].[office_code],
-       [classicmodels].[dbo].[office].[city],
+SELECT [classicmodels].[dbo].[office].[city],
        [classicmodels].[dbo].[office].[country],
        [classicmodels].[dbo].[office].[state],
-       [classicmodels].[dbo].[office].[phone]
+       [classicmodels].[dbo].[office].[phone],
+	   [classicmodels].[dbo].[office].[postal_code]
 FROM [classicmodels].[dbo].[office]
-WHERE [classicmodels].[dbo].[office].[city] IS NOT NULL
+WHERE [classicmodels].[dbo].[office].[city] IS NOT NULL;
 /* END */
