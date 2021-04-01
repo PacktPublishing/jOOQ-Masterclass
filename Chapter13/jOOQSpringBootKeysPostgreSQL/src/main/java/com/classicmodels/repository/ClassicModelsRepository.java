@@ -90,22 +90,7 @@ public class ClassicModelsRepository {
         saleRepository.insert(s);
         
         System.out.println("The inserted POJO ID: " + s.getSaleId());
-    }
-    
-    @Transactional
-    public void returnIdentitiesOnUpdatableRecord() {
-
-        SaleRecord sr = ctx.newRecord(SALE);
-
-        sr.setFiscalYear(2021);
-        sr.setSale(4500.25);
-        sr.setEmployeeNumber(1504L);
-
-        sr.insert();
-
-        System.out.println("The inserted record ID: " + sr.getSaleId());
-        System.out.println("The inserted record 'sale_index' IDENTITY: " + sr.getSaleIndex());
-    }
+    }        
     
     @Transactional
     public void suppressPrimaryKeyReturnOnUpdatableRecord() {
@@ -122,8 +107,7 @@ public class ClassicModelsRepository {
 
         srNoReturnId.insert();
 
-        System.out.println("The inserted record ID (should be null): " + srNoReturnId.getSaleId());
-        System.out.println("The inserted record 'sale_index' IDENTITY should be null: " + srNoReturnId.getSaleIndex());
+        System.out.println("The inserted record ID (should be null): " + srNoReturnId.getSaleId());        
     }
 
     @Transactional

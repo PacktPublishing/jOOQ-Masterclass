@@ -15,8 +15,7 @@ public class ClassicModelsService {
     public void callAll() {
 
         classicModelsRepository.insertIntoAndReturnPrimaryKey();
-        classicModelsRepository.insertAndReturnPrimaryKey();
-        classicModelsRepository.returnIdentitiesOnUpdatableRecord();
+        classicModelsRepository.insertAndReturnPrimaryKey();       
         classicModelsRepository.suppressPrimaryKeyReturnOnUpdatableRecord();
         classicModelsRepository.updatePrimaryKeyOnUpdatableRecord();        
         classicModelsRepository.compareComposedPrimaryKey();

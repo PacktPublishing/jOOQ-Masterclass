@@ -171,8 +171,7 @@
                                     
                                     <!-- Give enough time to jOOQ to trigger the queries needed for generating sources 
                                     (default is 5 seconds) -->
-                                    <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>
-                                    
+                                    <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>                                    
                                 </database>
                                                         
                                 <!-- Rename the generated DAOs classes -->                      
