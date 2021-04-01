@@ -29,7 +29,7 @@ public class ClassicModelsRepository {
 
         System.out.println("The inserted record ID: " + pr.getProductId());
         
-        // the *pr.getProductUid()* works thanks to the synthetic identity configured in pom.xml
+        // the *pr.getProductUid()* works because jOOQ detected this identity
         System.out.println("The inserted record 'product_uid' IDENTITY: " + pr.getProductUid());
     }
 }

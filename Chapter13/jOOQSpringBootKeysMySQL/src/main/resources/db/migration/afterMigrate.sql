@@ -33,15 +33,15 @@ insert  into `office`(`office_code`,`city`,`phone`,`address_line_first`,`address
 
 ('7','London','+44 20 7877 2041','25 Old Broad Street','Level 7','N/A','UK','CV555RR','EMEA'),
 
-('8',NULL,'+44 20 1827 21411','25 Hum Street','Level 2',NULL,'USA','CV555RR','EMEA'), 
+('8',NULL,'+44 20 1827 21411','25 Hum Street','Level 2',NULL,'USA','CV556RR','EMEA'), 
 
-('9','Bucharest','+44 20 1827 21411','22 DN1','Level 12',NULL,NULL,'CV555RR','NA'), 
+('9','Bucharest','+44 20 1827 21411','22 DN1','Level 12',NULL,NULL,'CV557RR','NA'), 
 
-('10',NULL,'+44 20 1827 21411','12 Home','Level 22',NULL,NULL,'CV555RR','NA'), 
+('10',NULL,'+44 20 1827 21411','12 Home','Level 22',NULL,NULL,'CV558RR','NA'), 
 
 ('11','Paris','+32 12 713 4304','43 Rue 2',NULL,NULL,'France','DT975HH','EMEA'),
 
-('12','Tokyo','+81 33 224 3444','4-1 Kioicho',NULL,'Koil-Ku','Japan','DD578YU','Japan') ON DUPLICATE KEY UPDATE office_code=office_code;
+('12','Tokyo','+81 33 224 3444','4-2 Kioicho',NULL,'Koil-Ku','Japan','DD578YU','Japan') ON DUPLICATE KEY UPDATE office_code=office_code;
 
 /*Data for the table `department` */
 
@@ -431,7 +431,7 @@ insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_li
 
 (103,'54, rue Royale',NULL,'Nantes',NULL,'44000','France'),
 
-(112,'8489 Strong St.',NULL,'Las Vegas','NV','83030','USA'),
+(112,'8489 Strong St.',NULL,'Las Vegas','NV','75017','USA'),
 
 (114,'636 St Kilda Road','Level 3','Melbourne','Victoria','3004','Australia'),
 
@@ -445,9 +445,9 @@ insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_li
 
 (128,'Lyonerstr. 34',NULL,'Frankfurt',NULL,'60528','Germany'),
 
-(129,'5557 North Pendale Street',NULL,'San Francisco','CA','94217','USA'),
+(129,'5557 North Pendale Street',NULL,'San Francisco','CA','AZ934VB','USA'),
 
-(131,'897 Long Airport Avenue',NULL,'NYC','NY','10022','USA'),
+(131,'897 Long Airport Avenue',NULL,'NYC','NY','AA100CV','USA'),
 
 (141,'C/ Moralzarzal, 86',NULL,'Madrid',NULL,'28034','Spain'),
 
@@ -459,7 +459,7 @@ insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_li
 
 (148,'Bronz Sok.','Bronz Apt. 3/6 Tesvikiye','Singapore',NULL,'079903','Singapore'),
 
-(151,'4092 Furth Circle','Suite 400','NYC','NY','10022','USA'),
+(151,'4092 Furth Circle','Suite 400','NYC','NY','AA100CV','USA'),
 
 (157,'7586 Pompton St.',NULL,'Allentown','PA','70267','USA'),
 
@@ -483,7 +483,7 @@ insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_li
 
 (177,'1-6-20 Dojima',NULL,'Kita-ku','Osaka',' 530-0003','Japan'),
 
-(181,'2678 Kingston Rd.','Suite 101','NYC','NY','10022','USA'),
+(181,'2678 Kingston Rd.','Suite 101','NYC','NY','AA100CV','USA'),
 
 (186,'Keskuskatu 45',NULL,'Helsinki',NULL,'21240','Finland'),
 
@@ -531,7 +531,7 @@ insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_li
 
 (250,'27 rue du Colonel Pierre Avia',NULL,'Paris',NULL,'75508','France'),
 
-(256,'67, avenue de l\'Europe',NULL,'Versailles',NULL,'78000','France'),
+(256,'67, avenue de l''Europe',NULL,'Versailles',NULL,'78000','France'),
 
 (259,'Mehrheimerstr. 369',NULL,'Köln',NULL,'50739','Germany'),
 
@@ -565,11 +565,11 @@ insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_li
 
 (320,'4575 Hillside Dr.',NULL,'New Bedford','MA','50553','USA'),
 
-(321,'7734 Strong St.',NULL,'San Francisco','CA','94217','USA'),
+(321,'7734 Strong St.',NULL,'San Francisco','CA','AZ934VB','USA'),
 
 (323,'162-164 Grafton Road','Level 2','Auckland  ',NULL,NULL,'New Zealand'),
 
-(324,'25 Old Broad Street','Level 7','London','N/A','EC2N 1HN','UK'),
+(324,'25 Old Broad Street','Level 7','London','N/A','CV555RR','UK'),
 
 (328,'7476 Moss Rd.',NULL,'Newark','NJ','94019','USA'),
 
@@ -581,7 +581,7 @@ insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_li
 
 (339,'782 First Street',NULL,'Philadelphia','PA','71270','USA'),
 
-(344,'Merchants House','27-30 Merchant\'s Quay','Madrid',NULL,'28023','Spain'),
+(344,'Merchants House','27-30 Merchant''s Quay','Madrid',NULL,'28023','Spain'),
 
 (347,'6047 Douglas Av.',NULL,'Los Angeles','CA','91003','USA'),
 
@@ -589,7 +589,7 @@ insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_li
 
 (350,'12, rue des Bouchers',NULL,'Marseille',NULL,'13008','France'),
 
-(353,'59 rue de l\'Abbaye',NULL,'Reims',NULL,'51100','France'),
+(353,'59 rue de l''Abbaye',NULL,'Reims',NULL,'51100','France'),
 
 (356,'1250 Pretorius Street',NULL,'Hatfield','Pretoria','0028','South Africa'),
 
@@ -597,7 +597,7 @@ insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_li
 
 (361,'Luisenstr. 48',NULL,'Münster',NULL,'44087','Germany'),
 
-(362,'8616 Spinnaker Dr.',NULL,'Boston','MA','51003','USA'),
+(362,'8616 Spinnaker Dr.',NULL,'Boston','MA','XX021SS','USA'),
 
 (363,'2304 Long Airport Avenue',NULL,'Nashua','NH','62005','USA'),
 
@@ -625,7 +625,7 @@ insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_li
 
 (415,'Hansastr. 15',NULL,'Munich',NULL,'80686','Germany'),
 
-(424,'5905 Pompton St.','Suite 750','NYC','NY','10022','USA'),
+(424,'5905 Pompton St.','Suite 750','NYC','NY','AA100CV','USA'),
 
 (443,'Heerstr. 22',NULL,'Leipzig',NULL,'04179','Germany'),
 
@@ -639,7 +639,7 @@ insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_li
 
 (455,'567 North Pendale Street',NULL,'New Haven','CT','97823','USA'),
 
-(456,'5290 North Pendale Street','Suite 200','NYC','NY','10022','USA'),
+(456,'5290 North Pendale Street','Suite 200','NYC','NY','AA100CV','USA'),
 
 (458,'C/ Araquil, 67',NULL,'Madrid',NULL,'28023','Spain'),
 
@@ -669,9 +669,9 @@ insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_li
 
 (489,'120 Hanover Sq.',NULL,'London',NULL,'WA1 1DP','UK'),
 
-(495,'6251 Ingle Ln.',NULL,'Boston','MA','51003','USA'),
+(495,'6251 Ingle Ln.',NULL,'Boston','MA','XX021SS','USA'),
 
-(496,'Arenales 1938 3\'A\'',NULL,'Auckland  ',NULL,NULL,'New Zealand') ON DUPLICATE KEY UPDATE customer_number=customer_number;
+(496,'Arenales 1938 3''A''',NULL,'Auckland  ',NULL,NULL,'New Zealand') ON DUPLICATE KEY UPDATE customer_number=customer_number;
 
 /*Data for the table `productline` */
 

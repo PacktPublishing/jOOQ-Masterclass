@@ -44,7 +44,8 @@ CREATE TABLE `office` (
   `postal_code` varchar(15) NOT NULL,
   `territory` varchar(10) NOT NULL,
   `location` point DEFAULT NULL,
-  CONSTRAINT `office_pk` PRIMARY KEY (`office_code`)
+  CONSTRAINT `office_pk` PRIMARY KEY (`office_code`),
+  CONSTRAINT `office_postal_code_uk` UNIQUE (`postal_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `department` (
@@ -90,7 +91,6 @@ CREATE TABLE `sale` (
   `rate` enum ('SILVER', 'GOLD', 'PLATINUM') DEFAULT NULL,
   `vat` enum ('NONE', 'MIN', 'MAX') DEFAULT NULL,
   `trend` varchar(10) DEFAULT NULL,
-  `sale_index` bigint DEFAULT 1,
   CONSTRAINT `sale_pk` PRIMARY KEY (`sale_id`),    
   CONSTRAINT `sale_employee_fk` FOREIGN KEY (`employee_number`) REFERENCES `employee` (`employee_number`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -134,6 +134,7 @@ CREATE TABLE `customerdetail` (
   `postal_code` varchar(15) DEFAULT NULL,
   `country` varchar(50),
   CONSTRAINT `customerdetail_pk` PRIMARY KEY (`customer_number`),  
+  CONSTRAINT customerdetail_address_line_first_uk UNIQUE (address_line_first),
   CONSTRAINT `customerdetail_customer_fk` FOREIGN KEY (`customer_number`) REFERENCES `customer` (`customer_number`)  
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -196,9 +197,13 @@ CREATE TABLE `product` (
   `buy_price` decimal(10,2) DEFAULT 0.0,
   `msrp` decimal(10,2) DEFAULT 0.0,
   `specs` mediumtext DEFAULT NULL,
+  `product_uid` bigint DEFAULT 10,
   CONSTRAINT `product_pk` PRIMARY KEY (`product_id`),  
   CONSTRAINT `product_productline_fk` FOREIGN KEY (`product_line`,`code`) REFERENCES `productline` (`product_line`,`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE sequences (sequence_name VARCHAR(50),currval INT);
+INSERT INTO sequences (sequence_name,currval) VALUES ('product_uid_seq',0);
 
 /*Table structure for table `order` */
 
@@ -291,6 +296,13 @@ BEGIN
 END$$
 DELIMITER ;
 
+DELIMITER $$
+CREATE TRIGGER product_uid_trigger BEFORE INSERT ON product FOR EACH ROW BEGIN
+  UPDATE sequences set currval = currval + 10 where sequence_name = 'product_uid_seq';
+  SET NEW.product_uid = (SELECT currval FROM sequences WHERE sequence_name = 'product_uid_seq');
+END$$
+DELIMITER ;
+
 -- VIEWS
 CREATE OR REPLACE VIEW customer_master AS
 SELECT `classicmodels`.`customer`.`customer_name`,
@@ -305,11 +317,11 @@ JOIN `classicmodels`.`customerdetail` ON `classicmodels`.`customerdetail`.`custo
 WHERE `classicmodels`.`customer`.`first_buy_date` IS NOT NULL;
 
 CREATE OR REPLACE VIEW office_master AS
-SELECT `classicmodels`.`office`.`office_code`,
-       `classicmodels`.`office`.`city`,
+SELECT `classicmodels`.`office`.`city`,
        `classicmodels`.`office`.`country`,
        `classicmodels`.`office`.`state`,
-       `classicmodels`.`office`.`phone`
+       `classicmodels`.`office`.`phone`,
+	   `classicmodels`.`office`.`postal_code`
 FROM `classicmodels`.`office`
-WHERE `classicmodels`.`office`.`city` IS NOT NULL
+WHERE `classicmodels`.`office`.`city` IS NOT NULL;
 /* END */

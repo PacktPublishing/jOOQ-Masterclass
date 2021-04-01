@@ -141,9 +141,6 @@ CREATE TABLE department (
 DROP SEQUENCE IF EXISTS sale_seq;
 GO
 
-CREATE SEQUENCE sale_seq START WITH 1 INCREMENT BY 1;
-GO
-
 CREATE TABLE sale (
   [sale_id] bigint NOT NULL IDENTITY,  
   [fiscal_year] int NOT NULL,  
@@ -152,8 +149,7 @@ CREATE TABLE sale (
   [hot] bit DEFAULT 0,  
   [rate] varchar(10) DEFAULT NULL,
   [vat] varchar(10) DEFAULT NULL,
-  [trend] varchar(10) DEFAULT NULL,
-  [sale_index] bigint NOT NULL DEFAULT (NEXT VALUE FOR sale_seq),
+  [trend] varchar(10) DEFAULT NULL,  
   CONSTRAINT [sale_pk] PRIMARY KEY ([sale_id])
 ,    
   CONSTRAINT [sale_employee_fk] FOREIGN KEY ([employee_number]) REFERENCES employee ([employee_number]) ON UPDATE CASCADE,
@@ -251,6 +247,9 @@ CREATE TABLE productlinedetail (
 
 /*Table structure for table `product` */
 
+CREATE SEQUENCE product_uid_seq START WITH 10 INCREMENT BY 10;
+GO
+
 CREATE TABLE product (
   [product_id] bigint NOT NULL IDENTITY,
   [product_name] varchar(70) DEFAULT NULL,
@@ -263,6 +262,7 @@ CREATE TABLE product (
   [buy_price] decimal(10,2) DEFAULT 0.0,
   [specs] varchar(max) DEFAULT NULL,
   [msrp] decimal(10,2) DEFAULT 0.0,
+  [product_uid] bigint NOT NULL DEFAULT (NEXT VALUE FOR product_uid_seq),
   CONSTRAINT [product_pk] PRIMARY KEY ([product_id])
  ,
   CONSTRAINT [product_productline_fk] FOREIGN KEY ([product_line],[code]) REFERENCES productline ([product_line],[code])
