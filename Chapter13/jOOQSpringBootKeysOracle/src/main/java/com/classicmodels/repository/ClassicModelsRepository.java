@@ -80,22 +80,7 @@ public class ClassicModelsRepository {
         
         System.out.println("The inserted POJO ID: " + s.getSaleId());
     }
-    
-    @Transactional
-    public void returnIdentitiesOnUpdatableRecord() {
-
-        SaleRecord sr = ctx.newRecord(SALE);
-
-        sr.setFiscalYear(BigInteger.valueOf(2021));
-        sr.setSale(4500.25);
-        sr.setEmployeeNumber(1504L);
-
-        sr.insert();
-
-        System.out.println("The inserted record ID: " + sr.getSaleId());
-        System.out.println("The inserted record 'sale_index' IDENTITY: " + sr.getSaleIndex());
-    }
-    
+        
     @Transactional
     public void suppressPrimaryKeyReturnOnUpdatableRecord() {
 
@@ -111,8 +96,7 @@ public class ClassicModelsRepository {
 
         srNoReturnId.insert();
 
-        System.out.println("The inserted record ID (should be null): " + srNoReturnId.getSaleId());
-        System.out.println("The inserted record 'sale_index' IDENTITY should be null: " + srNoReturnId.getSaleIndex());
+        System.out.println("The inserted record ID (should be null): " + srNoReturnId.getSaleId());    
     }
 
     @Transactional
@@ -284,20 +268,14 @@ public class ClassicModelsRepository {
         
         System.out.println("RowID after delete:\n" + del);
         
-        var ins1 = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
+         var ins = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
                 .values(BigInteger.valueOf(2004), 2311.42, 1370L)
                 .returningResult(SALE.SALE_ID, rowid())
-                .fetchOne();        
-        
-        var ins2 = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
-                .values(BigInteger.valueOf(2004), 2311.42, 1370L)
-                .returningResult(SALE.SALE_ID, SALE.SALE_INDEX, rowid())
                 .fetchOne();
         
-        System.out.println("RowID after insert (1):\n" + ins1);
-        System.out.println("RowID after insert (2):\n" + ins2);
+        System.out.println("RowID after insert:\n" + ins);        
         
-        String rowid = ins2.value3();
+        String rowid = ins.value2();
         var result = ctx.selectFrom(SALE)
                 .where(rowid().eq(rowid))
                 .fetch();                
