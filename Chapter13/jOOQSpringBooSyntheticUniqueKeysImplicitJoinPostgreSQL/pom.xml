@@ -192,7 +192,7 @@
                                 </uniqueKeys>
                                 <foreignKeys>
                                     <foreignKey>  
-                                        <name>customer_office_master_fk</name>                                                                       
+                                        <name>office_master_fk</name>                                                                       
                                         <tables>customer_master</tables>
                                         <fields>
                                             <field>postal_code</field>                                            
