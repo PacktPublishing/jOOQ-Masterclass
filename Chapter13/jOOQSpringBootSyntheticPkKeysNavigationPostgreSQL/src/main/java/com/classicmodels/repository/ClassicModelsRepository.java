@@ -24,7 +24,7 @@ public class ClassicModelsRepository {
         CustomerMasterRecord cmr = ctx.selectFrom(CUSTOMER_MASTER)
                 .where(CUSTOMER_MASTER.CUSTOMER_NAME.eq("Classic Legends Inc."))
                 .fetchSingle();      
-        
+                
         OfficeMasterRecord parent = cmr.fetchParent(Keys.CUSTOMER_MASTER__OFFICE_MASTER_FK);
         System.out.println("Customer:\n" + cmr + " Parent:\n" + parent);
         

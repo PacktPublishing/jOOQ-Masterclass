@@ -1,11 +1,16 @@
 package com.classicmodels.repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 import jooq.generated.embeddables.pojos.OfficeMasterPk;
 import jooq.generated.embeddables.records.OfficeMasterPkRecord;
 import static jooq.generated.tables.CustomerMaster.CUSTOMER_MASTER;
+import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.OfficeMaster.OFFICE_MASTER;
 import org.jooq.DSLContext;
+import static org.jooq.impl.DSL.count;
+import static org.jooq.impl.DSL.field;
+import static org.jooq.impl.DSL.selectCount;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,12 +43,30 @@ public class ClassicModelsRepository {
         System.out.println("Result 2:\n" + result2);
 
         var result3 = ctx.select(CUSTOMER_MASTER.CUSTOMER_NAME, CUSTOMER_MASTER.CREDIT_LIMIT,
-                CUSTOMER_MASTER.CUSTOMER_OFFICE_MASTER_FK)
+                CUSTOMER_MASTER.OFFICE_MASTER_FK)
                 .from(CUSTOMER_MASTER)
                 .orderBy(CUSTOMER_MASTER.CUSTOMER_NAME)
                 .fetch();
 
         System.out.println("Result 3:\n" + result3);
+
+        var result4 = ctx.select(CUSTOMER_MASTER.OFFICE_MASTER_FK, count().as("customers_count"))
+                .from(CUSTOMER_MASTER)
+                .groupBy(CUSTOMER_MASTER.OFFICE_MASTER_FK, CUSTOMER_MASTER.CREDIT_LIMIT)
+                .having(CUSTOMER_MASTER.CREDIT_LIMIT.between(
+                        BigDecimal.valueOf(10000), BigDecimal.valueOf(50000)))
+                .fetch();
+
+        System.out.println("Result 4:\n" + result4);
+
+        var result5 = ctx.select(OFFICE_MASTER.OFFICE_MASTER_PK,
+                (field(selectCount().from(CUSTOMER_MASTER)
+                        .where(CUSTOMER_MASTER.POSTAL_CODE
+                                .eq(OFFICE_MASTER.POSTAL_CODE)))).as("customerNr"))
+                .from(OFFICE_MASTER)
+                .fetch();
+        
+        System.out.println("Result 5:\n" + result5);
     }
 
     @Transactional
@@ -53,11 +76,11 @@ public class ClassicModelsRepository {
                 OFFICE_MASTER.OFFICE_CODE, OFFICE_MASTER.PHONE)
                 .from(CUSTOMER_MASTER)
                 .innerJoin(OFFICE_MASTER)
-                .on(OFFICE_MASTER.OFFICE_MASTER_PK.eq(CUSTOMER_MASTER.CUSTOMER_OFFICE_MASTER_FK))
+                .on(OFFICE_MASTER.OFFICE_MASTER_PK.eq(CUSTOMER_MASTER.OFFICE_MASTER_FK))
                 .orderBy(CUSTOMER_MASTER.CUSTOMER_NAME)
                 .fetch();
 
-        System.out.println("Result 4:\n" + result);
+        System.out.println("Result 6:\n" + result);
     }
 
     @Transactional
