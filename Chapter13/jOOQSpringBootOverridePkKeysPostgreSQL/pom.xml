@@ -178,7 +178,8 @@
                             (A Java regular expression. Use the pipe to separate several expressions).
                             Excludes match before includes, i.e. excludes have a higher priority -->
                             <excludes>flyway_schema_history</excludes>       
-                                                      
+                                               
+                            <!--                                 
                             <syntheticObjects>
                                 <primaryKeys>
                                     <primaryKey>
@@ -191,9 +192,26 @@
                                     </primaryKey>
                                 </primaryKeys>                               
                             </syntheticObjects>                                                           
+                            -->
                             
-                            <!-- This flag will also replace synthetic primary keys, if it matches. -->
-                            <overridePrimaryKeys>customer_name_uk|department_code_uk</overridePrimaryKeys>                            
+                            <syntheticObjects>
+                                <primaryKeys>
+                                    <primaryKey>
+                                        <name>synthetic_customer_name</name>
+                                        <tables>customer</tables>
+                                        <fields>
+                                            <field>customer_name</field>                                            
+                                        </fields>
+                                    </primaryKey>
+                                    <primaryKey>
+                                        <name>synthetic_department_code</name>
+                                        <tables>department</tables>
+                                        <fields>
+                                            <field>code</field>                                            
+                                        </fields>
+                                    </primaryKey>
+                                </primaryKeys>                               
+                            </syntheticObjects>                            
                         </database>
                                        
                         <!-- jOOQ will generate POJOs in your behalf -->
