@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.app</groupId>
-    <artifactId>jOOQSpringBooSyntheticPkKeysNavigationPostgreSQL</artifactId>
+    <artifactId>jOOQSpringBootSyntheticPkKeysImplicitJoinPostgreSQL</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQSpringBooSyntheticPkKeysNavigationPostgreSQL</name>
+    <name>jOOQSpringBootSyntheticPkKeysImplicitJoinPostgreSQL</name>
     <description>jOOQ - Spring Boot app</description>    
 
     <parent>
@@ -180,7 +180,7 @@
                             <excludes>flyway_schema_history</excludes>                                   
                             
                             <!-- Prepare the synthetic keys -->
-                            <syntheticObjects>                                                                
+                            <syntheticObjects>                                
                                 <primaryKeys>
                                     <primaryKey>
                                         <name>office_master_pk</name>                                        

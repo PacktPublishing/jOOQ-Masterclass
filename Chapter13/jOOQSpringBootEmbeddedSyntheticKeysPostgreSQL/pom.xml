@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.app</groupId>
-    <artifactId>jOOQSpringBooOverridePkKeysPostgreSQL</artifactId>
+    <artifactId>jOOQSpringBootEmbeddedSyntheticKeysPostgreSQL</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQSpringBooOverridePkKeysPostgreSQL</name>
+    <name>jOOQSpringBootEmbeddedSyntheticKeysPostgreSQL</name>
     <description>jOOQ - Spring Boot app</description>    
 
     <parent>
@@ -177,23 +177,41 @@
                             <!-- All elements that are excluded from your schema
                             (A Java regular expression. Use the pipe to separate several expressions).
                             Excludes match before includes, i.e. excludes have a higher priority -->
-                            <excludes>flyway_schema_history</excludes>       
-                                                      
-                            <syntheticObjects>
+                            <excludes>flyway_schema_history</excludes>                                   
+                            
+                            <!-- Prepare the synthetic keys -->
+                            <syntheticObjects>                                
                                 <primaryKeys>
                                     <primaryKey>
-                                        <name>synthetic_department_pk</name>
-                                        <tables>department</tables>
+                                        <name>office_master_pk</name>                                        
+                                        <tables>office_master</tables>
                                         <fields>
-                                            <field>name</field>
-                                            <field>phone</field>
+                                            <field>country</field>
+                                            <field>state</field>
+                                            <field>city</field>
                                         </fields>
-                                    </primaryKey>
-                                </primaryKeys>                               
-                            </syntheticObjects>                                                           
+                                    </primaryKey>                                     
+                                </primaryKeys>
+                                <foreignKeys>
+                                    <foreignKey>  
+                                        <name>office_master_fk</name>                                                                       
+                                        <tables>customer_master</tables>
+                                        <fields>
+                                            <field>country</field>
+                                            <field>state</field>
+                                            <field>city</field>
+                                        </fields>
+                                        <referencedTable>office_master</referencedTable>                                        
+                                        <referencedFields>
+                                            <field>country</field>
+                                            <field>state</field>
+                                            <field>city</field>
+                                        </referencedFields>
+                                    </foreignKey>
+                                </foreignKeys>                                
+                            </syntheticObjects>                            
                             
-                            <!-- This flag will also replace synthetic primary keys, if it matches. -->
-                            <overridePrimaryKeys>customer_name_uk|department_code_uk</overridePrimaryKeys>                            
+                            <embeddablePrimaryKeys>office_master_pk</embeddablePrimaryKeys>                            
                         </database>
                                        
                         <!-- jOOQ will generate POJOs in your behalf -->

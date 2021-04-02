@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.app</groupId>
-    <artifactId>jOOQSpringBooSyntheticPkKeysImplicitJoinMySQL</artifactId>
+    <artifactId>jOOQSpringBootSyntheticPkKeysImplicitJoinMySQL</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQSpringBooSyntheticPkKeysImplicitJoinMySQL</name>
+    <name>jOOQSpringBootSyntheticPkKeysImplicitJoinMySQL</name>
     <description>jOOQ - Spring Boot app</description>    
 
     <parent>

@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.app</groupId>
-    <artifactId>jOOQSpringBooSyntheticUniqueKeysImplicitJoinPostgreSQL</artifactId>
+    <artifactId>jOOQSpringBootSyntheticUniqueKeysImplicitJoinPostgreSQL</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQSpringBooSyntheticUniqueKeysImplicitJoinPostgreSQL</name>
+    <name>jOOQSpringBootSyntheticUniqueKeysImplicitJoinPostgreSQL</name>
     <description>jOOQ - Spring Boot app</description>    
 
     <parent>
