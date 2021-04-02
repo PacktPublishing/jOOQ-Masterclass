@@ -360,7 +360,8 @@ JOIN "public"."customerdetail" ON "public"."customerdetail"."customer_number" = 
 WHERE "public"."customer"."first_buy_date" IS NOT NULL;
 
 CREATE OR REPLACE VIEW office_master AS
-SELECT "public"."office"."city",
+SELECT "public"."office"."office_code",
+       "public"."office"."city",
        "public"."office"."country",
        "public"."office"."state",
        "public"."office"."phone",

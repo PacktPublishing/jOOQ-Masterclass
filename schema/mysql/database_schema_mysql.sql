@@ -317,7 +317,8 @@ JOIN `classicmodels`.`customerdetail` ON `classicmodels`.`customerdetail`.`custo
 WHERE `classicmodels`.`customer`.`first_buy_date` IS NOT NULL;
 
 CREATE OR REPLACE VIEW office_master AS
-SELECT `classicmodels`.`office`.`city`,
+SELECT `classicmodels`.`office`.`office_code`,
+       `classicmodels`.`office`.`city`,
        `classicmodels`.`office`.`country`,
        `classicmodels`.`office`.`state`,
        `classicmodels`.`office`.`phone`,

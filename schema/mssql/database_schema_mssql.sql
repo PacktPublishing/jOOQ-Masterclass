@@ -353,7 +353,8 @@ WHERE [classicmodels].[dbo].[customer].[first_buy_date] IS NOT NULL;
 GO
 
 CREATE VIEW office_master AS
-SELECT [classicmodels].[dbo].[office].[city],
+SELECT [classicmodels].[dbo].[office].[office_code],
+       [classicmodels].[dbo].[office].[city],
        [classicmodels].[dbo].[office].[country],
        [classicmodels].[dbo].[office].[state],
        [classicmodels].[dbo].[office].[phone],
