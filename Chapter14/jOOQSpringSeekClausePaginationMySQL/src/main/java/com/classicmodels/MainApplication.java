@@ -28,7 +28,7 @@ public class MainApplication {
             classicModelsService.loadEmployeesOfficeCodeAscSalaryDesc("1", 75000, 10);
             classicModelsService.loadEmployeesOfficeCodeAscSalaryAsc("1", 75000, 10);
             classicModelsService.loadOrderdetailPageOrderIdAscProductIdQuantityOrderedDesc(10100, 23, 30, 10);
-            classicModelsService.loadProductsBuyPriceGtMsrp(0, 20);
+            classicModelsService.loadProductsBuyPriceGtMsrp(0, 5);
         };
     }
 }

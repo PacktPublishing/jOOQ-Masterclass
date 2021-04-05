@@ -83,9 +83,9 @@ public class ClassicModelsRepository {
 
     public List<Product> fetchProductsBuyPriceGtMsrp(long productId, int size) {
 
-        List<Product> result = ctx.selectFrom(PRODUCT)
-                .orderBy(PRODUCT.PRODUCT_ID, PRODUCT.BUY_PRICE)
-                .seek(val(productId), PRODUCT.MSRP.minus(PRODUCT.MSRP.mul(0.35))) // or, seekAfter
+        List<Product> result = ctx.selectFrom(PRODUCT)                
+                .orderBy(PRODUCT.BUY_PRICE, PRODUCT.PRODUCT_ID)                
+                .seek(PRODUCT.MSRP.minus(PRODUCT.MSRP.mul(0.35)), val(productId)) // or, seekAfter
                 .limit(size)
                 .fetchInto(Product.class);
 
