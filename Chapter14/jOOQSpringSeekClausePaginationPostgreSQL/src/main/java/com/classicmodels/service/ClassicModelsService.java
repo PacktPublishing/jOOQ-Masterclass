@@ -47,4 +47,9 @@ public class ClassicModelsService {
 
         return classicModelsRepository.fetchProductsBuyPriceGtMsrp(productId, size);
     }
+
+    public String loadOrderdetailPageGroupBy(long orderId, int size) {
+
+        return classicModelsRepository.fetchOrderdetailPageGroupBy(orderId, size);
+    }
 }

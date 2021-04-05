@@ -61,4 +61,11 @@ public class ClassicModelsController {
 
         return classicModelsService.loadProductsBuyPriceGtMsrp(productId, size);
     }
+    
+    @GetMapping("/orderdetail/{orderId}/{size}")
+    public String loadOrderdetailPageGroupBy(
+            @PathVariable(name = "orderId") long orderId, @PathVariable(name = "size") int size) {
+
+        return classicModelsService.loadOrderdetailPageGroupBy(orderId, size);
+    }
 }

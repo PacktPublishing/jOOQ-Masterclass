@@ -8,6 +8,8 @@ import jooq.generated.tables.pojos.Product;
 import static jooq.generated.tables.Product.PRODUCT;
 import jooq.generated.tables.pojos.Employee;
 import org.jooq.DSLContext;
+import org.jooq.JSONFormat;
+import static org.jooq.impl.DSL.sum;
 import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -83,11 +85,25 @@ public class ClassicModelsRepository {
 
     public List<Product> fetchProductsBuyPriceGtMsrp(long productId, int size) {
 
-        List<Product> result = ctx.selectFrom(PRODUCT)                
-                .orderBy(PRODUCT.BUY_PRICE, PRODUCT.PRODUCT_ID)                
+        List<Product> result = ctx.selectFrom(PRODUCT)
+                .orderBy(PRODUCT.BUY_PRICE, PRODUCT.PRODUCT_ID)
                 .seek(PRODUCT.MSRP.minus(PRODUCT.MSRP.mul(0.35)), val(productId)) // or, seekAfter
                 .limit(size)
                 .fetchInto(Product.class);
+
+        return result;
+    }
+
+    public String fetchOrderdetailPageGroupBy(long orderId, int size) {
+
+        var result = ctx.select(ORDERDETAIL.ORDER_ID, sum(ORDERDETAIL.PRICE_EACH))
+                .from(ORDERDETAIL)
+                .groupBy(ORDERDETAIL.ORDER_ID)
+                .orderBy(ORDERDETAIL.ORDER_ID)
+                .seek(orderId) // or, seekAfter
+                .limit(size)
+                .fetch()
+                .formatJSON(JSONFormat.DEFAULT_FOR_RECORDS);
 
         return result;
     }
