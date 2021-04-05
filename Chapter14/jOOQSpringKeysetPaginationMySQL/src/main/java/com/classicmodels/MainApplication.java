@@ -23,7 +23,7 @@ public class MainApplication {
     public ApplicationRunner init() {
         return args -> {
 
-            classicModelsService.loadProducts(0, 5);
+            classicModelsService.loadProducts(20, 5);
         };
     }
 }
