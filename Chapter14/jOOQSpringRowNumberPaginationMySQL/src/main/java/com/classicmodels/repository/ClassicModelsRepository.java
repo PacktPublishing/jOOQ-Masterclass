@@ -22,7 +22,7 @@ public class ClassicModelsRepository {
 
     public List<ProductMaster> fetchProductMasterPage(int start, int end) {
 
-        var result = ctx.select().from(select(PRODUCT_MASTER.PRODUCT_LINE, 
+        var result = ctx.select().from(select(PRODUCT_MASTER.PRODUCT_LINE,
                 PRODUCT_MASTER.PRODUCT_NAME, PRODUCT_MASTER.PRODUCT_SCALE,
                 rowNumber().over().orderBy(PRODUCT_MASTER.PRODUCT_LINE).as("rowNum"))
                 .from(PRODUCT_MASTER).asTable("t"))
@@ -30,5 +30,5 @@ public class ClassicModelsRepository {
                 .fetchInto(ProductMaster.class);
 
         return result;
-    }    
+    }
 }
