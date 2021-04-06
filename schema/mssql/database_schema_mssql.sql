@@ -361,4 +361,10 @@ SELECT [classicmodels].[dbo].[office].[office_code],
 	   [classicmodels].[dbo].[office].[postal_code]
 FROM [classicmodels].[dbo].[office]
 WHERE [classicmodels].[dbo].[office].[city] IS NOT NULL;
+
+CREATE OR REPLACE VIEW product_master AS
+SELECT [classicmodels].[dbo].[product].[product_line],
+       [classicmodels].[dbo].[product].[product_name],
+       [classicmodels].[dbo].[product].[product_scale]       
+FROM [classicmodels].[dbo].[product];
 /* END */
