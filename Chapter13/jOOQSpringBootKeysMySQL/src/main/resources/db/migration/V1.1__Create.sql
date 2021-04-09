@@ -317,11 +317,18 @@ JOIN `classicmodels`.`customerdetail` ON `classicmodels`.`customerdetail`.`custo
 WHERE `classicmodels`.`customer`.`first_buy_date` IS NOT NULL;
 
 CREATE OR REPLACE VIEW office_master AS
-SELECT `classicmodels`.`office`.`city`,
+SELECT `classicmodels`.`office`.`office_code`,
+       `classicmodels`.`office`.`city`,
        `classicmodels`.`office`.`country`,
        `classicmodels`.`office`.`state`,
        `classicmodels`.`office`.`phone`,
 	   `classicmodels`.`office`.`postal_code`
 FROM `classicmodels`.`office`
 WHERE `classicmodels`.`office`.`city` IS NOT NULL;
+
+CREATE OR REPLACE VIEW product_master AS
+SELECT `classicmodels`.`product`.`product_line`,
+       `classicmodels`.`product`.`product_name`,
+       `classicmodels`.`product`.`product_scale`       
+FROM `classicmodels`.`product`;
 /* END */

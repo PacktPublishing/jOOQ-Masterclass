@@ -36,7 +36,8 @@ public class ClassicModelsRepository {
         // Record1<Long>
         var insertedId = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
                 .values(2004, 2311.42, 1370L)
-                .returningResult(SALE.SALE_ID)
+                .returningResult(SALE.getIdentity().getField())
+                // or, .returningResult(SALE.SALE_ID)
                 .fetchOne(); // get directly the long value, .fetchOne().value1();
 
         System.out.println("Inserted ID:\n" + insertedId);
@@ -46,7 +47,8 @@ public class ClassicModelsRepository {
                 .values(2004, 2311.42, 1370L)
                 .values(2003, 900.21, 1504L)
                 .values(2005, 1232.2, 1166L)
-                .returningResult(SALE.SALE_ID)
+                .returningResult(SALE.getIdentity().getField())
+                // or, .returningResult(SALE.SALE_ID)
                 .fetch();
 
         System.out.println("Inserted IDs:\n" + insertedIds);
