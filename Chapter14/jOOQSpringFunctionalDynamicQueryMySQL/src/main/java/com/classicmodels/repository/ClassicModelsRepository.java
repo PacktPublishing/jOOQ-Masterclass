@@ -1,11 +1,9 @@
 package com.classicmodels.repository;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 import static jooq.generated.tables.Sale.SALE;
@@ -18,6 +16,8 @@ import org.jooq.Table;
 import org.jooq.TableField;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import com.classicmodels.util.SaleFunction;
+import jooq.generated.tables.records.SaleRecord;
 
 @Repository
 @Transactional(readOnly = true)
@@ -29,95 +29,112 @@ public class ClassicModelsRepository {
         this.ctx = ctx;
     }
 
-    // Day 1
-    public List<Sale> filterByFiscalYear(int fiscalYear) {
+    /* Evolving from 0 to functional implementation */
+    // Day 1 (writing a filter based on *fiscalYear*)
+    public List<SaleRecord> filterByFiscalYear(int fiscalYear) {
 
         return ctx.selectFrom(SALE)
                 .where(SALE.FISCAL_YEAR.eq(fiscalYear))
-                .fetchInto(Sale.class);
+                .fetch();
     }
 
-    // Day 2
-    public List<Sale> filterByTrend(String trend) {
+    // Day 2 (writing another filter based on *trend*)
+    public List<SaleRecord> filterByTrend(String trend) {
 
         return ctx.selectFrom(SALE)
                 .where(SALE.TREND.eq(trend))
-                .fetchInto(Sale.class);
+                .fetch();
     }
 
-    // Day 3
-    public List<Sale> filterByFiscalYearAndTrend(int fiscalYear, String trend) {
+    // Day 3 (writing a filter based on *fiscalYear* and *trend*, this can become an issue if more filters are needed)
+    public List<SaleRecord> filterByFiscalYearAndTrend(int fiscalYear, String trend) {
 
         return ctx.selectFrom(SALE)
                 .where(SALE.FISCAL_YEAR.eq(fiscalYear)
                         .and(SALE.TREND.eq(trend)))
-                .fetchInto(Sale.class);
+                .fetch();
     }
 
-    // Day 4
-    public List<Sale> filterByz(SalePredicate sp) {
+    // Day 4 (relying on Collection<Condition>)
+    public List<SaleRecord> filterBy1(Collection<Condition> cf) {
 
         return ctx.selectFrom(SALE)
-                .where(sp.apply(SALE))
-                .fetchInto(Sale.class);
+                .where(cf)
+                .fetch();
     }
 
-    // Day 5
-    public List<Sale> filterByf(Function<Sale, Condition> sp) {
+    // Day 5 (writing an interface for more flexibility and type-safety)
+    public List<SaleRecord> filterBy2(SaleFunction<Sale, Condition> sf) {
 
         return ctx.selectFrom(SALE)
-                .where(sp.apply(SALE))
-                .fetchInto(Sale.class);
+                .where(sf.apply(SALE))
+                .fetch();
     }
 
-    // Day 6
-    public List<Sale> filterByf(Function<Sale, Condition>... sp) {
+    // Day 6 (wait, Java already has java.util.function.Function<T, R>)
+    public List<SaleRecord> filterBy3(Function<Sale, Condition> f) {
 
         return ctx.selectFrom(SALE)
-                .where(Arrays.stream(sp)
-                        .map(f -> f.apply(SALE))
-                        .collect(Collectors.toList()))
-                .fetchInto(Sale.class);
+                .where(f.apply(SALE))
+                .fetch();
     }
 
-    // Day 7
-    public <T extends Table, R extends Record> List<R>
-            filterByfd(T t, Function<T, Condition>... sp) {
+    // Day 7 (allow the code to apply multiple conditions)
+    public List<SaleRecord> filterBy4(Function<Sale, Condition>... ff) {
+
+        return ctx.selectFrom(SALE)
+                .where(Stream.of(ff).map(f -> f.apply(SALE)).collect(toList()))
+                .fetch();
+    }
+
+    // Day 8 (add genericity)
+    public <T extends Table<R>, R extends Record> List<R>
+            filterBy5(T t, Function<T, Condition>... ff) {
 
         return ctx.selectFrom(t)
-                .where(Stream.of(sp).map(f -> f.apply(t)).collect(toList()))
+                .where(Stream.of(ff).map(f -> f.apply(t)).collect(toList()))
                 .fetch();
     }
 
-    // Day 8
-    public <T extends Table> List<Record>
-            filterBydfd(T t, Supplier<Collection<SelectField<?>>> select, Function<T, Condition>... sp) {
+    // Day 9 (select certain fields (TableField), add Supplier to defer creation)
+    public <T extends Table<R>, R extends Record> List<Record>
+            filterBy6(T t, Supplier<Collection<TableField<R, ?>>> select, Function<T, Condition>... ff) {
 
         return ctx.select(select.get())
                 .from(t)
-                .where(Stream.of(sp).map(f -> f.apply(t)).collect(toList()))
+                .where(Stream.of(ff).map(f -> f.apply(t)).collect(toList()))
                 .fetch();
     }
 
-    // ccc
-    public <T extends Table, R extends Record> List<Record>
-            filterBydfdddd(T t, Supplier<Collection<TableField<R, ?>>> select, Function<T, Condition>... sp) {
+    // Still day 9 (select certain fields (SelectField), add Supplier to defer creation)
+    public <T extends Table<R>, R extends Record> List<Record>
+            filterBy7(T t, Supplier<Collection<SelectField<?>>> select, Function<T, Condition>... ff) {
 
         return ctx.select(select.get())
                 .from(t)
-                .where(Stream.of(sp).map(f -> f.apply(t)).collect(toList()))
+                .where(Stream.of(ff).map(f -> f.apply(t)).collect(toList()))
                 .fetch();
     }
 
-    // Day 9
-    public <T extends Table> List<Record>
-            filterBydfds(T t, Supplier<Collection<SelectField<?>>> select,
-                    Supplier<Collection<Condition>> sp) {
+    // Still day 9 (add two Suppliers)
+    public <T extends Table<R>, R extends Record> List<Record>
+            filterBy8(T t, Supplier<Collection<TableField<R, ?>>> select,
+                    Supplier<Collection<Condition>> ff) {
 
         return ctx.select(select.get())
                 .from(t)
-                .where(sp.get())
+                .where(ff.get())
                 .fetch();
     }
 
+    // Still day 9 (add two Suppliers)
+    public <T extends Table<R>, R extends Record> List<Record>
+            filterBy9(T t, Supplier<Collection<SelectField<?>>> select,
+                    Supplier<Collection<Condition>> ff) {
+
+        return ctx.select(select.get())
+                .from(t)
+                .where(ff.get())
+                .fetch();
+    }
 }

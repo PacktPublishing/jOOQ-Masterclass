@@ -23,7 +23,7 @@ public class MainApplication {
     public ApplicationRunner init() {
         return args -> {
 
-            classicModelsService.c();
+            classicModelsService.callAll();
         };
     }
 }
