@@ -6,7 +6,17 @@ var start = 0;
 
 getPost();
 
-window.addEventListener('scroll', () => {
+function infniteScroll() {
+    window.addEventListener('scroll', iscroll);
+}
+
+function showLoading() {
+    window.removeEventListener('scroll', iscroll);
+    loading.classList.add('show');
+    setTimeout(getPost, 1000)
+}
+
+function iscroll() {
     const {scrollTop, scrollHeight, clientHeight} = document.documentElement;
 
     console.log({scrollTop, scrollHeight, clientHeight});
@@ -14,11 +24,6 @@ window.addEventListener('scroll', () => {
     if (clientHeight + scrollTop >= scrollHeight - 5) {
         showLoading();
     }
-});
-
-function showLoading() {
-    loading.classList.add('show');
-    setTimeout(getPost, 1000)
 }
 
 async function getPost() {
@@ -28,6 +33,7 @@ async function getPost() {
 
     start = data[size-1].orderdetailId;
 
+    infniteScroll();
     addDataToDOM(data);
 }
 
