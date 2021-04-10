@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />        
+        <link rel="stylesheet" href="style.css?x=0" />
+        
+        <title>Infinite Scroll</title>
+    </head>
+    <body>
+
+        <div id="sidebar" class="sticky">            
+            <table>      
+                <tr>
+                    <td colspan="6"><h4>Select the price</h4></td>  
+                </tr>
+                <tr>  
+                    <td><input type="radio" id="check1" name="n1" class="pl1" value="50"/> </td>  
+                    <td> 0 - 50  </td>
+                    <td><input type="radio" id="check2" name="n1" class="pl1" value="100"/> </td>  
+                    <td> 50 - 100  </td>
+                    <td><input type="radio" id="check3" name="n1" class="pl1" value="150"/> </td>  
+                    <td> 100 - 150  </td>
+                </tr>                 
+                <tr>
+                    <td colspan="6"><h4>Select the quantity ordered</h4></td>  
+                </tr>
+                <tr>  
+                    <td><input type="radio" id="check4" name="n2" class="pl2" value="25"/> </td>  
+                    <td> 0 - 25  </td>
+                    <td><input type="radio" id="check5" name="n2" class="pl2" value="50"/> </td>  
+                    <td> 25 - 50  </td>
+                    <td><input type="radio" id="check6" name="n2" class="pl2" value="75"/> </td>  
+                    <td> 50 - 75  </td>
+                </tr>                 
+            </table>
+            <button id="btn" onclick="getSelectedAndPost();">Submit</button> 
+        </div>
+
+        <div class="panel">
+            <div class="container" id="container">
+                <h1>Order Detail</h1>  
+            </div>
+            <div class="loading">
+                <div class="ball"></div>
+                <div class="ball"></div>
+                <div class="ball"></div>
+            </div>
+        </div>
+        <script src="main.js"></script>
+    </body>
+</html>
