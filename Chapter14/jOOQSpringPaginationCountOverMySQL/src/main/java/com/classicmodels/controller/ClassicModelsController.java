@@ -16,9 +16,15 @@ public class ClassicModelsController {
         this.classicModelsService = classicModelsService;
     }
 
-    @GetMapping("/products/{page}/{size}")
-    public Page<Product> loadProducts(@PathVariable(name = "page") int page, @PathVariable(name = "size") int size) {
+    @GetMapping("/products1/{page}/{size}")
+    public Page<Product> loadProductsExtraSelectCount(@PathVariable(name = "page") int page, @PathVariable(name = "size") int size) {
 
-        return classicModelsService.loadProducts(page, size);
+        return classicModelsService.loadProductsExtraSelectCount(page, size);
+    }
+    
+    @GetMapping("/products2/{page}/{size}")
+    public Page<Product> loadProductsWithoutExtraSelectCount(@PathVariable(name = "page") int page, @PathVariable(name = "size") int size) {
+
+        return classicModelsService.loadProductsWithoutExtraSelectCount(page, size);
     }
 }

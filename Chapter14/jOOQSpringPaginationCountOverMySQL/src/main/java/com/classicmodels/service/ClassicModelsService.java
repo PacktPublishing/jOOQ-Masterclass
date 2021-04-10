@@ -14,8 +14,13 @@ public class ClassicModelsService {
         this.classicModelsRepository = classicModelsRepository;
     }
 
-    public Page<Product> loadProducts(int page, int size) {
+    public Page<Product> loadProductsWithoutExtraSelectCount(int page, int size) {
 
-        return classicModelsRepository.fetchProductsPage(page, size);
+        return classicModelsRepository.fetchProductsPageWithoutExtraSelectCount(page, size);
+    }
+
+    public Page<Product> loadProductsExtraSelectCount(int page, int size) {
+
+        return classicModelsRepository.fetchProductsPageExtraSelectCount(page, size);
     }
 }
