@@ -24,7 +24,24 @@ public class ClassicModelsRepository {
         this.ctx = ctx;
     }
 
-    public Page<Product> fetchProductsPage(int page, int size) {
+    public Page<Product> fetchProductsPageExtraSelectCount(int page, int size) {
+
+        long total = ctx.fetchCount(PRODUCT);
+
+        List<Product> result = ctx.selectFrom(PRODUCT)
+                .orderBy(PRODUCT.PRODUCT_ID)
+                .limit(size)
+                .offset(size * page)
+                .fetchInto(Product.class);
+
+        Page<Product> pageOfProduct = new PageImpl(result,
+                PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, PRODUCT.PRODUCT_ID.getName())),
+                total);
+
+        return pageOfProduct;
+    }
+
+    public Page<Product> fetchProductsPageWithoutExtraSelectCount(int page, int size) {
 
         Map<Integer, List<Product>> result = ctx.select(
                 PRODUCT.asterisk(), count().over().as("total"))
@@ -33,11 +50,11 @@ public class ClassicModelsRepository {
                 .limit(size)
                 .offset(size * page)
                 .fetchGroups(field("total", Integer.class), Product.class);
-              
-        Page<Product> pageOfProduct = new PageImpl(result.values().iterator().next(), 
+
+        Page<Product> pageOfProduct = new PageImpl(result.values().iterator().next(),
                 PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, PRODUCT.PRODUCT_ID.getName())),
                 result.entrySet().iterator().next().getKey());
-        
+
         return pageOfProduct;
     }
 
