@@ -2,9 +2,11 @@ package com.classicmodels.service;
 
 import com.classicmodels.repository.ClassicModelsRepository;
 import java.util.List;
+import jooq.generated.embeddables.records.EmbeddedProductlinePkRecord;
 import jooq.generated.tables.pojos.Employee;
 import jooq.generated.tables.pojos.Orderdetail;
 import jooq.generated.tables.pojos.Product;
+import jooq.generated.tables.pojos.Productline;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -47,6 +49,14 @@ public class ClassicModelsService {
 
         return classicModelsRepository.fetchProductsBuyPriceGtMsrp(productId, size);
     }
+    
+    public List<Productline> loadProductlineEmbeddedKey(String productline, long code, int size) {
+        
+        EmbeddedProductlinePkRecord epk 
+                = new EmbeddedProductlinePkRecord(productline, code);
+        
+        return classicModelsRepository.fetchProductlineEmbeddedKey(epk, size);
+    }    
 
     public String loadOrderdetailPageGroupBy(long orderId, int size) {
 

@@ -368,4 +368,10 @@ SELECT "public"."office"."office_code",
        "public"."office"."postal_code"
 FROM "public"."office"
 WHERE "public"."office"."city" IS NOT NULL;
+
+CREATE OR REPLACE VIEW product_master AS
+SELECT "public"."product"."product_line",
+       "public"."product"."product_name",
+       "public"."product"."product_scale"       
+FROM "public"."product";
 /* END */
