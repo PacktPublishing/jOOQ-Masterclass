@@ -1,11 +1,14 @@
 package com.classicmodels.repository;
 
 import java.util.List;
+import jooq.generated.embeddables.records.EmbeddedProductlinePkRecord;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import jooq.generated.tables.pojos.Orderdetail;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import jooq.generated.tables.pojos.Product;
 import static jooq.generated.tables.Product.PRODUCT;
+import jooq.generated.tables.pojos.Productline;
+import static jooq.generated.tables.Productline.PRODUCTLINE;
 import jooq.generated.tables.pojos.Employee;
 import org.jooq.DSLContext;
 import org.jooq.JSONFormat;
@@ -93,7 +96,20 @@ public class ClassicModelsRepository {
 
         return result;
     }
-    
+
+    public List<Productline> fetchProductlineEmbeddedKey(EmbeddedProductlinePkRecord epk, int size) {
+
+        List<Productline> result = ctx.select(PRODUCTLINE.asterisk()
+                .except(PRODUCTLINE.HTML_DESCRIPTION, PRODUCTLINE.IMAGE))
+                .from(PRODUCTLINE)
+                .orderBy(PRODUCTLINE.PRODUCTLINE_PK) // embedded key
+                .seek(epk) // or, seekAfter
+                .limit(size)
+                .fetchInto(Productline.class);
+
+        return result;
+    }
+
     public String fetchOrderdetailPageGroupBy(long orderId, int size) {
 
         var result = ctx.select(ORDERDETAIL.ORDER_ID, sum(ORDERDETAIL.PRICE_EACH))

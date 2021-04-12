@@ -42,7 +42,7 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>               
         <dependency>
-            <groupId>org.jooq</groupId>
+            <groupId>org.jooq.trial-java-8</groupId>
             <artifactId>jooq</artifactId>         
             <version>${jooq.version}</version>
         </dependency>              
@@ -121,7 +121,7 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.jooq</groupId>
+                <groupId>org.jooq.trial-java-8</groupId>
                 <artifactId>jooq-codegen-maven</artifactId> 
                 <version>${jooq.version}</version>              
                 <executions>
@@ -177,7 +177,28 @@
                                     <!-- Give enough time to jOOQ to trigger the queries needed for generating sources 
                                     (default is 5 seconds) -->
                                     <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>                                                                      
+                                    
+                                    <!-- !MySQL ignores constraints names on PK -->
+                                    <embeddablePrimaryKeys>KEY_productline_PRIMARY</embeddablePrimaryKeys>   
                                 </database>
+                                
+                                <strategy>
+                                    <matchers>                                      
+                                        <embeddables>
+                                            <embeddable>
+                                                <expression>.*_PRIMARY</expression>
+                                                <recordClass>                                                    
+                                                    <expression>Embedded_$0_Record</expression>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+                                                    <transform>PASCAL</transform>
+                                                </recordClass>  
+                                                <pojoClass>
+                                                    <expression>Embedded_$0</expression>                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+                                                    <transform>PASCAL</transform>
+                                                </pojoClass>                                                                                           
+                                            </embeddable>
+                                        </embeddables>                                        
+                                    </matchers>
+                                </strategy>
                                                                             
                                 <!-- jOOQ will generate POJOs in your behalf -->
                                 <generate>

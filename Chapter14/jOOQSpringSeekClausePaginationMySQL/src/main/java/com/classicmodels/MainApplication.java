@@ -29,6 +29,7 @@ public class MainApplication {
             classicModelsService.loadEmployeesOfficeCodeAscSalaryAsc("1", 75000, 10);
             classicModelsService.loadOrderdetailPageOrderIdAscProductIdQuantityOrderedDesc(10100, 23, 30, 10);
             classicModelsService.loadProductsBuyPriceGtMsrp(0, 5);
+            classicModelsService.loadProductlineEmbeddedKey("Ships", 433823, 3);
             classicModelsService.loadOrderdetailPageGroupBy(10000, 5);
         };
     }

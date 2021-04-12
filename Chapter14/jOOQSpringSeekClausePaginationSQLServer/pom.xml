@@ -175,14 +175,33 @@
                                     
                                     <!-- Give enough time to jOOQ to trigger the queries needed for generating sources 
                                     (default is 5 seconds) -->
-                                    <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>                                    
-                                </database>                          
+                                    <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>  
+                                    
+                                    <embeddablePrimaryKeys>productline_pk</embeddablePrimaryKeys>                                  
+                                </database>  
+                                
+                                <strategy>
+                                    <matchers>                                      
+                                        <embeddables>
+                                            <embeddable>
+                                                <expression>.*_pk</expression>
+                                                <recordClass>                                                    
+                                                    <expression>Embedded_$0_Record</expression>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+                                                    <transform>PASCAL</transform>
+                                                </recordClass>  
+                                                <pojoClass>
+                                                    <expression>Embedded_$0</expression>                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+                                                    <transform>PASCAL</transform>
+                                                </pojoClass>                                                                                           
+                                            </embeddable>
+                                        </embeddables>                                        
+                                    </matchers>
+                                </strategy>                        
                                 
                                 <!-- jOOQ will generate POJOs and DAOs in your behalf -->
                                 <generate>
                                     <pojos>true</pojos>                                   
-                                    <validationAnnotations>true</validationAnnotations>                            
-                                    <springAnnotations>true</springAnnotations>   
+                                    <validationAnnotations>true</validationAnnotations>                                                                
                                 </generate>
                                 
                                 <target>

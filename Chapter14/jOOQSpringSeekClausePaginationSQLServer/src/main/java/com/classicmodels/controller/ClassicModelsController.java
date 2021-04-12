@@ -5,6 +5,7 @@ import java.util.List;
 import jooq.generated.tables.pojos.Employee;
 import jooq.generated.tables.pojos.Orderdetail;
 import jooq.generated.tables.pojos.Product;
+import jooq.generated.tables.pojos.Productline;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -60,6 +61,15 @@ public class ClassicModelsController {
             @PathVariable(name = "productId") long productId, @PathVariable(name = "size") int size) {
 
         return classicModelsService.loadProductsBuyPriceGtMsrp(productId, size);
+    }
+        
+    @GetMapping("/productline/{productLine}/{code}/{size}")
+    public List<Productline> loadProductlineEmbeddedKey(
+            @PathVariable(name = "productLine") String productLine, 
+            @PathVariable(name = "code") long code,
+            @PathVariable(name = "size") int size) {
+
+        return classicModelsService.loadProductlineEmbeddedKey(productLine, code, size);
     }
     
     @GetMapping("/orderdetail/{orderId}/{size}")
