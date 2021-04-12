@@ -99,7 +99,9 @@ public class ClassicModelsRepository {
 
     public List<Productline> fetchProductlineEmbeddedKey(EmbeddedKeyProductlinePrimaryRecord epk, int size) {
 
-        List<Productline> result = ctx.selectFrom(PRODUCTLINE)
+        List<Productline> result = ctx.select(PRODUCTLINE.asterisk()
+                .except(PRODUCTLINE.HTML_DESCRIPTION, PRODUCTLINE.IMAGE))
+                .from(PRODUCTLINE)
                 .orderBy(PRODUCTLINE.KEY_PRODUCTLINE_PRIMARY) // embedded key
                 .seek(epk) // or, seekAfter
                 .limit(size)
