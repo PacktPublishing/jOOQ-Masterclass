@@ -27,7 +27,7 @@
         <maven.compiler.target>14</maven.compiler.target>
         
         <jaxb.version>2.3.0</jaxb.version>
-        <jooq.version>3.14.7</jooq.version>             
+        <jooq.version>3.14.8</jooq.version>             
         <xdb6.version>18.3.0.0</xdb6.version>
         <codehaus.mojo.version>1.0.0</codehaus.mojo.version>
         <maven.compiler.plugin.version>3.3</maven.compiler.plugin.version>
@@ -194,14 +194,33 @@
                                     
                                     <!-- Give enough time to jOOQ to trigger the queries needed for generating sources 
                                     (default is 5 seconds) -->
-                                    <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>                                                                      
+                                    <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>                    
+                                    
+                                    <embeddablePrimaryKeys>productline_pk</embeddablePrimaryKeys>                                                                                    
                                 </database>
+                                
+                                <strategy>
+                                    <matchers>                                      
+                                        <embeddables>
+                                            <embeddable>
+                                                <expression>.*_pk</expression>
+                                                <recordClass>                                                    
+                                                    <expression>Embedded_$0_Record</expression>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+                                                    <transform>PASCAL</transform>
+                                                </recordClass>  
+                                                <pojoClass>
+                                                    <expression>Embedded_$0</expression>                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+                                                    <transform>PASCAL</transform>
+                                                </pojoClass>                                                                                           
+                                            </embeddable>
+                                        </embeddables>                                        
+                                    </matchers>
+                                </strategy>
                                                                 
                                 <!-- jOOQ will generate POJOs and DAOs in your behalf -->
                                 <generate>
                                     <pojos>true</pojos>                                   
-                                    <validationAnnotations>true</validationAnnotations>                            
-                                    <springAnnotations>true</springAnnotations>   
+                                    <validationAnnotations>true</validationAnnotations>                                      
                                 </generate>
                                 
                                 <target>
