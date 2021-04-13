@@ -3,12 +3,15 @@ package com.classicmodels.repository;
 import com.classicmodels.service.Clazz;
 import java.math.BigDecimal;
 import java.util.List;
+import static jooq.generated.tables.BankTransaction.BANK_TRANSACTION;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Sale.SALE;
+import jooq.generated.tables.pojos.BankTransaction;
+import jooq.generated.tables.records.BankTransactionRecord;
 import jooq.generated.tables.records.CustomerRecord;
 import jooq.generated.tables.records.EmployeeRecord;
 import jooq.generated.tables.records.ProductRecord;
@@ -43,7 +46,7 @@ public class ClassicModelsRepository {
 
         return ctx.selectFrom(PRODUCT)
                 .where((buyPrice > 0f ? PRODUCT.BUY_PRICE.gt(BigDecimal.valueOf(buyPrice)) : trueCondition())
-                        .and(cars ? PRODUCT.PRODUCT_LINE.in("Classic Cars", "Motorcycles", "Trucks and Buses", "Vintage Cars") 
+                        .and(cars ? PRODUCT.PRODUCT_LINE.in("Classic Cars", "Motorcycles", "Trucks and Buses", "Vintage Cars")
                                 : PRODUCT.PRODUCT_LINE.in("Plains", "Ships", "Trains")))
                 .fetch();
     }
@@ -54,6 +57,15 @@ public class ClassicModelsRepository {
                 .where(EMPLOYEE.SALARY.compare(isSaleRep ? Comparator.IN : Comparator.NOT_IN,
                         select(EMPLOYEE.SALARY).from(EMPLOYEE).where(EMPLOYEE.SALARY.lt(65000))))
                 .orderBy(EMPLOYEE.SALARY)
+                .fetch();
+    }
+
+    public List<BankTransactionRecord> fetchBankTransactions(String status) {
+
+        return ctx.selectFrom(BANK_TRANSACTION)
+                .where(BANK_TRANSACTION.TRANSFER_AMOUNT.compare(
+                        status.equals("SUCCESS") || status.equals("FAILED")
+                        ? Comparator.GREATER_OR_EQUAL : Comparator.LESS_OR_EQUAL, BigDecimal.valueOf(10000)))
                 .fetch();
     }
 
