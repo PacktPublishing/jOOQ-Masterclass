@@ -10,7 +10,6 @@ import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Sale.SALE;
-import jooq.generated.tables.pojos.BankTransaction;
 import jooq.generated.tables.records.BankTransactionRecord;
 import jooq.generated.tables.records.CustomerRecord;
 import jooq.generated.tables.records.EmployeeRecord;
