@@ -24,6 +24,7 @@ import org.jooq.UpdateQuery;
 import static org.jooq.impl.DSL.avg;
 import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.select;
+import static org.jooq.impl.DSL.trueCondition;
 import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,7 +39,16 @@ public class ClassicModelsRepository {
         this.ctx = ctx;
     }
 
-    public List<EmployeeRecord> toggleComparisonPredicates1(boolean isSaleRep) {
+    public List<ProductRecord> fetchCarsOrNoCars(float buyPrice, boolean cars) {
+
+        return ctx.selectFrom(PRODUCT)
+                .where((buyPrice > 0f ? PRODUCT.BUY_PRICE.gt(BigDecimal.valueOf(buyPrice)) : trueCondition())
+                        .and(cars ? PRODUCT.PRODUCT_LINE.in("Classic Cars", "Motorcycles", "Trucks and Buses", "Vintage Cars") 
+                                : PRODUCT.PRODUCT_LINE.in("Plains", "Ships", "Trains")))
+                .fetch();
+    }
+
+    public List<EmployeeRecord> fetchEmployees1(boolean isSaleRep) {
 
         return ctx.selectFrom(EMPLOYEE)
                 .where(EMPLOYEE.SALARY.compare(isSaleRep ? Comparator.IN : Comparator.NOT_IN,
@@ -47,7 +57,7 @@ public class ClassicModelsRepository {
                 .fetch();
     }
 
-    public List<EmployeeRecord> toggleComparisonPredicates2(boolean salesReps) {
+    public List<EmployeeRecord> fetchEmployees2(boolean salesReps) {
 
         return ctx.selectFrom(EMPLOYEE)
                 .where(
@@ -66,7 +76,7 @@ public class ClassicModelsRepository {
                 .fetch();
     }
 
-    public List<ProductRecord> toggleComparisonPredicates3(float buyPrice, float msrp) {
+    public List<ProductRecord> fetchProducts(float buyPrice, float msrp) {
 
         return ctx.selectFrom(PRODUCT)
                 .where(PRODUCT.BUY_PRICE.compare(
