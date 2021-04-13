@@ -17,7 +17,7 @@ public class ClassicModelsController {
     }
 
     @GetMapping("/orderdetail/{orderdetailId}/{size}")
-    public List<Orderdetail> fetchOrderdetailPageAsc(@PathVariable(name = "orderdetailId") int orderdetailId,
+    public List<Orderdetail> loadOrderdetailPageAsc(@PathVariable(name = "orderdetailId") int orderdetailId,
             @PathVariable(name = "size") int size) {
 
         return classicModelsService.loadOrderdetailPageAsc(orderdetailId, size);

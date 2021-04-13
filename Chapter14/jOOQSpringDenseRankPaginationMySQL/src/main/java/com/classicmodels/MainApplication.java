@@ -23,7 +23,9 @@ public class MainApplication {
     public ApplicationRunner init() {
         return args -> {
 
-            classicModelsService.loadOfficeWithEmploeePage(1, 5);
+            classicModelsService.loadOfficeWithEmployeeOffset(3, 4);
+            classicModelsService.loadOfficeWithEmployeeSeek("1", 5);
+            classicModelsService.loadOfficeWithEmployeeDR(1, 3);
         };
     }
 }

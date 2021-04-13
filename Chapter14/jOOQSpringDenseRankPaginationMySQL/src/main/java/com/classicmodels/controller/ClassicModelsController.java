@@ -17,11 +17,25 @@ public class ClassicModelsController {
     public ClassicModelsController(ClassicModelsService classicModelsService) {
         this.classicModelsService = classicModelsService;
     }
-
-    @GetMapping("/officeWithEmployees/{start}/{end}")
-    public Map<Office, List<Employee>> loadOfficeWithEmploeePage(
+    
+    @GetMapping("/officeWithEmployeesOffset/{page}/{size}")
+    public Map<Office, List<Employee>> fetchOfficeWithEmployeeOffset(
+            @PathVariable(name = "page") int page, @PathVariable(name = "size") int size) {
+        
+        return classicModelsService.loadOfficeWithEmployeeOffset(page, size);
+    }
+    
+    @GetMapping("/officeWithEmployeesSeek/{officeCode}/{size}")
+    public Map<Office, List<Employee>> loadOfficeWithEmployeeSeek(
+            @PathVariable(name = "officeCode") String officeCode, @PathVariable(name = "size") int size) {
+        
+        return classicModelsService.loadOfficeWithEmployeeSeek(officeCode, size);
+    }
+        
+    @GetMapping("/officeWithEmployeesDR/{start}/{end}")
+    public Map<Office, List<Employee>> loadOfficeWithEmployeeDR(
             @PathVariable(name = "start") int start, @PathVariable(name = "end") int end) {
 
-        return classicModelsService.loadOfficeWithEmploeePage(start, end);
-    }
+        return classicModelsService.loadOfficeWithEmployeeDR(start, end);
+    } 
 }

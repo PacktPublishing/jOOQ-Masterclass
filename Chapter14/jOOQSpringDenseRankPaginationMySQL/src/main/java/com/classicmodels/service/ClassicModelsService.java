@@ -16,8 +16,18 @@ public class ClassicModelsService {
         this.classicModelsRepository = classicModelsRepository;
     }
 
-    public Map<Office, List<Employee>> loadOfficeWithEmploeePage(int start, int end) {
+    public Map<Office, List<Employee>> loadOfficeWithEmployeeOffset(int page, int size) {
 
-        return classicModelsRepository.fetchOfficeWithEmploeePage(start, end);
+        return classicModelsRepository.fetchOfficeWithEmployeeOffset(page, size);
+    }
+
+    public Map<Office, List<Employee>> loadOfficeWithEmployeeSeek(String officeCode, int size) {
+
+        return classicModelsRepository.fetchOfficeWithEmployeeSeek(officeCode, size);
+    }
+
+    public Map<Office, List<Employee>> loadOfficeWithEmployeeDR(int start, int end) {
+
+        return classicModelsRepository.fetchOfficeWithEmployeeDR(start, end);
     }
 }

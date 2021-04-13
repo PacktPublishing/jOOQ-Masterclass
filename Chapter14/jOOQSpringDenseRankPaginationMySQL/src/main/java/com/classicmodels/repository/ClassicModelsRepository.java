@@ -23,11 +23,48 @@ public class ClassicModelsRepository {
         this.ctx = ctx;
     }
 
-    public Map<Office, List<Employee>> fetchOfficeWithEmploeePage(int start, int end) {
+    // classical offset pagination
+    public Map<Office, List<Employee>> fetchOfficeWithEmployeeOffset(int page, int size) {
+
+        Map<Office, List<Employee>> result = ctx.select(OFFICE.OFFICE_CODE, OFFICE.CITY,
+                OFFICE.COUNTRY, OFFICE.TERRITORY, OFFICE.STATE, OFFICE.ADDRESS_LINE_FIRST, OFFICE.PHONE,
+                EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.JOB_TITLE,
+                EMPLOYEE.SALARY, EMPLOYEE.EXTENSION, EMPLOYEE.EMAIL)
+                .from(OFFICE)
+                .join(EMPLOYEE)
+                .on(OFFICE.OFFICE_CODE.eq(EMPLOYEE.OFFICE_CODE))
+                .orderBy(OFFICE.OFFICE_CODE)
+                .limit(size)
+                .offset(size * page)
+                .fetchGroups(Office.class, Employee.class);
+
+        return result;
+    }
+
+    // classical keyset pagination
+    public Map<Office, List<Employee>> fetchOfficeWithEmployeeSeek(String officeCode, int size) {
+
+        Map<Office, List<Employee>> result = ctx.select(OFFICE.OFFICE_CODE, OFFICE.CITY,
+                OFFICE.COUNTRY, OFFICE.TERRITORY, OFFICE.STATE, OFFICE.ADDRESS_LINE_FIRST, OFFICE.PHONE,
+                EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.JOB_TITLE,
+                EMPLOYEE.SALARY, EMPLOYEE.EXTENSION, EMPLOYEE.EMAIL)
+                .from(OFFICE)
+                .join(EMPLOYEE)
+                .on(OFFICE.OFFICE_CODE.eq(EMPLOYEE.OFFICE_CODE))
+                .orderBy(OFFICE.OFFICE_CODE)
+                .seek(officeCode)
+                .limit(size)
+                .fetchGroups(Office.class, Employee.class);
+
+        return result;
+    }
+
+    // using DENSE_RANK() to avoid result set truncation
+    public Map<Office, List<Employee>> fetchOfficeWithEmployeeDR(int start, int end) {
 
         Map<Office, List<Employee>> result = ctx.select().from(select(OFFICE.OFFICE_CODE, OFFICE.CITY,
                 OFFICE.COUNTRY, OFFICE.TERRITORY, OFFICE.STATE, OFFICE.ADDRESS_LINE_FIRST, OFFICE.PHONE,
-                EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.JOB_TITLE, 
+                EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.JOB_TITLE,
                 EMPLOYEE.SALARY, EMPLOYEE.EXTENSION, EMPLOYEE.EMAIL,
                 denseRank().over().orderBy(OFFICE.OFFICE_CODE, OFFICE.CITY).as("rank"))
                 .from(OFFICE)
