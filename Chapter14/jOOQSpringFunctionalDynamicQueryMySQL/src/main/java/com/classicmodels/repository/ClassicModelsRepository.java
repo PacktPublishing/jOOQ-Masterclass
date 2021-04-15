@@ -114,27 +114,5 @@ public class ClassicModelsRepository {
                 .from(t)
                 .where(Stream.of(ff).map(f -> f.apply(t)).collect(toList()))
                 .fetch();
-    }
-
-    // Still day 9 (add two Suppliers)
-    public <T extends Table<R>, R extends Record> List<Record>
-            filterBy8(T t, Supplier<Collection<TableField<R, ?>>> select,
-                    Supplier<Collection<Condition>> ff) {
-
-        return ctx.select(select.get())
-                .from(t)
-                .where(ff.get())
-                .fetch();
-    }
-
-    // Still day 9 (add two Suppliers)
-    public <T extends Table<R>, R extends Record> List<Record>
-            filterBy9(T t, Supplier<Collection<SelectField<?>>> select,
-                    Supplier<Collection<Condition>> ff) {
-
-        return ctx.select(select.get())
-                .from(t)
-                .where(ff.get())
-                .fetch();
-    }
+    }   
 }

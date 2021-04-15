@@ -2,8 +2,10 @@ package com.classicmodels.service;
 
 import com.classicmodels.repository.ClassicModelsRepository;
 import java.util.List;
+import static jooq.generated.tables.Employee.EMPLOYEE;
 import org.jooq.Record;
 import static jooq.generated.tables.Sale.SALE;
+import jooq.generated.tables.records.EmployeeRecord;
 import jooq.generated.tables.records.SaleRecord;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.table;
@@ -51,32 +53,28 @@ public class ClassicModelsService {
         System.out.println("EXAMPLE 7:\n" + r7);
         
         // Day 8
-        List<SaleRecord> r8 = classicModelsRepository.filterBy5(SALE, 
+        List<SaleRecord> r81 = classicModelsRepository.filterBy5(SALE, 
                 s -> s.SALE_.gt(4000d), s -> s.TREND.eq("DOWN"), s -> s.EMPLOYEE_NUMBER.eq(1370L));
-        System.out.println("EXAMPLE 8:\n" + r8);
+        System.out.println("EXAMPLE 8.1:\n" + r81);
+        
+        List<EmployeeRecord> r82 = classicModelsRepository.filterBy5(EMPLOYEE, 
+                e -> e.JOB_TITLE.eq("Sales Rep"), e -> e.SALARY.gt(55000));
+        System.out.println("EXAMPLE 8.2:\n" + r82);
+        
+        List<Record> r83 = classicModelsRepository.filterBy5(table("employee"), 
+                e -> field("job_title", String.class).eq("Sales Rep"), 
+                e -> field("salary", Integer.class).gt(55000));
+        System.out.println("EXAMPLE 8.3:\n" + r83);
         
         // Day 9
         List<Record> r9 = classicModelsRepository.filterBy6(SALE, 
                 () -> List.of(SALE.SALE_ID, SALE.FISCAL_YEAR),
                 s -> s.SALE_.gt(4000d), s -> s.TREND.eq("DOWN"), s -> s.EMPLOYEE_NUMBER.eq(1370L));
         System.out.println("EXAMPLE 9:\n" + r9);
-        
-        // Still day 9        
+                
         List<Record> r10 = classicModelsRepository.filterBy7(table("sale"), 
                 () -> List.of(field("sale_id"), field("fiscal_year")),
                 s -> field("sale").gt(4000d), s -> field("trend").eq("DOWN"), s -> field("employee_number").eq(1370L));
-        System.out.println("EXAMPLE 10:\n" + r10);
-        
-        // Still day 9        
-        List<Record> r11 = classicModelsRepository.filterBy9(SALE, 
-                () -> List.of(SALE.SALE_ID, SALE.FISCAL_YEAR),
-                () -> List.of(SALE.SALE_.gt(4000d), SALE.TREND.eq("DOWN"), SALE.EMPLOYEE_NUMBER.eq(1370L)));
-        System.out.println("EXAMPLE 11:\n" + r11);
-        
-        // Still day 9        
-        List<Record> r12 = classicModelsRepository.filterBy9(table("sale"), 
-                () -> List.of(field("sale_id"), field("fiscal_year")),
-                () -> List.of(field("sale").gt(4000d), field("trend").eq("DOWN"), field("employee_number").eq(1370L)));
-        System.out.println("EXAMPLE 12:\n" + r12);
+        System.out.println("EXAMPLE 10:\n" + r10);        
     }
 }
