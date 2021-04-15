@@ -21,32 +21,32 @@ public class ClassicModelsService {
     public void callAll() {
 
         // Day 1
-        List<SaleRecord> r1 = classicModelsRepository.filterByFiscalYear(2004);
+        List<SaleRecord> r1 = classicModelsRepository.filterSaleByFiscalYear(2004);
         System.out.println("EXAMPLE 1:\n" + r1);
 
         // Day 2
-        List<SaleRecord> r2 = classicModelsRepository.filterByTrend("UP");
+        List<SaleRecord> r2 = classicModelsRepository.filterSaleByTrend("UP");
         System.out.println("EXAMPLE 2:\n" + r2);
 
         // Day 3
-        List<SaleRecord> r3 = classicModelsRepository.filterByFiscalYearAndTrend(2004, "UP");
+        List<SaleRecord> r3 = classicModelsRepository.filterSaleByFiscalYearAndTrend(2004, "UP");
         System.out.println("EXAMPLE 3:\n" + r3);
 
         // Day 4
-        List<SaleRecord> r4 = classicModelsRepository.filterBy1(
+        List<SaleRecord> r4 = classicModelsRepository.filterSaleBy1(
                 List.of(SALE.FISCAL_YEAR.eq(2004), SALE.TREND.eq("DOWN"), SALE.EMPLOYEE_NUMBER.eq(1370L)));
         System.out.println("EXAMPLE 4:\n" + r4);
 
         // Day 5
-        List<SaleRecord> r5 = classicModelsRepository.filterBy2(s -> s.SALE_.gt(4000d));
+        List<SaleRecord> r5 = classicModelsRepository.filterSaleBy2(s -> s.SALE_.gt(4000d));
         System.out.println("EXAMPLE 5:\n" + r5);
         
         // Day 6
-        List<SaleRecord> r6 = classicModelsRepository.filterBy3(s -> s.SALE_.gt(4000d));
+        List<SaleRecord> r6 = classicModelsRepository.filterSaleBy3(s -> s.SALE_.gt(4000d));
         System.out.println("EXAMPLE 6:\n" + r6);
         
         // Day 7
-        List<SaleRecord> r7 = classicModelsRepository.filterBy4(
+        List<SaleRecord> r7 = classicModelsRepository.filterSaleBy4(
                 s -> s.SALE_.gt(4000d), s -> s.TREND.eq("DOWN"), s -> s.EMPLOYEE_NUMBER.eq(1370L));
         System.out.println("EXAMPLE 7:\n" + r7);
         

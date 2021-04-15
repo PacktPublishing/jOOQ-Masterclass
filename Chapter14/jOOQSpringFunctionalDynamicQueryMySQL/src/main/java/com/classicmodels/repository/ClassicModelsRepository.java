@@ -31,7 +31,7 @@ public class ClassicModelsRepository {
 
     /* Evolving from 0 to functional implementation */
     // Day 1 (writing a filter based on *fiscalYear*)
-    public List<SaleRecord> filterByFiscalYear(int fiscalYear) {
+    public List<SaleRecord> filterSaleByFiscalYear(int fiscalYear) {
 
         return ctx.selectFrom(SALE)
                 .where(SALE.FISCAL_YEAR.eq(fiscalYear))
@@ -39,7 +39,7 @@ public class ClassicModelsRepository {
     }
 
     // Day 2 (writing another filter based on *trend*)
-    public List<SaleRecord> filterByTrend(String trend) {
+    public List<SaleRecord> filterSaleByTrend(String trend) {
 
         return ctx.selectFrom(SALE)
                 .where(SALE.TREND.eq(trend))
@@ -47,7 +47,7 @@ public class ClassicModelsRepository {
     }
 
     // Day 3 (writing a filter based on *fiscalYear* and *trend*, this can become an issue if more filters are needed)
-    public List<SaleRecord> filterByFiscalYearAndTrend(int fiscalYear, String trend) {
+    public List<SaleRecord> filterSaleByFiscalYearAndTrend(int fiscalYear, String trend) {
 
         return ctx.selectFrom(SALE)
                 .where(SALE.FISCAL_YEAR.eq(fiscalYear)
@@ -56,7 +56,7 @@ public class ClassicModelsRepository {
     }
 
     // Day 4 (relying on Collection<Condition>)
-    public List<SaleRecord> filterBy1(Collection<Condition> cf) {
+    public List<SaleRecord> filterSaleBy1(Collection<Condition> cf) {
 
         return ctx.selectFrom(SALE)
                 .where(cf)
@@ -64,7 +64,7 @@ public class ClassicModelsRepository {
     }
 
     // Day 5 (writing an interface for more flexibility and type-safety)
-    public List<SaleRecord> filterBy2(SaleFunction<Sale, Condition> sf) {
+    public List<SaleRecord> filterSaleBy2(SaleFunction<Sale, Condition> sf) {
 
         return ctx.selectFrom(SALE)
                 .where(sf.apply(SALE))
@@ -72,7 +72,7 @@ public class ClassicModelsRepository {
     }
 
     // Day 6 (wait, Java already has java.util.function.Function<T, R>)
-    public List<SaleRecord> filterBy3(Function<Sale, Condition> f) {
+    public List<SaleRecord> filterSaleBy3(Function<Sale, Condition> f) {
 
         return ctx.selectFrom(SALE)
                 .where(f.apply(SALE))
@@ -80,7 +80,7 @@ public class ClassicModelsRepository {
     }
 
     // Day 7 (allow the code to apply multiple conditions)
-    public List<SaleRecord> filterBy4(Function<Sale, Condition>... ff) {
+    public List<SaleRecord> filterSaleBy4(Function<Sale, Condition>... ff) {
 
         return ctx.selectFrom(SALE)
                 .where(Stream.of(ff).map(f -> f.apply(SALE)).collect(toList()))
