@@ -44,18 +44,21 @@ public class ClassicModelsService {
 
         List<Record> r8 = classicModelsRepository.appendTwoJoins(true, true);
         System.out.println("EXAMPLE 8\n" + r8);
-
-        List<CustomerRecord> r9 = classicModelsRepository.unionQueries(
-                new Clazz(0, 1), new Clazz(2, 2), new Clazz(3, 5), new Clazz(6, 15));
+        
+        List<Record> r9 = classicModelsRepository.decomposeSelectAndFrom();
         System.out.println("EXAMPLE 9\n" + r9);
 
-        long r10 = classicModelsRepository.insertValues("z", "t", "1:10", true);
+        List<CustomerRecord> r10 = classicModelsRepository.classifyCustomerPayments(
+                new Clazz(0, 1), new Clazz(2, 2), new Clazz(3, 5), new Clazz(6, 15));
         System.out.println("EXAMPLE 10\n" + r10);
 
-        int r11 = classicModelsRepository.updateValues(38.25f, 0.25f);
+        long r11 = classicModelsRepository.insertClassicCar("1972 Alfa Romeo GTA", "Motor City Art Classics", "1:10", true);
         System.out.println("EXAMPLE 11\n" + r11);
 
-        int r12 = classicModelsRepository.deleteValues(2004, 5640.99);
+        int r12 = classicModelsRepository.updateProduct(38.25f, 0.25f);
         System.out.println("EXAMPLE 12\n" + r12);
+
+        int r13 = classicModelsRepository.deleteSale(2004, 5640.99);
+        System.out.println("EXAMPLE 13\n" + r13);
     }
 }

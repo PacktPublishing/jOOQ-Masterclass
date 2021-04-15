@@ -167,7 +167,26 @@ public class ClassicModelsRepository {
         return select.fetch();
     }
 
-    public List<CustomerRecord> unionQueries(Clazz... clazzes) {
+    public List<Record> decomposeSelectAndFrom() {
+
+        SelectQuery select = ctx.select().limit(100).getQuery();
+
+        select.addFrom(OFFICE);
+        select.addSelect(OFFICE.CITY, OFFICE.COUNTRY);
+
+        select.addFrom(EMPLOYEE);
+        select.addSelect(EMPLOYEE.JOB_TITLE);
+
+        select.addFrom(CUSTOMER);
+        select.addSelect(CUSTOMER.asterisk().except(CUSTOMER.CONTACT_FIRST_NAME, CUSTOMER.CONTACT_LAST_NAME));
+
+        select.addFrom(PAYMENT);
+        select.addSelect(PAYMENT.fields());
+
+        return select.fetch();
+    }
+
+    public List<CustomerRecord> classifyCustomerPayments(Clazz... clazzes) {
 
         SelectQuery[] sq = new SelectQuery[clazzes.length];
 
@@ -195,7 +214,7 @@ public class ClassicModelsRepository {
             sq[i].addHaving(count().between(clazzes[i].left(), clazzes[i].right()));
             sq[0].union(sq[i]);
         }
-
+        
         return sq[0].fetch();
     }
 
@@ -210,9 +229,13 @@ public class ClassicModelsRepository {
     }
 
     @Transactional
-    public long insertValues(String productName, String productVendor, String productScale, boolean price) {
+    public long insertClassicCar(
+            String productName, String productVendor, String productScale, boolean price) {
 
         InsertQuery iq = ctx.insertQuery(PRODUCT);
+        
+        iq.addValue(PRODUCT.PRODUCT_LINE, "Classic Cars");
+        iq.addValue(PRODUCT.CODE, 599302);
 
         if (productName != null) {
             iq.addValue(PRODUCT.PRODUCT_NAME, productName);
@@ -229,8 +252,7 @@ public class ClassicModelsRepository {
         if (price) {
             iq.addValue(PRODUCT.BUY_PRICE, select(avg(PRODUCT.BUY_PRICE)).from(PRODUCT));
         }
-
-        iq.onDuplicateKeyIgnore(true);
+        
         iq.setReturning(PRODUCT.getIdentity());
 
         iq.execute();
@@ -240,7 +262,7 @@ public class ClassicModelsRepository {
     }
 
     @Transactional
-    public int updateValues(float oldPrice, float value) {
+    public int updateProduct(float oldPrice, float value) {
 
         UpdateQuery uq = ctx.updateQuery(PRODUCT);
 
@@ -251,7 +273,7 @@ public class ClassicModelsRepository {
     }
 
     @Transactional
-    public int deleteValues(int fiscalYear, double sale) {
+    public int deleteSale(int fiscalYear, double sale) {
 
         DeleteQuery dq = ctx.deleteQuery(SALE);
 
