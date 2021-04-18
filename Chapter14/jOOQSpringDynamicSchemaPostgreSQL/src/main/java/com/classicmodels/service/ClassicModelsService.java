@@ -1,8 +1,6 @@
 package com.classicmodels.service;
 
 import com.classicmodels.repository.ClassicModelsRepository;
-import java.util.List;
-import jooq.generated.tables.pojos.Product;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,8 +12,19 @@ public class ClassicModelsService {
         this.classicModelsRepository = classicModelsRepository;
     }
 
-    public void ddlFromJavaSchema(){
-
-       classicModelsRepository.ddlFromJavaSchema();
+    public void callAll() {
+        
+        classicModelsRepository.ddlFromJavaSchema();
+        classicModelsRepository.createSchema();
+        classicModelsRepository.createSequence();
+        classicModelsRepository.populateSchema();
+        classicModelsRepository.alterSchema();
+        classicModelsRepository.createDropIndexes();
+        classicModelsRepository.createTableFromAnotherTable();
+        classicModelsRepository.createTempTable1();
+        classicModelsRepository.createTempTable2();
+        classicModelsRepository.createType();
+        classicModelsRepository.createDomain();
+        classicModelsRepository.createView();
     }
 }
