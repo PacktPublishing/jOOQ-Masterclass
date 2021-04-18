@@ -14,13 +14,14 @@ public class ClassicModelsService {
 
     public void generateSchema() {
 
-        //classicModelsRepository.ddlFromJavaSchema();
-       // classicModelsRepository.generateSchema();
-       // classicModelsRepository.alterSchema();
-       //classicModelsRepository.createDropIndexes();
-       classicModelsRepository.createTableFromAnotherTable();
-       // classicModelsRepository.createTempTable1();
+        classicModelsRepository.ddlFromJavaSchema();
+        classicModelsRepository.createSchema();
+        classicModelsRepository.populateSchema();
+        classicModelsRepository.alterSchema();
+        classicModelsRepository.createDropIndexes();
+        classicModelsRepository.createTableFromAnotherTable();
+        classicModelsRepository.createTempTable1();
         classicModelsRepository.createTempTable2();
-        //classicModelsRepository.createView();
+        classicModelsRepository.createView();
     }
 }

@@ -43,13 +43,16 @@ public class ClassicModelsRepository {
     }
 
     @Transactional
-    public void generateSchema() {
+    public void createSchema() {
 
-        ctx.dropDatabaseIfExists("classicmodels_g").execute();      // or, ctx.dropDatabase()
-        ctx.createSchemaIfNotExists("classicmodels_g").execute();   // or, ctx.createSchema()     
-
+        ctx.dropSchemaIfExists("classicmodels_g").execute();  // or, ctx.dropSchema()
+        ctx.createSchemaIfNotExists("classicmodels_g").execute();       // or, ctx.createSchema()     
         ctx.setSchema("classicmodels_g").execute();
-
+    }
+    
+    @Transactional
+    public void populateSchema() {
+        
         ctx.dropTableIfExists("employee_g").execute();
         ctx.createTable("employee_g")
                 .column("employee_number_g", SQLDataType.BIGINT.nullable(false))
@@ -106,9 +109,7 @@ public class ClassicModelsRepository {
 
     @Transactional
     public void createTableFromAnotherTable() {
-
-        ctx.setSchema("classicmodels_g").execute();
-
+        
         ctx.dropTableIfExists("office_all_g").execute();
         ctx.createTable("office_all_g").as(
                 select().from(OFFICE))
@@ -128,8 +129,6 @@ public class ClassicModelsRepository {
 
     @Transactional
     public void createTempTable1() {
-
-        ctx.setSchema("classicmodels_g").execute();
 
         ctx.dropTemporaryTableIfExists("employee_t").execute();
         ctx.createGlobalTemporaryTable("employee_t") // or, createTemporaryTable (local temporary table)
@@ -154,8 +153,6 @@ public class ClassicModelsRepository {
     @Transactional
     public void createTempTable2() {
 
-        ctx.setSchema("classicmodels_g").execute();
-
         ctx.dropTemporaryTableIfExists("top3product_t").execute();
         ctx.createGlobalTemporaryTable("top3product_t").as( // or, createTemporaryTable (local temporary table)
                 select().from(TOP3PRODUCT)
@@ -169,8 +166,6 @@ public class ClassicModelsRepository {
     @Transactional
     public void createView() {
 
-        ctx.setSchema("classicmodels_g").execute();
-        
         ctx.dropViewIfExists("product_view");
         ctx.createOrReplaceView("product_view").as(
                 select(PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME, PRODUCT.BUY_PRICE)
