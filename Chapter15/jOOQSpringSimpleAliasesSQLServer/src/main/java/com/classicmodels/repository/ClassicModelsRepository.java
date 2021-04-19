@@ -1,6 +1,6 @@
 package com.classicmodels.repository;
 
-import static jooq.generated.Public.PUBLIC;
+import static jooq.generated.Classicmodels.CLASSICMODELS;
 import jooq.generated.tables.Customerdetail;
 import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
 import static jooq.generated.tables.Employee.EMPLOYEE;
@@ -29,7 +29,7 @@ public class ClassicModelsRepository {
     public void simpleTableAlias() {
 
         // using schema name
-        Table<ProductRecord> p0 = PUBLIC.PRODUCT;
+        Table<ProductRecord> p0 = CLASSICMODELS.DBO.PRODUCT;
 
         Table<ProductRecord> p1 = PRODUCT;
         Table<ProductRecord> p2 = PRODUCT.as("p");
@@ -67,7 +67,7 @@ public class ClassicModelsRepository {
     public void simpleColumnAlias() {
 
         // using schema name
-        Field<String> f0 = PUBLIC.PRODUCT.PRODUCT_NAME;
+        Field<String> f0 = CLASSICMODELS.DBO.PRODUCT.PRODUCT_NAME;
 
         Field<String> f1 = PRODUCT.PRODUCT_NAME;
         Field<String> f2 = PRODUCT.PRODUCT_NAME.as("f");
@@ -109,25 +109,25 @@ public class ClassicModelsRepository {
                 .from(EMPLOYEE)
                 .fetch();
 
-        // select "public"."office"."city" from "public"."office" as "t"
-        // Since we assigned an alias to "public"."office" table then 
-        // 'public.office.city' column become unknown   
+        // select [classicmodels].[dbo].[office].[city] from [classicmodels].[dbo].[office] [t]
+        // Since we assigned an alias to [classicmodels].[dbo].[office] table then 
+        // '[classicmodels].[dbo].[office].[city]' column become unknown   
         /*
         ctx.select(OFFICE.CITY)
                 .from(OFFICE.as("t"))
                 .fetch();
-         */
+        */ 
         
-        // This selects all columns separated by comma, obviously not what we want
-        // select t from "public"."office" as "t"    
+        // This leads to invalid column name 't'
+        // select t from [classicmodels].[dbo].[office] [t]
         /*
         ctx.select(field("t", "city"))
                 .from(OFFICE.as("t"))
                 .fetch();
-        */ 
+        */
         
         // This selects all columns, obviously not what we want
-        // select "t"."office_code", "t"."city", ..., "t"."location" from "public"."office" as "t"
+        // select [t].[office_code], [t].[city], ... , [t].[location] from [classicmodels].[dbo].[office] [t]
         /*
         ctx.select(table("t").field("city"))
                 .from(OFFICE.as("t"))
@@ -135,12 +135,12 @@ public class ClassicModelsRepository {
         */
         
         // The next 2 works, but are prone to ambiguities
-        // select city from "public"."office" as "t"
+        // select city from [classicmodels].[dbo].[office] [t]
         ctx.select(field("city"))
                 .from(OFFICE.as("t"))
                 .fetch();
 
-        // select "city" from "public"."office" as "t"
+        // select [city] from [classicmodels].[dbo].[office] [t]
         ctx.select(field(name("city")))
                 .from(OFFICE.as("t"))
                 .fetch();
@@ -153,19 +153,19 @@ public class ClassicModelsRepository {
          */
         
         // This works, but as you can see is not quite a clean result
-        // select t.city from "public"."office" as "t"
+        // select t.city from [classicmodels].[dbo].[office] [t]
         ctx.select(field("t.city"))
                 .from(OFFICE.as("t"))
                 .fetch();
 
         // No more ambiguities, but still not the best we can do
-        // select t1.city, t2.city from "public"."office" as "t1", "public"."customerdetail" as "t2"
+        // select t1.city, t2.city from [classicmodels].[dbo].[office] [t1], [classicmodels].[dbo].[customerdetail] [t2]
         ctx.select(field("t1.city"), field("t2.city"))
                 .from(OFFICE.as("t1"), CUSTOMERDETAIL.as("t2"))
                 .fetch();
 
         // This is better since identifiers are correctly generated
-        // select "t"."city" from "public"."office" as "t"
+        // select [t].[city] from [classicmodels].[dbo].[office] [t]
         ctx.select(field(name("t", "city")))
                 .from(OFFICE.as("t"))
                 .fetch();
