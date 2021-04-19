@@ -1,5 +1,6 @@
 package com.classicmodels.repository;
 
+import java.util.List;
 import static jooq.generated.Sequences.EMPLOYEE_SEQ;
 import static jooq.generated.Sequences.SALE_SEQ;
 import static jooq.generated.tables.Employee.EMPLOYEE;
@@ -141,11 +142,16 @@ public class ClassicModelsRepository {
                 + "Start: " + start + "\nMin: " + min + "\nMax: " + max + "\nInc:" + inc);
 
         var vals = ctx.select(EMPLOYEE_SEQ.nextval(), EMPLOYEE_SEQ.currval()).fetchSingle();
+        long val = ctx.select(EMPLOYEE_SEQ.nextval()).fetchSingleInto(Long.class); // or, fetchOneInto()
 
         System.out.println("Next val: " + vals.get(0) + " Current val: " + vals.get(1));
+        System.out.println("Next val: " + val);
 
         var next10Vals = ctx.fetch(EMPLOYEE_SEQ.nextvals(10));
         System.out.println("Next 10 vals:\n" + next10Vals);
+        
+        List<Long> next10LongVals = ctx.fetch(EMPLOYEE_SEQ.nextvals(10)).into(Long.class);
+        System.out.println("Next 10 vals:\n" + next10LongVals);
     }
 
     @Transactional
@@ -167,6 +173,7 @@ public class ClassicModelsRepository {
                 .execute(); 
          */
         var cr = ctx.select(SALE_SEQ.currval()).fetchSingle().value1();
+        long crLong = ctx.select(SALE_SEQ.currval()).fetchSingleInto(Long.class); // or, fetchOneInto()
 
         // UPDATE the SALE having as ID the fetched *cr* 
         // (it is possible that this is not the current value anymore)
@@ -223,9 +230,10 @@ public class ClassicModelsRepository {
 
         // Or, by fetching and caching 10 IDs
         var ids = ctx.fetch(EMPLOYEE_SEQ.nextvals(10));
+        List<Long> idsLong = ctx.fetch(EMPLOYEE_SEQ.nextvals(10)).into(Long.class);
 
         // This is also useful for Records to pre-set IDs:
-        // EmployeeRecord er = new EmployeeRecord(ids.get(0).value1(), 
+        // EmployeeRecord er = new EmployeeRecord(ids.get(0).value1(), // or, idsLong.get(0)
         //        "Lionel", "Andre", "x8990", "landre@gmail.com", "1", 
         //                57000, 1143L, "Sales Rep", null, null);        
         for (int i = 0; i < ids.size(); i++) {
@@ -233,7 +241,8 @@ public class ClassicModelsRepository {
             ctx.insertInto(EMPLOYEE, EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.LAST_NAME, EMPLOYEE.FIRST_NAME,
                     EMPLOYEE.EXTENSION, EMPLOYEE.EMAIL, EMPLOYEE.OFFICE_CODE, EMPLOYEE.SALARY,
                     EMPLOYEE.REPORTS_TO, EMPLOYEE.JOB_TITLE)
-                    .values(ids.get(i).value1(), // if you need Field<?> then ids.get(i).field1()
+                    .values(// ids.get(i).value1(), // if you need Field<?> then ids.get(i).field1()
+                            idsLong.get(i),
                             "Lionel", "Andre", "x8990", "landre@gmail.com", "1",
                             57000, 1143L, "Sales Rep")
                     .execute();

@@ -152,7 +152,7 @@ public class ClassicModelsRepository {
 
         ctx.insertInto(table("EMPLOYEE_T"), field("LAST_NAME_T"), field("FIRST_NAME_T"),
                 field("JOB_TITLE_T"), field("SALARY_T"))
-                .values("John", "Malon", "x", 75000)
+                .values("Mark", "Joiop", "PM", 75000)
                 .values("Yen", "Right", "VP", 110000)
                 .execute();
 
