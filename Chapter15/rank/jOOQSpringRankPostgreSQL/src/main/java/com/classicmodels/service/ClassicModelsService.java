@@ -18,5 +18,7 @@ public class ClassicModelsService {
        classicModelsRepository.saleRankByFiscalYear();
        classicModelsRepository.saleRankByTotalSales();
        classicModelsRepository.saleRankByNumberOfSales();
+       classicModelsRepository.orderRankByOrderMonthDay();
+       classicModelsRepository.productRankByVendorAndScale();
     }
 }
