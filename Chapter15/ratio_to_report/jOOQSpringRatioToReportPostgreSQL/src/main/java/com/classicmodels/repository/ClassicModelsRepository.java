@@ -1,7 +1,7 @@
 package com.classicmodels.repository;
 
 import static jooq.generated.tables.Employee.EMPLOYEE;
-import static jooq.generated.tables.Sale.SALE;
+import static jooq.generated.tables.Office.OFFICE;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.ratioToReport;
 import static org.jooq.impl.DSL.round;
@@ -22,29 +22,30 @@ public class ClassicModelsRepository {
     /*  The RATIO_TO_REPORT() is a window function (analytic function) that
         computes the ratio of the specified value to the sum of values in the set. */
     
-    public void ratioToReportSale() {
+    public void ratioToReportSalary() {
 
-        ctx.select(SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR, SALE.SALE_,
-                round(ratioToReport(SALE.SALE_).over(), 2).as("ratio_to_report_sale"))
-                .from(SALE)
+        ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY,
+                round(ratioToReport(EMPLOYEE.SALARY).over(), 2).as("ratio_to_report_salary"))
+                .from(EMPLOYEE)
                 .fetch();
 
         // emulate RATIO_TO_REPORT()        
-        ctx.select(SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR, SALE.SALE_,
-                round(SALE.SALE_.divide(sum(SALE.SALE_).over()), 2).as("ratio_to_report_sale"))
-                .from(SALE)
+        ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY,
+                round(EMPLOYEE.SALARY.cast(Double.class).divide(sum(EMPLOYEE.SALARY
+                        .cast(Double.class)).over()), 2).as("ratio_to_report_salary"))
+                .from(EMPLOYEE)
                 .fetch();
     }
 
-    public void ratioToReportSalePerEmployee() {
+    public void ratioToReportSalaryPerOffice() {
 
         ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY,
-                SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR, SALE.SALE_,
-                round(ratioToReport(SALE.SALE_).over()
-                        .partitionBy(SALE.EMPLOYEE_NUMBER), 2).as("ratio_to_report_sale"))
+                OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.COUNTRY,
+                round(ratioToReport(EMPLOYEE.SALARY).over()
+                        .partitionBy(OFFICE.OFFICE_CODE), 2).as("ratio_to_report_salary"))
                 .from(EMPLOYEE)
-                .innerJoin(SALE)
-                .on(EMPLOYEE.EMPLOYEE_NUMBER.eq(SALE.EMPLOYEE_NUMBER))
+                .innerJoin(OFFICE)
+                .on(EMPLOYEE.OFFICE_CODE.eq(OFFICE.OFFICE_CODE))
                 .fetch();
     }
 }
