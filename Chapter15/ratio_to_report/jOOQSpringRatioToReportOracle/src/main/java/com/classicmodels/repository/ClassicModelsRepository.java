@@ -3,7 +3,9 @@ package com.classicmodels.repository;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Office.OFFICE;
 import org.jooq.DSLContext;
-import static org.jooq.impl.DSL.ntile;
+import static org.jooq.impl.DSL.ratioToReport;
+import static org.jooq.impl.DSL.round;
+import static org.jooq.impl.DSL.sum;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,23 +19,30 @@ public class ClassicModelsRepository {
         this.ctx = ctx;
     }
 
-    /*  The NTILE() is a window function useful for distributing the 
-        number of rows in the specified N number of groups. */
+    /*  The RATIO_TO_REPORT() is a window function (analytic function) that
+        computes the ratio of the specified value to the sum of values in the set. */
     
-    public void ntileSalary() {
+    public void ratioToReportSalary() {
 
         ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY,
-                ntile(5).over().orderBy(EMPLOYEE.SALARY.desc()).as("salary_group"))
+                round(ratioToReport(EMPLOYEE.SALARY).over(), 2).as("ratio_to_report_salary"))
+                .from(EMPLOYEE)
+                .fetch();
+
+        // emulate RATIO_TO_REPORT()        
+        ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY,
+                round(EMPLOYEE.SALARY.cast(Double.class).divide(sum(EMPLOYEE.SALARY
+                        .cast(Double.class)).over()), 2).as("ratio_to_report_salary"))
                 .from(EMPLOYEE)
                 .fetch();
     }
 
-    public void ntileSalaryPerOffice() {
+    public void ratioToReportSalaryPerOffice() {
 
         ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY,
                 OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.COUNTRY,
-                ntile(2).over().partitionBy(OFFICE.OFFICE_CODE)
-                        .orderBy(EMPLOYEE.SALARY.desc()).as("salary_group"))
+                round(ratioToReport(EMPLOYEE.SALARY).over()
+                        .partitionBy(OFFICE.OFFICE_CODE), 2).as("ratio_to_report_salary"))
                 .from(EMPLOYEE)
                 .innerJoin(OFFICE)
                 .on(EMPLOYEE.OFFICE_CODE.eq(OFFICE.OFFICE_CODE))

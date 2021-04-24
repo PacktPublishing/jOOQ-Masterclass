@@ -14,7 +14,7 @@ public class ClassicModelsService {
 
     public void callAll() {
 
-       classicModelsRepository.ntileSalary();
-       classicModelsRepository.ntileSalaryPerOffice();
+       classicModelsRepository.ratioToReportSalary();
+       classicModelsRepository.ratioToReportSalaryPerOffice();
     }
 }
