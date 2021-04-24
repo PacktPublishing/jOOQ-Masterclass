@@ -3,11 +3,9 @@ package com.classicmodels.repository;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
-import static org.jooq.impl.DSL.cast;
 import static org.jooq.impl.DSL.ratioToReport;
 import static org.jooq.impl.DSL.round;
 import static org.jooq.impl.DSL.sum;
-import org.jooq.impl.SQLDataType;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +25,7 @@ public class ClassicModelsRepository {
     public void ratioToReportSale() {
 
         ctx.select(SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR, SALE.SALE_,
-                round(cast(ratioToReport(SALE.SALE_).over(), SQLDataType.NUMERIC), 2)
+                round(ratioToReport(SALE.SALE_).over(), 2)
                         .as("ratio_to_report_sale"))
                 .from(SALE)
                 .fetch();
@@ -43,8 +41,8 @@ public class ClassicModelsRepository {
 
         ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY,
                 SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR, SALE.SALE_,
-                round(cast(ratioToReport(SALE.SALE_).over()
-                        .partitionBy(SALE.EMPLOYEE_NUMBER), SQLDataType.NUMERIC), 2)
+                round(ratioToReport(SALE.SALE_).over()
+                        .partitionBy(SALE.EMPLOYEE_NUMBER), 2)
                         .as("ratio_to_report_sale"))
                 .from(EMPLOYEE)
                 .innerJoin(SALE)
