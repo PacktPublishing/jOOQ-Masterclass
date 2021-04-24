@@ -60,13 +60,13 @@ public class ClassicModelsRepository {
                                 .orderBy(ORDER.REQUIRED_DATE))).as("cluster_nr"))
                 .from(ORDER).asTable("t");
 
-        System.out.println(ctx.select(min(t.field("rdate")).as("cluster_start"),
+        ctx.select(min(t.field("rdate")).as("cluster_start"),
                 max(t.field("rdate")).as("cluster_end"),
                 min(t.field("status")).as("cluster_score"))
                 .from(t)
                 .groupBy(t.field("cluster_nr"))
                 .orderBy(1)
-                .fetch().format(100));
+                .fetch();
     }
 
     public void returnEvery10thProduct() {
