@@ -2,8 +2,12 @@ package com.classicmodels.repository;
 
 import static jooq.generated.tables.Product.PRODUCT;
 import org.jooq.DSLContext;
+import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.firstValue;
 import static org.jooq.impl.DSL.lastValue;
+import static org.jooq.impl.DSL.name;
+import static org.jooq.impl.DSL.rowNumber;
+import static org.jooq.impl.DSL.select;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +28,6 @@ public class ClassicModelsRepository {
     
         - LAST_VALUE() returns the value of the specified expression with 
           respect to the last row in the window frame. */
-    
     public void cheapestAndMostExpensiveProduct() {
 
         ctx.select(PRODUCT.PRODUCT_NAME, PRODUCT.BUY_PRICE,
@@ -45,5 +48,30 @@ public class ClassicModelsRepository {
                         .rangeBetweenUnboundedPreceding().andUnboundedFollowing().as("most_expensive"))
                 .from(PRODUCT)
                 .fetch();
-    }                 
+    }
+
+    // SQL Server doesn't support NTH_VALUE(), but we can emulate it via ROW_NUMBER()
+    // ------------------------------------------------------------------------------
+    public void secondCheapestProduct() {
+
+        ctx.select().from(
+                select(PRODUCT.PRODUCT_NAME, PRODUCT.BUY_PRICE,
+                        rowNumber()
+                                .over().orderBy(PRODUCT.BUY_PRICE).as("second_cheapest"))
+                        .from(PRODUCT))
+                .where(field(name("second_cheapest")).eq(2))
+                .fetch();
+    }
+
+    public void secondMostExpensiveProductByProductLine() {
+
+        ctx.select().from(
+                select(PRODUCT.PRODUCT_LINE, PRODUCT.PRODUCT_NAME, PRODUCT.BUY_PRICE,
+                        rowNumber().over()
+                                .partitionBy(PRODUCT.PRODUCT_LINE)
+                                .orderBy(PRODUCT.BUY_PRICE.desc()).as("second_most_expensive"))
+                        .from(PRODUCT))
+                .where(field(name("second_most_expensive")).eq(2))
+                .fetch();
+    }
 }

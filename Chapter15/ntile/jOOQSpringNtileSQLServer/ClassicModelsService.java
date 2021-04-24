@@ -14,9 +14,9 @@ public class ClassicModelsService {
 
     public void callAll() {
 
-        classicModelsRepository.cheapestAndMostExpensiveProduct();
-        classicModelsRepository.cheapestAndMostExpensiveProductByProductLine();                
-        classicModelsRepository.secondCheapestProduct();
-        classicModelsRepository.secondMostExpensiveProductByProductLine();
+       classicModelsRepository.dummyAssignRankToProducts();
+       classicModelsRepository.saleRankByFiscalYear();
+       classicModelsRepository.saleRankByTotalSales();
+       classicModelsRepository.saleRankByNumberOfSales();
     }
 }
