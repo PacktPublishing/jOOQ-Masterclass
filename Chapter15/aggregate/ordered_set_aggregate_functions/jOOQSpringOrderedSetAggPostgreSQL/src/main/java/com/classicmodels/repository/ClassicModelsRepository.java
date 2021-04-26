@@ -1,16 +1,19 @@
 package com.classicmodels.repository;
 
 import static jooq.generated.tables.Employee.EMPLOYEE;
-import static jooq.generated.tables.Office.OFFICE;
+import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
+import static org.jooq.impl.DSL.all;
+import static org.jooq.impl.DSL.avg;
 import static org.jooq.impl.DSL.concat;
 import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.cumeDist;
 import static org.jooq.impl.DSL.denseRank;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.listAgg;
+import static org.jooq.impl.DSL.mode;
 import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.percentRank;
 import static org.jooq.impl.DSL.percentileCont;
@@ -83,47 +86,15 @@ public class ClassicModelsRepository {
     public void percentileDiscContEmployeePerOffice() {
 
         ctx.select(
-                percentileDisc(0.25).withinGroupOrderBy(SALE.SALE_).as("0.25"),
-                percentileDisc(0.5).withinGroupOrderBy(SALE.SALE_).as("0.50"),
-                percentileDisc(0.75).withinGroupOrderBy(SALE.SALE_).as("0.75"),
-                percentileDisc(1.0).withinGroupOrderBy(SALE.SALE_).as("1.0"))
+                percentileDisc(0.25).withinGroupOrderBy(SALE.SALE_).as("pd - 0.25"),
+                percentileCont(0.25).withinGroupOrderBy(SALE.SALE_).as("pc - 0.25"),
+                percentileDisc(0.5).withinGroupOrderBy(SALE.SALE_).as("pd - 0.50"),
+                percentileCont(0.5).withinGroupOrderBy(SALE.SALE_).as("pc - 0.50"),
+                percentileDisc(0.75).withinGroupOrderBy(SALE.SALE_).as("pd - 0.75"),
+                percentileCont(0.75).withinGroupOrderBy(SALE.SALE_).as("pc - 0.75"),
+                percentileDisc(1.0).withinGroupOrderBy(SALE.SALE_).as("pd - 1.0"),
+                percentileCont(1.0).withinGroupOrderBy(SALE.SALE_).as("pc - 1.0"))
                 .from(SALE)
-                .fetch();
-
-        ctx.select().from(
-                select(OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.COUNTRY,
-                        EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY,
-                        percentileDisc(0.5).withinGroupOrderBy(EMPLOYEE.SALARY)
-                                .over().partitionBy(OFFICE.OFFICE_CODE).as("percentile_cont"))
-                        .from(OFFICE)
-                        .join(EMPLOYEE)
-                        .on(OFFICE.OFFICE_CODE.eq(EMPLOYEE.OFFICE_CODE)).asTable("t"))
-                .where(field(name("t", "percentile_cont"))
-                        .le(select(percentileCont(0.5).withinGroupOrderBy(EMPLOYEE.SALARY))
-                                .from(EMPLOYEE)))
-                .fetch();
-
-        ctx.select(SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR, SALE.SALE_,
-                percentileDisc(0.25).withinGroupOrderBy(SALE.SALE_)
-                        .over().partitionBy(SALE.FISCAL_YEAR).as("0.25"),
-                percentileDisc(0.5).withinGroupOrderBy(SALE.SALE_)
-                        .over().partitionBy(SALE.FISCAL_YEAR).as("0.50"),
-                percentileDisc(0.75).withinGroupOrderBy(SALE.SALE_)
-                        .over().partitionBy(SALE.FISCAL_YEAR).as("0.75"),
-                percentileDisc(1.0).withinGroupOrderBy(SALE.SALE_)
-                        .over().partitionBy(SALE.FISCAL_YEAR).as("1.0"))
-                .from(SALE)
-                .fetch();
-
-        ctx.select(OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.COUNTRY,
-                EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY,
-                percentileCont(0.5).withinGroupOrderBy(EMPLOYEE.SALARY)
-                        .over().partitionBy(OFFICE.OFFICE_CODE),
-                percentileDisc(0.5).withinGroupOrderBy(EMPLOYEE.SALARY)
-                        .over().partitionBy(OFFICE.OFFICE_CODE))
-                .from(OFFICE)
-                .join(EMPLOYEE)
-                .on(OFFICE.OFFICE_CODE.eq(EMPLOYEE.OFFICE_CODE))
                 .fetch();
     }
 
@@ -140,5 +111,40 @@ public class ClassicModelsRepository {
                         .withinGroupOrderBy(EMPLOYEE.SALARY.desc(), EMPLOYEE.FIRST_NAME.desc()).as("employees"))
                 .from(EMPLOYEE)
                 .fetch();
-    } 
+    }
+
+    // MODE()
+    public void modeSale() {
+
+        ctx.select(mode().withinGroupOrderBy(SALE.FISCAL_YEAR))
+                .from(SALE)
+                .fetch();
+
+        // emulation of mode
+        ctx.select(SALE.FISCAL_YEAR)
+                .from(SALE)
+                .groupBy(SALE.FISCAL_YEAR)
+                .having(count().ge(all(select(count())
+                        .from(SALE).groupBy(SALE.FISCAL_YEAR))))
+                .fetch();
+
+        ctx.select(mode().withinGroupOrderBy(ORDERDETAIL.QUANTITY_ORDERED))
+                .from(ORDERDETAIL)
+                .fetch();
+
+        // emulation of mode using a percentage of the total number of occurrences
+        ctx.select(avg(ORDERDETAIL.QUANTITY_ORDERED))
+                .from(ORDERDETAIL)
+                .groupBy(ORDERDETAIL.QUANTITY_ORDERED)
+                .having(count().ge(all(select(count().mul(0.75))
+                        .from(ORDERDETAIL).groupBy(ORDERDETAIL.QUANTITY_ORDERED))))
+                .fetch();
+
+        ctx.select(avg(ORDERDETAIL.QUANTITY_ORDERED))
+                .from(ORDERDETAIL)
+                .groupBy(ORDERDETAIL.QUANTITY_ORDERED)
+                .having(count().ge(all(select(count().mul(0.95))
+                        .from(ORDERDETAIL).groupBy(ORDERDETAIL.QUANTITY_ORDERED))))
+                .fetch();
+    }
 }

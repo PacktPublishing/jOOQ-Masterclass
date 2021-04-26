@@ -14,9 +14,6 @@ public class ClassicModelsService {
 
     public void callAll() {
 
-        classicModelsRepository.denseRankSalesLeCertainSale();
-        classicModelsRepository.rankEmployeeSalary();
-        classicModelsRepository.percentRankAndCumeDist();
         classicModelsRepository.percentileDiscContEmployeePerOffice();
         classicModelsRepository.listAggEmployee();
         classicModelsRepository.modeSale();
