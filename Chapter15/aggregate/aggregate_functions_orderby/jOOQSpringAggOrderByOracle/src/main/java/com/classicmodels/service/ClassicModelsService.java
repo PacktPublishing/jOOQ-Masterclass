@@ -18,5 +18,6 @@ public class ClassicModelsService {
         classicModelsRepository.xmlAggCustomer();
         classicModelsRepository.collectSale();
         classicModelsRepository.groupConcatEmployee();
+        classicModelsRepository.keepingExample();
     }
 }

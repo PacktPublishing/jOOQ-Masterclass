@@ -140,6 +140,7 @@ CREATE TABLE office (
   postal_code varchar2(15) NOT NULL,
   territory varchar2(10) NOT NULL,
   location sdo_geometry DEFAULT NULL,
+  internal_budget int NOT NULL,
   CONSTRAINT office_pk PRIMARY KEY (office_code),
   CONSTRAINT office_postal_code_uk UNIQUE (postal_code)
 ) ;
@@ -519,8 +520,8 @@ CREATE TABLE orderdetail (
   quantity_ordered number(10) NOT NULL,
   price_each number(10,2) NOT NULL,
   order_line_number number(5) NOT NULL,
-  CONSTRAINT orderdetail_pk PRIMARY KEY (orderdetail_id)
- ,
+  CONSTRAINT orderdetail_pk PRIMARY KEY (orderdetail_id),
+  CONSTRAINT orderdetail_uk UNIQUE (order_id, product_id),
   CONSTRAINT orderdetail_order_fk FOREIGN KEY (order_id) REFERENCES "ORDER" (order_id),
   CONSTRAINT orderdetail_product__fk FOREIGN KEY (product_id) REFERENCES product (product_id)
 ) ;
