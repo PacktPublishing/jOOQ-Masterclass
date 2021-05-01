@@ -147,7 +147,7 @@ insert  into employee(employee_number,last_name,first_name,extension,email,offic
 
 (1088,'Patterson','William','x4871','wpatterson@classicmodelcars.com','6',80000,1056,'Sales Manager (APAC)', NULL,'560, 120, 440, 320, 315, 0, 0, 100, 125, 0, 900'),
 
-(1102,'Bondur','Gerard','x5408','gbondur@classicmodelcars.com','4',80000,1056,'Sale Manager (EMEA)', NULL, NULL),
+(1102,'Bondur','Gerard','x5408','gbondur@classicmodelcars.com','4',80000,1056,'Sales Manager (EMEA)', NULL, NULL),
 
 (1143,'Bow','Anthony','x5428','abow@classicmodelcars.com','1',75000,1056,'Sales Manager (NA)',NULL, NULL),
 
