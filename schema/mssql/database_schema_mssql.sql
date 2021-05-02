@@ -150,6 +150,8 @@ CREATE TABLE sale (
   [hot] bit DEFAULT 0,  
   [rate] varchar(10) DEFAULT NULL,
   [vat] varchar(10) DEFAULT NULL,
+  [fiscal_month] int NOT NULL,
+  [revenue_growth] float NOT NULL,
   [trend] varchar(10) DEFAULT NULL,  
   CONSTRAINT [sale_pk] PRIMARY KEY ([sale_id])
 ,    

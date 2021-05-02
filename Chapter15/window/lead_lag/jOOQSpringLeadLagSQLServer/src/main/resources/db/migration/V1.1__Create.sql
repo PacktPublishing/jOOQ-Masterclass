@@ -91,6 +91,7 @@ CREATE TABLE office (
   [postal_code] varchar(15) NOT NULL,
   [territory] varchar(10) NOT NULL,
   [location] [geometry] DEFAULT NULL,
+  [internal_budget] int NOT NULL,
   CONSTRAINT [office_pk] PRIMARY KEY ([office_code]),
   CONSTRAINT [office_postal_code_uk] UNIQUE ([postal_code])
 ) ;
@@ -149,6 +150,8 @@ CREATE TABLE sale (
   [hot] bit DEFAULT 0,  
   [rate] varchar(10) DEFAULT NULL,
   [vat] varchar(10) DEFAULT NULL,
+  [fiscal_month] int NOT NULL,
+  [revenue_growth] float NOT NULL,
   [trend] varchar(10) DEFAULT NULL,  
   CONSTRAINT [sale_pk] PRIMARY KEY ([sale_id])
 ,    
@@ -292,8 +295,8 @@ CREATE TABLE orderdetail (
   [quantity_ordered] int NOT NULL,
   [price_each] decimal(10,2) NOT NULL,
   [order_line_number] smallint NOT NULL,
-  CONSTRAINT [orderdetail_pk] PRIMARY KEY ([orderdetail_id])
- ,
+  CONSTRAINT [orderdetail_pk] PRIMARY KEY ([orderdetail_id]),
+  CONSTRAINT [orderdetail_uk] UNIQUE ([order_id], [product_id]),
   CONSTRAINT [orderdetail_order_fk] FOREIGN KEY ([order_id]) REFERENCES [order] ([order_id]),
   CONSTRAINT [orderdetail_product_fk] FOREIGN KEY ([product_id]) REFERENCES product ([product_id])
 ) ;
@@ -361,4 +364,11 @@ SELECT [classicmodels].[dbo].[office].[office_code],
 	   [classicmodels].[dbo].[office].[postal_code]
 FROM [classicmodels].[dbo].[office]
 WHERE [classicmodels].[dbo].[office].[city] IS NOT NULL;
+GO
+
+CREATE VIEW product_master AS
+SELECT [classicmodels].[dbo].[product].[product_line],
+       [classicmodels].[dbo].[product].[product_name],
+       [classicmodels].[dbo].[product].[product_scale]       
+FROM [classicmodels].[dbo].[product];
 /* END */

@@ -14,31 +14,37 @@ This is a modified version of the original schema
 /*Data for the table `office` */
 
 begin try
-insert  into office(office_code,city,phone,address_line_first,address_line_second,state,country,postal_code,territory) values 
+insert  into office(office_code,city,phone,address_line_first,address_line_second,state,country,postal_code,territory,internal_budget) values 
 
-('1','San Francisco','+1 650 219 4782','100 Market Street','Suite 300','CA','USA','AZ934VB','NA'),
+('1','San Francisco','+1 650 219 4782','100 Market Street','Suite 300','CA','USA','AZ934VB','NA',90000),
 
-('2','Boston','+1 215 837 0825','1550 Court Place','Suite 102','MA','USA','XX021SS','NA'),
+('2','Boston','+1 215 837 0825','1550 Court Place','Suite 102','MA','USA','XX021SS','NA',85000),
 
-('3','NYC','+1 212 555 3000','523 East 53rd Street','apt. 5A','NY','USA','AA100CV','NA'),
+('3','NYC','+1 212 555 3000','523 East 53rd Street','apt. 5A','NY','USA','AA100CV','NA', 100000),
 
-('4','Paris','+33 14 723 4404','43 Rue Jouffroy D''abbans',NULL,NULL,'France','MN750CV','EMEA'),
+('4','Paris','+33 14 723 4404','43 Rue Jouffroy D''abbans',NULL,NULL,'France','MN750CV','EMEA',35000),
 
-('5','Tokyo','+81 33 224 5000','4-1 Kioicho',NULL,'Chiyoda-Ku','Japan','RT102TT','Japan'),
+('5','Tokyo','+81 33 224 5000','4-1 Kioicho',NULL,'Chiyoda-Ku','Japan','RT102TT','Japan',90000),
 
-('6','Sydney','+61 2 9264 2451','5-11 Wentworth Avenue','Floor --2',NULL,'Australia','XC344VD','APAC'),
+('6','Sydney','+61 2 9264 2451','5-11 Wentworth Avenue','Floor --2',NULL,'Australia','XC344VD','APAC',45500),
 
-('7','London','+44 20 7877 2041','25 Old Broad Street','Level 7','N/A','UK','CV555RR','EMEA'),
+('7','London','+44 20 7877 2041','25 Old Broad Street','Level 7','N/A','UK','CV555RR','EMEA',50000),
 
-('8',NULL,'+44 20 1827 21411','25 Hum Street','Level 2',NULL,'USA','CV556RR','EMEA'), 
+('8',NULL,'+44 20 1827 21411','25 Hum Street','Level 2',NULL,'USA','CV556RR','EMEA',95000), 
 
-('9','Bucharest','+44 20 1827 21411','22 DN1','Level 12',NULL,NULL,'CV557RR','NA'), 
+('9','Bucharest','+44 20 1827 21411','22 DN1','Level 12',NULL,NULL,'CV557RR','NA',120000), 
 
-('10',NULL,'+44 20 1827 21411','12 Home','Level 22',NULL,NULL,'CV558RR','NA'), 
+('10',NULL,'+44 20 1827 21411','12 Home','Level 22',NULL,NULL,'CV558RR','NA',110000), 
 
-('11','Paris','+32 12 713 4304','43 Rue 2',NULL,NULL,'France','DT975HH','EMEA'),
+('11','Paris','+32 12 713 4304','43 Rue 2',NULL,NULL,'France','DT975HH','EMEA',78000),
 
-('12','Tokyo','+81 33 224 3444','4-2 Kioicho',NULL,'Koil-Ku','Japan','DD578YU','Japan')
+('12','Tokyo','+81 33 224 3444','4-2 Kioicho',NULL,'Koil-Ku','Japan','DD578YU','Japan',55000),
+
+('13','Los Angeles','+3 223 7995','110 Only Street','Alio 0','CA','USA','AZ944VB','NA',40000), 
+
+('14','San Diego','+1 222 4345 5553','220 Ternary Street','Alio 73','CA','USA','AZ948VB','NA',65000), 
+
+('15','Springfield','+1 0009 9000 777','155 Market Place','Suite 107','MA','USA','XX521SS','NA',55000)
 end try
 begin catch
 end catch;
@@ -141,7 +147,7 @@ insert  into employee(employee_number,last_name,first_name,extension,email,offic
 
 (1088,'Patterson','William','x4871','wpatterson@classicmodelcars.com','6',80000,1056,'Sales Manager (APAC)', NULL,'560, 120, 440, 320, 315, 0, 0, 100, 125, 0, 900'),
 
-(1102,'Bondur','Gerard','x5408','gbondur@classicmodelcars.com','4',80000,1056,'Sale Manager (EMEA)', NULL, NULL),
+(1102,'Bondur','Gerard','x5408','gbondur@classicmodelcars.com','4',80000,1056,'Sales Manager (EMEA)', NULL, NULL),
 
 (1143,'Bow','Anthony','x5428','abow@classicmodelcars.com','1',75000,1056,'Sales Manager (NA)',NULL, NULL),
 
@@ -8235,57 +8241,57 @@ SET IDENTITY_INSERT [bank_transaction] OFF;
 /*Data for the table `sale` */
 SET IDENTITY_INSERT [sale] ON
 begin try
-insert  into sale(sale_id,fiscal_year,sale,employee_number,trend) values 
+insert  into sale(sale_id,fiscal_year,sale,employee_number,fiscal_month,revenue_growth,trend) values 
 
-(1, 2003, 5282.64, 1370,'UP'),
+(1, 2003, 5282.64, 1370, 1, 0, 'CONSTANT'),
 
-(2, 2004, 1938.24, 1370,'UP'),
+(2, 2004, 1938.24, 1370, 2, 0, 'CONSTANT'),
 
-(3, 2004, 1676.14, 1370,'DOWN'),
+(3, 2004, 1676.14, 1370, 3, -13.52, 'DOWN'),
 
-(4, 2003, 3213, 1166,'DOWN'),
+(4, 2003, 3213, 1166, 1, -39.17, 'DOWN'),
 
-(5, 2004, 2121.35, 1166,'DOWN'),
+(5, 2004, 2121.35, 1166, 4, 26.56, 'UP'),
 
-(6, 2004, 3711.12, 1166,'CONSTANT'),
+(6, 2004, 3711.12, 1166, 4, 74.94, 'UP'),
 
-(7, 2003, 3449.26, 1611,'CONSTANT'),
+(7, 2003, 3449.26, 1611, 3, 7.35, 'UP'),
 
-(8, 2003, 4704.92, 1611,'UP'),
+(8, 2003, 4704.92, 1611, 4, 36.40, 'UP'),
 
-(9, 2004, 2974.43, 1611,'CONSTANT'),
+(9, 2004, 2974.43, 1611, 5, -19.85, 'DOWN'),
 
-(10, 2004, 4755.6, 1611,'UP'),
+(10, 2004, 4755.6, 1611, 6, 59.88, 'UP'),
 
-(11, 2004, 5657.4, 1611,'DOWN'),
+(11, 2004, 5657.4, 1611, 6, 18.96, 'UP'),
 
-(12, 2004, 3660.75, 1370,'DOWN'),
+(12, 2004, 3660.75, 1370, 7, -35.29, 'DOWN'),
 
-(13, 2004, 2812.32, 1370,'DOWN'),
+(13, 2004, 2812.32, 1370, 8, -23.17, 'DOWN'),
 
-(14, 2005, 1607.76, 1370,'UP'),
+(14, 2005, 1607.76, 1370, 2, 0, 'CONSTANT'),
 
-(15, 2005, 4996.62, 1370,'CONSTANT'),
+(15, 2005, 4996.62, 1370, 3, 210.78, 'UP'),
 
-(16, 2003, 5571.8, 1504,'DOWN'),
+(16, 2003, 5571.8, 1504, 4, 18.42, 'UP'),
 
-(17, 2003, 1491.38, 1504,'CONSTANT'),
+(17, 2003, 1491.38, 1504, 6, -73.23, 'DOWN'),
 
-(18, 2004, 3884.34, 1504,'DOWN'),
+(18, 2004, 3884.34, 1504, 9, 38.11, 'UP'),
 
-(19, 2004, 5241.44, 1504,'CONSTANT') ,
+(19, 2004, 5241.44, 1504, 10, 34.93, 'UP'),
 
-(20, 2004, 51241.54, 1143,'DOWN'),
+(20, 2004, 51241.54, 1143, 11, 877.62, 'UP'),
 
-(21, 2003, 25241.43, 1143,'DOWN'),
+(21, 2003, 25241.43, 1143, 8, 1592.48, 'UP'),
 
-(22, 2000, 12434.22, 1370,'DOWN'),
+(22, 2000, 12434.22, 1370, 11, 0, 'CONSTANT'),
 
-(23, 2007, 9008.22, 1504,'DOWN'),
+(23, 2007, 9008.22, 1504, 3, 0, 'CONSTANT'),
 
-(24, 2007, 150399.34, 1611,'DOWN'),
+(24, 2007, 150399.34, 1611, 7, 1569.57, 'UP'),
 
-(25, 2005, 52343.12, 1102,'DOWN')
+(25, 2005, 52343.12, 1102, 5, 947.57, 'UP')
 end try
 begin catch
 end catch

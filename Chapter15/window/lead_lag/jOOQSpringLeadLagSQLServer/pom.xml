@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.app</groupId>
-    <artifactId>jOOQSpringPercentRankSQLServer</artifactId>
+    <artifactId>jOOQSpringLeadLagSQLServer</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQSpringPercentRankSQLServer</name>
+    <name>jOOQSpringLeadLagSQLServer</name>
     <description>jOOQ - Spring Boot app</description>    
 
     <parent>
