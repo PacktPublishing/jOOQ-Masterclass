@@ -11,10 +11,14 @@ import static org.jooq.impl.DSL.boolAnd;
 import static org.jooq.impl.DSL.boolOr;
 import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.every;
+import static org.jooq.impl.DSL.lag;
+import static org.jooq.impl.DSL.product;
+import static org.jooq.impl.DSL.round;
 import static org.jooq.impl.DSL.sqrt;
 import static org.jooq.impl.DSL.stddevPop;
 import static org.jooq.impl.DSL.stddevSamp;
 import static org.jooq.impl.DSL.sum;
+import static org.jooq.impl.DSL.val;
 import static org.jooq.impl.DSL.varPop;
 import static org.jooq.impl.DSL.varSamp;
 import org.springframework.stereotype.Repository;
@@ -108,7 +112,18 @@ public class ClassicModelsRepository {
                 .fetch();
     }
 
-    // alea cu biti
-    // collect
-    // median
+    // the compounded month growth rate in 2004 via geometric mean
+    public void cmgrSale() {
+
+        ctx.select(SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR, SALE.SALE_,
+                round((product(val(1).plus(SALE.REVENUE_GROWTH.divide(100)))
+                        .power(val(1).divide(count()))).mul(100), 2).concat("%").as("CMGR"))
+                .from(SALE)
+                .where(SALE.FISCAL_YEAR.eq(2004))
+                .orderBy(SALE.FISCAL_MONTH)
+                .fetch();
+    }
+
+    
+    
 }

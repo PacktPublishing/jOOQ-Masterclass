@@ -12,6 +12,7 @@ import static org.jooq.impl.DSL.lead;
 import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.round;
 import static org.jooq.impl.DSL.select;
+import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,7 +52,7 @@ public class ClassicModelsRepository {
     }
 
     public void lagYoY() {
-System.out.println(
+
         ctx.select(asterisk(), round(field(name("t", "sale"), Double.class)
                 .minus(field(name("t", "prev_sale"), Double.class)).mul(100d)
                 .divide(field(name("t", "prev_sale"), Double.class)), 1)
@@ -62,7 +63,19 @@ System.out.println(
                                         .orderBy(SALE.FISCAL_YEAR, SALE.SALE_), 1))
                                 .from(SALE)
                                 .asTable("t", "sid", "sen", "fy", "sale", "prev_sale"))
-                .fetch().format(10000));
+                .fetch();
+    }
+    
+    // Calculating Month-Over-Month Growth Rate 
+    public void monthOverMonthGrowthRateSale() {
+        
+        ctx.select(SALE.FISCAL_MONTH,
+                val(100).mul((SALE.SALE_.minus(lag(SALE.SALE_, 1).over().orderBy(SALE.FISCAL_MONTH)))
+                        .divide(lag(SALE.SALE_, 1).over().orderBy(SALE.FISCAL_MONTH))).concat("%").as("MOM"))
+                .from(SALE)
+                .where(SALE.FISCAL_YEAR.eq(2004))                
+                .orderBy(SALE.FISCAL_MONTH)
+                .fetch();
     }
 
     public void leadLagSalary() {

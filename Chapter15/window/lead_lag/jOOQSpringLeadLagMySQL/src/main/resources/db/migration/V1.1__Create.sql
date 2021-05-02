@@ -44,6 +44,7 @@ CREATE TABLE `office` (
   `postal_code` varchar(15) NOT NULL,
   `territory` varchar(10) NOT NULL,
   `location` point DEFAULT NULL,
+  `internal_budget` int NOT NULL,
   CONSTRAINT `office_pk` PRIMARY KEY (`office_code`),
   CONSTRAINT `office_postal_code_uk` UNIQUE (`postal_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -90,6 +91,8 @@ CREATE TABLE `sale` (
   `hot` boolean DEFAULT FALSE,  
   `rate` enum ('SILVER', 'GOLD', 'PLATINUM') DEFAULT NULL,
   `vat` enum ('NONE', 'MIN', 'MAX') DEFAULT NULL,
+  `fiscal_month` int NOT NULL,
+  `revenue_growth` float NOT NULL, 
   `trend` varchar(10) DEFAULT NULL,
   CONSTRAINT `sale_pk` PRIMARY KEY (`sale_id`),    
   CONSTRAINT `sale_employee_fk` FOREIGN KEY (`employee_number`) REFERENCES `employee` (`employee_number`) ON UPDATE CASCADE
@@ -227,8 +230,9 @@ CREATE TABLE `orderdetail` (
   `product_id` bigint NOT NULL,
   `quantity_ordered` int NOT NULL,
   `price_each` decimal(10,2) NOT NULL,
-  `order_line_number` smallint NOT NULL,
+  `order_line_number` smallint NOT NULL,  
   CONSTRAINT `orderdetail_pk` PRIMARY KEY (`orderdetail_id`),
+  CONSTRAINT `orderdetail_uk` UNIQUE KEY (`order_id`, `product_id`),
   CONSTRAINT `orderdetail_order_fk` FOREIGN KEY (`order_id`) REFERENCES `order` (`order_id`),
   CONSTRAINT `orderdetail_product_fk` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;

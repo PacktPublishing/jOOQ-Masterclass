@@ -192,6 +192,12 @@ public class ClassicModelsRepository {
                 .from(PRODUCT)
                 .fetch();
     }        
+    
+    // synthetic PRODUCT
+    public void productSample() {
+        
+        // combina median pe fiecare an
+    }
 }
 
 

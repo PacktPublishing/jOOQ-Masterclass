@@ -91,6 +91,8 @@ CREATE TABLE `sale` (
   `hot` boolean DEFAULT FALSE,  
   `rate` enum ('SILVER', 'GOLD', 'PLATINUM') DEFAULT NULL,
   `vat` enum ('NONE', 'MIN', 'MAX') DEFAULT NULL,
+  `fiscal_month` int NOT NULL,
+  `revenue_growth` float NOT NULL, 
   `trend` varchar(10) DEFAULT NULL,
   CONSTRAINT `sale_pk` PRIMARY KEY (`sale_id`),    
   CONSTRAINT `sale_employee_fk` FOREIGN KEY (`employee_number`) REFERENCES `employee` (`employee_number`) ON UPDATE CASCADE

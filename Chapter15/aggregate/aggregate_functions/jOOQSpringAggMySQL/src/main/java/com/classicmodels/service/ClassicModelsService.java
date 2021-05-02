@@ -14,10 +14,13 @@ public class ClassicModelsService {
 
     public void callAll() {
 
-        classicModelsRepository.sdSale();
+      /*  classicModelsRepository.sdSale();
         classicModelsRepository.productBuyPriceVariance();
         classicModelsRepository.covarianceSale();
         classicModelsRepository.boolAndOrSample();
+*/
+      classicModelsRepository.cmgrSale();
+      classicModelsRepository.q();
 
     }
 }
