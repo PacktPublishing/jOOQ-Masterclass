@@ -17,31 +17,37 @@ This is a modified version of the original schema for Oracle
 
 alter session set nls_date_format = 'yyyy-MM-dd';
 
-insert /*+ ignore_row_on_dupkey_index(office(office_code)) */ into office(office_code,city,phone,address_line_first,address_line_second,state,country,postal_code,territory) 
+insert /*+ ignore_row_on_dupkey_index(office(office_code)) */ into office(office_code,city,phone,address_line_first,address_line_second,state,country,postal_code,territory,internal_budget) 
 
-select '1','San Francisco','+1 650 219 4782','100 Market Street','Suite 300','CA','USA','AZ934VB','NA' from dual union all
+select '1','San Francisco','+1 650 219 4782','100 Market Street','Suite 300','CA','USA','AZ934VB','NA',90000 from dual union all
 
-select '2','Boston','+1 215 837 0825','1550 Court Place','Suite 102','MA','USA','XX021SS','NA' from dual union all
+select '2','Boston','+1 215 837 0825','1550 Court Place','Suite 102','MA','USA','XX021SS','NA',85000 from dual union all
 
-select '3','NYC','+1 212 555 3000','523 East 53rd Street','apt. 5A','NY','USA','AA100CV','NA' from dual union all
+select '3','NYC','+1 212 555 3000','523 East 53rd Street','apt. 5A','NY','USA','AA100CV','NA', 100000 from dual union all
 
-select '4','Paris','+33 14 723 4404','43 Rue Jouffroy D''abbans',NULL,NULL,'France','MN750CV','EMEA' from dual union all
+select '4','Paris','+33 14 723 4404','43 Rue Jouffroy D''abbans',NULL,NULL,'France','MN750CV','EMEA',35000 from dual union all
 
-select '5','Tokyo','+81 33 224 5000','4-1 Kioicho',NULL,'Chiyoda-Ku','Japan','RT102TT','Japan' from dual union all
+select '5','Tokyo','+81 33 224 5000','4-1 Kioicho',NULL,'Chiyoda-Ku','Japan','RT102TT','Japan',90000 from dual union all
 
-select '6','Sydney','+61 2 9264 2451','5-11 Wentworth Avenue','Floor --2',NULL,'Australia','XC344VD','APAC' from dual union all
+select '6','Sydney','+61 2 9264 2451','5-11 Wentworth Avenue','Floor --2',NULL,'Australia','XC344VD','APAC',45500 from dual union all
 
-select '7','London','+44 20 7877 2041','25 Old Broad Street','Level 7','N/A','UK','CV555RR','EMEA' from dual union all
+select '7','London','+44 20 7877 2041','25 Old Broad Street','Level 7','N/A','UK','CV555RR','EMEA',50000 from dual union all
 
-select '8',NULL,'+44 20 1827 21411','25 Hum Street','Level 2',NULL,'USA','CV556RR','EMEA' from dual union all
+select '8',NULL,'+44 20 1827 21411','25 Hum Street','Level 2',NULL,'USA','CV556RR','EMEA',95000 from dual union all
 
-select '9','Bucharest','+44 20 1827 21411','22 DN1','Level 12',NULL,NULL,'CV557RR','NA' from dual union all
+select '9','Bucharest','+44 20 1827 21411','22 DN1','Level 12',NULL,NULL,'CV557RR','NA',120000 from dual union all
 
-select '10',NULL,'+44 20 1827 21411','12 Home','Level 22',NULL,NULL,'CV558RR','NA' from dual union all
+select '10',NULL,'+44 20 1827 21411','12 Home','Level 22',NULL,NULL,'CV558RR','NA',110000 from dual union all
 
-select '11','Paris','+32 12 713 4304','43 Rue 2',NULL,NULL,'France','DT975HH','EMEA' from dual union all
+select '11','Paris','+32 12 713 4304','43 Rue 2',NULL,NULL,'France','DT975HH','EMEA',78000 from dual union all
 
-select '12','Tokyo','+81 33 224 3444','4-2 Kioicho',NULL,'Koil-Ku','Japan','DD578YU','Japan' from dual;
+select '12','Tokyo','+81 33 224 3444','4-2 Kioicho',NULL,'Koil-Ku','Japan','DD578YU','Japan',55000 from dual union all
+
+select '13','Los Angeles','+3 223 7995','110 Only Street','Alio 0','CA','USA','AZ944VB','NA',40000 from dual union all
+
+select '14','San Diego','+1 222 4345 5553','220 Ternary Street','Alio 73','CA','USA','AZ948VB','NA',65000 from dual union all
+
+select '15','Springfield','+1 0009 9000 777','155 Market Place','Suite 107','MA','USA','XX521SS','NA',55000 from dual;
 
 /*Data for the table `department` */
 
@@ -125,7 +131,7 @@ insert /*+ ignore_row_on_dupkey_index(employee(employee_number)) */ into employe
 
  select 1088,'Patterson','William','x4871','wpatterson@classicmodelcars.com','6',80000,1056,'Sales Manager (APAC)',NULL,monthlyBonusArr(560, 120, 440, 320, 315, 0, 0, 100, 125, 0, 900) from dual union all 
 
- select 1102,'Bondur','Gerard','x5408','gbondur@classicmodelcars.com','4',80000,1056,'Sale Manager (EMEA)',NULL,NULL from dual union all 
+ select 1102,'Bondur','Gerard','x5408','gbondur@classicmodelcars.com','4',80000,1056,'Sales Manager (EMEA)',NULL,NULL from dual union all 
 
  select 1143,'Bow','Anthony','x5428','abow@classicmodelcars.com','1',75000,1056,'Sales Manager (NA)',NULL,NULL from dual union all 
 
@@ -1596,7 +1602,7 @@ insert /*+ ignore_row_on_dupkey_index("ORDER"(order_id)) */ into "ORDER"(order_i
 
 /*Data for the table `orderdetail` */
 
-insert /*+ ignore_row_on_dupkey_index(orderdetail(orderdetail_id)) */ into orderdetail(order_id,product_id,quantity_ordered,price_each,order_line_number) 
+insert /*+ ignore_row_on_dupkey_index(orderdetail(order_id, product_id)) */ into orderdetail(order_id,product_id,quantity_ordered,price_each,order_line_number) 
 
  select 10100,23,30,'136.00',3 from dual union all 
 
@@ -8167,51 +8173,57 @@ select 9,'Optimus Bank','8V34VN5U435334','5312.23',333,'NF959653','2005-03-01 19
 
 select 10,'BRT Bank','TVNU343T38TUNU3T','52151.81',278,'GP636783', '2003-03-02 12:32:00','FAILED' from dual;
 
-insert /*+ ignore_row_on_dupkey_index(sale(sale_id)) */ into sale(sale_id,fiscal_year,sale,employee_number,trend)
+insert /*+ ignore_row_on_dupkey_index(sale(sale_id)) */ into sale(sale_id,fiscal_year,sale,employee_number,fiscal_month,revenue_growth,trend)
 
-select 1, 2003, 5282.64, 1370, 'UP' from dual union all 
+select 1, 2003, 5282.64, 1370, 1, 0, 'CONSTANT' from dual union all
 
-select 2, 2004, 1938.24, 1370, 'UP' from dual union all 
+select 2, 2004, 1938.24, 1370, 2, 0, 'CONSTANT' from dual union all
 
-select 3, 2004, 1676.14, 1370, 'DOWN' from dual union all 
+select 3, 2004, 1676.14, 1370, 3, -13.52, 'DOWN' from dual union all
 
-select 4, 2003, 3213, 1166, 'DOWN' from dual union all 
+select 4, 2003, 3213, 1166, 1, -39.17, 'DOWN' from dual union all
 
-select 5, 2004, 2121.35, 1166, 'DOWN' from dual union all 
+select 5, 2004, 2121.35, 1166, 4, 26.56, 'UP' from dual union all
 
-select 6, 2004, 3711.12, 1166, 'CONSTANT' from dual union all 
+select 6, 2004, 3711.12, 1166, 4, 74.94, 'UP' from dual union all
 
-select 7, 2003, 3449.26, 1611, 'CONSTANT' from dual union all 
+select 7, 2003, 3449.26, 1611, 3, 7.35, 'UP' from dual union all
 
-select 8, 2003, 4704.92, 1611, 'UP' from dual union all 
+select 8, 2003, 4704.92, 1611, 4, 36.40, 'UP' from dual union all
 
-select 9, 2004, 2974.43, 1611, 'CONSTANT' from dual union all 
+select 9, 2004, 2974.43, 1611, 5, -19.85, 'DOWN' from dual union all
 
-select 10, 2004, 4755.6, 1611, 'UP' from dual union all 
+select 10, 2004, 4755.6, 1611, 6, 59.88, 'UP' from dual union all
 
-select 11, 2004, 5657.4, 1611, 'DOWN' from dual union all 
+select 11, 2004, 5657.4, 1611, 6, 18.96, 'UP' from dual union all
 
-select 12, 2004, 3660.75, 1370, 'DOWN' from dual union all 
+select 12, 2004, 3660.75, 1370, 7, -35.29, 'DOWN' from dual union all
 
-select 13, 2004, 2812.32, 1370, 'DOWN' from dual union all 
+select 13, 2004, 2812.32, 1370, 8, -23.17, 'DOWN' from dual union all
 
-select 14, 2005, 1607.76, 1370, 'UP' from dual union all 
+select 14, 2005, 1607.76, 1370, 2, 0, 'CONSTANT' from dual union all
 
-select 15, 2005, 4996.62, 1370, 'CONSTANT' from dual union all 
+select 15, 2005, 4996.62, 1370, 3, 210.78, 'UP' from dual union all
 
-select 16, 2003, 5571.8, 1504, 'DOWN' from dual union all 
+select 16, 2003, 5571.8, 1504, 4, 18.42, 'UP' from dual union all
 
-select 17, 2003, 1491.38, 1504, 'CONSTANT' from dual union all 
+select 17, 2003, 1491.38, 1504, 6, -73.23, 'DOWN' from dual union all
 
-select 18, 2004, 3884.34, 1504, 'DOWN' from dual union all 
+select 18, 2004, 3884.34, 1504, 9, 38.11, 'UP' from dual union all
 
-select 19, 2004, 5241.44, 1504, 'CONSTANT' from dual union all
+select 19, 2004, 5241.44, 1504, 10, 34.93, 'UP' from dual union all
 
-select 20, 2004, 51241.54, 1143,'DOWN' from dual union all
+select 20, 2004, 51241.54, 1143, 11, 877.62, 'UP' from dual union all
 
-select 21, 2003, 25241.43, 1143,'DOWN' from dual union all
+select 21, 2003, 25241.43, 1143, 8, 1592.48, 'UP' from dual union all
 
-select 22, 2005, 52343.12, 1102,'DOWN' from dual;
+select 22, 2000, 12434.22, 1370, 11, 0, 'CONSTANT' from dual union all
+
+select 23, 2007, 9008.22, 1504, 3, 0, 'CONSTANT' from dual union all
+
+select 24, 2007, 150399.34, 1611, 7, 1569.57, 'UP' from dual union all
+
+select 25, 2005, 52343.12, 1102, 5, 947.57, 'UP' from dual;
 
 /*Data for the table `top3product` */
 
