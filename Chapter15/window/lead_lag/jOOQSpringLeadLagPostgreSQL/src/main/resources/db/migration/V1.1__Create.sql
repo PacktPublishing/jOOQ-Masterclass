@@ -56,6 +56,7 @@ CREATE TABLE office (
   postal_code postal_code NOT NULL,
   territory varchar(10) NOT NULL,
   location point DEFAULT NULL,
+  internal_budget int NOT NULL, 
   CONSTRAINT office_pk PRIMARY KEY (office_code),
   CONSTRAINT office_postal_code_uk UNIQUE (postal_code)
 ) ;
@@ -115,6 +116,8 @@ CREATE TABLE sale (
   hot boolean DEFAULT FALSE,
   rate rate_type DEFAULT NULL,
   vat vat_type DEFAULT NULL,
+  fiscal_month int NOT NULL,
+  revenue_growth float NOT NULL,
   trend varchar(10) DEFAULT NULL,
   CONSTRAINT sale_pk PRIMARY KEY (sale_id)
  ,  
@@ -268,8 +271,8 @@ CREATE TABLE orderdetail (
   quantity_ordered int NOT NULL,
   price_each decimal(10,2) NOT NULL,
   order_line_number smallint NOT NULL,
-  CONSTRAINT orderdetail_pk PRIMARY KEY (orderdetail_id)
- ,
+  CONSTRAINT orderdetail_pk PRIMARY KEY (orderdetail_id),
+  CONSTRAINT orderdetail_uk UNIQUE (order_id, product_id),
   CONSTRAINT orderdetail_order_fk FOREIGN KEY (order_id) REFERENCES "order" (order_id),
   CONSTRAINT orderdetail_product_fk FOREIGN KEY (product_id) REFERENCES product (product_id)
 ) ;

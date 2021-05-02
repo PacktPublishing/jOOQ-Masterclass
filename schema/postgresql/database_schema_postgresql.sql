@@ -116,6 +116,8 @@ CREATE TABLE sale (
   hot boolean DEFAULT FALSE,
   rate rate_type DEFAULT NULL,
   vat vat_type DEFAULT NULL,
+  fiscal_month int NOT NULL,
+  revenue_growth float NOT NULL,
   trend varchar(10) DEFAULT NULL,
   CONSTRAINT sale_pk PRIMARY KEY (sale_id)
  ,  
