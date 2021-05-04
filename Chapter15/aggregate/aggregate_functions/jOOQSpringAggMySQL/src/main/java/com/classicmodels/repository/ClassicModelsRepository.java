@@ -12,6 +12,8 @@ import static org.jooq.impl.DSL.boolAnd;
 import static org.jooq.impl.DSL.boolOr;
 import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.every;
+import static org.jooq.impl.DSL.exp;
+import static org.jooq.impl.DSL.ln;
 import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.product;
 import static org.jooq.impl.DSL.round;
@@ -34,6 +36,24 @@ public class ClassicModelsRepository {
 
     public ClassicModelsRepository(DSLContext ctx) {
         this.ctx = ctx;
+    }
+
+    // Harmonic mean
+    public void saleHarmonicMean() {
+
+        ctx.select(SALE.FISCAL_YEAR, count().divide(sum(val(1d).divide(SALE.SALE_))).as("harmonic_mean"))
+                .from(SALE)
+                .groupBy(SALE.FISCAL_YEAR)
+                .fetch();
+    }
+
+    // Geometric mean
+    public void saleGeometricMean() {
+
+        ctx.select(SALE.FISCAL_YEAR, exp(avg(ln(SALE.SALE_))).as("geometric_mean"))
+                .from(SALE)
+                .groupBy(SALE.FISCAL_YEAR)
+                .fetch();
     }
 
     // Standard deviation
@@ -89,15 +109,43 @@ public class ClassicModelsRepository {
                 .fetch();
     }
 
-    public void covarianceSale() {
+    // Covariance
+    public void covarianceProductBuyPriceMSRP() {        
 
-        ctx.select(aggregate("covar_samp", Double.class, SALE.SALE_).as("covar_samp"),
-                aggregate("covar_pop", Double.class, SALE.SALE_).as("covar_pop"))
-                .from(SALE)
+        // (SUMXY-SUMX * SUMY/N)/(N-1) -> covar_samp() equivalent
+        ctx.select(PRODUCT.PRODUCT_LINE,
+                (sum(PRODUCT.BUY_PRICE.mul(PRODUCT.MSRP))
+                        .minus(sum(PRODUCT.BUY_PRICE).mul(sum(PRODUCT.MSRP)
+                                .divide(count())))).divide(count().minus(1)).as("covar_samp"))
+                .from(PRODUCT)
+                .groupBy(PRODUCT.PRODUCT_LINE)
+                .fetch();
+    }
+    
+    public void mySqlConcatws() {
+        
+        ctx.select(aggregate("concat_ws", String.class, val(" "), EMPLOYEE.FIRST_NAME, 
+                        EMPLOYEE.LAST_NAME).as("employee"))
+                .from(EMPLOYEE)                
                 .fetch();
     }
 
-    // using bool_and() / bool_or()
+    // Correlation(regression) functions
+    public void regressionProductBuyPriceMSRP() {
+
+        // emulating regrSXY() as REGR_SXY = (SUMXY-SUMX * SUMY/N)
+        ctx.select(PRODUCT.PRODUCT_LINE,
+                sum(PRODUCT.BUY_PRICE.mul(PRODUCT.MSRP))
+                        .minus(sum(PRODUCT.BUY_PRICE).mul(sum(PRODUCT.MSRP)
+                                .divide(count()))).as("regr_sxy"))
+                .from(PRODUCT)
+                .groupBy(PRODUCT.PRODUCT_LINE)
+                .fetch();
+
+        // see also: regrSXX(),regrSYY(), regrAvgX​(), regrAvgXY(), regrCount(), regrIntercept(), regrR2(), regrSlope()
+    }
+
+    // Using bool_and() / bool_or()
     public void boolAndOrSample() {
 
         ctx.select(boolAnd(EMPLOYEE.SALARY.gt(77000)),
@@ -114,6 +162,40 @@ public class ClassicModelsRepository {
                 .fetch();
     }
 
+    // Bits operations
+    public void bitsOperationsSample() {
+
+        ctx.selectFrom(SALE)
+                .where(SALE.FISCAL_YEAR.bitXor(2004).eq(0))
+                .fetch();
+
+        /*
+        // Replacing bits
+        
+                    j    i     
+        q =      1001100110010
+        p =         111111
+        result = 1001111110010 (5106)                 
+         */
+        int i = 4;
+        int j = 9;
+        int q = 4914;
+        int p = 63;
+
+        Field<Integer> ones = val(0).bitNot().as("ones");
+        Field<Integer> leftShiftJ = ones.shl(j + 1).as("leftShiftJ");
+        Field<Integer> leftShiftI = val(1).shl(i).minus(1).as("leftShiftI");
+        Field<Integer> mask = leftShiftJ.bitOr(leftShiftI).as("mask");
+        Field<Integer> applyMaskToQ = val(q).bitAnd(mask).as("applyMaskToQ");
+        Field<Integer> bringPInPlace = val(p).shl(i).as("bringPInPlace");
+
+        ctx.select(applyMaskToQ.bitOr(bringPInPlace)).from(
+                select(applyMaskToQ, bringPInPlace).from(
+                        select(mask).from(select(leftShiftJ, leftShiftI).from(
+                                select(ones))))).fetch();
+    }
+    
+    // synthetic PRODUCT
     // the compounded month growth rate in 2004 via geometric mean
     public void cmgrSale() {
 
@@ -121,8 +203,7 @@ public class ClassicModelsRepository {
                 round((product(val(1).plus(SALE.REVENUE_GROWTH.divide(100)))
                         .power(val(1).divide(count()))).mul(100), 2).concat("%").as("CMGR"))
                 .from(SALE)
-                .where(SALE.FISCAL_YEAR.eq(2004))
-                .orderBy(SALE.FISCAL_MONTH)
+                .groupBy(SALE.FISCAL_YEAR)
                 .fetch();
     }
 
@@ -134,17 +215,17 @@ public class ClassicModelsRepository {
                 PRODUCT.MSRP.as("y"), avg(PRODUCT.MSRP).over().as("y_bar")).from(PRODUCT)
                 .asTable("t1");
 
-        var t2 = select(((sum(t1.field("x", Double.class).minus(t1.field("x_bar")))
-                .mul(t1.field("y", Double.class).minus(t1.field("y_bar"))))
+        var t2 = select(((sum(t1.field("x", Double.class).minus(t1.field("x_bar"))
+                .mul(t1.field("y", Double.class).minus(t1.field("y_bar")))))
                 .divide(sum((t1.field("x", Double.class).minus(t1.field("x_bar")))
-                        .mul(t1.field("y", Double.class).minus(t1.field("y_bar")))))).as("slope"),
+                        .mul(t1.field("x", Double.class).minus(t1.field("x_bar")))))).as("slope"),
                 max(t1.field("x_bar")).as("x_bar_max"),
                 max(t1.field("y_bar")).as("y_bar_max"))
-                .from(t1);
+                .from(t1).asTable("t2");
 
         ctx.select(t2.field("slope"),
                 t2.field("y_bar_max").minus(t2.field("x_bar_max")
                         .mul(t2.field("slope", Double.class))).as("intercept"))
                 .from(t2).fetch();
-    }       
+    }
 }

@@ -14,14 +14,16 @@ public class ClassicModelsService {
 
     public void callAll() {
 
-      /*  classicModelsRepository.sdSale();
+        classicModelsRepository.saleHarmonicMean();
+        classicModelsRepository.saleGeometricMean();
+        classicModelsRepository.sdSale();
         classicModelsRepository.productBuyPriceVariance();
-        classicModelsRepository.covarianceSale();
+        classicModelsRepository.covarianceProductBuyPriceMSRP();
+        classicModelsRepository.mySqlConcatws();
+        classicModelsRepository.regressionProductBuyPriceMSRP();
         classicModelsRepository.boolAndOrSample();
-*/
-      classicModelsRepository.cmgrSale();
-      classicModelsRepository.linearRegression();
-      //classicModelsRepository.nps();
-
+        classicModelsRepository.bitsOperationsSample();
+        classicModelsRepository.cmgrSale();
+        classicModelsRepository.linearRegression();
     }
 }
