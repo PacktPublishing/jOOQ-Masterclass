@@ -20,7 +20,8 @@ public class ClassicModelsService {
         classicModelsRepository.boolAndOrSample();
 */
       classicModelsRepository.cmgrSale();
-      classicModelsRepository.q();
+      classicModelsRepository.linearRegression();
+      //classicModelsRepository.nps();
 
     }
 }

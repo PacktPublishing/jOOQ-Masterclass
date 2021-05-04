@@ -7,13 +7,15 @@ import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import org.jooq.Field;
 import static org.jooq.impl.DSL.aggregate;
+import static org.jooq.impl.DSL.avg;
 import static org.jooq.impl.DSL.boolAnd;
 import static org.jooq.impl.DSL.boolOr;
 import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.every;
-import static org.jooq.impl.DSL.lag;
+import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.product;
 import static org.jooq.impl.DSL.round;
+import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.sqrt;
 import static org.jooq.impl.DSL.stddevPop;
 import static org.jooq.impl.DSL.stddevSamp;
@@ -115,7 +117,7 @@ public class ClassicModelsRepository {
     // the compounded month growth rate in 2004 via geometric mean
     public void cmgrSale() {
 
-        ctx.select(SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR, SALE.SALE_,
+        ctx.select(SALE.FISCAL_YEAR,
                 round((product(val(1).plus(SALE.REVENUE_GROWTH.divide(100)))
                         .power(val(1).divide(count()))).mul(100), 2).concat("%").as("CMGR"))
                 .from(SALE)
@@ -124,6 +126,25 @@ public class ClassicModelsRepository {
                 .fetch();
     }
 
-    
-    
+    // Calculating Linear Regression Coefficients
+    // y = slope * x - intercept 
+    public void linearRegression() {
+
+        var t1 = select(PRODUCT.BUY_PRICE.as("x"), avg(PRODUCT.BUY_PRICE).over().as("x_bar"),
+                PRODUCT.MSRP.as("y"), avg(PRODUCT.MSRP).over().as("y_bar")).from(PRODUCT)
+                .asTable("t1");
+
+        var t2 = select(((sum(t1.field("x", Double.class).minus(t1.field("x_bar")))
+                .mul(t1.field("y", Double.class).minus(t1.field("y_bar"))))
+                .divide(sum((t1.field("x", Double.class).minus(t1.field("x_bar")))
+                        .mul(t1.field("y", Double.class).minus(t1.field("y_bar")))))).as("slope"),
+                max(t1.field("x_bar")).as("x_bar_max"),
+                max(t1.field("y_bar")).as("y_bar_max"))
+                .from(t1);
+
+        ctx.select(t2.field("slope"),
+                t2.field("y_bar_max").minus(t2.field("x_bar_max")
+                        .mul(t2.field("slope", Double.class))).as("intercept"))
+                .from(t2).fetch();
+    }       
 }

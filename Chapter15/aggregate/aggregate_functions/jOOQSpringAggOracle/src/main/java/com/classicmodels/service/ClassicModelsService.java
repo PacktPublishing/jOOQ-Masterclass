@@ -14,6 +14,8 @@ public class ClassicModelsService {
 
     public void callAll() {
 
+        classicModelsRepository.saleHarmonicMean();
+        classicModelsRepository.saleGeometricMean();
         classicModelsRepository.sdSale();
         classicModelsRepository.productBuyPriceVariance();
         classicModelsRepository.covarianceProductBuyPriceMSRP();
@@ -21,5 +23,7 @@ public class ClassicModelsService {
         classicModelsRepository.boolAndOrSample();
         classicModelsRepository.bitsOperationsSample();
         classicModelsRepository.medianSample();
+        classicModelsRepository.cmgrSale();
+        classicModelsRepository.linearRegression();
     }
 }
