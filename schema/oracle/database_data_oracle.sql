@@ -35,7 +35,7 @@ select '7','London','+44 20 7877 2041','25 Old Broad Street','Level 7','N/A','UK
 
 select '8',NULL,'+44 20 1827 21411','25 Hum Street','Level 2',NULL,'USA','CV556RR','EMEA',95000 from dual union all
 
-select '9','Bucharest','+44 20 1827 21411','22 DN1','Level 12',NULL,NULL,'CV557RR','NA',120000 from dual union all
+select '9','Bucharest','+44 20 1827 21411','22 DN1','Level 12',NULL,'','CV557RR','NA',120000 from dual union all
 
 select '10',NULL,'+44 20 1827 21411','12 Home','Level 22',NULL,NULL,'CV558RR','NA',110000 from dual union all
 

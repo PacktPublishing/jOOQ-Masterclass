@@ -32,7 +32,7 @@ insert  into office(office_code,city,phone,address_line_first,address_line_secon
 
 ('8',NULL,'+44 20 1827 21411','25 Hum Street','Level 2',NULL,'USA','CV556RR','EMEA',95000), 
 
-('9','Bucharest','+44 20 1827 21411','22 DN1','Level 12',NULL,NULL,'CV557RR','NA',120000), 
+('9','Bucharest','+44 20 1827 21411','22 DN1','Level 12',NULL,'','CV557RR','NA',120000), 
 
 ('10',NULL,'+44 20 1827 21411','12 Home','Level 22',NULL,NULL,'CV558RR','NA',110000), 
 
