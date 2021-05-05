@@ -106,6 +106,7 @@ CREATE TABLE employee (
   [email] varchar(100) NOT NULL,
   [office_code] varchar(10) NOT NULL,
   [salary] int NOT NULL,
+  [commission] int DEFAULT NULL,
   [reports_to] bigint DEFAULT NULL,
   [job_title] varchar(50) NOT NULL,
   [employee_of_year] varchar(50) DEFAULT NULL,
@@ -132,6 +133,8 @@ CREATE TABLE department (
   [office_code] varchar(10) NOT NULL,
   [topic] varchar(100) DEFAULT NULL,  
   [dep_net_ipv4] varchar(16) DEFAULT NULL, 
+  [local_budget] int DEFAULT NULL,
+  [profit] int DEFAULT NULL,
   CONSTRAINT [department_pk] PRIMARY KEY ([department_id]),
   CONSTRAINT [department_code_uk] UNIQUE ([code])
 ,
