@@ -149,9 +149,11 @@ public class ClassicModelsRepository {
 
         // NVL2        
         ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME,
-                iif(EMPLOYEE.COMMISSION.isNotNull(), 
-                        EMPLOYEE.SALARY.plus(EMPLOYEE.COMMISSION), EMPLOYEE.SALARY).as("iif"),
-                nvl2(EMPLOYEE.COMMISSION, 
+                iif(EMPLOYEE.COMMISSION.isNull(),
+                        EMPLOYEE.SALARY, EMPLOYEE.SALARY.plus(EMPLOYEE.COMMISSION)).as("iif1"),
+                iif(EMPLOYEE.COMMISSION.isNotNull(),
+                        EMPLOYEE.SALARY.plus(EMPLOYEE.COMMISSION), EMPLOYEE.SALARY).as("iif2"),
+                nvl2(EMPLOYEE.COMMISSION,
                         EMPLOYEE.SALARY.plus(EMPLOYEE.COMMISSION), EMPLOYEE.SALARY).as("nvl2"))
                 .from(EMPLOYEE)
                 .fetch();

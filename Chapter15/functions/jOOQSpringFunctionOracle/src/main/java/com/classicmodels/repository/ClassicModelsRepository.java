@@ -6,16 +6,18 @@ import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import static jooq.generated.tables.Product.PRODUCT;
 import org.jooq.DSLContext;
-import static org.jooq.Nullability.NULL;
+import static org.jooq.impl.DSL.castNull;
 import static org.jooq.impl.DSL.coalesce;
 import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.decode;
+import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.greatest;
 import static org.jooq.impl.DSL.iif;
 import static org.jooq.impl.DSL.least;
 import static org.jooq.impl.DSL.nullif;
 import static org.jooq.impl.DSL.nvl;
 import static org.jooq.impl.DSL.nvl2;
+import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.sign;
 import static org.jooq.impl.DSL.sum;
 import org.springframework.stereotype.Repository;
@@ -45,7 +47,7 @@ public class ClassicModelsRepository {
         System.out.println(
                 ctx.select(DEPARTMENT.NAME, DEPARTMENT.OFFICE_CODE, DEPARTMENT.LOCAL_BUDGET,
                         (DEPARTMENT.LOCAL_BUDGET.mul(2)).divide(100),
-                        decode(DEPARTMENT.LOCAL_BUDGET, NULL, 0, DEPARTMENT.LOCAL_BUDGET)
+                        decode(DEPARTMENT.LOCAL_BUDGET, castNull(Integer.class), 0, DEPARTMENT.LOCAL_BUDGET)
                                 .mul(2).divide(100).as("decode"))
                         .from(DEPARTMENT)
                         .fetch().format(1000));
@@ -69,21 +71,20 @@ public class ClassicModelsRepository {
                 .orderBy(
                         decode(c,
                                 "N", DEPARTMENT.NAME,
-                                "B", DEPARTMENT.LOCAL_BUDGET.cast(String.class),
-                                "C", DEPARTMENT.CODE.cast(String.class)))
+                                "B", DEPARTMENT.LOCAL_BUDGET,
+                                "C", DEPARTMENT.CODE))
                 .fetch();
 
         // DECODE AND GROUP BY
         System.out.println(
-                ctx.select(decode(sign(PRODUCT.BUY_PRICE.minus(PRODUCT.MSRP.divide(2))),
-                        1, "Buy price larger than half of MSRP",
-                        0, "Buy price larger than half of MSRP",
-                        -1, "Buy price smaller than half of MSRP"), count())
-                        .from(PRODUCT)
-                        .groupBy(decode(sign(PRODUCT.BUY_PRICE.minus(PRODUCT.MSRP.divide(2))),
+                ctx.select(field("T.D"), count()).from(
+                        select(decode(sign(PRODUCT.BUY_PRICE.minus(PRODUCT.MSRP.divide(2))),
                                 1, "Buy price larger than half of MSRP",
                                 0, "Buy price larger than half of MSRP",
-                                -1, "Buy price smaller than half of MSRP"), PRODUCT.BUY_PRICE, PRODUCT.MSRP)
+                                -1, "Buy price smaller than half of MSRP").as("D"))
+                                .from(PRODUCT)
+                                .groupBy(PRODUCT.BUY_PRICE, PRODUCT.MSRP).asTable("T"))
+                        .groupBy(field("T.D"))
                         .fetch().format(10000));
 
         // DECODE AND SUM
@@ -101,7 +102,7 @@ public class ClassicModelsRepository {
         System.out.println(
                 ctx.select(DEPARTMENT.NAME, DEPARTMENT.OFFICE_CODE,
                         DEPARTMENT.LOCAL_BUDGET, DEPARTMENT.PROFIT,
-                        decode(DEPARTMENT.LOCAL_BUDGET, NULL, DEPARTMENT.PROFIT,
+                        decode(DEPARTMENT.LOCAL_BUDGET, castNull(Integer.class), DEPARTMENT.PROFIT,
                                 decode(sign(DEPARTMENT.PROFIT.minus(DEPARTMENT.LOCAL_BUDGET)),
                                         1, DEPARTMENT.PROFIT.minus(DEPARTMENT.LOCAL_BUDGET),
                                         0, DEPARTMENT.LOCAL_BUDGET.divide(2).mul(-1),
@@ -111,7 +112,7 @@ public class ClassicModelsRepository {
 
         // IIF
         ctx.select(ORDERDETAIL.PRODUCT_ID, ORDERDETAIL.QUANTITY_ORDERED,
-                iif(ORDERDETAIL.QUANTITY_ORDERED.gt(45), "MORE", "LESS").as("45"))
+                iif(ORDERDETAIL.QUANTITY_ORDERED.gt(45L), "MORE", "LESS").as("45"))
                 .from(ORDERDETAIL)
                 .fetch();
 

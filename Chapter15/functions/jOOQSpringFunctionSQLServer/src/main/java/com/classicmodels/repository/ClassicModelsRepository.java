@@ -10,12 +10,14 @@ import static org.jooq.Nullability.NULL;
 import static org.jooq.impl.DSL.coalesce;
 import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.decode;
+import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.greatest;
 import static org.jooq.impl.DSL.iif;
 import static org.jooq.impl.DSL.least;
 import static org.jooq.impl.DSL.nullif;
 import static org.jooq.impl.DSL.nvl;
 import static org.jooq.impl.DSL.nvl2;
+import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.sign;
 import static org.jooq.impl.DSL.sum;
 import org.springframework.stereotype.Repository;
@@ -75,26 +77,31 @@ public class ClassicModelsRepository {
 
         // DECODE AND GROUP BY
         System.out.println(
-                ctx.select(decode(sign(PRODUCT.BUY_PRICE.minus(PRODUCT.MSRP.divide(2))),
-                        1, "Buy price larger than half of MSRP",
-                        0, "Buy price larger than half of MSRP",
-                        -1, "Buy price smaller than half of MSRP"), count())
-                        .from(PRODUCT)
-                        .groupBy(decode(sign(PRODUCT.BUY_PRICE.minus(PRODUCT.MSRP.divide(2))),
+                ctx.select(field("t.d"), count()).from(
+                        select(decode(sign(PRODUCT.BUY_PRICE.minus(PRODUCT.MSRP.divide(2))),
                                 1, "Buy price larger than half of MSRP",
                                 0, "Buy price larger than half of MSRP",
-                                -1, "Buy price smaller than half of MSRP"), PRODUCT.BUY_PRICE, PRODUCT.MSRP)
+                                -1, "Buy price smaller than half of MSRP").as("d"))
+                                .from(PRODUCT)
+                                .groupBy(PRODUCT.BUY_PRICE, PRODUCT.MSRP).asTable("t"))
+                        .groupBy(field("t.d"))
                         .fetch().format(10000));
 
         // DECODE AND SUM
         System.out.println(
-                ctx.select(PRODUCT.PRODUCT_LINE,
-                        sum(decode(greatest(PRODUCT.BUY_PRICE, 0), least(PRODUCT.BUY_PRICE, 35), 1, 0)).as("< 35"),
-                        sum(decode(greatest(PRODUCT.BUY_PRICE, 36), least(PRODUCT.BUY_PRICE, 55), 1, 0)).as("36-55"),
-                        sum(decode(greatest(PRODUCT.BUY_PRICE, 56), least(PRODUCT.BUY_PRICE, 75), 1, 0)).as("56-75"),
-                        sum(decode(greatest(PRODUCT.BUY_PRICE, 76), least(PRODUCT.BUY_PRICE, 150), 1, 0)).as("76-150"))
-                        .from(PRODUCT)
-                        .groupBy(PRODUCT.PRODUCT_LINE)
+                ctx.select(field("pl"), 
+                        sum(field("t.a", Integer.class)).as("< 35"),
+                        sum(field("t.b", Integer.class)).as("36-55"),
+                        sum(field("t.c", Integer.class)).as("56-75"),
+                        sum(field("t.d", Integer.class)).as("76-150")).from(
+                        select(PRODUCT.PRODUCT_LINE.as("pl"),
+                                decode(greatest(PRODUCT.BUY_PRICE, 0), least(PRODUCT.BUY_PRICE, 35), 1, 0).as("a"),
+                                decode(greatest(PRODUCT.BUY_PRICE, 36), least(PRODUCT.BUY_PRICE, 55), 1, 0).as("b"),
+                                decode(greatest(PRODUCT.BUY_PRICE, 56), least(PRODUCT.BUY_PRICE, 75), 1, 0).as("c"),
+                                decode(greatest(PRODUCT.BUY_PRICE, 76), least(PRODUCT.BUY_PRICE, 150), 1, 0).as("d"))
+                                .from(PRODUCT)
+                                .groupBy(PRODUCT.PRODUCT_LINE, PRODUCT.BUY_PRICE).asTable("t"))
+                        .groupBy(field("t.pl"))
                         .fetch().format(1000));
 
         // DECODE AND DECODE
