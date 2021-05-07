@@ -12,9 +12,9 @@ import static jooq.generated.tables.Product.PRODUCT;
 import org.jooq.DSLContext;
 import org.jooq.DatePart;
 import org.jooq.Field;
-import static org.jooq.Nullability.NULL;
 import static org.jooq.impl.DSL.atan2;
 import static org.jooq.impl.DSL.cast;
+import static org.jooq.impl.DSL.castNull;
 import static org.jooq.impl.DSL.coalesce;
 import static org.jooq.impl.DSL.concat;
 import static org.jooq.impl.DSL.cos;
@@ -72,22 +72,24 @@ public class ClassicModelsRepository {
     ///////////////////////
     public void generalFunctionExamples() {
 
-        // COALESCE        
-        System.out.println(
-                ctx.select(DEPARTMENT.NAME, DEPARTMENT.OFFICE_CODE, DEPARTMENT.LOCAL_BUDGET,
-                        (DEPARTMENT.LOCAL_BUDGET.mul(2)).divide(100),
-                        coalesce(DEPARTMENT.LOCAL_BUDGET, 0).mul(2).divide(100).as("coalesce"))
-                        .from(DEPARTMENT)
-                        .fetch().format(1000));
+        // COALESCE          
+        ctx.select(DEPARTMENT.NAME, DEPARTMENT.OFFICE_CODE,
+                DEPARTMENT.CASH, DEPARTMENT.ACCOUNTS_RECEIVABLE, DEPARTMENT.INVENTORIES,
+                DEPARTMENT.ACCRUED_LIABILITIES, DEPARTMENT.ACCOUNTS_PAYABLE, DEPARTMENT.ST_BORROWING,
+                round(coalesce(DEPARTMENT.CASH, DEPARTMENT.ACCOUNTS_RECEIVABLE,
+                        DEPARTMENT.INVENTORIES, val(0)).mul(0.25), 2).as("deduction_profit"),
+                round(coalesce(DEPARTMENT.ACCRUED_LIABILITIES, DEPARTMENT.ACCOUNTS_PAYABLE,
+                        DEPARTMENT.ST_BORROWING, val(0)).mul(0.25), 2).as("deduction_expenses"))
+                .from(DEPARTMENT)
+                .fetch();
 
-        // DECODE
-        System.out.println(
-                ctx.select(DEPARTMENT.NAME, DEPARTMENT.OFFICE_CODE, DEPARTMENT.LOCAL_BUDGET,
-                        (DEPARTMENT.LOCAL_BUDGET.mul(2)).divide(100),
-                        decode(DEPARTMENT.LOCAL_BUDGET, NULL, 0, DEPARTMENT.LOCAL_BUDGET)
-                                .mul(2).divide(100).as("decode"))
-                        .from(DEPARTMENT)
-                        .fetch().format(1000));
+        // DECODE        
+        ctx.select(DEPARTMENT.NAME, DEPARTMENT.OFFICE_CODE, DEPARTMENT.LOCAL_BUDGET,
+                decode(DEPARTMENT.LOCAL_BUDGET,
+                        castNull(Double.class), 0, DEPARTMENT.LOCAL_BUDGET.mul(0.25))
+                        .mul(2).divide(100).as("financial index"))
+                .from(DEPARTMENT)
+                .fetch();
 
         // DECODE AND MULTIPLE VALUES
         System.out.println(
@@ -140,7 +142,7 @@ public class ClassicModelsRepository {
         System.out.println(
                 ctx.select(DEPARTMENT.NAME, DEPARTMENT.OFFICE_CODE,
                         DEPARTMENT.LOCAL_BUDGET, DEPARTMENT.PROFIT,
-                        decode(DEPARTMENT.LOCAL_BUDGET, NULL, DEPARTMENT.PROFIT,
+                        decode(DEPARTMENT.LOCAL_BUDGET, castNull(Double.class), DEPARTMENT.PROFIT,
                                 decode(sign(DEPARTMENT.PROFIT.minus(DEPARTMENT.LOCAL_BUDGET)),
                                         1, DEPARTMENT.PROFIT.minus(DEPARTMENT.LOCAL_BUDGET),
                                         0, DEPARTMENT.LOCAL_BUDGET.divide(2).mul(-1),
@@ -186,6 +188,17 @@ public class ClassicModelsRepository {
                         .from(OFFICE)
                         .fetch().format(1000));
 
+        // ((ACTUAL PROFIT ÷ FORECAST PROFIT) - 1) * 100, variance formula        
+        ctx.select(DEPARTMENT.NAME, DEPARTMENT.OFFICE_CODE,
+                DEPARTMENT.LOCAL_BUDGET, DEPARTMENT.FORECAST_PROFIT, DEPARTMENT.PROFIT,
+                round((DEPARTMENT.PROFIT.divide(DEPARTMENT.FORECAST_PROFIT)).minus(1d).mul(100), 2)
+                        .concat("%").as("no_nvl"),
+                round((nvl(DEPARTMENT.PROFIT, 0d).divide(
+                        nvl(DEPARTMENT.FORECAST_PROFIT, 10000d))).minus(1d).mul(100), 2)
+                        .concat("%").as("nvl"))
+                .from(DEPARTMENT)
+                .fetch();
+        
         // NVL2        
         ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME,
                 iif(EMPLOYEE.COMMISSION.isNull(),
