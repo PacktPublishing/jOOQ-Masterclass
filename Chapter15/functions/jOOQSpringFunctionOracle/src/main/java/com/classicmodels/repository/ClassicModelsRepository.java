@@ -77,9 +77,9 @@ public class ClassicModelsRepository {
                 DEPARTMENT.CASH, DEPARTMENT.ACCOUNTS_RECEIVABLE, DEPARTMENT.INVENTORIES,
                 DEPARTMENT.ACCRUED_LIABILITIES, DEPARTMENT.ACCOUNTS_PAYABLE, DEPARTMENT.ST_BORROWING,
                 round(coalesce(DEPARTMENT.CASH, DEPARTMENT.ACCOUNTS_RECEIVABLE,
-                        DEPARTMENT.INVENTORIES, val(0)).mul(0.25), 2).as("deduction_profit"),
+                        DEPARTMENT.INVENTORIES, val(0)).mul(0.25), 2).as("income_deduction"),
                 round(coalesce(DEPARTMENT.ACCRUED_LIABILITIES, DEPARTMENT.ACCOUNTS_PAYABLE,
-                        DEPARTMENT.ST_BORROWING, val(0)).mul(0.25), 2).as("deduction_expenses"))
+                        DEPARTMENT.ST_BORROWING, val(0)).mul(0.25), 2).as("expenses_deduction"))
                 .from(DEPARTMENT)
                 .fetch();
 
@@ -87,7 +87,7 @@ public class ClassicModelsRepository {
         ctx.select(DEPARTMENT.NAME, DEPARTMENT.OFFICE_CODE, DEPARTMENT.LOCAL_BUDGET,
                 decode(DEPARTMENT.LOCAL_BUDGET,
                         castNull(Double.class), 0, DEPARTMENT.LOCAL_BUDGET.mul(0.25))
-                        .mul(2).divide(100).as("financial index"))
+                        .mul(2).divide(100).as("financial_index"))
                 .from(DEPARTMENT)
                 .fetch();
 
@@ -103,7 +103,7 @@ public class ClassicModelsRepository {
 
         // DECODE AND ORDER BY
         String c = "N"; // input parameter (it may come from the database), 
-        //pay attention that ORDER BY cannot use indexes in this case      
+        // !!! pay attention that ORDER BY cannot use indexes in this case      
         ctx.select(DEPARTMENT.NAME, DEPARTMENT.LOCAL_BUDGET, DEPARTMENT.OFFICE_CODE)
                 .from(DEPARTMENT)
                 .orderBy(
@@ -124,12 +124,22 @@ public class ClassicModelsRepository {
                 .groupBy(field("T.D"))
                 .fetch();
 
-        // DECODE AND SUM        
+        // DECODE AND SUM             
         ctx.select(PRODUCT.PRODUCT_LINE,
                 sum(decode(greatest(PRODUCT.BUY_PRICE, 0), least(PRODUCT.BUY_PRICE, 35), 1, 0)).as("< 35"),
                 sum(decode(greatest(PRODUCT.BUY_PRICE, 36), least(PRODUCT.BUY_PRICE, 55), 1, 0)).as("36-55"),
                 sum(decode(greatest(PRODUCT.BUY_PRICE, 56), least(PRODUCT.BUY_PRICE, 75), 1, 0)).as("56-75"),
                 sum(decode(greatest(PRODUCT.BUY_PRICE, 76), least(PRODUCT.BUY_PRICE, 150), 1, 0)).as("76-150"))
+                .from(PRODUCT)
+                .groupBy(PRODUCT.PRODUCT_LINE)
+                .fetch();
+
+        // of course, you can write the same thing as here        
+        ctx.select(PRODUCT.PRODUCT_LINE,
+                count().filterWhere(PRODUCT.BUY_PRICE.gt(BigDecimal.ZERO).and(PRODUCT.BUY_PRICE.lt(BigDecimal.valueOf(35)))).as("< 35"),
+                count().filterWhere(PRODUCT.BUY_PRICE.gt(BigDecimal.valueOf(36)).and(PRODUCT.BUY_PRICE.lt(BigDecimal.valueOf(55)))).as("36-55"),
+                count().filterWhere(PRODUCT.BUY_PRICE.gt(BigDecimal.valueOf(56)).and(PRODUCT.BUY_PRICE.lt(BigDecimal.valueOf(75)))).as("56-75"),
+                count().filterWhere(PRODUCT.BUY_PRICE.gt(BigDecimal.valueOf(76)).and(PRODUCT.BUY_PRICE.lt(BigDecimal.valueOf(150)))).as("76-150"))
                 .from(PRODUCT)
                 .groupBy(PRODUCT.PRODUCT_LINE)
                 .fetch();
@@ -275,12 +285,12 @@ public class ClassicModelsRepository {
         // add an interval of 10 days to a date
         var dcd = ctx.select(date("2022-02-03"),
                 dateAdd(Date.valueOf("2022-02-03"), 10).as("after_10_days")).fetch();
-        System.out.println("After adding 10 days (java.sql.Date): " + dcd);
+        System.out.println("After adding 10 days (java.sql.Date):\n" + dcd);
 
         // add an interval of months to a date
         var mcd = ctx.select(date("2022-02-03"),
                 dateAdd(Date.valueOf("2022-02-03"), new YearToMonth(0, 3)).as("after_3_month")).fetch();
-        System.out.println("After adding 3 months (java.sql.Date): " + mcd);
+        System.out.println("After adding 3 months (java.sql.Date):\n" + mcd);
 
         // extract parts of a date
         int day11 = ctx.select(dayOfWeek(Date.valueOf("2021-05-06"))).fetchOneInto(Integer.class);

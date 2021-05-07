@@ -75,9 +75,9 @@ public class ClassicModelsRepository {
                 DEPARTMENT.CASH, DEPARTMENT.ACCOUNTS_RECEIVABLE, DEPARTMENT.INVENTORIES,
                 DEPARTMENT.ACCRUED_LIABILITIES, DEPARTMENT.ACCOUNTS_PAYABLE, DEPARTMENT.ST_BORROWING,
                 round(coalesce(DEPARTMENT.CASH, DEPARTMENT.ACCOUNTS_RECEIVABLE,
-                        DEPARTMENT.INVENTORIES, val(0)).mul(0.25), 2).as("deduction_profit"),
+                        DEPARTMENT.INVENTORIES, val(0)).mul(0.25), 2).as("income_deduction"),
                 round(coalesce(DEPARTMENT.ACCRUED_LIABILITIES, DEPARTMENT.ACCOUNTS_PAYABLE,
-                        DEPARTMENT.ST_BORROWING, val(0)).mul(0.25), 2).as("deduction_expenses"))
+                        DEPARTMENT.ST_BORROWING, val(0)).mul(0.25), 2).as("expenses_deduction"))
                 .from(DEPARTMENT)
                 .fetch();
 
@@ -85,7 +85,7 @@ public class ClassicModelsRepository {
         ctx.select(DEPARTMENT.NAME, DEPARTMENT.OFFICE_CODE, DEPARTMENT.LOCAL_BUDGET,
                 decode(DEPARTMENT.LOCAL_BUDGET,
                         castNull(Double.class), 0, DEPARTMENT.LOCAL_BUDGET.mul(0.25))
-                        .mul(2).divide(100).as("financial index"))
+                        .mul(2).divide(100).as("financial_index"))
                 .from(DEPARTMENT)
                 .fetch();
 
@@ -279,12 +279,12 @@ public class ClassicModelsRepository {
         // add an interval of 10 days to a date
         var dcd = ctx.select(date("2022-02-03"),
                 dateAdd(Date.valueOf("2022-02-03"), 10).as("after_10_days")).fetch();
-        System.out.println("After adding 10 days (java.sql.Date): " + dcd);
+        System.out.println("After adding 10 days (java.sql.Date):\n" + dcd);
 
         // add an interval of months to a date
         var mcd = ctx.select(date("2022-02-03"),
                 dateAdd(Date.valueOf("2022-02-03"), new YearToMonth(0, 3)).as("after_3_month")).fetch();
-        System.out.println("After adding 3 months (java.sql.Date): " + mcd);
+        System.out.println("After adding 3 months (java.sql.Date):\n" + mcd);
 
         // extract parts of a date
         int day11 = ctx.select(dayOfWeek(Date.valueOf("2021-05-06"))).fetchOneInto(Integer.class);
