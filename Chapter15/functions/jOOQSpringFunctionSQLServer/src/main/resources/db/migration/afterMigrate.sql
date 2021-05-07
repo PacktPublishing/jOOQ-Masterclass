@@ -53,37 +53,37 @@ end catch;
 
 SET IDENTITY_INSERT [department] ON
 begin try
-insert into [department] ([department_id],[name],[phone],[code],[office_code],[topic],[local_budget],[profit]) values 
+insert into [department] ([department_id],[name],[phone],[code],[office_code],[topic],[local_budget],[profit],[forecast_profit],[cash],[accounts_receivable],[inventories],[accounts_payable],[st_borrowing],[accrued_liabilities]) values 
 
-('1','Advertising','-int 4782','1333','1','publicity, promotion', NULL, NULL),
+('1','Advertising','-int 4782','1333','1','publicity, promotion', NULL, NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 
-('2','Sales','-int 41233','1441','1', 'commerce, trade, sellout, transaction', 650000, 900000),
+('2','Sales','-int 41233','1441','1', 'commerce, trade, sellout, transaction', 650000, 900000, 800000,20000,NULL,10000,NULL,NULL,NULL),
 
-('3','Accounting','-int 8233','2311','2', 'monetary, business', NULL, 450000),
+('3','Accounting','-int 8233','2311','2', 'monetary, business', NULL, 450000, NULL,25000,NULL,NULL,NULL,NULL,NULL),
 
-('4','Finance','-int 4421','3229','3', 'commerce, fiscal, monetary, business', 120000, 90000), 
+('4','Finance','-int 4421','3229','3', 'commerce, fiscal, monetary, business', 120000, 90000, NULL,NULL,NULL,NULL,40000,10000,NULL), 
 
-('5','Sales','-int 34443','6554','2', 'commerce, sellout, transaction', 345000, 350000),
+('5','Sales','-int 34443','6554','2', 'commerce, sellout, transaction', 345000, 350000, 450000,11000,25000,5000,10000,85000,12000),
 
-('6','Sales','-int 7664','1234','4', NULL, NULL, 100000),
+('6','Sales','-int 7664','1234','4', NULL, NULL, 100000, NULL,NULL,NULL,NULL,50000,NULL,NULL),
 
-('7','Marketing','-int 1266','9090','4', 'market, research, advertising', NULL, 500000),
+('7','Marketing','-int 1266','9090','4', 'market, research, advertising', NULL, 500000, 250000,NULL,11000,NULL,5000,NULL,1000),
 
-('8','Marketing','-int 4543','4544','5', 'market, research, advertising', NULL, 430000),
+('8','Marketing','-int 4543','4544','5', 'market, research, advertising', NULL, 430000, 900000,NULL,NULL,NULL,NULL,NULL,NULL),
 
-('9','Assembly','-int 8777','5455','6', 'gathering, construction, joining', 500000, 500000),
+('9','Assembly','-int 8777','5455','6', 'gathering, construction, joining', 500000, 500000, 450000,NULL,NULL,NULL,7000,NULL,NULL),
 
-('10','Accounting','-int 6765','4555','6', 'monetary, business', NULL, NULL),
+('10','Accounting','-int 6765','4555','6', 'monetary, business', NULL, NULL, 100000,10000,NULL,NULL,4000,NULL,NULL),
 
-('11','Finance','-int 1111','7876','7', 'commerce, fiscal, monetary, business', 450000, NULL), 
+('11','Finance','-int 1111','7876','7', 'commerce, fiscal, monetary, business', 450000, NULL, 450000,NULL,NULL,NULL,NULL,NULL,NULL), 
 
-('12','Logistics','-int 4421','3222','8', 'facilities, supplies', NULL, 120000), 
+('12','Logistics','-int 4421','3222','8', 'facilities, supplies', NULL, 120000, 300000,10000,NULL,11000,NULL,16000,NULL), 
 
-('13','Logistics','-int 7453','7884','9', 'facilities, supplies', NULL, 80000), 
+('13','Logistics','-int 7453','7884','9', 'facilities, supplies', NULL, 80000, 100000,9000,NULL,6000,2300,4400,NULL), 
 
-('14','Logistics','-int 3433','6777','12','facilities, supplies', 235000, 233000), 
+('14','Logistics','-int 3433','6777','12','facilities, supplies', 235000, 233000, NULL,NULL,NULL,1000,NULL,NULL,9000), 
 
-('15','HR','-int 2323','7888','12', 'people, interview, hiring', NULL, 120000)
+('15','HR','-int 2323','7888','12', 'people, interview, hiring', NULL, 120000, 120000,NULL,544,NULL,NULL,2300,NULL)
 end try
 begin catch
 end catch;
