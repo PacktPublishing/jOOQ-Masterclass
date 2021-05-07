@@ -103,7 +103,7 @@ public class ClassicModelsRepository {
 
         // DECODE AND ORDER BY
         String c = "N"; // input parameter (it may come from the database), 
-        //pay attention that ORDER BY cannot use indexes in this case      
+        // !!! pay attention that ORDER BY cannot use indexes in this case      
         ctx.select(DEPARTMENT.NAME, DEPARTMENT.LOCAL_BUDGET, DEPARTMENT.OFFICE_CODE)
                 .from(DEPARTMENT)
                 .orderBy(
@@ -131,6 +131,16 @@ public class ClassicModelsRepository {
                 sum(decode(greatest(PRODUCT.BUY_PRICE, 36), least(PRODUCT.BUY_PRICE, 55), 1, 0)).as("36-55"),
                 sum(decode(greatest(PRODUCT.BUY_PRICE, 56), least(PRODUCT.BUY_PRICE, 75), 1, 0)).as("56-75"),
                 sum(decode(greatest(PRODUCT.BUY_PRICE, 76), least(PRODUCT.BUY_PRICE, 150), 1, 0)).as("76-150"))
+                .from(PRODUCT)
+                .groupBy(PRODUCT.PRODUCT_LINE)
+                .fetch();
+        
+        // of course, you can write the same thing as here        
+        ctx.select(PRODUCT.PRODUCT_LINE,
+                count().filterWhere(PRODUCT.BUY_PRICE.gt(BigDecimal.ZERO).and(PRODUCT.BUY_PRICE.lt(BigDecimal.valueOf(35)))).as("< 35"),
+                count().filterWhere(PRODUCT.BUY_PRICE.gt(BigDecimal.valueOf(36)).and(PRODUCT.BUY_PRICE.lt(BigDecimal.valueOf(55)))).as("36-55"),
+                count().filterWhere(PRODUCT.BUY_PRICE.gt(BigDecimal.valueOf(56)).and(PRODUCT.BUY_PRICE.lt(BigDecimal.valueOf(75)))).as("56-75"),
+                count().filterWhere(PRODUCT.BUY_PRICE.gt(BigDecimal.valueOf(76)).and(PRODUCT.BUY_PRICE.lt(BigDecimal.valueOf(150)))).as("76-150"))
                 .from(PRODUCT)
                 .groupBy(PRODUCT.PRODUCT_LINE)
                 .fetch();
