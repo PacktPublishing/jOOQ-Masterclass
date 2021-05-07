@@ -72,33 +72,34 @@ public class ClassicModelsRepository {
     ///////////////////////
     public void generalFunctionExamples() {
 
-        // COALESCE        
-        System.out.println(
-                ctx.select(DEPARTMENT.NAME, DEPARTMENT.OFFICE_CODE, DEPARTMENT.LOCAL_BUDGET,
-                        (DEPARTMENT.LOCAL_BUDGET.mul(2)).divide(100),
-                        coalesce(DEPARTMENT.LOCAL_BUDGET, 0).mul(2).divide(100).as("coalesce"))
-                        .from(DEPARTMENT)
-                        .fetch().format(1000));
+        // COALESCE          
+        ctx.select(DEPARTMENT.NAME, DEPARTMENT.OFFICE_CODE,
+                DEPARTMENT.CASH, DEPARTMENT.ACCOUNTS_RECEIVABLE, DEPARTMENT.INVENTORIES,
+                DEPARTMENT.ACCRUED_LIABILITIES, DEPARTMENT.ACCOUNTS_PAYABLE, DEPARTMENT.ST_BORROWING,
+                round(coalesce(DEPARTMENT.CASH, DEPARTMENT.ACCOUNTS_RECEIVABLE,
+                        DEPARTMENT.INVENTORIES, val(0)).mul(0.25), 2).as("deduction_profit"),
+                round(coalesce(DEPARTMENT.ACCRUED_LIABILITIES, DEPARTMENT.ACCOUNTS_PAYABLE,
+                        DEPARTMENT.ST_BORROWING, val(0)).mul(0.25), 2).as("deduction_expenses"))
+                .from(DEPARTMENT)
+                .fetch();
 
-        // DECODE
-        System.out.println(
-                ctx.select(DEPARTMENT.NAME, DEPARTMENT.OFFICE_CODE, DEPARTMENT.LOCAL_BUDGET,
-                        (DEPARTMENT.LOCAL_BUDGET.mul(2)).divide(100),
-                        decode(DEPARTMENT.LOCAL_BUDGET, castNull(Integer.class), 0, DEPARTMENT.LOCAL_BUDGET)
-                                .mul(2).divide(100).as("decode"))
-                        .from(DEPARTMENT)
-                        .fetch().format(1000));
+        // DECODE        
+        ctx.select(DEPARTMENT.NAME, DEPARTMENT.OFFICE_CODE, DEPARTMENT.LOCAL_BUDGET,
+                decode(DEPARTMENT.LOCAL_BUDGET,
+                        castNull(Double.class), 0, DEPARTMENT.LOCAL_BUDGET.mul(0.25))
+                        .mul(2).divide(100).as("financial index"))
+                .from(DEPARTMENT)
+                .fetch();
 
-        // DECODE AND MULTIPLE VALUES
-        System.out.println(
-                ctx.select(DEPARTMENT.NAME, DEPARTMENT.OFFICE_CODE, DEPARTMENT.LOCAL_BUDGET,
-                        decode(DEPARTMENT.NAME,
-                                "Advertising", "Publicity and promotion",
-                                "Accounting", "Monetary and business",
-                                "Logistics", "Facilities and supplies",
-                                DEPARTMENT.NAME).concat(" department").as("description"))
-                        .from(DEPARTMENT)
-                        .fetch().format(1000));
+        // DECODE AND MULTIPLE VALUES        
+        ctx.select(DEPARTMENT.NAME, DEPARTMENT.OFFICE_CODE, DEPARTMENT.LOCAL_BUDGET,
+                decode(DEPARTMENT.NAME,
+                        "Advertising", "Publicity and promotion",
+                        "Accounting", "Monetary and business",
+                        "Logistics", "Facilities and supplies",
+                        DEPARTMENT.NAME).concat(" department").as("description"))
+                .from(DEPARTMENT)
+                .fetch();
 
         // DECODE AND ORDER BY
         String c = "N"; // input parameter (it may come from the database), 
@@ -112,40 +113,37 @@ public class ClassicModelsRepository {
                                 "C", DEPARTMENT.CODE))
                 .fetch();
 
-        // DECODE AND GROUP BY
-        System.out.println(
-                ctx.select(field("T.D"), count()).from(
-                        select(decode(sign(PRODUCT.BUY_PRICE.minus(PRODUCT.MSRP.divide(2))),
-                                1, "Buy price larger than half of MSRP",
-                                0, "Buy price larger than half of MSRP",
-                                -1, "Buy price smaller than half of MSRP").as("D"))
-                                .from(PRODUCT)
-                                .groupBy(PRODUCT.BUY_PRICE, PRODUCT.MSRP).asTable("T"))
-                        .groupBy(field("T.D"))
-                        .fetch().format(10000));
-
-        // DECODE AND SUM
-        System.out.println(
-                ctx.select(PRODUCT.PRODUCT_LINE,
-                        sum(decode(greatest(PRODUCT.BUY_PRICE, 0), least(PRODUCT.BUY_PRICE, 35), 1, 0)).as("< 35"),
-                        sum(decode(greatest(PRODUCT.BUY_PRICE, 36), least(PRODUCT.BUY_PRICE, 55), 1, 0)).as("36-55"),
-                        sum(decode(greatest(PRODUCT.BUY_PRICE, 56), least(PRODUCT.BUY_PRICE, 75), 1, 0)).as("56-75"),
-                        sum(decode(greatest(PRODUCT.BUY_PRICE, 76), least(PRODUCT.BUY_PRICE, 150), 1, 0)).as("76-150"))
+        // DECODE AND GROUP BY        
+        ctx.select(field("T.D"), count()).from(
+                select(decode(sign(PRODUCT.BUY_PRICE.minus(PRODUCT.MSRP.divide(2))),
+                        1, "Buy price larger than half of MSRP",
+                        0, "Buy price larger than half of MSRP",
+                        -1, "Buy price smaller than half of MSRP").as("D"))
                         .from(PRODUCT)
-                        .groupBy(PRODUCT.PRODUCT_LINE)
-                        .fetch().format(1000));
+                        .groupBy(PRODUCT.BUY_PRICE, PRODUCT.MSRP).asTable("T"))
+                .groupBy(field("T.D"))
+                .fetch();
 
-        // DECODE AND DECODE
-        System.out.println(
-                ctx.select(DEPARTMENT.NAME, DEPARTMENT.OFFICE_CODE,
-                        DEPARTMENT.LOCAL_BUDGET, DEPARTMENT.PROFIT,
-                        decode(DEPARTMENT.LOCAL_BUDGET, castNull(Integer.class), DEPARTMENT.PROFIT,
-                                decode(sign(DEPARTMENT.PROFIT.minus(DEPARTMENT.LOCAL_BUDGET)),
-                                        1, DEPARTMENT.PROFIT.minus(DEPARTMENT.LOCAL_BUDGET),
-                                        0, DEPARTMENT.LOCAL_BUDGET.divide(2).mul(-1),
-                                        -1, DEPARTMENT.LOCAL_BUDGET.mul(-1))).as("profit_balance"))
-                        .from(DEPARTMENT)
-                        .fetch().format(1000));
+        // DECODE AND SUM        
+        ctx.select(PRODUCT.PRODUCT_LINE,
+                sum(decode(greatest(PRODUCT.BUY_PRICE, 0), least(PRODUCT.BUY_PRICE, 35), 1, 0)).as("< 35"),
+                sum(decode(greatest(PRODUCT.BUY_PRICE, 36), least(PRODUCT.BUY_PRICE, 55), 1, 0)).as("36-55"),
+                sum(decode(greatest(PRODUCT.BUY_PRICE, 56), least(PRODUCT.BUY_PRICE, 75), 1, 0)).as("56-75"),
+                sum(decode(greatest(PRODUCT.BUY_PRICE, 76), least(PRODUCT.BUY_PRICE, 150), 1, 0)).as("76-150"))
+                .from(PRODUCT)
+                .groupBy(PRODUCT.PRODUCT_LINE)
+                .fetch();
+
+        // DECODE AND DECODE        
+        ctx.select(DEPARTMENT.NAME, DEPARTMENT.OFFICE_CODE,
+                DEPARTMENT.LOCAL_BUDGET, DEPARTMENT.PROFIT,
+                decode(DEPARTMENT.LOCAL_BUDGET, castNull(Integer.class), DEPARTMENT.PROFIT,
+                        decode(sign(DEPARTMENT.PROFIT.minus(DEPARTMENT.LOCAL_BUDGET)),
+                                1, DEPARTMENT.PROFIT.minus(DEPARTMENT.LOCAL_BUDGET),
+                                0, DEPARTMENT.LOCAL_BUDGET.divide(2).mul(-1),
+                                -1, DEPARTMENT.LOCAL_BUDGET.mul(-1))).as("profit_balance"))
+                .from(DEPARTMENT)
+                .fetch();
 
         // IIF
         ctx.select(ORDERDETAIL.PRODUCT_ID, ORDERDETAIL.QUANTITY_ORDERED,
@@ -153,37 +151,46 @@ public class ClassicModelsRepository {
                 .from(ORDERDETAIL)
                 .fetch();
 
-        System.out.println(
-                ctx.select(
-                        iif(PRODUCT.PRODUCT_SCALE.eq("1:10"), "A",
-                                iif(PRODUCT.PRODUCT_SCALE.eq("1:12"), "B",
-                                        iif(PRODUCT.PRODUCT_SCALE.eq("1:18"), "C",
-                                                iif(PRODUCT.PRODUCT_SCALE.eq("1:24"), "D",
-                                                        iif(PRODUCT.PRODUCT_SCALE.eq("1:32"), "E",
-                                                                iif(PRODUCT.PRODUCT_SCALE.eq("1:50"), "F",
-                                                                        iif(PRODUCT.PRODUCT_SCALE.eq("1:72"), "G",
-                                                                                iif(PRODUCT.PRODUCT_SCALE.eq("1:700"), "H", "N/A")
-                                                                        )
+        ctx.select(
+                iif(PRODUCT.PRODUCT_SCALE.eq("1:10"), "A",
+                        iif(PRODUCT.PRODUCT_SCALE.eq("1:12"), "B",
+                                iif(PRODUCT.PRODUCT_SCALE.eq("1:18"), "C",
+                                        iif(PRODUCT.PRODUCT_SCALE.eq("1:24"), "D",
+                                                iif(PRODUCT.PRODUCT_SCALE.eq("1:32"), "E",
+                                                        iif(PRODUCT.PRODUCT_SCALE.eq("1:50"), "F",
+                                                                iif(PRODUCT.PRODUCT_SCALE.eq("1:72"), "G",
+                                                                        iif(PRODUCT.PRODUCT_SCALE.eq("1:700"), "H", "N/A")
                                                                 )
                                                         )
                                                 )
                                         )
                                 )
-                        ).as("class_scale"), count())
-                        .from(PRODUCT)
-                        .groupBy(PRODUCT.PRODUCT_SCALE)
-                        .fetch().format(1000));
+                        )
+                ).as("class_scale"), count())
+                .from(PRODUCT)
+                .groupBy(PRODUCT.PRODUCT_SCALE)
+                .fetch();
 
         // NULLIF
         ctx.selectFrom(OFFICE)
                 .where(nullif(OFFICE.COUNTRY, "").isNull())
                 .fetch();
 
-        // NVL
-        System.out.println(
-                ctx.select(OFFICE.OFFICE_CODE, nvl(OFFICE.CITY, "N/A"), nvl(OFFICE.COUNTRY, "N/A"))
-                        .from(OFFICE)
-                        .fetch().format(1000));
+        // NVL        
+        ctx.select(OFFICE.OFFICE_CODE, nvl(OFFICE.CITY, "N/A"), nvl(OFFICE.COUNTRY, "N/A"))
+                .from(OFFICE)
+                .fetch();
+
+        // ((ACTUAL PROFIT ÷ FORECAST PROFIT) - 1) * 100, variance formula        
+        ctx.select(DEPARTMENT.NAME, DEPARTMENT.OFFICE_CODE,
+                DEPARTMENT.LOCAL_BUDGET, DEPARTMENT.FORECAST_PROFIT, DEPARTMENT.PROFIT,
+                round((DEPARTMENT.PROFIT.divide(DEPARTMENT.FORECAST_PROFIT)).minus(1d).mul(100), 2)
+                        .concat("%").as("no_nvl"),
+                round((nvl(DEPARTMENT.PROFIT, 0d).divide(
+                        nvl(DEPARTMENT.FORECAST_PROFIT, 10000d))).minus(1d).mul(100), 2)
+                        .concat("%").as("nvl"))
+                .from(DEPARTMENT)
+                .fetch();
 
         // NVL2        
         ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME,
@@ -196,7 +203,7 @@ public class ClassicModelsRepository {
                 .from(EMPLOYEE)
                 .fetch();
     }
-    
+
     ///////////////////////
     // Numeric Functions //
     ///////////////////////
@@ -253,7 +260,7 @@ public class ClassicModelsRepository {
     // Datetime Functions //
     ////////////////////////
     public void dateTimeFunctionsExample() {
-        
+
         // get current date
         Date cd = ctx.select(currentDate()).fetchOneInto(Date.class);
         LocalDate ld = ctx.select(currentLocalDate()).fetchOneInto(LocalDate.class);
@@ -304,7 +311,7 @@ public class ClassicModelsRepository {
         var ldcd = ctx.select(localDateAdd(LocalDate.parse("2023-05-08"), 3)
                 .as("after_3_days")).fetch();
         System.out.println("After adding 3 days (java.sql.Date):\n" + ldcd);
-        
+
         // Parse a string value to a java.time.LocalDateTime
         LocalDateTime fd = ctx.select(toLocalDateTime("20210501170000",
                 "YYYYMMDDHH24MISS")).fetchOneInto(LocalDateTime.class);

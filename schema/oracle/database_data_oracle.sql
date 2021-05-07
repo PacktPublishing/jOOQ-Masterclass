@@ -51,37 +51,37 @@ select '15','Springfield','+1 0009 9000 777','155 Market Place','Suite 107','MA'
 
 /*Data for the table `department` */
 
-insert /*+ ignore_row_on_dupkey_index(department(department_id)) */ into department(department_id,name,phone,code,office_code,topic,local_budget,profit) 
+insert /*+ ignore_row_on_dupkey_index(department(department_id)) */ into department(department_id,name,phone,code,office_code,topic,local_budget,profit,forecast_profit,cash,accounts_receivable,inventories,accounts_payable,st_borrowing,accrued_liabilities) 
 
-select '1','Advertising','-int 4782','1333','1',topicArr('publicity', 'promotion'), NULL, NULL from dual union all
+select '1','Advertising','-int 4782','1333','1',topicArr('publicity', 'promotion'), NULL, NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL from dual union all
 
-select '2','Sales','-int 41233','1441','1', topicArr('commerce', 'trade', 'sellout', 'transaction'), 650000, 900000 from dual union all
+select '2','Sales','-int 41233','1441','1', topicArr('commerce', 'trade', 'sellout', 'transaction'), 650000, 900000, 800000,20000,NULL,10000,NULL,NULL,NULL from dual union all
 
-select '3','Accounting','-int 8233','2311','2', topicArr('monetary', 'business'), NULL, 450000 from dual union all
+select '3','Accounting','-int 8233','2311','2', topicArr('monetary', 'business'), NULL, 450000, NULL,25000,NULL,NULL,NULL,NULL,NULL from dual union all
 
-select '4','Finance','-int 4421','3229','3', topicArr('commerce', 'fiscal', 'monetary', 'business'), 120000, 90000 from dual union all
+select '4','Finance','-int 4421','3229','3', topicArr('commerce', 'fiscal', 'monetary', 'business'), 120000, 90000, NULL,NULL,NULL,NULL,40000,10000,NULL from dual union all
 
-select '5','Sales','-int 34443','6554','2', topicArr('commerce', 'sellout', 'transaction'), 345000, 350000 from dual union all
+select '5','Sales','-int 34443','6554','2', topicArr('commerce', 'sellout', 'transaction'), 345000, 350000, 450000,11000,25000,5000,10000,85000,12000 from dual union all
 
-select '6','Sales','-int 7664','1234','4', NULL, NULL, 100000 from dual union all
+select '6','Sales','-int 7664','1234','4', NULL, NULL, 100000, NULL,NULL,NULL,NULL,50000,NULL,NULL from dual union all
 
-select '7','Marketing','-int 1266','9090','4', topicArr('market', 'research', 'advertising'), NULL, 500000 from dual union all
+select '7','Marketing','-int 1266','9090','4', topicArr('market', 'research', 'advertising'), NULL, 500000, 250000,NULL,11000,NULL,5000,NULL,1000 from dual union all
 
-select '8','Marketing','-int 4543','4544','5', topicArr('market', 'research', 'advertising'), NULL,430000 from dual union all
+select '8','Marketing','-int 4543','4544','5', topicArr('market', 'research', 'advertising'), NULL,430000, 900000,NULL,NULL,NULL,NULL,NULL,NULL from dual union all
 
-select '9','Assembly','-int 8777','5455','6', topicArr('gathering', 'construction', 'joining'), 500000, 500000 from dual union all
+select '9','Assembly','-int 8777','5455','6', topicArr('gathering', 'construction', 'joining'), 500000, 500000, 450000,NULL,NULL,NULL,7000,NULL,NULL from dual union all
 
-select '10','Accounting','-int 6765','4555','6', topicArr('monetary', 'business'),NULL,NULL from dual union all
+select '10','Accounting','-int 6765','4555','6', topicArr('monetary', 'business'),NULL,NULL, 100000,10000,NULL,NULL,4000,NULL,NULL from dual union all
 
-select '11','Finance','-int 1111','7876','7', topicArr('commerce', 'fiscal', 'monetary', 'business'), 450000, NULL from dual union all
+select '11','Finance','-int 1111','7876','7', topicArr('commerce', 'fiscal', 'monetary', 'business'), 450000, NULL, 450000,NULL,NULL,NULL,NULL,NULL,NULL from dual union all
 
-select '12','Logistics','-int 4421','3222','8', topicArr('facilities', 'supplies'),NULL,120000 from dual union all
+select '12','Logistics','-int 4421','3222','8', topicArr('facilities', 'supplies'),NULL,120000, 300000,10000,NULL,11000,NULL,16000,NULL from dual union all
 
-select '13','Logistics','-int 7453','7884','9', topicArr('facilities', 'supplies'), NULL, 80000 from dual union all
+select '13','Logistics','-int 7453','7884','9', topicArr('facilities', 'supplies'), NULL, 80000, 100000,9000,NULL,6000,2300,4400,NULL from dual union all
 
-select '14','Logistics','-int 3433','6777','12',topicArr('facilities', 'supplies'), 235000, 233000 from dual union all
+select '14','Logistics','-int 3433','6777','12',topicArr('facilities', 'supplies'), 235000, 233000, NULL,NULL,NULL,1000,NULL,NULL,9000 from dual union all
 
-select '15','HR','-int 2323','7888','12', topicArr('people', 'interview', 'hiring'), NULL, 120000 from dual;
+select '15','HR','-int 2323','7888','12', topicArr('people', 'interview', 'hiring'), NULL, 120000, 120000,NULL,544,NULL,NULL,2300,NULL from dual;
 
 /*Data for the table `manager` */
 
