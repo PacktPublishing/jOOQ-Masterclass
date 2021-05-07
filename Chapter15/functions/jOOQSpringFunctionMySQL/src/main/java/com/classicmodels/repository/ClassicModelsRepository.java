@@ -66,8 +66,7 @@ public class ClassicModelsRepository {
     ///////////////////////
     // General Functions //
     ///////////////////////
-    
-    public void coalesceDecodeIif() {
+    public void generalFunctionExamples() {
 
         // COALESCE        
         System.out.println(
@@ -193,11 +192,13 @@ public class ClassicModelsRepository {
                         EMPLOYEE.SALARY.plus(EMPLOYEE.COMMISSION), EMPLOYEE.SALARY).as("nvl2"))
                 .from(EMPLOYEE)
                 .fetch();
+    }
 
-        ///////////////////////
-        // Numeric Functions //
-        ///////////////////////
-        
+    ///////////////////////
+    // Numeric Functions //
+    ///////////////////////
+    public void numericFunctionsExamples() {
+
         // Fibonacci
         int n = 15;
 
@@ -230,21 +231,25 @@ public class ClassicModelsRepository {
         ctx.select().from(values(row(val(6371d).mul(val(2d)
                 .mul(atan2(sqrt(a), sqrt(val(1d).minus(a))))))))
                 .fetch();
+    }
 
-        //////////////////////
-        // String Functions //
-        //////////////////////
-        
+    //////////////////////
+    // String Functions //
+    //////////////////////
+    public void stringFunctionsExample() {
+
         ctx.select(concat(upper(EMPLOYEE.FIRST_NAME), space(1),
                 substring(EMPLOYEE.LAST_NAME, 1, 1).concat(". ("),
                 lower(EMPLOYEE.JOB_TITLE),
                 rpad(val(")"), 4, '.')).as("employee"))
                 .from(EMPLOYEE)
                 .fetch();
+    }
 
-        ////////////////////////
-        // Datetime Functions //
-        ////////////////////////
+    ////////////////////////
+    // Datetime Functions //
+    ////////////////////////
+    public void dateTimeFunctionsExample() {
         
         // get current date
         Date cd = ctx.select(currentDate()).fetchOneInto(Date.class);
@@ -295,6 +300,6 @@ public class ClassicModelsRepository {
         // add 3 days to a LocalDate       
         var ldcd = ctx.select(localDateAdd(LocalDate.parse("2023-05-08"), 3)
                 .as("after_3_days")).fetch();
-        System.out.println("After adding 3 days (java.sql.Date): " + ldcd);                
+        System.out.println("After adding 3 days (java.sql.Date):\n" + ldcd);
     }
 }
