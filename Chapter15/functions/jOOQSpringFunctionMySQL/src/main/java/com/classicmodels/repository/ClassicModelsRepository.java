@@ -83,7 +83,7 @@ public class ClassicModelsRepository {
         ctx.select(DEPARTMENT.NAME, DEPARTMENT.OFFICE_CODE, DEPARTMENT.LOCAL_BUDGET,
                 decode(DEPARTMENT.LOCAL_BUDGET,
                         castNull(Double.class), 0, DEPARTMENT.LOCAL_BUDGET.mul(0.25))
-                        .mul(2).divide(100).as("financial index"))
+                        .mul(2).divide(100).as("financial_index"))
                 .from(DEPARTMENT)
                 .fetch();
 
