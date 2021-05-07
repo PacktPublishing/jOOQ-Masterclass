@@ -91,16 +91,15 @@ public class ClassicModelsRepository {
                 .from(DEPARTMENT)
                 .fetch();
 
-        // DECODE AND MULTIPLE VALUES
-        System.out.println(
-                ctx.select(DEPARTMENT.NAME, DEPARTMENT.OFFICE_CODE, DEPARTMENT.LOCAL_BUDGET,
-                        decode(DEPARTMENT.NAME,
-                                "Advertising", "Publicity and promotion",
-                                "Accounting", "Monetary and business",
-                                "Logistics", "Facilities and supplies",
-                                DEPARTMENT.NAME).concat(" department").as("description"))
-                        .from(DEPARTMENT)
-                        .fetch().format(1000));
+        // DECODE AND MULTIPLE VALUES        
+        ctx.select(DEPARTMENT.NAME, DEPARTMENT.OFFICE_CODE, DEPARTMENT.LOCAL_BUDGET,
+                decode(DEPARTMENT.NAME,
+                        "Advertising", "Publicity and promotion",
+                        "Accounting", "Monetary and business",
+                        "Logistics", "Facilities and supplies",
+                        DEPARTMENT.NAME).concat(" department").as("description"))
+                .from(DEPARTMENT)
+                .fetch();
 
         // DECODE AND ORDER BY
         String c = "N"; // input parameter (it may come from the database), 
@@ -114,41 +113,38 @@ public class ClassicModelsRepository {
                                 "C", DEPARTMENT.CODE.cast(String.class)))
                 .fetch();
 
-        // DECODE AND GROUP BY
-        System.out.println(
-                ctx.select(decode(sign(PRODUCT.BUY_PRICE.minus(PRODUCT.MSRP.divide(2))),
+        // DECODE AND GROUP BY        
+        ctx.select(decode(sign(PRODUCT.BUY_PRICE.minus(PRODUCT.MSRP.divide(2))),
+                1, "Buy price larger than half of MSRP",
+                0, "Buy price larger than half of MSRP",
+                -1, "Buy price smaller than half of MSRP"), count())
+                .from(PRODUCT)
+                .groupBy(decode(sign(PRODUCT.BUY_PRICE.minus(PRODUCT.MSRP.divide(2))),
                         1, "Buy price larger than half of MSRP",
                         0, "Buy price larger than half of MSRP",
-                        -1, "Buy price smaller than half of MSRP"), count())
-                        .from(PRODUCT)
-                        .groupBy(decode(sign(PRODUCT.BUY_PRICE.minus(PRODUCT.MSRP.divide(2))),
-                                1, "Buy price larger than half of MSRP",
-                                0, "Buy price larger than half of MSRP",
-                                -1, "Buy price smaller than half of MSRP"), PRODUCT.BUY_PRICE, PRODUCT.MSRP)
-                        .fetch().format(10000));
+                        -1, "Buy price smaller than half of MSRP"), PRODUCT.BUY_PRICE, PRODUCT.MSRP)
+                .fetch();
 
-        // DECODE AND SUM
-        System.out.println(
-                ctx.select(PRODUCT.PRODUCT_LINE,
-                        sum(decode(greatest(PRODUCT.BUY_PRICE, 0), least(PRODUCT.BUY_PRICE, 35), 1, 0)).as("< 35"),
-                        sum(decode(greatest(PRODUCT.BUY_PRICE, 36), least(PRODUCT.BUY_PRICE, 55), 1, 0)).as("36-55"),
-                        sum(decode(greatest(PRODUCT.BUY_PRICE, 56), least(PRODUCT.BUY_PRICE, 75), 1, 0)).as("56-75"),
-                        sum(decode(greatest(PRODUCT.BUY_PRICE, 76), least(PRODUCT.BUY_PRICE, 150), 1, 0)).as("76-150"))
-                        .from(PRODUCT)
-                        .groupBy(PRODUCT.PRODUCT_LINE)
-                        .fetch().format(1000));
+        // DECODE AND SUM        
+        ctx.select(PRODUCT.PRODUCT_LINE,
+                sum(decode(greatest(PRODUCT.BUY_PRICE, 0), least(PRODUCT.BUY_PRICE, 35), 1, 0)).as("< 35"),
+                sum(decode(greatest(PRODUCT.BUY_PRICE, 36), least(PRODUCT.BUY_PRICE, 55), 1, 0)).as("36-55"),
+                sum(decode(greatest(PRODUCT.BUY_PRICE, 56), least(PRODUCT.BUY_PRICE, 75), 1, 0)).as("56-75"),
+                sum(decode(greatest(PRODUCT.BUY_PRICE, 76), least(PRODUCT.BUY_PRICE, 150), 1, 0)).as("76-150"))
+                .from(PRODUCT)
+                .groupBy(PRODUCT.PRODUCT_LINE)
+                .fetch();
 
-        // DECODE AND DECODE
-        System.out.println(
-                ctx.select(DEPARTMENT.NAME, DEPARTMENT.OFFICE_CODE,
-                        DEPARTMENT.LOCAL_BUDGET, DEPARTMENT.PROFIT,
-                        decode(DEPARTMENT.LOCAL_BUDGET, castNull(Double.class), DEPARTMENT.PROFIT,
-                                decode(sign(DEPARTMENT.PROFIT.minus(DEPARTMENT.LOCAL_BUDGET)),
-                                        1, DEPARTMENT.PROFIT.minus(DEPARTMENT.LOCAL_BUDGET),
-                                        0, DEPARTMENT.LOCAL_BUDGET.divide(2).mul(-1),
-                                        -1, DEPARTMENT.LOCAL_BUDGET.mul(-1))).as("profit_balance"))
-                        .from(DEPARTMENT)
-                        .fetch().format(1000));
+        // DECODE AND DECODE        
+        ctx.select(DEPARTMENT.NAME, DEPARTMENT.OFFICE_CODE,
+                DEPARTMENT.LOCAL_BUDGET, DEPARTMENT.PROFIT,
+                decode(DEPARTMENT.LOCAL_BUDGET, castNull(Double.class), DEPARTMENT.PROFIT,
+                        decode(sign(DEPARTMENT.PROFIT.minus(DEPARTMENT.LOCAL_BUDGET)),
+                                1, DEPARTMENT.PROFIT.minus(DEPARTMENT.LOCAL_BUDGET),
+                                0, DEPARTMENT.LOCAL_BUDGET.divide(2).mul(-1),
+                                -1, DEPARTMENT.LOCAL_BUDGET.mul(-1))).as("profit_balance"))
+                .from(DEPARTMENT)
+                .fetch();
 
         // IIF
         ctx.select(ORDERDETAIL.PRODUCT_ID, ORDERDETAIL.QUANTITY_ORDERED,
@@ -156,37 +152,35 @@ public class ClassicModelsRepository {
                 .from(ORDERDETAIL)
                 .fetch();
 
-        System.out.println(
-                ctx.select(
-                        iif(PRODUCT.PRODUCT_SCALE.eq("1:10"), "A",
-                                iif(PRODUCT.PRODUCT_SCALE.eq("1:12"), "B",
-                                        iif(PRODUCT.PRODUCT_SCALE.eq("1:18"), "C",
-                                                iif(PRODUCT.PRODUCT_SCALE.eq("1:24"), "D",
-                                                        iif(PRODUCT.PRODUCT_SCALE.eq("1:32"), "E",
-                                                                iif(PRODUCT.PRODUCT_SCALE.eq("1:50"), "F",
-                                                                        iif(PRODUCT.PRODUCT_SCALE.eq("1:72"), "G",
-                                                                                iif(PRODUCT.PRODUCT_SCALE.eq("1:700"), "H", "N/A")
-                                                                        )
+        ctx.select(
+                iif(PRODUCT.PRODUCT_SCALE.eq("1:10"), "A",
+                        iif(PRODUCT.PRODUCT_SCALE.eq("1:12"), "B",
+                                iif(PRODUCT.PRODUCT_SCALE.eq("1:18"), "C",
+                                        iif(PRODUCT.PRODUCT_SCALE.eq("1:24"), "D",
+                                                iif(PRODUCT.PRODUCT_SCALE.eq("1:32"), "E",
+                                                        iif(PRODUCT.PRODUCT_SCALE.eq("1:50"), "F",
+                                                                iif(PRODUCT.PRODUCT_SCALE.eq("1:72"), "G",
+                                                                        iif(PRODUCT.PRODUCT_SCALE.eq("1:700"), "H", "N/A")
                                                                 )
                                                         )
                                                 )
                                         )
                                 )
-                        ).as("class_scale"), count())
-                        .from(PRODUCT)
-                        .groupBy(PRODUCT.PRODUCT_SCALE)
-                        .fetch().format(1000));
+                        )
+                ).as("class_scale"), count())
+                .from(PRODUCT)
+                .groupBy(PRODUCT.PRODUCT_SCALE)
+                .fetch();
 
         // NULLIF
         ctx.selectFrom(OFFICE)
                 .where(nullif(OFFICE.COUNTRY, "").isNull())
                 .fetch();
 
-        // NVL
-        System.out.println(
-                ctx.select(OFFICE.OFFICE_CODE, nvl(OFFICE.CITY, "N/A"), nvl(OFFICE.COUNTRY, "N/A"))
-                        .from(OFFICE)
-                        .fetch().format(1000));
+        // NVL        
+        ctx.select(OFFICE.OFFICE_CODE, nvl(OFFICE.CITY, "N/A"), nvl(OFFICE.COUNTRY, "N/A"))
+                .from(OFFICE)
+                .fetch();
 
         // ((ACTUAL PROFIT ÷ FORECAST PROFIT) - 1) * 100, variance formula        
         ctx.select(DEPARTMENT.NAME, DEPARTMENT.OFFICE_CODE,
@@ -198,7 +192,7 @@ public class ClassicModelsRepository {
                         .concat("%").as("nvl"))
                 .from(DEPARTMENT)
                 .fetch();
-        
+
         // NVL2        
         ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME,
                 iif(EMPLOYEE.COMMISSION.isNull(),
@@ -239,6 +233,7 @@ public class ClassicModelsRepository {
              + COS(latitude1) * COS(latitude2) * POWER (SIN((longitude2 − longitude1) / 2.0), 2);                 
         RETURN (6371.0 * (2.0 * ATN2(SQRT(a),SQRT(1.0 − a))));
          */
+        
         double pi180 = Math.PI / 180;
 
         Field<BigDecimal> a = (power(sin(val((latitude2 - latitude1) * pi180).divide(2d)), 2d)
