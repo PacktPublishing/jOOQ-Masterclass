@@ -1,23 +1,59 @@
 package com.classicmodels.repository;
 
+import java.math.BigDecimal;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import static jooq.generated.tables.Department.DEPARTMENT;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import static jooq.generated.tables.Product.PRODUCT;
 import org.jooq.DSLContext;
+import org.jooq.DatePart;
+import org.jooq.Field;
 import static org.jooq.Nullability.NULL;
+import static org.jooq.impl.DSL.atan2;
+import static org.jooq.impl.DSL.cast;
 import static org.jooq.impl.DSL.coalesce;
+import static org.jooq.impl.DSL.concat;
+import static org.jooq.impl.DSL.cos;
 import static org.jooq.impl.DSL.count;
+import static org.jooq.impl.DSL.currentDate;
+import static org.jooq.impl.DSL.currentLocalDate;
+import static org.jooq.impl.DSL.date;
+import static org.jooq.impl.DSL.dateAdd;
+import static org.jooq.impl.DSL.day;
+import static org.jooq.impl.DSL.dayOfWeek;
+import static org.jooq.impl.DSL.dayOfYear;
 import static org.jooq.impl.DSL.decode;
+import static org.jooq.impl.DSL.extract;
 import static org.jooq.impl.DSL.greatest;
 import static org.jooq.impl.DSL.iif;
 import static org.jooq.impl.DSL.least;
+import static org.jooq.impl.DSL.localDate;
+import static org.jooq.impl.DSL.localDateAdd;
+import static org.jooq.impl.DSL.lower;
+import static org.jooq.impl.DSL.month;
 import static org.jooq.impl.DSL.nullif;
 import static org.jooq.impl.DSL.nvl;
 import static org.jooq.impl.DSL.nvl2;
+import static org.jooq.impl.DSL.power;
+import static org.jooq.impl.DSL.round;
+import static org.jooq.impl.DSL.row;
+import static org.jooq.impl.DSL.rpad;
 import static org.jooq.impl.DSL.sign;
+import static org.jooq.impl.DSL.sin;
+import static org.jooq.impl.DSL.space;
+import static org.jooq.impl.DSL.sqrt;
+import static org.jooq.impl.DSL.substring;
 import static org.jooq.impl.DSL.sum;
+import static org.jooq.impl.DSL.toLocalDateTime;
+import static org.jooq.impl.DSL.upper;
+import static org.jooq.impl.DSL.val;
+import static org.jooq.impl.DSL.values;
+import static org.jooq.impl.SQLDataType.NUMERIC;
+import org.jooq.types.YearToMonth;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,7 +67,10 @@ public class ClassicModelsRepository {
         this.ctx = ctx;
     }
 
-    public void coalesceDecodeIif() {
+    ///////////////////////
+    // General Functions //
+    ///////////////////////
+    public void generalFunctionExamples() {
 
         // COALESCE        
         System.out.println(
@@ -157,5 +196,119 @@ public class ClassicModelsRepository {
                         EMPLOYEE.SALARY.plus(EMPLOYEE.COMMISSION), EMPLOYEE.SALARY).as("nvl2"))
                 .from(EMPLOYEE)
                 .fetch();
+    }
+
+    ///////////////////////
+    // Numeric Functions //
+    ///////////////////////
+    public void numericFunctionsExamples() {
+
+        // Fibonacci
+        int n = 15;
+
+        ctx.select().from(values(row(
+                round(cast((power(1.6180339, n).minus(power(-0.6180339, n)))
+                        .divide(2.236067977), NUMERIC), 0)
+        ))).fetch();
+
+        // Distance between two points
+        // Banesti, Romania  
+        double latitude1 = 45.10057933230524;
+        double longitude1 = 25.76015481483892;
+
+        // Tabriz, Azarbaidjan
+        double latitude2 = 38.09271544696884;
+        double longitude2 = 46.278607862213306;
+
+        // Math behind the SQL
+        /* 
+        a = POWER(SIN((latitude2 − latitude1) / 2.0)), 2)
+             + COS(latitude1) * COS(latitude2) * POWER (SIN((longitude2 − longitude1) / 2.0), 2);                 
+        RETURN (6371.0 * (2.0 * ATN2(SQRT(a),SQRT(1.0 − a))));
+         */
+        double pi180 = Math.PI / 180;
+
+        Field<BigDecimal> a = (power(sin(val((latitude2 - latitude1) * pi180).divide(2d)), 2d)
+                .plus(cos(latitude1 * pi180).mul(cos(latitude2 * pi180))
+                        .mul(power(sin(val((longitude2 - longitude1) * pi180).divide(2d)), 2d))));
+
+        ctx.select().from(values(row(val(6371d).mul(val(2d)
+                .mul(atan2(sqrt(a), sqrt(val(1d).minus(a))))))))
+                .fetch();
+    }
+
+    //////////////////////
+    // String Functions //
+    //////////////////////
+    public void stringFunctionsExample() {
+
+        ctx.select(concat(upper(EMPLOYEE.FIRST_NAME), space(1),
+                substring(EMPLOYEE.LAST_NAME, 1, 1).concat(". ("),
+                lower(EMPLOYEE.JOB_TITLE),
+                rpad(val(")"), 4, '.')).as("employee"))
+                .from(EMPLOYEE)
+                .fetch();
+    }
+
+    ////////////////////////
+    // Datetime Functions //
+    ////////////////////////
+    public void dateTimeFunctionsExample() {
+
+        // get current date
+        Date cd = ctx.select(currentDate()).fetchOneInto(Date.class);
+        LocalDate ld = ctx.select(currentLocalDate()).fetchOneInto(LocalDate.class);
+
+        System.out.println("Current date (java.sql.Date): " + cd);
+        System.out.println("Current date (java.time.LocalDate): " + ld);
+
+        // convert an ISO 8601 DATE string literal into a java.sql.Date
+        Date ccd = ctx.select(date("2024-01-29")).fetchOneInto(Date.class);
+        System.out.println("Converted date (java.sql.Date): " + ccd);
+
+        // add an interval of 10 days to a date
+        var dcd = ctx.select(date("2022-02-03"),
+                dateAdd(Date.valueOf("2022-02-03"), 10).as("after_10_days")).fetch();
+        System.out.println("After adding 10 days (java.sql.Date): " + dcd);
+
+        // add an interval of months to a date
+        var mcd = ctx.select(date("2022-02-03"),
+                dateAdd(Date.valueOf("2022-02-03"), new YearToMonth(0, 3)).as("after_3_month")).fetch();
+        System.out.println("After adding 3 months (java.sql.Date): " + mcd);
+
+        // extract parts of a date
+        int day11 = ctx.select(dayOfWeek(Date.valueOf("2021-05-06"))).fetchOneInto(Integer.class);
+        int day12 = ctx.select(extract(Date.valueOf("2021-05-06"), DatePart.DAY_OF_WEEK)).fetchOneInto(Integer.class);
+        System.out.println("Day of week (1 = Sunday, 2 = Monday, ..., 7 = Saturday): " + day11);
+        System.out.println("Day of week (1 = Sunday, 2 = Monday, ..., 7 = Saturday): " + day12);
+
+        int day21 = ctx.select(dayOfYear(Date.valueOf("2021-05-06"))).fetchOneInto(Integer.class);
+        int day22 = ctx.select(extract(Date.valueOf("2021-05-06"), DatePart.DAY_OF_YEAR)).fetchOneInto(Integer.class);
+        System.out.println("Day of year (corresponds to ChronoField.DAY_OF_YEAR): " + day21);
+        System.out.println("Day of year (corresponds to ChronoField.DAY_OF_YEAR): " + day22);
+
+        int month1 = ctx.select(month(Date.valueOf("2021-05-06"))).fetchOneInto(Integer.class);
+        int month2 = ctx.select(extract(Date.valueOf("2021-05-06"), DatePart.MONTH)).fetchOneInto(Integer.class);
+        System.out.println("Month (corresponds  to ChronoField.MONTH_OF_YEAR): " + month1);
+        System.out.println("Month (corresponds  to ChronoField.MONTH_OF_YEAR): " + month2);
+
+        int day31 = ctx.select(day(Date.valueOf("2021-05-06"))).fetchOneInto(Integer.class);
+        int day32 = ctx.select(extract(Date.valueOf("2021-05-06"), DatePart.DAY)).fetchOneInto(Integer.class);
+        System.out.println("Day (corresponds  to ChronoField.DAY_OF_MONTH): " + day31);
+        System.out.println("Day (corresponds  to ChronoField.DAY_OF_MONTH): " + day32);
+
+        // convert an ISO 8601 DATE string literal into java.time.LocalDate
+        LocalDate cld = ctx.select(localDate("2021-05-06")).fetchOneInto(LocalDate.class);
+        System.out.println("String to LocalDate: " + cld);
+
+        // add 3 days to a LocalDate       
+        var ldcd = ctx.select(localDateAdd(LocalDate.parse("2023-05-08"), 3)
+                .as("after_3_days")).fetch();
+        System.out.println("After adding 3 days (java.sql.Date):\n" + ldcd);
+
+        // Parse a string value to a java.time.LocalDateTime
+        LocalDateTime fd = ctx.select(toLocalDateTime("20210501170000",
+                "YYYYMMDDHH24MISS")).fetchOneInto(LocalDateTime.class);
+        System.out.println("Format date: " + fd);
     }
 }

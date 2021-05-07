@@ -14,6 +14,9 @@ public class ClassicModelsService {
 
     public void callAll() {
 
-        classicModelsRepository.coalesceDecodeIif();
+        classicModelsRepository.generalFunctionExamples();
+        classicModelsRepository.numericFunctionsExamples();
+        classicModelsRepository.stringFunctionsExample();
+        classicModelsRepository.dateTimeFunctionsExample();
     }
 }
