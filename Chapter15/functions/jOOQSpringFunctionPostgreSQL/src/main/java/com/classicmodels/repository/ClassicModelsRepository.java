@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
 import static jooq.generated.tables.Department.DEPARTMENT;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Office.OFFICE;
@@ -32,6 +33,7 @@ import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.greatest;
 import static org.jooq.impl.DSL.ifnull;
 import static org.jooq.impl.DSL.iif;
+import static org.jooq.impl.DSL.isnull;
 import static org.jooq.impl.DSL.least;
 import static org.jooq.impl.DSL.localDate;
 import static org.jooq.impl.DSL.localDateAdd;
@@ -213,13 +215,19 @@ public class ClassicModelsRepository {
                 .where(nullif(OFFICE.COUNTRY, "").isNull())
                 .fetch();
 
-        // IFNULL
+        // IFNULL and ISNULL()        
         ctx.select(DEPARTMENT.DEPARTMENT_ID, DEPARTMENT.NAME,
-                ifnull(DEPARTMENT.LOCAL_BUDGET, 0).as("budget"))
+                ifnull(DEPARTMENT.LOCAL_BUDGET, 0).as("budget_if"),
+                isnull(DEPARTMENT.LOCAL_BUDGET, 0).as("budget_is"))
                 .from(DEPARTMENT)
                 .fetch();
 
-        // re-written version of the IIF() approach
+        ctx.select(ifnull(CUSTOMERDETAIL.POSTAL_CODE, CUSTOMERDETAIL.ADDRESS_LINE_FIRST).as("address_if"),
+                isnull(CUSTOMERDETAIL.POSTAL_CODE, CUSTOMERDETAIL.ADDRESS_LINE_FIRST).as("address_is"))
+                .from(CUSTOMERDETAIL)
+                .fetch();
+
+        // re-written version of the IIF() approach (using isnull() is trivial)
         ctx.select(DEPARTMENT.NAME, DEPARTMENT.OFFICE_CODE,
                 iif(DEPARTMENT.LOCAL_BUDGET.isNull(),
                         ((ifnull(DEPARTMENT.CASH, 0)

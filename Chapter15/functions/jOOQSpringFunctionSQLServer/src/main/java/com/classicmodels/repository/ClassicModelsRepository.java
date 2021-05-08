@@ -3,6 +3,7 @@ package com.classicmodels.repository;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
+import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
 import static jooq.generated.tables.Department.DEPARTMENT;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Office.OFFICE;
@@ -30,6 +31,7 @@ import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.greatest;
 import static org.jooq.impl.DSL.ifnull;
 import static org.jooq.impl.DSL.iif;
+import static org.jooq.impl.DSL.isnull;
 import static org.jooq.impl.DSL.least;
 import static org.jooq.impl.DSL.localDate;
 import static org.jooq.impl.DSL.localDateAdd;
@@ -138,7 +140,7 @@ public class ClassicModelsRepository {
                         .groupBy(PRODUCT.PRODUCT_LINE, PRODUCT.BUY_PRICE).asTable("t"))
                 .groupBy(field("t.pl"))
                 .fetch();
-        
+
         // of course, you can write the same thing as here        
         ctx.select(PRODUCT.PRODUCT_LINE,
                 count().filterWhere(PRODUCT.BUY_PRICE.gt(BigDecimal.ZERO).and(PRODUCT.BUY_PRICE.lt(BigDecimal.valueOf(35)))).as("< 35"),
@@ -165,12 +167,12 @@ public class ClassicModelsRepository {
                 iif(DEPARTMENT.LOCAL_BUDGET.isNull(), "NO BUDGET", "HAS BUDGET").as("budget"))
                 .from(DEPARTMENT)
                 .fetch();
-        
+
         ctx.select(ORDERDETAIL.PRODUCT_ID, ORDERDETAIL.QUANTITY_ORDERED,
                 iif(ORDERDETAIL.QUANTITY_ORDERED.gt(45), "MORE", "LESS").as("45"))
                 .from(ORDERDETAIL)
                 .fetch();
-        
+
         // check this example simplified via ifnull() in the IFNULL() section
         ctx.select(DEPARTMENT.NAME, DEPARTMENT.OFFICE_CODE,
                 iif(DEPARTMENT.LOCAL_BUDGET.isNull(),
@@ -184,7 +186,7 @@ public class ClassicModelsRepository {
                                 .plus(iif(DEPARTMENT.ACCRUED_LIABILITIES.isNull(), 0, DEPARTMENT.ACCRUED_LIABILITIES)
                                         .plus(iif(DEPARTMENT.ST_BORROWING.isNull(), 0, DEPARTMENT.ST_BORROWING))))).as("budget"))
                 .from(DEPARTMENT)
-                .fetch();   
+                .fetch();
 
         ctx.select(
                 iif(PRODUCT.PRODUCT_SCALE.eq("1:10"), "A",
@@ -210,7 +212,7 @@ public class ClassicModelsRepository {
         ctx.select(OFFICE.OFFICE_CODE, nullif(OFFICE.COUNTRY, ""))
                 .from(OFFICE)
                 .fetch();
-        
+
         ctx.selectFrom(OFFICE)
                 .where(nullif(OFFICE.COUNTRY, "").isNull())
                 .fetch();
@@ -230,14 +232,20 @@ public class ClassicModelsRepository {
                         .concat("%").as("nvl"))
                 .from(DEPARTMENT)
                 .fetch();
-        
-        // IFNULL
+
+        // IFNULL and ISNULL()        
         ctx.select(DEPARTMENT.DEPARTMENT_ID, DEPARTMENT.NAME,
-                ifnull(DEPARTMENT.LOCAL_BUDGET, 0).as("budget"))
+                ifnull(DEPARTMENT.LOCAL_BUDGET, 0).as("budget_if"),
+                isnull(DEPARTMENT.LOCAL_BUDGET, 0).as("budget_is"))
                 .from(DEPARTMENT)
                 .fetch();
 
-        // re-written version of the IIF() approach
+        ctx.select(ifnull(CUSTOMERDETAIL.POSTAL_CODE, CUSTOMERDETAIL.ADDRESS_LINE_FIRST).as("address_if"),
+                isnull(CUSTOMERDETAIL.POSTAL_CODE, CUSTOMERDETAIL.ADDRESS_LINE_FIRST).as("address_is"))
+                .from(CUSTOMERDETAIL)
+                .fetch();
+
+        // re-written version of the IIF() approach (using isnull() is trivial)
         ctx.select(DEPARTMENT.NAME, DEPARTMENT.OFFICE_CODE,
                 iif(DEPARTMENT.LOCAL_BUDGET.isNull(),
                         ((ifnull(DEPARTMENT.CASH, 0)
