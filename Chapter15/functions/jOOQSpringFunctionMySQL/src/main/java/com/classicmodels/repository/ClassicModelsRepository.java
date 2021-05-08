@@ -112,12 +112,12 @@ public class ClassicModelsRepository {
         // DECODE AND GROUP BY        
         ctx.select(decode(sign(PRODUCT.BUY_PRICE.minus(PRODUCT.MSRP.divide(2))),
                 1, "Buy price larger than half of MSRP",
-                0, "Buy price larger than half of MSRP",
+                0, "Buy price equal to half of MSRP",
                 -1, "Buy price smaller than half of MSRP"), count())
                 .from(PRODUCT)
                 .groupBy(decode(sign(PRODUCT.BUY_PRICE.minus(PRODUCT.MSRP.divide(2))),
                         1, "Buy price larger than half of MSRP",
-                        0, "Buy price larger than half of MSRP",
+                        0, "Buy price equal to half of MSRP",
                         -1, "Buy price smaller than half of MSRP"))
                 .fetch();
 

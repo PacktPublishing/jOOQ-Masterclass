@@ -117,7 +117,7 @@ public class ClassicModelsRepository {
         ctx.select(field("T.D"), count()).from(
                 select(decode(sign(PRODUCT.BUY_PRICE.minus(PRODUCT.MSRP.divide(2))),
                         1, "Buy price larger than half of MSRP",
-                        0, "Buy price larger than half of MSRP",
+                        0, "Buy price equal to half of MSRP",
                         -1, "Buy price smaller than half of MSRP").as("D"))
                         .from(PRODUCT)
                         .groupBy(PRODUCT.BUY_PRICE, PRODUCT.MSRP).asTable("T"))
