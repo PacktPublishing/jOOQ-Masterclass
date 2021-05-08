@@ -27,6 +27,7 @@ import static org.jooq.impl.DSL.dayOfYear;
 import static org.jooq.impl.DSL.decode;
 import static org.jooq.impl.DSL.extract;
 import static org.jooq.impl.DSL.greatest;
+import static org.jooq.impl.DSL.ifnull;
 import static org.jooq.impl.DSL.iif;
 import static org.jooq.impl.DSL.least;
 import static org.jooq.impl.DSL.localDate;
@@ -152,7 +153,7 @@ public class ClassicModelsRepository {
                 .from(DEPARTMENT)
                 .fetch();
 
-        // IIF
+        // IIF                               
         ctx.select(ORDERDETAIL.PRODUCT_ID, ORDERDETAIL.QUANTITY_ORDERED,
                 iif(ORDERDETAIL.QUANTITY_ORDERED.gt(45), "MORE", "LESS").as("45"))
                 .from(ORDERDETAIL)
@@ -192,7 +193,11 @@ public class ClassicModelsRepository {
                 .groupBy(PRODUCT.PRODUCT_SCALE)
                 .fetch();
 
-        // NULLIF
+        // NULLIF        
+        ctx.select(OFFICE.OFFICE_CODE, nullif(OFFICE.COUNTRY, ""))
+                .from(OFFICE)
+                .fetch();
+        
         ctx.selectFrom(OFFICE)
                 .where(nullif(OFFICE.COUNTRY, "").isNull())
                 .fetch();

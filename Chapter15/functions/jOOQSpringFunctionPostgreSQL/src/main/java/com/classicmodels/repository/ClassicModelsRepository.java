@@ -197,6 +197,10 @@ public class ClassicModelsRepository {
                 .fetch();
 
         // NULLIF
+        ctx.select(OFFICE.OFFICE_CODE, nullif(OFFICE.COUNTRY, ""))
+                .from(OFFICE)
+                .fetch();
+        
         ctx.selectFrom(OFFICE)
                 .where(nullif(OFFICE.COUNTRY, "").isNull())
                 .fetch();
