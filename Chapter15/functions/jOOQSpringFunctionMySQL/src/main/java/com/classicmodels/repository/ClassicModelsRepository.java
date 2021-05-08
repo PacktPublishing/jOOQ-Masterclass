@@ -155,7 +155,7 @@ public class ClassicModelsRepository {
 
         // IIF        
         ctx.select(DEPARTMENT.DEPARTMENT_ID, DEPARTMENT.NAME,
-                iif(DEPARTMENT.LOCAL_BUDGET.isNull(), "NO BUDGET", "HAS BUDGET"))
+                iif(DEPARTMENT.LOCAL_BUDGET.isNull(), "NO BUDGET", "HAS BUDGET").as("budget"))
                 .from(DEPARTMENT)
                 .fetch();
 
@@ -164,6 +164,7 @@ public class ClassicModelsRepository {
                 .from(ORDERDETAIL)
                 .fetch();
 
+        // check this example simplified via ifnull() in the IFNULL() section
         ctx.select(DEPARTMENT.NAME, DEPARTMENT.OFFICE_CODE,
                 iif(DEPARTMENT.LOCAL_BUDGET.isNull(),
                         ((iif(DEPARTMENT.CASH.isNull(), 0, DEPARTMENT.CASH)
@@ -205,6 +206,27 @@ public class ClassicModelsRepository {
 
         ctx.selectFrom(OFFICE)
                 .where(nullif(OFFICE.COUNTRY, "").isNull())
+                .fetch();
+
+        // IFNULL
+        ctx.select(DEPARTMENT.DEPARTMENT_ID, DEPARTMENT.NAME,
+                ifnull(DEPARTMENT.LOCAL_BUDGET, 0).as("budget"))
+                .from(DEPARTMENT)
+                .fetch();
+
+        // re-written version of the IIF() approach
+        ctx.select(DEPARTMENT.NAME, DEPARTMENT.OFFICE_CODE,
+                iif(DEPARTMENT.LOCAL_BUDGET.isNull(),
+                        ((ifnull(DEPARTMENT.CASH, 0)
+                                .plus(ifnull(DEPARTMENT.ACCOUNTS_RECEIVABLE, 0))
+                                .plus(ifnull(DEPARTMENT.INVENTORIES, 0)))
+                                .minus(ifnull(DEPARTMENT.ACCOUNTS_PAYABLE, 0)
+                                        .plus(ifnull(DEPARTMENT.ACCRUED_LIABILITIES, 0))
+                                        .plus(ifnull(DEPARTMENT.ST_BORROWING, 0)))),
+                        DEPARTMENT.LOCAL_BUDGET.minus(ifnull(DEPARTMENT.ACCOUNTS_PAYABLE, 0)
+                                .plus(ifnull(DEPARTMENT.ACCRUED_LIABILITIES, 0)
+                                        .plus(ifnull(DEPARTMENT.ST_BORROWING, 0))))).as("budget"))
+                .from(DEPARTMENT)
                 .fetch();
 
         // NVL        
