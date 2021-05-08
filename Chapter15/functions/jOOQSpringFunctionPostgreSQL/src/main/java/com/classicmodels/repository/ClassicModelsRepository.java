@@ -28,6 +28,7 @@ import static org.jooq.impl.DSL.dayOfWeek;
 import static org.jooq.impl.DSL.dayOfYear;
 import static org.jooq.impl.DSL.decode;
 import static org.jooq.impl.DSL.extract;
+import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.greatest;
 import static org.jooq.impl.DSL.iif;
 import static org.jooq.impl.DSL.least;
@@ -42,6 +43,7 @@ import static org.jooq.impl.DSL.power;
 import static org.jooq.impl.DSL.round;
 import static org.jooq.impl.DSL.row;
 import static org.jooq.impl.DSL.rpad;
+import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.sign;
 import static org.jooq.impl.DSL.sin;
 import static org.jooq.impl.DSL.space;
@@ -114,15 +116,14 @@ public class ClassicModelsRepository {
                 .fetch();
 
         // DECODE AND GROUP BY        
-        ctx.select(decode(sign(PRODUCT.BUY_PRICE.minus(PRODUCT.MSRP.divide(2))),
-                1, "Buy price larger than half of MSRP",
-                0, "Buy price equal to half of MSRP",
-                -1, "Buy price smaller than half of MSRP"), count())
-                .from(PRODUCT)
-                .groupBy(decode(sign(PRODUCT.BUY_PRICE.minus(PRODUCT.MSRP.divide(2))),
+        ctx.select(field("t.d"), count()).from(
+                select(decode(sign(PRODUCT.BUY_PRICE.minus(PRODUCT.MSRP.divide(2))),
                         1, "Buy price larger than half of MSRP",
                         0, "Buy price equal to half of MSRP",
-                        -1, "Buy price smaller than half of MSRP"), PRODUCT.BUY_PRICE, PRODUCT.MSRP)
+                        -1, "Buy price smaller than half of MSRP").as("d"))
+                        .from(PRODUCT)
+                        .groupBy(PRODUCT.BUY_PRICE, PRODUCT.MSRP).asTable("t"))
+                .groupBy(field("t.d"))
                 .fetch();
 
         // DECODE AND SUM        
