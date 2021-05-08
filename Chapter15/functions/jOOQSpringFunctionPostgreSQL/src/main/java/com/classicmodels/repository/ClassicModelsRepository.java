@@ -161,6 +161,20 @@ public class ClassicModelsRepository {
                 iif(ORDERDETAIL.QUANTITY_ORDERED.gt(45), "MORE", "LESS").as("45"))
                 .from(ORDERDETAIL)
                 .fetch();
+        
+        ctx.select(DEPARTMENT.NAME, DEPARTMENT.OFFICE_CODE,
+                iif(DEPARTMENT.LOCAL_BUDGET.isNull(),
+                        ((iif(DEPARTMENT.CASH.isNull(), 0, DEPARTMENT.CASH)
+                                .plus(iif(DEPARTMENT.ACCOUNTS_RECEIVABLE.isNull(), 0, DEPARTMENT.ACCOUNTS_RECEIVABLE))
+                                .plus(iif(DEPARTMENT.INVENTORIES.isNull(), 0, DEPARTMENT.INVENTORIES)))
+                                .minus(iif(DEPARTMENT.ACCOUNTS_PAYABLE.isNull(), 0, DEPARTMENT.ACCOUNTS_PAYABLE)
+                                        .plus(iif(DEPARTMENT.ACCRUED_LIABILITIES.isNull(), 0, DEPARTMENT.ACCRUED_LIABILITIES))
+                                        .plus(iif(DEPARTMENT.ST_BORROWING.isNull(), 0, DEPARTMENT.ST_BORROWING)))),
+                        DEPARTMENT.LOCAL_BUDGET.minus(iif(DEPARTMENT.ACCOUNTS_PAYABLE.isNull(), 0, DEPARTMENT.ACCOUNTS_PAYABLE)
+                                .plus(iif(DEPARTMENT.ACCRUED_LIABILITIES.isNull(), 0, DEPARTMENT.ACCRUED_LIABILITIES)
+                                        .plus(iif(DEPARTMENT.ST_BORROWING.isNull(), 0, DEPARTMENT.ST_BORROWING))))).as("budget"))
+                .from(DEPARTMENT)
+                .fetch();   
 
         ctx.select(
                 iif(PRODUCT.PRODUCT_SCALE.eq("1:10"), "A",
