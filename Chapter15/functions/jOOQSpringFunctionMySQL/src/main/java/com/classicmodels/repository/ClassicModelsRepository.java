@@ -131,7 +131,7 @@ public class ClassicModelsRepository {
                 .from(PRODUCT)
                 .groupBy(PRODUCT.PRODUCT_LINE)
                 .fetch();
-        
+
         // of course, you can write the same thing as here        
         ctx.select(PRODUCT.PRODUCT_LINE,
                 count().filterWhere(PRODUCT.BUY_PRICE.gt(BigDecimal.ZERO).and(PRODUCT.BUY_PRICE.lt(BigDecimal.valueOf(35)))).as("< 35"),
@@ -153,12 +153,17 @@ public class ClassicModelsRepository {
                 .from(DEPARTMENT)
                 .fetch();
 
-        // IIF                               
+        // IIF        
+        ctx.select(DEPARTMENT.DEPARTMENT_ID, DEPARTMENT.NAME,
+                iif(DEPARTMENT.LOCAL_BUDGET.isNull(), "NO BUDGET", "HAS BUDGET"))
+                .from(DEPARTMENT)
+                .fetch();
+
         ctx.select(ORDERDETAIL.PRODUCT_ID, ORDERDETAIL.QUANTITY_ORDERED,
                 iif(ORDERDETAIL.QUANTITY_ORDERED.gt(45), "MORE", "LESS").as("45"))
                 .from(ORDERDETAIL)
                 .fetch();
-        
+
         ctx.select(DEPARTMENT.NAME, DEPARTMENT.OFFICE_CODE,
                 iif(DEPARTMENT.LOCAL_BUDGET.isNull(),
                         ((iif(DEPARTMENT.CASH.isNull(), 0, DEPARTMENT.CASH)
@@ -171,7 +176,7 @@ public class ClassicModelsRepository {
                                 .plus(iif(DEPARTMENT.ACCRUED_LIABILITIES.isNull(), 0, DEPARTMENT.ACCRUED_LIABILITIES)
                                         .plus(iif(DEPARTMENT.ST_BORROWING.isNull(), 0, DEPARTMENT.ST_BORROWING))))).as("budget"))
                 .from(DEPARTMENT)
-                .fetch();   
+                .fetch();
 
         ctx.select(
                 iif(PRODUCT.PRODUCT_SCALE.eq("1:10"), "A",
@@ -197,7 +202,7 @@ public class ClassicModelsRepository {
         ctx.select(OFFICE.OFFICE_CODE, nullif(OFFICE.COUNTRY, ""))
                 .from(OFFICE)
                 .fetch();
-        
+
         ctx.selectFrom(OFFICE)
                 .where(nullif(OFFICE.COUNTRY, "").isNull())
                 .fetch();

@@ -156,6 +156,11 @@ public class ClassicModelsRepository {
                 .fetch();
 
         // IIF        
+        ctx.select(DEPARTMENT.DEPARTMENT_ID, DEPARTMENT.NAME,
+                iif(DEPARTMENT.LOCAL_BUDGET.isNull(), "NO BUDGET", "HAS BUDGET"))
+                .from(DEPARTMENT)
+                .fetch();
+        
         ctx.select(ORDERDETAIL.PRODUCT_ID, ORDERDETAIL.QUANTITY_ORDERED,
                 iif(ORDERDETAIL.QUANTITY_ORDERED.gt(45L), "MORE", "LESS").as("45"))
                 .from(ORDERDETAIL)
