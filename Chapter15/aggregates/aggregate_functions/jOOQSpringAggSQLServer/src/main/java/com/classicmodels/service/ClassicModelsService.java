@@ -20,10 +20,10 @@ public class ClassicModelsService {
         classicModelsRepository.productBuyPriceVariance();
         classicModelsRepository.covarianceProductBuyPriceMSRP();
         classicModelsRepository.regressionProductBuyPriceMSRP();
+        classicModelsRepository.linearRegression();
         classicModelsRepository.boolAndOrSample();
         classicModelsRepository.bitsOperationsSample();        
         classicModelsRepository.cmgrSale();
-        classicModelsRepository.squareSale();
-        classicModelsRepository.linearRegression();
+        classicModelsRepository.squareSale();        
     }
 }

@@ -110,13 +110,22 @@ public class ClassicModelsRepository {
     }
 
     // Covariance
-    public void covarianceProductBuyPriceMSRP() {        
-
-        // (SUMXY-SUMX * SUMY/N)/(N-1) -> covar_samp() equivalent
+    public void covarianceProductBuyPriceMSRP() {              
+        
+        // (SUM(x*y) - SUM(x) * SUM(y) / COUNT(*)) / (COUNT(*) - 1) -> covar_samp() equivalent
         ctx.select(PRODUCT.PRODUCT_LINE,
                 (sum(PRODUCT.BUY_PRICE.mul(PRODUCT.MSRP))
                         .minus(sum(PRODUCT.BUY_PRICE).mul(sum(PRODUCT.MSRP)
                                 .divide(count())))).divide(count().minus(1)).as("covar_samp"))
+                .from(PRODUCT)
+                .groupBy(PRODUCT.PRODUCT_LINE)
+                .fetch();
+        
+        // (SUM(x*y) - SUM(x) * SUM(y) / COUNT(*)) / COUNT(*) -> covar_pop() equivalent
+        ctx.select(PRODUCT.PRODUCT_LINE,
+                ((sum(PRODUCT.BUY_PRICE.mul(PRODUCT.MSRP))
+                        .minus(sum(PRODUCT.BUY_PRICE).mul(sum(PRODUCT.MSRP)
+                                .divide(count())))).divide(count())).as("covar_pop"))
                 .from(PRODUCT)
                 .groupBy(PRODUCT.PRODUCT_LINE)
                 .fetch();
@@ -133,7 +142,7 @@ public class ClassicModelsRepository {
     // Correlation(regression) functions
     public void regressionProductBuyPriceMSRP() {
 
-        // emulating regrSXY() as REGR_SXY = (SUMXY-SUMX * SUMY/N)
+        // emulating regrSXY() as REGR_SXY = SUM(X*Y)-SUM(X) * SUM(Y)/COUNT(*)
         ctx.select(PRODUCT.PRODUCT_LINE,
                 sum(PRODUCT.BUY_PRICE.mul(PRODUCT.MSRP))
                         .minus(sum(PRODUCT.BUY_PRICE).mul(sum(PRODUCT.MSRP)
@@ -156,6 +165,28 @@ public class ClassicModelsRepository {
         SUM(1) * COVAR_POP(y, x) AS REGR_SXY,
         SUM(1) * VAR_POP(y) AS REGR_SYY
         */
+    }
+    
+    // Calculating Linear Regression Coefficients
+    // y = slope * x - intercept 
+    public void linearRegression() {
+
+        var t1 = select(PRODUCT.BUY_PRICE.as("x"), avg(PRODUCT.BUY_PRICE).over().as("x_bar"),
+                PRODUCT.MSRP.as("y"), avg(PRODUCT.MSRP).over().as("y_bar")).from(PRODUCT)
+                .asTable("t1");
+
+        var t2 = select(((sum(t1.field("x", Double.class).minus(t1.field("x_bar"))
+                .mul(t1.field("y", Double.class).minus(t1.field("y_bar")))))
+                .divide(sum((t1.field("x", Double.class).minus(t1.field("x_bar")))
+                        .mul(t1.field("x", Double.class).minus(t1.field("x_bar")))))).as("slope"),
+                max(t1.field("x_bar")).as("x_bar_max"),
+                max(t1.field("y_bar")).as("y_bar_max"))
+                .from(t1).asTable("t2");
+
+        ctx.select(t2.field("slope"),
+                t2.field("y_bar_max").minus(t2.field("x_bar_max")
+                        .mul(t2.field("slope", Double.class))).as("intercept"))
+                .from(t2).fetch();
     }
 
     // Using bool_and() / bool_or()
@@ -218,27 +249,5 @@ public class ClassicModelsRepository {
                 .from(SALE)
                 .groupBy(SALE.FISCAL_YEAR)
                 .fetch();
-    }
-
-    // Calculating Linear Regression Coefficients
-    // y = slope * x - intercept 
-    public void linearRegression() {
-
-        var t1 = select(PRODUCT.BUY_PRICE.as("x"), avg(PRODUCT.BUY_PRICE).over().as("x_bar"),
-                PRODUCT.MSRP.as("y"), avg(PRODUCT.MSRP).over().as("y_bar")).from(PRODUCT)
-                .asTable("t1");
-
-        var t2 = select(((sum(t1.field("x", Double.class).minus(t1.field("x_bar"))
-                .mul(t1.field("y", Double.class).minus(t1.field("y_bar")))))
-                .divide(sum((t1.field("x", Double.class).minus(t1.field("x_bar")))
-                        .mul(t1.field("x", Double.class).minus(t1.field("x_bar")))))).as("slope"),
-                max(t1.field("x_bar")).as("x_bar_max"),
-                max(t1.field("y_bar")).as("y_bar_max"))
-                .from(t1).asTable("t2");
-
-        ctx.select(t2.field("slope"),
-                t2.field("y_bar_max").minus(t2.field("x_bar_max")
-                        .mul(t2.field("slope", Double.class))).as("intercept"))
-                .from(t2).fetch();
-    }
+    }   
 }

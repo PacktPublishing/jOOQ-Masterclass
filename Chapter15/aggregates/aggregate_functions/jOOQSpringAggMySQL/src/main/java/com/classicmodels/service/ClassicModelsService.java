@@ -21,9 +21,9 @@ public class ClassicModelsService {
         classicModelsRepository.covarianceProductBuyPriceMSRP();
         classicModelsRepository.mySqlConcatws();
         classicModelsRepository.regressionProductBuyPriceMSRP();
+        classicModelsRepository.linearRegression();
         classicModelsRepository.boolAndOrSample();
         classicModelsRepository.bitsOperationsSample();
-        classicModelsRepository.cmgrSale();
-        classicModelsRepository.linearRegression();
+        classicModelsRepository.cmgrSale();        
     }
 }
