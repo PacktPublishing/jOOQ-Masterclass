@@ -241,7 +241,8 @@ public class ClassicModelsRepository {
     }
 
     // synthetic PRODUCT
-    // the compounded month growth rate in 2004 via geometric mean
+    // the compounded month growth rate via geometric mean as
+    // (PRODUCT(1+SALE.REVENUE_GROWTH)))^(1/COUNT())
     public void cmgrSale() {
 
         ctx.select(SALE.FISCAL_YEAR,
