@@ -150,6 +150,14 @@ public class ClassicModelsRepository {
                 .groupBy(PRODUCT.PRODUCT_LINE)
                 .fetch();
 
+        // emulating regrSXY() as SUM(1) * COVAR_POP(expr1, expr2) for non-null pairs
+        ctx.select(PRODUCT.PRODUCT_LINE,
+                (sum(val(1))
+                        .mul(aggregate("covar_pop", Double.class, PRODUCT.BUY_PRICE, PRODUCT.MSRP))).as("regr_sxy"))
+                .from(PRODUCT)
+                .groupBy(PRODUCT.PRODUCT_LINE)
+                .fetch();
+
         // see also: regrSXX(),regrSYY(), regrAvgX​(), regrAvgXY(), regrCount(), regrIntercept(), regrR2(), regrSlope()
     }
 
