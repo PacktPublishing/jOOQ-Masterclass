@@ -160,6 +160,19 @@ public class ClassicModelsRepository {
                 .fetch();
 
         // see also: regrSXX(),regrSYY(), regrAvgX​(), regrAvgXY(), regrCount(), regrIntercept(), regrR2(), regrSlope()
+        
+        // emulations:
+        /*
+        AVG(x) AS REGR_AVGX,
+        AVG(y) AS REGR_AVGY,
+        SUM(1) AS REGR_COUNT,
+        AVG(y)-(COVAR_POP(y, x)/VAR_POP(x))*AVG(x) AS REGR_INTERCEPT,
+        REGR_R2_COEF(VAR_POP(y), VAR_POP(x), CORR(y, x)) AS REGR_R2,
+        COVAR_POP(y, x)/VAR_POP(x) AS REGR_SLOPE,
+        SUM(1) * VAR_POP(x) AS REGR_SXX,
+        SUM(1) * COVAR_POP(y, x) AS REGR_SXY,
+        SUM(1) * VAR_POP(y) AS REGR_SYY
+        */
     }
 
     // Using bool_and() / bool_or()
