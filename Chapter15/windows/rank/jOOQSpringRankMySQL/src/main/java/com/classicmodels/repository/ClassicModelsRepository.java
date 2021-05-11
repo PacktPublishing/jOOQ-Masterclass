@@ -4,11 +4,11 @@ import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
-import org.jooq.DatePart;
 import static org.jooq.impl.DSL.count;
-import static org.jooq.impl.DSL.extract;
+import static org.jooq.impl.DSL.month;
 import static org.jooq.impl.DSL.rank;
 import static org.jooq.impl.DSL.sum;
+import static org.jooq.impl.DSL.year;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,8 +64,8 @@ public class ClassicModelsRepository {
     public void orderRankByOrderMonthDay() {
 
         ctx.select(ORDER.ORDER_ID, ORDER.CUSTOMER_NUMBER, ORDER.ORDER_DATE,
-                rank().over().orderBy(extract(ORDER.ORDER_DATE, DatePart.YEAR),
-                        extract(ORDER.ORDER_DATE, DatePart.MONTH)))
+                rank().over().orderBy(year(ORDER.ORDER_DATE), // or, extract(ORDER.ORDER_DATE, DatePart.YEAR)
+                        month(ORDER.ORDER_DATE))) //  extract(ORDER.ORDER_DATE, DatePart.MONTH)
                 .from(ORDER)
                 .fetch();
     }
