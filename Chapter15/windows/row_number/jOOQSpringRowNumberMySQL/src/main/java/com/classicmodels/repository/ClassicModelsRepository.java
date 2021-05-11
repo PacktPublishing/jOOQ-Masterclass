@@ -27,8 +27,9 @@ public class ClassicModelsRepository {
         this.ctx = ctx;
     }
 
-    /*  The ROW_NUMBER() is a window function (or analytic function) that assigns a sequential 
+    /*  The ROW_NUMBER() is a window function that assigns a sequential 
         number to each row (it starts from 1) */
+    
     // simple use case, just assign a sequential number
     public void dummyAssignSequentialNumberToProducts() {
 
