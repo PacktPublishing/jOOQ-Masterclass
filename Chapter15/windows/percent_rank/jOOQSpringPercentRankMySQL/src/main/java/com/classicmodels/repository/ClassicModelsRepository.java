@@ -43,8 +43,8 @@ public class ClassicModelsRepository {
                 .fetch();
     }
 
-    public void percentileRankEmployeesBySalaryAndOffice() {
-
+    public void percentileRankEmployeesBySalaryAndOffice() {        
+                
         ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY,
                 OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.COUNTRY,
                 round(percentRank().over().partitionBy(OFFICE.OFFICE_CODE)
