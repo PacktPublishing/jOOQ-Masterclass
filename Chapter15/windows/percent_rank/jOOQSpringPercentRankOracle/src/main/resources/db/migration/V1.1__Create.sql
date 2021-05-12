@@ -118,6 +118,15 @@ END;
 /
 COMMIT;
 
+/* Type used in collect() */
+
+BEGIN
+   EXECUTE IMMEDIATE 'CREATE TYPE salaryArr AS TABLE OF INTEGER;';
+EXCEPTION
+   WHEN OTHERS THEN NULL;
+END;
+/
+
 /*Table structure for table `office` */
 
 CREATE TABLE office (
@@ -131,6 +140,7 @@ CREATE TABLE office (
   postal_code varchar2(15) NOT NULL,
   territory varchar2(10) NOT NULL,
   location sdo_geometry DEFAULT NULL,
+  internal_budget int NOT NULL,
   CONSTRAINT office_pk PRIMARY KEY (office_code),
   CONSTRAINT office_postal_code_uk UNIQUE (postal_code)
 ) ;
@@ -159,6 +169,7 @@ CREATE TABLE employee (
   email varchar2(100) NOT NULL,
   office_code varchar2(10) NOT NULL,
   salary int NOT NULL,
+  commission int DEFAULT NULL,
   reports_to number(10) DEFAULT NULL,
   job_title varchar2(50) NOT NULL,
   employee_of_year employeeOfYearArr DEFAULT NULL,
@@ -189,6 +200,8 @@ CREATE TABLE sale (
   hot number(1,0) DEFAULT 0,
   rate varchar2(10) DEFAULT NULL,
   vat varchar2(10) DEFAULT NULL,
+  fiscal_month int NOT NULL,
+  revenue_growth float NOT NULL,
   trend varchar2(10) DEFAULT NULL,  
   CONSTRAINT sale_pk PRIMARY KEY (sale_id)
 ,  
@@ -313,6 +326,15 @@ CREATE TABLE department (
   office_code varchar(10) NOT NULL,
   topic topicArr DEFAULT NULL,  
   dep_net_ipv4 varchar(16) DEFAULT NULL,
+  local_budget float DEFAULT NULL,
+  profit float DEFAULT NULL,
+  forecast_profit float DEFAULT NULL,
+  cash float DEFAULT NULL,
+  accounts_receivable float DEFAULT NULL,
+  inventories float DEFAULT NULL,
+  accounts_payable float DEFAULT NULL,
+  st_borrowing float DEFAULT NULL,
+  accrued_liabilities float DEFAULT NULL,
   CONSTRAINT department_pk PRIMARY KEY (department_id),
   CONSTRAINT department_code_uk UNIQUE (code)
 ,
@@ -510,8 +532,8 @@ CREATE TABLE orderdetail (
   quantity_ordered number(10) NOT NULL,
   price_each number(10,2) NOT NULL,
   order_line_number number(5) NOT NULL,
-  CONSTRAINT orderdetail_pk PRIMARY KEY (orderdetail_id)
- ,
+  CONSTRAINT orderdetail_pk PRIMARY KEY (orderdetail_id),
+  CONSTRAINT orderdetail_uk UNIQUE (order_id, product_id),
   CONSTRAINT orderdetail_order_fk FOREIGN KEY (order_id) REFERENCES "ORDER" (order_id),
   CONSTRAINT orderdetail_product__fk FOREIGN KEY (product_id) REFERENCES product (product_id)
 ) ;

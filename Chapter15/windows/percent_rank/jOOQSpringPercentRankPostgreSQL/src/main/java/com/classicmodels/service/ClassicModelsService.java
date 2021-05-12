@@ -16,5 +16,6 @@ public class ClassicModelsService {
 
        classicModelsRepository.percentileRankEmployeesBySalary();
        classicModelsRepository.percentileRankEmployeesBySalaryAndOffice();
+       classicModelsRepository.computeProfitCategories();
     }
 }
