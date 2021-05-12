@@ -79,7 +79,8 @@ public class ClassicModelsRepository {
                 count().filterWhere(field("p").between(0.2, 0.8)).as("good_profit"),
                 count().filterWhere(field("p").gt(0.8)).as("high_profit")).from(
                 select(percentRank().over().orderBy(DEPARTMENT.PROFIT).as("p"))
-                        .from(DEPARTMENT))                
+                        .from(DEPARTMENT)
+                        .where(DEPARTMENT.PROFIT.isNotNull()))
                 .fetch();                
     }
 }
