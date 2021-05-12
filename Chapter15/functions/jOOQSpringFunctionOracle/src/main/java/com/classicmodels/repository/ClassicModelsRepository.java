@@ -14,6 +14,7 @@ import org.jooq.DSLContext;
 import org.jooq.DatePart;
 import org.jooq.Field;
 import static org.jooq.impl.DSL.atan2;
+import static org.jooq.impl.DSL.avg;
 import static org.jooq.impl.DSL.castNull;
 import static org.jooq.impl.DSL.coalesce;
 import static org.jooq.impl.DSL.concat;
@@ -84,6 +85,19 @@ public class ClassicModelsRepository {
                 round(coalesce(DEPARTMENT.ACCRUED_LIABILITIES, DEPARTMENT.ACCOUNTS_PAYABLE,
                         DEPARTMENT.ST_BORROWING, val(0)).mul(0.25), 2).as("expenses_deduction"))
                 .from(DEPARTMENT)
+                .fetch();
+        
+        // Fill gaps in forecast profit        
+        ctx.select(DEPARTMENT.NAME, DEPARTMENT.OFFICE_CODE, DEPARTMENT.FORECAST_PROFIT,
+                DEPARTMENT.PROFIT,
+                coalesce(DEPARTMENT.FORECAST_PROFIT,
+                        select(avg(field("T.FORECAST_PROFIT", Double.class))).from(DEPARTMENT.as("T"))
+                                .where(coalesce(field("T.PROFIT"), 0)
+                                        .gt(coalesce(DEPARTMENT.PROFIT, 0))
+                                        .and(field("T.FORECAST_PROFIT").isNotNull())))
+                        .as("FILL_FORECAST_PROFIT"))
+                .from(DEPARTMENT)
+                .orderBy(DEPARTMENT.DEPARTMENT_ID)
                 .fetch();
 
         // DECODE        
