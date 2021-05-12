@@ -15,6 +15,7 @@ import static org.jooq.impl.DSL.every;
 import static org.jooq.impl.DSL.exp;
 import static org.jooq.impl.DSL.ln;
 import static org.jooq.impl.DSL.max;
+import static org.jooq.impl.DSL.one;
 import static org.jooq.impl.DSL.product;
 import static org.jooq.impl.DSL.round;
 import static org.jooq.impl.DSL.select;
@@ -246,8 +247,8 @@ public class ClassicModelsRepository {
     public void cmgrSale() {
 
         ctx.select(SALE.FISCAL_YEAR,
-                round((product(val(1).plus(SALE.REVENUE_GROWTH.divide(100)))
-                        .power(val(1).divide(count()))).mul(100), 2).concat("%").as("CMGR"))
+                round((product(one().plus(SALE.REVENUE_GROWTH.divide(100)))
+                        .power(one().divide(count()))).mul(100), 2).concat("%").as("CMGR"))
                 .from(SALE)
                 .groupBy(SALE.FISCAL_YEAR)
                 .fetch();

@@ -17,6 +17,7 @@ import static org.jooq.impl.DSL.exp;
 import static org.jooq.impl.DSL.ln;
 import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.median;
+import static org.jooq.impl.DSL.one;
 import static org.jooq.impl.DSL.product;
 import static org.jooq.impl.DSL.regrIntercept;
 import static org.jooq.impl.DSL.regrR2;
@@ -278,11 +279,13 @@ public class ClassicModelsRepository {
     // (PRODUCT(1+SALE.REVENUE_GROWTH)))^(1/COUNT())
     public void cmgrSale() {
 
+        // val(0) can be replaced by zero()
+        // val(1) can be replaced by one()
         ctx.select(SALE.FISCAL_YEAR,
-                round((product(val(1).plus(SALE.REVENUE_GROWTH.divide(100)))
-                        .power(val(1).divide(count()))).mul(100), 2).concat("%").as("CMGR"))
+                round((product(one().plus(SALE.REVENUE_GROWTH.divide(100)))
+                        .power(one().divide(count()))).mul(100), 2).concat("%").as("CMGR"))
                 .from(SALE)
                 .groupBy(SALE.FISCAL_YEAR)
-                .fetch();
+                .fetch();        
     }   
 }
