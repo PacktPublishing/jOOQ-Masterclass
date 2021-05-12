@@ -1,14 +1,17 @@
 package com.classicmodels.repository;
 
+import static jooq.generated.tables.Department.DEPARTMENT;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Office.OFFICE;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.case_;
 import static org.jooq.impl.DSL.cast;
 import static org.jooq.impl.DSL.count;
+import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.percentRank;
 import static org.jooq.impl.DSL.rank;
 import static org.jooq.impl.DSL.round;
+import static org.jooq.impl.DSL.select;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,8 +46,8 @@ public class ClassicModelsRepository {
                 .fetch();
     }
 
-    public void percentileRankEmployeesBySalaryAndOffice() {        
-                
+    public void percentileRankEmployeesBySalaryAndOffice() {
+
         ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY,
                 OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.COUNTRY,
                 round(percentRank().over().partitionBy(OFFICE.OFFICE_CODE)
@@ -68,5 +71,15 @@ public class ClassicModelsRepository {
                 .innerJoin(OFFICE)
                 .on(EMPLOYEE.OFFICE_CODE.eq(OFFICE.OFFICE_CODE))
                 .fetch();
+    }
+
+    public void computeProfitCategories() {
+
+        ctx.select(count().filterWhere(field("p").lt(0.2)).as("low_profit"),
+                count().filterWhere(field("p").between(0.2, 0.8)).as("good_profit"),
+                count().filterWhere(field("p").gt(0.8)).as("high_profit")).from(
+                select(percentRank().over().orderBy(DEPARTMENT.PROFIT).as("p"))
+                        .from(DEPARTMENT))                
+                .fetch();                
     }
 }
