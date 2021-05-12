@@ -18,7 +18,10 @@ import static org.jooq.impl.DSL.ln;
 import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.median;
 import static org.jooq.impl.DSL.product;
+import static org.jooq.impl.DSL.regrIntercept;
+import static org.jooq.impl.DSL.regrR2;
 import static org.jooq.impl.DSL.regrSXY;
+import static org.jooq.impl.DSL.regrSlope;
 import static org.jooq.impl.DSL.round;
 import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.sqrt;
@@ -203,6 +206,13 @@ public class ClassicModelsRepository {
                 t2.field("y_bar_max").minus(t2.field("x_bar_max")
                         .mul(t2.field("slope", Double.class))).as("intercept"))
                 .from(t2).fetch();
+        
+        // or, the same thing via regrSlope() and regrIntercept()
+        ctx.select(regrSlope(PRODUCT.MSRP, PRODUCT.BUY_PRICE).as("slope"),
+                regrIntercept(PRODUCT.MSRP, PRODUCT.BUY_PRICE).as("intercept"),
+                sqrt(regrR2(PRODUCT.MSRP, PRODUCT.BUY_PRICE)).as("r"))
+                .from(PRODUCT)
+                .fetch();
     }
 
     // Using bool_and() / bool_or()
