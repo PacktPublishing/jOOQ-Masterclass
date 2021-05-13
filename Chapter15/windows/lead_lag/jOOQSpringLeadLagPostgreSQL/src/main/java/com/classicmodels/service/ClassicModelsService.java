@@ -17,7 +17,7 @@ public class ClassicModelsService {
         classicModelsRepository.leadLagOrder();
         classicModelsRepository.leadSalaryByOffice();
 
-        classicModelsRepository.lagYoY();
+        classicModelsRepository.lagYOY();
         classicModelsRepository.monthOverMonthGrowthRateSale();
 
         classicModelsRepository.leadLagSalary();

@@ -60,12 +60,12 @@ public class ClassicModelsRepository {
                 .fetch();
     }
 
-    public void lagYoY() { // YoY: year-over-year
+    public void lagYOY() { // YOY: year-over-year
 
         ctx.select(table(name("t")).asterisk(), round(field(name("t", "sale"), Double.class)
                 .minus(field(name("t", "prev_sale"), Double.class)).mul(100d)
                 .divide(field(name("t", "prev_sale"), Double.class)), 1)
-                .concat("%").as("YoY"))
+                .concat("%").as("YOY"))
                 .from(
                         select(SALE.SALE_ID, SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR, round(SALE.SALE_, 1),
                                 round(lag(SALE.SALE_, 1).over().partitionBy(SALE.EMPLOYEE_NUMBER)
