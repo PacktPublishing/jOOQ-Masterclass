@@ -1,12 +1,11 @@
 package com.classicmodels.repository;
 
-import static jooq.generated.tables.Product.PRODUCT;
+import static jooq.generated.tables.Employee.EMPLOYEE;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.cast;
 import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.cumeDist;
 import static org.jooq.impl.DSL.round;
-import org.jooq.impl.SQLDataType;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,19 +25,19 @@ public class ClassicModelsRepository {
         function is greater than zero and less than or equal one (0 < CUME_DIST() <= 1). 
         The repeated column values receive the same CUME_DIST() value. */
     
-    public void cumeDistProductBuyPrice() {
+    public void cumeDistSalary() {
 
-        ctx.select(PRODUCT.PRODUCT_NAME, PRODUCT.QUANTITY_IN_STOCK,
-                round(cast(cumeDist().over().orderBy(PRODUCT.QUANTITY_IN_STOCK), SQLDataType.NUMERIC), 2).as("cume_dist"))
-                .from(PRODUCT)
+        ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY,
+                round(cumeDist().over().orderBy(EMPLOYEE.SALARY), 2).as("cume_dist"))
+                .from(EMPLOYEE)
                 .fetch();
 
         // emulate CUME_DIST() 
-        ctx.select(PRODUCT.PRODUCT_NAME, PRODUCT.QUANTITY_IN_STOCK,
-                round(((cast(count().over().orderBy(PRODUCT.QUANTITY_IN_STOCK).rangeUnboundedPreceding(), Double.class)).divide(
-                        count().over().orderBy(PRODUCT.QUANTITY_IN_STOCK).rangeBetweenUnboundedPreceding()
+        ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY,
+                round(((cast(count().over().orderBy(EMPLOYEE.SALARY).rangeUnboundedPreceding(), Double.class)).divide(
+                        count().over().orderBy(EMPLOYEE.SALARY).rangeBetweenUnboundedPreceding()
                                 .andUnboundedFollowing())), 2).as("cume_dist"))
-                .from(PRODUCT)
+                .from(EMPLOYEE)
                 .fetch();
     }
 }

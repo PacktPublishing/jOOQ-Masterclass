@@ -14,6 +14,6 @@ public class ClassicModelsService {
 
     public void callAll() {
 
-       classicModelsRepository.cumeDistProductBuyPrice();
+       classicModelsRepository.cumeDistSalary();
     }
 }
