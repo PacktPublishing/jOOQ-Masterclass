@@ -15,5 +15,6 @@ public class ClassicModelsService {
     public void callAll() {
 
        classicModelsRepository.cumeDistSalary();
+       classicModelsRepository.get25PercentTopSales();
     }
 }

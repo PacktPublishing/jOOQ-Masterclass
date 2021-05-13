@@ -1,7 +1,6 @@
 package com.classicmodels.service;
 
 import com.classicmodels.repository.ClassicModelsRepository;
-import com.classicmodels.repository.ClassicModelsRepository;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,5 +15,6 @@ public class ClassicModelsService {
     public void callAll() {
 
        classicModelsRepository.cumeDistSalary();
+       classicModelsRepository.get25PercentTopSales();
     }
 }
