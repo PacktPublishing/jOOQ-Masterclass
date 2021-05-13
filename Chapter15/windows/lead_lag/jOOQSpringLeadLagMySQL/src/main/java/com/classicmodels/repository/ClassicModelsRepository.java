@@ -31,10 +31,19 @@ public class ClassicModelsRepository {
         - The LAG() function allows you to look back a number of rows and access data 
           of that row from the current row.*/
     
-    public void leadOrder() {
+    public void leadLagOrder() {
 
-        ctx.select(ORDER.ORDER_ID, ORDER.CUSTOMER_NUMBER, ORDER.STATUS, ORDER.ORDER_DATE,
-                lead(ORDER.ORDER_DATE, 1).over().orderBy(ORDER.ORDER_DATE).as("next_order"))
+        ctx.select(ORDER.ORDER_ID, ORDER.STATUS,
+                lead(ORDER.ORDER_DATE, 1).over().orderBy(ORDER.ORDER_DATE).as("next_order"),
+                ORDER.ORDER_DATE,
+                lag(ORDER.ORDER_DATE, 1).over().orderBy(ORDER.ORDER_DATE).as("prev_order"))
+                .from(ORDER)
+                .fetch();
+
+        // or, we can ommit "1", but I prefer to add it
+        ctx.select(ORDER.ORDER_ID, ORDER.STATUS, ORDER.ORDER_DATE,
+                lead(ORDER.ORDER_DATE).over().orderBy(ORDER.ORDER_DATE).as("next_order"),
+                lag(ORDER.ORDER_DATE).over().orderBy(ORDER.ORDER_DATE).as("prev_order"))
                 .from(ORDER)
                 .fetch();
     }
@@ -51,7 +60,7 @@ public class ClassicModelsRepository {
                 .fetch();
     }
 
-    public void lagYoY() {
+    public void lagYoY() { // YoY: year-over-year
 
         ctx.select(asterisk(), round(field(name("t", "sale"), Double.class)
                 .minus(field(name("t", "prev_sale"), Double.class)).mul(100d)
@@ -65,15 +74,15 @@ public class ClassicModelsRepository {
                                 .asTable("t", "sid", "sen", "fy", "sale", "prev_sale"))
                 .fetch();
     }
-    
+
     // Calculating Month-Over-Month Growth Rate 
     public void monthOverMonthGrowthRateSale() {
-        
+
         ctx.select(SALE.FISCAL_MONTH,
                 val(100).mul((SALE.SALE_.minus(lag(SALE.SALE_, 1).over().orderBy(SALE.FISCAL_MONTH)))
                         .divide(lag(SALE.SALE_, 1).over().orderBy(SALE.FISCAL_MONTH))).concat("%").as("MOM"))
                 .from(SALE)
-                .where(SALE.FISCAL_YEAR.eq(2004))                
+                .where(SALE.FISCAL_YEAR.eq(2004))
                 .orderBy(SALE.FISCAL_MONTH)
                 .fetch();
     }
@@ -90,5 +99,5 @@ public class ClassicModelsRepository {
                 .innerJoin(EMPLOYEE)
                 .on(OFFICE.OFFICE_CODE.eq(EMPLOYEE.OFFICE_CODE))
                 .fetch();
-    }
+    }    
 }

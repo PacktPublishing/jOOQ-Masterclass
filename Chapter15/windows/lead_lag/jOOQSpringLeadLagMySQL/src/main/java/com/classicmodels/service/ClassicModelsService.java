@@ -14,12 +14,12 @@ public class ClassicModelsService {
 
     public void callAll() {
 
-        classicModelsRepository.leadOrder();
+        classicModelsRepository.leadLagOrder();
         classicModelsRepository.leadSalaryByOffice();
 
         classicModelsRepository.lagYoY();
         classicModelsRepository.monthOverMonthGrowthRateSale();
 
-        classicModelsRepository.leadLagSalary();
+        classicModelsRepository.leadLagSalary();        
     }
 }

@@ -31,14 +31,22 @@ public class ClassicModelsRepository {
         - The LAG() function allows you to look back a number of rows and access data 
           of that row from the current row.*/
     
-    public void leadOrder() {
+    public void leadLagOrder() {
 
-        ctx.select(ORDER.ORDER_ID, ORDER.CUSTOMER_NUMBER, ORDER.STATUS, ORDER.ORDER_DATE,
-                lead(ORDER.ORDER_DATE, 1).over().orderBy(ORDER.ORDER_DATE).as("next_order"))
+        ctx.select(ORDER.ORDER_ID, ORDER.STATUS, ORDER.ORDER_DATE,
+                lead(ORDER.ORDER_DATE, 1).over().orderBy(ORDER.ORDER_DATE).as("next_order"),
+                lag(ORDER.ORDER_DATE, 1).over().orderBy(ORDER.ORDER_DATE).as("prev_order"))
                 .from(ORDER)
-                .fetch();
+                .fetch();                
+        
+        // or, we can ommit "1", but I prefer to add it
+        ctx.select(ORDER.ORDER_ID, ORDER.STATUS, ORDER.ORDER_DATE,
+                lead(ORDER.ORDER_DATE).over().orderBy(ORDER.ORDER_DATE).as("next_order"),
+                lag(ORDER.ORDER_DATE).over().orderBy(ORDER.ORDER_DATE).as("prev_order"))
+                .from(ORDER)
+                .fetch(); 
     }
-
+    
     public void leadSalaryByOffice() {
 
         ctx.select(OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.COUNTRY,
@@ -51,7 +59,7 @@ public class ClassicModelsRepository {
                 .fetch();
     }
 
-    public void lagYoY() {
+    public void lagYoY() { // YoY: year-over-year
 
         ctx.select(asterisk(), round(field(name("t", "sale"), Double.class)
                 .minus(field(name("t", "prev_sale"), Double.class)).mul(100d)
