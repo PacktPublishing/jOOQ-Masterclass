@@ -25,6 +25,7 @@ DROP TABLE IF EXISTS customerdetail CASCADE;
 DROP TABLE IF EXISTS sale CASCADE;
 DROP TABLE IF EXISTS token CASCADE;
 DROP TABLE IF EXISTS employee CASCADE;
+DROP TABLE IF EXISTS employee_status CASCADE;
 DROP TABLE IF EXISTS department CASCADE;
 DROP TABLE IF EXISTS office CASCADE;
 
@@ -110,6 +111,17 @@ CREATE TABLE employee (
 ) ;
 
 CREATE SEQUENCE employee_seq START 100000 INCREMENT 10 MINVALUE 100000 MAXVALUE 10000000 OWNED BY employee.employee_number;
+
+/*Table structure for table `employee_status` */
+
+CREATE TABLE employee_status (
+  id serial NOT NULL,
+  employee_number bigint NOT NULL,  
+  status varchar(50) NOT NULL,  
+  acquired_date date NOT NULL,
+  CONSTRAINT id_pk PRIMARY KEY (id),  
+  CONSTRAINT employee_status_employee_fk FOREIGN KEY (employee_number) REFERENCES employee (employee_number)
+);
 
 /*Table structure for table `sale` */
 

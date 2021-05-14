@@ -8245,4 +8245,88 @@ select 2, 1, 2687.55 from dual union all
 
 select 3, 1, 1095.09 from dual;
 
+/*Data for the table `employee_status` */
+
+insert /*+ ignore_row_on_dupkey_index(employee_status(id)) */ into employee_status(id,employee_number,status,acquired_date)
+
+select 1, 1002, 'REGULAR', '2004-04-14' from dual union all
+
+select 2, 1056, 'REGULAR', '2003-06-10' from dual union all
+
+select 3, 1076, 'REGULAR', '2005-01-10' from dual union all
+
+select 4, 1088, 'REGULAR', '2005-04-10' from dual union all
+
+select 5, 1102, 'REGULAR', '2003-07-12' from dual union all
+
+select 6, 1143, 'REGULAR', '2003-05-12' from dual union all
+
+select 7, 1143, 'AVERAGE', '2004-12-05' from dual union all
+
+select 8, 1165, 'REGULAR', '2005-11-15' from dual union all
+
+select 9, 1166, 'REGULAR', '2003-06-15' from dual union all
+
+select 10, 1166, 'AVERAGE', '2004-11-15' from dual union all
+
+select 11, 1188, 'REGULAR', '2003-10-25' from dual union all
+
+select 12, 1216, 'REGULAR', '2003-11-25' from dual union all
+
+select 13, 1286, 'REGULAR', '2004-09-25' from dual union all
+
+select 14, 1323, 'REGULAR', '2006-01-25' from dual union all
+
+select 15, 1337, 'REGULAR', '2003-02-23' from dual union all
+
+select 16, 1370, 'REGULAR', '2000-02-23' from dual union all
+
+select 17, 1370, 'AVERAGE', '2002-06-21' from dual union all
+
+select 18, 1370, 'GOOD', '2004-01-11' from dual union all
+
+select 19, 1370, 'EXCELLENT', '2005-11-11' from dual union all
+
+select 20, 1401, 'REGULAR', '2005-10-11' from dual union all
+
+select 21, 1401, 'AVERAGE', '2006-02-12' from dual union all
+
+select 22, 1501, 'REGULAR', '2004-02-12' from dual union all
+
+select 23, 1501, 'AVERAGE', '2005-02-12' from dual union all
+
+select 24, 1504, 'REGULAR', '2003-02-12' from dual union all
+
+select 25, 1504, 'AVERAGE', '2006-02-12' from dual union all
+
+select 26, 1504, 'GOOD', '2007-06-10' from dual union all
+
+select 27, 1611, 'REGULAR', '2003-01-10' from dual union all
+
+select 28, 1611, 'AVERAGE', '2004-05-17' from dual union all
+
+select 29, 1611, 'GOOD', '2005-03-22' from dual union all
+
+select 30, 1611, 'EXCELLENT', '2007-03-20' from dual union all
+
+select 31, 1612, 'REGULAR', '2003-01-22' from dual union all
+
+select 32, 1612, 'AVERAGE', '2004-05-11' from dual union all
+
+select 33, 1619, 'REGULAR', '2000-05-11' from dual union all
+
+select 34, 1619, 'AVERAGE', '2001-05-11' from dual union all
+
+select 35, 1619, 'GOOD', '2004-01-15' from dual union all
+
+select 36, 1621, 'REGULAR', '2004-03-15' from dual union all
+
+select 37, 1621, 'AVERAGE', '2005-12-15' from dual union all
+
+select 38, 1625, 'REGULAR', '2002-12-15' from dual union all
+
+select 39, 1702, 'REGULAR', '2002-11-25' from dual union all
+
+select 40, 1702, 'AVERAGE', '2004-09-02' from dual;
+
 /* END */

@@ -73,6 +73,8 @@ IF OBJECT_ID('sale', 'U') IS NOT NULL
   DROP TABLE token;
 IF OBJECT_ID('employee', 'U') IS NOT NULL 
   DROP TABLE employee;
+IF OBJECT_ID('employee_status', 'U') IS NOT NULL 
+  DROP TABLE employee_status;
   IF OBJECT_ID('department', 'U') IS NOT NULL 
   DROP TABLE department;
 IF OBJECT_ID('office', 'U') IS NOT NULL 
@@ -106,6 +108,7 @@ CREATE TABLE employee (
   [email] varchar(100) NOT NULL,
   [office_code] varchar(10) NOT NULL,
   [salary] int NOT NULL,
+  [commission] int DEFAULT NULL,
   [reports_to] bigint DEFAULT NULL,
   [job_title] varchar(50) NOT NULL,
   [employee_of_year] varchar(50) DEFAULT NULL,
@@ -115,6 +118,17 @@ CREATE TABLE employee (
   CONSTRAINT [employee_employee_fk] FOREIGN KEY ([reports_to]) REFERENCES employee ([employee_number]),
   CONSTRAINT [employee_office_fk] FOREIGN KEY ([office_code]) REFERENCES office ([office_code])
 ) ;
+
+/*Table structure for table `employee_status` */
+
+CREATE TABLE employee_status (
+  [id] bigint NOT NULL IDENTITY,
+  [employee_number] bigint NOT NULL,  
+  [status] varchar(50) NOT NULL,  
+  [acquired_date] date NOT NULL,
+  CONSTRAINT id_pk PRIMARY KEY (id),  
+  CONSTRAINT employee_status_employee_fk FOREIGN KEY (employee_number) REFERENCES employee (employee_number)
+);
 
 DROP SEQUENCE IF EXISTS employee_seq;
 GO
@@ -132,6 +146,15 @@ CREATE TABLE department (
   [office_code] varchar(10) NOT NULL,
   [topic] varchar(100) DEFAULT NULL,  
   [dep_net_ipv4] varchar(16) DEFAULT NULL, 
+  [local_budget] float DEFAULT NULL,
+  [profit] float DEFAULT NULL,
+  [forecast_profit] float DEFAULT NULL,
+  [cash] float DEFAULT NULL,
+  [accounts_receivable] float DEFAULT NULL,
+  [inventories] float DEFAULT NULL,
+  [accounts_payable] float DEFAULT NULL,
+  [st_borrowing] float DEFAULT NULL,
+  [accrued_liabilities] float DEFAULT NULL,
   CONSTRAINT [department_pk] PRIMARY KEY ([department_id]),
   CONSTRAINT [department_code_uk] UNIQUE ([code])
 ,

@@ -2,13 +2,16 @@ package com.classicmodels.repository;
 
 import java.math.BigInteger;
 import static jooq.generated.tables.Employee.EMPLOYEE;
+import static jooq.generated.tables.EmployeeStatus.EMPLOYEE_STATUS;
 import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
+import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.lag;
 import static org.jooq.impl.DSL.lead;
+import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.round;
 import static org.jooq.impl.DSL.select;
@@ -98,6 +101,28 @@ public class ClassicModelsRepository {
                 .from(OFFICE)
                 .innerJoin(EMPLOYEE)
                 .on(OFFICE.OFFICE_CODE.eq(EMPLOYEE.OFFICE_CODE))
+                .fetch();
+    }
+    
+    // Calculating Funnel drop-off metrics
+    // Determine the percentage of employees that advanced from REGULAR to AVERAGE to GOOD to EXCELLENT
+    @Transactional
+    public void employeeFunnel() {
+
+        ctx.with(name("grouped_status")).as(
+                select(EMPLOYEE_STATUS.STATUS.as("status"), count().as("status_count"))
+                        .from(EMPLOYEE_STATUS)
+                        .groupBy(EMPLOYEE_STATUS.STATUS)
+                        .orderBy(count()))
+                .select(field(name("status")), field(name("status_count")),
+                        field(name("status_count"))
+                                .divide(field(select(max(
+                                        field(name("status_count"), Integer.class)))
+                                        .from(name("grouped_status")))).as("total_percentage"),
+                        field(name("status_count")).divide(lag(field(name("status_count"), Integer.class)).over()
+                                .orderBy(field(name("status_count")).desc())).as("percentage_survival_by_step"))
+                .from(name("grouped_status"))
+                .orderBy(field(name("status_count")).desc())
                 .fetch();
     }
 }
