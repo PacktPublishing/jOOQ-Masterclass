@@ -47,25 +47,24 @@ public class ClassicModelsRepository {
                 .from(PRODUCT)
                 .fetch();
     }
-    
+
     public void secondCheapestProduct() {
-        
+
         ctx.select(PRODUCT.PRODUCT_NAME, PRODUCT.BUY_PRICE,
                 nthValue(PRODUCT.PRODUCT_NAME, 2)
-                        .over().orderBy(PRODUCT.BUY_PRICE).as("second_cheapest"))                
+                        .over().orderBy(PRODUCT.BUY_PRICE).as("second_cheapest"))
                 .from(PRODUCT)
-                .fetch();      
+                .fetch();
     }
-    
+
     public void secondMostExpensiveProductByProductLine() {
 
-        // PostgreSQL doesn't support fromLast() so we order desc
-        System.out.println(
+        // PostgreSQL doesn't support fromLast() so we order desc        
         ctx.select(PRODUCT.PRODUCT_LINE, PRODUCT.PRODUCT_NAME, PRODUCT.BUY_PRICE,
                 nthValue(PRODUCT.PRODUCT_NAME, 2).over()
                         .partitionBy(PRODUCT.PRODUCT_LINE).orderBy(PRODUCT.BUY_PRICE.desc())
                         .rangeBetweenUnboundedPreceding().andUnboundedFollowing().as("second_most_expensive"))
                 .from(PRODUCT)
-                .fetch().format(1000));
-    }        
+                .fetch();
+    }
 }

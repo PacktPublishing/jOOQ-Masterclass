@@ -16,6 +16,6 @@ public class ClassicModelsService {
 
        classicModelsRepository.ntileSalary();
        classicModelsRepository.ntileSalaryPerOffice();
-       classicModelsRepository.ntilePrices();
+       classicModelsRepository.ntilePrices();       
     }
 }

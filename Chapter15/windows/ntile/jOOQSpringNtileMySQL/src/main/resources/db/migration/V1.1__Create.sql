@@ -28,6 +28,7 @@ DROP TABLE IF EXISTS `customer`;
 DROP TABLE IF EXISTS `sale`;
 DROP TABLE IF EXISTS `token`;
 DROP TABLE IF EXISTS `employee`;
+DROP TABLE IF EXISTS `employee_status`;
 DROP TABLE IF EXISTS `department`;
 DROP TABLE IF EXISTS `office`;
 
@@ -89,6 +90,17 @@ CREATE TABLE `employee` (
   CONSTRAINT `employee_pk` PRIMARY KEY (`employee_number`),
   CONSTRAINT `employee_employee_fk` FOREIGN KEY (`reports_to`) REFERENCES `employee` (`employee_number`),
   CONSTRAINT `employee_office_fk` FOREIGN KEY (`office_code`) REFERENCES `office` (`office_code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Table structure for table `employee_status` */
+
+CREATE TABLE `employee_status` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `employee_number` bigint NOT NULL,  
+  `status` varchar(50) NOT NULL,  
+  `acquired_date` date NOT NULL,
+  CONSTRAINT `id_pk` PRIMARY KEY (`id`),  
+  CONSTRAINT `employee_status_employee_fk` FOREIGN KEY (`employee_number`) REFERENCES `employee` (`employee_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Table structure for table `sale` */

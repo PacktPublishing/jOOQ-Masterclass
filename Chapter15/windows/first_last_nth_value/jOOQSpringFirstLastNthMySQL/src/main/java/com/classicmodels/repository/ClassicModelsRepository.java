@@ -37,7 +37,7 @@ public class ClassicModelsRepository {
     }
 
     public void cheapestAndMostExpensiveProductByProductLine() {
-
+        
         ctx.select(PRODUCT.PRODUCT_LINE, PRODUCT.PRODUCT_NAME, PRODUCT.BUY_PRICE,
                 firstValue(PRODUCT.PRODUCT_NAME).over()
                         .partitionBy(PRODUCT.PRODUCT_LINE).orderBy(PRODUCT.BUY_PRICE).as("cheapest"),
@@ -59,13 +59,12 @@ public class ClassicModelsRepository {
     
     public void secondMostExpensiveProductByProductLine() {
 
-        // MySQL doesn't support fromLast() so we order desc
-        System.out.println(
+        // MySQL doesn't support fromLast() so we order desc        
         ctx.select(PRODUCT.PRODUCT_LINE, PRODUCT.PRODUCT_NAME, PRODUCT.BUY_PRICE,
                 nthValue(PRODUCT.PRODUCT_NAME, 2).over()
                         .partitionBy(PRODUCT.PRODUCT_LINE).orderBy(PRODUCT.BUY_PRICE.desc())
                         .rangeBetweenUnboundedPreceding().andUnboundedFollowing().as("second_most_expensive"))
                 .from(PRODUCT)
-                .fetch().format(1000));
+                .fetch();
     }        
 }

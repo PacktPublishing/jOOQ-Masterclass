@@ -1,6 +1,7 @@
 package com.classicmodels.repository;
 
 import static jooq.generated.tables.Employee.EMPLOYEE;
+import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.ratioToReport;
@@ -24,29 +25,39 @@ public class ClassicModelsRepository {
     
     public void ratioToReportSale() {
 
-        ctx.select(SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR, SALE.SALE_,
+        ctx.select(SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR, round(SALE.SALE_, 2).as("sale"),
                 round(ratioToReport(SALE.SALE_).over(), 2)
                         .as("ratio_to_report_sale"))
                 .from(SALE)
                 .fetch();
 
         // emulate RATIO_TO_REPORT()        
-        ctx.select(SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR, SALE.SALE_,
+        ctx.select(SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR, round(SALE.SALE_, 2).as("sale"),
                 round(SALE.SALE_.divide(sum(SALE.SALE_).over()), 2).as("ratio_to_report_sale"))
                 .from(SALE)
                 .fetch();
     }
 
-    public void ratioToReportSalePerEmployee() {
+    public void ratioToReportSalePerFiscalYear() {
 
-        ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY,
-                SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR, SALE.SALE_,
+        ctx.select(SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR, SALE.SALE_,
                 round(ratioToReport(SALE.SALE_).over()
-                        .partitionBy(SALE.EMPLOYEE_NUMBER), 2)
+                        .partitionBy(SALE.FISCAL_YEAR), 2)
                         .as("ratio_to_report_sale"))
-                .from(EMPLOYEE)
-                .innerJoin(SALE)
-                .on(EMPLOYEE.EMPLOYEE_NUMBER.eq(SALE.EMPLOYEE_NUMBER))
+                .from(SALE)
+                .fetch();
+    }
+
+    public void ratioToReportEmployeeSalary() {
+        
+        ctx.select(OFFICE.OFFICE_CODE, sum(EMPLOYEE.SALARY).as("salaries"),
+                ratioToReport(sum(EMPLOYEE.SALARY)).over()
+                        .mul(100).concat("%").as("ratio_to_report"))
+                .from(OFFICE)
+                .join(EMPLOYEE)
+                .on(OFFICE.OFFICE_CODE.eq(EMPLOYEE.OFFICE_CODE))
+                .groupBy(OFFICE.OFFICE_CODE)
+                .orderBy(OFFICE.OFFICE_CODE)
                 .fetch();
     }
 }

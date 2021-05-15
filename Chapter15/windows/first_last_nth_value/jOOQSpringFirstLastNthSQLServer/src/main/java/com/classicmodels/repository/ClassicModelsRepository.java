@@ -65,6 +65,7 @@ public class ClassicModelsRepository {
 
     public void secondMostExpensiveProductByProductLine() {
 
+        // SQL Server doesn't support fromLast() so we order desc        
         ctx.select().from(
                 select(PRODUCT.PRODUCT_LINE, PRODUCT.PRODUCT_NAME, PRODUCT.BUY_PRICE,
                         rowNumber().over()
