@@ -69,7 +69,9 @@ IF OBJECT_ID('customer', 'U') IS NOT NULL
   DROP TABLE customer;
 IF OBJECT_ID('sale', 'U') IS NOT NULL 
   DROP TABLE sale;
-  IF OBJECT_ID('token', 'U') IS NOT NULL 
+IF OBJECT_ID('daily_activity', 'U') IS NOT NULL 
+  DROP TABLE daily_activity;
+IF OBJECT_ID('token', 'U') IS NOT NULL 
   DROP TABLE token;
 IF OBJECT_ID('employee', 'U') IS NOT NULL 
   DROP TABLE employee;
@@ -182,6 +184,17 @@ CREATE TABLE sale (
   CONSTRAINT [enum_rate_check] CHECK ([rate] IN('SILVER', 'GOLD', 'PLATINUM')),
   CONSTRAINT [enum_vat_check] CHECK ([vat] IN('NONE', 'MIN', 'MAX'))
 ) ;
+
+/*Table structure for table `daily_activity` */
+
+CREATE TABLE [daily_activity] (
+  [day_id] bigint NOT NULL IDENTITY, 
+  [day_date] date NOT NULL,
+  [sales] float NOT NULL,  
+  [visitors] float NOT NULL,    
+  [conversion] float NOT NULL,
+  CONSTRAINT [daily_activity_pk] PRIMARY KEY ([day_id])
+);
 
 CREATE TABLE [token] (
   [token_id] bigint NOT NULL IDENTITY,

@@ -69,10 +69,14 @@ IF OBJECT_ID('customer', 'U') IS NOT NULL
   DROP TABLE customer;
 IF OBJECT_ID('sale', 'U') IS NOT NULL 
   DROP TABLE sale;
-  IF OBJECT_ID('token', 'U') IS NOT NULL 
+IF OBJECT_ID('daily_activity', 'U') IS NOT NULL 
+  DROP TABLE daily_activity;
+IF OBJECT_ID('token', 'U') IS NOT NULL 
   DROP TABLE token;
 IF OBJECT_ID('employee', 'U') IS NOT NULL 
   DROP TABLE employee;
+IF OBJECT_ID('employee_status', 'U') IS NOT NULL 
+  DROP TABLE employee_status;
   IF OBJECT_ID('department', 'U') IS NOT NULL 
   DROP TABLE department;
 IF OBJECT_ID('office', 'U') IS NOT NULL 
@@ -116,6 +120,17 @@ CREATE TABLE employee (
   CONSTRAINT [employee_employee_fk] FOREIGN KEY ([reports_to]) REFERENCES employee ([employee_number]),
   CONSTRAINT [employee_office_fk] FOREIGN KEY ([office_code]) REFERENCES office ([office_code])
 ) ;
+
+/*Table structure for table `employee_status` */
+
+CREATE TABLE employee_status (
+  [id] bigint NOT NULL IDENTITY,
+  [employee_number] bigint NOT NULL,  
+  [status] varchar(50) NOT NULL,  
+  [acquired_date] date NOT NULL,
+  CONSTRAINT id_pk PRIMARY KEY (id),  
+  CONSTRAINT employee_status_employee_fk FOREIGN KEY (employee_number) REFERENCES employee (employee_number)
+);
 
 DROP SEQUENCE IF EXISTS employee_seq;
 GO
@@ -169,6 +184,17 @@ CREATE TABLE sale (
   CONSTRAINT [enum_rate_check] CHECK ([rate] IN('SILVER', 'GOLD', 'PLATINUM')),
   CONSTRAINT [enum_vat_check] CHECK ([vat] IN('NONE', 'MIN', 'MAX'))
 ) ;
+
+/*Table structure for table `daily_activity` */
+
+CREATE TABLE [daily_activity] (
+  [day_id] bigint NOT NULL IDENTITY, 
+  [day_date] date NOT NULL,
+  [sales] float NOT NULL,  
+  [visitors] float NOT NULL,    
+  [conversion] float NOT NULL,
+  CONSTRAINT [daily_activity_pk] PRIMARY KEY ([day_id])
+);
 
 CREATE TABLE [token] (
   [token_id] bigint NOT NULL IDENTITY,

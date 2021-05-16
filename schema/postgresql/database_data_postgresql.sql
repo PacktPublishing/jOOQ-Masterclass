@@ -8318,6 +8318,30 @@ insert into employee_status(id,employee_number,status,acquired_date) values
 
 (39, 1702, 'REGULAR', '2002-11-25'),
 
-(40, 1702, 'AVERAGE', '2004-09-02') ON CONFLICT (id) DO NOTHING;;
+(40, 1702, 'AVERAGE', '2004-09-02') ON CONFLICT (id) DO NOTHING;
+
+/*Data for the table `daily_activity` */
+
+insert into daily_activity(day_id,day_date,sales,visitors,conversion) values 
+
+(1, '2004-01-01', 21, 3373, 0.62),
+
+(2, '2004-01-02', 50, 3820, 1.31),
+
+(3, '2004-01-03', 50, 3175, 1.57),
+
+(4, '2004-01-04', 33, 4013, 0.82),
+
+(5, '2004-01-05', 58, 4022, 1.44),
+
+(6, '2004-01-06', 5, 4873, 0.25),
+
+(7, '2004-01-07', 36, 1924, 1.87),
+
+(8, '2004-01-08', 44, 3867, 1.14),
+
+(9, '2004-01-09', 28, 3621, 0.77),
+
+(10, '2004-01-10', 50, 1722, 2.90) ON CONFLICT (day_id) DO NOTHING;
 
 /* END */

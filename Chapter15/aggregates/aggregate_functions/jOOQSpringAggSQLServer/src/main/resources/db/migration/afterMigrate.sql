@@ -8327,4 +8327,124 @@ begin catch
 end catch
 SET IDENTITY_INSERT [token] OFF;
 
+/*Data for the table `employee_status` */
+
+SET IDENTITY_INSERT [employee_status] ON
+begin try
+insert into employee_status(id,employee_number,status,acquired_date) values 
+
+(1, 1002, 'REGULAR', '2004-04-14'),
+
+(2, 1056, 'REGULAR', '2003-06-10'),
+
+(3, 1076, 'REGULAR', '2005-01-10'),
+
+(4, 1088, 'REGULAR', '2005-04-10'),
+
+(5, 1102, 'REGULAR', '2003-07-12'),
+
+(6, 1143, 'REGULAR', '2003-05-12'),
+
+(7, 1143, 'AVERAGE', '2004-12-05'),
+
+(8, 1165, 'REGULAR', '2005-11-15'),
+
+(9, 1166, 'REGULAR', '2003-06-15'),
+
+(10, 1166, 'AVERAGE', '2004-11-15'),
+
+(11, 1188, 'REGULAR', '2003-10-25'),
+
+(12, 1216, 'REGULAR', '2003-11-25'),
+
+(13, 1286, 'REGULAR', '2004-09-25'),
+
+(14, 1323, 'REGULAR', '2006-01-25'),
+
+(15, 1337, 'REGULAR', '2003-02-23'),
+
+(16, 1370, 'REGULAR', '2000-02-23'),
+
+(17, 1370, 'AVERAGE', '2002-06-21'),
+
+(18, 1370, 'GOOD', '2004-01-11'),
+
+(19, 1370, 'EXCELLENT', '2005-11-11'),
+
+(20, 1401, 'REGULAR', '2005-10-11'),
+
+(21, 1401, 'AVERAGE', '2006-02-12'),
+
+(22, 1501, 'REGULAR', '2004-02-12'),
+
+(23, 1501, 'AVERAGE', '2005-02-12'),
+
+(24, 1504, 'REGULAR', '2003-02-12'),
+
+(25, 1504, 'AVERAGE', '2006-02-12'),
+
+(26, 1504, 'GOOD', '2007-06-10'),
+
+(27, 1611, 'REGULAR', '2003-01-10'),
+
+(28, 1611, 'AVERAGE', '2004-05-17'),
+
+(29, 1611, 'GOOD', '2005-03-22'),
+
+(30, 1611, 'EXCELLENT', '2007-03-20'),
+
+(31, 1612, 'REGULAR', '2003-01-22'),
+
+(32, 1612, 'AVERAGE', '2004-05-11'),
+
+(33, 1619, 'REGULAR', '2000-05-11'),
+
+(34, 1619, 'AVERAGE', '2001-05-11'),
+
+(35, 1619, 'GOOD', '2004-01-15'),
+
+(36, 1621, 'REGULAR', '2004-03-15'),
+
+(37, 1621, 'AVERAGE', '2005-12-15'),
+
+(38, 1625, 'REGULAR', '2002-12-15'),
+
+(39, 1702, 'REGULAR', '2002-11-25'),
+
+(40, 1702, 'AVERAGE', '2004-09-02')
+end try
+begin catch
+end catch
+SET IDENTITY_INSERT [employee_status] OFF;
+
+/*Data for the table `daily_activity` */
+
+SET IDENTITY_INSERT [daily_activity] ON
+begin try
+insert into daily_activity(day_id,day_date,sales,visitors,conversion) values 
+
+(1, '2004-01-01', 21, 3373, 0.62),
+
+(2, '2004-01-02', 50, 3820, 1.31),
+
+(3, '2004-01-03', 50, 3175, 1.57),
+
+(4, '2004-01-04', 33, 4013, 0.82),
+
+(5, '2004-01-05', 58, 4022, 1.44),
+
+(6, '2004-01-06', 5, 4873, 0.25),
+
+(7, '2004-01-07', 36, 1924, 1.87),
+
+(8, '2004-01-08', 44, 3867, 1.14),
+
+(9, '2004-01-09', 28, 3621, 0.77),
+
+(10, '2004-01-10', 50, 1722, 2.90) 
+end try
+begin catch
+end catch
+SET IDENTITY_INSERT [daily_activity] OFF;
+
 /* END */

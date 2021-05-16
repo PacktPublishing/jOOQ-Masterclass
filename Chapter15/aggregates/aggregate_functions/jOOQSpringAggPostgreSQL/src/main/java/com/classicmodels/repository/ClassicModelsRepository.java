@@ -1,11 +1,13 @@
 package com.classicmodels.repository;
 
 import java.math.BigDecimal;
+import static jooq.generated.tables.DailyActivity.DAILY_ACTIVITY;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import org.jooq.Field;
+import static org.jooq.impl.DSL.abs;
 import static org.jooq.impl.DSL.aggregate;
 import static org.jooq.impl.DSL.avg;
 import static org.jooq.impl.DSL.boolAnd;
@@ -14,6 +16,7 @@ import static org.jooq.impl.DSL.cast;
 import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.every;
 import static org.jooq.impl.DSL.exp;
+import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.ln;
 import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.median;
@@ -29,6 +32,7 @@ import static org.jooq.impl.DSL.sqrt;
 import static org.jooq.impl.DSL.stddevPop;
 import static org.jooq.impl.DSL.stddevSamp;
 import static org.jooq.impl.DSL.sum;
+import static org.jooq.impl.DSL.table;
 import static org.jooq.impl.DSL.val;
 import static org.jooq.impl.DSL.varPop;
 import static org.jooq.impl.DSL.varSamp;
@@ -89,6 +93,21 @@ public class ClassicModelsRepository {
                 stddevPop(SALE.SALE_).over().partitionBy(SALE.FISCAL_YEAR).orderBy(SALE.FISCAL_YEAR).as("pop1"),
                 sqrt(varPop(SALE.SALE_).over().partitionBy(SALE.FISCAL_YEAR).orderBy(SALE.FISCAL_YEAR)).as("pop2"))
                 .from(SALE)
+                .fetch();
+        
+        // Compute z-scores        
+        ctx.with("sales_stats").as(
+                select(avg(DAILY_ACTIVITY.SALES).as("mean"),
+                        stddevSamp(DAILY_ACTIVITY.SALES).as("sd")).from(DAILY_ACTIVITY))
+                .with("visitors_stats").as(
+                select(avg(DAILY_ACTIVITY.VISITORS).as("mean"),
+                        stddevSamp(DAILY_ACTIVITY.VISITORS).as("sd")).from(DAILY_ACTIVITY))
+                .select(DAILY_ACTIVITY.DAY_DATE,
+                        abs(DAILY_ACTIVITY.SALES.minus(field("sales_stats.mean")))
+                                .divide(field("sales_stats.sd", Float.class)).as("z_score_sales"),
+                        abs(DAILY_ACTIVITY.VISITORS.minus(field("visitors_stats.mean")))
+                                .divide(field("visitors_stats.sd", Float.class)).as("z_score_visitors"))
+                .from(table("sales_stats"), table("visitors_stats"), DAILY_ACTIVITY)
                 .fetch();
     }
 

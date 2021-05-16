@@ -8329,4 +8329,28 @@ select 39, 1702, 'REGULAR', '2002-11-25' from dual union all
 
 select 40, 1702, 'AVERAGE', '2004-09-02' from dual;
 
+/*Data for the table `daily_activity` */
+
+insert /*+ ignore_row_on_dupkey_index(daily_activity(day_id)) */ into daily_activity(day_id,day_date,sales,visitors,conversion)
+
+select 1, '2004-01-01', 21, 3373, 0.62 from dual union all
+
+select 2, '2004-01-02', 50, 3820, 1.31 from dual union all
+
+select 3, '2004-01-03', 50, 3175, 1.57 from dual union all
+
+select 4, '2004-01-04', 33, 4013, 0.82 from dual union all
+
+select 5, '2004-01-05', 58, 4022, 1.44 from dual union all
+
+select 6, '2004-01-06', 5, 4873, 0.25 from dual union all
+
+select 7, '2004-01-07', 36, 1924, 1.87 from dual union all
+
+select 8, '2004-01-08', 44, 3867, 1.14 from dual union all
+
+select 9, '2004-01-09', 28, 3621, 0.77 from dual union all
+
+select 10, '2004-01-10', 50, 1722, 2.90 from dual;
+
 /* END */

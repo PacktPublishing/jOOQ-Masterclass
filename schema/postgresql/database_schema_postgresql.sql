@@ -23,6 +23,7 @@ DROP TABLE IF EXISTS manager CASCADE;
 DROP TABLE IF EXISTS customer CASCADE;
 DROP TABLE IF EXISTS customerdetail CASCADE;
 DROP TABLE IF EXISTS sale CASCADE;
+DROP TABLE IF EXISTS daily_activity CASCADE;
 DROP TABLE IF EXISTS token CASCADE;
 DROP TABLE IF EXISTS employee CASCADE;
 DROP TABLE IF EXISTS employee_status CASCADE;
@@ -145,6 +146,17 @@ CREATE TABLE sale (
  ,  
   CONSTRAINT sale_employee_fk FOREIGN KEY (employee_number) REFERENCES employee (employee_number) ON UPDATE CASCADE
 ) ;
+
+/*Table structure for table `daily_activity` */
+
+CREATE TABLE daily_activity (
+  day_id serial NOT NULL, 
+  day_date date NOT NULL,
+  sales float NOT NULL,  
+  visitors float NOT NULL,    
+  conversion float NOT NULL,
+  CONSTRAINT daily_activity_pk PRIMARY KEY (day_id)
+);
 
 /*Table structure for table `token` */
 
