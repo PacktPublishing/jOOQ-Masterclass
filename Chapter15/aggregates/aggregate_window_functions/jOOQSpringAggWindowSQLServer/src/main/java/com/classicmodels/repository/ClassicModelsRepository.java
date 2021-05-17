@@ -101,7 +101,7 @@ public class ClassicModelsRepository {
                 ORDERDETAIL.ORDER_LINE_NUMBER, ORDERDETAIL.QUANTITY_ORDERED, ORDERDETAIL.PRICE_EACH,
                 avg(ORDERDETAIL.PRICE_EACH).over()
                         .partitionBy(ORDERDETAIL.ORDER_ID).orderBy(ORDERDETAIL.PRICE_EACH)
-                        .rowsPreceding(3).as("avg_last_3_prices"))
+                        .rowsPreceding(2).as("avg_last_3_prices"))
                 .from(ORDERDETAIL)
                 .fetch();
     }
