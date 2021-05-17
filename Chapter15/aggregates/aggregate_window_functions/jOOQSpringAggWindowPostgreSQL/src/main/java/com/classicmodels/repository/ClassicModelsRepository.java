@@ -11,6 +11,7 @@ import org.jooq.Field;
 import static org.jooq.impl.DSL.avg;
 import static org.jooq.impl.DSL.cast;
 import static org.jooq.impl.DSL.count;
+import static org.jooq.impl.DSL.cumeDist;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.median;
@@ -76,9 +77,10 @@ public class ClassicModelsRepository {
 
         // example 4 - emulate CUME_DIST() 
         ctx.select(PRODUCT.PRODUCT_NAME, PRODUCT.QUANTITY_IN_STOCK,
+                round(cumeDist().over().orderBy(PRODUCT.QUANTITY_IN_STOCK), 2).as("cume_dist"),
                 round(((cast(count().over().orderBy(PRODUCT.QUANTITY_IN_STOCK).rangeUnboundedPreceding(), Double.class)).divide(
                         count().over().orderBy(PRODUCT.QUANTITY_IN_STOCK).rangeBetweenUnboundedPreceding()
-                                .andUnboundedFollowing())), 2).as("cume_dist"))
+                                .andUnboundedFollowing())), 2).as("em_cume_dist"))
                 .from(PRODUCT)
                 .fetch();
     }
@@ -106,7 +108,7 @@ public class ClassicModelsRepository {
                 ORDERDETAIL.ORDER_LINE_NUMBER, ORDERDETAIL.QUANTITY_ORDERED, ORDERDETAIL.PRICE_EACH,
                 avg(ORDERDETAIL.PRICE_EACH).over()
                         .partitionBy(ORDERDETAIL.ORDER_ID).orderBy(ORDERDETAIL.PRICE_EACH)
-                        .rowsPreceding(2).as("avg_last_3_prices"))
+                        .rowsPreceding(2).as("avg_prec_3_prices"))
                 .from(ORDERDETAIL)
                 .fetch();
     }
