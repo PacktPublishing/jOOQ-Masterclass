@@ -23,8 +23,10 @@ DROP TABLE IF EXISTS manager CASCADE;
 DROP TABLE IF EXISTS customer CASCADE;
 DROP TABLE IF EXISTS customerdetail CASCADE;
 DROP TABLE IF EXISTS sale CASCADE;
+DROP TABLE IF EXISTS daily_activity CASCADE;
 DROP TABLE IF EXISTS token CASCADE;
 DROP TABLE IF EXISTS employee CASCADE;
+DROP TABLE IF EXISTS employee_status CASCADE;
 DROP TABLE IF EXISTS department CASCADE;
 DROP TABLE IF EXISTS office CASCADE;
 
@@ -111,6 +113,17 @@ CREATE TABLE employee (
 
 CREATE SEQUENCE employee_seq START 100000 INCREMENT 10 MINVALUE 100000 MAXVALUE 10000000 OWNED BY employee.employee_number;
 
+/*Table structure for table `employee_status` */
+
+CREATE TABLE employee_status (
+  id serial NOT NULL,
+  employee_number bigint NOT NULL,  
+  status varchar(50) NOT NULL,  
+  acquired_date date NOT NULL,
+  CONSTRAINT id_pk PRIMARY KEY (id),  
+  CONSTRAINT employee_status_employee_fk FOREIGN KEY (employee_number) REFERENCES employee (employee_number)
+);
+
 /*Table structure for table `sale` */
 
 CREATE SEQUENCE sale_seq START 1000000;
@@ -133,6 +146,17 @@ CREATE TABLE sale (
  ,  
   CONSTRAINT sale_employee_fk FOREIGN KEY (employee_number) REFERENCES employee (employee_number) ON UPDATE CASCADE
 ) ;
+
+/*Table structure for table `daily_activity` */
+
+CREATE TABLE daily_activity (
+  day_id serial NOT NULL, 
+  day_date date NOT NULL,
+  sales float NOT NULL,  
+  visitors float NOT NULL,    
+  conversion float NOT NULL,
+  CONSTRAINT daily_activity_pk PRIMARY KEY (day_id)
+);
 
 /*Table structure for table `token` */
 

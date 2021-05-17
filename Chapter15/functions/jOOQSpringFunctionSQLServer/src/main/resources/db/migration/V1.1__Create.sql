@@ -13,6 +13,50 @@ This is a modified version of the original schema for Microsoft Server SQL
 
 /* USER-DEFINED FUNCTIONS */
 
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE OR ALTER FUNCTION [SPLIT_PART] (@tstr varchar(2000), @sstr varchar(1), @occ int)
+   RETURNS varchar(1024)
+AS BEGIN
+  DECLARE @cpos int, @pos int, @cnt int, @ret varchar(1000), @tstrlen int, @tocc  int
+	SET @tstrlen  = LEN (@tstr)
+	SET @tocc = DATALENGTH(@tstr)-DATALENGTH(REPLACE(@tstr,@sstr,''))
+	iF @tstrlen = 0
+		RETURN(@ret)
+	ELSE
+	BEGIN
+		SET @pos = CHARINDEX(@sstr, @tstr,  1)
+		IF @pos = 0
+			RETURN(@ret)
+		ELSE
+		BEGIN
+			SET @cnt = 1		
+			IF @occ = 1 
+				SET @ret = LEFT(@tstr, @pos -1) 
+			ELSE
+			BEGIN
+				WHILE (@cnt < @occ)
+				BEGIN
+					SET @cpos = CHARINDEX(@sstr, @tstr, @pos + 1)
+					SET @cnt = @cnt + 1
+					IF @cpos =0
+						SET @ret= SUBSTRING (@tstr, @pos +1, @tstrlen) 
+					ELSE
+						SET @ret = SUBSTRING(@tstr, @pos+1, @cpos-@pos-1)
+					SET @pos = @cpos	
+				END
+					IF (@cnt > @tocc+1)
+					SET @ret = ''
+			END
+		END
+	END
+	RETURN(@ret)
+END
+GO
+
 CREATE OR ALTER FUNCTION netPriceEach(
     @quantity INT,
     @list_price DEC(10,2),
@@ -69,10 +113,14 @@ IF OBJECT_ID('customer', 'U') IS NOT NULL
   DROP TABLE customer;
 IF OBJECT_ID('sale', 'U') IS NOT NULL 
   DROP TABLE sale;
-  IF OBJECT_ID('token', 'U') IS NOT NULL 
+IF OBJECT_ID('daily_activity', 'U') IS NOT NULL 
+  DROP TABLE daily_activity;
+IF OBJECT_ID('token', 'U') IS NOT NULL 
   DROP TABLE token;
 IF OBJECT_ID('employee', 'U') IS NOT NULL 
   DROP TABLE employee;
+IF OBJECT_ID('employee_status', 'U') IS NOT NULL 
+  DROP TABLE employee_status;
   IF OBJECT_ID('department', 'U') IS NOT NULL 
   DROP TABLE department;
 IF OBJECT_ID('office', 'U') IS NOT NULL 
@@ -116,6 +164,17 @@ CREATE TABLE employee (
   CONSTRAINT [employee_employee_fk] FOREIGN KEY ([reports_to]) REFERENCES employee ([employee_number]),
   CONSTRAINT [employee_office_fk] FOREIGN KEY ([office_code]) REFERENCES office ([office_code])
 ) ;
+
+/*Table structure for table `employee_status` */
+
+CREATE TABLE employee_status (
+  [id] bigint NOT NULL IDENTITY,
+  [employee_number] bigint NOT NULL,  
+  [status] varchar(50) NOT NULL,  
+  [acquired_date] date NOT NULL,
+  CONSTRAINT id_pk PRIMARY KEY (id),  
+  CONSTRAINT employee_status_employee_fk FOREIGN KEY (employee_number) REFERENCES employee (employee_number)
+);
 
 DROP SEQUENCE IF EXISTS employee_seq;
 GO
@@ -169,6 +228,17 @@ CREATE TABLE sale (
   CONSTRAINT [enum_rate_check] CHECK ([rate] IN('SILVER', 'GOLD', 'PLATINUM')),
   CONSTRAINT [enum_vat_check] CHECK ([vat] IN('NONE', 'MIN', 'MAX'))
 ) ;
+
+/*Table structure for table `daily_activity` */
+
+CREATE TABLE [daily_activity] (
+  [day_id] bigint NOT NULL IDENTITY, 
+  [day_date] date NOT NULL,
+  [sales] float NOT NULL,  
+  [visitors] float NOT NULL,    
+  [conversion] float NOT NULL,
+  CONSTRAINT [daily_activity_pk] PRIMARY KEY ([day_id])
+);
 
 CREATE TABLE [token] (
   [token_id] bigint NOT NULL IDENTITY,

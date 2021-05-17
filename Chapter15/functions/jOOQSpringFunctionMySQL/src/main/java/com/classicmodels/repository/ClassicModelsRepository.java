@@ -12,6 +12,7 @@ import static jooq.generated.tables.Product.PRODUCT;
 import org.jooq.DSLContext;
 import org.jooq.DatePart;
 import org.jooq.Field;
+import static org.jooq.impl.DSL.aggregate;
 import static org.jooq.impl.DSL.atan2;
 import static org.jooq.impl.DSL.avg;
 import static org.jooq.impl.DSL.castNull;
@@ -32,6 +33,7 @@ import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.greatest;
 import static org.jooq.impl.DSL.ifnull;
 import static org.jooq.impl.DSL.iif;
+import static org.jooq.impl.DSL.inline;
 import static org.jooq.impl.DSL.isnull;
 import static org.jooq.impl.DSL.least;
 import static org.jooq.impl.DSL.localDate;
@@ -41,6 +43,8 @@ import static org.jooq.impl.DSL.month;
 import static org.jooq.impl.DSL.nullif;
 import static org.jooq.impl.DSL.nvl;
 import static org.jooq.impl.DSL.nvl2;
+import static org.jooq.impl.DSL.one;
+import static org.jooq.impl.DSL.position;
 import static org.jooq.impl.DSL.power;
 import static org.jooq.impl.DSL.round;
 import static org.jooq.impl.DSL.row;
@@ -67,6 +71,45 @@ public class ClassicModelsRepository {
 
     public ClassicModelsRepository(DSLContext ctx) {
         this.ctx = ctx;
+    }
+
+    public void someNullsStuffGoodToKnow() {
+
+        // all these return NULL
+        ctx.select().from(values(row(field(castNull(Integer.class).eq(castNull(Integer.class)))))).fetch();
+        ctx.select().from(values(row(field(castNull(Integer.class).gt(0))))).fetch();
+        ctx.select().from(values(row(field(castNull(Integer.class).lt(0))))).fetch();
+        ctx.select().from(values(row(field(castNull(Integer.class).eq(0))))).fetch();
+        ctx.select().from(values(row(field(castNull(Integer.class).divide(0))))).fetch();
+
+        // IS DISTINCT FROM and IS NOT DISTINCT FROM that specially 
+        // treats NULL values as if it were a known value
+        ctx.select().from(values(row(field(castNull(Integer.class).isDistinctFrom(castNull(Integer.class)))))).fetch();
+        ctx.select().from(values(row(field(castNull(Integer.class).isNotDistinctFrom(castNull(Integer.class)))))).fetch();
+        ctx.select().from(values(row(field(castNull(Integer.class).isDistinctFrom(0))))).fetch();
+        ctx.select().from(values(row(field(castNull(Integer.class).isNotDistinctFrom(0))))).fetch();
+
+        // IS NULL and IS NOT NULL
+        ctx.select(OFFICE.OFFICE_CODE, OFFICE.CITY)
+                .from(OFFICE)
+                .where(OFFICE.CITY.isNull())
+                .fetch();
+
+        ctx.select(OFFICE.OFFICE_CODE, OFFICE.CITY)
+                .from(OFFICE)
+                .where(OFFICE.CITY.isNotNull())
+                .fetch();
+        
+        // sorting NULLs
+        ctx.select(OFFICE.OFFICE_CODE, OFFICE.CITY)
+                .from(OFFICE)
+                .orderBy(OFFICE.CITY.desc().nullsFirst())
+                .fetch();
+
+        ctx.select(OFFICE.OFFICE_CODE, OFFICE.CITY)
+                .from(OFFICE)
+                .orderBy(OFFICE.CITY.desc().nullsLast())
+                .fetch();
     }
 
     ///////////////////////
@@ -329,6 +372,31 @@ public class ClassicModelsRepository {
                 substring(EMPLOYEE.LAST_NAME, 1, 1).concat(". ("),
                 lower(EMPLOYEE.JOB_TITLE),
                 rpad(val(")"), 4, '.')).as("employee"))
+                .from(EMPLOYEE)
+                .fetch();
+
+        // the next three queries does the same thing - split an email as "name@domain" into "name" and "domain"
+        ctx.select(EMPLOYEE.EMAIL,
+                substring(EMPLOYEE.EMAIL, one(),
+                        position(EMPLOYEE.EMAIL, "@").minus(1)).as("name"),
+                substring(EMPLOYEE.EMAIL,
+                        position(EMPLOYEE.EMAIL, "@").plus(1)).as("domain"))
+                .from(EMPLOYEE)
+                .fetch();
+
+        ctx.select(EMPLOYEE.EMAIL,
+                aggregate("substring_index", String.class,
+                        EMPLOYEE.EMAIL, inline("@"), one()).as("name"),
+                aggregate("substring_index", String.class,
+                        EMPLOYEE.EMAIL, inline("@"), inline(-1)).as("domain"))
+                .from(EMPLOYEE)
+                .fetch();
+
+        ctx.select(EMPLOYEE.EMAIL,
+                aggregate("regexp_substr", String.class, EMPLOYEE.EMAIL,
+                        inline("[^@]+")).as("name"),
+                aggregate("regexp_substr", String.class, EMPLOYEE.EMAIL,
+                        inline("[^@]+$")).as("domain"))
                 .from(EMPLOYEE)
                 .fetch();
     }

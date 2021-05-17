@@ -13,6 +13,50 @@ This is a modified version of the original schema for Microsoft Server SQL
 
 /* USER-DEFINED FUNCTIONS */
 
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE OR ALTER FUNCTION [SPLIT_PART] (@tstr varchar(2000), @sstr varchar(1), @occ int)
+   RETURNS varchar(1024)
+AS BEGIN
+  DECLARE @cpos int, @pos int, @cnt int, @ret varchar(1000), @tstrlen int, @tocc  int
+	SET @tstrlen  = LEN (@tstr)
+	SET @tocc = DATALENGTH(@tstr)-DATALENGTH(REPLACE(@tstr,@sstr,''))
+	iF @tstrlen = 0
+		RETURN(@ret)
+	ELSE
+	BEGIN
+		SET @pos = CHARINDEX(@sstr, @tstr,  1)
+		IF @pos = 0
+			RETURN(@ret)
+		ELSE
+		BEGIN
+			SET @cnt = 1		
+			IF @occ = 1 
+				SET @ret = LEFT(@tstr, @pos -1) 
+			ELSE
+			BEGIN
+				WHILE (@cnt < @occ)
+				BEGIN
+					SET @cpos = CHARINDEX(@sstr, @tstr, @pos + 1)
+					SET @cnt = @cnt + 1
+					IF @cpos =0
+						SET @ret= SUBSTRING (@tstr, @pos +1, @tstrlen) 
+					ELSE
+						SET @ret = SUBSTRING(@tstr, @pos+1, @cpos-@pos-1)
+					SET @pos = @cpos	
+				END
+					IF (@cnt > @tocc+1)
+					SET @ret = ''
+			END
+		END
+	END
+	RETURN(@ret)
+END
+GO
+
 CREATE OR ALTER FUNCTION netPriceEach(
     @quantity INT,
     @list_price DEC(10,2),

@@ -3,6 +3,7 @@ package com.classicmodels.repository;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
+import static jooq.generated.Routines.splitPart;
 import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
 import static jooq.generated.tables.Department.DEPARTMENT;
 import static jooq.generated.tables.Employee.EMPLOYEE;
@@ -32,6 +33,7 @@ import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.greatest;
 import static org.jooq.impl.DSL.ifnull;
 import static org.jooq.impl.DSL.iif;
+import static org.jooq.impl.DSL.inline;
 import static org.jooq.impl.DSL.isnull;
 import static org.jooq.impl.DSL.least;
 import static org.jooq.impl.DSL.localDate;
@@ -41,6 +43,8 @@ import static org.jooq.impl.DSL.month;
 import static org.jooq.impl.DSL.nullif;
 import static org.jooq.impl.DSL.nvl;
 import static org.jooq.impl.DSL.nvl2;
+import static org.jooq.impl.DSL.one;
+import static org.jooq.impl.DSL.position;
 import static org.jooq.impl.DSL.power;
 import static org.jooq.impl.DSL.round;
 import static org.jooq.impl.DSL.row;
@@ -69,6 +73,45 @@ public class ClassicModelsRepository {
         this.ctx = ctx;
     }
 
+    public void someNullsStuffGoodToKnow() {
+
+        // all these return NULL
+        ctx.select().from(values(row(field(castNull(Integer.class).eq(castNull(Integer.class)))))).fetch();
+        ctx.select().from(values(row(field(castNull(Integer.class).gt(0))))).fetch();
+        ctx.select().from(values(row(field(castNull(Integer.class).lt(0))))).fetch();
+        ctx.select().from(values(row(field(castNull(Integer.class).eq(0))))).fetch();
+        ctx.select().from(values(row(field(castNull(Integer.class).divide(0))))).fetch();
+
+        // IS DISTINCT FROM and IS NOT DISTINCT FROM that specially 
+        // treats NULL values as if it were a known value
+        ctx.select().from(values(row(field(castNull(Integer.class).isDistinctFrom(castNull(Integer.class)))))).fetch();
+        ctx.select().from(values(row(field(castNull(Integer.class).isNotDistinctFrom(castNull(Integer.class)))))).fetch();
+        ctx.select().from(values(row(field(castNull(Integer.class).isDistinctFrom(0))))).fetch();
+        ctx.select().from(values(row(field(castNull(Integer.class).isNotDistinctFrom(0))))).fetch();
+
+        // IS NULL and IS NOT NULL
+        ctx.select(OFFICE.OFFICE_CODE, OFFICE.CITY)
+                .from(OFFICE)
+                .where(OFFICE.CITY.isNull())
+                .fetch();
+
+        ctx.select(OFFICE.OFFICE_CODE, OFFICE.CITY)
+                .from(OFFICE)
+                .where(OFFICE.CITY.isNotNull())
+                .fetch();
+        
+        // sorting NULLs
+        ctx.select(OFFICE.OFFICE_CODE, OFFICE.CITY)
+                .from(OFFICE)
+                .orderBy(OFFICE.CITY.desc().nullsFirst())
+                .fetch();
+
+        ctx.select(OFFICE.OFFICE_CODE, OFFICE.CITY)
+                .from(OFFICE)
+                .orderBy(OFFICE.CITY.desc().nullsLast())
+                .fetch();
+    }
+    
     ///////////////////////
     // General Functions //
     ///////////////////////
@@ -84,7 +127,7 @@ public class ClassicModelsRepository {
                         DEPARTMENT.ST_BORROWING, val(0)).mul(0.25), 2).as("expenses_deduction"))
                 .from(DEPARTMENT)
                 .fetch();
-        
+
         // Fill gaps in forecast profit        
         ctx.select(DEPARTMENT.NAME, DEPARTMENT.OFFICE_CODE, DEPARTMENT.FORECAST_PROFIT,
                 DEPARTMENT.PROFIT,
@@ -336,6 +379,21 @@ public class ClassicModelsRepository {
                 rpad(val(")"), 4, '.')).as("employee"))
                 .from(EMPLOYEE)
                 .fetch();
+
+        // the next two queries does the same thing - split an email as "name@domain" into "name" and "domain"
+        ctx.select(EMPLOYEE.EMAIL,
+                substring(EMPLOYEE.EMAIL, one(),
+                        position(EMPLOYEE.EMAIL, "@").minus(1)).as("name"),
+                substring(EMPLOYEE.EMAIL,
+                        position(EMPLOYEE.EMAIL, "@").plus(1)).as("domain"))
+                .from(EMPLOYEE)
+                .fetch();
+
+        ctx.select(EMPLOYEE.EMAIL,
+                splitPart(EMPLOYEE.EMAIL, inline("@"), one()).as("name"),
+                splitPart(EMPLOYEE.EMAIL, inline("@"), inline(2)).as("domain"))
+                .from(EMPLOYEE)
+                .fetch();               
     }
 
     ////////////////////////

@@ -14,9 +14,11 @@ public class ClassicModelsService {
 
     public void callAll() {
 
+        classicModelsRepository.someNullsStuffGoodToKnow();
+        
         classicModelsRepository.generalFunctionExamples();
         classicModelsRepository.numericFunctionsExamples();
         classicModelsRepository.stringFunctionsExample();
-        classicModelsRepository.dateTimeFunctionsExample();
+        classicModelsRepository.dateTimeFunctionsExample();                
     }
 }

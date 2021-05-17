@@ -13,6 +13,7 @@ import static jooq.generated.tables.Product.PRODUCT;
 import org.jooq.DSLContext;
 import org.jooq.DatePart;
 import org.jooq.Field;
+import static org.jooq.impl.DSL.aggregate;
 import static org.jooq.impl.DSL.atan2;
 import static org.jooq.impl.DSL.avg;
 import static org.jooq.impl.DSL.cast;
@@ -34,6 +35,7 @@ import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.greatest;
 import static org.jooq.impl.DSL.ifnull;
 import static org.jooq.impl.DSL.iif;
+import static org.jooq.impl.DSL.inline;
 import static org.jooq.impl.DSL.isnull;
 import static org.jooq.impl.DSL.least;
 import static org.jooq.impl.DSL.localDate;
@@ -43,6 +45,8 @@ import static org.jooq.impl.DSL.month;
 import static org.jooq.impl.DSL.nullif;
 import static org.jooq.impl.DSL.nvl;
 import static org.jooq.impl.DSL.nvl2;
+import static org.jooq.impl.DSL.one;
+import static org.jooq.impl.DSL.position;
 import static org.jooq.impl.DSL.power;
 import static org.jooq.impl.DSL.round;
 import static org.jooq.impl.DSL.row;
@@ -72,6 +76,45 @@ public class ClassicModelsRepository {
     public ClassicModelsRepository(DSLContext ctx) {
         this.ctx = ctx;
     }
+    
+    public void someNullsStuffGoodToKnow() {
+
+        // all these return NULL
+        ctx.select().from(values(row(field(castNull(Integer.class).eq(castNull(Integer.class)))))).fetch();
+        ctx.select().from(values(row(field(castNull(Integer.class).gt(0))))).fetch();
+        ctx.select().from(values(row(field(castNull(Integer.class).lt(0))))).fetch();
+        ctx.select().from(values(row(field(castNull(Integer.class).eq(0))))).fetch();
+        ctx.select().from(values(row(field(castNull(Integer.class).divide(0))))).fetch();
+
+        // IS DISTINCT FROM and IS NOT DISTINCT FROM that specially 
+        // treats NULL values as if it were a known value
+        ctx.select().from(values(row(field(castNull(Integer.class).isDistinctFrom(castNull(Integer.class)))))).fetch();
+        ctx.select().from(values(row(field(castNull(Integer.class).isNotDistinctFrom(castNull(Integer.class)))))).fetch();
+        ctx.select().from(values(row(field(castNull(Integer.class).isDistinctFrom(0))))).fetch();
+        ctx.select().from(values(row(field(castNull(Integer.class).isNotDistinctFrom(0))))).fetch();
+
+        // IS NULL and IS NOT NULL
+        ctx.select(OFFICE.OFFICE_CODE, OFFICE.CITY)
+                .from(OFFICE)
+                .where(OFFICE.CITY.isNull())
+                .fetch();
+
+        ctx.select(OFFICE.OFFICE_CODE, OFFICE.CITY)
+                .from(OFFICE)
+                .where(OFFICE.CITY.isNotNull())
+                .fetch();
+        
+        // sorting NULLs
+        ctx.select(OFFICE.OFFICE_CODE, OFFICE.CITY)
+                .from(OFFICE)
+                .orderBy(OFFICE.CITY.desc().nullsFirst())
+                .fetch();
+
+        ctx.select(OFFICE.OFFICE_CODE, OFFICE.CITY)
+                .from(OFFICE)
+                .orderBy(OFFICE.CITY.desc().nullsLast())
+                .fetch();
+    }
 
     ///////////////////////
     // General Functions //
@@ -88,7 +131,7 @@ public class ClassicModelsRepository {
                         DEPARTMENT.ST_BORROWING, val(0)).mul(0.25), 2).as("expenses_deduction"))
                 .from(DEPARTMENT)
                 .fetch();
-        
+
         // Fill gaps in forecast profit        
         ctx.select(DEPARTMENT.NAME, DEPARTMENT.OFFICE_CODE, DEPARTMENT.FORECAST_PROFIT,
                 DEPARTMENT.PROFIT,
@@ -152,7 +195,7 @@ public class ClassicModelsRepository {
                 .from(PRODUCT)
                 .groupBy(PRODUCT.PRODUCT_LINE)
                 .fetch();
-        
+
         // of course, you can write the same thing as here        
         ctx.select(PRODUCT.PRODUCT_LINE,
                 count().filterWhere(PRODUCT.BUY_PRICE.gt(BigDecimal.ZERO).and(PRODUCT.BUY_PRICE.lt(BigDecimal.valueOf(35)))).as("< 35"),
@@ -179,12 +222,12 @@ public class ClassicModelsRepository {
                 iif(DEPARTMENT.LOCAL_BUDGET.isNull(), "NO BUDGET", "HAS BUDGET").as("budget"))
                 .from(DEPARTMENT)
                 .fetch();
-        
+
         ctx.select(ORDERDETAIL.PRODUCT_ID, ORDERDETAIL.QUANTITY_ORDERED,
                 iif(ORDERDETAIL.QUANTITY_ORDERED.gt(45), "MORE", "LESS").as("45"))
                 .from(ORDERDETAIL)
                 .fetch();
-        
+
         // check this example simplified via ifnull() in the IFNULL() section
         ctx.select(DEPARTMENT.NAME, DEPARTMENT.OFFICE_CODE,
                 iif(DEPARTMENT.LOCAL_BUDGET.isNull(),
@@ -198,7 +241,7 @@ public class ClassicModelsRepository {
                                 .plus(iif(DEPARTMENT.ACCRUED_LIABILITIES.isNull(), 0, DEPARTMENT.ACCRUED_LIABILITIES)
                                         .plus(iif(DEPARTMENT.ST_BORROWING.isNull(), 0, DEPARTMENT.ST_BORROWING))))).as("budget"))
                 .from(DEPARTMENT)
-                .fetch();   
+                .fetch();
 
         ctx.select(
                 iif(PRODUCT.PRODUCT_SCALE.eq("1:10"), "A",
@@ -224,7 +267,7 @@ public class ClassicModelsRepository {
         ctx.select(OFFICE.OFFICE_CODE, nullif(OFFICE.COUNTRY, ""))
                 .from(OFFICE)
                 .fetch();
-        
+
         ctx.selectFrom(OFFICE)
                 .where(nullif(OFFICE.COUNTRY, "").isNull())
                 .fetch();
@@ -255,7 +298,7 @@ public class ClassicModelsRepository {
                                         .plus(ifnull(DEPARTMENT.ST_BORROWING, 0))))).as("budget"))
                 .from(DEPARTMENT)
                 .fetch();
-        
+
         // NVL        
         ctx.select(OFFICE.OFFICE_CODE, nvl(OFFICE.CITY, "N/A"), nvl(OFFICE.COUNTRY, "N/A"))
                 .from(OFFICE)
@@ -312,7 +355,6 @@ public class ClassicModelsRepository {
              + COS(latitude1) * COS(latitude2) * POWER (SIN((longitude2 − longitude1) / 2.0), 2);                 
         RETURN (6371.0 * (2.0 * ATN2(SQRT(a),SQRT(1.0 − a))));
          */
-        
         double pi180 = Math.PI / 180;
 
         Field<BigDecimal> a = (power(sin(val((latitude2 - latitude1) * pi180).divide(2d)), 2d)
@@ -335,6 +377,23 @@ public class ClassicModelsRepository {
                 rpad(val(")"), 4, '.')).as("employee"))
                 .from(EMPLOYEE)
                 .fetch();
+
+        // the next two queries does the same thing - split an email as "name@domain" into "name" and "domain"
+        ctx.select(EMPLOYEE.EMAIL,
+                substring(EMPLOYEE.EMAIL, one(),
+                        position(EMPLOYEE.EMAIL, "@").minus(1)).as("name"),
+                substring(EMPLOYEE.EMAIL,
+                        position(EMPLOYEE.EMAIL, "@").plus(1)).as("domain"))
+                .from(EMPLOYEE)
+                .fetch();
+
+        ctx.select(EMPLOYEE.EMAIL,
+                aggregate("split_part", String.class,
+                        EMPLOYEE.EMAIL, inline("@"), one()).as("name"),
+                aggregate("split_part", String.class,
+                        EMPLOYEE.EMAIL, inline("@"), inline(2)).as("domain"))
+                .from(EMPLOYEE)
+                .fetch();        
     }
 
     ////////////////////////
