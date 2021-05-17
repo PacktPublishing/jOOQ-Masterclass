@@ -29,6 +29,7 @@ import static org.jooq.impl.DSL.dayOfWeek;
 import static org.jooq.impl.DSL.dayOfYear;
 import static org.jooq.impl.DSL.decode;
 import static org.jooq.impl.DSL.extract;
+import static org.jooq.impl.DSL.falseCondition;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.greatest;
 import static org.jooq.impl.DSL.ifnull;
@@ -56,6 +57,7 @@ import static org.jooq.impl.DSL.space;
 import static org.jooq.impl.DSL.sqrt;
 import static org.jooq.impl.DSL.substring;
 import static org.jooq.impl.DSL.sum;
+import static org.jooq.impl.DSL.trueCondition;
 import static org.jooq.impl.DSL.upper;
 import static org.jooq.impl.DSL.val;
 import static org.jooq.impl.DSL.values;
@@ -75,15 +77,37 @@ public class ClassicModelsRepository {
 
     public void someNullsStuffGoodToKnow() {
 
+        /*
+        Statement	        Result	Comment
+        SELECT NULL = NULL;	NULL	NULL cannot be compared to NULL
+        SELECT NULL > 0;	NULL	NULL can't be compared
+        SELECT NULL < 0;	NULL	NULL can't be compared
+        SELECT NULL = 0;	NULL	NULL can't be equated
+        SELECT NULL / 0;	NULL	So, no Division by Zero error ?!
+        SELECT NULL OR FALSE;	NULL	NULL can't be used in boolean logic
+        SELECT NULL OR TRUE;	TRUE	Surprising and database dependent!
+        */
+
         // all these return NULL
         ctx.select().from(values(row(field(castNull(Integer.class).eq(castNull(Integer.class)))))).fetch();
         ctx.select().from(values(row(field(castNull(Integer.class).gt(0))))).fetch();
         ctx.select().from(values(row(field(castNull(Integer.class).lt(0))))).fetch();
         ctx.select().from(values(row(field(castNull(Integer.class).eq(0))))).fetch();
-        ctx.select().from(values(row(field(castNull(Integer.class).divide(0))))).fetch();
+        ctx.select().from(values(row(field(castNull(Integer.class).divide(0))))).fetch();                
+        ctx.select().from(values(row(field((falseCondition().or(castNull(Integer.class).eq(0))))))).fetch();        
+        ctx.select().from(values(row(field((trueCondition().or(castNull(Integer.class).eq(0))))))).fetch();
 
         // IS DISTINCT FROM and IS NOT DISTINCT FROM that specially 
         // treats NULL values as if it were a known value
+        
+        /*
+        X	        Y	        IS DISTINCT FROM
+        not NULL	not NULL	rely on the regular not equal '<>' operator
+        not NULL	NULL	        return TRUE because they are different
+        NULL	        not NULL	return TRUE because they are different
+        NULL	        NULL	        return FALSE because they are the same
+        */
+        
         ctx.select().from(values(row(field(castNull(Integer.class).isDistinctFrom(castNull(Integer.class)))))).fetch();
         ctx.select().from(values(row(field(castNull(Integer.class).isNotDistinctFrom(castNull(Integer.class)))))).fetch();
         ctx.select().from(values(row(field(castNull(Integer.class).isDistinctFrom(0))))).fetch();
