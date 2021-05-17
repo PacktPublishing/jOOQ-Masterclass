@@ -30,18 +30,19 @@ public class ClassicModelsRepository {
     // ARRAY_AGG()
     public void arrayAggEmployee() {
 
-        ctx.select(
+        String[] names1 = ctx.select(
                 arrayAgg(EMPLOYEE.FIRST_NAME).orderBy(EMPLOYEE.FIRST_NAME.desc(), EMPLOYEE.LAST_NAME.desc()))
                 .from(EMPLOYEE)
-                .fetch();
+                .fetch().get(0).value1();
 
         // fetch as a Java array
-        String[] names = ctx.select(EMPLOYEE.FIRST_NAME)
+        String[] names2 = ctx.select(EMPLOYEE.FIRST_NAME)
                 .from(EMPLOYEE)
                 .orderBy(EMPLOYEE.FIRST_NAME.desc(), EMPLOYEE.LAST_NAME.desc())
                 .fetchArray(EMPLOYEE.FIRST_NAME);
 
-        System.out.println("Java array:\n" + Arrays.toString(names));
+        System.out.println("Java array (1):\n" + Arrays.toString(names1));
+        System.out.println("Java array (2):\n" + Arrays.toString(names2));
     }
 
     // JSON_ARRAYAGG()
