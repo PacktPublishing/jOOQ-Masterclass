@@ -1,9 +1,10 @@
 package com.classicmodels.repository;
 
+import java.util.Arrays;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Sale.SALE;
-import jooq.generated.udt.records.SalaryarrRecord;
+import jooq.generated.udt.records.SalaryArrRecord;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.collect;
 import static org.jooq.impl.DSL.concat;
@@ -62,20 +63,32 @@ public class ClassicModelsRepository {
     // COLLECT()
     public void collectSale() {
 
-        var result1 = ctx.select(collect(EMPLOYEE.SALARY, SalaryarrRecord.class)
+        // Result<Record1<SalaryArrRecord>>
+        var result1 = ctx.select(collect(EMPLOYEE.SALARY, SalaryArrRecord.class)
                 .orderBy(EMPLOYEE.SALARY.asc(), EMPLOYEE.JOB_TITLE.desc()))
                 .from(EMPLOYEE)
                 .fetch();
 
-        System.out.println("Result (1):\n" + result1);
+        System.out.println("Result (1):\n" + Arrays.toString(result1.get(0).value1().toArray(Integer[]::new)));
+        System.out.println("Result (1) the fifth element:" + result1.get(0).value1().get(5));
 
+        // Result<Record1<SalaryArrRecord>>
         var result2 = ctx.select(collect(EMPLOYEE.SALARY,
-                SQLDataType.INTEGER.asArrayDataType(SalaryarrRecord.class))
+                SQLDataType.INTEGER.asArrayDataType(SalaryArrRecord.class))
                 .orderBy(EMPLOYEE.SALARY.asc(), EMPLOYEE.JOB_TITLE.desc()))
                 .from(EMPLOYEE)
                 .fetch();
 
-        System.out.println("Result (2):\n" + result2);
+        System.out.println("Result (2):\n" + Arrays.toString(result2.get(0).value1().toArray(Integer[]::new)));
+        System.out.println("Result (2), the fifth element:" + result2.get(0).value1().get(5));
+
+        SalaryArrRecord result3 = ctx.select(collect(EMPLOYEE.SALARY, SalaryArrRecord.class)
+                .orderBy(EMPLOYEE.SALARY.asc(), EMPLOYEE.JOB_TITLE.desc()))
+                .from(EMPLOYEE)
+                .fetchOneInto(SalaryArrRecord.class);
+
+        System.out.println("Result (3):\n" + Arrays.toString(result3.toArray(Integer[]::new)));
+        System.out.println("Result (3), the fifth element:fetchOneInto(SalaryArrRecord.class)" + result3.get(5));               
     }
 
     // GROUP_CONCAT()

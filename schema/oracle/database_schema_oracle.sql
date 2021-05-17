@@ -133,7 +133,7 @@ COMMIT;
 /* Type used in collect() */
 
 BEGIN
-   EXECUTE IMMEDIATE 'CREATE TYPE salaryArr AS TABLE OF INTEGER;';
+   EXECUTE IMMEDIATE 'CREATE TYPE SALARY_ARR AS TABLE OF NUMBER(7);';
 EXCEPTION
    WHEN OTHERS THEN NULL;
 END;
@@ -180,7 +180,7 @@ CREATE TABLE employee (
   extension varchar2(10) NOT NULL,
   email varchar2(100) NOT NULL,
   office_code varchar2(10) NOT NULL,
-  salary int NOT NULL,
+  salary number(7) NOT NULL,
   commission int DEFAULT NULL,
   reports_to number(10) DEFAULT NULL,
   job_title varchar2(50) NOT NULL,
