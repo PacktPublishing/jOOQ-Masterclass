@@ -86,16 +86,16 @@ public class ClassicModelsRepository {
         SELECT NULL / 0;	NULL	So, no Division by Zero error ?!
         SELECT NULL OR FALSE;	NULL	NULL can't be used in boolean logic
         SELECT NULL OR TRUE;	TRUE	Surprising and database dependent!
-         */
-        
+        */
+
         // all these return NULL
-        ctx.select().from(values(row(field(castNull(Integer.class).eq(castNull(Integer.class)))))).fetch();
-        ctx.select().from(values(row(field(castNull(Integer.class).gt(0))))).fetch();
-        ctx.select().from(values(row(field(castNull(Integer.class).lt(0))))).fetch();
-        ctx.select().from(values(row(field(castNull(Integer.class).eq(0))))).fetch();
-        ctx.select().from(values(row(field(castNull(Integer.class).divide(0))))).fetch();
-        ctx.select().from(values(row(field((falseCondition().or(castNull(Integer.class).eq(0))))))).fetch();
-        ctx.select().from(values(row(field((trueCondition().or(castNull(Integer.class).eq(0))))))).fetch();
+        ctx.select(field(castNull(Integer.class).eq(castNull(Integer.class))).as("r")).fetch();
+        ctx.select(field(castNull(Integer.class).gt(0)).as("r")).fetch();
+        ctx.select(field(castNull(Integer.class).lt(0)).as("r")).fetch();
+        ctx.select(field(castNull(Integer.class).eq(0)).as("r")).fetch();
+        ctx.select(field(castNull(Integer.class).divide(0)).as("r")).fetch();                
+        ctx.select(field(trueCondition().or(castNull(Integer.class).eq(0))).as("r")).fetch();        
+        ctx.select(field(falseCondition().or(castNull(Integer.class).eq(0))).as("r")).fetch();        
 
         // IS DISTINCT FROM and IS NOT DISTINCT FROM that specially 
         // treats NULL values as if it were a known value
@@ -106,12 +106,12 @@ public class ClassicModelsRepository {
         not NULL	NULL	        return TRUE because they are different
         NULL	        not NULL	return TRUE because they are different
         NULL	        NULL	        return FALSE because they are the same
-         */
+        */
         
-        ctx.select().from(values(row(field(castNull(Integer.class).isDistinctFrom(castNull(Integer.class)))))).fetch();
-        ctx.select().from(values(row(field(castNull(Integer.class).isNotDistinctFrom(castNull(Integer.class)))))).fetch();
-        ctx.select().from(values(row(field(castNull(Integer.class).isDistinctFrom(0))))).fetch();
-        ctx.select().from(values(row(field(castNull(Integer.class).isNotDistinctFrom(0))))).fetch();
+        ctx.select(field(castNull(Integer.class).isDistinctFrom(castNull(Integer.class))).as("r")).fetch();
+        ctx.select(field(castNull(Integer.class).isNotDistinctFrom(castNull(Integer.class))).as("r")).fetch();
+        ctx.select(field(castNull(Integer.class).isDistinctFrom(0)).as("r")).fetch();
+        ctx.select(field(castNull(Integer.class).isNotDistinctFrom(0)).as("r")).fetch();
 
         // IS NULL and IS NOT NULL
         ctx.select(OFFICE.OFFICE_CODE, OFFICE.CITY)
@@ -123,7 +123,7 @@ public class ClassicModelsRepository {
                 .from(OFFICE)
                 .where(OFFICE.CITY.isNotNull())
                 .fetch();
-
+        
         // sorting NULLs
         ctx.select(OFFICE.OFFICE_CODE, OFFICE.CITY)
                 .from(OFFICE)
