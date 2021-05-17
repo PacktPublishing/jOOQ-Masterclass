@@ -13,6 +13,50 @@ This is a modified version of the original schema for Microsoft Server SQL
 
 /* USER-DEFINED FUNCTIONS */
 
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE OR ALTER FUNCTION [SPLIT_PART] (@tstr varchar(2000), @sstr varchar(1), @occ int)
+   RETURNS varchar(1024)
+AS BEGIN
+  DECLARE @cpos int, @pos int, @cnt int, @ret varchar(1000), @tstrlen int, @tocc  int
+	SET @tstrlen  = LEN (@tstr)
+	SET @tocc = DATALENGTH(@tstr)-DATALENGTH(REPLACE(@tstr,@sstr,''))
+	iF @tstrlen = 0
+		RETURN(@ret)
+	ELSE
+	BEGIN
+		SET @pos = CHARINDEX(@sstr, @tstr,  1)
+		IF @pos = 0
+			RETURN(@ret)
+		ELSE
+		BEGIN
+			SET @cnt = 1		
+			IF @occ = 1 
+				SET @ret = LEFT(@tstr, @pos -1) 
+			ELSE
+			BEGIN
+				WHILE (@cnt < @occ)
+				BEGIN
+					SET @cpos = CHARINDEX(@sstr, @tstr, @pos + 1)
+					SET @cnt = @cnt + 1
+					IF @cpos =0
+						SET @ret= SUBSTRING (@tstr, @pos +1, @tstrlen) 
+					ELSE
+						SET @ret = SUBSTRING(@tstr, @pos+1, @cpos-@pos-1)
+					SET @pos = @cpos	
+				END
+					IF (@cnt > @tocc+1)
+					SET @ret = ''
+			END
+		END
+	END
+	RETURN(@ret)
+END
+GO
+
 CREATE OR ALTER FUNCTION netPriceEach(
     @quantity INT,
     @list_price DEC(10,2),
@@ -69,10 +113,14 @@ IF OBJECT_ID('customer', 'U') IS NOT NULL
   DROP TABLE customer;
 IF OBJECT_ID('sale', 'U') IS NOT NULL 
   DROP TABLE sale;
-  IF OBJECT_ID('token', 'U') IS NOT NULL 
+IF OBJECT_ID('daily_activity', 'U') IS NOT NULL 
+  DROP TABLE daily_activity;
+IF OBJECT_ID('token', 'U') IS NOT NULL 
   DROP TABLE token;
 IF OBJECT_ID('employee', 'U') IS NOT NULL 
   DROP TABLE employee;
+IF OBJECT_ID('employee_status', 'U') IS NOT NULL 
+  DROP TABLE employee_status;
   IF OBJECT_ID('department', 'U') IS NOT NULL 
   DROP TABLE department;
 IF OBJECT_ID('office', 'U') IS NOT NULL 
@@ -91,6 +139,7 @@ CREATE TABLE office (
   [postal_code] varchar(15) NOT NULL,
   [territory] varchar(10) NOT NULL,
   [location] [geometry] DEFAULT NULL,
+  [internal_budget] int NOT NULL,
   CONSTRAINT [office_pk] PRIMARY KEY ([office_code]),
   CONSTRAINT [office_postal_code_uk] UNIQUE ([postal_code])
 ) ;
@@ -105,6 +154,7 @@ CREATE TABLE employee (
   [email] varchar(100) NOT NULL,
   [office_code] varchar(10) NOT NULL,
   [salary] int NOT NULL,
+  [commission] int DEFAULT NULL,
   [reports_to] bigint DEFAULT NULL,
   [job_title] varchar(50) NOT NULL,
   [employee_of_year] varchar(50) DEFAULT NULL,
@@ -114,6 +164,17 @@ CREATE TABLE employee (
   CONSTRAINT [employee_employee_fk] FOREIGN KEY ([reports_to]) REFERENCES employee ([employee_number]),
   CONSTRAINT [employee_office_fk] FOREIGN KEY ([office_code]) REFERENCES office ([office_code])
 ) ;
+
+/*Table structure for table `employee_status` */
+
+CREATE TABLE employee_status (
+  [id] bigint NOT NULL IDENTITY,
+  [employee_number] bigint NOT NULL,  
+  [status] varchar(50) NOT NULL,  
+  [acquired_date] date NOT NULL,
+  CONSTRAINT id_pk PRIMARY KEY (id),  
+  CONSTRAINT employee_status_employee_fk FOREIGN KEY (employee_number) REFERENCES employee (employee_number)
+);
 
 DROP SEQUENCE IF EXISTS employee_seq;
 GO
@@ -131,6 +192,15 @@ CREATE TABLE department (
   [office_code] varchar(10) NOT NULL,
   [topic] varchar(100) DEFAULT NULL,  
   [dep_net_ipv4] varchar(16) DEFAULT NULL, 
+  [local_budget] float DEFAULT NULL,
+  [profit] float DEFAULT NULL,
+  [forecast_profit] float DEFAULT NULL,
+  [cash] float DEFAULT NULL,
+  [accounts_receivable] float DEFAULT NULL,
+  [inventories] float DEFAULT NULL,
+  [accounts_payable] float DEFAULT NULL,
+  [st_borrowing] float DEFAULT NULL,
+  [accrued_liabilities] float DEFAULT NULL,
   CONSTRAINT [department_pk] PRIMARY KEY ([department_id]),
   CONSTRAINT [department_code_uk] UNIQUE ([code])
 ,
@@ -149,6 +219,8 @@ CREATE TABLE sale (
   [hot] bit DEFAULT 0,  
   [rate] varchar(10) DEFAULT NULL,
   [vat] varchar(10) DEFAULT NULL,
+  [fiscal_month] int NOT NULL,
+  [revenue_growth] float NOT NULL,
   [trend] varchar(10) DEFAULT NULL,  
   CONSTRAINT [sale_pk] PRIMARY KEY ([sale_id])
 ,    
@@ -156,6 +228,17 @@ CREATE TABLE sale (
   CONSTRAINT [enum_rate_check] CHECK ([rate] IN('SILVER', 'GOLD', 'PLATINUM')),
   CONSTRAINT [enum_vat_check] CHECK ([vat] IN('NONE', 'MIN', 'MAX'))
 ) ;
+
+/*Table structure for table `daily_activity` */
+
+CREATE TABLE [daily_activity] (
+  [day_id] bigint NOT NULL IDENTITY, 
+  [day_date] date NOT NULL,
+  [sales] float NOT NULL,  
+  [visitors] float NOT NULL,    
+  [conversion] float NOT NULL,
+  CONSTRAINT [daily_activity_pk] PRIMARY KEY ([day_id])
+);
 
 CREATE TABLE [token] (
   [token_id] bigint NOT NULL IDENTITY,
@@ -292,8 +375,8 @@ CREATE TABLE orderdetail (
   [quantity_ordered] int NOT NULL,
   [price_each] decimal(10,2) NOT NULL,
   [order_line_number] smallint NOT NULL,
-  CONSTRAINT [orderdetail_pk] PRIMARY KEY ([orderdetail_id])
- ,
+  CONSTRAINT [orderdetail_pk] PRIMARY KEY ([orderdetail_id]),
+  CONSTRAINT [orderdetail_uk] UNIQUE ([order_id], [product_id]),
   CONSTRAINT [orderdetail_order_fk] FOREIGN KEY ([order_id]) REFERENCES [order] ([order_id]),
   CONSTRAINT [orderdetail_product_fk] FOREIGN KEY ([product_id]) REFERENCES product ([product_id])
 ) ;
@@ -361,4 +444,11 @@ SELECT [classicmodels].[dbo].[office].[office_code],
 	   [classicmodels].[dbo].[office].[postal_code]
 FROM [classicmodels].[dbo].[office]
 WHERE [classicmodels].[dbo].[office].[city] IS NOT NULL;
+GO
+
+CREATE VIEW product_master AS
+SELECT [classicmodels].[dbo].[product].[product_line],
+       [classicmodels].[dbo].[product].[product_name],
+       [classicmodels].[dbo].[product].[product_scale]       
+FROM [classicmodels].[dbo].[product];
 /* END */

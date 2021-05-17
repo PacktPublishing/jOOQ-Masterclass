@@ -8,10 +8,10 @@ import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.arrayAgg;
 import static org.jooq.impl.DSL.concat;
 import static org.jooq.impl.DSL.groupConcat;
+import static org.jooq.impl.DSL.inline;
 import static org.jooq.impl.DSL.jsonArrayAgg;
 import static org.jooq.impl.DSL.jsonEntry;
 import static org.jooq.impl.DSL.jsonObject;
-import static org.jooq.impl.DSL.val;
 import static org.jooq.impl.DSL.xmlagg;
 import static org.jooq.impl.DSL.xmlelement;
 import org.springframework.stereotype.Repository;
@@ -74,7 +74,7 @@ public class ClassicModelsRepository {
     // GROUP_CONCAT()
     public void groupConcatEmployee() {
 
-        ctx.select(groupConcat(concat(EMPLOYEE.FIRST_NAME, val(" "), EMPLOYEE.LAST_NAME))
+        ctx.select(groupConcat(concat(EMPLOYEE.FIRST_NAME, inline(" "), EMPLOYEE.LAST_NAME))
                 .orderBy(EMPLOYEE.SALARY.desc()).separator("; ").as("names_of_employees"))
                 .from(EMPLOYEE)
                 .fetch();
