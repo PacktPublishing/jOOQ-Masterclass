@@ -26,8 +26,10 @@ DROP TABLE IF EXISTS `manager`;
 DROP TABLE IF EXISTS `customerdetail`;
 DROP TABLE IF EXISTS `customer`;
 DROP TABLE IF EXISTS `sale`;
+DROP TABLE IF EXISTS `daily_activity`;
 DROP TABLE IF EXISTS `token`;
 DROP TABLE IF EXISTS `employee`;
+DROP TABLE IF EXISTS `employee_status`;
 DROP TABLE IF EXISTS `department`;
 DROP TABLE IF EXISTS `office`;
 
@@ -44,6 +46,7 @@ CREATE TABLE `office` (
   `postal_code` varchar(15) NOT NULL,
   `territory` varchar(10) NOT NULL,
   `location` point DEFAULT NULL,
+  `internal_budget` int NOT NULL,
   CONSTRAINT `office_pk` PRIMARY KEY (`office_code`),
   CONSTRAINT `office_postal_code_uk` UNIQUE (`postal_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -56,6 +59,15 @@ CREATE TABLE `department` (
   `office_code` varchar(10) NOT NULL,
   `topic` varchar(100) DEFAULT NULL,  
   `dep_net_ipv4` varchar(16) DEFAULT NULL,
+  `local_budget` float DEFAULT NULL,
+  `profit` float DEFAULT NULL,
+  `forecast_profit` float DEFAULT NULL,
+  `cash` float DEFAULT NULL,
+  `accounts_receivable` float DEFAULT NULL,
+  `inventories` float DEFAULT NULL,
+  `accounts_payable` float DEFAULT NULL,
+  `st_borrowing` float DEFAULT NULL,
+  `accrued_liabilities` float DEFAULT NULL,
   CONSTRAINT `department_pk` PRIMARY KEY (`department_id`),  
   CONSTRAINT `department_code_uk` UNIQUE (`code`),
   CONSTRAINT `department_office_fk` FOREIGN KEY (`office_code`) REFERENCES `office` (`office_code`)
@@ -71,6 +83,7 @@ CREATE TABLE `employee` (
   `email` varchar(100) NOT NULL,
   `office_code` varchar(10) NOT NULL,
   `salary` int NOT NULL,
+  `commission` int DEFAULT NULL,
   `reports_to` bigint DEFAULT NULL,
   `job_title` varchar(50) NOT NULL, 
   `employee_of_year` varchar(50) DEFAULT NULL,
@@ -78,6 +91,17 @@ CREATE TABLE `employee` (
   CONSTRAINT `employee_pk` PRIMARY KEY (`employee_number`),
   CONSTRAINT `employee_employee_fk` FOREIGN KEY (`reports_to`) REFERENCES `employee` (`employee_number`),
   CONSTRAINT `employee_office_fk` FOREIGN KEY (`office_code`) REFERENCES `office` (`office_code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Table structure for table `employee_status` */
+
+CREATE TABLE `employee_status` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `employee_number` bigint NOT NULL,  
+  `status` varchar(50) NOT NULL,  
+  `acquired_date` date NOT NULL,
+  CONSTRAINT `id_pk` PRIMARY KEY (`id`),  
+  CONSTRAINT `employee_status_employee_fk` FOREIGN KEY (`employee_number`) REFERENCES `employee` (`employee_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Table structure for table `sale` */
@@ -90,9 +114,22 @@ CREATE TABLE `sale` (
   `hot` boolean DEFAULT FALSE,  
   `rate` enum ('SILVER', 'GOLD', 'PLATINUM') DEFAULT NULL,
   `vat` enum ('NONE', 'MIN', 'MAX') DEFAULT NULL,
+  `fiscal_month` int NOT NULL,
+  `revenue_growth` float NOT NULL, 
   `trend` varchar(10) DEFAULT NULL,
   CONSTRAINT `sale_pk` PRIMARY KEY (`sale_id`),    
   CONSTRAINT `sale_employee_fk` FOREIGN KEY (`employee_number`) REFERENCES `employee` (`employee_number`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Table structure for table `daily_activity` */
+
+CREATE TABLE `daily_activity` (
+  `day_id` bigint NOT NULL AUTO_INCREMENT, 
+  `day_date` date NOT NULL,
+  `sales` float NOT NULL,  
+  `visitors` float NOT NULL,    
+  `conversion` float NOT NULL,
+  CONSTRAINT `daily_activity_pk` PRIMARY KEY (`day_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Table structure for table `token` */

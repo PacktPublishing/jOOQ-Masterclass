@@ -46,7 +46,7 @@ public class ClassicModelsRepository {
                 .on(EMPLOYEE.OFFICE_CODE.eq(OFFICE.OFFICE_CODE))
                 .fetch();
 
-        // example 2
+        // example 2 (another formula of median)
         Field<Integer> x = ctx.select(sum(PRODUCT.QUANTITY_IN_STOCK)
                 .over().partitionBy(PRODUCT.QUANTITY_IN_STOCK)).asField("x");
         Field<Integer> y = (val(2).mul(rowNumber().over().orderBy(PRODUCT.QUANTITY_IN_STOCK))
@@ -68,9 +68,10 @@ public class ClassicModelsRepository {
                 BANK_TRANSACTION.TRANSFER_AMOUNT, BANK_TRANSACTION.STATUS,
                 sum(BANK_TRANSACTION.TRANSFER_AMOUNT).over()
                         .partitionBy(BANK_TRANSACTION.CUSTOMER_NUMBER)
-                        .orderBy(BANK_TRANSACTION.CACHING_DATE, BANK_TRANSACTION.STATUS)
+                        .orderBy(BANK_TRANSACTION.CACHING_DATE)
                         .rowsBetweenUnboundedPreceding().andCurrentRow().as("result"))
                 .from(BANK_TRANSACTION)
+                .where(BANK_TRANSACTION.STATUS.eq("SUCCESS"))
                 .fetch();
 
         // example 4 - emulate CUME_DIST() 
@@ -105,7 +106,7 @@ public class ClassicModelsRepository {
                 ORDERDETAIL.ORDER_LINE_NUMBER, ORDERDETAIL.QUANTITY_ORDERED, ORDERDETAIL.PRICE_EACH,
                 avg(ORDERDETAIL.PRICE_EACH).over()
                         .partitionBy(ORDERDETAIL.ORDER_ID).orderBy(ORDERDETAIL.PRICE_EACH)
-                        .rowsPreceding(3).as("avg_last_3_days"))
+                        .rowsPreceding(3).as("avg_last_3_prices"))
                 .from(ORDERDETAIL)
                 .fetch();
     }

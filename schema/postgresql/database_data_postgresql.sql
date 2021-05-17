@@ -8162,7 +8162,13 @@ insert into bank_transaction(transaction_id,bank_name,bank_iban,transfer_amount,
 
 (9,'Optimus Bank','8V34VN5U435334','5312.23',333,'NF959653','2005-03-01 19:32:56','RETRIED'),
 
-(10,'BRT Bank','TVNU343T38TUNU3T','52151.81',278,'GP636783', '2003-03-02 12:32:00','FAILED') ON CONFLICT (transaction_id) DO NOTHING;
+(10,'5 Stars Bank','8VN8UNT5U45T8','3382.13',462,'GC60330','2004-07-01 12:31:56','SUCCESS'),
+
+(11,'5 Stars Bank','8VN8UNT5U45T8','2566.17',462,'GC60330','2004-07-03 11:21:16','SUCCESS'),
+
+(12,'Bank Ltd. US','348398H3493HG93','12304.13',447,'OU516561','2004-12-27 16:15:22','SUCCESS'),
+
+(13,'BRT Bank','TVNU343T38TUNU3T','52151.81',278,'GP636783', '2003-03-02 12:32:00','FAILED') ON CONFLICT (transaction_id) DO NOTHING;
 
 insert into sale(sale_id,fiscal_year,sale,employee_number,fiscal_month,revenue_growth,trend) values 
 

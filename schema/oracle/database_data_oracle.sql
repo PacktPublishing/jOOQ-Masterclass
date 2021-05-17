@@ -8171,7 +8171,13 @@ select 8,'Optimus Bank','8V34VN5U435334','2544.36',333,'NF959653','2005-03-01 18
 
 select 9,'Optimus Bank','8V34VN5U435334','5312.23',333,'NF959653','2005-03-01 19:32:56','RETRIED' from dual union all
 
-select 10,'BRT Bank','TVNU343T38TUNU3T','52151.81',278,'GP636783', '2003-03-02 12:32:00','FAILED' from dual;
+select 10,'5 Stars Bank','8VN8UNT5U45T8','3382.13',462,'GC60330','2004-07-01 12:31:56','SUCCESS' from dual union all
+
+select 11,'5 Stars Bank','8VN8UNT5U45T8','2566.17',462,'GC60330','2004-07-03 11:21:16','SUCCESS' from dual union all
+
+select 12,'Bank Ltd. US','348398H3493HG93','12304.13',447,'OU516561','2004-12-27 16:15:22','SUCCESS' from dual union all
+
+select 13,'BRT Bank','TVNU343T38TUNU3T','52151.81',278,'GP636783', '2003-03-02 12:32:00','FAILED' from dual;
 
 insert /*+ ignore_row_on_dupkey_index(sale(sale_id)) */ into sale(sale_id,fiscal_year,sale,employee_number,fiscal_month,revenue_growth,trend)
 
