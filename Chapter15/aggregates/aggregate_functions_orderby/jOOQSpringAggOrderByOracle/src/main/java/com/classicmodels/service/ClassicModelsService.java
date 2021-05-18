@@ -19,5 +19,6 @@ public class ClassicModelsService {
         classicModelsRepository.collectSale();
         classicModelsRepository.groupConcatEmployee();
         classicModelsRepository.keepingExample();
+        classicModelsRepository.roadToKeep();
     }
 }

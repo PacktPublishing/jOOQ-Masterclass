@@ -1,8 +1,11 @@
 package com.classicmodels.repository;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Employee.EMPLOYEE;
+import jooq.generated.tables.Order;
+import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Sale.SALE;
 import jooq.generated.udt.records.SalaryArrRecord;
 import org.jooq.DSLContext;
@@ -10,6 +13,7 @@ import static org.jooq.impl.DSL.collect;
 import static org.jooq.impl.DSL.concat;
 import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.denseRank;
+import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.groupConcat;
 import static org.jooq.impl.DSL.inline;
 import static org.jooq.impl.DSL.jsonArrayAgg;
@@ -17,10 +21,14 @@ import static org.jooq.impl.DSL.jsonEntry;
 import static org.jooq.impl.DSL.jsonObject;
 import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.min;
+import static org.jooq.impl.DSL.rowNumber;
+import static org.jooq.impl.DSL.select;
+import static org.jooq.impl.DSL.selectOne;
 import static org.jooq.impl.DSL.sum;
 import static org.jooq.impl.DSL.xmlagg;
 import static org.jooq.impl.DSL.xmlelement;
 import org.jooq.impl.SQLDataType;
+import static org.jooq.util.oracle.OracleDSL.rowid;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -88,7 +96,7 @@ public class ClassicModelsRepository {
                 .fetchOneInto(SalaryArrRecord.class);
 
         System.out.println("Result (3):\n" + Arrays.toString(result3.toArray(Integer[]::new)));
-        System.out.println("Result (3), the fifth element:fetchOneInto(SalaryArrRecord.class)" + result3.get(5));               
+        System.out.println("Result (3), the fifth element:fetchOneInto(SalaryArrRecord.class)" + result3.get(5));
     }
 
     // GROUP_CONCAT()
@@ -119,6 +127,76 @@ public class ClassicModelsRepository {
                 sum(SALE.SALE_).keepDenseRankFirstOrderBy(SALE.FISCAL_YEAR),
                 count(SALE.SALE_).keepDenseRankLastOrderBy(SALE.FISCAL_YEAR))
                 .from(SALE)
+                .fetch();
+    }
+
+    public void roadToKeep() {
+
+        // select only the orders before 2004-06-06 by customer number
+        ctx.select(ORDER.CUSTOMER_NUMBER, max(ORDER.ORDER_DATE))
+                .from(ORDER)
+                .where(ORDER.ORDER_DATE.lt(LocalDate.of(2004, 6, 6)))
+                .groupBy(ORDER.CUSTOMER_NUMBER)
+                .fetch();
+
+        // select more information such as shipped date and status
+        // using left anti join
+        Order t = ORDER.as("T");
+        ctx.select(ORDER.CUSTOMER_NUMBER, ORDER.ORDER_DATE, ORDER.SHIPPED_DATE, ORDER.STATUS)
+                .from(ORDER)
+                .where(ORDER.ORDER_DATE.lt(LocalDate.of(2004, 6, 6)).andNotExists(
+                        selectOne()
+                                .from(t)
+                                .where(ORDER.CUSTOMER_NUMBER.eq(t.CUSTOMER_NUMBER)
+                                        .and(t.ORDER_DATE.lt(LocalDate.of(2004, 6, 6))
+                                                .and(t.ORDER_DATE.gt(ORDER.ORDER_DATE)))
+                                ))).fetch();
+
+        ctx.select(ORDER.CUSTOMER_NUMBER, ORDER.ORDER_DATE, ORDER.SHIPPED_DATE, ORDER.STATUS)
+                .from(ORDER)
+                .leftAntiJoin(t)
+                .on(ORDER.CUSTOMER_NUMBER.eq(t.CUSTOMER_NUMBER)
+                        .and(t.ORDER_DATE.lt(LocalDate.of(2004, 6, 6))
+                                .and(t.ORDER_DATE.gt(ORDER.ORDER_DATE))))
+                .where(ORDER.ORDER_DATE.lt(LocalDate.of(2004, 6, 6))).fetch();
+
+        // using ROW_NUMBER()        
+        ctx.select(field("R.CUSTOMER_NUMBER"), field("R.ORDER_DATE"),
+                field("R.SHIPPED_DATE"), field("R.STATUS"))
+                .from(select(ORDER.CUSTOMER_NUMBER, ORDER.ORDER_DATE,
+                        ORDER.SHIPPED_DATE, ORDER.STATUS,
+                        rowNumber().over().partitionBy(ORDER.CUSTOMER_NUMBER)
+                                .orderBy(ORDER.ORDER_DATE.desc()).as("RN"))
+                        .from(ORDER)
+                        .where(ORDER.ORDER_DATE.lt(LocalDate.of(2004, 6, 6))).asTable("R"))
+                .where(field("R.RN").eq(1))
+                .fetch();
+
+        /* EXPERIMENTAL
+        ctx.select(ORDER.CUSTOMER_NUMBER, ORDER.ORDER_DATE, ORDER.SHIPPED_DATE, ORDER.STATUS)
+                .from(ORDER)
+                .where(ORDER.ORDER_DATE.lt(LocalDate.of(2004, 6, 6)))
+                .qualify(rowNumber().over().partitionBy(ORDER.CUSTOMER_NUMBER)
+                        .orderBy(ORDER.ORDER_DATE.desc()).eq(1))
+                .fetch();
+         */
+        
+        // using ORACLE's KEEP        
+        ctx.select(ORDER.CUSTOMER_NUMBER,
+                max(ORDER.ORDER_DATE).as("ORDER_DATE"),
+                max(ORDER.SHIPPED_DATE).keepDenseRankLastOrderBy(ORDER.SHIPPED_DATE).as("SHIPPED_DATE"),
+                max(ORDER.STATUS).keepDenseRankLastOrderBy(ORDER.SHIPPED_DATE).as("STATUS"))
+                .from(ORDER)
+                .where(ORDER.ORDER_DATE.lt(LocalDate.of(2004, 6, 6)))
+                .groupBy(ORDER.CUSTOMER_NUMBER)
+                .fetch();
+
+        ctx.select(ORDER.CUSTOMER_NUMBER, ORDER.ORDER_DATE, ORDER.SHIPPED_DATE, ORDER.STATUS)
+                .from(ORDER)
+                .where((rowid().in(select(max((rowid())).keepDenseRankLastOrderBy(ORDER.SHIPPED_DATE))
+                        .from(ORDER)
+                        .where(ORDER.ORDER_DATE.lt(LocalDate.of(2004, 6, 6)))
+                        .groupBy(ORDER.CUSTOMER_NUMBER))))
                 .fetch();
     }
 }
