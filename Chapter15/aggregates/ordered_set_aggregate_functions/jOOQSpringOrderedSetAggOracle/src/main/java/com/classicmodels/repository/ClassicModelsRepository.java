@@ -1,5 +1,6 @@
 package com.classicmodels.repository;
 
+import java.math.BigInteger;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Product.PRODUCT;
@@ -134,9 +135,16 @@ public class ClassicModelsRepository {
                 listAgg(EMPLOYEE.FIRST_NAME).withinGroupOrderBy(EMPLOYEE.SALARY).as("list_agg"))
                 .from(EMPLOYEE)
                 .fetch();
+        
+        ctx.select(
+                listAgg(EMPLOYEE.FIRST_NAME).withinGroupOrderBy(EMPLOYEE.SALARY)
+                        .filterWhere(EMPLOYEE.SALARY.gt(BigInteger.valueOf(80000)))
+                        .as("list_agg"))
+                .from(EMPLOYEE)
+                .fetch();
 
         ctx.select(
-                listAgg(concat(EMPLOYEE.FIRST_NAME, val(" "), EMPLOYEE.LAST_NAME), ", ")
+                listAgg(concat(EMPLOYEE.FIRST_NAME, val(" "), EMPLOYEE.LAST_NAME), ",")
                         .withinGroupOrderBy(EMPLOYEE.SALARY.desc(), EMPLOYEE.FIRST_NAME.desc()).as("employees"))
                 .from(EMPLOYEE)
                 .fetch();

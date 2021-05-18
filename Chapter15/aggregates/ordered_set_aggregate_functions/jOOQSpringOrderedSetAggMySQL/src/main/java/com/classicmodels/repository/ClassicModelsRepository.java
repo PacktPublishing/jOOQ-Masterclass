@@ -27,9 +27,16 @@ public class ClassicModelsRepository {
                 .fetch();
 
         ctx.select(
-                listAgg(concat(EMPLOYEE.FIRST_NAME, val(" "), EMPLOYEE.LAST_NAME), ", ")
+                listAgg(EMPLOYEE.FIRST_NAME).withinGroupOrderBy(EMPLOYEE.SALARY)
+                        .filterWhere(EMPLOYEE.SALARY.gt(80000))
+                        .as("list_agg"))
+                .from(EMPLOYEE)
+                .fetch();
+
+        ctx.select(
+                listAgg(concat(EMPLOYEE.FIRST_NAME, val(" "), EMPLOYEE.LAST_NAME), ",")
                         .withinGroupOrderBy(EMPLOYEE.SALARY.desc(), EMPLOYEE.FIRST_NAME.desc()).as("employees"))
                 .from(EMPLOYEE)
                 .fetch();
-    } 
+    }
 }
