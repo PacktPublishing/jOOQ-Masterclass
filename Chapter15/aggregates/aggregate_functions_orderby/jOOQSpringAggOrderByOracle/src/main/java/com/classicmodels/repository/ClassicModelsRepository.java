@@ -132,7 +132,7 @@ public class ClassicModelsRepository {
 
     public void roadToKeep() {
 
-        // select only the orders before 2004-06-06 by customer number
+        // select only the ORDER_DATE closest to 2004-06-06 by customer number
         ctx.select(ORDER.CUSTOMER_NUMBER, max(ORDER.ORDER_DATE))
                 .from(ORDER)
                 .where(ORDER.ORDER_DATE.lt(LocalDate.of(2004, 6, 6)))
