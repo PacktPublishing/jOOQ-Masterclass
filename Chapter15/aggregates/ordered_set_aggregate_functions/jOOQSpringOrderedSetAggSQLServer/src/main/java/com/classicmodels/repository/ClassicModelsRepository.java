@@ -77,7 +77,7 @@ public class ClassicModelsRepository {
                 .join(PRODUCT)
                 .on(ORDERDETAIL.PRODUCT_ID.eq(PRODUCT.PRODUCT_ID))
                 .groupBy(ORDERDETAIL.ORDER_ID)
-                .fetch();
+                .fetch();        
     }
 
     // MODE()

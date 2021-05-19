@@ -26,6 +26,7 @@ DROP TABLE IF EXISTS `manager`;
 DROP TABLE IF EXISTS `customerdetail`;
 DROP TABLE IF EXISTS `customer`;
 DROP TABLE IF EXISTS `sale`;
+DROP TABLE IF EXISTS `daily_activity`;
 DROP TABLE IF EXISTS `token`;
 DROP TABLE IF EXISTS `employee`;
 DROP TABLE IF EXISTS `employee_status`;
@@ -118,6 +119,17 @@ CREATE TABLE `sale` (
   `trend` varchar(10) DEFAULT NULL,
   CONSTRAINT `sale_pk` PRIMARY KEY (`sale_id`),    
   CONSTRAINT `sale_employee_fk` FOREIGN KEY (`employee_number`) REFERENCES `employee` (`employee_number`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Table structure for table `daily_activity` */
+
+CREATE TABLE `daily_activity` (
+  `day_id` bigint NOT NULL AUTO_INCREMENT, 
+  `day_date` date NOT NULL,
+  `sales` float NOT NULL,  
+  `visitors` float NOT NULL,    
+  `conversion` float NOT NULL,
+  CONSTRAINT `daily_activity_pk` PRIMARY KEY (`day_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Table structure for table `token` */
@@ -240,6 +252,7 @@ CREATE TABLE `order` (
   `status` varchar(15) NOT NULL,
   `comments` text,
   `customer_number` bigint NOT NULL,
+  `amount` decimal(10,2) NOT NULL,
   CONSTRAINT `order_pk` PRIMARY KEY (`order_id`),
   CONSTRAINT `order_customer_fk` FOREIGN KEY (`customer_number`) REFERENCES `customer` (`customer_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;

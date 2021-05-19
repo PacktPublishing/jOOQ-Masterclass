@@ -534,6 +534,7 @@ CREATE TABLE "ORDER" (
   status varchar2(15) NOT NULL,
   comments clob,
   customer_number number(10) NOT NULL,
+  amount number(10,2) NOT NULL,
   CONSTRAINT order_pk PRIMARY KEY (order_id)
  ,
   CONSTRAINT order_customer_fk FOREIGN KEY (customer_number) REFERENCES customer (customer_number)

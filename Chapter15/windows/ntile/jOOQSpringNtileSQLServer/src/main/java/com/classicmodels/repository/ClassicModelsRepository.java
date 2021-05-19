@@ -2,8 +2,10 @@ package com.classicmodels.repository;
 
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Office.OFFICE;
+import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import org.jooq.DSLContext;
+import static org.jooq.impl.DSL.avg;
 import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.max;
@@ -53,6 +55,36 @@ public class ClassicModelsRepository {
                         ntile(10).over().orderBy(ORDERDETAIL.PRICE_EACH).as("bucket"))
                         .from(ORDERDETAIL))
                 .groupBy(field("bucket"))
+                .fetch();
+    }
+    
+    // Calculating Recency, Frequency and Monetary (RFM) indices
+    public void rfm() {
+
+        ctx.select(field("customer_number"),
+                ntile(4).over().orderBy(field("last_order_date")).as("rfm_recency"),
+                ntile(4).over().orderBy(field("count_order")).as("rfm_frequency"),
+                ntile(4).over().orderBy(field("avg_amount")).as("rfm_monetary")).from(
+                select(ORDER.CUSTOMER_NUMBER.as("customer_number"),
+                        max(ORDER.ORDER_DATE).as("last_order_date"),
+                        count().as("count_order"), avg(ORDER.AMOUNT).as("avg_amount"))
+                        .from(ORDER)
+                        .groupBy(ORDER.CUSTOMER_NUMBER))
+                .fetch();
+
+        // RFM combined based on the previous query        
+        ctx.select(field("customer_number"),
+                field("rfm_recency").mul(100).plus(field("rfm_frequency").mul(10))
+                        .plus(field("rfm_monetary")).as("rfm_combined")).from(
+                select(field("customer_number"),
+                        ntile(4).over().orderBy(field("last_order_date")).as("rfm_recency"),
+                        ntile(4).over().orderBy(field("count_order")).as("rfm_frequency"),
+                        ntile(4).over().orderBy(field("avg_amount")).as("rfm_monetary")).from(
+                        select(ORDER.CUSTOMER_NUMBER.as("customer_number"),
+                                max(ORDER.ORDER_DATE).as("last_order_date"),
+                                count().as("count_order"), avg(ORDER.AMOUNT).as("avg_amount"))
+                                .from(ORDER)
+                                .groupBy(ORDER.CUSTOMER_NUMBER)))
                 .fetch();
     }
 }

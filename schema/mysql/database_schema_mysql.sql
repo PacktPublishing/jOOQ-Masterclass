@@ -252,6 +252,7 @@ CREATE TABLE `order` (
   `status` varchar(15) NOT NULL,
   `comments` text,
   `customer_number` bigint NOT NULL,
+  `amount` decimal(10,2) NOT NULL,
   CONSTRAINT `order_pk` PRIMARY KEY (`order_id`),
   CONSTRAINT `order_customer_fk` FOREIGN KEY (`customer_number`) REFERENCES `customer` (`customer_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
