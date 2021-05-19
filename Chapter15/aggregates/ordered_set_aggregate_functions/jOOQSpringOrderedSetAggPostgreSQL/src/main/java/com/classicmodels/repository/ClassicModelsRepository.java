@@ -55,24 +55,36 @@ public class ClassicModelsRepository {
                 .fetch();
     }
 
-    // RANK()
-    public void rankEmployeeSalary() {
+    // PERCENT_RANK()    
+    public void percentRankEmployeeSalary() {
 
+        // What percentage of Sales Reps salaries are higher than $61,000 
         ctx.select(count().as("salary_nr"),
-                rank(val(61000)).withinGroupOrderBy(field(name("t", "salary")).desc()).as("salary_rank"))
+                percentRank(val(61000d)).withinGroupOrderBy(
+                        field(name("t", "salary")).desc()).mul(100).concat("%")
+                        .as("salary_percentile_rank"))
                 .from(select(EMPLOYEE.SALARY.as("salary"))
                         .from(EMPLOYEE)
                         .where(EMPLOYEE.JOB_TITLE.eq("Sales Rep"))
                         .groupBy(EMPLOYEE.SALARY)
                         .asTable("t"))
                 .fetch();
+
+        // What percentage of Sales Reps have salaries higher than $61,000 
+        ctx.select(count().as("salary_nr"),
+                percentRank(val(61000d)).withinGroupOrderBy(
+                        EMPLOYEE.SALARY.desc()).mul(100).concat("%")
+                        .as("salary_percentile_rank"))
+                .from(EMPLOYEE)
+                .where(EMPLOYEE.JOB_TITLE.eq("Sales Rep"))
+                .fetch();
     }
 
-    // PERCENT_RANK() & CUME_DIST() 
-    public void percentRankAndCumeDist() {
+    // RANK() & CUME_DIST() 
+    public void rankAndCumeDist() {
 
         ctx.select(
-                percentRank(val(61000)).withinGroupOrderBy(EMPLOYEE.SALARY).as("percentile_rank"))
+                rank(val(61000d)).withinGroupOrderBy(EMPLOYEE.SALARY).as("rank"))
                 .from(EMPLOYEE)
                 .fetch();
 
@@ -118,7 +130,7 @@ public class ClassicModelsRepository {
                         .withinGroupOrderBy(EMPLOYEE.SALARY.desc(), EMPLOYEE.FIRST_NAME.desc()).as("employees"))
                 .from(EMPLOYEE)
                 .fetch();
-        
+
         ctx.select(EMPLOYEE.JOB_TITLE, listAgg(EMPLOYEE.FIRST_NAME, ",")
                 .withinGroupOrderBy(EMPLOYEE.FIRST_NAME).as("employees"))
                 .from(EMPLOYEE)
