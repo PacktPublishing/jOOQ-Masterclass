@@ -15,6 +15,6 @@ public class ClassicModelsService {
     public void callAll() {
               
         classicModelsRepository.listAggEmployee();
-        classicModelsRepository.modeSale();
+        classicModelsRepository.modeOrderedSetAggregateFunctionEmulation();
     }
 }
