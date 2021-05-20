@@ -117,11 +117,11 @@ public class ClassicModelsRepository {
                 select(OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.COUNTRY,
                         EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY,
                         percentileDisc(0.5).withinGroupOrderBy(EMPLOYEE.SALARY)
-                                .over().partitionBy(OFFICE.OFFICE_CODE).as("percentile_cont"))
+                                .over().partitionBy(OFFICE.OFFICE_CODE).as("percentile_disc"))
                         .from(OFFICE)
                         .join(EMPLOYEE)
                         .on(OFFICE.OFFICE_CODE.eq(EMPLOYEE.OFFICE_CODE)).asTable("t"))
-                .where(field(name("t", "percentile_cont"))
+                .where(field(name("t", "percentile_disc"))
                         .le(select(percentileCont(0.5).withinGroupOrderBy(EMPLOYEE.SALARY))
                                 .from(EMPLOYEE)))
                 .fetch();
