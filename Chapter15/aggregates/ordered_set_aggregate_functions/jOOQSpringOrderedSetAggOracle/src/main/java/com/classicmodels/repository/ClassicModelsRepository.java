@@ -93,13 +93,17 @@ public class ClassicModelsRepository {
     }
 
     // PERCENTILE_DISC() & PERCENTILE_CONT()
-    public void percentileDiscContEmployeePerOffice() {
+    public void percentileDiscCont() {
 
         ctx.select(
-                percentileDisc(0.25).withinGroupOrderBy(SALE.SALE_).as("0.25"),
-                percentileDisc(0.5).withinGroupOrderBy(SALE.SALE_).as("0.50"),
-                percentileDisc(0.75).withinGroupOrderBy(SALE.SALE_).as("0.75"),
-                percentileDisc(1.0).withinGroupOrderBy(SALE.SALE_).as("1.0"))
+                percentileDisc(0.25).withinGroupOrderBy(SALE.SALE_).as("pd - 0.25"),
+                percentileCont(0.25).withinGroupOrderBy(SALE.SALE_).as("pc - 0.25"),
+                percentileDisc(0.5).withinGroupOrderBy(SALE.SALE_).as("pd - 0.50"),
+                percentileCont(0.5).withinGroupOrderBy(SALE.SALE_).as("pc - 0.50"),
+                percentileDisc(0.75).withinGroupOrderBy(SALE.SALE_).as("pd - 0.75"),
+                percentileCont(0.75).withinGroupOrderBy(SALE.SALE_).as("pc - 0.75"),
+                percentileDisc(1.0).withinGroupOrderBy(SALE.SALE_).as("pd - 1.0"),
+                percentileCont(1.0).withinGroupOrderBy(SALE.SALE_).as("pc - 1.0"))
                 .from(SALE)
                 .fetch();
 

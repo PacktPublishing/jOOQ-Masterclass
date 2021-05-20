@@ -17,7 +17,7 @@ public class ClassicModelsService {
         classicModelsRepository.denseRankSalesLeCertainSale();
         classicModelsRepository.percentRankEmployeeSalary();
         classicModelsRepository.rankAndCumeDist();
-        classicModelsRepository.percentileDiscContEmployeePerOffice();
+        classicModelsRepository.percentileDiscCont();
         classicModelsRepository.listAggEmployee();
         classicModelsRepository.modeSale();
     }

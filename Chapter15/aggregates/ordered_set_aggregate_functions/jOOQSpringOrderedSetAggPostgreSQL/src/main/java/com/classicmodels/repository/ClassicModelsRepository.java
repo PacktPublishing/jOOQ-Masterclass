@@ -95,7 +95,7 @@ public class ClassicModelsRepository {
     }
 
     // PERCENTILE_DISC() & PERCENTILE_CONT()
-    public void percentileDiscContEmployeePerOffice() {
+    public void percentileDiscCont() {
 
         ctx.select(
                 percentileDisc(0.25).withinGroupOrderBy(SALE.SALE_).as("pd - 0.25"),

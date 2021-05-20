@@ -14,7 +14,7 @@ public class ClassicModelsService {
 
     public void callAll() {
 
-        classicModelsRepository.percentileDiscContEmployeePerOffice();
+        classicModelsRepository.percentileDiscCont();
         classicModelsRepository.listAggEmployee();
         classicModelsRepository.modeSale();
     }

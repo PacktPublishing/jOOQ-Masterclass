@@ -29,7 +29,7 @@ public class ClassicModelsRepository {
     }
 
     // PERCENTILE_DISC() & PERCENTILE_CONT()
-    public void percentileDiscContEmployeePerOffice() {
+    public void percentileDiscCont() {
 
         ctx.select(OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.COUNTRY,
                 EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY,
