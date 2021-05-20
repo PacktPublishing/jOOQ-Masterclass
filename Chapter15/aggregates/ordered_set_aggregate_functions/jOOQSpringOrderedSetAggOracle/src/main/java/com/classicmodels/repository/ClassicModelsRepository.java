@@ -64,7 +64,7 @@ public class ClassicModelsRepository {
                         .as("salary_percentile_rank"))
                 .from(selectDistinct(EMPLOYEE.SALARY.as("salary"))
                         .from(EMPLOYEE)
-                        .where(EMPLOYEE.JOB_TITLE.eq("Sales Rep"))                        
+                        .where(EMPLOYEE.JOB_TITLE.eq("Sales Rep"))
                         .asTable("t"))
                 .fetch();
 
@@ -75,7 +75,7 @@ public class ClassicModelsRepository {
                         .as("salary_percentile_rank"))
                 .from(EMPLOYEE)
                 .where(EMPLOYEE.JOB_TITLE.eq("Sales Rep"))
-                .fetch();        
+                .fetch();
     }
 
     // RANK() & CUME_DIST() 
@@ -96,7 +96,7 @@ public class ClassicModelsRepository {
     public void percentileDiscCont() {
 
         ctx.select(
-                percentileDisc(0.25).withinGroupOrderBy(SALE.SALE_).as("pd - 0.25"),
+                percentileDisc(0.11).withinGroupOrderBy(SALE.SALE_).as("pd - 0.25"),
                 percentileCont(0.25).withinGroupOrderBy(SALE.SALE_).as("pc - 0.25"),
                 percentileDisc(0.5).withinGroupOrderBy(SALE.SALE_).as("pd - 0.50"),
                 percentileCont(0.5).withinGroupOrderBy(SALE.SALE_).as("pc - 0.50"),
@@ -104,6 +104,12 @@ public class ClassicModelsRepository {
                 percentileCont(0.75).withinGroupOrderBy(SALE.SALE_).as("pc - 0.75"),
                 percentileDisc(1.0).withinGroupOrderBy(SALE.SALE_).as("pd - 1.0"),
                 percentileCont(1.0).withinGroupOrderBy(SALE.SALE_).as("pc - 1.0"))
+                .from(SALE)
+                .fetch();
+
+        ctx.select(
+                percentileDisc(0.11).withinGroupOrderBy(SALE.SALE_).as("pd - 0.11"),
+                percentileCont(0.11).withinGroupOrderBy(SALE.SALE_).as("pc - 0.11"))
                 .from(SALE)
                 .fetch();
 
@@ -184,7 +190,7 @@ public class ClassicModelsRepository {
         // using the OVER(PARTITION BY ..) clause        
         ctx.select(EMPLOYEE.JOB_TITLE, listAgg(EMPLOYEE.SALARY, ",")
                 .withinGroupOrderBy(EMPLOYEE.SALARY).over().partitionBy(EMPLOYEE.JOB_TITLE))
-                .from(EMPLOYEE)                
+                .from(EMPLOYEE)
                 .fetch();
     }
 }

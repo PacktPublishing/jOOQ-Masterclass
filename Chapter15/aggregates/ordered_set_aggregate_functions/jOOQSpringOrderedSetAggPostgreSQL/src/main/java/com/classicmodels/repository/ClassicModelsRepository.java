@@ -108,6 +108,12 @@ public class ClassicModelsRepository {
                 percentileCont(1.0).withinGroupOrderBy(SALE.SALE_).as("pc - 1.0"))
                 .from(SALE)
                 .fetch();
+        
+        ctx.select(
+                percentileDisc(0.11).withinGroupOrderBy(SALE.SALE_).as("pd - 0.11"),
+                percentileCont(0.11).withinGroupOrderBy(SALE.SALE_).as("pc - 0.11"))
+                .from(SALE)
+                .fetch();
     }
 
     // LIST_AGG()
