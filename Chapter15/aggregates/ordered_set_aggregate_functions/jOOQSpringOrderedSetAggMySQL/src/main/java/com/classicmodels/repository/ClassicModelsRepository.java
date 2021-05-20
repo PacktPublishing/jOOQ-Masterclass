@@ -9,7 +9,9 @@ import static org.jooq.impl.DSL.all;
 import static org.jooq.impl.DSL.avg;
 import static org.jooq.impl.DSL.concat;
 import static org.jooq.impl.DSL.count;
+import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.listAgg;
+import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
@@ -65,12 +67,23 @@ public class ClassicModelsRepository {
     // MODE()
     public void modeOrderedSetAggregateFunctionEmulation() {
 
-        // emulation of mode that returns all results
+        // emulation of mode that returns all results (1)
         ctx.select(SALE.FISCAL_MONTH)
                 .from(SALE)
                 .groupBy(SALE.FISCAL_MONTH)
                 .having(count().ge(all(select(count())
                         .from(SALE).groupBy(SALE.FISCAL_MONTH))))
+                .fetch();
+        
+        // emulation of mode that returns all results (2)
+        ctx.select(field("FISCAL_MONTH")).from(
+                select(SALE.FISCAL_MONTH, count(SALE.FISCAL_MONTH).as("CNT1"))
+                        .from(SALE)
+                        .groupBy(SALE.FISCAL_MONTH))
+                .where(field("CNT1").eq(
+                        select(max(field("CNT2")))
+                                .from(select(count(SALE.FISCAL_MONTH).as("CNT2"))
+                                        .from(SALE).groupBy(SALE.FISCAL_MONTH))))
                 .fetch();
                 
         // emulation of mode using a percentage of the total number of occurrences

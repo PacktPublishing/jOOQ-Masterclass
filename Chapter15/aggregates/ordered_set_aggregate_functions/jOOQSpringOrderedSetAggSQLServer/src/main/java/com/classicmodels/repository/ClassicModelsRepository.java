@@ -10,7 +10,9 @@ import static org.jooq.impl.DSL.all;
 import static org.jooq.impl.DSL.avg;
 import static org.jooq.impl.DSL.concat;
 import static org.jooq.impl.DSL.count;
+import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.listAgg;
+import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.percentileCont;
 import static org.jooq.impl.DSL.percentileDisc;
 import static org.jooq.impl.DSL.select;
@@ -63,7 +65,7 @@ public class ClassicModelsRepository {
                         .withinGroupOrderBy(EMPLOYEE.SALARY.desc(), EMPLOYEE.FIRST_NAME.desc()).as("employees"))
                 .from(EMPLOYEE)
                 .fetch();
-        
+
         ctx.select(EMPLOYEE.JOB_TITLE, listAgg(EMPLOYEE.FIRST_NAME, ",")
                 .withinGroupOrderBy(EMPLOYEE.FIRST_NAME).as("employees"))
                 .from(EMPLOYEE)
@@ -77,18 +79,29 @@ public class ClassicModelsRepository {
                 .join(PRODUCT)
                 .on(ORDERDETAIL.PRODUCT_ID.eq(PRODUCT.PRODUCT_ID))
                 .groupBy(ORDERDETAIL.ORDER_ID)
-                .fetch();        
+                .fetch();
     }
 
     // MODE()
-    public void modeSale() {
+    public void modeOrderedSetAggregateFunctionEmulation() {
 
-        // emulation of mode
+        // emulation of mode that returns all results (1)
         ctx.select(SALE.FISCAL_YEAR)
                 .from(SALE)
                 .groupBy(SALE.FISCAL_YEAR)
                 .having(count().ge(all(select(count())
                         .from(SALE).groupBy(SALE.FISCAL_YEAR))))
+                .fetch();
+        
+        // emulation of mode that returns all results (2)
+        ctx.select(field("FISCAL_MONTH")).from(
+                select(SALE.FISCAL_MONTH, count(SALE.FISCAL_MONTH).as("CNT1"))
+                        .from(SALE)
+                        .groupBy(SALE.FISCAL_MONTH))
+                .where(field("CNT1").eq(
+                        select(max(field("CNT2")))
+                                .from(select(count(SALE.FISCAL_MONTH).as("CNT2"))
+                                        .from(SALE).groupBy(SALE.FISCAL_MONTH))))
                 .fetch();
 
         // emulation of mode using a percentage of the total number of occurrences

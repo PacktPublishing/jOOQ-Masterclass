@@ -13,6 +13,7 @@ import static org.jooq.impl.DSL.cumeDist;
 import static org.jooq.impl.DSL.denseRank;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.listAgg;
+import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.mode;
 import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.percentRank;
@@ -180,12 +181,23 @@ public class ClassicModelsRepository {
 
     public void modeOrderedSetAggregateFunctionEmulation() {
 
-        // emulation of mode that returns all results
+        // emulation of mode that returns all results (1)
         ctx.select(SALE.FISCAL_MONTH)
                 .from(SALE)
                 .groupBy(SALE.FISCAL_MONTH)
                 .having(count().ge(all(select(count())
                         .from(SALE).groupBy(SALE.FISCAL_MONTH))))
+                .fetch();
+        
+        // emulation of mode that returns all results (2)
+        ctx.select(field("fiscal_month")).from(
+                select(SALE.FISCAL_MONTH, count(SALE.FISCAL_MONTH).as("cnt1"))
+                        .from(SALE)
+                        .groupBy(SALE.FISCAL_MONTH))
+                .where(field("cnt1").eq(
+                        select(max(field("cnt2")))
+                                .from(select(count(SALE.FISCAL_MONTH).as("cnt2"))
+                                        .from(SALE).groupBy(SALE.FISCAL_MONTH))))
                 .fetch();
                 
         // emulation of mode using a percentage of the total number of occurrences

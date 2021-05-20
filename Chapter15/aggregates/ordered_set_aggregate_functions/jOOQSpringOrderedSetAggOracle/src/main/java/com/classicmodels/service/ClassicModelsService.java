@@ -18,7 +18,8 @@ public class ClassicModelsService {
         classicModelsRepository.percentRankEmployeeSalary();
         classicModelsRepository.rankAndCumeDist();
         classicModelsRepository.percentileDiscCont();
-        classicModelsRepository.listAggEmployee();
-        classicModelsRepository.modeSale();
+        classicModelsRepository.listAggEmployee();        
+        classicModelsRepository.modeAggregateFunction();
+        classicModelsRepository.modeOrderedSetAggregateFunctionEmulation();
     }
 }

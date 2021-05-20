@@ -14,6 +14,7 @@ import static org.jooq.impl.DSL.cumeDist;
 import static org.jooq.impl.DSL.denseRank;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.listAgg;
+import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.mode;
 import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.percentRank;
@@ -197,17 +198,36 @@ public class ClassicModelsRepository {
                 .fetch();
     }
 
-    // MODE()
-    public void modeSale() {
+    // MODE()    
+    public void modeAggregateFunction() {
 
-        // emulation of mode
-        ctx.select(SALE.FISCAL_YEAR)
+        // mode() aggregation function (no explicit ordering); relies on Oracle's STATS_MODE()
+        ctx.select(mode(SALE.FISCAL_MONTH).as("fiscal_month"))
                 .from(SALE)
-                .groupBy(SALE.FISCAL_YEAR)
+                .fetch();
+    }
+
+    public void modeOrderedSetAggregateFunctionEmulation() {
+
+        // emulation of mode that returns all results (1)
+        ctx.select(SALE.FISCAL_MONTH)
+                .from(SALE)
+                .groupBy(SALE.FISCAL_MONTH)
                 .having(count().ge(all(select(count())
-                        .from(SALE).groupBy(SALE.FISCAL_YEAR))))
+                        .from(SALE).groupBy(SALE.FISCAL_MONTH))))
                 .fetch();
 
+        // emulation of mode that returns all results (2)
+        ctx.select(field("FISCAL_MONTH")).from(
+                select(SALE.FISCAL_MONTH, count(SALE.FISCAL_MONTH).as("CNT1"))
+                        .from(SALE)
+                        .groupBy(SALE.FISCAL_MONTH))
+                .where(field("CNT1").eq(
+                        select(max(field("CNT2")))
+                                .from(select(count(SALE.FISCAL_MONTH).as("CNT2"))
+                                        .from(SALE).groupBy(SALE.FISCAL_MONTH))))
+                .fetch();
+        
         // emulation of mode using a percentage of the total number of occurrences
         ctx.select(avg(ORDERDETAIL.QUANTITY_ORDERED))
                 .from(ORDERDETAIL)
@@ -215,12 +235,12 @@ public class ClassicModelsRepository {
                 .having(count().ge(all(select(count().mul(0.75))
                         .from(ORDERDETAIL).groupBy(ORDERDETAIL.QUANTITY_ORDERED))))
                 .fetch();
-
+        
         ctx.select(avg(ORDERDETAIL.QUANTITY_ORDERED))
                 .from(ORDERDETAIL)
                 .groupBy(ORDERDETAIL.QUANTITY_ORDERED)
-                .having(count().ge(all(select(count().mul(0.95))
+                .having(count().ge(all(select(count().mul(0.85))
                         .from(ORDERDETAIL).groupBy(ORDERDETAIL.QUANTITY_ORDERED))))
-                .fetch();
+                .fetch();        
     }
 }

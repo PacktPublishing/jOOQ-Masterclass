@@ -15,7 +15,7 @@ public class ClassicModelsService {
     public void callAll() {
 
         classicModelsRepository.percentileDiscCont();
-        classicModelsRepository.listAggEmployee();
-        classicModelsRepository.modeSale();
+        classicModelsRepository.listAggEmployee();        
+        classicModelsRepository.modeOrderedSetAggregateFunctionEmulation();
     }
 }
