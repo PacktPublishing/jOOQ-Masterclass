@@ -6,12 +6,15 @@ import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
+import static org.jooq.impl.DSL.all;
+import static org.jooq.impl.DSL.avg;
 import static org.jooq.impl.DSL.concat;
 import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.cumeDist;
 import static org.jooq.impl.DSL.denseRank;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.listAgg;
+import static org.jooq.impl.DSL.mode;
 import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.percentRank;
 import static org.jooq.impl.DSL.percentileCont;
@@ -191,6 +194,33 @@ public class ClassicModelsRepository {
         ctx.select(EMPLOYEE.JOB_TITLE, listAgg(EMPLOYEE.SALARY, ",")
                 .withinGroupOrderBy(EMPLOYEE.SALARY).over().partitionBy(EMPLOYEE.JOB_TITLE))
                 .from(EMPLOYEE)
+                .fetch();
+    }
+
+    // MODE()
+    public void modeSale() {
+
+        // emulation of mode
+        ctx.select(SALE.FISCAL_YEAR)
+                .from(SALE)
+                .groupBy(SALE.FISCAL_YEAR)
+                .having(count().ge(all(select(count())
+                        .from(SALE).groupBy(SALE.FISCAL_YEAR))))
+                .fetch();
+
+        // emulation of mode using a percentage of the total number of occurrences
+        ctx.select(avg(ORDERDETAIL.QUANTITY_ORDERED))
+                .from(ORDERDETAIL)
+                .groupBy(ORDERDETAIL.QUANTITY_ORDERED)
+                .having(count().ge(all(select(count().mul(0.75))
+                        .from(ORDERDETAIL).groupBy(ORDERDETAIL.QUANTITY_ORDERED))))
+                .fetch();
+
+        ctx.select(avg(ORDERDETAIL.QUANTITY_ORDERED))
+                .from(ORDERDETAIL)
+                .groupBy(ORDERDETAIL.QUANTITY_ORDERED)
+                .having(count().ge(all(select(count().mul(0.95))
+                        .from(ORDERDETAIL).groupBy(ORDERDETAIL.QUANTITY_ORDERED))))
                 .fetch();
     }
 }

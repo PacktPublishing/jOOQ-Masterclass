@@ -3,9 +3,15 @@ package com.classicmodels.repository;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import static jooq.generated.tables.Product.PRODUCT;
+import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
+import static org.jooq.impl.DSL.all;
+import static org.jooq.impl.DSL.avg;
 import static org.jooq.impl.DSL.concat;
+import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.listAgg;
+import static org.jooq.impl.DSL.mode;
+import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,6 +60,37 @@ public class ClassicModelsRepository {
                 .join(PRODUCT)
                 .on(ORDERDETAIL.PRODUCT_ID.eq(PRODUCT.PRODUCT_ID))
                 .groupBy(ORDERDETAIL.ORDER_ID)
+                .fetch();
+    }
+
+    // MODE()
+    public void modeSale() {
+        
+        ctx.select(mode().withinGroupOrderBy(SALE.FISCAL_YEAR))
+                .from(SALE)
+                .fetch();
+
+        // emulation of mode
+        ctx.select(SALE.FISCAL_YEAR)
+                .from(SALE)
+                .groupBy(SALE.FISCAL_YEAR)
+                .having(count().ge(all(select(count())
+                        .from(SALE).groupBy(SALE.FISCAL_YEAR))))
+                .fetch();
+
+        // emulation of mode using a percentage of the total number of occurrences
+        ctx.select(avg(ORDERDETAIL.QUANTITY_ORDERED))
+                .from(ORDERDETAIL)
+                .groupBy(ORDERDETAIL.QUANTITY_ORDERED)
+                .having(count().ge(all(select(count().mul(0.75))
+                        .from(ORDERDETAIL).groupBy(ORDERDETAIL.QUANTITY_ORDERED))))
+                .fetch();
+
+        ctx.select(avg(ORDERDETAIL.QUANTITY_ORDERED))
+                .from(ORDERDETAIL)
+                .groupBy(ORDERDETAIL.QUANTITY_ORDERED)
+                .having(count().ge(all(select(count().mul(0.95))
+                        .from(ORDERDETAIL).groupBy(ORDERDETAIL.QUANTITY_ORDERED))))
                 .fetch();
     }
 }

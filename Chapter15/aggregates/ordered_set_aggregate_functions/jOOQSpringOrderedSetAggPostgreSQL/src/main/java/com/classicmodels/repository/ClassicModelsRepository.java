@@ -66,7 +66,7 @@ public class ClassicModelsRepository {
                         .as("salary_percentile_rank"))
                 .from(selectDistinct(EMPLOYEE.SALARY.as("salary"))
                         .from(EMPLOYEE)
-                        .where(EMPLOYEE.JOB_TITLE.eq("Sales Rep"))                        
+                        .where(EMPLOYEE.JOB_TITLE.eq("Sales Rep"))
                         .asTable("t"))
                 .fetch();
 
@@ -108,7 +108,7 @@ public class ClassicModelsRepository {
                 percentileCont(1.0).withinGroupOrderBy(SALE.SALE_).as("pc - 1.0"))
                 .from(SALE)
                 .fetch();
-        
+
         ctx.select(
                 percentileDisc(0.11).withinGroupOrderBy(SALE.SALE_).as("pd - 0.11"),
                 percentileCont(0.11).withinGroupOrderBy(SALE.SALE_).as("pc - 0.11"))
@@ -154,24 +154,40 @@ public class ClassicModelsRepository {
     }
 
     // MODE()
-    public void modeSale() {
+    public void modeOrderedSetAggregateFunction() {
 
         ctx.select(mode().withinGroupOrderBy(SALE.FISCAL_YEAR))
                 .from(SALE)
                 .fetch();
 
-        // emulation of mode
-        ctx.select(SALE.FISCAL_YEAR)
-                .from(SALE)
-                .groupBy(SALE.FISCAL_YEAR)
-                .having(count().ge(all(select(count())
-                        .from(SALE).groupBy(SALE.FISCAL_YEAR))))
-                .fetch();
-
-        ctx.select(mode().withinGroupOrderBy(ORDERDETAIL.QUANTITY_ORDERED))
+        ctx.select(mode().withinGroupOrderBy(ORDERDETAIL.QUANTITY_ORDERED.desc()))
                 .from(ORDERDETAIL)
                 .fetch();
+    }
+    
+    public void modeFunctionsVs() {
 
+        // mode() aggregation function (no explicit ordering)
+        ctx.select(mode(SALE.FISCAL_MONTH).as("fiscal_month"))
+                .from(SALE)
+                .fetch();
+
+        // mode() ordered set aggregate function (explicit ordering)
+        ctx.select(mode().withinGroupOrderBy(SALE.FISCAL_MONTH.desc()).as("fiscal_month"))
+                .from(SALE)
+                .fetch();
+    }
+
+    public void modeOrderedSetAggregateFunctionEmulation() {
+
+        // emulation of mode that returns all results
+        ctx.select(SALE.FISCAL_MONTH)
+                .from(SALE)
+                .groupBy(SALE.FISCAL_MONTH)
+                .having(count().ge(all(select(count())
+                        .from(SALE).groupBy(SALE.FISCAL_MONTH))))
+                .fetch();
+                
         // emulation of mode using a percentage of the total number of occurrences
         ctx.select(avg(ORDERDETAIL.QUANTITY_ORDERED))
                 .from(ORDERDETAIL)
