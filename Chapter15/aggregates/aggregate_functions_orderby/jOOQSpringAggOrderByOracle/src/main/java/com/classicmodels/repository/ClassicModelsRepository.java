@@ -140,6 +140,15 @@ public class ClassicModelsRepository {
                 .fetch();
 
         // select more information such as shipped date and status
+        
+        // using SELECT DISTINCT ON        
+        ctx.selectDistinct(ORDER.CUSTOMER_NUMBER, ORDER.ORDER_DATE, 
+                ORDER.SHIPPED_DATE, ORDER.STATUS).on(ORDER.CUSTOMER_NUMBER)
+                .from(ORDER)
+                .where(ORDER.ORDER_DATE.lt(LocalDate.of(2004, 6, 6)))
+                .orderBy(ORDER.CUSTOMER_NUMBER, ORDER.ORDER_DATE.desc())
+                .fetch();
+        
         // using left anti join
         Order t = ORDER.as("T");
         ctx.select(ORDER.CUSTOMER_NUMBER, ORDER.ORDER_DATE, ORDER.SHIPPED_DATE, ORDER.STATUS)

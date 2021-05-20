@@ -20,6 +20,7 @@ import static org.jooq.impl.DSL.percentileCont;
 import static org.jooq.impl.DSL.percentileDisc;
 import static org.jooq.impl.DSL.rank;
 import static org.jooq.impl.DSL.select;
+import static org.jooq.impl.DSL.selectDistinct;
 import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,19 +60,18 @@ public class ClassicModelsRepository {
     public void percentRankEmployeeSalary() {
 
         // What percentage of Sales Reps salaries are higher than $61,000 
-        ctx.select(count().as("salary_nr"),
+        ctx.select(count().as("nr_of_salaries"),
                 percentRank(val(61000d)).withinGroupOrderBy(
                         field(name("t", "salary")).desc()).mul(100).concat("%")
                         .as("salary_percentile_rank"))
-                .from(select(EMPLOYEE.SALARY.as("salary"))
+                .from(selectDistinct(EMPLOYEE.SALARY.as("salary"))
                         .from(EMPLOYEE)
-                        .where(EMPLOYEE.JOB_TITLE.eq("Sales Rep"))
-                        .groupBy(EMPLOYEE.SALARY)
+                        .where(EMPLOYEE.JOB_TITLE.eq("Sales Rep"))                        
                         .asTable("t"))
                 .fetch();
 
         // What percentage of Sales Reps have salaries higher than $61,000 
-        ctx.select(count().as("salary_nr"),
+        ctx.select(count().as("nr_of_salaries"),
                 percentRank(val(61000d)).withinGroupOrderBy(
                         EMPLOYEE.SALARY.desc()).mul(100).concat("%")
                         .as("salary_percentile_rank"))
