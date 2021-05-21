@@ -13,6 +13,7 @@ import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.cumeDist;
 import static org.jooq.impl.DSL.denseRank;
 import static org.jooq.impl.DSL.field;
+import static org.jooq.impl.DSL.inline;
 import static org.jooq.impl.DSL.listAgg;
 import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.mode;
@@ -161,6 +162,17 @@ public class ClassicModelsRepository {
                 listAgg(EMPLOYEE.FIRST_NAME).withinGroupOrderBy(EMPLOYEE.SALARY).as("list_agg"))
                 .from(EMPLOYEE)
                 .fetch();
+        
+        ctx.select(
+                listAgg(EMPLOYEE.FIRST_NAME, ";").withinGroupOrderBy(EMPLOYEE.SALARY).as("list_agg"))
+                .from(EMPLOYEE)
+                .fetch();
+                
+        String result = ctx.select(
+                listAgg(EMPLOYEE.FIRST_NAME, ",").withinGroupOrderBy(EMPLOYEE.SALARY).as("list_agg"))
+                .from(EMPLOYEE)
+                .fetchOneInto(String.class);
+        System.out.println("Result: " + result);        
 
         ctx.select(
                 listAgg(EMPLOYEE.FIRST_NAME).withinGroupOrderBy(EMPLOYEE.SALARY)
@@ -170,7 +182,7 @@ public class ClassicModelsRepository {
                 .fetch();
 
         ctx.select(
-                listAgg(concat(EMPLOYEE.FIRST_NAME, val(" "), EMPLOYEE.LAST_NAME), ",")
+                listAgg(concat(EMPLOYEE.FIRST_NAME, inline(" "), EMPLOYEE.LAST_NAME), ",")
                         .withinGroupOrderBy(EMPLOYEE.SALARY.desc(), EMPLOYEE.FIRST_NAME.desc()).as("employees"))
                 .from(EMPLOYEE)
                 .fetch();

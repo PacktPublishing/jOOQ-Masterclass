@@ -11,12 +11,12 @@ import static org.jooq.impl.DSL.avg;
 import static org.jooq.impl.DSL.concat;
 import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.field;
+import static org.jooq.impl.DSL.inline;
 import static org.jooq.impl.DSL.listAgg;
 import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.percentileCont;
 import static org.jooq.impl.DSL.percentileDisc;
 import static org.jooq.impl.DSL.select;
-import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,6 +54,17 @@ public class ClassicModelsRepository {
                 .fetch();
 
         ctx.select(
+                listAgg(EMPLOYEE.FIRST_NAME, ";").withinGroupOrderBy(EMPLOYEE.SALARY).as("list_agg"))
+                .from(EMPLOYEE)
+                .fetch();
+
+        String result = ctx.select(
+                listAgg(EMPLOYEE.FIRST_NAME, ",").withinGroupOrderBy(EMPLOYEE.SALARY).as("list_agg"))
+                .from(EMPLOYEE)
+                .fetchOneInto(String.class);
+        System.out.println("Result: " + result);
+
+        ctx.select(
                 listAgg(EMPLOYEE.FIRST_NAME).withinGroupOrderBy(EMPLOYEE.SALARY)
                         .filterWhere(EMPLOYEE.SALARY.gt(80000))
                         .as("list_agg"))
@@ -61,7 +72,7 @@ public class ClassicModelsRepository {
                 .fetch();
 
         ctx.select(
-                listAgg(concat(EMPLOYEE.FIRST_NAME, val(" "), EMPLOYEE.LAST_NAME), ",")
+                listAgg(concat(EMPLOYEE.FIRST_NAME, inline(" "), EMPLOYEE.LAST_NAME), ",")
                         .withinGroupOrderBy(EMPLOYEE.SALARY.desc(), EMPLOYEE.FIRST_NAME.desc()).as("employees"))
                 .from(EMPLOYEE)
                 .fetch();
@@ -92,7 +103,7 @@ public class ClassicModelsRepository {
                 .having(count().ge(all(select(count())
                         .from(SALE).groupBy(SALE.FISCAL_YEAR))))
                 .fetch();
-        
+
         // emulation of mode that returns all results (2)
         ctx.select(field("FISCAL_MONTH")).from(
                 select(SALE.FISCAL_MONTH, count(SALE.FISCAL_MONTH).as("CNT1"))
