@@ -47,11 +47,11 @@ public class ClassicModelsRepository {
 
     public void officeHavingLessThen3Employees() {
 
-        ctx.select(OFFICE.OFFICE_CODE, nvl(groupConcat(EMPLOYEE.FIRST_NAME), "N/A"))
+        ctx.select(OFFICE.OFFICE_CODE, OFFICE.CITY, nvl(groupConcat(EMPLOYEE.FIRST_NAME), "N/A").as("name"))
                 .from(OFFICE)
                 .leftJoin(EMPLOYEE)
                 .on(OFFICE.OFFICE_CODE.eq(EMPLOYEE.OFFICE_CODE))
-                .groupBy(OFFICE.OFFICE_CODE)
+                .groupBy(OFFICE.OFFICE_CODE, OFFICE.CITY)
                 .having(count().lt(3))
                 .fetch();
     }
@@ -156,7 +156,7 @@ public class ClassicModelsRepository {
                         (count().filterWhere(EMPLOYEE.JOB_TITLE.ne("Sales Rep"))
                                 .over().partitionBy(EMPLOYEE.OFFICE_CODE)).as("others"))
                         .from(EMPLOYEE).asTable("t"))
-                .groupBy(field(name("t", "office_code")), 
+                .groupBy(field(name("t", "office_code")),
                         field(name("t", "sales_rep")), field(name("t", "others")))
                 .fetch();
     }
