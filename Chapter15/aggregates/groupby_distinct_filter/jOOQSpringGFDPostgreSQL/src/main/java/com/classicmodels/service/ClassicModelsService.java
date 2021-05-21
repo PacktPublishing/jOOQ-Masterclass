@@ -13,15 +13,16 @@ public class ClassicModelsService {
     }
 
     public void callAll() {
-
+      
        classicModelsRepository.officeHavingLessThen3Employees();
        classicModelsRepository.employeeHavingLargestNumberOfSales();
        classicModelsRepository.orderdetailsQuantityOufOfRange2040();
        classicModelsRepository.avgOfSumOfSales();
-       classicModelsRepository.groupByExtractedMonth();       
+       classicModelsRepository.groupByExtractedMonth();            
        classicModelsRepository.exactDivisionOrderdetailTop3Product();       
        classicModelsRepository.employeeSalary();
        classicModelsRepository.avgSumProduct();
+       classicModelsRepository.filterNullsInArrayAgg();
        classicModelsRepository.filterEmployeeByOffice();
        classicModelsRepository.minMaxBuyPriceProduct();
        classicModelsRepository.firstNSalaries();
