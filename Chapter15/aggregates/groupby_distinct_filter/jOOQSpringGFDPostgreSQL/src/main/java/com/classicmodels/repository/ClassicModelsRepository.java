@@ -1,6 +1,7 @@
 package com.classicmodels.repository;
 
 import java.math.BigDecimal;
+import static jooq.generated.tables.Department.DEPARTMENT;
 import jooq.generated.tables.Employee;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Office.OFFICE;
@@ -14,6 +15,7 @@ import org.jooq.DSLContext;
 import org.jooq.DatePart;
 import org.jooq.Field;
 import static org.jooq.impl.DSL.all;
+import static org.jooq.impl.DSL.arrayAgg;
 import static org.jooq.impl.DSL.avg;
 import static org.jooq.impl.DSL.avgDistinct;
 import static org.jooq.impl.DSL.case_;
@@ -101,7 +103,7 @@ public class ClassicModelsRepository {
                 .groupBy(month)
                 .orderBy(month)
                 .fetch();
-    }
+    }    
 
     public void exactDivisionOrderdetailTop3Product() {
 
@@ -146,6 +148,26 @@ public class ClassicModelsRepository {
                 .from(PRODUCT)
                 .fetch();
     }
+    
+    public void filterNullsInArrayAgg() {
+
+        // no filter produces NULLs as well
+        ctx.select(arrayAgg(DEPARTMENT.ACCOUNTS_RECEIVABLE))
+                .from(DEPARTMENT)                
+                .fetch();
+        
+        // filter NULLs via WHERE clause 
+        ctx.select(arrayAgg(DEPARTMENT.ACCOUNTS_RECEIVABLE))
+                .from(DEPARTMENT)
+                .where(DEPARTMENT.ACCOUNTS_RECEIVABLE.isNotNull())
+                .fetch();
+
+        // filter NULLs via FILTER clause
+        ctx.select(arrayAgg(DEPARTMENT.ACCOUNTS_RECEIVABLE)
+                .filterWhere(DEPARTMENT.ACCOUNTS_RECEIVABLE.isNotNull()))
+                .from(DEPARTMENT)
+                .fetch();
+    }
 
     public void filterEmployeeByOffice() {
 
@@ -156,7 +178,7 @@ public class ClassicModelsRepository {
                         (count().filterWhere(EMPLOYEE.JOB_TITLE.ne("Sales Rep"))
                                 .over().partitionBy(EMPLOYEE.OFFICE_CODE)).as("others"))
                         .from(EMPLOYEE).asTable("t"))
-                .groupBy(field(name("t", "office_code")), 
+                .groupBy(field(name("t", "office_code")),
                         field(name("t", "sales_rep")), field(name("t", "others")))
                 .fetch();
     }
