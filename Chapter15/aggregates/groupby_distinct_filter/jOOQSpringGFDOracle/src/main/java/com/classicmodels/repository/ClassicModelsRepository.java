@@ -1,6 +1,7 @@
 package com.classicmodels.repository;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import jooq.generated.tables.Employee;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Office.OFFICE;
@@ -143,8 +144,46 @@ public class ClassicModelsRepository {
                 .from(PRODUCT)
                 .fetch();
     }
+    
+    public void pivotViaFilter() {
+        
+        // no pivot        
+        ctx.select(SALE.FISCAL_YEAR, SALE.FISCAL_MONTH,
+                sum(SALE.SALE_))
+                .from(SALE)
+                .groupBy(SALE.FISCAL_YEAR, SALE.FISCAL_MONTH)
+                .fetch();
+        
+        // pivot via FILTER        
+        ctx.select(SALE.FISCAL_YEAR,
+                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(BigInteger.valueOf(1))).as("Jan_sales"),
+                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(BigInteger.valueOf(2))).as("Feb_sales"),
+                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(BigInteger.valueOf(3))).as("Mar_sales"),
+                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(BigInteger.valueOf(4))).as("Apr_sales"),
+                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(BigInteger.valueOf(5))).as("May_sales"),
+                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(BigInteger.valueOf(6))).as("Jun_sales"),
+                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(BigInteger.valueOf(7))).as("Jul_sales"),
+                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(BigInteger.valueOf(8))).as("Aug_sales"),
+                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(BigInteger.valueOf(9))).as("Sep_sales"),
+                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(BigInteger.valueOf(10))).as("Oct_sales"),
+                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(BigInteger.valueOf(11))).as("Nov_sales"),
+                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(BigInteger.valueOf(12))).as("Dec_sales"))
+                .from(SALE)
+                .groupBy(SALE.FISCAL_YEAR)
+                .fetch();        
+    }
 
-    public void filterEmployeeByOffice() {
+    public void filterInAggWindowFunction() {
+
+        ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY,
+                OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.COUNTRY,
+                sum(EMPLOYEE.SALARY)
+                        .filterWhere(EMPLOYEE.COMMISSION.isNull())
+                        .over().partitionBy(OFFICE.OFFICE_CODE))
+                .from(EMPLOYEE)
+                .join(OFFICE)
+                .on(EMPLOYEE.OFFICE_CODE.eq(OFFICE.OFFICE_CODE))
+                .fetch();
 
         ctx.select().from(
                 select(EMPLOYEE.OFFICE_CODE,

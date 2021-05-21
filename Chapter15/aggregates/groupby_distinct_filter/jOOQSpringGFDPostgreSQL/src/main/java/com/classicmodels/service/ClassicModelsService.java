@@ -23,11 +23,12 @@ public class ClassicModelsService {
        classicModelsRepository.employeeSalary();
        classicModelsRepository.avgSumProduct();
        classicModelsRepository.filterNullsInArrayAgg();
-       classicModelsRepository.filterEmployeeByOffice();
+       classicModelsRepository.pivotViaFilter();
+       classicModelsRepository.filterInAggWindowFunction();
        classicModelsRepository.minMaxBuyPriceProduct();
        classicModelsRepository.firstNSalaries();
        classicModelsRepository.medianViaGroupByAndAvgDistinct();
        classicModelsRepository.countDistinctSalePerFiscalYear();
-       classicModelsRepository.sumAvgOrder();        
+       classicModelsRepository.sumAvgOrder();                      
     }
 }

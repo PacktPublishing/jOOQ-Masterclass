@@ -147,7 +147,45 @@ public class ClassicModelsRepository {
                 .fetch();
     }
 
-    public void filterEmployeeByOffice() {
+    public void pivotViaFilter() {
+
+        // no pivot        
+        ctx.select(SALE.FISCAL_YEAR, SALE.FISCAL_MONTH,
+                sum(SALE.SALE_))
+                .from(SALE)
+                .groupBy(SALE.FISCAL_YEAR, SALE.FISCAL_MONTH)
+                .fetch();
+
+        // pivot via FILTER        
+        ctx.select(SALE.FISCAL_YEAR,
+                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(1)).as("Jan_sales"),
+                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(2)).as("Feb_sales"),
+                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(3)).as("Mar_sales"),
+                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(4)).as("Apr_sales"),
+                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(5)).as("May_sales"),
+                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(6)).as("Jun_sales"),
+                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(7)).as("Jul_sales"),
+                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(8)).as("Aug_sales"),
+                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(9)).as("Sep_sales"),
+                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(10)).as("Oct_sales"),
+                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(11)).as("Nov_sales"),
+                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(12)).as("Dec_sales"))
+                .from(SALE)
+                .groupBy(SALE.FISCAL_YEAR)
+                .fetch();
+    }
+
+    public void filterInAggWindowFunction() {
+
+        ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY,
+                OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.COUNTRY,
+                sum(EMPLOYEE.SALARY)
+                        .filterWhere(EMPLOYEE.COMMISSION.isNull())
+                        .over().partitionBy(OFFICE.OFFICE_CODE))
+                .from(EMPLOYEE)
+                .join(OFFICE)
+                .on(EMPLOYEE.OFFICE_CODE.eq(OFFICE.OFFICE_CODE))
+                .fetch();
 
         ctx.select().from(
                 select(EMPLOYEE.OFFICE_CODE,

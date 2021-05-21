@@ -22,7 +22,8 @@ public class ClassicModelsService {
        classicModelsRepository.exactDivisionOrderdetailTop3Product();       
        classicModelsRepository.employeeSalary();
        classicModelsRepository.avgSumProduct();
-       classicModelsRepository.filterEmployeeByOffice();
+       classicModelsRepository.pivotViaFilter();
+       classicModelsRepository.filterInAggWindowFunction();       
        classicModelsRepository.minMaxBuyPriceProduct();
        classicModelsRepository.firstNSalaries();
        classicModelsRepository.medianViaGroupByAndAvgDistinct();
