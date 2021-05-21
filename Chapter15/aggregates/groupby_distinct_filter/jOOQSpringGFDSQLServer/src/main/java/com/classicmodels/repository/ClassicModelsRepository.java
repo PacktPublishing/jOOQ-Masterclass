@@ -21,6 +21,7 @@ import static org.jooq.impl.DSL.countDistinct;
 import static org.jooq.impl.DSL.extract;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.groupConcat;
+import static org.jooq.impl.DSL.listAgg;
 import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.min;
 import static org.jooq.impl.DSL.name;
@@ -191,6 +192,16 @@ public class ClassicModelsRepository {
                         .from(EMPLOYEE).asTable("t"))
                 .groupBy(field(name("t", "office_code")),
                         field(name("t", "sales_rep")), field(name("t", "others")))
+                .fetch();
+    }
+    
+    public void filterInOrderedSetAggregateFunction() {
+
+        ctx.select(
+                listAgg(EMPLOYEE.FIRST_NAME).withinGroupOrderBy(EMPLOYEE.SALARY)
+                        .filterWhere(EMPLOYEE.SALARY.gt(80000))
+                        .as("list_agg"))
+                .from(EMPLOYEE)
                 .fetch();
     }
    

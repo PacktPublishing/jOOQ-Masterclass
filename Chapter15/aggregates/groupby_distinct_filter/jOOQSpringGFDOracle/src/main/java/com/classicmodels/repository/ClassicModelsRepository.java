@@ -23,6 +23,7 @@ import static org.jooq.impl.DSL.countDistinct;
 import static org.jooq.impl.DSL.extract;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.groupConcat;
+import static org.jooq.impl.DSL.listAgg;
 import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.min;
 import static org.jooq.impl.DSL.name;
@@ -93,7 +94,7 @@ public class ClassicModelsRepository {
     }
 
     public void groupByExtractedMonth() {
-    
+
         ctx.select(extract(PAYMENT.PAYMENT_DATE, DatePart.MONTH), sum(PAYMENT.INVOICE_AMOUNT))
                 .from(PAYMENT)
                 .groupBy(extract(PAYMENT.PAYMENT_DATE, DatePart.MONTH))
@@ -144,16 +145,16 @@ public class ClassicModelsRepository {
                 .from(PRODUCT)
                 .fetch();
     }
-    
+
     public void pivotViaFilter() {
-        
+
         // no pivot        
         ctx.select(SALE.FISCAL_YEAR, SALE.FISCAL_MONTH,
                 sum(SALE.SALE_))
                 .from(SALE)
                 .groupBy(SALE.FISCAL_YEAR, SALE.FISCAL_MONTH)
                 .fetch();
-        
+
         // pivot via FILTER        
         ctx.select(SALE.FISCAL_YEAR,
                 sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(BigInteger.valueOf(1))).as("Jan_sales"),
@@ -170,7 +171,7 @@ public class ClassicModelsRepository {
                 sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(BigInteger.valueOf(12))).as("Dec_sales"))
                 .from(SALE)
                 .groupBy(SALE.FISCAL_YEAR)
-                .fetch();        
+                .fetch();
     }
 
     public void filterInAggWindowFunction() {
@@ -192,8 +193,18 @@ public class ClassicModelsRepository {
                         (count().filterWhere(EMPLOYEE.JOB_TITLE.ne("Sales Rep"))
                                 .over().partitionBy(EMPLOYEE.OFFICE_CODE)).as("OTHERS"))
                         .from(EMPLOYEE).asTable("T"))
-                .groupBy(field(name("T", "OFFICE_CODE")), 
+                .groupBy(field(name("T", "OFFICE_CODE")),
                         field(name("T", "SALES_REP")), field(name("T", "OTHERS")))
+                .fetch();
+    }
+
+    public void filterInOrderedSetAggregateFunction() {
+
+        ctx.select(
+                listAgg(EMPLOYEE.FIRST_NAME).withinGroupOrderBy(EMPLOYEE.SALARY)
+                        .filterWhere(EMPLOYEE.SALARY.gt(80000))
+                        .as("list_agg"))
+                .from(EMPLOYEE)
                 .fetch();
     }
 

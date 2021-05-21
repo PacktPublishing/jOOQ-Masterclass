@@ -24,6 +24,7 @@ public class ClassicModelsService {
        classicModelsRepository.avgSumProduct();
        classicModelsRepository.pivotViaFilter();
        classicModelsRepository.filterInAggWindowFunction();       
+       classicModelsRepository.filterInOrderedSetAggregateFunction();
        classicModelsRepository.minMaxBuyPriceProduct();
        classicModelsRepository.firstNSalaries();
        classicModelsRepository.medianViaGroupByAndAvgDistinct();
