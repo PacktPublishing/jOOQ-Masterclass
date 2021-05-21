@@ -44,7 +44,7 @@ public class ClassicModelsRepository {
         this.ctx = ctx;
     }
 
-    public void officeHavingLessThen5Employees() {
+    public void officeHavingLessThen3Employees() {
 
         ctx.select(OFFICE.OFFICE_CODE, nvl(groupConcat(EMPLOYEE.FIRST_NAME), "N/A"))
                 .from(OFFICE)

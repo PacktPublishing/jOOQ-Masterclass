@@ -14,7 +14,7 @@ public class ClassicModelsService {
 
     public void callAll() {
 
-       classicModelsRepository.officeHavingLessThen5Employees();
+       classicModelsRepository.officeHavingLessThen3Employees();
        classicModelsRepository.employeeHavingLargestNumberOfSales();
        classicModelsRepository.orderdetailsQuantityOufOfRange2040();
        classicModelsRepository.avgOfSumOfSales();
