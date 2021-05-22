@@ -29,6 +29,18 @@ public class ClassicModelsRepository {
 
     public void groupingEmployeeNumberFiscalYear() {
 
+        // the following two queries uses two grouping sets aggregated in the third query
+        ctx.select(SALE.EMPLOYEE_NUMBER, sum(SALE.SALE_))
+                .from(SALE)
+                .groupBy(SALE.EMPLOYEE_NUMBER)
+                .fetch();
+
+        ctx.select(SALE.FISCAL_YEAR, sum(SALE.SALE_))
+                .from(SALE)
+                .groupBy(SALE.FISCAL_YEAR)
+                .fetch();
+
+        // aggregated data for the previous two grouping sets 
         ctx.select(SALE.EMPLOYEE_NUMBER, castNull(INTEGER).as("fiscal_year"), sum(SALE.SALE_))
                 .from(SALE)
                 .groupBy(SALE.EMPLOYEE_NUMBER)
@@ -37,6 +49,7 @@ public class ClassicModelsRepository {
                         .groupBy(SALE.FISCAL_YEAR))
                 .fetch();
 
+        // write the previous query more compact via groupingSets()
         ctx.select(SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR, sum(SALE.SALE_))
                 .from(SALE)
                 .groupBy(groupingSets(SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR))

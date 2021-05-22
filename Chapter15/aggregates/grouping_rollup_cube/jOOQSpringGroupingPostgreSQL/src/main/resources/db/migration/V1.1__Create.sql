@@ -23,8 +23,10 @@ DROP TABLE IF EXISTS manager CASCADE;
 DROP TABLE IF EXISTS customer CASCADE;
 DROP TABLE IF EXISTS customerdetail CASCADE;
 DROP TABLE IF EXISTS sale CASCADE;
+DROP TABLE IF EXISTS daily_activity CASCADE;
 DROP TABLE IF EXISTS token CASCADE;
 DROP TABLE IF EXISTS employee CASCADE;
+DROP TABLE IF EXISTS employee_status CASCADE;
 DROP TABLE IF EXISTS department CASCADE;
 DROP TABLE IF EXISTS office CASCADE;
 
@@ -71,6 +73,15 @@ CREATE TABLE department (
   office_code varchar(10) NOT NULL,
   topic text[] DEFAULT NULL,  
   dep_net_ipv4 inet DEFAULT NULL,
+  local_budget float DEFAULT NULL,
+  profit float DEFAULT NULL,
+  forecast_profit float DEFAULT NULL,
+  cash float DEFAULT NULL,
+  accounts_receivable float DEFAULT NULL,
+  inventories float DEFAULT NULL,
+  accounts_payable float DEFAULT NULL,
+  st_borrowing float DEFAULT NULL,
+  accrued_liabilities float DEFAULT NULL,
   CONSTRAINT department_pk PRIMARY KEY (department_id),
   CONSTRAINT department_code_uk UNIQUE (code)
 ,
@@ -89,6 +100,7 @@ CREATE TABLE employee (
   email varchar(100) NOT NULL,
   office_code varchar(10) NOT NULL,
   salary int NOT NULL,
+  commission int DEFAULT NULL,
   reports_to bigint DEFAULT NULL,
   job_title varchar(50) NOT NULL,
   employee_of_year int[] DEFAULT NULL,
@@ -100,6 +112,17 @@ CREATE TABLE employee (
 ) ;
 
 CREATE SEQUENCE employee_seq START 100000 INCREMENT 10 MINVALUE 100000 MAXVALUE 10000000 OWNED BY employee.employee_number;
+
+/*Table structure for table `employee_status` */
+
+CREATE TABLE employee_status (
+  id serial NOT NULL,
+  employee_number bigint NOT NULL,  
+  status varchar(50) NOT NULL,  
+  acquired_date date NOT NULL,
+  CONSTRAINT id_pk PRIMARY KEY (id),  
+  CONSTRAINT employee_status_employee_fk FOREIGN KEY (employee_number) REFERENCES employee (employee_number)
+);
 
 /*Table structure for table `sale` */
 
@@ -116,11 +139,24 @@ CREATE TABLE sale (
   hot boolean DEFAULT FALSE,
   rate rate_type DEFAULT NULL,
   vat vat_type DEFAULT NULL,
+  fiscal_month int NOT NULL,
+  revenue_growth float NOT NULL,
   trend varchar(10) DEFAULT NULL,
   CONSTRAINT sale_pk PRIMARY KEY (sale_id)
  ,  
   CONSTRAINT sale_employee_fk FOREIGN KEY (employee_number) REFERENCES employee (employee_number) ON UPDATE CASCADE
 ) ;
+
+/*Table structure for table `daily_activity` */
+
+CREATE TABLE daily_activity (
+  day_id serial NOT NULL, 
+  day_date date NOT NULL,
+  sales float NOT NULL,  
+  visitors float NOT NULL,    
+  conversion float NOT NULL,
+  CONSTRAINT daily_activity_pk PRIMARY KEY (day_id)
+);
 
 /*Table structure for table `token` */
 
@@ -255,6 +291,7 @@ CREATE TABLE "order" (
   status varchar(15) NOT NULL,
   comments text,
   customer_number bigint NOT NULL,
+  amount decimal(10,2) NOT NULL,
   CONSTRAINT order_pk PRIMARY KEY (order_id)
  ,
   CONSTRAINT order_customer_fk FOREIGN KEY (customer_number) REFERENCES customer (customer_number)
