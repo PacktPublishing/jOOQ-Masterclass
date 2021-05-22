@@ -104,7 +104,7 @@ public class ClassicModelsRepository {
                 .groupBy(month)
                 .orderBy(month)
                 .fetch();
-    }    
+    }
 
     public void exactDivisionOrderdetailTop3Product() {
 
@@ -149,14 +149,14 @@ public class ClassicModelsRepository {
                 .from(PRODUCT)
                 .fetch();
     }
-    
+
     public void filterNullsInArrayAgg() {
 
         // no filter produces NULLs as well
         ctx.select(arrayAgg(DEPARTMENT.ACCOUNTS_RECEIVABLE))
-                .from(DEPARTMENT)                
+                .from(DEPARTMENT)
                 .fetch();
-        
+
         // filter NULLs via WHERE clause 
         ctx.select(arrayAgg(DEPARTMENT.ACCOUNTS_RECEIVABLE))
                 .from(DEPARTMENT)
@@ -169,16 +169,16 @@ public class ClassicModelsRepository {
                 .from(DEPARTMENT)
                 .fetch();
     }
-    
+
     public void pivotViaFilter() {
-        
+
         // no pivot        
         ctx.select(SALE.FISCAL_YEAR, SALE.FISCAL_MONTH,
                 sum(SALE.SALE_))
                 .from(SALE)
                 .groupBy(SALE.FISCAL_YEAR, SALE.FISCAL_MONTH)
                 .fetch();
-        
+
         // pivot via FILTER        
         ctx.select(SALE.FISCAL_YEAR,
                 sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(1)).as("Jan_sales"),
@@ -195,7 +195,7 @@ public class ClassicModelsRepository {
                 sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(12)).as("Dec_sales"))
                 .from(SALE)
                 .groupBy(SALE.FISCAL_YEAR)
-                .fetch();        
+                .fetch();
     }
 
     public void filterInAggWindowFunction() {
@@ -221,7 +221,7 @@ public class ClassicModelsRepository {
                         field(name("t", "sales_rep")), field(name("t", "others")))
                 .fetch();
     }
-    
+
     public void filterInOrderedSetAggregateFunction() {
 
         ctx.select(
@@ -300,6 +300,13 @@ public class ClassicModelsRepository {
                 countDistinct(SALE.EMPLOYEE_NUMBER).as("cnt_dis"), sum(SALE.SALE_))
                 .from(SALE)
                 .groupBy(SALE.FISCAL_YEAR)
+                .fetch();
+
+        // select the employees having sales in 3 distinct years
+        ctx.select(SALE.EMPLOYEE_NUMBER)
+                .from(SALE)
+                .groupBy(SALE.EMPLOYEE_NUMBER)
+                .having(countDistinct(SALE.FISCAL_YEAR).gt(3))
                 .fetch();
     }
 

@@ -13,23 +13,23 @@ public class ClassicModelsService {
     }
 
     public void callAll() {
-      
-       classicModelsRepository.officeHavingLessThen3Employees();
-       classicModelsRepository.employeeHavingLargestNumberOfSales();
-       classicModelsRepository.orderdetailsQuantityOufOfRange2040();
-       classicModelsRepository.avgOfSumOfSales();
-       classicModelsRepository.groupByExtractedMonth();            
-       classicModelsRepository.exactDivisionOrderdetailTop3Product();       
-       classicModelsRepository.employeeSalary();
-       classicModelsRepository.avgSumProduct();
-       classicModelsRepository.pivotViaFilter();
-       classicModelsRepository.filterNullsInArrayAgg();
-       classicModelsRepository.filterInOrderedSetAggregateFunction();       
-       classicModelsRepository.filterInAggWindowFunction();
-       classicModelsRepository.minMaxBuyPriceProduct();
-       classicModelsRepository.firstNSalaries();
-       classicModelsRepository.medianViaGroupByAndAvgDistinct();
-       classicModelsRepository.countDistinctSalePerFiscalYear();
-       classicModelsRepository.sumAvgOrder();                      
+
+        classicModelsRepository.officeHavingLessThen3Employees();
+        classicModelsRepository.employeeHavingLargestNumberOfSales();
+        classicModelsRepository.orderdetailsQuantityOufOfRange2040();
+        classicModelsRepository.avgOfSumOfSales();
+        classicModelsRepository.groupByExtractedMonth();
+        classicModelsRepository.exactDivisionOrderdetailTop3Product();
+        classicModelsRepository.employeeSalary();
+        classicModelsRepository.avgSumProduct();
+        classicModelsRepository.pivotViaFilter();
+        classicModelsRepository.filterNullsInArrayAgg();
+        classicModelsRepository.filterInOrderedSetAggregateFunction();
+        classicModelsRepository.filterInAggWindowFunction();
+        classicModelsRepository.minMaxBuyPriceProduct();
+        classicModelsRepository.firstNSalaries();
+        classicModelsRepository.medianViaGroupByAndAvgDistinct();
+        classicModelsRepository.countDistinctSalePerFiscalYear();
+        classicModelsRepository.sumAvgOrder();
     }
 }

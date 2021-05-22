@@ -277,6 +277,13 @@ public class ClassicModelsRepository {
                 .from(SALE)
                 .groupBy(SALE.FISCAL_YEAR)
                 .fetch();
+        
+        // select the employees having sales in 3 distinct years
+        ctx.select(SALE.EMPLOYEE_NUMBER)
+                .from(SALE)
+                .groupBy(SALE.EMPLOYEE_NUMBER)
+                .having(countDistinct(SALE.FISCAL_YEAR).gt(3))
+                .fetch();
     }
 
     public void sumAvgOrder() {
