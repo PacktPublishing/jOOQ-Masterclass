@@ -25,5 +25,6 @@ public class ClassicModelsService {
         classicModelsRepository.bitsOperationsSample();
         classicModelsRepository.medianSample();
         classicModelsRepository.cmgrSale();        
+        classicModelsRepository.modeSales();
     }
 }

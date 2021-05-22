@@ -14,12 +14,14 @@ import static org.jooq.impl.DSL.avg;
 import static org.jooq.impl.DSL.boolAnd;
 import static org.jooq.impl.DSL.boolOr;
 import static org.jooq.impl.DSL.count;
+import static org.jooq.impl.DSL.countDistinct;
 import static org.jooq.impl.DSL.every;
 import static org.jooq.impl.DSL.exp;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.ln;
 import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.median;
+import static org.jooq.impl.DSL.mode;
 import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.one;
 import static org.jooq.impl.DSL.product;
@@ -308,4 +310,14 @@ public class ClassicModelsRepository {
                 .groupBy(SALE.FISCAL_YEAR)
                 .fetch();        
     }   
+    
+    // MODE() aggregate function - select the value that occurs the most
+    public void modeSales() {
+                
+        ctx.select(SALE.EMPLOYEE_NUMBER, mode(SALE.FISCAL_YEAR))
+                .from(SALE)
+                .groupBy(SALE.EMPLOYEE_NUMBER)
+                .having(countDistinct(SALE.FISCAL_YEAR).gt(1))
+                .fetch();
+    }
 }
