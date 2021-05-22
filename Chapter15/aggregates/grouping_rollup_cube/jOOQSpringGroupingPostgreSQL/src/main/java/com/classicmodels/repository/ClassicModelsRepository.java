@@ -28,7 +28,7 @@ public class ClassicModelsRepository {
 
     public void groupingEmployeeNumberFiscalYear() {
 
-        // the following two queries uses two grouping sets aggregated in the third query
+        // the following two queries uses two grouping sets aggregated in the third query        
         ctx.select(SALE.EMPLOYEE_NUMBER, sum(SALE.SALE_))
                 .from(SALE)
                 .groupBy(SALE.EMPLOYEE_NUMBER)
@@ -39,7 +39,7 @@ public class ClassicModelsRepository {
                 .groupBy(SALE.FISCAL_YEAR)
                 .fetch();
 
-        // aggregated data for the previous two grouping sets 
+        // aggregated data for the previous two grouping sets         
         ctx.select(SALE.EMPLOYEE_NUMBER, castNull(INTEGER).as("fiscal_year"), sum(SALE.SALE_))
                 .from(SALE)
                 .groupBy(SALE.EMPLOYEE_NUMBER)
@@ -61,7 +61,7 @@ public class ClassicModelsRepository {
                 .from(OFFICE)
                 .groupBy(groupingSets(OFFICE.CITY, OFFICE.COUNTRY))
                 .fetch();
-
+        
         ctx.select(case_().when(grouping(OFFICE.CITY).eq(1), "{generated}")
                 .else_(OFFICE.CITY).as("city"),
                 case_().when(grouping(OFFICE.COUNTRY).eq(1), "{generated}")
