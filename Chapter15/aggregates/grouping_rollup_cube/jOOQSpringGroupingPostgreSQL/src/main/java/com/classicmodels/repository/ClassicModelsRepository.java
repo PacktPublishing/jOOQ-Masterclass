@@ -81,10 +81,10 @@ public class ClassicModelsRepository {
                 .groupBy(groupingSets(OFFICE.CITY, OFFICE.COUNTRY))
                 .fetch();
 
-        ctx.select(case_().when(grouping(OFFICE.CITY).eq(1), "The city")
-                .else_(isnull(OFFICE.CITY, "Unknown")).as("city"),
-                case_().when(grouping(OFFICE.COUNTRY).eq(1), "The country")
-                        .else_(isnull(OFFICE.COUNTRY, "Unknown")).as("country"),
+        ctx.select(case_().when(grouping(OFFICE.CITY).eq(1), "-")
+                .else_(isnull(OFFICE.CITY, "Unspecified")).as("city"),
+                case_().when(grouping(OFFICE.COUNTRY).eq(1), "-")
+                        .else_(isnull(OFFICE.COUNTRY, "Unspecified")).as("country"),
                                 sum(OFFICE.INTERNAL_BUDGET))
                         .from(OFFICE)
                         .groupBy(groupingSets(OFFICE.CITY, OFFICE.COUNTRY))
