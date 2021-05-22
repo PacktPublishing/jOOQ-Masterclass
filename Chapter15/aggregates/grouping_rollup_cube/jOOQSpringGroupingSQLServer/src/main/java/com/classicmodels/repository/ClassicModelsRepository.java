@@ -9,6 +9,7 @@ import static org.jooq.impl.DSL.cube;
 import static org.jooq.impl.DSL.grouping;
 import static org.jooq.impl.DSL.groupingId;
 import static org.jooq.impl.DSL.groupingSets;
+import static org.jooq.impl.DSL.isnull;
 import static org.jooq.impl.DSL.rollup;
 import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.sum;
@@ -62,6 +63,24 @@ public class ClassicModelsRepository {
                 .from(OFFICE)
                 .groupBy(groupingSets(OFFICE.CITY, OFFICE.COUNTRY))
                 .fetch();
+        
+        ctx.select(grouping(OFFICE.CITY).as("grouping_city"),
+                OFFICE.CITY,
+                grouping(OFFICE.COUNTRY).as("grouping_country"),
+                OFFICE.COUNTRY,
+                sum(OFFICE.INTERNAL_BUDGET))
+                .from(OFFICE)
+                .groupBy(groupingSets(OFFICE.CITY, OFFICE.COUNTRY))
+                .fetch();
+        
+        ctx.select(case_().when(grouping(OFFICE.CITY).eq(1), "The city")
+                .else_(isnull(OFFICE.CITY, "Unknown")).as("city"),
+                case_().when(grouping(OFFICE.COUNTRY).eq(1), "The country")
+                        .else_(isnull(OFFICE.COUNTRY, "Unknown")).as("country"),
+                                sum(OFFICE.INTERNAL_BUDGET))
+                        .from(OFFICE)
+                        .groupBy(groupingSets(OFFICE.CITY, OFFICE.COUNTRY))
+                        .fetch();
 
         ctx.select(case_().when(grouping(OFFICE.CITY).eq(1), "{generated}")
                 .else_(OFFICE.CITY).as("city"),
