@@ -148,9 +148,9 @@ public class ClassicModelsRepository {
                 DEPARTMENT.CASH, DEPARTMENT.ACCOUNTS_RECEIVABLE, DEPARTMENT.INVENTORIES,
                 DEPARTMENT.ACCRUED_LIABILITIES, DEPARTMENT.ACCOUNTS_PAYABLE, DEPARTMENT.ST_BORROWING,
                 round(coalesce(DEPARTMENT.CASH, DEPARTMENT.ACCOUNTS_RECEIVABLE,
-                        DEPARTMENT.INVENTORIES, val(0)).mul(0.25), 2).as("income_deduction"),
+                        DEPARTMENT.INVENTORIES, inline(0)).mul(0.25), 2).as("income_deduction"),
                 round(coalesce(DEPARTMENT.ACCRUED_LIABILITIES, DEPARTMENT.ACCOUNTS_PAYABLE,
-                        DEPARTMENT.ST_BORROWING, val(0)).mul(0.25), 2).as("expenses_deduction"))
+                        DEPARTMENT.ST_BORROWING, inline(0)).mul(0.25), 2).as("expenses_deduction"))
                 .from(DEPARTMENT)
                 .fetch();
 
