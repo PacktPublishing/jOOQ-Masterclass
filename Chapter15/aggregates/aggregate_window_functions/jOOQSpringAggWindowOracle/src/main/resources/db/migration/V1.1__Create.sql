@@ -133,7 +133,7 @@ COMMIT;
 /* Type used in collect() */
 
 BEGIN
-   EXECUTE IMMEDIATE 'CREATE TYPE salaryArr AS TABLE OF INTEGER;';
+   EXECUTE IMMEDIATE 'CREATE TYPE SALARY_ARR AS TABLE OF NUMBER(7);';
 EXCEPTION
    WHEN OTHERS THEN NULL;
 END;
@@ -180,7 +180,7 @@ CREATE TABLE employee (
   extension varchar2(10) NOT NULL,
   email varchar2(100) NOT NULL,
   office_code varchar2(10) NOT NULL,
-  salary int NOT NULL,
+  salary number(7) NOT NULL,
   commission int DEFAULT NULL,
   reports_to number(10) DEFAULT NULL,
   job_title varchar2(50) NOT NULL,
@@ -534,6 +534,7 @@ CREATE TABLE "ORDER" (
   status varchar2(15) NOT NULL,
   comments clob,
   customer_number number(10) NOT NULL,
+  amount number(10,2) NOT NULL,
   CONSTRAINT order_pk PRIMARY KEY (order_id)
  ,
   CONSTRAINT order_customer_fk FOREIGN KEY (customer_number) REFERENCES customer (customer_number)
@@ -624,7 +625,8 @@ CREATE TABLE bank_transaction (
   caching_date timestamp DEFAULT SYSTIMESTAMP,
   customer_number number(10) NOT NULL,
   check_number varchar2(50) NOT NULL, 
-  status varchar(50) DEFAULT 'SUCCESS',
+  card_type varchar2(50) NOT NULL,
+  status varchar2(50) DEFAULT 'SUCCESS',
   CONSTRAINT bank_transaction_pk PRIMARY KEY (transaction_id),  
   CONSTRAINT bank_transaction_customer_fk FOREIGN KEY (customer_number,check_number) REFERENCES payment (customer_number,check_number)
 ) ;

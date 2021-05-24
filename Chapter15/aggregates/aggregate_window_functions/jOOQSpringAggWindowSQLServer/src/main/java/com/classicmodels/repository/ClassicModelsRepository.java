@@ -1,5 +1,6 @@
 package com.classicmodels.repository;
 
+import java.time.LocalDateTime;
 import static jooq.generated.tables.BankTransaction.BANK_TRANSACTION;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Office.OFFICE;
@@ -57,7 +58,7 @@ public class ClassicModelsRepository {
                 .from(select(x, y, z).from(PRODUCT))
                 .where(y.between(0, 2))
                 .fetch();
-        
+
         // example 3        
         ctx.select(BANK_TRANSACTION.CUSTOMER_NUMBER, BANK_TRANSACTION.CACHING_DATE,
                 BANK_TRANSACTION.TRANSFER_AMOUNT, BANK_TRANSACTION.STATUS,
@@ -104,6 +105,39 @@ public class ClassicModelsRepository {
                         .partitionBy(ORDERDETAIL.ORDER_ID).orderBy(ORDERDETAIL.PRICE_EACH)
                         .rowsPreceding(2).as("avg_prec_3_prices"))
                 .from(ORDERDETAIL)
+                .fetch();
+    }
+
+    // Calculate Running Totals via SUM()
+    public void calculateRunningTotals() {
+
+        ctx.selectDistinct(BANK_TRANSACTION.CACHING_DATE, BANK_TRANSACTION.CARD_TYPE,
+                sum(BANK_TRANSACTION.TRANSFER_AMOUNT).over()
+                        .partitionBy(BANK_TRANSACTION.CARD_TYPE)
+                        .orderBy(BANK_TRANSACTION.CACHING_DATE).as("transaction_running_total"))
+                .from(BANK_TRANSACTION)
+                .where(BANK_TRANSACTION.CACHING_DATE
+                        .between(LocalDateTime.of(2005, 3, 1, 0, 0, 0),
+                                LocalDateTime.of(2005, 3, 31, 0, 0, 0)))
+                .orderBy(BANK_TRANSACTION.CARD_TYPE)
+                .fetch();
+    }
+
+    // Calculate Running Averages via SUM() and AVG()
+    public void calculateRunningAverages() {
+
+        ctx.select(BANK_TRANSACTION.CACHING_DATE, BANK_TRANSACTION.CARD_TYPE,
+                sum(BANK_TRANSACTION.TRANSFER_AMOUNT).as("daily_sum"),
+                avg(sum(BANK_TRANSACTION.TRANSFER_AMOUNT)).over()
+                        .orderBy(BANK_TRANSACTION.CACHING_DATE)
+                        .rowsBetweenPreceding(2).andCurrentRow().as("transaction_running_average"))
+                .from(BANK_TRANSACTION)
+                .where(BANK_TRANSACTION.CACHING_DATE
+                        .between(LocalDateTime.of(2005, 3, 1, 0, 0, 0),
+                                LocalDateTime.of(2005, 3, 31, 0, 0, 0))
+                        .and(BANK_TRANSACTION.CARD_TYPE.eq("VisaElectron")))
+                .groupBy(BANK_TRANSACTION.CACHING_DATE, BANK_TRANSACTION.CARD_TYPE)
+                .orderBy(BANK_TRANSACTION.CACHING_DATE)
                 .fetch();
     }
 }

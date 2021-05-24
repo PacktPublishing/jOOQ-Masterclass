@@ -625,7 +625,8 @@ CREATE TABLE bank_transaction (
   caching_date timestamp DEFAULT SYSTIMESTAMP,
   customer_number number(10) NOT NULL,
   check_number varchar2(50) NOT NULL, 
-  status varchar(50) DEFAULT 'SUCCESS',
+  card_type varchar2(50) NOT NULL,
+  status varchar2(50) DEFAULT 'SUCCESS',
   CONSTRAINT bank_transaction_pk PRIMARY KEY (transaction_id),  
   CONSTRAINT bank_transaction_customer_fk FOREIGN KEY (customer_number,check_number) REFERENCES payment (customer_number,check_number)
 ) ;

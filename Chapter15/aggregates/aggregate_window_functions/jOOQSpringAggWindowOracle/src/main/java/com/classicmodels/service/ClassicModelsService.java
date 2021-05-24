@@ -17,5 +17,8 @@ public class ClassicModelsService {
         classicModelsRepository.usingSumAndCount();
         classicModelsRepository.usingMinMax();
         classicModelsRepository.usingAvg();
+        
+        classicModelsRepository.calculateRunningTotals();
+        classicModelsRepository.calculateRunningAverages();
     }
 }

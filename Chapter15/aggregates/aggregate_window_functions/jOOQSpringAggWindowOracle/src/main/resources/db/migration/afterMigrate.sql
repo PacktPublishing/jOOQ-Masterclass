@@ -945,660 +945,659 @@ insert /*+ ignore_row_on_dupkey_index(product(product_id)) */ into product(produ
 
 /*Data for the table `order` */
 
-insert /*+ ignore_row_on_dupkey_index("ORDER"(order_id)) */ into "ORDER"(order_id,order_date,required_date,shipped_date,status,comments,customer_number) 
+insert /*+ ignore_row_on_dupkey_index("ORDER"(order_id)) */ into "ORDER"(order_id,order_date,required_date,shipped_date,status,comments,customer_number,amount) 
 
- select 10100,'2003-01-06','2003-01-13','2003-01-10','Shipped',NULL,363 from dual union all 
+select 10100,'2003-01-06','2003-01-13','2003-01-10','Shipped',NULL,363,301.84 from dual union all
 
- select 10101,'2003-01-09','2003-01-18','2003-01-11','Shipped','Check on availability.',128 from dual union all 
+select 10101,'2003-01-09','2003-01-18','2003-01-11','Shipped','Check on availability.',128,352 from dual union all
 
- select 10102,'2003-01-10','2003-01-18','2003-01-14','Shipped',NULL,181 from dual union all 
+select 10102,'2003-01-10','2003-01-18','2003-01-14','Shipped',NULL,181,138.68 from dual union all
 
- select 10103,'2003-01-29','2003-02-07','2003-02-02','Shipped',NULL,121 from dual union all 
+select 10103,'2003-01-29','2003-02-07','2003-02-02','Shipped',NULL,121,1520.37 from dual union all
 
- select 10104,'2003-01-31','2003-02-09','2003-02-01','Shipped',NULL,141 from dual union all 
+select 10104,'2003-01-31','2003-02-09','2003-02-01','Shipped',NULL,141,1198.58 from dual union all
 
- select 10105,'2003-02-11','2003-02-21','2003-02-12','Shipped',NULL,145 from dual union all 
+select 10105,'2003-02-11','2003-02-21','2003-02-12','Shipped',NULL,145,1479.71 from dual union all
 
- select 10106,'2003-02-17','2003-02-24','2003-02-21','Shipped',NULL,278 from dual union all 
+select 10106,'2003-02-17','2003-02-24','2003-02-21','Shipped',NULL,278,1427.28 from dual union all
 
- select 10107,'2003-02-24','2003-03-03','2003-02-26','Shipped','Difficult to negotiate with customer. We need more marketing materials',131 from dual union all 
+select 10107,'2003-02-24','2003-03-03','2003-02-26','Shipped','Difficult to negotiate with customer. We need more marketing materials',131,793.21 from dual union all
 
- select 10108,'2003-03-03','2003-03-12','2003-03-08','Shipped',NULL,385 from dual union all 
+select 10108,'2003-03-03','2003-03-12','2003-03-08','Shipped',NULL,385,1267.48 from dual union all
 
- select 10109,'2003-03-10','2003-03-19','2003-03-11','Shipped','Customer requested that FedEx Ground is used for this shipping',486 from dual union all 
+select 10109,'2003-03-10','2003-03-19','2003-03-11','Shipped','Customer requested that FedEx Ground is used for this shipping',486,700.89 from dual union all
 
- select 10110,'2003-03-18','2003-03-24','2003-03-20','Shipped',NULL,187 from dual union all 
+select 10110,'2003-03-18','2003-03-24','2003-03-20','Shipped',NULL,187,1338.47 from dual union all
 
- select 10111,'2003-03-25','2003-03-31','2003-03-30','Shipped',NULL,129 from dual union all 
+select 10111,'2003-03-25','2003-03-31','2003-03-30','Shipped',NULL,129,460.16 from dual union all
 
- select 10112,'2003-03-24','2003-04-03','2003-03-29','Shipped','Customer requested that ad materials (such as posters, pamphlets) be included in the shippment',144 from dual union all 
+select 10112,'2003-03-24','2003-04-03','2003-03-29','Shipped','Customer requested that ad materials select such as posters, pamphlets) be included in the shippment',144,282.26 from dual union all
 
- select 10113,'2003-03-26','2003-04-02','2003-03-27','Shipped',NULL,124 from dual union all 
+select 10113,'2003-03-26','2003-04-02','2003-03-27','Shipped',NULL,124,325.23 from dual union all
 
- select 10114,'2003-04-01','2003-04-07','2003-04-02','Shipped',NULL,172 from dual union all 
+select 10114,'2003-04-01','2003-04-07','2003-04-02','Shipped',NULL,172,909.72 from dual union all
 
- select 10115,'2003-04-04','2003-04-12','2003-04-07','Shipped',NULL,424 from dual union all 
+select 10115,'2003-04-04','2003-04-12','2003-04-07','Shipped',NULL,424,515.99 from dual union all
 
- select 10116,'2003-04-11','2003-04-19','2003-04-13','Shipped',NULL,381 from dual union all 
+select 10116,'2003-04-11','2003-04-19','2003-04-13','Shipped',NULL,381,60.28 from dual union all
 
- select 10117,'2003-04-16','2003-04-24','2003-04-17','Shipped',NULL,148 from dual union all 
+select 10117,'2003-04-16','2003-04-24','2003-04-17','Shipped',NULL,148,1307.47 from dual union all
 
- select 10118,'2003-04-21','2003-04-29','2003-04-26','Shipped','Customer has worked with some of our vendors in the past and is aware of their MSRP',216 from dual union all 
+select 10118,'2003-04-21','2003-04-29','2003-04-26','Shipped','Customer has worked with some of our vendors in the past and is aware of their MSRP',216,86.15 from dual union all
 
- select 10119,'2003-04-28','2003-05-05','2003-05-02','Shipped',NULL,382 from dual union all 
+select 10119,'2003-04-28','2003-05-05','2003-05-02','Shipped',NULL,382,1007.21 from dual union all
 
- select 10120,'2003-04-29','2003-05-08','2003-05-01','Shipped',NULL,114 from dual union all 
+select 10120,'2003-04-29','2003-05-08','2003-05-01','Shipped',NULL,114,1322.67 from dual union all
 
- select 10121,'2003-05-07','2003-05-13','2003-05-13','Shipped',NULL,353 from dual union all 
+select 10121,'2003-05-07','2003-05-13','2003-05-13','Shipped',NULL,353,439.17 from dual union all
 
- select 10122,'2003-05-08','2003-05-16','2003-05-13','Shipped',NULL,350 from dual union all 
+select 10122,'2003-05-08','2003-05-16','2003-05-13','Shipped',NULL,350,1598.27 from dual union all
 
- select 10123,'2003-05-20','2003-05-29','2003-05-22','Shipped',NULL,103 from dual union all 
+select 10123,'2003-05-20','2003-05-29','2003-05-22','Shipped',NULL,103,396.08 from dual union all
 
- select 10124,'2003-05-21','2003-05-29','2003-05-25','Shipped','Customer very concerned about the exact color of the models. There is high risk that he may dispute the order because there is a slight color mismatch',112 from dual union all 
+select 10124,'2003-05-21','2003-05-29','2003-05-25','Shipped','Customer very concerned about the exact color of the models. There is high risk that he may dispute the order because there is a slight color mismatch',112,976.44 from dual union all
 
- select 10125,'2003-05-21','2003-05-27','2003-05-24','Shipped',NULL,114 from dual union all 
+select 10125,'2003-05-21','2003-05-27','2003-05-24','Shipped',NULL,114,227.76 from dual union all
 
- select 10126,'2003-05-28','2003-06-07','2003-06-02','Shipped',NULL,458 from dual union all 
+select 10126,'2003-05-28','2003-06-07','2003-06-02','Shipped',NULL,458,1623.71 from dual union all
 
- select 10127,'2003-06-03','2003-06-09','2003-06-06','Shipped','Customer requested special shippment. The instructions were passed along to the warehouse',151 from dual union all 
+select 10127,'2003-06-03','2003-06-09','2003-06-06','Shipped','Customer requested special shippment. The instructions were passed along to the warehouse',151,1601.39 from dual union all
 
- select 10128,'2003-06-06','2003-06-12','2003-06-11','Shipped',NULL,141 from dual union all 
+select 10128,'2003-06-06','2003-06-12','2003-06-11','Shipped',NULL,141,350.86 from dual union all
 
- select 10129,'2003-06-12','2003-06-18','2003-06-14','Shipped',NULL,324 from dual union all 
+select 10129,'2003-06-12','2003-06-18','2003-06-14','Shipped',NULL,324,754.23 from dual union all
 
- select 10130,'2003-06-16','2003-06-24','2003-06-21','Shipped',NULL,198 from dual union all 
+select 10130,'2003-06-16','2003-06-24','2003-06-21','Shipped',NULL,198,168.34 from dual union all
 
- select 10131,'2003-06-16','2003-06-25','2003-06-21','Shipped',NULL,447 from dual union all 
+select 10131,'2003-06-16','2003-06-25','2003-06-21','Shipped',NULL,447,577.67 from dual union all
 
- select 10132,'2003-06-25','2003-07-01','2003-06-28','Shipped',NULL,323 from dual union all 
+select 10132,'2003-06-25','2003-07-01','2003-06-28','Shipped',NULL,323,80.00 from dual union all
 
- select 10133,'2003-06-27','2003-07-04','2003-07-03','Shipped',NULL,141 from dual union all 
+select 10133,'2003-06-27','2003-07-04','2003-07-03','Shipped',NULL,141,628.49 from dual union all
 
- select 10134,'2003-07-01','2003-07-10','2003-07-05','Shipped',NULL,250 from dual union all 
+select 10134,'2003-07-01','2003-07-10','2003-07-05','Shipped',NULL,250,747.93 from dual union all
 
- select 10135,'2003-07-02','2003-07-12','2003-07-03','Shipped',NULL,124 from dual union all 
+select 10135,'2003-07-02','2003-07-12','2003-07-03','Shipped',NULL,124,1494.89 from dual union all
 
- select 10136,'2003-07-04','2003-07-14','2003-07-06','Shipped','Customer is interested in buying more Ferrari models',242 from dual union all 
+select 10136,'2003-07-04','2003-07-14','2003-07-06','Shipped','Customer is interested in buying more Ferrari models',242,407.73 from dual union all
 
- select 10137,'2003-07-10','2003-07-20','2003-07-14','Shipped',NULL,353 from dual union all 
+select 10137,'2003-07-10','2003-07-20','2003-07-14','Shipped',NULL,353,385.54 from dual union all
 
- select 10138,'2003-07-07','2003-07-16','2003-07-13','Shipped',NULL,496 from dual union all 
+select 10138,'2003-07-07','2003-07-16','2003-07-13','Shipped',NULL,496,970.09 from dual union all
 
- select 10139,'2003-07-16','2003-07-23','2003-07-21','Shipped',NULL,282 from dual union all 
+select 10139,'2003-07-16','2003-07-23','2003-07-21','Shipped',NULL,282,714.16 from dual union all
 
- select 10140,'2003-07-24','2003-08-02','2003-07-30','Shipped',NULL,161 from dual union all 
+select 10140,'2003-07-24','2003-08-02','2003-07-30','Shipped',NULL,161,992.83 from dual union all
 
- select 10141,'2003-08-01','2003-08-09','2003-08-04','Shipped',NULL,334 from dual union all 
+select 10141,'2003-08-01','2003-08-09','2003-08-04','Shipped',NULL,334,857.52 from dual union all
 
- select 10142,'2003-08-08','2003-08-16','2003-08-13','Shipped',NULL,124 from dual union all 
+select 10142,'2003-08-08','2003-08-16','2003-08-13','Shipped',NULL,124,1570.77 from dual union all
 
- select 10143,'2003-08-10','2003-08-18','2003-08-12','Shipped','Can we deliver the new Ford Mustang models by end-of-quarter?',320 from dual union all 
+select 10143,'2003-08-10','2003-08-18','2003-08-12','Shipped','Can we deliver the new Ford Mustang models by end-of-quarter?',320,1227.49 from dual union all
 
- select 10144,'2003-08-13','2003-08-21','2003-08-14','Shipped',NULL,381 from dual union all 
+select 10144,'2003-08-13','2003-08-21','2003-08-14','Shipped',NULL,381,56.41 from dual union all
 
- select 10145,'2003-08-25','2003-09-02','2003-08-31','Shipped',NULL,205 from dual union all 
+select 10145,'2003-08-25','2003-09-02','2003-08-31','Shipped',NULL,205,1412.17 from dual union all
 
- select 10146,'2003-09-03','2003-09-13','2003-09-06','Shipped',NULL,447 from dual union all 
+select 10146,'2003-09-03','2003-09-13','2003-09-06','Shipped',NULL,447,191.24 from dual union all
 
- select 10147,'2003-09-05','2003-09-12','2003-09-09','Shipped',NULL,379 from dual union all 
+select 10147,'2003-09-05','2003-09-12','2003-09-09','Shipped',NULL,379,997.5 from dual union all
 
- select 10148,'2003-09-11','2003-09-21','2003-09-15','Shipped','They want to reevaluate their terms agreement with Finance.',276 from dual union all 
+select 10148,'2003-09-11','2003-09-21','2003-09-15','Shipped','They want to reevaluate their terms agreement with Finance.',276,1374.9 from dual union all
 
- select 10149,'2003-09-12','2003-09-18','2003-09-17','Shipped',NULL,487 from dual union all 
+select 10149,'2003-09-12','2003-09-18','2003-09-17','Shipped',NULL,487,925.52 from dual union all
 
- select 10150,'2003-09-19','2003-09-27','2003-09-21','Shipped','They want to reevaluate their terms agreement with Finance.',148 from dual union all 
+select 10150,'2003-09-19','2003-09-27','2003-09-21','Shipped','They want to reevaluate their terms agreement with Finance.',148,1096.9 from dual union all
 
- select 10151,'2003-09-21','2003-09-30','2003-09-24','Shipped',NULL,311 from dual union all 
+select 10151,'2003-09-21','2003-09-30','2003-09-24','Shipped',NULL,311,976.09 from dual union all
 
- select 10152,'2003-09-25','2003-10-03','2003-10-01','Shipped',NULL,333 from dual union all 
+select 10152,'2003-09-25','2003-10-03','2003-10-01','Shipped',NULL,333,336.44 from dual union all
 
- select 10153,'2003-09-28','2003-10-05','2003-10-03','Shipped',NULL,141 from dual union all 
+select 10153,'2003-09-28','2003-10-05','2003-10-03','Shipped',NULL,141,304.98 from dual union all
 
- select 10154,'2003-10-02','2003-10-12','2003-10-08','Shipped',NULL,219 from dual union all 
+select 10154,'2003-10-02','2003-10-12','2003-10-08','Shipped',NULL,219,134.5 from dual union all
 
- select 10155,'2003-10-06','2003-10-13','2003-10-07','Shipped',NULL,186 from dual union all 
+select 10155,'2003-10-06','2003-10-13','2003-10-07','Shipped',NULL,186,1084.82 from dual union all
 
- select 10156,'2003-10-08','2003-10-17','2003-10-11','Shipped',NULL,141 from dual union all 
+select 10156,'2003-10-08','2003-10-17','2003-10-11','Shipped',NULL,141,121.28 from dual union all
 
- select 10157,'2003-10-09','2003-10-15','2003-10-14','Shipped',NULL,473 from dual union all 
+select 10157,'2003-10-09','2003-10-15','2003-10-14','Shipped',NULL,473,475.12 from dual union all
 
- select 10158,'2003-10-10','2003-10-18','2003-10-15','Shipped',NULL,121 from dual union all 
+select 10158,'2003-10-10','2003-10-18','2003-10-15','Shipped',NULL,121,67.79 from dual union all
 
- select 10159,'2003-10-10','2003-10-19','2003-10-16','Shipped',NULL,321 from dual union all 
+select 10159,'2003-10-10','2003-10-19','2003-10-16','Shipped',NULL,321,1687.12 from dual union all
 
- select 10160,'2003-10-11','2003-10-17','2003-10-17','Shipped',NULL,347 from dual union all 
+select 10160,'2003-10-11','2003-10-17','2003-10-17','Shipped',NULL,347,562.16 from dual union all
 
- select 10161,'2003-10-17','2003-10-25','2003-10-20','Shipped',NULL,227 from dual union all 
+select 10161,'2003-10-17','2003-10-25','2003-10-20','Shipped',NULL,227,1068.37 from dual union all
 
- select 10162,'2003-10-18','2003-10-26','2003-10-19','Shipped',NULL,321 from dual union all 
+select 10162,'2003-10-18','2003-10-26','2003-10-19','Shipped',NULL,321,782.94 from dual union all
 
- select 10163,'2003-10-20','2003-10-27','2003-10-24','Shipped',NULL,424 from dual union all 
+select 10163,'2003-10-20','2003-10-27','2003-10-24','Shipped',NULL,424,651.79 from dual union all
 
- select 10164,'2003-10-21','2003-10-30','2003-10-23','Resolved','This order was disputed, but resolved on 11/1/2003; Customer doesn''t like the colors and precision of the models.',452 from dual union all 
+select 10164,'2003-10-21','2003-10-30','2003-10-23','Resolved','This order was disputed, but resolved on 11/1/2003; Customer does not like the colors and precision of the models.',452,758.85 from dual union all
 
- select 10165,'2003-10-22','2003-10-31','2003-12-26','Shipped','This order was on hold because customers''s credit limit had been exceeded. Order will ship when payment is received',148 from dual union all 
+select 10165,'2003-10-22','2003-10-31','2003-12-26','Shipped','This order was on hold because customer credit limit had been exceeded. Order will ship when payment is received',148,1674.66 from dual union all
 
- select 10166,'2003-10-21','2003-10-30','2003-10-27','Shipped',NULL,462 from dual union all 
+select 10166,'2003-10-21','2003-10-30','2003-10-27','Shipped',NULL,462,361.88 from dual union all
 
- select 10167,'2003-10-23','2003-10-30',NULL,'Cancelled','Customer called to cancel. The warehouse was notified in time and the order didn''t ship. They have a new VP of Sales and are shifting their sales model. Our VP of Sales should contact them.',448 from dual union all 
+select 10167,'2003-10-23','2003-10-30',NULL,'Cancelled','Customer called to cancel. The warehouse was notified in time and the order did not ship. They have a new VP of Sales and are shifting their sales model. Our VP of Sales should contact them.',448,1271.62 from dual union all
 
- select 10168,'2003-10-28','2003-11-03','2003-11-01','Shipped',NULL,161 from dual union all 
+select 10168,'2003-10-28','2003-11-03','2003-11-01','Shipped',NULL,161,1472.5 from dual union all
 
- select 10169,'2003-11-04','2003-11-14','2003-11-09','Shipped',NULL,276 from dual union all 
+select 10169,'2003-11-04','2003-11-14','2003-11-09','Shipped',NULL,276,1130.7 from dual union all
 
- select 10170,'2003-11-04','2003-11-12','2003-11-07','Shipped',NULL,452 from dual union all 
+select 10170,'2003-11-04','2003-11-12','2003-11-07','Shipped',NULL,452,410.22 from dual union all
 
- select 10171,'2003-11-05','2003-11-13','2003-11-07','Shipped',NULL,233 from dual union all 
+select 10171,'2003-11-05','2003-11-13','2003-11-07','Shipped',NULL,233,463.18 from dual union all
 
- select 10172,'2003-11-05','2003-11-14','2003-11-11','Shipped',NULL,175 from dual union all 
+select 10172,'2003-11-05','2003-11-14','2003-11-11','Shipped',NULL,175,716.82 from dual union all
 
- select 10173,'2003-11-05','2003-11-15','2003-11-09','Shipped','Cautious optimism. We have happy customers here, if we can keep them well stocked.  I need all the information I can get on the planned shippments of Porches',278 from dual union all 
+select 10173,'2003-11-05','2003-11-15','2003-11-09','Shipped','Cautious optimism. We have happy customers here, if we can keep them well stocked.  I need all the information I can get on the planned shippments of Porches',278,1310.96 from dual union all
 
- select 10174,'2003-11-06','2003-11-15','2003-11-10','Shipped',NULL,333 from dual union all 
+select 10174,'2003-11-06','2003-11-15','2003-11-10','Shipped',NULL,333,530.11 from dual union all
 
- select 10175,'2003-11-06','2003-11-14','2003-11-09','Shipped',NULL,324 from dual union all 
+select 10175,'2003-11-06','2003-11-14','2003-11-09','Shipped',NULL,324,1074.91 from dual union all
 
- select 10176,'2003-11-06','2003-11-15','2003-11-12','Shipped',NULL,386 from dual union all 
+select 10176,'2003-11-06','2003-11-15','2003-11-12','Shipped',NULL,386,1133.56 from dual union all
 
- select 10177,'2003-11-07','2003-11-17','2003-11-12','Shipped',NULL,344 from dual union all 
+select 10177,'2003-11-07','2003-11-17','2003-11-12','Shipped',NULL,344,878.84 from dual union all
 
- select 10178,'2003-11-08','2003-11-16','2003-11-10','Shipped','Custom shipping instructions sent to warehouse',242 from dual union all 
+select 10178,'2003-11-08','2003-11-16','2003-11-10','Shipped','Custom shipping instructions sent to warehouse',242,989.95 from dual union all
 
- select 10179,'2003-11-11','2003-11-17','2003-11-13','Cancelled','Customer cancelled due to urgent budgeting issues. Must be cautious when dealing with them in the future. Since order shipped already we must discuss who would cover the shipping charges.',496 from dual union all 
+select 10179,'2003-11-11','2003-11-17','2003-11-13','Cancelled','Customer cancelled due to urgent budgeting issues. Must be cautious when dealing with them in the future. Since order shipped already we must discuss who would cover the shipping charges.',496,702.84 from dual union all
 
- select 10180,'2003-11-11','2003-11-19','2003-11-14','Shipped',NULL,171 from dual union all 
+select 10180,'2003-11-11','2003-11-19','2003-11-14','Shipped',NULL,171,1226.65 from dual union all
 
- select 10181,'2003-11-12','2003-11-19','2003-11-15','Shipped',NULL,167 from dual union all 
+select 10181,'2003-11-12','2003-11-19','2003-11-15','Shipped',NULL,167,1760.39 from dual union all
 
- select 10182,'2003-11-12','2003-11-21','2003-11-18','Shipped',NULL,124 from dual union all 
+select 10182,'2003-11-12','2003-11-21','2003-11-18','Shipped',NULL,124,1360.43 from dual union all
 
- select 10183,'2003-11-13','2003-11-22','2003-11-15','Shipped','We need to keep in close contact with their Marketing VP. He is the decision maker for all their purchases.',339 from dual union all 
+select 10183,'2003-11-13','2003-11-22','2003-11-15','Shipped','We need to keep in close contact with their Marketing VP. He is the decision maker for all their purchases.',339,1143.9 from dual union all
 
- select 10184,'2003-11-14','2003-11-22','2003-11-20','Shipped',NULL,484 from dual union all 
+select 10184,'2003-11-14','2003-11-22','2003-11-20','Shipped',NULL,484,1205.41 from dual union all
 
- select 10185,'2003-11-14','2003-11-21','2003-11-20','Shipped',NULL,320 from dual union all 
+select 10185,'2003-11-14','2003-11-21','2003-11-20','Shipped',NULL,320,1605.19 from dual union all
 
- select 10186,'2003-11-14','2003-11-20','2003-11-18','Shipped','They want to reevaluate their terms agreement with the VP of Sales',489 from dual union all 
+select 10186,'2003-11-14','2003-11-20','2003-11-18','Shipped','They want to reevaluate their terms agreement with the VP of Sales',489,729.73 from dual union all
 
- select 10187,'2003-11-15','2003-11-24','2003-11-16','Shipped',NULL,211 from dual union all 
+select 10187,'2003-11-15','2003-11-24','2003-11-16','Shipped',NULL,211,1440.52 from dual union all
 
- select 10188,'2003-11-18','2003-11-26','2003-11-24','Shipped',NULL,167 from dual union all 
+select 10188,'2003-11-18','2003-11-26','2003-11-24','Shipped',NULL,167,777.15 from dual union all
 
- select 10189,'2003-11-18','2003-11-25','2003-11-24','Shipped','They want to reevaluate their terms agreement with Finance.',205 from dual union all 
+select 10189,'2003-11-18','2003-11-25','2003-11-24','Shipped','They want to reevaluate their terms agreement with Finance.',205,138.57 from dual union all
 
- select 10190,'2003-11-19','2003-11-29','2003-11-20','Shipped',NULL,141 from dual union all 
+select 10190,'2003-11-19','2003-11-29','2003-11-20','Shipped',NULL,141,254.82 from dual union all
 
- select 10191,'2003-11-20','2003-11-30','2003-11-24','Shipped','We must be cautions with this customer. Their VP of Sales resigned. Company may be heading down.',259 from dual union all 
+select 10191,'2003-11-20','2003-11-30','2003-11-24','Shipped','We must be cautions with this customer. Their VP of Sales resigned. Company may be heading down.',259,853.76 from dual union all
 
- select 10192,'2003-11-20','2003-11-29','2003-11-25','Shipped',NULL,363 from dual union all 
+select 10192,'2003-11-20','2003-11-29','2003-11-25','Shipped',NULL,363,1541.08 from dual union all
 
- select 10193,'2003-11-21','2003-11-28','2003-11-27','Shipped',NULL,471 from dual union all 
+select 10193,'2003-11-21','2003-11-28','2003-11-27','Shipped',NULL,471,1294.46 from dual union all
 
- select 10194,'2003-11-25','2003-12-02','2003-11-26','Shipped',NULL,146 from dual union all 
+select 10194,'2003-11-25','2003-12-02','2003-11-26','Shipped',NULL,146,1110.74 from dual union all
 
- select 10195,'2003-11-25','2003-12-01','2003-11-28','Shipped',NULL,319 from dual union all 
+select 10195,'2003-11-25','2003-12-01','2003-11-28','Shipped',NULL,319,911.46 from dual union all
 
- select 10196,'2003-11-26','2003-12-03','2003-12-01','Shipped',NULL,455 from dual union all 
+select 10196,'2003-11-26','2003-12-03','2003-12-01','Shipped',NULL,455,978.59 from dual union all
 
- select 10197,'2003-11-26','2003-12-02','2003-12-01','Shipped','Customer inquired about remote controlled models and gold models.',216 from dual union all 
+select 10197,'2003-11-26','2003-12-02','2003-12-01','Shipped','Customer inquired about remote controlled models and gold models.',216,1109.13 from dual union all
 
- select 10198,'2003-11-27','2003-12-06','2003-12-03','Shipped',NULL,385 from dual union all 
+select 10198,'2003-11-27','2003-12-06','2003-12-03','Shipped',NULL,385,506.86 from dual union all
 
- select 10199,'2003-12-01','2003-12-10','2003-12-06','Shipped',NULL,475 from dual union all 
+select 10199,'2003-12-01','2003-12-10','2003-12-06','Shipped',NULL,475,189.66 from dual union all
 
- select 10200,'2003-12-01','2003-12-09','2003-12-06','Shipped',NULL,211 from dual union all 
+select 10200,'2003-12-01','2003-12-09','2003-12-06','Shipped',NULL,211,505.54 from dual union all
 
- select 10201,'2003-12-01','2003-12-11','2003-12-02','Shipped',NULL,129 from dual union all 
+select 10201,'2003-12-01','2003-12-11','2003-12-02','Shipped',NULL,129,725.37 from dual union all
 
- select 10202,'2003-12-02','2003-12-09','2003-12-06','Shipped',NULL,357 from dual union all 
+select 10202,'2003-12-02','2003-12-09','2003-12-06','Shipped',NULL,357,506.36 from dual union all
 
- select 10203,'2003-12-02','2003-12-11','2003-12-07','Shipped',NULL,141 from dual union all 
+select 10203,'2003-12-02','2003-12-11','2003-12-07','Shipped',NULL,141,1107.92 from dual union all
 
- select 10204,'2003-12-02','2003-12-10','2003-12-04','Shipped',NULL,151 from dual union all 
+select 10204,'2003-12-02','2003-12-10','2003-12-04','Shipped',NULL,151,1619.73 from dual union all
 
- select 10205,'2003-12-03','2003-12-09','2003-12-07','Shipped',' I need all the information I can get on our competitors.',141 from dual union all 
+select 10205,'2003-12-03','2003-12-09','2003-12-07','Shipped',' I need all the information I can get on our competitors.',141,347.45 from dual union all
 
- select 10206,'2003-12-05','2003-12-13','2003-12-08','Shipped','Can we renegotiate this one?',202 from dual union all 
+select 10206,'2003-12-05','2003-12-13','2003-12-08','Shipped','Can we renegotiate this one?',202,1065.55 from dual union all
 
- select 10207,'2003-12-09','2003-12-17','2003-12-11','Shipped','Check on availability.',495 from dual union all 
+select 10207,'2003-12-09','2003-12-17','2003-12-11','Shipped','Check on availability.',495,1560.08 from dual union all
 
- select 10208,'2004-01-02','2004-01-11','2004-01-04','Shipped',NULL,146 from dual union all 
+select 10208,'2004-01-02','2004-01-11','2004-01-04','Shipped',NULL,146,1438.31 from dual union all
 
- select 10209,'2004-01-09','2004-01-15','2004-01-12','Shipped',NULL,347 from dual union all 
+select 10209,'2004-01-09','2004-01-15','2004-01-12','Shipped',NULL,347,646.57 from dual union all
 
- select 10210,'2004-01-12','2004-01-22','2004-01-20','Shipped',NULL,177 from dual union all 
+select 10210,'2004-01-12','2004-01-22','2004-01-20','Shipped',NULL,177,1443.06 from dual union all
 
- select 10211,'2004-01-15','2004-01-25','2004-01-18','Shipped',NULL,406 from dual union all 
+select 10211,'2004-01-15','2004-01-25','2004-01-18','Shipped',NULL,406,1399.57 from dual union all
 
- select 10212,'2004-01-16','2004-01-24','2004-01-18','Shipped',NULL,141 from dual union all 
+select 10212,'2004-01-16','2004-01-24','2004-01-18','Shipped',NULL,141,1541.83 from dual union all
 
- select 10213,'2004-01-22','2004-01-28','2004-01-27','Shipped','Difficult to negotiate with customer. We need more marketing materials',489 from dual union all 
+select 10213,'2004-01-22','2004-01-28','2004-01-27','Shipped','Difficult to negotiate with customer. We need more marketing materials',489,240.59 from dual union all
 
- select 10214,'2004-01-26','2004-02-04','2004-01-29','Shipped',NULL,458 from dual union all 
+select 10214,'2004-01-26','2004-02-04','2004-01-29','Shipped',NULL,458,623.43 from dual union all
 
- select 10215,'2004-01-29','2004-02-08','2004-02-01','Shipped','Customer requested that FedEx Ground is used for this shipping',475 from dual union all 
+select 10215,'2004-01-29','2004-02-08','2004-02-01','Shipped','Customer requested that FedEx Ground is used for this shipping',475,916.49 from dual union all
 
- select 10216,'2004-02-02','2004-02-10','2004-02-04','Shipped',NULL,256 from dual union all 
+select 10216,'2004-02-02','2004-02-10','2004-02-04','Shipped',NULL,256,133.94 from dual union all
 
- select 10217,'2004-02-04','2004-02-14','2004-02-06','Shipped',NULL,166 from dual union all 
+select 10217,'2004-02-04','2004-02-14','2004-02-06','Shipped',NULL,166,638.71 from dual union all
 
- select 10218,'2004-02-09','2004-02-16','2004-02-11','Shipped','Customer requested that ad materials (such as posters, pamphlets) be included in the shippment',473 from dual union all 
+select 10218,'2004-02-09','2004-02-16','2004-02-11','Shipped','Customer requested that ad materials select such as posters, pamphlets) be included in the shippment',473,262.87 from dual union all
 
- select 10219,'2004-02-10','2004-02-17','2004-02-12','Shipped',NULL,487 from dual union all 
+select 10219,'2004-02-10','2004-02-17','2004-02-12','Shipped',NULL,487,306.16 from dual union all
 
- select 10220,'2004-02-12','2004-02-19','2004-02-16','Shipped',NULL,189 from dual union all 
+select 10220,'2004-02-12','2004-02-19','2004-02-16','Shipped',NULL,189,982.07 from dual union all
 
- select 10221,'2004-02-18','2004-02-26','2004-02-19','Shipped',NULL,314 from dual union all 
+select 10221,'2004-02-18','2004-02-26','2004-02-19','Shipped',NULL,314,490.22 from dual union all
 
- select 10222,'2004-02-19','2004-02-27','2004-02-20','Shipped',NULL,239 from dual union all 
+select 10222,'2004-02-19','2004-02-27','2004-02-20','Shipped',NULL,239,1389.51 from dual union all
 
- select 10223,'2004-02-20','2004-02-29','2004-02-24','Shipped',NULL,114 from dual union all 
+select 10223,'2004-02-20','2004-02-29','2004-02-24','Shipped',NULL,114,1304.29 from dual union all
 
- select 10224,'2004-02-21','2004-03-02','2004-02-26','Shipped','Customer has worked with some of our vendors in the past and is aware of their MSRP',171 from dual union all 
+select 10224,'2004-02-21','2004-03-02','2004-02-26','Shipped','Customer has worked with some of our vendors in the past and is aware of their MSRP',171,472.32 from dual union all
 
- select 10225,'2004-02-22','2004-03-01','2004-02-24','Shipped',NULL,298 from dual union all 
+select 10225,'2004-02-22','2004-03-01','2004-02-24','Shipped',NULL,298,1392.48 from dual union all
 
- select 10226,'2004-02-26','2004-03-06','2004-03-02','Shipped',NULL,239 from dual union all 
+select 10226,'2004-02-26','2004-03-06','2004-03-02','Shipped',NULL,239,694.52 from dual union all
 
- select 10227,'2004-03-02','2004-03-12','2004-03-08','Shipped',NULL,146 from dual union all 
+select 10227,'2004-03-02','2004-03-12','2004-03-08','Shipped',NULL,146,1220.54 from dual union all
 
- select 10228,'2004-03-10','2004-03-18','2004-03-13','Shipped',NULL,173 from dual union all 
+select 10228,'2004-03-10','2004-03-18','2004-03-13','Shipped',NULL,173,658.67 from dual union all
 
- select 10229,'2004-03-11','2004-03-20','2004-03-12','Shipped',NULL,124 from dual union all 
+select 10229,'2004-03-11','2004-03-20','2004-03-12','Shipped',NULL,124,1246.31 from dual union all
 
- select 10230,'2004-03-15','2004-03-24','2004-03-20','Shipped','Customer very concerned about the exact color of the models. There is high risk that he may dispute the order because there is a slight color mismatch',128 from dual union all 
+select 10230,'2004-03-15','2004-03-24','2004-03-20','Shipped','Customer very concerned about the exact color of the models. There is high risk that he may dispute the order because there is a slight color mismatch',128,788.41 from dual union all
 
- select 10231,'2004-03-19','2004-03-26','2004-03-25','Shipped',NULL,344 from dual union all 
+select 10231,'2004-03-19','2004-03-26','2004-03-25','Shipped',NULL,344,340.32 from dual union all
 
- select 10232,'2004-03-20','2004-03-30','2004-03-25','Shipped',NULL,240 from dual union all 
+select 10232,'2004-03-20','2004-03-30','2004-03-25','Shipped',NULL,240,723.9 from dual union all
 
- select 10233,'2004-03-29','2004-04-04','2004-04-02','Shipped','Customer requested special shippment. The instructions were passed along to the warehouse',328 from dual union all 
+select 10233,'2004-03-29','2004-04-04','2004-04-02','Shipped','Customer requested special shippment. The instructions were passed along to the warehouse',328,204.75 from dual union all
 
- select 10234,'2004-03-30','2004-04-05','2004-04-02','Shipped',NULL,412 from dual union all 
+select 10234,'2004-03-30','2004-04-05','2004-04-02','Shipped',NULL,412,775.05 from dual union all
 
- select 10235,'2004-04-02','2004-04-12','2004-04-06','Shipped',NULL,260 from dual union all 
+select 10235,'2004-04-02','2004-04-12','2004-04-06','Shipped',NULL,260,926.24 from dual union all
 
- select 10236,'2004-04-03','2004-04-11','2004-04-08','Shipped',NULL,486 from dual union all 
+select 10236,'2004-04-03','2004-04-11','2004-04-08','Shipped',NULL,486,224.07 from dual union all
 
- select 10237,'2004-04-05','2004-04-12','2004-04-10','Shipped',NULL,181 from dual union all 
+select 10237,'2004-04-05','2004-04-12','2004-04-10','Shipped',NULL,181,809.92 from dual union all
 
- select 10238,'2004-04-09','2004-04-16','2004-04-10','Shipped',NULL,145 from dual union all 
+select 10238,'2004-04-09','2004-04-16','2004-04-10','Shipped',NULL,145,794.15 from dual union all
 
- select 10239,'2004-04-12','2004-04-21','2004-04-17','Shipped',NULL,311 from dual union all 
+select 10239,'2004-04-12','2004-04-21','2004-04-17','Shipped',NULL,311,471.61 from dual union all
 
- select 10240,'2004-04-13','2004-04-20','2004-04-20','Shipped',NULL,177 from dual union all 
+select 10240,'2004-04-13','2004-04-20','2004-04-20','Shipped',NULL,177,396.75 from dual union all
 
- select 10241,'2004-04-13','2004-04-20','2004-04-19','Shipped',NULL,209 from dual union all 
+select 10241,'2004-04-13','2004-04-20','2004-04-19','Shipped',NULL,209,1097.13 from dual union all
 
- select 10242,'2004-04-20','2004-04-28','2004-04-25','Shipped','Customer is interested in buying more Ferrari models',456 from dual union all 
+select 10242,'2004-04-20','2004-04-28','2004-04-25','Shipped','Customer is interested in buying more Ferrari models',456,36.52 from dual union all
 
- select 10243,'2004-04-26','2004-05-03','2004-04-28','Shipped',NULL,495 from dual union all 
+select 10243,'2004-04-26','2004-05-03','2004-04-28','Shipped',NULL,495,142.74 from dual union all
 
- select 10244,'2004-04-29','2004-05-09','2004-05-04','Shipped',NULL,141 from dual union all 
+select 10244,'2004-04-29','2004-05-09','2004-05-04','Shipped',NULL,141,744.69 from dual union all
 
- select 10245,'2004-05-04','2004-05-12','2004-05-09','Shipped',NULL,455 from dual union all 
+select 10245,'2004-05-04','2004-05-12','2004-05-09','Shipped',NULL,455,956.28 from dual union all
 
- select 10246,'2004-05-05','2004-05-13','2004-05-06','Shipped',NULL,141 from dual union all 
+select 10246,'2004-05-05','2004-05-13','2004-05-06','Shipped',NULL,141,1006.78 from dual union all
 
- select 10247,'2004-05-05','2004-05-11','2004-05-08','Shipped',NULL,334 from dual union all 
+select 10247,'2004-05-05','2004-05-11','2004-05-08','Shipped',NULL,334,757.24 from dual union all
 
- select 10248,'2004-05-07','2004-05-14',NULL,'Cancelled','Order was mistakenly placed. The warehouse noticed the lack of documentation.',131 from dual union all 
+select 10248,'2004-05-07','2004-05-14',NULL,'Cancelled','Order was mistakenly placed. The warehouse noticed the lack of documentation.',131,1263.34 from dual union all
 
- select 10249,'2004-05-08','2004-05-17','2004-05-11','Shipped','Can we deliver the new Ford Mustang models by end-of-quarter?',173 from dual union all 
+select 10249,'2004-05-08','2004-05-17','2004-05-11','Shipped','Can we deliver the new Ford Mustang models by end-of-quarter?',173,344.64 from dual union all
 
- select 10250,'2004-05-11','2004-05-19','2004-05-15','Shipped',NULL,450 from dual union all 
+select 10250,'2004-05-11','2004-05-19','2004-05-15','Shipped',NULL,450,1146.61 from dual union all
 
- select 10251,'2004-05-18','2004-05-24','2004-05-24','Shipped',NULL,328 from dual union all 
+select 10251,'2004-05-18','2004-05-24','2004-05-24','Shipped',NULL,328,660.49 from dual union all
 
- select 10252,'2004-05-26','2004-06-04','2004-05-29','Shipped',NULL,406 from dual union all 
+select 10252,'2004-05-26','2004-06-04','2004-05-29','Shipped',NULL,406,733.69 from dual union all
 
- select 10253,'2004-06-01','2004-06-09','2004-06-02','Cancelled','Customer disputed the order and we agreed to cancel it. We must be more cautions with this customer going forward, since they are very hard to please. We must cover the shipping fees.',201 from dual union all 
+select 10253,'2004-06-01','2004-06-09','2004-06-02','Cancelled','Customer disputed the order and we agreed to cancel it. We must be more cautions with this customer going forward, since they are very hard to please. We must cover the shipping fees.',201,1469.39 from dual union all
 
- select 10254,'2004-06-03','2004-06-13','2004-06-04','Shipped','Customer requested that DHL is used for this shipping',323 from dual union all 
+select 10254,'2004-06-03','2004-06-13','2004-06-04','Shipped','Customer requested that DHL is used for this shipping',323,983.52 from dual union all
 
- select 10255,'2004-06-04','2004-06-12','2004-06-09','Shipped',NULL,209 from dual union all 
+select 10255,'2004-06-04','2004-06-12','2004-06-09','Shipped',NULL,209,172.63 from dual union all
 
- select 10256,'2004-06-08','2004-06-16','2004-06-10','Shipped',NULL,145 from dual union all 
+select 10256,'2004-06-08','2004-06-16','2004-06-10','Shipped',NULL,145,146.32 from dual union all
 
- select 10257,'2004-06-14','2004-06-24','2004-06-15','Shipped',NULL,450 from dual union all 
+select 10257,'2004-06-14','2004-06-24','2004-06-15','Shipped',NULL,450,408.39 from dual union all
 
- select 10258,'2004-06-15','2004-06-25','2004-06-23','Shipped',NULL,398 from dual union all 
+select 10258,'2004-06-15','2004-06-25','2004-06-23','Shipped',NULL,398,624.48 from dual union all
 
- select 10259,'2004-06-15','2004-06-22','2004-06-17','Shipped',NULL,166 from dual union all 
+select 10259,'2004-06-15','2004-06-22','2004-06-17','Shipped',NULL,166,1259.09 from dual union all
 
- select 10260,'2004-06-16','2004-06-22',NULL,'Cancelled','Customer heard complaints from their customers and called to cancel this order. Will notify the Sales Manager.',357 from dual union all 
+select 10260,'2004-06-16','2004-06-22',NULL,'Cancelled','Customer heard complaints from their customers and called to cancel this order. Will notify the Sales Manager.',357,1152.26 from dual union all
 
- select 10261,'2004-06-17','2004-06-25','2004-06-22','Shipped',NULL,233 from dual union all 
+select 10261,'2004-06-17','2004-06-25','2004-06-22','Shipped',NULL,233,726.83 from dual union all
 
- select 10262,'2004-06-24','2004-07-01',NULL,'Cancelled','This customer found a better offer from one of our competitors. Will call back to renegotiate.',141 from dual union all 
+select 10262,'2004-06-24','2004-07-01',NULL,'Cancelled','This customer found a better offer from one of our competitors. Will call back to renegotiate.',141,1217.38 from dual union all
 
- select 10263,'2004-06-28','2004-07-04','2004-07-02','Shipped',NULL,175 from dual union all 
+select 10263,'2004-06-28','2004-07-04','2004-07-02','Shipped',NULL,175,1078.64 from dual union all
 
- select 10264,'2004-06-30','2004-07-06','2004-07-01','Shipped','Customer will send a truck to our local warehouse on 7/1/2004',362 from dual union all 
+select 10264,'2004-06-30','2004-07-06','2004-07-01','Shipped','Customer will send a truck to our local warehouse on 7/1/2004',362,526.81 from dual union all
 
- select 10265,'2004-07-02','2004-07-09','2004-07-07','Shipped',NULL,471 from dual union all 
+select 10265,'2004-07-02','2004-07-09','2004-07-07','Shipped',NULL,471,198.25 from dual union all
 
- select 10266,'2004-07-06','2004-07-14','2004-07-10','Shipped',NULL,386 from dual union all 
+select 10266,'2004-07-06','2004-07-14','2004-07-10','Shipped',NULL,386,1556.31 from dual union all
 
- select 10267,'2004-07-07','2004-07-17','2004-07-09','Shipped',NULL,151 from dual union all 
+select 10267,'2004-07-07','2004-07-17','2004-07-09','Shipped',NULL,151,495.98 from dual union all
 
- select 10268,'2004-07-12','2004-07-18','2004-07-14','Shipped',NULL,412 from dual union all 
+select 10268,'2004-07-12','2004-07-18','2004-07-14','Shipped',NULL,412,924.64 from dual union all
 
- select 10269,'2004-07-16','2004-07-22','2004-07-18','Shipped',NULL,382 from dual union all 
+select 10269,'2004-07-16','2004-07-22','2004-07-18','Shipped',NULL,382,152.9 from dual union all
 
- select 10270,'2004-07-19','2004-07-27','2004-07-24','Shipped','Can we renegotiate this one?',282 from dual union all 
+select 10270,'2004-07-19','2004-07-27','2004-07-24','Shipped','Can we renegotiate this one?',282,1088.2 from dual union all
 
- select 10271,'2004-07-20','2004-07-29','2004-07-23','Shipped',NULL,124 from dual union all 
+select 10271,'2004-07-20','2004-07-29','2004-07-23','Shipped',NULL,124,1054.03 from dual union all
 
- select 10272,'2004-07-20','2004-07-26','2004-07-22','Shipped',NULL,157 from dual union all 
+select 10272,'2004-07-20','2004-07-26','2004-07-22','Shipped',NULL,157,696.54 from dual union all
 
- select 10273,'2004-07-21','2004-07-28','2004-07-22','Shipped',NULL,314 from dual union all 
+select 10273,'2004-07-21','2004-07-28','2004-07-22','Shipped',NULL,314,1309.01 from dual union all
 
- select 10274,'2004-07-21','2004-07-29','2004-07-22','Shipped',NULL,379 from dual union all 
+select 10274,'2004-07-21','2004-07-29','2004-07-22','Shipped',NULL,379,376.05 from dual union all
 
- select 10275,'2004-07-23','2004-08-02','2004-07-29','Shipped',NULL,119 from dual union all 
+select 10275,'2004-07-23','2004-08-02','2004-07-29','Shipped',NULL,119,1455.41 from dual union all
 
- select 10276,'2004-08-02','2004-08-11','2004-08-08','Shipped',NULL,204 from dual union all 
+select 10276,'2004-08-02','2004-08-11','2004-08-08','Shipped',NULL,204,1285.44 from dual union all
 
- select 10277,'2004-08-04','2004-08-12','2004-08-05','Shipped',NULL,148 from dual union all 
+select 10277,'2004-08-04','2004-08-12','2004-08-05','Shipped',NULL,148,93.28 from dual union all
 
- select 10278,'2004-08-06','2004-08-16','2004-08-09','Shipped',NULL,112 from dual union all 
+select 10278,'2004-08-06','2004-08-16','2004-08-09','Shipped',NULL,112,920.21 from dual union all
 
- select 10279,'2004-08-09','2004-08-19','2004-08-15','Shipped','Cautious optimism. We have happy customers here, if we can keep them well stocked.  I need all the information I can get on the planned shippments of Porches',141 from dual union all 
+select 10279,'2004-08-09','2004-08-19','2004-08-15','Shipped','Cautious optimism. We have happy customers here, if we can keep them well stocked.  I need all the information I can get on the planned shippments of Porches',141,494.03 from dual union all
 
- select 10280,'2004-08-17','2004-08-27','2004-08-19','Shipped',NULL,249 from dual union all 
+select 10280,'2004-08-17','2004-08-27','2004-08-19','Shipped',NULL,249,1518.1 from dual union all
 
- select 10281,'2004-08-19','2004-08-28','2004-08-23','Shipped',NULL,157 from dual union all 
+select 10281,'2004-08-19','2004-08-28','2004-08-23','Shipped',NULL,157,1224.88 from dual union all
 
- select 10282,'2004-08-20','2004-08-26','2004-08-22','Shipped',NULL,124 from dual union all 
+select 10282,'2004-08-20','2004-08-26','2004-08-22','Shipped',NULL,124,1426.43 from dual union all
 
- select 10283,'2004-08-20','2004-08-30','2004-08-23','Shipped',NULL,260 from dual union all 
+select 10283,'2004-08-20','2004-08-30','2004-08-23','Shipped',NULL,260,1107.44 from dual union all
 
- select 10284,'2004-08-21','2004-08-29','2004-08-26','Shipped','Custom shipping instructions sent to warehouse',299 from dual union all 
+select 10284,'2004-08-21','2004-08-29','2004-08-26','Shipped','Custom shipping instructions sent to warehouse',299,985.48 from dual union all
 
- select 10285,'2004-08-27','2004-09-04','2004-08-31','Shipped',NULL,286 from dual union all 
+select 10285,'2004-08-27','2004-09-04','2004-08-31','Shipped',NULL,286,1170.23 from dual union all
 
- select 10286,'2004-08-28','2004-09-06','2004-09-01','Shipped',NULL,172 from dual union all 
+select 10286,'2004-08-28','2004-09-06','2004-09-01','Shipped',NULL,172,51.60 from dual union all
 
- select 10287,'2004-08-30','2004-09-06','2004-09-01','Shipped',NULL,298 from dual union all 
+select 10287,'2004-08-30','2004-09-06','2004-09-01','Shipped',NULL,298,1801.52 from dual union all
 
- select 10288,'2004-09-01','2004-09-11','2004-09-05','Shipped',NULL,166 from dual union all 
+select 10288,'2004-09-01','2004-09-11','2004-09-05','Shipped',NULL,166,1144.49 from dual union all
 
- select 10289,'2004-09-03','2004-09-13','2004-09-04','Shipped','We need to keep in close contact with their Marketing VP. He is the decision maker for all their purchases.',167 from dual union all 
+select 10289,'2004-09-03','2004-09-13','2004-09-04','Shipped','We need to keep in close contact with their Marketing VP. He is the decision maker for all their purchases.',167,320.19 from dual union all
 
- select 10290,'2004-09-07','2004-09-15','2004-09-13','Shipped',NULL,198 from dual union all 
+select 10290,'2004-09-07','2004-09-15','2004-09-13','Shipped',NULL,198,164.12 from dual union all
 
- select 10291,'2004-09-08','2004-09-17','2004-09-14','Shipped',NULL,448 from dual union all 
+select 10291,'2004-09-08','2004-09-17','2004-09-14','Shipped',NULL,448,1348.49 from dual union all
 
- select 10292,'2004-09-08','2004-09-18','2004-09-11','Shipped','They want to reevaluate their terms agreement with Finance.',131 from dual union all 
+select 10292,'2004-09-08','2004-09-18','2004-09-11','Shipped','They want to reevaluate their terms agreement with Finance.',131,1074.32 from dual union all
 
- select 10293,'2004-09-09','2004-09-18','2004-09-14','Shipped',NULL,249 from dual union all 
+select 10293,'2004-09-09','2004-09-18','2004-09-14','Shipped',NULL,249,1004.59 from dual union all
 
- select 10294,'2004-09-10','2004-09-17','2004-09-14','Shipped',NULL,204 from dual union all 
+select 10294,'2004-09-10','2004-09-17','2004-09-14','Shipped',NULL,204,98.32 from dual union all
 
- select 10295,'2004-09-10','2004-09-17','2004-09-14','Shipped','They want to reevaluate their terms agreement with Finance.',362 from dual union all 
+select 10295,'2004-09-10','2004-09-17','2004-09-14','Shipped','They want to reevaluate their terms agreement with Finance.',362,446.8 from dual union all
 
- select 10296,'2004-09-15','2004-09-22','2004-09-16','Shipped',NULL,415 from dual union all 
+select 10296,'2004-09-15','2004-09-22','2004-09-16','Shipped',NULL,415,1079.12 from dual union all
 
- select 10297,'2004-09-16','2004-09-22','2004-09-21','Shipped','We must be cautions with this customer. Their VP of Sales resigned. Company may be heading down.',189 from dual union all 
+select 10297,'2004-09-16','2004-09-22','2004-09-21','Shipped','We must be cautions with this customer. Their VP of Sales resigned. Company may be heading down.',189,594.71 from dual union all
 
- select 10298,'2004-09-27','2004-10-05','2004-10-01','Shipped',NULL,103 from dual union all 
+select 10298,'2004-09-27','2004-10-05','2004-10-01','Shipped',NULL,103,166.43 from dual union all
 
- select 10299,'2004-09-30','2004-10-10','2004-10-01','Shipped',NULL,186 from dual union all 
+select 10299,'2004-09-30','2004-10-10','2004-10-01','Shipped',NULL,186,976.32 from dual union all
 
- select 10300,'2003-10-04','2003-10-13','2003-10-09','Shipped',NULL,128 from dual union all 
+select 10300,'2003-10-04','2003-10-13','2003-10-09','Shipped',NULL,128,798.48 from dual union all
 
- select 10301,'2003-10-05','2003-10-15','2003-10-08','Shipped',NULL,299 from dual union all 
+select 10301,'2003-10-05','2003-10-15','2003-10-08','Shipped',NULL,299,1084.81 from dual union all
 
- select 10302,'2003-10-06','2003-10-16','2003-10-07','Shipped',NULL,201 from dual union all 
+select 10302,'2003-10-06','2003-10-16','2003-10-07','Shipped',NULL,201,574.41 from dual union all
 
- select 10303,'2004-10-06','2004-10-14','2004-10-09','Shipped','Customer inquired about remote controlled models and gold models.',484 from dual union all 
+select 10303,'2004-10-06','2004-10-14','2004-10-09','Shipped','Customer inquired about remote controlled models and gold models.',484,92.61 from dual union all
 
- select 10304,'2004-10-11','2004-10-20','2004-10-17','Shipped',NULL,256 from dual union all 
+select 10304,'2004-10-11','2004-10-20','2004-10-17','Shipped',NULL,256,1479.94 from dual union all
 
- select 10305,'2004-10-13','2004-10-22','2004-10-15','Shipped','Check on availability.',286 from dual union all 
+select 10305,'2004-10-13','2004-10-22','2004-10-15','Shipped','Check on availability.',286,1378.68 from dual union all
 
- select 10306,'2004-10-14','2004-10-21','2004-10-17','Shipped',NULL,187 from dual union all 
+select 10306,'2004-10-14','2004-10-21','2004-10-17','Shipped',NULL,187,1612.26 from dual union all
 
- select 10307,'2004-10-14','2004-10-23','2004-10-20','Shipped',NULL,339 from dual union all 
+select 10307,'2004-10-14','2004-10-23','2004-10-20','Shipped',NULL,339,741.25 from dual union all
 
- select 10308,'2004-10-15','2004-10-24','2004-10-20','Shipped','Customer requested that FedEx Ground is used for this shipping',319 from dual union all 
+select 10308,'2004-10-15','2004-10-24','2004-10-20','Shipped','Customer requested that FedEx Ground is used for this shipping',319,1334.48 from dual union all
 
- select 10309,'2004-10-15','2004-10-24','2004-10-18','Shipped',NULL,121 from dual union all 
+select 10309,'2004-10-15','2004-10-24','2004-10-18','Shipped',NULL,121,563.75 from dual union all
 
- select 10310,'2004-10-16','2004-10-24','2004-10-18','Shipped',NULL,259 from dual union all 
+select 10310,'2004-10-16','2004-10-24','2004-10-18','Shipped',NULL,259,1656.26 from dual union all
 
- select 10311,'2004-10-16','2004-10-23','2004-10-20','Shipped','Difficult to negotiate with customer. We need more marketing materials',141 from dual union all 
+select 10311,'2004-10-16','2004-10-23','2004-10-20','Shipped','Difficult to negotiate with customer. We need more marketing materials',141,1033.82 from dual union all
 
- select 10312,'2004-10-21','2004-10-27','2004-10-23','Shipped',NULL,124 from dual union all 
+select 10312,'2004-10-21','2004-10-27','2004-10-23','Shipped',NULL,124,1494.19 from dual union all
 
- select 10313,'2004-10-22','2004-10-28','2004-10-25','Shipped','Customer requested that FedEx Ground is used for this shipping',202 from dual union all 
+select 10313,'2004-10-22','2004-10-28','2004-10-25','Shipped','Customer requested that FedEx Ground is used for this shipping',202,1088.17 from dual union all
 
- select 10314,'2004-10-22','2004-11-01','2004-10-23','Shipped',NULL,227 from dual union all 
+select 10314,'2004-10-22','2004-11-01','2004-10-23','Shipped',NULL,227,1549.34 from dual union all
 
- select 10315,'2004-10-29','2004-11-08','2004-10-30','Shipped',NULL,119 from dual union all 
+select 10315,'2004-10-29','2004-11-08','2004-10-30','Shipped',NULL,119,568.27 from dual union all
 
- select 10316,'2004-11-01','2004-11-09','2004-11-07','Shipped','Customer requested that ad materials (such as posters, pamphlets) be included in the shippment',240 from dual union all 
+select 10316,'2004-11-01','2004-11-09','2004-11-07','Shipped','Customer requested that ad materials select such as posters, pamphlets) be included in the shippment',240,1375.59 from dual union all
 
- select 10317,'2004-11-02','2004-11-12','2004-11-08','Shipped',NULL,161 from dual union all 
+select 10317,'2004-11-02','2004-11-12','2004-11-08','Shipped',NULL,161,69.55 from dual union all
 
- select 10318,'2004-11-02','2004-11-09','2004-11-07','Shipped',NULL,157 from dual union all 
+select 10318,'2004-11-02','2004-11-09','2004-11-07','Shipped',NULL,157,846.35 from dual union all
 
- select 10319,'2004-11-03','2004-11-11','2004-11-06','Shipped','Customer requested that DHL is used for this shipping',456 from dual union all 
+select 10319,'2004-11-03','2004-11-11','2004-11-06','Shipped','Customer requested that DHL is used for this shipping',456,742.37 from dual union all
 
- select 10320,'2004-11-03','2004-11-13','2004-11-07','Shipped',NULL,144 from dual union all 
+select 10320,'2004-11-03','2004-11-13','2004-11-07','Shipped',NULL,144,551.11 from dual union all
 
- select 10321,'2004-11-04','2004-11-12','2004-11-07','Shipped',NULL,462 from dual union all 
+select 10321,'2004-11-04','2004-11-12','2004-11-07','Shipped',NULL,462,1397.94 from dual union all
 
- select 10322,'2004-11-04','2004-11-12','2004-11-10','Shipped','Customer has worked with some of our vendors in the past and is aware of their MSRP',363 from dual union all 
+select 10322,'2004-11-04','2004-11-12','2004-11-10','Shipped','Customer has worked with some of our vendors in the past and is aware of their MSRP',363,1345.23 from dual union all
 
- select 10323,'2004-11-05','2004-11-12','2004-11-09','Shipped',NULL,128 from dual union all 
+select 10323,'2004-11-05','2004-11-12','2004-11-09','Shipped',NULL,128,185.16 from dual union all
 
- select 10324,'2004-11-05','2004-11-11','2004-11-08','Shipped',NULL,181 from dual union all 
+select 10324,'2004-11-05','2004-11-11','2004-11-08','Shipped',NULL,181,1319.42 from dual union all
 
- select 10325,'2004-11-05','2004-11-13','2004-11-08','Shipped',NULL,121 from dual union all 
+select 10325,'2004-11-05','2004-11-13','2004-11-08','Shipped',NULL,121,955.8 from dual union all
 
- select 10326,'2004-11-09','2004-11-16','2004-11-10','Shipped',NULL,144 from dual union all 
+select 10326,'2004-11-09','2004-11-16','2004-11-10','Shipped',NULL,144,517.7 from dual union all
 
- select 10327,'2004-11-10','2004-11-19','2004-11-13','Resolved','Order was disputed and resolved on 12/1/04. The Sales Manager was involved. Customer claims the scales of the models don''t match what was discussed.',145 from dual union all 
+select 10327,'2004-11-10','2004-11-19','2004-11-13','Resolved','Order was disputed and resolved on 12/1/04. The Sales Manager was involved. Customer claims the scales of the models do not match what was discussed.',145,665.06 from dual union all
 
- select 10328,'2004-11-12','2004-11-21','2004-11-18','Shipped','Customer very concerned about the exact color of the models. There is high risk that he may dispute the order because there is a slight color mismatch',278 from dual union all 
+select 10328,'2004-11-12','2004-11-21','2004-11-18','Shipped','Customer very concerned about the exact color of the models. There is high risk that he may dispute the order because there is a slight color mismatch',278,1054.8 from dual union all
 
- select 10329,'2004-11-15','2004-11-24','2004-11-16','Shipped',NULL,131 from dual union all 
+select 10329,'2004-11-15','2004-11-24','2004-11-16','Shipped',NULL,131,1445.1 from dual union all
 
- select 10330,'2004-11-16','2004-11-25','2004-11-21','Shipped',NULL,385 from dual union all 
+select 10330,'2004-11-16','2004-11-25','2004-11-21','Shipped',NULL,385,385.78 from dual union all
 
- select 10331,'2004-11-17','2004-11-23','2004-11-23','Shipped','Customer requested special shippment. The instructions were passed along to the warehouse',486 from dual union all 
+select 10331,'2004-11-17','2004-11-23','2004-11-23','Shipped','Customer requested special shippment. The instructions were passed along to the warehouse',486,1451.43 from dual union all
 
- select 10332,'2004-11-17','2004-11-25','2004-11-18','Shipped',NULL,187 from dual union all 
+select 10332,'2004-11-17','2004-11-25','2004-11-18','Shipped',NULL,187,1347.08 from dual union all
 
- select 10333,'2004-11-18','2004-11-27','2004-11-20','Shipped',NULL,129 from dual union all 
+select 10333,'2004-11-18','2004-11-27','2004-11-20','Shipped',NULL,129,811.28 from dual union all
 
- select 10334,'2004-11-19','2004-11-28',NULL,'On Hold','The outstaniding balance for this customer exceeds their credit limit. Order will be shipped when a payment is received.',144 from dual union all 
+select 10334,'2004-11-19','2004-11-28',NULL,'On Hold','The outstaniding balance for this customer exceeds their credit limit. Order will be shipped when a payment is received.',144,657.49 from dual union all
 
- select 10335,'2004-11-19','2004-11-29','2004-11-23','Shipped',NULL,124 from dual union all 
+select 10335,'2004-11-19','2004-11-29','2004-11-23','Shipped',NULL,124,159.71 from dual union all
 
- select 10336,'2004-11-20','2004-11-26','2004-11-24','Shipped','Customer requested that DHL is used for this shipping',172 from dual union all 
+select 10336,'2004-11-20','2004-11-26','2004-11-24','Shipped','Customer requested that DHL is used for this shipping',172,1357.7 from dual union all
 
- select 10337,'2004-11-21','2004-11-30','2004-11-26','Shipped',NULL,424 from dual union all 
+select 10337,'2004-11-21','2004-11-30','2004-11-26','Shipped',NULL,424,813.03 from dual union all
 
- select 10338,'2004-11-22','2004-12-02','2004-11-27','Shipped',NULL,381 from dual union all 
+select 10338,'2004-11-22','2004-12-02','2004-11-27','Shipped',NULL,381,311.22 from dual union all
 
- select 10339,'2004-11-23','2004-11-30','2004-11-30','Shipped',NULL,398 from dual union all 
+select 10339,'2004-11-23','2004-11-30','2004-11-30','Shipped',NULL,398,1274.96 from dual union all
 
- select 10340,'2004-11-24','2004-12-01','2004-11-25','Shipped','Customer is interested in buying more Ferrari models',216 from dual union all 
+select 10340,'2004-11-24','2004-12-01','2004-11-25','Shipped','Customer is interested in buying more Ferrari models',216,580.85 from dual union all
 
- select 10341,'2004-11-24','2004-12-01','2004-11-29','Shipped',NULL,382 from dual union all 
+select 10341,'2004-11-24','2004-12-01','2004-11-29','Shipped',NULL,382,1003.19 from dual union all
 
- select 10342,'2004-11-24','2004-12-01','2004-11-29','Shipped',NULL,114 from dual union all 
+select 10342,'2004-11-24','2004-12-01','2004-11-29','Shipped',NULL,114,1063.74 from dual union all
 
- select 10343,'2004-11-24','2004-12-01','2004-11-26','Shipped',NULL,353 from dual union all 
+select 10343,'2004-11-24','2004-12-01','2004-11-26','Shipped',NULL,353,514.45 from dual union all
 
- select 10344,'2004-11-25','2004-12-02','2004-11-29','Shipped',NULL,350 from dual union all 
+select 10344,'2004-11-25','2004-12-02','2004-11-29','Shipped',NULL,350,573.86 from dual union all
 
- select 10345,'2004-11-25','2004-12-01','2004-11-26','Shipped',NULL,103 from dual union all 
+select 10345,'2004-11-25','2004-12-01','2004-11-26','Shipped',NULL,103,38.98 from dual union all
 
- select 10346,'2004-11-29','2004-12-05','2004-11-30','Shipped',NULL,112 from dual union all 
+select 10346,'2004-11-29','2004-12-05','2004-11-30','Shipped',NULL,112,515.95 from dual union all
 
- select 10347,'2004-11-29','2004-12-07','2004-11-30','Shipped','Can we deliver the new Ford Mustang models by end-of-quarter?',114 from dual union all 
+select 10347,'2004-11-29','2004-12-07','2004-11-30','Shipped','Can we deliver the new Ford Mustang models by end-of-quarter?',114,1240.73 from dual union all
 
- select 10348,'2004-11-01','2004-11-08','2004-11-05','Shipped',NULL,458 from dual union all 
+select 10348,'2004-11-01','2004-11-08','2004-11-05','Shipped',NULL,458,817.43 from dual union all
 
- select 10349,'2004-12-01','2004-12-07','2004-12-03','Shipped',NULL,151 from dual union all 
+select 10349,'2004-12-01','2004-12-07','2004-12-03','Shipped',NULL,151,1083.64 from dual union all
 
- select 10350,'2004-12-02','2004-12-08','2004-12-05','Shipped',NULL,141 from dual union all 
+select 10350,'2004-12-02','2004-12-08','2004-12-05','Shipped',NULL,141,1412.81 from dual union all
 
- select 10351,'2004-12-03','2004-12-11','2004-12-07','Shipped',NULL,324 from dual union all 
+select 10351,'2004-12-03','2004-12-11','2004-12-07','Shipped',NULL,324,434.87 from dual union all
 
- select 10352,'2004-12-03','2004-12-12','2004-12-09','Shipped',NULL,198 from dual union all 
+select 10352,'2004-12-03','2004-12-12','2004-12-09','Shipped',NULL,198,271.25 from dual union all
 
- select 10353,'2004-12-04','2004-12-11','2004-12-05','Shipped',NULL,447 from dual union all 
+select 10353,'2004-12-04','2004-12-11','2004-12-05','Shipped',NULL,447,685.32 from dual union all
 
- select 10354,'2004-12-04','2004-12-10','2004-12-05','Shipped',NULL,323 from dual union all 
+select 10354,'2004-12-04','2004-12-10','2004-12-05','Shipped',NULL,323,1285.99 from dual union all
 
- select 10355,'2004-12-07','2004-12-14','2004-12-13','Shipped',NULL,141 from dual union all 
+select 10355,'2004-12-07','2004-12-14','2004-12-13','Shipped',NULL,141,796.66 from dual union all
 
- select 10356,'2004-12-09','2004-12-15','2004-12-12','Shipped',NULL,250 from dual union all 
+select 10356,'2004-12-09','2004-12-15','2004-12-12','Shipped',NULL,250,795.62 from dual union all
 
- select 10357,'2004-12-10','2004-12-16','2004-12-14','Shipped',NULL,124 from dual union all 
+select 10357,'2004-12-10','2004-12-16','2004-12-14','Shipped',NULL,124,1060.42 from dual union all
 
- select 10358,'2004-12-10','2004-12-16','2004-12-16','Shipped','Customer requested that DHL is used for this shipping',141 from dual union all 
+select 10358,'2004-12-10','2004-12-16','2004-12-16','Shipped','Customer requested that DHL is used for this shipping',141,1297.97 from dual union all
 
- select 10359,'2004-12-15','2004-12-23','2004-12-18','Shipped',NULL,353 from dual union all 
+select 10359,'2004-12-15','2004-12-23','2004-12-18','Shipped',NULL,353,829.24 from dual union all
 
- select 10360,'2004-12-16','2004-12-22','2004-12-18','Shipped',NULL,496 from dual union all 
+select 10360,'2004-12-16','2004-12-22','2004-12-18','Shipped',NULL,496,1524.68 from dual union all
 
- select 10361,'2004-12-17','2004-12-24','2004-12-20','Shipped',NULL,282 from dual union all 
+select 10361,'2004-12-17','2004-12-24','2004-12-20','Shipped',NULL,282,1052.87 from dual union all
 
- select 10362,'2005-01-05','2005-01-16','2005-01-10','Shipped',NULL,161 from dual union all 
+select 10362,'2005-01-05','2005-01-16','2005-01-10','Shipped',NULL,161,458.28 from dual union all
 
- select 10363,'2005-01-06','2005-01-12','2005-01-10','Shipped',NULL,334 from dual union all 
+select 10363,'2005-01-06','2005-01-12','2005-01-10','Shipped',NULL,334,1352.37 from dual union all
 
- select 10364,'2005-01-06','2005-01-17','2005-01-09','Shipped',NULL,350 from dual union all 
+select 10364,'2005-01-06','2005-01-17','2005-01-09','Shipped',NULL,350,38.22 from dual union all
 
- select 10365,'2005-01-07','2005-01-18','2005-01-11','Shipped',NULL,320 from dual union all 
+select 10365,'2005-01-07','2005-01-18','2005-01-11','Shipped',NULL,320,267.06 from dual union all
 
- select 10366,'2005-01-10','2005-01-19','2005-01-12','Shipped',NULL,381 from dual union all 
+select 10366,'2005-01-10','2005-01-19','2005-01-12','Shipped',NULL,381,376.35 from dual union all
 
- select 10367,'2005-01-12','2005-01-21','2005-01-16','Resolved','This order was disputed and resolved on 2/1/2005. Customer claimed that container with shipment was damaged. FedEx''s investigation proved this wrong.',205 from dual union all 
+select 10367,'2005-01-12','2005-01-21','2005-01-16','Resolved','This order was disputed and resolved on 2/1/2005. Customer claimed that container with shipment was damaged. FedEx investigation proved this wrong.',205,1072.73 from dual union all
 
- select 10368,'2005-01-19','2005-01-27','2005-01-24','Shipped','Can we renegotiate this one?',124 from dual union all 
+select 10368,'2005-01-19','2005-01-27','2005-01-24','Shipped','Can we renegotiate this one?',124,401.41 from dual union all
 
- select 10369,'2005-01-20','2005-01-28','2005-01-24','Shipped',NULL,379 from dual union all 
+select 10369,'2005-01-20','2005-01-28','2005-01-24','Shipped',NULL,379,746.8 from dual union all
 
- select 10370,'2005-01-20','2005-02-01','2005-01-25','Shipped',NULL,276 from dual union all 
+select 10370,'2005-01-20','2005-02-01','2005-01-25','Shipped',NULL,276,898.11 from dual union all
 
- select 10371,'2005-01-23','2005-02-03','2005-01-25','Shipped',NULL,124 from dual union all 
+select 10371,'2005-01-23','2005-02-03','2005-01-25','Shipped',NULL,124,1116.35 from dual union all
 
- select 10372,'2005-01-26','2005-02-05','2005-01-28','Shipped',NULL,398 from dual union all 
+select 10372,'2005-01-26','2005-02-05','2005-01-28','Shipped',NULL,398,941.08 from dual union all
 
- select 10373,'2005-01-31','2005-02-08','2005-02-06','Shipped',NULL,311 from dual union all 
+select 10373,'2005-01-31','2005-02-08','2005-02-06','Shipped',NULL,311,1316.57 from dual union all
 
- select 10374,'2005-02-02','2005-02-09','2005-02-03','Shipped',NULL,333 from dual union all 
+select 10374,'2005-02-02','2005-02-09','2005-02-03','Shipped',NULL,333,617.75 from dual union all
 
- select 10375,'2005-02-03','2005-02-10','2005-02-06','Shipped',NULL,119 from dual union all 
+select 10375,'2005-02-03','2005-02-10','2005-02-06','Shipped',NULL,119,1299.1 from dual union all
 
- select 10376,'2005-02-08','2005-02-18','2005-02-13','Shipped',NULL,219 from dual union all 
+select 10376,'2005-02-08','2005-02-18','2005-02-13','Shipped',NULL,219,98.65 from dual union all
 
- select 10377,'2005-02-09','2005-02-21','2005-02-12','Shipped','Cautious optimism. We have happy customers here, if we can keep them well stocked.  I need all the information I can get on the planned shippments of Porches',186 from dual union all 
+select 10377,'2005-02-09','2005-02-21','2005-02-12','Shipped','Cautious optimism. We have happy customers here, if we can keep them well stocked.  I need all the information I can get on the planned shippments of Porches',186,633.58 from dual union all
 
- select 10378,'2005-02-10','2005-02-18','2005-02-11','Shipped',NULL,141 from dual union all 
+select 10378,'2005-02-10','2005-02-18','2005-02-11','Shipped',NULL,141,847.09 from dual union all
 
- select 10379,'2005-02-10','2005-02-18','2005-02-11','Shipped',NULL,141 from dual union all 
+select 10379,'2005-02-10','2005-02-18','2005-02-11','Shipped',NULL,141,503.79 from dual union all
 
- select 10380,'2005-02-16','2005-02-24','2005-02-18','Shipped',NULL,141 from dual union all 
+select 10380,'2005-02-16','2005-02-24','2005-02-18','Shipped',NULL,141,1034.1 from dual union all
 
- select 10381,'2005-02-17','2005-02-25','2005-02-18','Shipped',NULL,321 from dual union all 
+select 10381,'2005-02-17','2005-02-25','2005-02-18','Shipped',NULL,321,923.04 from dual union all
 
- select 10382,'2005-02-17','2005-02-23','2005-02-18','Shipped','Custom shipping instructions sent to warehouse',124 from dual union all 
+select 10382,'2005-02-17','2005-02-23','2005-02-18','Shipped','Custom shipping instructions sent to warehouse',124,1426.01 from dual union all
 
- select 10383,'2005-02-22','2005-03-02','2005-02-25','Shipped',NULL,141 from dual union all 
+select 10383,'2005-02-22','2005-03-02','2005-02-25','Shipped',NULL,141,1155.3 from dual union all
 
- select 10384,'2005-02-23','2005-03-06','2005-02-27','Shipped',NULL,321 from dual union all 
+select 10384,'2005-02-23','2005-03-06','2005-02-27','Shipped',NULL,321,386.2 from dual union all
 
- select 10385,'2005-02-28','2005-03-09','2005-03-01','Shipped',NULL,124 from dual union all 
+select 10385,'2005-02-28','2005-03-09','2005-03-01','Shipped',NULL,124,140.83 from dual union all
 
- select 10386,'2005-03-01','2005-03-09','2005-03-06','Resolved','Disputed then Resolved on 3/15/2005. Customer doesn''t like the craftsmaship of the models.',141 from dual union all 
+select 10386,'2005-03-01','2005-03-09','2005-03-06','Resolved','Disputed then Resolved on 3/15/2005. Customer does not like the craftsmaship of the models.',141,1352.06 from dual union all
 
- select 10387,'2005-03-02','2005-03-09','2005-03-06','Shipped','We need to keep in close contact with their Marketing VP. He is the decision maker for all their purchases.',148 from dual union all 
+select 10387,'2005-03-02','2005-03-09','2005-03-06','Shipped','We need to keep in close contact with their Marketing VP. He is the decision maker for all their purchases.',148,79.91 from dual union all
 
- select 10388,'2005-03-03','2005-03-11','2005-03-09','Shipped',NULL,462 from dual union all 
+select 10388,'2005-03-03','2005-03-11','2005-03-09','Shipped',NULL,462,667.12 from dual union all
 
- select 10389,'2005-03-03','2005-03-09','2005-03-08','Shipped',NULL,448 from dual union all 
+select 10389,'2005-03-03','2005-03-09','2005-03-08','Shipped',NULL,448,747.53 from dual union all
 
- select 10390,'2005-03-04','2005-03-11','2005-03-07','Shipped','They want to reevaluate their terms agreement with Finance.',124 from dual union all 
+select 10390,'2005-03-04','2005-03-11','2005-03-07','Shipped','They want to reevaluate their terms agreement with Finance.',124,1479.36 from dual union all
 
- select 10391,'2005-03-09','2005-03-20','2005-03-15','Shipped',NULL,276 from dual union all 
+select 10391,'2005-03-09','2005-03-20','2005-03-15','Shipped',NULL,276,911.23 from dual union all
 
- select 10392,'2005-03-10','2005-03-18','2005-03-12','Shipped',NULL,452 from dual union all 
+select 10392,'2005-03-10','2005-03-18','2005-03-12','Shipped',NULL,452,263.1 from dual union all
 
- select 10393,'2005-03-11','2005-03-22','2005-03-14','Shipped','They want to reevaluate their terms agreement with Finance.',323 from dual union all 
+select 10393,'2005-03-11','2005-03-22','2005-03-14','Shipped','They want to reevaluate their terms agreement with Finance.',323,1067.87 from dual union all
 
- select 10394,'2005-03-15','2005-03-25','2005-03-19','Shipped',NULL,141 from dual union all 
+select 10394,'2005-03-15','2005-03-25','2005-03-19','Shipped',NULL,141,556.06 from dual union all
 
- select 10395,'2005-03-17','2005-03-24','2005-03-23','Shipped','We must be cautions with this customer. Their VP of Sales resigned. Company may be heading down.',250 from dual union all 
+select 10395,'2005-03-17','2005-03-24','2005-03-23','Shipped','We must be cautions with this customer. Their VP of Sales resigned. Company may be heading down.',250,487.22 from dual union all
 
- select 10396,'2005-03-23','2005-04-02','2005-03-28','Shipped',NULL,124 from dual union all 
+select 10396,'2005-03-23','2005-04-02','2005-03-28','Shipped',NULL,124,778.38 from dual union all
 
- select 10397,'2005-03-28','2005-04-09','2005-04-01','Shipped',NULL,242 from dual union all 
+select 10397,'2005-03-28','2005-04-09','2005-04-01','Shipped',NULL,242,351.72 from dual union all
 
- select 10398,'2005-03-30','2005-04-09','2005-03-31','Shipped',NULL,353 from dual union all 
+select 10398,'2005-03-30','2005-04-09','2005-03-31','Shipped',NULL,353,1355.03 from dual union all
 
- select 10399,'2005-04-01','2005-04-12','2005-04-03','Shipped',NULL,496 from dual union all 
+select 10399,'2005-04-01','2005-04-12','2005-04-03','Shipped',NULL,496,787.39 from dual union all
 
- select 10400,'2005-04-01','2005-04-11','2005-04-04','Shipped','Customer requested that DHL is used for this shipping',450 from dual union all 
+select 10400,'2005-04-01','2005-04-11','2005-04-04','Shipped','Customer requested that DHL is used for this shipping',450,741.11 from dual union all
 
- select 10401,'2005-04-03','2005-04-14',NULL,'On Hold','Customer credit limit exceeded. Will ship when a payment is received.',328 from dual union all 
+select 10401,'2005-04-03','2005-04-14',NULL,'On Hold','Customer credit limit exceeded. Will ship when a payment is received.',328,886.7 from dual union all
 
- select 10402,'2005-04-07','2005-04-14','2005-04-12','Shipped',NULL,406 from dual union all 
+select 10402,'2005-04-07','2005-04-14','2005-04-12','Shipped',NULL,406,238.79 from dual union all
 
- select 10403,'2005-04-08','2005-04-18','2005-04-11','Shipped',NULL,201 from dual union all 
+select 10403,'2005-04-08','2005-04-18','2005-04-11','Shipped',NULL,201,793.27 from dual union all
 
- select 10404,'2005-04-08','2005-04-14','2005-04-11','Shipped',NULL,323 from dual union all 
+select 10404,'2005-04-08','2005-04-14','2005-04-11','Shipped',NULL,323,771.8 from dual union all
 
- select 10405,'2005-04-14','2005-04-24','2005-04-20','Shipped',NULL,209 from dual union all 
+select 10405,'2005-04-14','2005-04-24','2005-04-20','Shipped',NULL,209,500.04 from dual union all
 
- select 10406,'2005-04-15','2005-04-25','2005-04-21','Disputed','Customer claims container with shipment was damaged during shipping and some items were missing. I am talking to FedEx about this.',145 from dual union all 
+select 10406,'2005-04-15','2005-04-25','2005-04-21','Disputed','Customer claims container with shipment was damaged during shipping and some items were missing. I am talking to FedEx about this.',145,375.54 from dual union all
 
- select 10407,'2005-04-22','2005-05-04',NULL,'On Hold','Customer credit limit exceeded. Will ship when a payment is received.',450 from dual union all 
+select 10407,'2005-04-22','2005-05-04',NULL,'On Hold','Customer credit limit exceeded. Will ship when a payment is received.',450,1074.29 from dual union all
 
- select 10408,'2005-04-22','2005-04-29','2005-04-27','Shipped',NULL,398 from dual union all 
+select 10408,'2005-04-22','2005-04-29','2005-04-27','Shipped',NULL,398,41.03 from dual union all
 
- select 10409,'2005-04-23','2005-05-05','2005-04-24','Shipped',NULL,166 from dual union all 
+select 10409,'2005-04-23','2005-05-05','2005-04-24','Shipped',NULL,166,132.13 from dual union all
 
- select 10410,'2005-04-29','2005-05-10','2005-04-30','Shipped',NULL,357 from dual union all 
+select 10410,'2005-04-29','2005-05-10','2005-04-30','Shipped',NULL,357,743.35 from dual union all
 
- select 10411,'2005-05-01','2005-05-08','2005-05-06','Shipped',NULL,233 from dual union all 
+select 10411,'2005-05-01','2005-05-08','2005-05-06','Shipped',NULL,233,946.47 from dual union all
 
- select 10412,'2005-05-03','2005-05-13','2005-05-05','Shipped',NULL,141 from dual union all 
+select 10412,'2005-05-03','2005-05-13','2005-05-05','Shipped',NULL,141,1034.15 from dual union all
 
- select 10413,'2005-05-05','2005-05-14','2005-05-09','Shipped','Customer requested that DHL is used for this shipping',175 from dual union all 
+select 10413,'2005-05-05','2005-05-14','2005-05-09','Shipped','Customer requested that DHL is used for this shipping',175,763.06 from dual union all
 
- select 10414,'2005-05-06','2005-05-13',NULL,'On Hold','Customer credit limit exceeded. Will ship when a payment is received.',362 from dual union all 
+select 10414,'2005-05-06','2005-05-13',NULL,'On Hold','Customer credit limit exceeded. Will ship when a payment is received.',362,1163.89 from dual union all
 
- select 10415,'2005-05-09','2005-05-20','2005-05-12','Disputed','Customer claims the scales of the models don''t match what was discussed. I keep all the paperwork though to prove otherwise',471 from dual union all 
+select 10415,'2005-05-09','2005-05-20','2005-05-12','Disputed','Customer claims the scales of the models do not match what was discussed. I keep all the paperwork though to prove otherwise',471,324.13 from dual union all
 
- select 10416,'2005-05-10','2005-05-16','2005-05-14','Shipped',NULL,386 from dual union all 
+select 10416,'2005-05-10','2005-05-16','2005-05-14','Shipped',NULL,386,1084.51 from dual union all
 
- select 10417,'2005-05-13','2005-05-19','2005-05-19','Disputed','Customer doesn''t like the colors and precision of the models.',141 from dual union all 
+select 10417,'2005-05-13','2005-05-19','2005-05-19','Disputed','Customer does not like the colors and precision of the models.',141,671.33 from dual union all
 
- select 10418,'2005-05-16','2005-05-24','2005-05-20','Shipped',NULL,412 from dual union all 
+select 10418,'2005-05-16','2005-05-24','2005-05-20','Shipped',NULL,412,727.23 from dual union all
 
- select 10419,'2005-05-17','2005-05-28','2005-05-19','Shipped',NULL,382 from dual union all 
+select 10419,'2005-05-17','2005-05-28','2005-05-19','Shipped',NULL,382,1471.49 from dual union all
 
- select 10420,'2005-05-29','2005-06-07',NULL,'In Process',NULL,282 from dual union all 
+select 10420,'2005-05-29','2005-06-07',NULL,'In Process',NULL,282,1014.01 from dual union all
 
- select 10421,'2005-05-29','2005-06-06',NULL,'In Process','Custom shipping instructions were sent to warehouse',124 from dual union all 
+select 10421,'2005-05-29','2005-06-06',NULL,'In Process','Custom shipping instructions were sent to warehouse',124,211.86 from dual union all
 
- select 10422,'2005-05-30','2005-06-11',NULL,'In Process',NULL,157 from dual union all 
+select 10422,'2005-05-30','2005-06-11',NULL,'In Process',NULL,157,138.88 from dual union all
 
- select 10423,'2005-05-30','2005-06-05',NULL,'In Process',NULL,314 from dual union all 
+select 10423,'2005-05-30','2005-06-05',NULL,'In Process',NULL,314,403.05 from dual union all
 
- select 10424,'2005-05-31','2005-06-08',NULL,'In Process',NULL,141 from dual union all 
+select 10424,'2005-05-31','2005-06-08',NULL,'In Process',NULL,141,612.75 from dual union all
 
- select 10425,'2005-05-31','2005-06-07',NULL,'In Process',NULL,119 from dual;
-
+select 10425,'2005-05-31','2005-06-07',NULL,'In Process',NULL,119,1231.98 from dual;
 
 /*Data for the table `orderdetail` */
 
@@ -8151,33 +8150,51 @@ select 496,'MN89921','2004-12-31 09:02:11','52166.00', '2004-12-31 09:02:11'  fr
 
 /*Data for the table `bank_transaction` */
 
-insert /*+ ignore_row_on_dupkey_index(bank_transaction(transaction_id)) */ into bank_transaction(transaction_id,bank_name,bank_iban,transfer_amount,customer_number,check_number,caching_date,status)
+insert /*+ ignore_row_on_dupkey_index(bank_transaction(transaction_id)) */ into bank_transaction(transaction_id,bank_name,bank_iban,transfer_amount,customer_number,check_number,caching_date,card_type,status)
 
-select 1,'Bank Ltd. US','DN44398834N34','6631.36',447,'AO757239','2003-09-15 18:22:54','SUCCESS' from dual union all
+select 1,'Bank Ltd. US','DN44398834N34','6631.36',447,'AO757239','2003-09-15 18:22:54','VisaElectron','SUCCESS' from dual union all
 
-select 2,'Bank Ltd. US','348398H3493HG93','26304.13',447,'OU516561','2004-12-17 16:45:22','FAILED' from dual union all
+select 2,'Bank Ltd. US','348398H3493HG93','26304.13',447,'OU516561','2004-12-17 16:45:22','VisaElectron','FAILED' from dual union all
 
-select 3,'Transilvania Bank','8TVN598N454VN84T','9977.85',462,'GC60330','2003-11-08 18:57:25','SUCCESS' from dual union all
+select 3,'Transilvania Bank','8TVN598N454VN84T','9977.85',462,'GC60330','2003-11-08 18:57:25','VisaElectron','SUCCESS' from dual union all
 
-select 4,'5 Stars Bank','8VN8UNT5U45T8','48355.87',462,'PE176846', '2004-11-27 14:30:22','SUCCESS' from dual union all
+select 4,'5 Stars Bank','8VN8UNT5U45T8','48355.87',462,'PE176846', '2004-11-27 14:30:22','VisaElectron','SUCCESS' from dual union all
 
-select 5,'5 Stars Bank','TVU58NU58U84N4YUG','33967.73',398,'AJ478695','2005-02-14 12:09:15','FAILED' from dual union all
+select 5,'5 Stars Bank','TVU58NU58U84N4YUG','33967.73',398,'AJ478695','2005-02-14 12:09:15','VisaElectron','FAILED' from dual union all
 
-select 6,'Optimus Bank','8V34VN5U435334','4588.36',333,'NF959653','2005-03-01 12:12:00','UNAUTHORIZED' from dual union all
+select 6,'Optimus Bank','8V34VN5U435334','4588.36',333,'NF959653','2005-03-01 12:12:00','VisaElectron','UNAUTHORIZED' from dual union all
 
-select 7,'Optimus Bank','8V34VN5U435334','8987.36',333,'NF959653','2005-03-01 14:00:00','UNAUTHORIZED' from dual union all
+select 7,'Optimus Bank','8V34VN5U435334','8987.36',333,'NF959653','2005-03-01 14:00:00','MasterCard','UNAUTHORIZED' from dual union all
 
-select 8,'Optimus Bank','8V34VN5U435334','2544.36',333,'NF959653','2005-03-01 18:20:10','FAILED' from dual union all
+select 8,'Optimus Bank','8V34VN5U435334','2544.36',333,'NF959653','2005-03-01 18:20:10','VisaElectron','FAILED' from dual union all
 
-select 9,'Optimus Bank','8V34VN5U435334','5312.23',333,'NF959653','2005-03-01 19:32:56','RETRIED' from dual union all
+select 9,'Optimus Bank','8V34VN5U435334','5312.23',333,'NF959653','2005-03-01 19:32:56','MasterCard','RETRIED' from dual union all
 
-select 10,'5 Stars Bank','8VN8UNT5U45T8','3382.13',462,'GC60330','2004-07-01 12:31:56','SUCCESS' from dual union all
+select 10,'5 Stars Bank','8VN8UNT5U45T8','3382.13',462,'GC60330','2004-07-01 12:31:56','VisaElectron','SUCCESS' from dual union all
 
-select 11,'5 Stars Bank','8VN8UNT5U45T8','2566.17',462,'GC60330','2004-07-03 11:21:16','SUCCESS' from dual union all
+select 11,'5 Stars Bank','8VN8UNT5U45T8','2566.17',462,'GC60330','2004-07-03 11:21:16','VisaElectron','SUCCESS' from dual union all
 
-select 12,'Bank Ltd. US','348398H3493HG93','12304.13',447,'OU516561','2004-12-27 16:15:22','SUCCESS' from dual union all
+select 12,'Bank Ltd. US','348398H3493HG93','12304.13',447,'OU516561','2004-12-27 16:15:22','VisaElectron','SUCCESS' from dual union all
 
-select 13,'BRT Bank','TVNU343T38TUNU3T','52151.81',278,'GP636783', '2003-03-02 12:32:00','FAILED' from dual;
+select 13,'BRT Bank','TVNU343T38TUNU3T','52151.81',278,'GP636783', '2003-03-02 12:32:00','MasterCard','FAILED' from dual union all
+
+select 14,'Optimus Bank','GH390439i344F','56321.33',124,'AE215433','2005-03-05 12:32:56','VisaElectron','SUCCESS' from dual union all
+
+select 15,'Optimus Bank','GH390439i344F','9866.21',124,'AE215433','2005-03-05 13:00:00','VisaElectron','SUCCESS' from dual union all
+
+select 16,'Optimus Bank','GH390439i344F','35057.05',124,'AE215433','2005-03-05 14:12:00','VisaElectron','SUCCESS' from dual union all
+
+select 17,'5 Stars Bank','QQQ333330944','6522.99',141,'IN446258','2005-03-25 13:44:11','VisaElectron','SUCCESS' from dual union all
+
+select 18,'5 Stars Bank','QQQ333330944','2566.17',141,'IN446258','2005-03-25 14:00:05','VisaElectron','SUCCESS' from dual union all
+
+select 19,'5 Stars Bank','QQQ333330944','15800.30',141,'IN446258','2005-03-25 14:03:05','VisaElectron','SUCCESS' from dual union all
+
+select 20,'5 Stars Bank','QQQ333330944','21455.32',141,'IN446258','2005-03-25 15:13:05','VisaElectron','SUCCESS' from dual union all
+
+select 21,'5 Stars Bank','QQQ333330944','9883.22',141,'IN446258','2005-03-25 15:25:05','VisaElectron','SUCCESS' from dual union all
+
+select 22,'5 Stars Bank','QQQ333330944','8843.26',141,'IN446258','2005-03-25 16:00:05','VisaElectron','SUCCESS' from dual;
 
 insert /*+ ignore_row_on_dupkey_index(sale(sale_id)) */ into sale(sale_id,fiscal_year,sale,employee_number,fiscal_month,revenue_growth,trend)
 
