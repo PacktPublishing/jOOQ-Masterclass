@@ -1,5 +1,7 @@
 package com.classicmodels.repository;
 
+import java.time.LocalDateTime;
+import static jooq.generated.tables.BankTransaction.BANK_TRANSACTION;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.EmployeeStatus.EMPLOYEE_STATUS;
 import static jooq.generated.tables.Office.OFFICE;
@@ -16,6 +18,7 @@ import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.round;
 import static org.jooq.impl.DSL.select;
+import static org.jooq.impl.DSL.sum;
 import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -123,6 +126,23 @@ public class ClassicModelsRepository {
                                 .orderBy(field("status_count").desc())).as("percentage_survival_by_step"))
                 .from("grouped_status")
                 .orderBy(field("status_count").desc())
+                .fetch();
+    }
+    
+    // Time Series Analysis
+    public void timeSeriesAnalysis() {
+
+        ctx.select(BANK_TRANSACTION.CACHING_DATE,
+                sum(BANK_TRANSACTION.TRANSFER_AMOUNT).as("daily_sum"),
+                sum(BANK_TRANSACTION.TRANSFER_AMOUNT)
+                        .minus(lag(sum(BANK_TRANSACTION.TRANSFER_AMOUNT))
+                                .over().orderBy(BANK_TRANSACTION.CACHING_DATE)).as("daily_difference"))
+                .from(BANK_TRANSACTION)
+                .where(BANK_TRANSACTION.CACHING_DATE
+                        .between(LocalDateTime.of(2005, 3, 1, 0, 0, 0),
+                                LocalDateTime.of(2005, 3, 31, 0, 0, 0))
+                        .and(BANK_TRANSACTION.BANK_NAME.eq("Optimus Bank")))
+                .groupBy(BANK_TRANSACTION.CACHING_DATE)
                 .fetch();
     }
 }

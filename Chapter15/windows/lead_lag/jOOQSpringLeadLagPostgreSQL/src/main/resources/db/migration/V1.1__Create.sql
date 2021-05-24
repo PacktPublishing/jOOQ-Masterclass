@@ -23,6 +23,7 @@ DROP TABLE IF EXISTS manager CASCADE;
 DROP TABLE IF EXISTS customer CASCADE;
 DROP TABLE IF EXISTS customerdetail CASCADE;
 DROP TABLE IF EXISTS sale CASCADE;
+DROP TABLE IF EXISTS daily_activity CASCADE;
 DROP TABLE IF EXISTS token CASCADE;
 DROP TABLE IF EXISTS employee CASCADE;
 DROP TABLE IF EXISTS employee_status CASCADE;
@@ -145,6 +146,17 @@ CREATE TABLE sale (
  ,  
   CONSTRAINT sale_employee_fk FOREIGN KEY (employee_number) REFERENCES employee (employee_number) ON UPDATE CASCADE
 ) ;
+
+/*Table structure for table `daily_activity` */
+
+CREATE TABLE daily_activity (
+  day_id serial NOT NULL, 
+  day_date date NOT NULL,
+  sales float NOT NULL,  
+  visitors float NOT NULL,    
+  conversion float NOT NULL,
+  CONSTRAINT daily_activity_pk PRIMARY KEY (day_id)
+);
 
 /*Table structure for table `token` */
 
@@ -279,6 +291,7 @@ CREATE TABLE "order" (
   status varchar(15) NOT NULL,
   comments text,
   customer_number bigint NOT NULL,
+  amount decimal(10,2) NOT NULL,
   CONSTRAINT order_pk PRIMARY KEY (order_id)
  ,
   CONSTRAINT order_customer_fk FOREIGN KEY (customer_number) REFERENCES customer (customer_number)
@@ -333,6 +346,7 @@ CREATE TABLE bank_transaction (
   caching_date timestamp NOT NULL DEFAULT NOW(),
   customer_number bigint NOT NULL,
   check_number varchar(50) NOT NULL, 
+  card_type varchar(50) NOT NULL, 
   status varchar(50) NOT NULL DEFAULT 'SUCCESS',   
   CONSTRAINT bank_transaction_pk PRIMARY KEY (transaction_id),    
   CONSTRAINT bank_transaction_customer_fk FOREIGN KEY (customer_number,check_number) REFERENCES payment (customer_number,check_number)

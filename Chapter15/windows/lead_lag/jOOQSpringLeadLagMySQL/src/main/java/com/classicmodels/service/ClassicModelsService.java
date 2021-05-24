@@ -22,5 +22,7 @@ public class ClassicModelsService {
 
         classicModelsRepository.leadLagSalary();        
         classicModelsRepository.employeeFunnel();
+        
+        classicModelsRepository.timeSeriesAnalysis();
     }
 }

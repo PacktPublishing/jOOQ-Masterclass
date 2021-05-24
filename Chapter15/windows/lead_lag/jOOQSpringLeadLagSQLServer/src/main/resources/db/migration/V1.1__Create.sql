@@ -13,6 +13,50 @@ This is a modified version of the original schema for Microsoft Server SQL
 
 /* USER-DEFINED FUNCTIONS */
 
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE OR ALTER FUNCTION [SPLIT_PART] (@tstr varchar(2000), @sstr varchar(1), @occ int)
+   RETURNS varchar(1024)
+AS BEGIN
+  DECLARE @cpos int, @pos int, @cnt int, @ret varchar(1000), @tstrlen int, @tocc  int
+	SET @tstrlen  = LEN (@tstr)
+	SET @tocc = DATALENGTH(@tstr)-DATALENGTH(REPLACE(@tstr,@sstr,''))
+	iF @tstrlen = 0
+		RETURN(@ret)
+	ELSE
+	BEGIN
+		SET @pos = CHARINDEX(@sstr, @tstr,  1)
+		IF @pos = 0
+			RETURN(@ret)
+		ELSE
+		BEGIN
+			SET @cnt = 1		
+			IF @occ = 1 
+				SET @ret = LEFT(@tstr, @pos -1) 
+			ELSE
+			BEGIN
+				WHILE (@cnt < @occ)
+				BEGIN
+					SET @cpos = CHARINDEX(@sstr, @tstr, @pos + 1)
+					SET @cnt = @cnt + 1
+					IF @cpos =0
+						SET @ret= SUBSTRING (@tstr, @pos +1, @tstrlen) 
+					ELSE
+						SET @ret = SUBSTRING(@tstr, @pos+1, @cpos-@pos-1)
+					SET @pos = @cpos	
+				END
+					IF (@cnt > @tocc+1)
+					SET @ret = ''
+			END
+		END
+	END
+	RETURN(@ret)
+END
+GO
+
 CREATE OR ALTER FUNCTION netPriceEach(
     @quantity INT,
     @list_price DEC(10,2),
@@ -69,7 +113,9 @@ IF OBJECT_ID('customer', 'U') IS NOT NULL
   DROP TABLE customer;
 IF OBJECT_ID('sale', 'U') IS NOT NULL 
   DROP TABLE sale;
-  IF OBJECT_ID('token', 'U') IS NOT NULL 
+IF OBJECT_ID('daily_activity', 'U') IS NOT NULL 
+  DROP TABLE daily_activity;
+IF OBJECT_ID('token', 'U') IS NOT NULL 
   DROP TABLE token;
 IF OBJECT_ID('employee', 'U') IS NOT NULL 
   DROP TABLE employee;
@@ -182,6 +228,17 @@ CREATE TABLE sale (
   CONSTRAINT [enum_rate_check] CHECK ([rate] IN('SILVER', 'GOLD', 'PLATINUM')),
   CONSTRAINT [enum_vat_check] CHECK ([vat] IN('NONE', 'MIN', 'MAX'))
 ) ;
+
+/*Table structure for table `daily_activity` */
+
+CREATE TABLE [daily_activity] (
+  [day_id] bigint NOT NULL IDENTITY, 
+  [day_date] date NOT NULL,
+  [sales] float NOT NULL,  
+  [visitors] float NOT NULL,    
+  [conversion] float NOT NULL,
+  CONSTRAINT [daily_activity_pk] PRIMARY KEY ([day_id])
+);
 
 CREATE TABLE [token] (
   [token_id] bigint NOT NULL IDENTITY,
@@ -304,6 +361,7 @@ CREATE TABLE [order] (
   [status] varchar(15) NOT NULL,
   [comments] varchar(max),
   [customer_number] bigint NOT NULL,
+  [amount] decimal(10,2) NOT NULL,
   CONSTRAINT [order_pk] PRIMARY KEY ([order_id])
  ,
   CONSTRAINT [order_customer_fk] FOREIGN KEY ([customer_number]) REFERENCES customer ([customer_number])
@@ -358,6 +416,7 @@ CREATE TABLE bank_transaction (
   [caching_date] datetime DEFAULT GETDATE(),
   [customer_number] bigint NOT NULL,
   [check_number] varchar(50) NOT NULL, 
+  [card_type] varchar(50) NOT NULL,
   [status] varchar(50) NOT NULL DEFAULT 'SUCCESS',
   CONSTRAINT [bank_transaction_pk] PRIMARY KEY ([transaction_id]),  
   CONSTRAINT [bank_transaction_customer_fk] FOREIGN KEY ([customer_number],[check_number]) REFERENCES payment ([customer_number],[check_number])
