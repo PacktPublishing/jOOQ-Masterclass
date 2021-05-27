@@ -1,6 +1,7 @@
 package com.classicmodels.repository;
 
 import java.math.BigDecimal;
+import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Productline.PRODUCTLINE;
@@ -9,9 +10,11 @@ import org.jooq.CommonTableExpression;
 import org.jooq.DSLContext;
 import org.jooq.Field;
 import org.jooq.Record2;
+import static org.jooq.impl.DSL.avg;
 import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.max;
+import static org.jooq.impl.DSL.min;
 import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.sum;
@@ -199,6 +202,51 @@ public class ClassicModelsRepository {
                 .on(field(name("cte_productline_counts", "product_line"))
                         .eq(field(name("cte_productline_sales", "product_line"))))
                 .orderBy(field(name("cte_productline_counts", "product_line")))
+                .fetch();
+    }
+
+    // nested CTEs
+    public void cte8() {
+
+        var cte1 = name("avg_per_office")
+                .fields("office", "avg_salary_per_office")
+                .as(select(EMPLOYEE.OFFICE_CODE, avg(EMPLOYEE.SALARY))
+                        .from(EMPLOYEE)
+                        .groupBy(EMPLOYEE.OFFICE_CODE));
+
+        var cte2 = name("min_salary_office")
+                .fields("min_avg_salary_per_office")
+                .as(select(min(cte1.field("avg_salary_per_office"))).from(cte1));
+
+        var cte3 = name("max_salary_office")
+                .fields("max_avg_salary_per_office")
+                .as(select(max(cte1.field("avg_salary_per_office"))).from(cte1));
+
+        ctx.with(cte1, cte2, cte3)
+                .select()
+                .from(cte1)
+                .crossJoin(cte2)
+                .crossJoin(cte3)
+                .fetch();
+    }
+
+    public void cte9() {
+
+        ctx.with("avg_per_office")
+                .as(select(EMPLOYEE.OFFICE_CODE.as("office"),
+                        avg(EMPLOYEE.SALARY).as("avg_salary_per_office"))
+                        .from(EMPLOYEE)
+                        .groupBy(EMPLOYEE.OFFICE_CODE))
+                .with("min_salary_office")
+                .as(select(min(field(name("avg_salary_per_office")))
+                        .as("min_avg_salary_per_office")).from(name("avg_per_office")))
+                .with("max_salary_office")
+                .as(select(max(field(name("avg_salary_per_office")))
+                        .as("max_avg_salary_per_office")).from(name("avg_per_office")))
+                .select()
+                .from(name("avg_per_office"))
+                .crossJoin(name("min_salary_office"))
+                .crossJoin(name("max_salary_office"))
                 .fetch();
     }
 }
