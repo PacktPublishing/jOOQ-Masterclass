@@ -13,8 +13,10 @@ public class ClassicModelsService {
     }
 
     public void callAll() {
-
+        
         classicModelsRepository.cte1();
         classicModelsRepository.cte2();
+        classicModelsRepository.cte3();
+        classicModelsRepository.cte4();
     }
 }

@@ -14,7 +14,9 @@ public class ClassicModelsService {
 
     public void callAll() {
 
-        classicModelsRepository.cte1();
-        classicModelsRepository.cte2();
+       classicModelsRepository.dummyAssignRankToProducts();
+       classicModelsRepository.saleRankByFiscalYear();
+       classicModelsRepository.saleRankByTotalSales();
+       classicModelsRepository.saleRankByNumberOfSales();
     }
 }

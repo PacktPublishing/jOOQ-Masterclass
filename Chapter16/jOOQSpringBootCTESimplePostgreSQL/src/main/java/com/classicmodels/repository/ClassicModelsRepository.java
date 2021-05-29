@@ -18,6 +18,7 @@ import static org.jooq.impl.DSL.min;
 import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.sum;
+import static org.jooq.impl.DSL.with;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -247,6 +248,24 @@ public class ClassicModelsRepository {
                 .from(name("avg_per_office"))
                 .crossJoin(name("min_salary_office"))
                 .crossJoin(name("max_salary_office"))
+                .fetch();
+    }
+
+    // nested CTE as FROM WITH
+    public void cte10() {
+
+        // 1. compute min salary per office
+        // 2. sum salaries per salary
+        // 3. avg salaries        
+        ctx.with("t2")
+                .as(select(avg(field("sum_min_sal", Float.class)).as("avg_sum_min_sal")).from(
+                        with("t1").as(select(min(EMPLOYEE.SALARY).as("min_sal"))
+                                .from(EMPLOYEE)
+                                .groupBy(EMPLOYEE.OFFICE_CODE)).select(
+                                sum(field("min_sal", Float.class)).as("sum_min_sal")).from(name("t1"))
+                                .groupBy(field("min_sal"))))
+                .select()
+                .from(name("t2"))
                 .fetch();
     }
 }

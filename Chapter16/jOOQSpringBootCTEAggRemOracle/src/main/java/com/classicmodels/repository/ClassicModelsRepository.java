@@ -20,6 +20,10 @@ public class ClassicModelsRepository {
         this.ctx = ctx;
     }
 
+    /*
+    Calculating Top N items and Aggregating (sum) the remainder into "9999"
+    */
+        
     public void cte1() {
 
         var t = name("cte_top3")
