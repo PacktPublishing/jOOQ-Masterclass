@@ -36,7 +36,7 @@ public class ClassicModelsRepository {
 
     public ClassicModelsRepository(DSLContext ctx) {
         this.ctx = ctx;
-    }
+    }    
 
     // VALUES LIST
     public void cte1() {
