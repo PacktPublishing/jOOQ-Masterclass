@@ -107,6 +107,20 @@ public class ClassicModelsRepository {
                 .fetch();
     }
     
+    // First row in the last group of consecutive rows
+    public void firstRowInLastGroup() {
+
+        ctx.select().from(
+                select(ORDER.CUSTOMER_NUMBER, ORDER.ORDER_DATE, ORDER.REQUIRED_DATE, ORDER.STATUS,                        
+                        field(lead(ORDER.STATUS).over().orderBy(ORDER.REQUIRED_DATE.desc())
+                        .isDistinctFrom(ORDER.STATUS)).as("first_in_group"))
+                        .from(ORDER).asTable("t")
+        ).where(field(name("t", "first_in_group")).isTrue())
+                .orderBy(field(name("t", "required_date")).desc())
+                .limit(1)
+                .fetchOne();
+    }
+    
     // Calculating Funnel drop-off metrics
     // Determine the percentage of employees that advanced from REGULAR to AVERAGE to GOOD to EXCELLENT
     @Transactional

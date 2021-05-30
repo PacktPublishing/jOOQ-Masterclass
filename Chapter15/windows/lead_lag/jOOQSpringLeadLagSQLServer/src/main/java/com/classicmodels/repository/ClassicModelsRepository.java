@@ -105,7 +105,7 @@ public class ClassicModelsRepository {
                 .innerJoin(EMPLOYEE)
                 .on(OFFICE.OFFICE_CODE.eq(EMPLOYEE.OFFICE_CODE))
                 .fetch();
-    }
+    }    
     
     // Calculating Funnel drop-off metrics
     // Determine the percentage of employees that advanced from REGULAR to AVERAGE to GOOD to EXCELLENT

@@ -236,6 +236,6 @@ public class ClassicModelsRepository {
                 .as(selectFrom(PRODUCT).orderBy(rand()).limit(10))
                 .select()
                 .from(name("dt"))
-                .fetch();
-    }
+                .fetch();               
+    }       
 }

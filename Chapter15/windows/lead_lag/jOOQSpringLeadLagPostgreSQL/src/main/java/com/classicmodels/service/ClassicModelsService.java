@@ -21,6 +21,7 @@ public class ClassicModelsService {
         classicModelsRepository.monthOverMonthGrowthRateSale();
 
         classicModelsRepository.leadLagSalary();
+        classicModelsRepository.firstRowInLastGroup();
         classicModelsRepository.employeeFunnel();
         
         classicModelsRepository.timeSeriesAnalysis();

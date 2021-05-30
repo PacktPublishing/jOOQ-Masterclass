@@ -20,9 +20,10 @@ public class ClassicModelsService {
         classicModelsRepository.lagYOY();
         classicModelsRepository.monthOverMonthGrowthRateSale();
 
-        classicModelsRepository.leadLagSalary();        
+        classicModelsRepository.leadLagSalary();     
+        classicModelsRepository.firstRowInLastGroup();
         classicModelsRepository.employeeFunnel();
         
-        classicModelsRepository.timeSeriesAnalysis();
+        classicModelsRepository.timeSeriesAnalysis();                
     }
 }
