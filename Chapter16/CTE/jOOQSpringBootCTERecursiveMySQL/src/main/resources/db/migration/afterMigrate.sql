@@ -11,10 +11,13 @@ This is a modified version of the original schema
 
 /* START */
 
+USE `classicmodels`;
+
+SET SESSION group_concat_max_len = 100000;
+
 /*Data for the table `office` */
 
-begin try
-insert  into office(office_code,city,phone,address_line_first,address_line_second,state,country,postal_code,territory,internal_budget) values 
+insert  into `office`(`office_code`,`city`,`phone`,`address_line_first`,`address_line_second`,`state`,`country`,`postal_code`,`territory`,`internal_budget`) values 
 
 ('1','San Francisco','+1 650 219 4782','100 Market Street','Suite 300','CA','USA','AZ934VB','NA',90000),
 
@@ -44,18 +47,13 @@ insert  into office(office_code,city,phone,address_line_first,address_line_secon
 
 ('14','San Diego','+1 222 4345 5553','220 Ternary Street','Alio 73','CA','USA','AZ948VB','NA',65000), 
 
-('15','Springfield','+1 0009 9000 777','155 Market Place','Suite 107','MA','USA','XX521SS','NA',55000)
-end try
-begin catch
-end catch;
+('15','Springfield','+1 0009 9000 777','155 Market Place','Suite 107','MA','USA','XX521SS','NA',55000) ON DUPLICATE KEY UPDATE office_code=office_code;
 
 /*Data for the table `department` */
 
-SET IDENTITY_INSERT [department] ON
-begin try
-insert into [department] ([department_id],[name],[phone],[code],[office_code],[topic],[local_budget],[profit],[forecast_profit],[cash],[accounts_receivable],[inventories],[accounts_payable],[st_borrowing],[accrued_liabilities]) values 
+insert into `department`(`department_id`,`name`,`phone`,`code`,`office_code`,`topic`, `local_budget`, `profit`, `forecast_profit`,`cash`,`accounts_receivable`,`inventories`,`accounts_payable`,`st_borrowing`,`accrued_liabilities`) values 
 
-('1','Advertising','-int 4782','1333','1','publicity, promotion', NULL, NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+('1','Advertising','-int 4782','1333','1','publicity, promotion', NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 
 ('2','Sales','-int 41233','1441','1', 'commerce, trade, sellout, transaction', 650000, 900000, 800000,20000,NULL,10000,NULL,NULL,NULL),
 
@@ -83,32 +81,21 @@ insert into [department] ([department_id],[name],[phone],[code],[office_code],[t
 
 ('14','Logistics','-int 3433','6777','12','facilities, supplies', 235000, 233000, NULL,NULL,NULL,1000,NULL,NULL,9000), 
 
-('15','HR','-int 2323','7888','12', 'people, interview, hiring', NULL, 120000, 120000,NULL,544,NULL,NULL,2300,NULL)
-end try
-begin catch
-end catch;
-SET IDENTITY_INSERT [department] OFF;
+('15','HR','-int 2323','7888','12', 'people, interview, hiring', NULL, 120000, 120000,NULL,544,NULL,NULL,2300,NULL) ON DUPLICATE KEY UPDATE department_id=department_id;
 
 /*Data for the table `manager` */
 
-SET IDENTITY_INSERT [manager] ON
-begin try
-insert into [manager]([manager_id],[manager_name],[manager_evaluation], [manager_detail]) values 
+insert into `manager` (`manager_id`, `manager_name`, `manager_evaluation`, `manager_detail`) values 
 
 ('1', 'Joana Nimar', '67, 34, 33, 66', '{"firstName":"Joana","lastName":"Nimar","gender":"Female","dob":"1983-01-01","email":"joananimar@gmail.com","age":30,"address":{"streetAddress":"21 Fake Street","city":"New York City","state":"NY","zipOrPostal":"10021"},"phoneNumber":[{"type":"home","number":["212 555-1234","212 543-0933"]},{"type":"mobile","number":["646 555-4567","644 153-3527","626 231-6743"]}],"summary":"6 years of management experience","computerSkills":[{"OS":["Linux"],"Office":["MS Word","Excel"],"Management":["X10Mangement","ManPlat1","AllCeo"],"Tools":["GMail","Meet"]}],"shareholder":"5%","projects":[{"name":"SBS (aka. Shared Business Services)","start":"2015-08-01","end":"2019-11-21","type":"development","role":"Sr. Manager","details":"Develop a powerful team in a short time"},{"name":"RLCM (aka. Role Lifecycle Management)","start":"2011-03-01","end":"2015-07-01","type":"development","role":"Manager Leader","details":"Increase income"},{"name":"Member-Provider Portal Enhancement","start":"2009-03-01","end":"2011-03-01","type":"enhancement","role":"Technical Leader","details":"Managing the enhancement and defects fixing team"}]}'),
 
 ('2', 'Mark Janel', '99, 23, 11, 23', '{"firstName":"Mark","lastName":"Janel","gender":"Male","dob":"1985-03-07","email":"markjanel@yahoo.com","age":37,"address":{"streetAddress":"24 Red Street","city":"Banesti","state":"Prahova","zipOrPostal":"506734"},"phoneNumber":[{"type":"home","number":["0727 823 989","0723 621 723","0712 212 676"]},{"type":"mobile","number":["378 555 233","678 154 227"]}],"summary":"4 years of management experience","computerSkills":[{"OS":["Windows"],"Office":["Power Point","Access","FoxPro"],"Management":["AllCeo","ManagementTools Suite"],"Tools":["Skype","GMail","Meet","Google Calendar"]}],"projects":[{"name":"Business Retail","start":"2012-02-05","end":"2014-10-11","type":"retail","role":"General Manager","details":"Expand retail business"},{"name":"Selling Point","start":"2011-01-01","end":"2012-02-05","type":"selling","role":"Manager Leader","details":"Manager of selling department"}]}'),
 
-('3', 'Olivia Goy', '99, 34, 11, 78', '{"firstName":"Olivia","lastName":"Goy","gender":"Female","dob":"1978-08-04","email":"oliviagoy@gmail.com","age":42,"address":{"streetAddress":"118 National Street","city":"Barcelona","state":"Catalonia","zipOrPostal":"660933"},"phoneNumber":[{"type":"home","number":["0999 3844 3333","0223 1333 4455","0265 7883 4422"]},{"type":"mobile","number":["980 992 122","112 644 212","322 323 642"]}],"summary":"10 years of management experience","computerSkills":[{"OS":["Linux","Windows"],"Office":["MS Word","Power Point"],"Management":["ManPlat1","AllCeo","TeamManagement"],"Tools":["Slack"]}],"projects":[{"name":"Marketing Share","start":"2016-08-02","end":"2021-06-02","type":"administrator","role":"Principal Manager","details":"Marketing share for small companies"},{"name":"Draft Management","start":"2014-06-06","end":"2016-08-02","type":"development","role":"Manager Leader","details":"First e-management platform"},{"name":"Car Management","start":"2005-03-21","end":"2014-06-06","type":"enhancement","role":"Leader of retail","details":"Enhancement of cars management"}]}')
-end try
-begin catch
-end catch
-SET IDENTITY_INSERT [manager] OFF;
+('3', 'Olivia Goy', '99, 34, 11, 78', '{"firstName":"Olivia","lastName":"Goy","gender":"Female","dob":"1978-08-04","email":"oliviagoy@gmail.com","age":42,"address":{"streetAddress":"118 National Street","city":"Barcelona","state":"Catalonia","zipOrPostal":"660933"},"phoneNumber":[{"type":"home","number":["0999 3844 3333","0223 1333 4455","0265 7883 4422"]},{"type":"mobile","number":["980 992 122","112 644 212","322 323 642"]}],"summary":"10 years of management experience","computerSkills":[{"OS":["Linux","Windows"],"Office":["MS Word","Power Point"],"Management":["ManPlat1","AllCeo","TeamManagement"],"Tools":["Slack"]}],"projects":[{"name":"Marketing Share","start":"2016-08-02","end":"2021-06-02","type":"administrator","role":"Principal Manager","details":"Marketing share for small companies"},{"name":"Draft Management","start":"2014-06-06","end":"2016-08-02","type":"development","role":"Manager Leader","details":"First e-management platform"},{"name":"Car Management","start":"2005-03-21","end":"2014-06-06","type":"enhancement","role":"Leader of retail","details":"Enhancement of cars management"}]}') ON DUPLICATE KEY UPDATE manager_id=manager_id;
 
 /*Data for the table `office_has_manager` */
 
-begin try
-insert into [office_has_manager] ([offices_office_code], [managers_manager_id]) values 
+insert into `office_has_manager` (`offices_office_code`, `managers_manager_id`) values 
 
 ('1', '1'),
 
@@ -130,14 +117,11 @@ insert into [office_has_manager] ([offices_office_code], [managers_manager_id]) 
 
 ('6', '1'),
 
-('7', '2')
-end try
-begin catch
-end catch;
+('7', '2') ON DUPLICATE KEY UPDATE offices_office_code=offices_office_code;
 
 /*Data for the table `employee` */
-begin try
-insert  into employee(employee_number,last_name,first_name,extension,email,office_code,salary,commission,reports_to,job_title,employee_of_year,monthly_bonus) values 
+
+insert  into `employee`(`employee_number`,`last_name`,`first_name`,`extension`,`email`,`office_code`,`salary`, `commission`, `reports_to`,`job_title`,`employee_of_year`, `monthly_bonus`) values 
 
 (1002,'Murphy','Diane','x5800','dmurphy@classicmodelcars.com','1',120000,10000,NULL,'President',NULL,'450, 210, 222, 123, 110, 0, 0, 0, 560, 440, 315, 125, 0, 900'),
 
@@ -183,16 +167,11 @@ insert  into employee(employee_number,last_name,first_name,extension,email,offic
 
 (1625,'Kato','Yoshimi','x102','ykato@classicmodelcars.com','5',60000,2500,1621,'Sales Rep','2004, 2005, 2006', NULL),
 
-(1702,'Gerard','Martin','x2312','mgerard@classicmodelcars.com','4',50000,3400,1102,'Sales Rep','2005, 2007', NULL)
-end try
-begin catch
-end catch;
+(1702,'Gerard','Martin','x2312','mgerard@classicmodelcars.com','4',50000,3400,1102,'Sales Rep','2005, 2007', NULL) ON DUPLICATE KEY UPDATE employee_number=employee_number;
 
 /*Data for the table `customer` */
 
-SET IDENTITY_INSERT [customer] ON
-begin try
-insert  into customer(customer_number,customer_name,contact_last_name,contact_first_name,phone,sales_rep_employee_number,credit_limit,first_buy_date) values 
+insert  into `customer`(`customer_number`,`customer_name`,`contact_last_name`,`contact_first_name`,`phone`,`sales_rep_employee_number`,`credit_limit`,`first_buy_date`) values 
 
 (99,'Australian Home','Paoule','Sart ','40.11.2555',1370,'21000.00',20210),
 
@@ -444,15 +423,9 @@ insert  into customer(customer_number,customer_name,contact_last_name,contact_fi
 
 (495,'Diecast Collectables','Franco','Valarie','6175552555',1188,'85100.00',20409),
 
-(496,'Kelly''s Gift Shop','Snowden','Tony','+64 9 5555500',1612,'110000.00',20142)
-end try
-begin catch
-end catch
-SET IDENTITY_INSERT [customer] OFF;
+(496,'Kelly''s Gift Shop','Snowden','Tony','+64 9 5555500',1612,'110000.00',20142) ON DUPLICATE KEY UPDATE customer_number=customer_number;
 
-/*Data for the table `customerdetail` */
-begin try
-insert  into customerdetail(customer_number,address_line_first,address_line_second,city,state,postal_code,country) values 
+insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_line_second`,`city`,`state`,`postal_code`,`country`) values 
 
 (99,'43 Rue 2',NULL, 'Paris' ,NULL,'25017','France'),
 
@@ -704,36 +677,29 @@ insert  into customerdetail(customer_number,address_line_first,address_line_seco
 
 (495,'6251 Ingle Ln.',NULL,'Boston','MA','XX021SS','USA'),
 
-(496,'Arenales 1938 3''A''',NULL,'Auckland  ',NULL,NULL,'New Zealand')
-end try
-begin catch
-end catch;
+(496,'Arenales 1938 3''A''',NULL,'Auckland  ',NULL,NULL,'New Zealand') ON DUPLICATE KEY UPDATE customer_number=customer_number;
 
 /*Data for the table `productline` */
-begin try
-insert  into productline(product_line,code,text_description,html_description,image,created_on) values 
 
-('Classic Cars',599302,'Attention car enthusiasts: Make your wildest car ownership dreams come true. Whether you are looking for classic muscle cars, dream sports cars or movie-inspired miniatures, you will find great choices in this category. These replicas feature superb attention to detail and craftsmanship and offer features such as working steering system, opening forward compartment, opening rear trunk with removable spare wheel, 4-wheel independent spring suspension, and so on. The models range in size from 1:10 to 1:24 scale and include numerous limited edition and several out-of-production vehicles. All models include a certificate of authenticity from their manufacturers and come fully assembled and ready for display in the home or office.','<productline><name>Classic Cars</name><code>599302</code><capacity supportClass="a, b, c"><a index="200A">200</a><b index="100B">100</b><c index="500C">500<note for="client">This has certain limitations</note></c></capacity><details><power>5000kw</power><type nr_of_lines="5" command="ERP">1</type></details></productline>',NULL,'2005-02-03'),
+insert  into `productline`(`product_line`,`code`,`text_description`,`html_description`,`image`) values 
 
-('Motorcycles',599302,'Our motorcycles are state of the art replicas of classic as well as contemporary motorcycle legends such as Harley Davidson, Ducati and Vespa. Models contain stunning details such as official logos, rotating wheels, working kickstand, front suspension, gear-shift lever, footbrake lever, and drive chain. Materials used include diecast and plastic. The models range in size from 1:10 to 1:50 scale and include numerous limited edition and several out-of-production vehicles. All models come fully assembled and ready for display in the home or office. Most include a certificate of authenticity.','<productline><name>Motorcycles</name><code>599302</code><capacity supportClass="a, b"><a index="250A">200</a><b index="150B">100</b></capacity><details><power>2000kw</power><type nr_of_lines="3" command="OPS">2</type></details></productline>',NULL,'2004-12-12'),
+('Classic Cars',599302, 'Attention car enthusiasts: Make your wildest car ownership dreams come true. Whether you are looking for classic muscle cars, dream sports cars or movie-inspired miniatures, you will find great choices in this category. These replicas feature superb attention to detail and craftsmanship and offer features such as working steering system, opening forward compartment, opening rear trunk with removable spare wheel, 4-wheel independent spring suspension, and so on. The models range in size from 1:10 to 1:24 scale and include numerous limited edition and several out-of-production vehicles. All models include a certificate of authenticity from their manufacturers and come fully assembled and ready for display in the home or office.',NULL,NULL),
 
-('Planes',433823,'Unique, diecast airplane and helicopter replicas suitable for collections, as well as home, office or classroom decorations. Models contain stunning details such as official logos and insignias, rotating jet engines and propellers, retractable wheels, and so on. Most come fully assembled and with a certificate of authenticity from their manufacturers.',NULL,NULL,'2004-02-14'),
+('Motorcycles',599302,'Our motorcycles are state of the art replicas of classic as well as contemporary motorcycle legends such as Harley Davidson, Ducati and Vespa. Models contain stunning details such as official logos, rotating wheels, working kickstand, front suspension, gear-shift lever, footbrake lever, and drive chain. Materials used include diecast and plastic. The models range in size from 1:10 to 1:50 scale and include numerous limited edition and several out-of-production vehicles. All models come fully assembled and ready for display in the home or office. Most include a certificate of authenticity.',NULL,NULL),
 
-('Ships',433823,'The perfect holiday or anniversary gift for executives, clients, friends, and family. These handcrafted model ships are unique, stunning works of art that will be treasured for generations! They come fully assembled and ready for display in the home or office. We guarantee the highest quality, and best value.',NULL,NULL,'2005-12-12'),
+('Planes',433823,'Unique, diecast airplane and helicopter replicas suitable for collections, as well as home, office or classroom decorations. Models contain stunning details such as official logos and insignias, rotating jet engines and propellers, retractable wheels, and so on. Most come fully assembled and with a certificate of authenticity from their manufacturers.',NULL,NULL),
 
-('Trains',123333,'Model trains are a rewarding hobby for enthusiasts of all ages. Whether you''re looking for collectible wooden trains, electric streetcars or locomotives, you''ll find a number of great choices for any budget within this category. The interactive aspect of trains makes toy trains perfect for young children. The wooden train sets are ideal for children under the age of 5.','<productline><name>Trains</name><code>123333</code><capacity supportClass="a, b, b1, c"><a index="250A">200</a><b index="150B">100<b1 index="300B">300</b1></b><c index="350B">350</c></capacity><details><power>20000kw</power><type nr_of_lines="1" command="ERP">1</type></details></productline>',NULL,'2004-03-03'),
+('Ships',433823,'The perfect holiday or anniversary gift for executives, clients, friends, and family. These handcrafted model ships are unique, stunning works of art that will be treasured for generations! They come fully assembled and ready for display in the home or office. We guarantee the highest quality, and best value.',NULL,NULL),
 
-('Trucks and Buses',569331,'The Truck and Bus models are realistic replicas of buses and specialized trucks produced from the early 1920s to present. The models range in size from 1:12 to 1:50 scale and include numerous limited edition and several out-of-production vehicles. Materials used include tin, diecast and plastic. All models include a certificate of authenticity from their manufacturers and are a perfect ornament for the home and office.',NULL,NULL,'2005-02-25'),
+('Trains',123333,'Model trains are a rewarding hobby for enthusiasts of all ages. Whether you\'re looking for collectible wooden trains, electric streetcars or locomotives, you\'ll find a number of great choices for any budget within this category. The interactive aspect of trains makes toy trains perfect for young children. The wooden train sets are ideal for children under the age of 5.',NULL,NULL),
 
-('Vintage Cars',223113,'Our Vintage Car models realistically portray automobiles produced from the early 1900s through the 1940s. Materials used include Bakelite, diecast, plastic and wood. Most of the replicas are in the 1:18 and 1:24 scale sizes, which provide the optimum in detail and accuracy. Prices range from $30.00 up to $180.00 for some special limited edition replicas. All models include a certificate of authenticity from their manufacturers and come fully assembled and ready for display in the home or office.',NULL,NULL,'2004-04-02')
-end try
-begin catch
-end catch;
+('Trucks and Buses',569331,'The Truck and Bus models are realistic replicas of buses and specialized trucks produced from the early 1920s to present. The models range in size from 1:12 to 1:50 scale and include numerous limited edition and several out-of-production vehicles. Materials used include tin, diecast and plastic. All models include a certificate of authenticity from their manufacturers and are a perfect ornament for the home and office.',NULL,NULL),
+
+('Vintage Cars',223113,'Our Vintage Car models realistically portray automobiles produced from the early 1900s through the 1940s. Materials used include Bakelite, diecast, plastic and wood. Most of the replicas are in the 1:18 and 1:24 scale sizes, which provide the optimum in detail and accuracy. Prices range from $30.00 up to $180.00 for some special limited edition replicas. All models include a certificate of authenticity from their manufacturers and come fully assembled and ready for display in the home or office.',NULL,NULL) ON DUPLICATE KEY UPDATE product_line=product_line;
 
 /*Data for the table `productlinedetail` */
 
-begin try
-insert  into productlinedetail(product_line,code,line_capacity,line_type) values 
+insert  into `productlinedetail`(`product_line`,`code`,`line_capacity`,`line_type`) values 
 
 ('Classic Cars',599302,'200A', 1),
 
@@ -747,16 +713,11 @@ insert  into productlinedetail(product_line,code,line_capacity,line_type) values
 
 ('Trucks and Buses',569331,'566C',2),
 
-('Vintage Cars',223113,'1000A', 3)
-end try
-begin catch
-end catch;
+('Vintage Cars',223113,'1000A', 3) ON DUPLICATE KEY UPDATE product_line=product_line;
 
 /*Data for the table `product` */
 
-SET IDENTITY_INSERT [product] ON
-begin try
-insert  into product(product_id,product_name,product_line,code,product_scale,product_vendor,product_description,quantity_in_stock,buy_price,msrp) values 
+insert  into `product`(`product_id`,`product_name`,`product_line`,`code`,`product_scale`,`product_vendor`,`product_description`,`quantity_in_stock`,`buy_price`,`msrp`) values 
 
 (1,'1969 Harley Davidson Ultimate Chopper','Motorcycles',599302,'1:10','Min Lin Diecast','PENDING',7933,'48.81','95.70'),
 
@@ -976,17 +937,11 @@ insert  into product(product_id,product_name,product_line,code,product_scale,pro
 
 (109,'Boeing X-32A JSF','Planes',433823,'1:72','Motor City Art Classics','10" Wingspan with retractable landing gears.Comes with pilot',4857,'32.77','49.66'),
 
-(110,'Pont Yacht','Ships',433823,'1:72','Unimax Art Galleries','Measures 38 inches Long x 33 3/4 inches High. Includes a stand.rnMany extras including rigging, long boats, pilot house, anchors, etc. Comes with 2 masts, all square-rigged',414,'33.30','54.60')
-end try
-begin catch
-end catch
-SET IDENTITY_INSERT [product] OFF;
+(110,'Pont Yacht','Ships',433823,'1:72','Unimax Art Galleries','Measures 38 inches Long x 33 3/4 inches High. Includes a stand.rnMany extras including rigging, long boats, pilot house, anchors, etc. Comes with 2 masts, all square-rigged',414,'33.30','54.60') ON DUPLICATE KEY UPDATE product_id=product_id;
 
 /*Data for the table `order` */
 
-SET IDENTITY_INSERT [order] ON
-begin try
-insert  into [order](order_id,order_date,required_date,shipped_date,status,comments,customer_number,amount) values 
+insert  into `order`(`order_id`,`order_date`,`required_date`,`shipped_date`,`status`,`comments`,`customer_number`,`amount`) values 
 
 (10100,'2003-01-06','2003-01-13','2003-01-10','Shipped',NULL,363,301.84),
 
@@ -1116,13 +1071,13 @@ insert  into [order](order_id,order_date,required_date,shipped_date,status,comme
 
 (10163,'2003-10-20','2003-10-27','2003-10-24','Shipped',NULL,424,651.79),
 
-(10164,'2003-10-21','2003-10-30','2003-10-23','Resolved','This order was disputed, but resolved on 11/1/2003; Customer does not like the colors and precision of the models.',452,758.85),
+(10164,'2003-10-21','2003-10-30','2003-10-23','Resolved','This order was disputed, but resolved on 11/1/2003; Customer doesn\'t like the colors and precision of the models.',452,758.85),
 
-(10165,'2003-10-22','2003-10-31','2003-12-26','Shipped','This order was on hold because customer credit limit had been exceeded. Order will ship when payment is received',148,1674.66),
+(10165,'2003-10-22','2003-10-31','2003-12-26','Shipped','This order was on hold because customers\'s credit limit had been exceeded. Order will ship when payment is received',148,1674.66),
 
 (10166,'2003-10-21','2003-10-30','2003-10-27','Shipped',NULL,462,361.88),
 
-(10167,'2003-10-23','2003-10-30',NULL,'Cancelled','Customer called to cancel. The warehouse was notified in time and the order did not ship. They have a new VP of Sales and are shifting their sales model. Our VP of Sales should contact them.',448,1271.62),
+(10167,'2003-10-23','2003-10-30',NULL,'Cancelled','Customer called to cancel. The warehouse was notified in time and the order didn\'t ship. They have a new VP of Sales and are shifting their sales model. Our VP of Sales should contact them.',448,1271.62),
 
 (10168,'2003-10-28','2003-11-03','2003-11-01','Shipped',NULL,161,1472.5),
 
@@ -1442,7 +1397,7 @@ insert  into [order](order_id,order_date,required_date,shipped_date,status,comme
 
 (10326,'2004-11-09','2004-11-16','2004-11-10','Shipped',NULL,144,517.7),
 
-(10327,'2004-11-10','2004-11-19','2004-11-13','Resolved','Order was disputed and resolved on 12/1/04. The Sales Manager was involved. Customer claims the scales of the models do not match what was discussed.',145,665.06),
+(10327,'2004-11-10','2004-11-19','2004-11-13','Resolved','Order was disputed and resolved on 12/1/04. The Sales Manager was involved. Customer claims the scales of the models don\'t match what was discussed.',145,665.06),
 
 (10328,'2004-11-12','2004-11-21','2004-11-18','Shipped','Customer very concerned about the exact color of the models. There is high risk that he may dispute the order because there is a slight color mismatch',278,1054.8),
 
@@ -1522,7 +1477,7 @@ insert  into [order](order_id,order_date,required_date,shipped_date,status,comme
 
 (10366,'2005-01-10','2005-01-19','2005-01-12','Shipped',NULL,381,376.35),
 
-(10367,'2005-01-12','2005-01-21','2005-01-16','Resolved','This order was disputed and resolved on 2/1/2005. Customer claimed that container with shipment was damaged. FedEx investigation proved this wrong.',205,1072.73),
+(10367,'2005-01-12','2005-01-21','2005-01-16','Resolved','This order was disputed and resolved on 2/1/2005. Customer claimed that container with shipment was damaged. FedEx\'s investigation proved this wrong.',205,1072.73),
 
 (10368,'2005-01-19','2005-01-27','2005-01-24','Shipped','Can we renegotiate this one?',124,401.41),
 
@@ -1560,7 +1515,7 @@ insert  into [order](order_id,order_date,required_date,shipped_date,status,comme
 
 (10385,'2005-02-28','2005-03-09','2005-03-01','Shipped',NULL,124,140.83),
 
-(10386,'2005-03-01','2005-03-09','2005-03-06','Resolved','Disputed then Resolved on 3/15/2005. Customer does not like the craftsmaship of the models.',141,1352.06),
+(10386,'2005-03-01','2005-03-09','2005-03-06','Resolved','Disputed then Resolved on 3/15/2005. Customer doesn\'t like the craftsmaship of the models.',141,1352.06),
 
 (10387,'2005-03-02','2005-03-09','2005-03-06','Shipped','We need to keep in close contact with their Marketing VP. He is the decision maker for all their purchases.',148,79.91),
 
@@ -1618,11 +1573,11 @@ insert  into [order](order_id,order_date,required_date,shipped_date,status,comme
 
 (10414,'2005-05-06','2005-05-13',NULL,'On Hold','Customer credit limit exceeded. Will ship when a payment is received.',362,1163.89),
 
-(10415,'2005-05-09','2005-05-20','2005-05-12','Disputed','Customer claims the scales of the models do not match what was discussed. I keep all the paperwork though to prove otherwise',471,324.13),
+(10415,'2005-05-09','2005-05-20','2005-05-12','Disputed','Customer claims the scales of the models don\'t match what was discussed. I keep all the paperwork though to prove otherwise',471,324.13),
 
 (10416,'2005-05-10','2005-05-16','2005-05-14','Shipped',NULL,386,1084.51),
 
-(10417,'2005-05-13','2005-05-19','2005-05-19','Disputed','Customer does not like the colors and precision of the models.',141,671.33),
+(10417,'2005-05-13','2005-05-19','2005-05-19','Disputed','Customer doesn\'t like the colors and precision of the models.',141,671.33),
 
 (10418,'2005-05-16','2005-05-24','2005-05-20','Shipped',NULL,412,727.23),
 
@@ -1638,15 +1593,11 @@ insert  into [order](order_id,order_date,required_date,shipped_date,status,comme
 
 (10424,'2005-05-31','2005-06-08',NULL,'In Process',NULL,141,612.75),
 
-(10425,'2005-05-31','2005-06-07',NULL,'In Process',NULL,119,1231.98)
-end try
-begin catch
-end catch
-SET IDENTITY_INSERT [order] OFF;
+(10425,'2005-05-31','2005-06-07',NULL,'In Process',NULL,119,1231.98) ON DUPLICATE KEY UPDATE order_id=order_id;
 
 /*Data for the table `orderdetail` */
-begin try
-insert into orderdetail(order_id,product_id,quantity_ordered,price_each,order_line_number) values
+
+insert  into `orderdetail`(`order_id`,`product_id`,`quantity_ordered`,`price_each`,`order_line_number`) values 
 
 (10100,23,30,'136.00',3),
 
@@ -3646,13 +3597,7 @@ insert into orderdetail(order_id,product_id,quantity_ordered,price_each,order_li
 
 (10205,61,32,'27.88',5),
 
-(10205,64,24,'36.74',4)
-end try
-begin catch
-end catch;
-
-begin try
-insert  into orderdetail(order_id,product_id,quantity_ordered,price_each,order_line_number) values 
+(10205,64,24,'36.74',4),
 
 (10206,2,47,'203.59',6),
 
@@ -5650,13 +5595,7 @@ insert  into orderdetail(order_id,product_id,quantity_ordered,price_each,order_l
 
 (10312,82,44,'96.42',7),
 
-(10313,6,40,'141.83',7)
-end try
-begin catch
-end catch;
-
-begin try
-insert  into orderdetail(order_id,product_id,quantity_ordered,price_each,order_line_number) values 
+(10313,6,40,'141.83',7),
 
 (10313,9,21,'131.20',11),
 
@@ -7650,14 +7589,11 @@ insert  into orderdetail(order_id,product_id,quantity_ordered,price_each,order_l
 
 (10425,88,11,'50.32',6),
 
-(10425,94,18,'94.92',2)
-end try
-begin catch
-end catch;
+(10425,94,18,'94.92',2) ON DUPLICATE KEY UPDATE orderdetail_id=orderdetail_id;
 
-/*Data for the table `payment` */
-begin try
-insert into payment(customer_number,check_number,payment_date,invoice_amount,caching_date) values 
+/* Data for the table `payment` */
+
+insert  into `payment`(`customer_number`,`check_number`,`payment_date`,`invoice_amount`, `caching_date`) values 
 
 (103,'HQ336336','2004-10-19 12:00:01','6066.78', '2004-10-19 12:30:15'),
 
@@ -8203,16 +8139,11 @@ insert into payment(customer_number,check_number,payment_date,invoice_amount,cac
 
 (496,'MB342426','2003-07-16 21:10:15','32077.44', '2003-07-16 23:04:15'),
 
-(496,'MN89921','2004-12-31 09:02:11','52166.00', '2004-12-31 09:02:11')
-end try
-begin catch
-end catch;
+(496,'MN89921','2004-12-31 09:02:11','52166.00', '2004-12-31 09:02:11') ON DUPLICATE KEY UPDATE customer_number=customer_number;
 
 /*Data for the table `bank_transaction` */
 
-SET IDENTITY_INSERT [bank_transaction] ON
-begin try
-insert into bank_transaction(transaction_id,bank_name,bank_iban,transfer_amount,customer_number,check_number,caching_date,card_type,status) values 
+insert  into `bank_transaction`(`transaction_id`,`bank_name`,`bank_iban`,`transfer_amount`,`customer_number`,`check_number`,`caching_date`,`card_type`,`status`) values 
 
 (1,'Bank Ltd. US','DN44398834N34','6631.36',447,'AO757239','2003-09-15 18:22:54','VisaElectron','SUCCESS'),
 
@@ -8256,16 +8187,11 @@ insert into bank_transaction(transaction_id,bank_name,bank_iban,transfer_amount,
 
 (21,'5 Stars Bank','QQQ333330944','9883.22',141,'IN446258','2005-03-25 15:25:05','VisaElectron','SUCCESS'),
 
-(22,'5 Stars Bank','QQQ333330944','8843.26',141,'IN446258','2005-03-25 16:00:05','VisaElectron','SUCCESS')
-end try
-begin catch
-end catch
-SET IDENTITY_INSERT [bank_transaction] OFF;
+(22,'5 Stars Bank','QQQ333330944','8843.26',141,'IN446258','2005-03-25 16:00:05','VisaElectron','SUCCESS') ON DUPLICATE KEY UPDATE transaction_id=transaction_id;
 
 /*Data for the table `sale` */
-SET IDENTITY_INSERT [sale] ON
-begin try
-insert  into sale(sale_id,fiscal_year,sale,employee_number,fiscal_month,revenue_growth,trend) values 
+
+insert into sale(sale_id,fiscal_year,sale,employee_number,fiscal_month,revenue_growth,trend) values 
 
 (1, 2003, 5282.64, 1370, 1, 0, 'CONSTANT'),
 
@@ -8316,46 +8242,32 @@ insert  into sale(sale_id,fiscal_year,sale,employee_number,fiscal_month,revenue_
 (24, 2007, 150399.34, 1611, 7, 1569.57, 'UP'),
 
 (25, 2005, 52343.12, 1102, 5, 947.57, 'UP')
-end try
-begin catch
-end catch
-SET IDENTITY_INSERT [sale] OFF;
+
+ON DUPLICATE KEY UPDATE sale_id=sale_id;
 
 /*Data for the table `top3product` */
 
-begin try
-insert into top3product(product_id,product_name) values 
+insert into `top3product`(`product_id`,`product_name`) values 
 
 (40, '1992 Ferrari 360 Spider red'),
 
 (1, '1969 Harley Davidson Ultimate Chopper'),
 
-(2, '1952 Alpine Renault 1300')
-end try
-begin catch
-end catch
+(2, '1952 Alpine Renault 1300') ON DUPLICATE KEY UPDATE product_id=product_id;
 
 /*Data for the table `token` */
 
-SET IDENTITY_INSERT [token] ON
-begin try
-insert into token(token_id,sale_id,amount) values 
+insert into `token`(`token_id`,`sale_id`,`amount`) values 
 
 (1, 1, 1500),
 
 (2, 1, 2687.55),
 
-(3, 1, 1095.09)
-end try
-begin catch
-end catch
-SET IDENTITY_INSERT [token] OFF;
+(3, 1, 1095.09) ON DUPLICATE KEY UPDATE token_id=token_id;
 
 /*Data for the table `employee_status` */
 
-SET IDENTITY_INSERT [employee_status] ON
-begin try
-insert into employee_status(id,employee_number,status,acquired_date) values 
+insert into `employee_status`(`id`,`employee_number`,`status`, `acquired_date`) values 
 
 (1, 1002, 'REGULAR', '2004-04-14'),
 
@@ -8435,17 +8347,11 @@ insert into employee_status(id,employee_number,status,acquired_date) values
 
 (39, 1702, 'REGULAR', '2002-11-25'),
 
-(40, 1702, 'AVERAGE', '2004-09-02')
-end try
-begin catch
-end catch
-SET IDENTITY_INSERT [employee_status] OFF;
+(40, 1702, 'AVERAGE', '2004-09-02') ON DUPLICATE KEY UPDATE id=id;
 
 /*Data for the table `daily_activity` */
 
-SET IDENTITY_INSERT [daily_activity] ON
-begin try
-insert into daily_activity(day_id,day_date,sales,visitors,conversion) values 
+insert into `daily_activity`(`day_id`,`day_date`,`sales`, `visitors`, `conversion`) values 
 
 (1, '2004-01-01', 21, 3373, 0.62),
 
@@ -8465,16 +8371,11 @@ insert into daily_activity(day_id,day_date,sales,visitors,conversion) values
 
 (9, '2004-01-09', 28, 3621, 0.77),
 
-(10, '2004-01-10', 50, 1722, 2.90) 
-end try
-begin catch
-end catch
-SET IDENTITY_INSERT [daily_activity] OFF;
+(10, '2004-01-10', 50, 1722, 2.90) ON DUPLICATE KEY UPDATE day_id=day_id;
 
-/*Data for the table `office_flights` */
+/*Data for the table `bank_transaction` */
 
-begin try
-insert  into office_flights(depart_town,arrival_town,distance_km) values 
+insert  into `office_flights`(`depart_town`,`arrival_town`,`distance_km`) values 
 
 ('Paris', 'Los Angeles', 9080),
 
@@ -8538,9 +8439,6 @@ insert  into office_flights(depart_town,arrival_town,distance_km) values
 
 ('London', 'Tokyo', 9559),
 
-('Tokyo', 'London', 9559)
-end try
-begin catch
-end catch
+('Tokyo', 'London', 9559) ON DUPLICATE KEY UPDATE depart_town=depart_town;
 
 /* END */
