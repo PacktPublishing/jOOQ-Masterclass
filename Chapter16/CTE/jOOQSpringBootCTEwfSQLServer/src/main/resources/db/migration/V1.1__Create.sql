@@ -1,4 +1,4 @@
-﻿/*
+/*
 *********************************************************************
 http://www.mysqltutorial.org
 *********************************************************************
@@ -344,9 +344,9 @@ CREATE TABLE product (
   [product_vendor] varchar(50) DEFAULT NULL,
   [product_description] varchar(max) DEFAULT NULL,
   [quantity_in_stock] smallint DEFAULT 0,
-  [buy_price] decimal(10,2)  NOT NULL DEFAULT 0.0,
+  [buy_price] decimal(10,2) DEFAULT 0.0,
   [specs] varchar(max) DEFAULT NULL,
-  [msrp] decimal(10,2) NOT NULL DEFAULT 0.0,
+  [msrp] decimal(10,2) DEFAULT 0.0,
   [product_uid] bigint NOT NULL DEFAULT (NEXT VALUE FOR product_uid_seq),
   CONSTRAINT [product_pk] PRIMARY KEY ([product_id])
  ,

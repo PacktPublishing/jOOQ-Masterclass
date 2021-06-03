@@ -1,4 +1,4 @@
-﻿/*
+/*
 *********************************************************************
 http://www.mysqltutorial.org
 *********************************************************************
@@ -485,8 +485,8 @@ CREATE TABLE product (
   product_vendor varchar2(50) DEFAULT NULL,
   product_description clob DEFAULT NULL,
   quantity_in_stock number(5) DEFAULT 0,
-  buy_price number(10,2) NOT NULL DEFAULT 0.0,
-  msrp number(10,2) NOT NULL DEFAULT 0.0,
+  buy_price number(10,2) DEFAULT 0.0,
+  msrp number(10,2) DEFAULT 0.0,
   specs clob DEFAULT NULL,
   product_uid number(10) NOT NULL,
   CONSTRAINT product_pk PRIMARY KEY (product_id)
