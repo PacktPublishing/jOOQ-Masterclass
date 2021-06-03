@@ -128,6 +128,12 @@ EXCEPTION
    WHEN OTHERS THEN NULL;
 END;
 /
+BEGIN
+   EXECUTE IMMEDIATE 'DROP TABLE "OFFICE_FLIGHTS" CASCADE CONSTRAINTS';
+EXCEPTION
+   WHEN OTHERS THEN NULL;
+END;
+/
 COMMIT;
 
 /* Type used in collect() */
@@ -479,8 +485,8 @@ CREATE TABLE product (
   product_vendor varchar2(50) DEFAULT NULL,
   product_description clob DEFAULT NULL,
   quantity_in_stock number(5) DEFAULT 0,
-  buy_price number(10,2) DEFAULT 0.0,
-  msrp number(10,2) DEFAULT 0.0,
+  buy_price number(10,2) DEFAULT 0.0 NOT NULL,
+  msrp number(10,2) DEFAULT 0.0 NOT NULL,
   specs clob DEFAULT NULL,
   product_uid number(10) NOT NULL,
   CONSTRAINT product_pk PRIMARY KEY (product_id)
@@ -648,6 +654,15 @@ BEGIN
  SELECT bank_transaction_seq.NEXTVAL INTO :NEW.transaction_id FROM DUAL;
 END;
 /
+
+/*Table structure for table `office_flights` */
+
+CREATE TABLE office_flights (  
+  depart_town varchar2(32) NOT NULL,
+  arrival_town varchar2(32) NOT NULL,
+  distance_km number(7) NOT NULL,
+  CONSTRAINT office_flights_pk PRIMARY KEY (depart_town, arrival_town)
+);
 
 COMMIT;
 

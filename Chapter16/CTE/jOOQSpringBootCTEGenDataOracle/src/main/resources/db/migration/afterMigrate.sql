@@ -8376,4 +8376,72 @@ select 9, '2004-01-09', 28, 3621, 0.77 from dual union all
 
 select 10, '2004-01-10', 50, 1722, 2.90 from dual;
 
+/*Data for the table `office_flights` */
+
+insert  /*+ ignore_row_on_dupkey_index(office_flights(depart_town, arrival_town)) */ into office_flights(depart_town,arrival_town,distance_km)
+
+select 'Paris', 'Los Angeles', 9080 from dual union all
+
+select 'Los Angeles', 'Paris', 9080 from dual union all
+
+select 'Paris', 'Boston', 5528 from dual union all
+
+select 'Boston', 'Paris', 5528 from dual union all
+
+select 'Paris', 'Sydney', 16950 from dual union all
+
+select 'Sydney', 'Paris', 16950 from dual union all
+
+select 'Paris', 'London', 344 from dual union all
+
+select 'London', 'Paris', 344 from dual union all
+
+select 'Paris', 'Bucharest', 1871 from dual union all
+
+select 'Bucharest', 'Paris', 1871 from dual union all
+
+select 'Los Angeles', 'San Diego', 180 from dual union all
+
+select 'San Diego', 'Los Angeles', 180 from dual union all
+
+select 'Los Angeles', 'Sydney', 12073 from dual union all
+
+select 'Sydney', 'Los Angeles', 12073 from dual union all
+
+select 'San Diego', 'Boston', 4150 from dual union all
+
+select 'Boston', 'San Diego', 4150 from dual union all
+
+select 'Boston', 'New York', 305 from dual union all
+
+select 'New York', 'Boston', 305 from dual union all
+
+select 'Boston', 'Springfield', 1580 from dual union all
+
+select 'Springfield', 'Boston', 1580 from dual union all
+
+select 'New York', 'Springfield', 1329 from dual union all
+
+select 'Springfield', 'New York', 1329 from dual union all
+
+select 'New York', 'Sydney', 15979 from dual union all
+
+select 'Sydney', 'New York', 15979 from dual union all
+
+select 'New York', 'London', 5567 from dual union all
+
+select 'London', 'New York', 5567 from dual union all
+
+select 'Sydney', 'Tokyo', 7819 from dual union all
+
+select 'Tokyo', 'Sydney', 7819 from dual union all
+
+select 'Sydney', 'London', 16983 from dual union all
+
+select 'London', 'Sydney', 16983 from dual union all
+
+select 'London', 'Tokyo', 9559 from dual union all
+
+select 'Tokyo', 'London', 9559 from dual;
+
 /* END */
