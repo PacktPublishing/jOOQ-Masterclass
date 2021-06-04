@@ -3,8 +3,10 @@ package com.classicmodels.repository;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
+import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.select;
+import static org.jooq.impl.DSL.table;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,7 +44,9 @@ public class ClassicModelsRepository {
         );
     }
 
-    // updatable views
+    // updatable view in MySQL, SQL Server and Oracle
+    // in PostgreSQL, this view is NOT updatable!!!
+    // "Views that do not select from a single table or view are not automatically updatable."
     public void updatableViews() {
 
         ctx.dropViewIfExists("employees_and_sales").execute();
@@ -53,8 +57,21 @@ public class ClassicModelsRepository {
                         .on(EMPLOYEE.EMPLOYEE_NUMBER.eq(SALE.EMPLOYEE_NUMBER)))
                 .execute();
 
-        System.out.println(
-                ctx.select().from(name("employees_and_sales")).fetch()
+        System.out.println("Before update:\n" 
+                + ctx.select().from(name("employees_and_sales")).fetch()
         );
+        
+        /* - this will not work!
+        ctx.update(table(name("employees_and_sales")))
+                .set(field(name("sale")), 
+                        field(name("sale"),  Double.class)
+                                .plus(field(name("sale")).mul(0.25)))                
+                .where(field(name("sale")).gt(5000))
+                .execute();
+        
+        System.out.println("After update:\n" 
+                + ctx.select().from(name("employees_and_sales")).fetch()
+        );
+        */
     }
 }

@@ -13,8 +13,8 @@ public class ClassicModelsService {
     }
 
     public void callAll() {
-        
+
         classicModelsRepository.roViews();
-		classicModelsRepository.updatableViews();
+        classicModelsRepository.updatableViews();
     }
 }
