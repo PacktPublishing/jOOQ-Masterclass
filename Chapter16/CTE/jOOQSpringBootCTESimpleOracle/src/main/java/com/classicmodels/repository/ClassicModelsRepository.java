@@ -2,6 +2,7 @@ package com.classicmodels.repository;
 
 import java.math.BigDecimal;
 import static jooq.generated.tables.Employee.EMPLOYEE;
+import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Productline.PRODUCTLINE;
@@ -13,9 +14,12 @@ import org.jooq.Record2;
 import static org.jooq.impl.DSL.avg;
 import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.field;
+import static org.jooq.impl.DSL.inline;
+import static org.jooq.impl.DSL.values;
 import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.min;
 import static org.jooq.impl.DSL.name;
+import static org.jooq.impl.DSL.row;
 import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.sum;
 import org.springframework.stereotype.Repository;
@@ -204,7 +208,7 @@ public class ClassicModelsRepository {
                 .orderBy(field(name("cte_productline_counts", "product_line")))
                 .fetch();
     }
-    
+
     // nested CTEs
     public void cte8() {
 
@@ -247,6 +251,68 @@ public class ClassicModelsRepository {
                 .from(name("avg_per_office"))
                 .crossJoin(name("min_salary_office"))
                 .crossJoin(name("max_salary_office"))
+                .fetch();
+    }
+
+    // materialized CTE
+    public void cte10() {
+
+        ctx.with("cte", "customer_number", "order_line_number", "sum_price", "sum_quantity")
+                // .asMaterialized(...) - same as using "as()" because PostgreSQL automatically materialize this CTE
+                // .asNotMaterialized(...) - has effect because it suppress PostgreSQL materialization !!!
+                .as(select(ORDER.CUSTOMER_NUMBER, ORDERDETAIL.ORDER_LINE_NUMBER,
+                        sum(ORDERDETAIL.PRICE_EACH),
+                        sum(ORDERDETAIL.QUANTITY_ORDERED))
+                        .from(ORDER)
+                        .join(ORDERDETAIL)
+                        .on(ORDER.ORDER_ID.eq(ORDERDETAIL.ORDER_ID))
+                        .groupBy(ORDERDETAIL.ORDER_LINE_NUMBER, ORDER.CUSTOMER_NUMBER))
+                .select(field(name("customer_number")), inline("Order Line Number").as("metric"),
+                        field(name("order_line_number"))).from(name("cte")) // 1
+                .unionAll(select(field(name("customer_number")), inline("Sum Price").as("metric"),
+                        field(name("sum_price"))).from(name("cte"))) // 2                    
+                .unionAll(select(field(name("customer_number")), inline("Sum Quantity").as("metric"),
+                        field(name("sum_quantity"))).from(name("cte"))) // 3                   
+                .fetch();
+
+        // using cross apply optimize the previous query
+        ctx.with("cte", "customer_number", "order_line_number", "sum_price", "sum_quantity")
+                .as(select(ORDER.CUSTOMER_NUMBER, ORDERDETAIL.ORDER_LINE_NUMBER,
+                        sum(ORDERDETAIL.PRICE_EACH),
+                        sum(ORDERDETAIL.QUANTITY_ORDERED))
+                        .from(ORDER)
+                        .join(ORDERDETAIL)
+                        .on(ORDER.ORDER_ID.eq(ORDERDETAIL.ORDER_ID))
+                        .groupBy(ORDERDETAIL.ORDER_LINE_NUMBER, ORDER.CUSTOMER_NUMBER))
+                .select(field(name("customer_number")),
+                        field(name("t", "metric")), field(name("t", "value")))
+                .from(name("cte")).crossApply(
+                select(inline("Order Line Number").as("metric"),
+                        field(name("order_line_number")).as("value"))
+                        .unionAll(select(inline("Sum Price").as("metric"),
+                                field(name("sum_price")).as("value")))
+                        .unionAll(select(inline("Sum Quantity").as("metric"),
+                                field(name("sum_quantity")).as("value")))
+                        .asTable("t"))
+                .fetch();
+
+        // using values() constructor optimize even further the previous query
+        ctx.with("cte", "customer_number", "order_line_number", "sum_price", "sum_quantity")
+                .as(select(ORDER.CUSTOMER_NUMBER, ORDERDETAIL.ORDER_LINE_NUMBER,
+                        sum(ORDERDETAIL.PRICE_EACH),
+                        sum(ORDERDETAIL.QUANTITY_ORDERED))
+                        .from(ORDER)
+                        .join(ORDERDETAIL)
+                        .on(ORDER.ORDER_ID.eq(ORDERDETAIL.ORDER_ID))
+                        .groupBy(ORDERDETAIL.ORDER_LINE_NUMBER, ORDER.CUSTOMER_NUMBER))
+                .select(field(name("customer_number")),
+                        field(name("t", "metric")), field(name("t", "value")))
+                .from(name("cte")).crossApply(
+                values(row("Order Line Number",
+                        field(name("cte", "order_line_number"))),
+                        row("Sum Price", field(name("cte", "sum_price"))),
+                        row("Sum Quantity", field(name("cte", "sum_quantity"))))
+                        .as("t", "metric", "value"))
                 .fetch();
     }
 }

@@ -18,12 +18,14 @@ public class ClassicModelsService {
         classicModelsRepository.cte2();
         classicModelsRepository.cte3();
         classicModelsRepository.cte4();
-        
+
         classicModelsRepository.cte5();
         classicModelsRepository.cte6();
         classicModelsRepository.cte7();
-        
+
         classicModelsRepository.cte8();
         classicModelsRepository.cte9();
+
+        classicModelsRepository.cte10();
     }
 }

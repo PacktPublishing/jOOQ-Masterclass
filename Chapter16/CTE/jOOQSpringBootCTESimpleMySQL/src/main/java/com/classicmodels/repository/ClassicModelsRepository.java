@@ -2,6 +2,7 @@ package com.classicmodels.repository;
 
 import java.math.BigDecimal;
 import static jooq.generated.tables.Employee.EMPLOYEE;
+import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Productline.PRODUCTLINE;
@@ -13,11 +14,14 @@ import org.jooq.Record2;
 import static org.jooq.impl.DSL.avg;
 import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.field;
+import static org.jooq.impl.DSL.inline;
+import static org.jooq.impl.DSL.lateral;
 import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.min;
 import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.sum;
+import static org.jooq.impl.DSL.table;
 import static org.jooq.impl.DSL.with;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -205,7 +209,7 @@ public class ClassicModelsRepository {
                 .orderBy(field(name("cte_productline_counts", "product_line")))
                 .fetch();
     }
-    
+
     // nested CTEs
     public void cte8() {
 
@@ -250,7 +254,7 @@ public class ClassicModelsRepository {
                 .crossJoin(name("max_salary_office"))
                 .fetch();
     }
-    
+
     // nested CTE as FROM WITH
     public void cte10() {
 
@@ -266,6 +270,49 @@ public class ClassicModelsRepository {
                                 .groupBy(field("min_sal"))))
                 .select()
                 .from(name("t2"))
+                .fetch();
+    }
+
+    // materialized CTE
+    public void cte11() {
+
+        ctx.with("cte")
+                // .asMaterialized(...) - has no effect
+                // .asNotMaterialized(...) - has no effect
+                .as(select(ORDER.CUSTOMER_NUMBER, ORDERDETAIL.ORDER_LINE_NUMBER,
+                        sum(ORDERDETAIL.PRICE_EACH).as("sum_price"),
+                        sum(ORDERDETAIL.QUANTITY_ORDERED).as("sum_quantity"))
+                        .from(ORDER)
+                        .join(ORDERDETAIL)
+                        .on(ORDER.ORDER_ID.eq(ORDERDETAIL.ORDER_ID))
+                        .groupBy(ORDERDETAIL.ORDER_LINE_NUMBER, ORDER.CUSTOMER_NUMBER))
+                .select(field(name("customer_number")), inline("Order Line Number").as("metric"),
+                        field(name("order_line_number"))).from(name("cte")) // 1
+                .unionAll(select(field(name("customer_number")), inline("Sum Price").as("metric"),
+                        field(name("sum_price"))).from(name("cte"))) // 2                    
+                .unionAll(select(field(name("customer_number")), inline("Sum Quantity").as("metric"),
+                        field(name("sum_quantity"))).from(name("cte"))) // 3                   
+                .fetch();
+
+        // use lateral join
+        ctx.with("cte")
+                .as(select(ORDER.CUSTOMER_NUMBER, ORDERDETAIL.ORDER_LINE_NUMBER,
+                        sum(ORDERDETAIL.PRICE_EACH).as("sum_price"),
+                        sum(ORDERDETAIL.QUANTITY_ORDERED).as("sum_quantity"))
+                        .from(ORDER)
+                        .join(ORDERDETAIL)
+                        .on(ORDER.ORDER_ID.eq(ORDERDETAIL.ORDER_ID))
+                        .groupBy(ORDERDETAIL.ORDER_LINE_NUMBER, ORDER.CUSTOMER_NUMBER))
+                .select(field(name("customer_number")),
+                        field(name("t", "metric")), field(name("t", "value")))
+                .from(table(name("cte")), lateral(
+                        select(inline("Order Line Number").as("metric"),
+                                field(name("order_line_number")).as("value"))
+                                .unionAll(select(inline("Sum Price").as("metric"),
+                                        field(name("sum_price")).as("value")))
+                                .unionAll(select(inline("Sum Quantity").as("metric"),
+                                        field(name("sum_quantity")).as("value"))))
+                        .as("t"))
                 .fetch();
     }
 }
