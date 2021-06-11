@@ -2,6 +2,9 @@ package com.classicmodels.repository;
 
 import java.math.BigDecimal;
 import static jooq.generated.tables.Employee.EMPLOYEE;
+import static jooq.generated.tables.Manager.MANAGER;
+import static jooq.generated.tables.Office.OFFICE;
+import static jooq.generated.tables.OfficeHasManager.OFFICE_HAS_MANAGER;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import static jooq.generated.tables.Product.PRODUCT;
 import jooq.generated.tables.Sale;
@@ -18,6 +21,7 @@ import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.row;
 import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.sum;
+import static org.jooq.impl.DSL.values;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,15 +41,39 @@ public class ClassicModelsRepository {
         Table<?> t1 = select(inline(1).as("one")).asTable();
         // or, Table<?> t1 = table(select(inline(1).as("one")));
 
-        // select `alias_30260683`.`one` from (select 1 as `one` from dual) as `alias_30260683`
+        // select "alias_30260683"."one" from (select 1 "one" from dual) "alias_30260683"
         ctx.selectFrom(t1).fetch();
 
         // explicit alias
         Table<?> t2 = select(inline(1).as("one")).asTable("t");
         // or, Table<?> t2 = table(select(inline(1).as("one"))).as("t");
 
-        // select `t`.`one` from (select 1 as `one` from dual) as `t`
+        // select "t"."one" from (select 1 "one" from dual) "t"
         ctx.selectFrom(t2).fetch();
+
+        Table<?> t3 = select().from(values(row(1, "John"), row(2, "Mary"), row(3, "Kelly"))
+                        .as("t", "id", "name")).asTable();
+        
+        // select "alias_116047195"."id", "alias_116047195"."name" from 
+        // (select "t"."id", "t"."name" from (select 1 "id", 'John' "name" from dual union all 
+        // select 2, 'Mary' from dual union all select 3, 'Kelly' from dual) "t") "alias_116047195"
+        ctx.selectFrom(t3).fetch();
+        
+        Table<?> t4 = select().from(values(row(1, "John"), 
+                row(2, "Mary"), row(3, "Kelly"))).asTable("t", "id", "name");
+        
+        // select "t"."id", "t"."name" from (select null "id", null "name" from dual where 1 = 0 
+        // union all select "v"."c1", "v"."c2" from (select 1 "c1", 'John' "c2" from dual union all 
+        // select 2, 'Mary' from dual union all select 3, 'Kelly' from dual) "v") "t"
+        ctx.selectFrom(t4).fetch();
+        
+        Table<?> t5 = select().from(values(row(1, "John"), 
+                row(2, "Mary"), row(3, "Kelly")).as("x", "x1", "x2")).asTable("t", "id", "name");
+        
+        // select "t"."id", "t"."name" from (select null "id", null "name" from dual where 1 = 0 
+        // union all select "x"."x1", "x"."x2" from (select 1 "x1", 'John' "x2" from dual union all 
+        // select 2, 'Mary' from dual union all select 3, 'Kelly' from dual) "x") "t"
+        ctx.selectFrom(t5).fetch();
     }
 
     // a "nested SELECT" is often called a "derived table"
@@ -216,10 +244,30 @@ public class ClassicModelsRepository {
                         .where(SALE.EMPLOYEE_NUMBER.eq(EMPLOYEE.EMPLOYEE_NUMBER)).asTable("t")))
                 .fetch();
 
+        ctx.select(MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME,
+                field(name("officeCode")), field(name("city")), field(name("state")))
+                .from(MANAGER, lateral(select(OFFICE.OFFICE_CODE.as("officeCode"),
+                        OFFICE.CITY.as("city"), OFFICE.STATE.as("state"))
+                        .from(OFFICE).join(OFFICE_HAS_MANAGER)
+                        .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))
+                        .where(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID)).asTable("t")))
+                .orderBy(MANAGER.MANAGER_ID)
+                .fetch();
+
         // CROSS APPLY
         ctx.select().from(EMPLOYEE)
                 .crossApply(select(count().as("sales_count")).from(SALE)
                         .where(SALE.EMPLOYEE_NUMBER.eq(EMPLOYEE.EMPLOYEE_NUMBER)).asTable("t"))
+                .fetch();
+
+        ctx.select(MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME,
+                field(name("officeCode")), field(name("city")), field(name("state")))
+                .from(MANAGER).crossApply(select(OFFICE.OFFICE_CODE.as("officeCode"),
+                OFFICE.CITY.as("city"), OFFICE.STATE.as("state"))
+                .from(OFFICE).join(OFFICE_HAS_MANAGER)
+                .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))
+                .where(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID)).asTable("t"))
+                .orderBy(MANAGER.MANAGER_ID)
                 .fetch();
     }
 }

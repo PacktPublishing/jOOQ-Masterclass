@@ -19,6 +19,6 @@ public class ClassicModelsService {
         classicModelsRepository.nestedSelectDerivedTableMultipleColumns();
         classicModelsRepository.multipleNestedSelectDerivedTables();
         classicModelsRepository.selectAsteriskAndFields();
-        classicModelsRepository.derivedTableAndLateral();
+        classicModelsRepository.derivedTableAndCrossApply();
     }
 }

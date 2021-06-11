@@ -2,6 +2,9 @@ package com.classicmodels.repository;
 
 import java.math.BigDecimal;
 import static jooq.generated.tables.Employee.EMPLOYEE;
+import static jooq.generated.tables.Manager.MANAGER;
+import static jooq.generated.tables.Office.OFFICE;
+import static jooq.generated.tables.OfficeHasManager.OFFICE_HAS_MANAGER;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import static jooq.generated.tables.Product.PRODUCT;
 import jooq.generated.tables.Sale;
@@ -214,6 +217,16 @@ public class ClassicModelsRepository {
         ctx.select().from(EMPLOYEE, lateral(
                 select(count().as("sales_count")).from(SALE)
                         .where(SALE.EMPLOYEE_NUMBER.eq(EMPLOYEE.EMPLOYEE_NUMBER))).asTable("t"))
-                .fetch();        
+                .fetch();
+
+        ctx.select(MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME,
+                field(name("officeCode")), field(name("city")), field(name("state")))
+                .from(MANAGER, lateral(select(OFFICE.OFFICE_CODE.as("officeCode"),
+                        OFFICE.CITY.as("city"), OFFICE.STATE.as("state"))
+                        .from(OFFICE).join(OFFICE_HAS_MANAGER)
+                        .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))
+                        .where(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID)).asTable("t")))
+                .orderBy(MANAGER.MANAGER_ID)
+                .fetch();
     }
 }
