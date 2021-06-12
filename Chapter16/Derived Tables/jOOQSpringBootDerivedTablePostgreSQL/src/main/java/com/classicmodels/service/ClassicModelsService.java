@@ -14,10 +14,10 @@ public class ClassicModelsService {
 
     public void callAll() {
 
-        classicModelsRepository.unamedDerivedTable();
-        classicModelsRepository.nestedSelectDerivedTableSingleColumn();
-        classicModelsRepository.nestedSelectDerivedTableMultipleColumns();
-        classicModelsRepository.multipleNestedSelectDerivedTables();
+        classicModelsRepository.unamedDerivedTable();        
+        classicModelsRepository.nestedSelectDerivedTable();
+        classicModelsRepository.useExtractedFieldsInDerivedTableAndQuery();
+        classicModelsRepository.noNeedToTransformIntoTable();
         classicModelsRepository.selectAsteriskAndFields();
         classicModelsRepository.derivedTableAndLateral();
     }

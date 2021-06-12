@@ -41,233 +41,270 @@ public class ClassicModelsRepository {
         Table<?> t1 = select(inline(1).as("one")).asTable();
         // or, Table<?> t1 = table(select(inline(1).as("one")));
 
-        // select "alias_30260683"."one" from (select 1 "one" from dual) "alias_30260683"
+        // select "alias_30260683"."one" from (select 1 as "one") as "alias_30260683"
         ctx.selectFrom(t1).fetch();
 
         // explicit alias
         Table<?> t2 = select(inline(1).as("one")).asTable("t");
         // or, Table<?> t2 = table(select(inline(1).as("one"))).as("t");
 
-        // select "t"."one" from (select 1 "one" from dual) "t"
+        // select "t"."one" from (select 1 as "one") as "t"
         ctx.selectFrom(t2).fetch();
 
-        Table<?> t3 = select().from(values(row(1, "John"), row(2, "Mary"), row(3, "Kelly"))
-                        .as("t", "id", "name")).asTable();
-        
-        // select "alias_116047195"."id", "alias_116047195"."name" from 
-        // (select "t"."id", "t"."name" from (select 1 "id", 'John' "name" from dual union all 
-        // select 2, 'Mary' from dual union all select 3, 'Kelly' from dual) "t") "alias_116047195"
-        ctx.selectFrom(t3).fetch();
-        
-        Table<?> t4 = select().from(values(row(1, "John"), 
+        Table<?> t31 = values(row(1, "John"), row(2, "Mary"), row(3, "Kelly"))
+                .as("t", "id", "name"); // or, .asTable("t", "id", "name");
+        Table<?> t32 = select().from(values(row(1, "John"), row(2, "Mary"), row(3, "Kelly"))
+                .as("t", "id", "name")).asTable();
+
+        // select "t"."id", "t"."name" from (values (1, 'John'), (2, 'Mary'), (3, 'Kelly')) as "t" ("id", "name")
+        ctx.selectFrom(t31).fetch();
+
+        // select "alias_116047195"."id", "alias_116047195"."name" from (
+        // select "t"."id", "t"."name" from (values (1, 'John'), (2, 'Mary'), (3, 'Kelly')) 
+        // as "t" ("id", "name")) as "alias_116047195"
+        ctx.selectFrom(t32).fetch();
+
+        Table<?> t4 = select().from(values(row(1, "John"),
                 row(2, "Mary"), row(3, "Kelly"))).asTable("t", "id", "name");
-        
-        // select "t"."id", "t"."name" from (select null "id", null "name" from dual where 1 = 0 
-        // union all select "v"."c1", "v"."c2" from (select 1 "c1", 'John' "c2" from dual union all 
-        // select 2, 'Mary' from dual union all select 3, 'Kelly' from dual) "v") "t"
+
+        // select "t"."id", "t"."name" from (select "v"."c1", "v"."c2" from (values (1, 'John'), 
+        // (2, 'Mary'), (3, 'Kelly')) as "v" ("c1", "c2")) as "t" ("id", "name")
         ctx.selectFrom(t4).fetch();
-        
-        Table<?> t5 = select().from(values(row(1, "John"), 
+
+        Table<?> t5 = select().from(values(row(1, "John"),
                 row(2, "Mary"), row(3, "Kelly")).as("x", "x1", "x2")).asTable("t", "id", "name");
-        
-        // select "t"."id", "t"."name" from (select null "id", null "name" from dual where 1 = 0 
-        // union all select "x"."x1", "x"."x2" from (select 1 "x1", 'John' "x2" from dual union all 
-        // select 2, 'Mary' from dual union all select 3, 'Kelly' from dual) "x") "t"
+
+        // select "t"."id", "t"."name" from (select "x"."x1", "x"."x2" from (values (1, 'John'), 
+        // (2, 'Mary'), (3, 'Kelly')) as "x" ("x1", "x2")) as "t" ("id", "name")
         ctx.selectFrom(t5).fetch();
     }
 
-    // a "nested SELECT" is often called a "derived table"
-    public void nestedSelectDerivedTableSingleColumn() {
+    public void nestedSelectDerivedTable() {
 
-        // ---SUBQUERY HAVING A SINGLE COLUMN---
-        
-        // derived table as nested SELECT
-        ctx.selectFrom(PRODUCT)
-                .where(PRODUCT.PRODUCT_ID.in(
-                        select(ORDERDETAIL.PRODUCT_ID).from(ORDERDETAIL)
-                                .where(ORDERDETAIL.QUANTITY_ORDERED.gt(80L))))
-                .fetch();
+        // jOOQ generates the derived table alias                
+        System.out.println("EXAMPLE 1.1:\n"
+                + ctx.select().from(select(ORDERDETAIL.PRODUCT_ID, ORDERDETAIL.PRICE_EACH).from(ORDERDETAIL)
+                        .where(ORDERDETAIL.QUANTITY_ORDERED.gt(50L)))
+                        .innerJoin(PRODUCT)
+                        .on(field(name("PRICE_EACH")).eq(PRODUCT.BUY_PRICE))
+                        .fetch());
 
-        // prefer to extract the nested SELECT via field() 
-        // since there is a single column fetched        
-        Field<Long> f = field(select(ORDERDETAIL.PRODUCT_ID).from(ORDERDETAIL)
-                .where(ORDERDETAIL.QUANTITY_ORDERED.gt(80L)));
+        // explicit derived table alias, but not required by jOOQ
+        System.out.println("EXAMPLE 1.2:\n"
+                + ctx.select().from(select(ORDERDETAIL.PRODUCT_ID, ORDERDETAIL.PRICE_EACH).from(ORDERDETAIL)
+                        .where(ORDERDETAIL.QUANTITY_ORDERED.gt(50L)).asTable("T"))
+                        .innerJoin(PRODUCT)
+                        .on(field(name("T", "PRICE_EACH")).eq(PRODUCT.BUY_PRICE))
+                        .fetch());
 
-        // this is not type-safe, you can replace Long with other type (e.g., String)
-        // Field<Long> f = select(ORDERDETAIL.PRODUCT_ID).from(ORDERDETAIL)
-        //      .where(ORDERDETAIL.QUANTITY_ORDERED.gt(80L)).asField();
-        ctx.selectFrom(PRODUCT)
-                .where(PRODUCT.PRODUCT_ID.in(f))
-                .fetch();
-
-        // avoid this approach, prefer above 
-        Table<?> t = select(ORDERDETAIL.PRODUCT_ID).from(ORDERDETAIL)
-                .where(ORDERDETAIL.QUANTITY_ORDERED.gt(80L)).asTable("t");
-        // or, Table<?> t = table(select(ORDERDETAIL.PRODUCT_ID).from(ORDERDETAIL)
-        //             .where(ORDERDETAIL.QUANTITY_ORDERED.gt(80L))).as("t");
-
-        // this also works, but jOOQ will attach the alias for the derived table
-        // var t = select(ORDERDETAIL.PRODUCT_ID).from(ORDERDETAIL)
-        //        .where(ORDERDETAIL.QUANTITY_ORDERED.gt(80L));
-        ctx.select().from(PRODUCT, t)
-                .where(PRODUCT.PRODUCT_ID.in(t.field(name("product_id"))))
-                .fetch();
-
-        ctx.selectFrom(PRODUCT)
-                .where(PRODUCT.PRODUCT_ID.in(
-                        select(t.field(name("product_id"), Long.class)).from(t)))
-                .fetch();
-    }
-
-    // a "nested SELECT" is often called a "derived table"
-    public void nestedSelectDerivedTableMultipleColumns() {
-
-        // ---SUBQUERY HAVING MULTIPLE COLUMNS---        
-        
-        // EXAMPLE 1
-        ctx.selectFrom(PRODUCT)
-                .where(row(PRODUCT.PRODUCT_ID, PRODUCT.BUY_PRICE).in(
-                        select(ORDERDETAIL.PRODUCT_ID, ORDERDETAIL.PRICE_EACH).from(ORDERDETAIL)
-                                .where(ORDERDETAIL.QUANTITY_ORDERED.gt(50L))))
-                .fetch();
+        // without explicit derived table alias this query leads to an error caused by ambiguous reference of "product_id"
+        System.out.println("EXAMPLE 1.3:\n"
+                + ctx.select(PRODUCT.PRODUCT_LINE, PRODUCT.PRODUCT_NAME, field(name("T", "PRICE_EACH")))
+                        .from(select(ORDERDETAIL.PRODUCT_ID, ORDERDETAIL.PRICE_EACH).from(ORDERDETAIL)
+                                .where(ORDERDETAIL.QUANTITY_ORDERED.gt(50L)).asTable("T"))
+                        .innerJoin(PRODUCT)
+                        .on(field(name("T", "PRODUCT_ID")).eq(PRODUCT.PRODUCT_ID))
+                        .fetch());
 
         Table<?> t = select(ORDERDETAIL.PRODUCT_ID, ORDERDETAIL.PRICE_EACH).from(ORDERDETAIL)
-                .where(ORDERDETAIL.QUANTITY_ORDERED.gt(50L)).asTable("t");
+                .where(ORDERDETAIL.QUANTITY_ORDERED.gt(50L)).asTable("T");
         // or, Table<?> t = table(select(ORDERDETAIL.PRODUCT_ID, ORDERDETAIL.PRICE_EACH).from(ORDERDETAIL)
-        //                        .where(ORDERDETAIL.QUANTITY_ORDERED.gt(50L))).as("t");
+        //                        .where(ORDERDETAIL.QUANTITY_ORDERED.gt(50L))).as("T");
 
-        ctx.selectFrom(PRODUCT)
-                .where(row(PRODUCT.PRODUCT_ID, PRODUCT.BUY_PRICE).in(
-                        select(t.field(name("product_id"), Long.class),
-                                t.field(name("price_each"), BigDecimal.class)).from(t)))
-                .fetch();
+        // this also works, but jOOQ will attach the alias for the derived table
+        // var t = select(ORDERDETAIL.PRODUCT_ID, ORDERDETAIL.PRICE_EACH).from(ORDERDETAIL)
+        //        .where(ORDERDETAIL.QUANTITY_ORDERED.gt(50L));
+        // var t = select(ORDERDETAIL.PRODUCT_ID, ORDERDETAIL.PRICE_EACH).from(ORDERDETAIL)
+        //       .where(ORDERDETAIL.QUANTITY_ORDERED.gt(50L)).asTable();
+        // var t = table(select(ORDERDETAIL.PRODUCT_ID, ORDERDETAIL.PRICE_EACH).from(ORDERDETAIL)
+        //        .where(ORDERDETAIL.QUANTITY_ORDERED.gt(50L)));
+        
+        System.out.println("EXAMPLE 1.4:\n"
+                + ctx.select().from(t)
+                        .innerJoin(PRODUCT)
+                        .on(t.field(name("PRICE_EACH"), BigDecimal.class).eq(PRODUCT.BUY_PRICE))
+                        .fetch());
 
-        // using <T> Field<T> field(Field<T> field)
-        ctx.selectFrom(PRODUCT)
-                .where(row(PRODUCT.PRODUCT_ID, PRODUCT.BUY_PRICE).in(
-                        select(t.field(ORDERDETAIL.PRODUCT_ID), t.field(ORDERDETAIL.PRICE_EACH)).from(t)))
-                .fetch();
+        System.out.println("EXAMPLE 1.5:\n"
+                + ctx.select(PRODUCT.PRODUCT_LINE, PRODUCT.PRODUCT_NAME, t.field(name("PRICE_EACH")))
+                        .from(t)
+                        .innerJoin(PRODUCT)
+                        .on(t.field(name("PRODUCT_ID"), Long.class).eq(PRODUCT.PRODUCT_ID))
+                        .fetch());
 
-        // EXAMPLE 2 
-        Field<BigDecimal> avgs = avg(ORDERDETAIL.PRICE_EACH).as("avgs");
-        Field<Long> order = ORDERDETAIL.ORDER_ID.as("order");
+        // using <T> Field<T> field(Field<T> field) to gain type-safety        
+        System.out.println("EXAMPLE 1.6:\n"
+                + ctx.select(PRODUCT.PRODUCT_LINE, PRODUCT.PRODUCT_NAME, t.field(ORDERDETAIL.PRICE_EACH))
+                        .from(t)
+                        .innerJoin(PRODUCT)
+                        .on(t.field(PRODUCT.PRODUCT_ID).eq(PRODUCT.PRODUCT_ID))
+                        .fetch());
 
-        ctx.select(ORDERDETAIL.ORDER_ID, ORDERDETAIL.ORDERDETAIL_ID,
-                ORDERDETAIL.PRODUCT_ID, ORDERDETAIL.PRICE_EACH)
-                .from(ORDERDETAIL, select(avgs, order)
-                        .from(ORDERDETAIL)
-                        .groupBy(ORDERDETAIL.ORDER_ID))
-                .where(ORDERDETAIL.ORDER_ID.eq(order)
-                        .and(ORDERDETAIL.PRICE_EACH.lt(avgs)))
-                .orderBy(ORDERDETAIL.ORDER_ID)
-                .fetch();
-
-        // extract the derived table
-        Table<?> p = select(avgs, order)
-                .from(ORDERDETAIL)
-                .groupBy(ORDERDETAIL.ORDER_ID)
-                .asTable("p");
-
-        ctx.select(ORDERDETAIL.ORDER_ID, ORDERDETAIL.ORDERDETAIL_ID,
-                ORDERDETAIL.PRODUCT_ID, ORDERDETAIL.PRICE_EACH)
-                .from(ORDERDETAIL, p)
-                .where(ORDERDETAIL.ORDER_ID.eq(order)
-                        .and(ORDERDETAIL.PRICE_EACH.lt(avgs)))
-                .orderBy(ORDERDETAIL.ORDER_ID)
-                .fetch();
+        System.out.println("EXAMPLE 1.7:\n"
+                + ctx.select().from(t)
+                        .innerJoin(PRODUCT)
+                        .on(t.field(ORDERDETAIL.PRICE_EACH).eq(PRODUCT.BUY_PRICE))
+                        .fetch());
     }
 
-    // a "nested SELECT" is often called a "derived table"
-    public void multipleNestedSelectDerivedTables() {
+    public void useExtractedFieldsInDerivedTableAndQuery() {
 
-        ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
-                .from(EMPLOYEE)
-                .where(select(avg(SALE.SALE_)).from(SALE).lt(
-                        (select(sum(SALE.SALE_)).from(SALE)
-                                .where(EMPLOYEE.EMPLOYEE_NUMBER
-                                        .eq(SALE.EMPLOYEE_NUMBER)))))
-                .fetch();
+        Field<BigDecimal> avg = avg(ORDERDETAIL.PRICE_EACH).as("AVG");
+        Field<Long> ord = ORDERDETAIL.ORDER_ID.as("ORD");
 
-        // extract the derived tables
-        Field<BigDecimal> f1 = field(select(avg(SALE.SALE_)).from(SALE));
-        Field<BigDecimal> f2 = field(select(sum(SALE.SALE_)).from(SALE)
+        System.out.println("EXAMPLE 2.1:\n"
+                + ctx.select(ORDERDETAIL.ORDER_ID, ORDERDETAIL.ORDERDETAIL_ID,
+                        ORDERDETAIL.PRODUCT_ID, ORDERDETAIL.PRICE_EACH)
+                        .from(ORDERDETAIL, select(avg, ord)
+                                .from(ORDERDETAIL)
+                                .groupBy(ORDERDETAIL.ORDER_ID))
+                        .where(ORDERDETAIL.ORDER_ID.eq(ord)
+                                .and(ORDERDETAIL.PRICE_EACH.lt(avg)))
+                        .orderBy(ORDERDETAIL.ORDER_ID)
+                        .fetch());
+
+        // extract the derived table
+        Table<?> t = select(avg, ord)
+                .from(ORDERDETAIL)
+                .groupBy(ORDERDETAIL.ORDER_ID)
+                .asTable("T");
+
+        System.out.println("EXAMPLE 2.2:\n"
+                + ctx.select(ORDERDETAIL.ORDER_ID, ORDERDETAIL.ORDERDETAIL_ID,
+                        ORDERDETAIL.PRODUCT_ID, ORDERDETAIL.PRICE_EACH)
+                        .from(ORDERDETAIL, t)
+                        .where(ORDERDETAIL.ORDER_ID.eq(ord)           // unqualified
+                                .and(ORDERDETAIL.PRICE_EACH.lt(avg))) // unqualified
+                        .orderBy(ORDERDETAIL.ORDER_ID)
+                        .fetch());
+        
+        System.out.println("EXAMPLE 2.3:\n"
+                + ctx.select(ORDERDETAIL.ORDER_ID, ORDERDETAIL.ORDERDETAIL_ID,
+                        ORDERDETAIL.PRODUCT_ID, ORDERDETAIL.PRICE_EACH)
+                        .from(ORDERDETAIL, t)
+                        .where(ORDERDETAIL.ORDER_ID.eq(t.field(ord))            // qualified
+                                .and(ORDERDETAIL.PRICE_EACH.lt(t.field(avg))))  // qualified
+                        .orderBy(ORDERDETAIL.ORDER_ID)
+                        .fetch());
+    }
+
+    public void noNeedToTransformIntoTable() {
+
+        // a subquery that can be extracted as a SELECT, no need to trasform it into a derived table
+        System.out.println("EXAMPLE 3.1:\n"
+                + ctx.selectFrom(PRODUCT)
+                        .where(row(PRODUCT.PRODUCT_ID, PRODUCT.BUY_PRICE).in(
+                                select(ORDERDETAIL.PRODUCT_ID, ORDERDETAIL.PRICE_EACH).from(ORDERDETAIL)
+                                        .where(ORDERDETAIL.QUANTITY_ORDERED.gt(50L))))
+                        .fetch());
+
+        var s = select(ORDERDETAIL.PRODUCT_ID, ORDERDETAIL.PRICE_EACH).from(ORDERDETAIL)
+                .where(ORDERDETAIL.QUANTITY_ORDERED.gt(50L));
+
+        System.out.println("EXAMPLE 3.2:\n"
+                + ctx.selectFrom(PRODUCT)
+                        .where(row(PRODUCT.PRODUCT_ID, PRODUCT.BUY_PRICE).in(s))
+                        .fetch());
+
+        System.out.println("EXAMPLE 3.3:\n"
+                + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
+                        .from(EMPLOYEE)
+                        .where(select(avg(SALE.SALE_)).from(SALE).lt(
+                                (select(sum(SALE.SALE_)).from(SALE)
+                                        .where(EMPLOYEE.EMPLOYEE_NUMBER
+                                                .eq(SALE.EMPLOYEE_NUMBER)))))
+                        .fetch());
+
+        // another subquery that can be extracted as a SELECT, no need to trasform it into a derived table
+        var s1 = select(avg(SALE.SALE_)).from(SALE);
+        var s2 = select(sum(SALE.SALE_)).from(SALE)
                 .where(EMPLOYEE.EMPLOYEE_NUMBER
-                        .eq(SALE.EMPLOYEE_NUMBER)));
+                        .eq(SALE.EMPLOYEE_NUMBER));
 
-        ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
-                .from(EMPLOYEE)
-                .where(f1.lt((f2)))
-                .fetch();
+        System.out.println("EXAMPLE 3.4:\n"
+                + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
+                        .from(EMPLOYEE)
+                        .where(s1.lt((s2)))
+                        .fetch());
     }
 
     public void selectAsteriskAndFields() {
 
-        Sale sale1 = SALE.as("t");
-        Table<?> sale2 = SALE.as("t");
-        Table<?> sale3 = ctx.selectFrom(SALE).asTable("t");
+        Sale sale1 = SALE.as("T");
+        Table<?> sale2 = SALE.as("T");
+        Table<?> sale3 = ctx.selectFrom(SALE).asTable("T");
 
         // single SELECT!
-        ctx.select(sale1.fields())
-                .from(sale1)
-                .where(sale1.SALE_.gt(50000.0)).fetch();
+        System.out.println("EXAMPLE 4.1:\n"
+                + ctx.select(sale1.fields())
+                        .from(sale1)
+                        .where(sale1.SALE_.gt(50000.0)).fetch());
 
         // single SELECT!
-        ctx.select(sale2.fields())
-                .from(sale2)
-                .where(sale2.field(name("SALE"), Double.class).gt(50000.0)).fetch();
+        System.out.println("EXAMPLE 4.2:\n"
+                + ctx.select(sale2.fields())
+                        .from(sale2)
+                        .where(sale2.field(name("SALE"), Double.class).gt(50000.0)).fetch());
 
         // nested SELECT!
-        ctx.select(sale3.fields())
-                .from(sale3)
-                .where(sale3.field(name("SALE"), Double.class).gt(50000.0)).fetch();
+        System.out.println("EXAMPLE 4.3:\n"
+                + ctx.select(sale3.fields())
+                        .from(sale3)
+                        .where(sale3.field(name("SALE"), Double.class).gt(50000.0)).fetch());
 
-        // fields() and asterisk()
-        Table<?> t = ctx.select(SALE.EMPLOYEE_NUMBER, count(SALE.SALE_).as("sales_count"))
+        // fields() and asterisk()        
+        Table<?> t = ctx.select(SALE.EMPLOYEE_NUMBER, count(SALE.SALE_).as("SALES_COUNT"))
                 .from(SALE)
-                .groupBy(SALE.EMPLOYEE_NUMBER).asTable("t");
+                .groupBy(SALE.EMPLOYEE_NUMBER).asTable("T");
 
-        ctx.select(t.fields())
-                .from(t)
-                .orderBy(t.field(name("sales_count"))).fetch();
+        System.out.println("EXAMPLE 4.4:\n"
+                + ctx.select(t.fields())
+                        .from(t)
+                        .orderBy(t.field(name("SALES_COUNT"))).fetch());
 
-        ctx.select(t.asterisk(), EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
-                .from(EMPLOYEE, t)
-                .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(t.field(name("employee_number"), Long.class)))
-                .orderBy(t.field(name("sales_count"))).fetch();
+        System.out.println("EXAMPLE 4.5:\n"
+                + ctx.select(t.asterisk(), EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
+                        .from(EMPLOYEE, t)
+                        .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(t.field(name("EMPLOYEE_NUMBER"), Long.class)))
+                        .orderBy(t.field(name("SALES_COUNT"))).fetch());
     }
 
     public void derivedTableAndLateral() {
 
         // LATERAL keyword to connect a derived table to the previous table in the FROM clause
-        ctx.select().from(EMPLOYEE, lateral(
-                select(count().as("sales_count")).from(SALE)
-                        .where(SALE.EMPLOYEE_NUMBER.eq(EMPLOYEE.EMPLOYEE_NUMBER)).asTable("t")))
-                .fetch();
+        System.out.println("EXAMPLE 5.1:\n"
+                + ctx.select().from(EMPLOYEE, lateral(
+                        select(count().as("SALES_COUNT")).from(SALE)
+                                .where(SALE.EMPLOYEE_NUMBER.eq(EMPLOYEE.EMPLOYEE_NUMBER)).asTable("T")))
+                        .fetch());
 
-        ctx.select(MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME,
-                field(name("officeCode")), field(name("city")), field(name("state")))
-                .from(MANAGER, lateral(select(OFFICE.OFFICE_CODE.as("officeCode"),
-                        OFFICE.CITY.as("city"), OFFICE.STATE.as("state"))
-                        .from(OFFICE).join(OFFICE_HAS_MANAGER)
-                        .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))
-                        .where(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID)).asTable("t")))
-                .orderBy(MANAGER.MANAGER_ID)
-                .fetch();
+        System.out.println("EXAMPLE 5.2:\n"
+                + ctx.select(MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME,
+                        field(name("OFFICE_CODE")), field(name("CITY")), field(name("STATE")))
+                        .from(MANAGER, lateral(select(OFFICE.OFFICE_CODE.as("OFFICE_CODE"),
+                                OFFICE.CITY.as("CITY"), OFFICE.STATE.as("STATE"))
+                                .from(OFFICE).join(OFFICE_HAS_MANAGER)
+                                .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))
+                                .where(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID)).asTable("T")))
+                        .orderBy(MANAGER.MANAGER_ID)
+                        .fetch());
 
         // CROSS APPLY
-        ctx.select().from(EMPLOYEE)
-                .crossApply(select(count().as("sales_count")).from(SALE)
-                        .where(SALE.EMPLOYEE_NUMBER.eq(EMPLOYEE.EMPLOYEE_NUMBER)).asTable("t"))
-                .fetch();
+        System.out.println("EXAMPLE 5.3:\n"
+                + ctx.select().from(EMPLOYEE)
+                        .crossApply(select(count().as("SALES_COUNT")).from(SALE)
+                                .where(SALE.EMPLOYEE_NUMBER.eq(EMPLOYEE.EMPLOYEE_NUMBER)).asTable("T"))
+                        .fetch());
 
-        ctx.select(MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME,
-                field(name("officeCode")), field(name("city")), field(name("state")))
-                .from(MANAGER).crossApply(select(OFFICE.OFFICE_CODE.as("officeCode"),
-                OFFICE.CITY.as("city"), OFFICE.STATE.as("state"))
-                .from(OFFICE).join(OFFICE_HAS_MANAGER)
-                .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))
-                .where(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID)).asTable("t"))
-                .orderBy(MANAGER.MANAGER_ID)
-                .fetch();
+        System.out.println("EXAMPLE 5.4:\n"
+                + ctx.select(MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME,
+                        field(name("OFFICE_CODE")), field(name("CITY")), field(name("STATE")))
+                        .from(MANAGER).crossApply(select(OFFICE.OFFICE_CODE.as("OFFICE_CODE"),
+                        OFFICE.CITY.as("CITY"), OFFICE.STATE.as("STATE"))
+                        .from(OFFICE).join(OFFICE_HAS_MANAGER)
+                        .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))
+                        .where(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID)).asTable("T"))
+                        .orderBy(MANAGER.MANAGER_ID)
+                        .fetch());
     }
 }
