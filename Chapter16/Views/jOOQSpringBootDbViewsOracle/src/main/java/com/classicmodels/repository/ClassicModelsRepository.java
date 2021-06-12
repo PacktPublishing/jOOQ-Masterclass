@@ -44,7 +44,7 @@ public class ClassicModelsRepository {
         );
     }
 
-    // updatable views
+    // updatable views - partially updatable
     public void updatableViews() {
 
         ctx.dropViewIfExists("employees_and_sales").execute();

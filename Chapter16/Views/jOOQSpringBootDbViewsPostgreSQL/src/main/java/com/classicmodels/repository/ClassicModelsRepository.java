@@ -3,10 +3,8 @@ package com.classicmodels.repository;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
-import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.select;
-import static org.jooq.impl.DSL.table;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
