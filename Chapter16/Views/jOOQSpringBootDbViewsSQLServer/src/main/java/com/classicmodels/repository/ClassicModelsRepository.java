@@ -48,8 +48,9 @@ public class ClassicModelsRepository {
     public void updatableViews() {
 
         ctx.dropViewIfExists("employees_and_sales").execute();
-        ctx.createView("employees_and_sales", "first_name", "last_name", "sale_id", "sale")
-                .as(select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, SALE.SALE_ID, SALE.SALE_)
+        ctx.createView("employees_and_sales", "first_name", "last_name", "salary", "sale_id", "sale")
+                .as(select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY,
+                        SALE.SALE_ID, SALE.SALE_)
                         .from(EMPLOYEE)
                         .join(SALE)
                         .on(EMPLOYEE.EMPLOYEE_NUMBER.eq(SALE.EMPLOYEE_NUMBER)))
@@ -69,5 +70,19 @@ public class ClassicModelsRepository {
         System.out.println("After update:\n" 
                 + ctx.select().from(name("employees_and_sales")).fetch()
         );
+        
+        // this will not work!!!
+        // this causes "View or function 'employees_and_sales' is not updatable because the modification affects multiple base tables."
+        /*
+        ctx.update(table(name("employees_and_sales")))
+                .set(field(name("sale")),
+                        field(name("sale"), Double.class)
+                                .minus(field(name("sale")).mul(0.25)))
+                .set(field(name("salary")),
+                        field(name("salary"), Integer.class)
+                                .minus(field(name("salary")).mul(0.25)))
+                .where(field(name("sale")).gt(5000))
+                .execute();
+         */
     }
 }
