@@ -116,7 +116,7 @@ public class ClassicModelsRepository {
     public void cte5() {
 
         var cte1 = name("cte_productline_counts")
-                .fields("product_line", "code", "product_count", "description")
+                .fields("product_line", "code", "description", "product_count")
                 .as(select(PRODUCT.PRODUCT_LINE, PRODUCT.CODE, PRODUCTLINE.TEXT_DESCRIPTION,
                         count(PRODUCT.PRODUCT_ID))
                         .from(PRODUCTLINE)
@@ -149,7 +149,7 @@ public class ClassicModelsRepository {
         Field<String> pl = PRODUCT.PRODUCT_LINE;
 
         var cte1 = name("cte_productline_counts")
-                .fields(pl.getName(), "code", "product_count", "description")
+                .fields(pl.getName(), "code", "description", "product_count")
                 .as(select(pl, PRODUCT.CODE, PRODUCTLINE.TEXT_DESCRIPTION,
                         count(PRODUCT.PRODUCT_ID))
                         .from(PRODUCTLINE)

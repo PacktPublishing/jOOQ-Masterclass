@@ -37,7 +37,7 @@ public class ClassicModelsRepository {
     }
 
     public void cte1() {
-
+             
         CommonTableExpression<Record2<Long, BigDecimal>> t = name("cte_sales")
                 .fields("employee_nr", "sales")
                 .as(select(SALE.EMPLOYEE_NUMBER, sum(SALE.SALE_))
@@ -49,7 +49,7 @@ public class ClassicModelsRepository {
                 .from(t)
                 .where(t.field("sales", Double.class)
                         .eq(select(max(t.field("sales", Double.class))).from(t)))
-                .fetch();
+                .fetch();               
     }
 
     public void cte2() {
@@ -110,14 +110,14 @@ public class ClassicModelsRepository {
                 .from(name("cte_sales"))
                 .where(field(name("sales"))
                         .eq(select(max(field(name("sales")))).from(name("cte_sales"))))
-                .fetch();
+                .fetch();                   
     }
 
     // two CTEs
     public void cte5() {
 
         var cte1 = name("cte_productline_counts")
-                .fields("product_line", "code", "product_count", "description")
+                .fields("product_line", "code", "description", "product_count")
                 .as(select(PRODUCT.PRODUCT_LINE, PRODUCT.CODE, PRODUCTLINE.TEXT_DESCRIPTION,
                         count(PRODUCT.PRODUCT_ID))
                         .from(PRODUCTLINE)
@@ -150,7 +150,7 @@ public class ClassicModelsRepository {
         Field<String> pl = PRODUCT.PRODUCT_LINE;
 
         var cte1 = name("cte_productline_counts")
-                .fields(pl.getName(), "code", "product_count", "description")
+                .fields(pl.getName(), "code", "description", "product_count")
                 .as(select(pl, PRODUCT.CODE, PRODUCTLINE.TEXT_DESCRIPTION,
                         count(PRODUCT.PRODUCT_ID))
                         .from(PRODUCTLINE)
@@ -255,11 +255,12 @@ public class ClassicModelsRepository {
     public void cte10() {
 
         // 1. compute min salary per office
-        // 2. sum salaries per salary
+        // 2. sum salaries per min salary
         // 3. avg salaries        
         ctx.with("t2")
                 .as(select(avg(field("sum_min_sal", Float.class)).as("avg_sum_min_sal")).from(
-                        with("t1").as(select(min(EMPLOYEE.SALARY).as("min_sal"))
+                        with("t1")
+                                .as(select(min(EMPLOYEE.SALARY).as("min_sal"))
                                 .from(EMPLOYEE)
                                 .groupBy(EMPLOYEE.OFFICE_CODE)).select(
                                 sum(field("min_sal", Float.class)).as("sum_min_sal")).from(name("t1"))
