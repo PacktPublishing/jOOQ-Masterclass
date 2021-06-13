@@ -44,14 +44,7 @@ public class ClassicModelsRepository {
                         .groupBy(SALE.EMPLOYEE_NUMBER));
 
         ctx.with(t)
-                .select(t.field("employee_nr"), t.field("sales"))
-                .from(t)
-                .where(t.field("sales", Double.class)
-                        .eq(select(max(t.field("sales", Double.class))).from(t)))
-                .fetch();
-
-        ctx.with(t)
-                .select()
+                .select() // or, .select(t.field("employee_nr"), t.field("sales"))
                 .from(t)
                 .where(t.field("sales", Double.class)
                         .eq(select(max(t.field("sales", Double.class))).from(t)))
@@ -70,7 +63,7 @@ public class ClassicModelsRepository {
                         .groupBy(e));
 
         ctx.with(t)
-                .select(t.field(e.getName()), t.field(s.getName()))
+                .select() // or, .select(t.field(e.getName()), t.field(s.getName()))
                 .from(t)
                 .where(t.field(s.getName(), s.getType())
                         .eq(select(max(t.field(s.getName(), s.getType()))).from(t)))
@@ -89,14 +82,7 @@ public class ClassicModelsRepository {
                         .groupBy(e));
 
         ctx.with(t)
-                .select(t.field(e), t.field(s))
-                .from(t)
-                .where(t.field(s)
-                        .eq(select(max(t.field(s))).from(t)))
-                .fetch();
-
-        ctx.with(t)
-                .select()
+                .select() // or, .select(t.field(e), t.field(s))
                 .from(t)
                 .where(t.field(s)
                         .eq(select(max(t.field(s))).from(t)))
@@ -105,6 +91,16 @@ public class ClassicModelsRepository {
 
     public void cte4() {
 
+        ctx.with("cte_sales", "employee_nr", "sales")
+                .as(select(SALE.EMPLOYEE_NUMBER, sum(SALE.SALE_))
+                        .from(SALE)
+                        .groupBy(SALE.EMPLOYEE_NUMBER))
+                .select() // field(name("employee_nr")), field(name("sales"))
+                .from(name("cte_sales"))
+                .where(field(name("sales"))
+                        .eq(select(max(field(name("sales")))).from(name("cte_sales"))))
+                .fetch();
+        
         ctx.with("cte_sales")
                 .as(select(SALE.EMPLOYEE_NUMBER.as("employee_nr"), sum(SALE.SALE_).as("sales"))
                         .from(SALE)
