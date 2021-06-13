@@ -256,7 +256,7 @@ public class ClassicModelsRepository {
 
         // 1. compute min salary per office
         // 2. sum salaries per min salary
-        // 3. avg salaries        
+        // 3. avg sum salaries        
         ctx.with("t2")
                 .as(select(avg(field("sum_min_sal", Float.class)).as("avg_sum_min_sal")).from(
                         with("t1")

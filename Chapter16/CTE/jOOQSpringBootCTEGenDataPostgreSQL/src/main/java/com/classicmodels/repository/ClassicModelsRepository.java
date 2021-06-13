@@ -59,7 +59,8 @@ public class ClassicModelsRepository {
 
         ctx.with("dt")
                 .as(select()
-                        .from(values(row(LocalDate.of(2021, 1, 1), 10),
+                        .from(values(
+                                row(LocalDate.of(2021, 1, 1), 10),
                                 row(LocalDate.of(2021, 1, 2), 12),
                                 row(LocalDate.of(2021, 1, 3), 13),
                                 row(LocalDate.of(2021, 1, 4), 14),
