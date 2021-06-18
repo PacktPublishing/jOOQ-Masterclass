@@ -8368,4 +8368,72 @@ insert into daily_activity(day_id,day_date,sales,visitors,conversion) values
 
 (10, '2004-01-10', 50, 1722, 2.90) ON CONFLICT (day_id) DO NOTHING;
 
+/*Data for the table `office_flights` */
+
+insert  into office_flights(depart_town,arrival_town,distance_km) values 
+
+('Paris', 'Los Angeles', 9080),
+
+('Los Angeles', 'Paris', 9080),
+
+('Paris', 'Boston', 5528),
+
+('Boston', 'Paris', 5528),
+
+('Paris', 'Sydney', 16950),
+
+('Sydney', 'Paris', 16950),
+
+('Paris', 'London', 344),
+
+('London', 'Paris', 344),
+
+('Paris', 'Bucharest', 1871),
+
+('Bucharest', 'Paris', 1871),
+
+('Los Angeles', 'San Diego', 180),
+
+('San Diego', 'Los Angeles', 180),
+
+('Los Angeles', 'Sydney', 12073),
+
+('Sydney', 'Los Angeles', 12073),
+
+('San Diego', 'Boston', 4150),
+
+('Boston', 'San Diego', 4150),
+
+('Boston', 'New York', 305),
+
+('New York', 'Boston', 305),
+
+('Boston', 'Springfield', 1580),
+
+('Springfield', 'Boston', 1580),
+
+('New York', 'Springfield', 1329),
+
+('Springfield', 'New York', 1329),
+
+('New York', 'Sydney', 15979),
+
+('Sydney', 'New York', 15979),
+
+('New York', 'London', 5567),
+
+('London', 'New York', 5567),
+
+('Sydney', 'Tokyo', 7819),
+
+('Tokyo', 'Sydney', 7819),
+
+('Sydney', 'London', 16983),
+
+('London', 'Sydney', 16983),
+
+('London', 'Tokyo', 9559),
+
+('Tokyo', 'London', 9559) ON CONFLICT (depart_town, arrival_town) DO NOTHING;
+
 /* END */

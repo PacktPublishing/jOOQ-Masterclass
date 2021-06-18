@@ -14,7 +14,7 @@ public class ClassicModelsService {
 
     public void callAll() {
         
-        classicModelsRepository.derivedTableToTemporaryTableToCTE();
-        classicModelsRepository.temporaryTableToCTE();
+        classicModelsRepository.derivedTableToTemporaryTableToCTE1();
+        classicModelsRepository.derivedTableToTemporaryTableToCTE2();
     }
 }

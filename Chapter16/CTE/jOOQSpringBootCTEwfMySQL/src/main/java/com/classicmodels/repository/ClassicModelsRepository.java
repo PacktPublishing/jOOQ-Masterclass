@@ -42,6 +42,7 @@ public class ClassicModelsRepository {
                         min(field(name("data_val"))).as("start_data_val"))
                 .from(name("t"))
                 .groupBy(field(name("absent_data_grp")))
+                .orderBy(field(name("absent_data_grp")))
                 .fetch();
     }
 
@@ -62,7 +63,7 @@ public class ClassicModelsRepository {
                 .fetch();
     }
 
-    // Find the top three highest valued-orders in each year:
+    // Find the top three highest valued-orders in each year
     public void cte3() {
 
         ctx.with("order_values")

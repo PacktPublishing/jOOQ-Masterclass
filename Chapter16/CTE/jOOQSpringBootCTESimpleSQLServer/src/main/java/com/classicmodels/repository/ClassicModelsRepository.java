@@ -256,7 +256,7 @@ public class ClassicModelsRepository {
         ctx.with("cte")
                 // .asMaterialized(...) - has no effect
                 // .asNotMaterialized(...) - has no effect
-                .asNotMaterialized(select(ORDER.CUSTOMER_NUMBER, ORDERDETAIL.ORDER_LINE_NUMBER,
+                .as(select(ORDER.CUSTOMER_NUMBER, ORDERDETAIL.ORDER_LINE_NUMBER,
                         sum(ORDERDETAIL.PRICE_EACH).as("sum_price"),
                         sum(ORDERDETAIL.QUANTITY_ORDERED).as("sum_quantity"))
                         .from(ORDER)

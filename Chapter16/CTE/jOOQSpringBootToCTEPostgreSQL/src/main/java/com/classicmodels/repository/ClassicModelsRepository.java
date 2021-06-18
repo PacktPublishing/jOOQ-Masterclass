@@ -23,7 +23,7 @@ public class ClassicModelsRepository {
         this.ctx = ctx;
     }
 
-    public void derivedTableToTemporaryTableToCTE() {
+    public void derivedTableToTemporaryTableToCTE1() {
 
         // derived tables        
         ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME,
@@ -42,14 +42,14 @@ public class ClassicModelsRepository {
         ctx.dropTemporaryTableIfExists("t2").execute();
         ctx.dropTemporaryTableIfExists("t3").execute();
 
-        ctx.createTable("t1").as(
+        ctx.createTemporaryTable("t1").as(
                 select(sum(SALE.SALE_).as("sum_all_sales")).from(SALE)).execute();
 
-        ctx.createTable("t2").as(
+        ctx.createTemporaryTable("t2").as(
                 select(countDistinct(SALE.EMPLOYEE_NUMBER).as("nbr_employee")).from(SALE)).execute();
 
-        ctx.createTable("t3").as(
-                ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, sum(SALE.SALE_).as("employee_sale"))
+        ctx.createTemporaryTable("t3").as(
+                select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, sum(SALE.SALE_).as("employee_sale"))
                         .from(EMPLOYEE)
                         .innerJoin(SALE)
                         .on(EMPLOYEE.EMPLOYEE_NUMBER.eq(SALE.EMPLOYEE_NUMBER))
@@ -65,11 +65,11 @@ public class ClassicModelsRepository {
 
         // CTE
         ctx.with("cte1", "sum_all_sales")
-                .asMaterialized(select(sum(SALE.SALE_)).from(SALE))
+                .as(select(sum(SALE.SALE_)).from(SALE)) // or, asMaterialized
                 .with("cte2", "nbr_employee")
-                .asMaterialized(select(countDistinct(SALE.EMPLOYEE_NUMBER)).from(SALE))
+                .as(select(countDistinct(SALE.EMPLOYEE_NUMBER)).from(SALE))
                 .with("cte3", "first_name", "last_name", "employee_sale")
-                .asMaterialized(select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, sum(SALE.SALE_).as("employee_sale"))
+                .as(select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, sum(SALE.SALE_).as("employee_sale"))
                         .from(EMPLOYEE)
                         .innerJoin(SALE)
                         .on(EMPLOYEE.EMPLOYEE_NUMBER.eq(SALE.EMPLOYEE_NUMBER))
@@ -83,11 +83,21 @@ public class ClassicModelsRepository {
                 .fetch();
     }
 
-    public void temporaryTableToCTE() {
+    public void derivedTableToTemporaryTableToCTE2() {
+
+        // derived table
+        ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, field(name("max_sale")))
+                .from(EMPLOYEE)
+                .innerJoin(select(SALE.EMPLOYEE_NUMBER.as("employee_number"), max(SALE.SALE_).as("max_sale"))
+                                .from(SALE)
+                                .groupBy(SALE.EMPLOYEE_NUMBER).asTable("max_employee_sale"))
+                .on(field(name("max_employee_sale", "employee_number"))
+                        .eq(EMPLOYEE.EMPLOYEE_NUMBER))
+                .fetch();
 
         // temporary table
         ctx.dropTemporaryTableIfExists("max_employee_sale").execute();
-        ctx.createTable("max_employee_sale").as(
+        ctx.createTemporaryTable("max_employee_sale").as(
                 select(SALE.EMPLOYEE_NUMBER, max(SALE.SALE_).as("max_sale"))
                         .from(SALE)
                         .groupBy(SALE.EMPLOYEE_NUMBER))

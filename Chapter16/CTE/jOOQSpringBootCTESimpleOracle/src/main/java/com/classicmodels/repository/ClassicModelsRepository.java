@@ -254,9 +254,9 @@ public class ClassicModelsRepository {
     public void cte10() {
 
         ctx.with("cte", "customer_number", "order_line_number", "sum_price", "sum_quantity")
-                // .asMaterialized(...) - same as using "as()" because PostgreSQL automatically materialize this CTE
-                // .asNotMaterialized(...) - has effect because it suppress PostgreSQL materialization !!!
-                .as(select(ORDER.CUSTOMER_NUMBER, ORDERDETAIL.ORDER_LINE_NUMBER,
+                // .asMaterialized(...) - add the Oracle hint, /*+ materialize */
+                // .asNotMaterialized(...) - add the Oracle hint, /*+ inline */
+                .asMaterialized(select(ORDER.CUSTOMER_NUMBER, ORDERDETAIL.ORDER_LINE_NUMBER,
                         sum(ORDERDETAIL.PRICE_EACH),
                         sum(ORDERDETAIL.QUANTITY_ORDERED))
                         .from(ORDER)

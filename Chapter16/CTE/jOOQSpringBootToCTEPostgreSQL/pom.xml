@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.app</groupId>
-    <artifactId>jOOQSpringBootCTEvsTTPostgreSQL</artifactId>
+    <artifactId>jOOQSpringBootToCTEPostgreSQL</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQSpringBootCTEvsTTPostgreSQL</name>
+    <name>jOOQSpringBootToCTEPostgreSQL</name>
     <description>jOOQ - Spring Boot app</description>    
 
     <parent>
