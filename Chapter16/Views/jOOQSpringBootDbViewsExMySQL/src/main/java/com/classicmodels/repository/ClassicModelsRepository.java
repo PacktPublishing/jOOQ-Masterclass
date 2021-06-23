@@ -6,7 +6,6 @@ import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Order.ORDER;
 import org.jooq.DSLContext;
 import org.jooq.Table;
-import static org.jooq.impl.DSL.cast;
 import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.cumeDist;
 import static org.jooq.impl.DSL.field;
@@ -18,7 +17,6 @@ import static org.jooq.impl.DSL.rowNumber;
 import static org.jooq.impl.DSL.not;
 import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.with;
-import static org.jooq.impl.SQLDataType.NUMERIC;
 import static org.jooq.impl.DSL.row;
 import static org.jooq.impl.DSL.table;
 import static org.jooq.impl.DSL.values;
@@ -48,7 +46,7 @@ public class ClassicModelsRepository {
                 .execute();
 
         ctx.select(field(name("office_code")), field(name("headcount")),
-                round(cast(cumeDist().over().orderBy(field(name("headcount"))).mul(100), NUMERIC), 2)
+                round(cumeDist().over().orderBy(field(name("headcount"))).mul(100), 2)
                         .concat("%")
                         .as("cume_dist_val"))
                 .from(name("office_headcounts"))

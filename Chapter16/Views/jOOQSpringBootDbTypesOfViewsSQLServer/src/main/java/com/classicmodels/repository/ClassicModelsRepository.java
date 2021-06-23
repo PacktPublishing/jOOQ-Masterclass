@@ -106,7 +106,7 @@ public class ClassicModelsRepository {
                 .execute();
 
         var result = ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME,
-                coalesce(field(name("sales_count")), 0))
+                coalesce(field(name("sales_count")), 0).as("sales_count"))
                 .from(EMPLOYEE)
                 .leftOuterJoin(table(name("employee_sales")))
                 .on(EMPLOYEE.EMPLOYEE_NUMBER
@@ -143,14 +143,15 @@ public class ClassicModelsRepository {
     // Nested VIEWs
     public void nestedView() {
 
+        ctx.dropViewIfExists("customer_orders_2").execute();
         ctx.dropViewIfExists("customer_orders_1").execute();
+        
         ctx.createView("customer_orders_1", "customer_number", "orders_count")
                 .as(select(ORDER.CUSTOMER_NUMBER, count())
                         .from(ORDER)
                         .groupBy(ORDER.CUSTOMER_NUMBER))
                 .execute();
-
-        ctx.dropViewIfExists("customer_orders_2").execute();
+        
         ctx.createView("customer_orders_2", "first_name", "last_name", "orders_count")                 
                 .as(select(CUSTOMER.CONTACT_FIRST_NAME, CUSTOMER.CONTACT_LAST_NAME,
                         coalesce(field(name("orders_count")), 0))

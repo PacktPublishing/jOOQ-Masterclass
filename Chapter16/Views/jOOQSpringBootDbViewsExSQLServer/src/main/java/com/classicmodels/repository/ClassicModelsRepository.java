@@ -48,7 +48,7 @@ public class ClassicModelsRepository {
                 .execute();
 
         ctx.select(field(name("office_code")), field(name("headcount")),
-                round(cast(cumeDist().over().orderBy(field(name("headcount"))).mul(100), NUMERIC), 2)
+                round(cumeDist().over().orderBy(field(name("headcount"))).mul(100), 2)
                         .concat("%")
                         .as("cume_dist_val"))
                 .from(name("office_headcounts"))
