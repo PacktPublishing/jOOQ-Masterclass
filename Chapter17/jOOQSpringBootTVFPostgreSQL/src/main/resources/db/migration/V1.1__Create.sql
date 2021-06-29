@@ -270,7 +270,7 @@ CREATE TABLE product (
   product_scale varchar(10) DEFAULT NULL,
   product_vendor varchar(50) DEFAULT NULL,
   product_description text DEFAULT NULL,
-  quantity_in_stock int DEFAULT 0,
+  quantity_in_stock smallint DEFAULT 0,
   buy_price decimal(10,2) NOT NULL DEFAULT 0.0,
   msrp decimal(10,2) NOT NULL DEFAULT 0.0,
   specs hstore DEFAULT NULL,
@@ -377,51 +377,6 @@ BEGIN
    
   RETURN avg_count; 
 END; 
-$$;
-
-CREATE OR REPLACE FUNCTION net_price_each(
-    quantity INT,
-    list_price DECIMAL(10,2),
-    discount DECIMAL(4,2)
-)
-RETURNS DECIMAL(10,2) LANGUAGE plpgsql AS $$ 
-BEGIN
-    RETURN quantity * list_price * (1 - discount);
-END;
-$$;
-
-CREATE OR REPLACE FUNCTION get_customer(cl INT) RETURNS refcursor AS $$
-    DECLARE
-      cur refcursor;                                                   
-    BEGIN
-      OPEN cur FOR SELECT * FROM customer WHERE credit_limit > cl ORDER BY customer_name;   
-      RETURN cur;                                    
-    END;
-    $$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION employee_office_array(VARCHAR(10))
-RETURNS bigint[] AS $$
-  SELECT ARRAY(SELECT "public"."employee"."employee_number"
-      FROM "public"."employee" WHERE "public"."employee"."office_code" = $1)
-$$
-LANGUAGE SQL;
-
-CREATE OR REPLACE FUNCTION department_topic_arr(id bigint)
-RETURNS text[] AS $$
-  SELECT "public"."department"."topic"
-      FROM "public"."department" WHERE "public"."department"."department_id" = id
-$$
-LANGUAGE SQL;
-
-CREATE OR REPLACE FUNCTION net_price_each(
-    quantity INT,
-    list_price DECIMAL(10,2),
-    discount DECIMAL(4,2)
-)
-RETURNS DECIMAL(10,2) LANGUAGE plpgsql AS $$ 
-BEGIN
-    RETURN quantity * list_price * (1 - discount);
-END;
 $$;
 
 CREATE OR REPLACE FUNCTION top_three_sales_per_employee(employee_nr bigint)

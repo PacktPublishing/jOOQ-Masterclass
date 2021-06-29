@@ -1,4 +1,4 @@
-﻿/*
+/*
 *********************************************************************
 http://www.mysqltutorial.org
 *********************************************************************
@@ -57,7 +57,7 @@ AS BEGIN
 END
 GO
 
-CREATE OR ALTER FUNCTION net_price_each(
+CREATE OR ALTER FUNCTION netPriceEach(
     @quantity INT,
     @list_price DEC(10,2),
     @discount DEC(4,2)
@@ -359,7 +359,7 @@ CREATE TABLE product (
   [product_scale] varchar(10) DEFAULT NULL,
   [product_vendor] varchar(50) DEFAULT NULL,
   [product_description] varchar(max) DEFAULT NULL,
-  [quantity_in_stock] int DEFAULT 0,
+  [quantity_in_stock] smallint DEFAULT 0,
   [buy_price] decimal(10,2)  NOT NULL DEFAULT 0.0,
   [specs] varchar(max) DEFAULT NULL,
   [msrp] decimal(10,2) NOT NULL DEFAULT 0.0,

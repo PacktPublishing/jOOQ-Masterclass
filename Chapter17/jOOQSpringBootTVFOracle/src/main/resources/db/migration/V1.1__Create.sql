@@ -1,4 +1,4 @@
-﻿/*
+/*
 *********************************************************************
 http://www.mysqltutorial.org
 *********************************************************************
@@ -484,7 +484,7 @@ CREATE TABLE product (
   product_scale varchar2(10) DEFAULT NULL,
   product_vendor varchar2(50) DEFAULT NULL,
   product_description clob DEFAULT NULL,
-  quantity_in_stock number(7) DEFAULT 0,
+  quantity_in_stock number(5) DEFAULT 0,
   buy_price number(10,2) DEFAULT 0.0 NOT NULL,
   msrp number(10,2) DEFAULT 0.0 NOT NULL,
   specs clob DEFAULT NULL,
@@ -669,7 +669,7 @@ COMMIT;
 /* USER-DEFINED FUNCTIONS */
 
 CREATE OR REPLACE FUNCTION get_total_sales(
-    in_year IN PLS_INTEGER
+    in_year PLS_INTEGER
 ) 
 RETURN NUMBER
 IS
@@ -686,31 +686,6 @@ BEGIN
     
     -- return the total sales
     RETURN l_total_sales;
-END;
-/
-
-CREATE OR REPLACE FUNCTION net_price_each(
-    quantity IN PLS_INTEGER,
-    list_price IN NUMBER,
-    discount IN NUMBER
-)
-RETURN NUMBER IS
-    result NUMBER := quantity * list_price * (1 - discount);
-BEGIN
-    RETURN result;
-END;
-/
-
-CREATE OR REPLACE FUNCTION get_customer (cl IN NUMBER)
-RETURN SYS_REFCURSOR
-  AS cur SYS_REFCURSOR;
-BEGIN
-  OPEN cur FOR
-  SELECT *
-    FROM CUSTOMER
-	WHERE CREDIT_LIMIT > cl
-    ORDER BY CUSTOMER_NAME;
-  RETURN cur;
 END;
 /
 

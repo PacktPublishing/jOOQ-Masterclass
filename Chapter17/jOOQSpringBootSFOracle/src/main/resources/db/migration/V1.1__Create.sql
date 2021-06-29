@@ -1,4 +1,4 @@
-﻿/*
+/*
 *********************************************************************
 http://www.mysqltutorial.org
 *********************************************************************
@@ -698,19 +698,6 @@ RETURN NUMBER IS
     result NUMBER := quantity * list_price * (1 - discount);
 BEGIN
     RETURN result;
-END;
-/
-
-CREATE OR REPLACE FUNCTION get_customer (cl IN NUMBER)
-RETURN SYS_REFCURSOR
-  AS cur SYS_REFCURSOR;
-BEGIN
-  OPEN cur FOR
-  SELECT *
-    FROM CUSTOMER
-	WHERE CREDIT_LIMIT > cl
-    ORDER BY CUSTOMER_NAME;
-  RETURN cur;
 END;
 /
 

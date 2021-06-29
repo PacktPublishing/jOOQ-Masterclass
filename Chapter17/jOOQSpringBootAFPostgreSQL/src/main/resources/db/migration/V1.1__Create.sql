@@ -390,15 +390,6 @@ BEGIN
 END;
 $$;
 
-CREATE OR REPLACE FUNCTION get_customer(cl INT) RETURNS refcursor AS $$
-    DECLARE
-      cur refcursor;                                                   
-    BEGIN
-      OPEN cur FOR SELECT * FROM customer WHERE credit_limit > cl ORDER BY customer_name;   
-      RETURN cur;                                    
-    END;
-    $$ LANGUAGE plpgsql;
-
 CREATE OR REPLACE FUNCTION employee_office_array(VARCHAR(10))
 RETURNS bigint[] AS $$
   SELECT ARRAY(SELECT "public"."employee"."employee_number"
