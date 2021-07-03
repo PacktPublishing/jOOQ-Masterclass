@@ -1,11 +1,13 @@
 package com.classicmodels.repository;
 
 import static jooq.generated.Routines.getCustomer;
+import static jooq.generated.Routines.getOfficesMultiple;
 import jooq.generated.routines.GetCustomer;
-import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
+import jooq.generated.tables.records.GetOfficesMultipleRecord;
 import org.jooq.DSLContext;
-import static org.jooq.impl.DSL.field;
-import static org.jooq.impl.DSL.name;
+import org.jooq.Result;
+import org.jooq.Record;
+import static org.jooq.impl.DSL.table;
 import static org.jooq.impl.DSL.unnest;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,25 +22,33 @@ public class ClassicModelsRepository {
         this.ctx = ctx;
     }
 
-    public void executeCursorFunction() {
-        
+    public void executeSingleCursorFunction() {
+
         // EXECUTION 1
-        GetCustomer customers = new GetCustomer();                
+        GetCustomer customers = new GetCustomer();
         customers.setCl(50000);
-        
-        customers.execute(ctx.configuration());       
-        System.out.println(customers.getReturnValue());    
-        
+
+        customers.execute(ctx.configuration());
+        System.out.println(customers.getReturnValue());
+
         // EXECUTION 2
-        ctx.select().from(unnest(getCustomer(50000))).fetch();
-        
+        getCustomer(50000);
+
         // EXECUTION 3
-        ctx.select(CUSTOMERDETAIL.CITY, CUSTOMERDETAIL.STATE, CUSTOMERDETAIL.COUNTRY, 
-                field(name("t", "customer_number")))
-                .from(CUSTOMERDETAIL)
-                .innerJoin(unnest(getCustomer(50000)).as("t"))
-                .on(field(name("t", "customer_number")).eq(CUSTOMERDETAIL.CUSTOMER_NUMBER))
-                .fetch();
+        ctx.select().from(unnest(getCustomer(50000))).fetch();
+        ctx.select().from(table(getCustomer(50000))).fetch();
     }
 
+    public void executeMultipleCursorFunction() {
+
+        Result<GetOfficesMultipleRecord> results = getOfficesMultiple(ctx.configuration());
+
+        for (GetOfficesMultipleRecord result : results) {
+            Result<Record> records = result.getGetOfficesMultiple();
+            System.out.println("-------------------------");
+            for (Record r : records) {
+                System.out.println(r.get("city") + ", " + r.get("country"));
+            }
+        }
+    }
 }

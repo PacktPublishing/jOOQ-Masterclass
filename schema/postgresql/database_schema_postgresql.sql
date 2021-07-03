@@ -398,7 +398,21 @@ CREATE OR REPLACE FUNCTION get_customer(cl INT) RETURNS refcursor AS $$
       RETURN cur;                                    
     END;
     $$ LANGUAGE plpgsql;
-
+	
+-- Procedure that returns multiple result sets (cursors)
+   CREATE OR REPLACE FUNCTION get_offices_multiple() RETURNS SETOF refcursor AS $$
+    DECLARE
+      ref1 refcursor;           
+      ref2 refcursor;                             
+    BEGIN
+      OPEN ref1 FOR SELECT city, country FROM office WHERE internal_budget < 100000;  
+      RETURN NEXT ref1;                                                 
+ 
+      OPEN ref2 FOR SELECT city, country FROM office WHERE internal_budget > 100000;  
+      RETURN NEXT ref2;                                                 
+    END;
+    $$ LANGUAGE plpgsql;	
+	  
 CREATE OR REPLACE FUNCTION employee_office_array(VARCHAR(10))
 RETURNS bigint[] AS $$
   SELECT ARRAY(SELECT "public"."employee"."employee_number"

@@ -14,7 +14,6 @@ public class ClassicModelsService {
 
     public void callAll() {
 
-        classicModelsRepository.executeSingleCursorFunction();
-        classicModelsRepository.executeMultipleCursorFunction();
+        classicModelsRepository.executeCursorFunction();
     }
 }
