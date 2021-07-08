@@ -14,9 +14,6 @@ public class ClassicModelsService {
 
     public void callAll() {
 
-        classicModelsRepository.executeScalarFunction();
-        classicModelsRepository.executeOutParamFunction();
-        classicModelsRepository.executeInOutParamFunction();
-        classicModelsRepository.executeUpdateFunction();
+        classicModelsRepository.executePolymorphicFunction();
     }
 }

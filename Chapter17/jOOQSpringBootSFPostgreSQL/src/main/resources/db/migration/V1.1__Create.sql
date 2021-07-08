@@ -366,6 +366,13 @@ CREATE TABLE office_flights (
 
 /* USER-DEFINED FUNCTIONS */
 
+CREATE OR REPLACE FUNCTION make_array(anyelement, anyelement) RETURNS anyarray AS $$
+    SELECT ARRAY[$1, $2];
+$$ LANGUAGE SQL;
+
+CREATE FUNCTION dup (f1 anyelement, OUT f2 anyelement, OUT f3 anyarray)
+AS 'select $1, array[$1,$1]' LANGUAGE SQL;
+
 CREATE OR REPLACE FUNCTION get_avg_sale(len_from int, len_to int) 
   RETURNS int LANGUAGE plpgsql AS $$ 
 DECLARE avg_count integer; 
@@ -378,6 +385,89 @@ BEGIN
   RETURN avg_count; 
 END; 
 $$;
+
+create or replace function get_salary_stat(
+    out min_sal int,
+    out max_sal int,
+    out avg_sal numeric) 
+language plpgsql
+as $$
+begin
+  
+  select min(salary),
+         max(salary),
+		 avg(salary)::numeric(7,2)
+  into min_sal, max_sal, avg_sal
+  from employee;
+
+end;
+$$;
+
+create or replace function swap(
+	inout x int,
+	inout y int
+) 
+language plpgsql	
+as $$
+begin
+   select x,y into y,x;
+end; 
+$$;
+
+CREATE FUNCTION update_msrp (product_id bigint, debit integer) RETURNS integer AS $$
+    UPDATE product
+        SET msrp = msrp - debit
+        WHERE product_id = update_msrp.product_id
+    RETURNING msrp;
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION net_price_each(
+    quantity INT,
+    list_price DECIMAL(10,2),
+    discount DECIMAL(4,2)
+)
+RETURNS DECIMAL(10,2) LANGUAGE plpgsql AS $$ 
+BEGIN
+    RETURN quantity * list_price * (1 - discount);
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION get_customer(cl INT) RETURNS refcursor AS $$
+    DECLARE
+      cur refcursor;                                                   
+    BEGIN
+      OPEN cur FOR SELECT * FROM customer WHERE credit_limit > cl ORDER BY customer_name;   
+      RETURN cur;                                    
+    END;
+    $$ LANGUAGE plpgsql;
+	
+-- Procedure that returns multiple result sets (cursors)
+   CREATE OR REPLACE FUNCTION get_offices_multiple() RETURNS SETOF refcursor AS $$
+    DECLARE
+      ref1 refcursor;           
+      ref2 refcursor;                             
+    BEGIN
+      OPEN ref1 FOR SELECT city, country FROM office WHERE internal_budget < 100000;  
+      RETURN NEXT ref1;                                                 
+ 
+      OPEN ref2 FOR SELECT city, country FROM office WHERE internal_budget > 100000;  
+      RETURN NEXT ref2;                                                 
+    END;
+    $$ LANGUAGE plpgsql;	
+	  
+CREATE OR REPLACE FUNCTION employee_office_array(VARCHAR(10))
+RETURNS bigint[] AS $$
+  SELECT ARRAY(SELECT "public"."employee"."employee_number"
+      FROM "public"."employee" WHERE "public"."employee"."office_code" = $1)
+$$
+LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION department_topic_arr(id bigint)
+RETURNS text[] AS $$
+  SELECT "public"."department"."topic"
+      FROM "public"."department" WHERE "public"."department"."department_id" = id
+$$
+LANGUAGE SQL;
 
 CREATE OR REPLACE FUNCTION net_price_each(
     quantity INT,

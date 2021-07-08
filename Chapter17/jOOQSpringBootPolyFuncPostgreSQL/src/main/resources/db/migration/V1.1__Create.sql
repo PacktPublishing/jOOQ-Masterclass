@@ -386,41 +386,6 @@ BEGIN
 END; 
 $$;
 
-create or replace function get_salary_stat(
-    out min_sal int,
-    out max_sal int,
-    out avg_sal numeric) 
-language plpgsql
-as $$
-begin
-  
-  select min(salary),
-         max(salary),
-		 avg(salary)::numeric(7,2)
-  into min_sal, max_sal, avg_sal
-  from employee;
-
-end;
-$$;
-
-create or replace function swap(
-	inout x int,
-	inout y int
-) 
-language plpgsql	
-as $$
-begin
-   select x,y into y,x;
-end; 
-$$;
-
-CREATE FUNCTION update_msrp (product_id bigint, debit integer) RETURNS integer AS $$
-    UPDATE product
-        SET msrp = msrp - debit
-        WHERE product_id = update_msrp.product_id
-    RETURNING msrp;
-$$ LANGUAGE SQL;
-
 CREATE OR REPLACE FUNCTION net_price_each(
     quantity INT,
     list_price DECIMAL(10,2),

@@ -668,6 +668,45 @@ COMMIT;
 
 /* USER-DEFINED FUNCTIONS */
 
+CREATE OR REPLACE PACKAGE department_pkg
+AS
+  TYPE bgt_arr IS TABLE OF float INDEX BY PLS_INTEGER;
+
+  FUNCTION get_bgt(p_profit IN float)
+    RETURN bgt_arr;
+	
+  FUNCTION get_max_cash
+    RETURN float; 
+END;
+/
+CREATE OR REPLACE PACKAGE BODY department_pkg
+ AS  
+  FUNCTION get_bgt(p_profit IN float)
+    RETURN bgt_arr
+  IS
+    r_bgt_arr bgt_arr;
+  BEGIN
+    SELECT LOCAL_BUDGET
+      BULK COLLECT INTO r_bgt_arr
+      FROM DEPARTMENT
+     WHERE PROFIT > p_profit;
+
+    RETURN r_bgt_arr;
+  END;
+  
+  FUNCTION get_max_cash
+    RETURN float 
+  IS
+    r_max_cash float;
+  BEGIN
+    SELECT max(CASH) INTO r_max_cash
+	  FROM DEPARTMENT;
+	  
+	RETURN r_max_cash;  
+  END;  
+END;
+/
+
 CREATE OR REPLACE FUNCTION get_total_sales(
     in_year IN PLS_INTEGER
 ) 
@@ -698,6 +737,19 @@ RETURN NUMBER IS
     result NUMBER := quantity * list_price * (1 - discount);
 BEGIN
     RETURN result;
+END;
+/
+
+CREATE OR REPLACE FUNCTION get_customer (cl IN NUMBER)
+RETURN SYS_REFCURSOR
+  AS cur SYS_REFCURSOR;
+BEGIN
+  OPEN cur FOR
+  SELECT *
+    FROM CUSTOMER
+	WHERE CREDIT_LIMIT > cl
+    ORDER BY CUSTOMER_NAME;
+  RETURN cur;
 END;
 /
 
