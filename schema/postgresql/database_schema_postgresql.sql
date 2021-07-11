@@ -414,6 +414,13 @@ begin
 end; 
 $$;
 
+CREATE FUNCTION new_salary(salary int, bonus int DEFAULT 50, penalty int DEFAULT 0)
+RETURNS int
+LANGUAGE SQL
+AS $$
+    SELECT $1 + $2 - $3;
+$$;
+
 CREATE FUNCTION update_msrp (product_id bigint, debit integer) RETURNS integer AS $$
     UPDATE product
         SET msrp = msrp - debit

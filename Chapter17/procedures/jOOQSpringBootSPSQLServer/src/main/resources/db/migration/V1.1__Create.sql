@@ -1,4 +1,4 @@
-﻿/*
+/*
 *********************************************************************
 http://www.mysqltutorial.org
 *********************************************************************
@@ -102,9 +102,6 @@ AS BEGIN
     RETURN	  
 END; 
 GO
-
-/* USER-DEFINED PROCEDURES */
-
 
 IF OBJECT_ID('payment', 'U') IS NOT NULL 
   DROP TABLE payment;  
