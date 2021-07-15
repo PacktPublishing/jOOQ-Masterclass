@@ -12,9 +12,8 @@ public class ClassicModelsService {
         this.classicModelsRepository = classicModelsRepository;
     }
 
-    public void callAll() {
+    public void sampleReactiveQuery() {
 
-        classicModelsRepository.executeStoredProcedureSelect();
-        classicModelsRepository.executeStoredProcedureMultipleSelect();       
+        classicModelsRepository.sampleReactiveQuery();
     }
 }

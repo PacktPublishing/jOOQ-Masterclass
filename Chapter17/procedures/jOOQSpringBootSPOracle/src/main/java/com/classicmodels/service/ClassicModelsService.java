@@ -14,7 +14,9 @@ public class ClassicModelsService {
 
     public void callAll() {
 
+        classicModelsRepository.executeStoredProcedureInAndOut();
+        classicModelsRepository.executeStoredProcedureInOut();
         classicModelsRepository.executeStoredProcedureSelect();
-        classicModelsRepository.executeStoredProcedureMultipleSelect();       
+        classicModelsRepository.executeStoredProcedureMultipleSelect();
     }
 }

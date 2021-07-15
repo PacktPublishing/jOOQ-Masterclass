@@ -104,7 +104,28 @@ END;
 GO
 
 /* USER-DEFINED PROCEDURES */
+CREATE PROCEDURE get_product(@pid BIGINT)
+AS BEGIN
+	SELECT * FROM [classicmodels].[dbo].[product] 
+          WHERE [classicmodels].[dbo].[product].[product_id] = @pid;
+END;
+GO
 
+CREATE PROCEDURE get_emps_in_office(@in_office_code VARCHAR(10))
+AS BEGIN
+    SELECT [classicmodels].[dbo].[office].[city], 
+	       [classicmodels].[dbo].[office].[country], 
+		   [classicmodels].[dbo].[office].[internal_budget]
+      FROM [classicmodels].[dbo].[office]
+     WHERE [classicmodels].[dbo].[office].[office_code]=@in_office_code;
+
+    SELECT [classicmodels].[dbo].[employee].[employee_number],
+	       [classicmodels].[dbo].[employee].[first_name],
+		   [classicmodels].[dbo].[employee].[last_name]
+      FROM [classicmodels].[dbo].[employee]
+     WHERE [classicmodels].[dbo].[employee].[office_code]=@in_office_code;
+END;
+GO
 
 IF OBJECT_ID('payment', 'U') IS NOT NULL 
   DROP TABLE payment;  
