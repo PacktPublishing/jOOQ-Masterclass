@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.app</groupId>
-    <artifactId>jOOQSpringBootHmbPostgreSQL</artifactId>
+    <artifactId>jOOQSpringBootHmlPostgreSQL</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQSpringBootHmbPostgreSQL</name>
+    <name>jOOQSpringBootHmlPostgreSQL</name>
     <description>jOOQ - Spring Boot app</description>    
 
     <parent>
@@ -27,15 +27,24 @@
         <maven.compiler.target>14</maven.compiler.target>
 
         <jooq.version>3.15.0</jooq.version>     
-        <flyway.version>6.5.7</flyway.version>        
+        <flyway.version>7.12.1</flyway.version>        
         <codehaus.mojo.version>1.0.0</codehaus.mojo.version>                
         <hibernate.validator.version>5.2.4.Final</hibernate.validator.version>
+        <spring-cloud.version>Finchley.BUILD-SNAPSHOT</spring-cloud.version>
     </properties>
 
-    <dependencies>                        
+    <dependencies>                                
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-stream</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-stream-binder-kafka</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-webflux</artifactId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -56,30 +65,31 @@
             <artifactId>spring-boot-starter-data-r2dbc</artifactId>
         </dependency>       
         <dependency>
-            <groupId>io.r2dbc</groupId>
-            <artifactId>r2dbc-postgresql</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <version>${hibernate.validator.version}</version>
-        </dependency>            
-        <dependency>
-            <groupId>javax.persistence</groupId>
-            <artifactId>javax.persistence-api</artifactId>    
-        </dependency>
+            <groupId>io.r2dbc</groupId>
+            <artifactId>r2dbc-postgresql</artifactId>  
+        </dependency>       
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
+    
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <plugins>
@@ -140,14 +150,14 @@
                 <artifactId>jooq-codegen-maven</artifactId>               
                 <executions>
                     <execution>
-                        <id>generate-postgresql</id>
+                        <id>generate-oracle</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>generate</goal>
                         </goals>
                     </execution>
                 </executions>                
-                <configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.14.0.xsd">                                                 
+                <configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.15.0.xsd">                                                 
                     <!-- Configure the database connection here -->
                     <jdbc>
                         <driver>${spring.datasource.driverClassName}</driver>
@@ -164,7 +174,8 @@
                         Defaults to org.jooq.codegen.JavaGenerator -->
                         <name>org.jooq.codegen.JavaGenerator</name>
         
-                        <database>                                                                                                                                                                                                 
+                        <database>           
+                                                                                                                                                                                                           
                             <!-- The database type. The format here is:
                             org.jooq.meta.[database].[database]Database -->
                             <name>org.jooq.meta.postgres.PostgresDatabase</name>
@@ -184,15 +195,14 @@
                             <!-- All elements that are excluded from your schema
                             (A Java regular expression. Use the pipe to separate several expressions).
                             Excludes match before includes, i.e. excludes have a higher priority -->
-                            <excludes>flyway_schema_history</excludes>                                                                                                                
-                        </database>                                              
-                                
-                        <!-- jOOQ will generate POJOs in your behalf -->
-                        <generate>                            
-                            <pojos>true</pojos>                   
-                            <validationAnnotations>true</validationAnnotations>            
-                        </generate>
+                            <excludes>flyway_schema_history</excludes>   
+                        </database>  
                         
+                        <!-- jOOQ will generate POJOs in your behalf -->
+                        <generate>
+                            <pojos>true</pojos>                      
+                        </generate>                                            
+                                                                                        
                         <target>
                             <!-- The destination package of your generated classes (within the destination directory) -->
                             <packageName>jooq.generated</packageName>
