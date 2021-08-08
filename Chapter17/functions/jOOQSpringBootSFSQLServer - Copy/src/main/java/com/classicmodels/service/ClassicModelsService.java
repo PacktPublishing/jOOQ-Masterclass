@@ -14,7 +14,6 @@ public class ClassicModelsService {
 
     public void callAll() {
 
-        classicModelsRepository.createScalarFunction();
-        classicModelsRepository.callScalarFunction();
+        classicModelsRepository.executeScalarFunction();
     }
 }

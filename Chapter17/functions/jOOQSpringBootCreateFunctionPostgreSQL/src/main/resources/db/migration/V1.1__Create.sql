@@ -414,6 +414,13 @@ begin
 end; 
 $$;
 
+CREATE FUNCTION new_salary(salary int, bonus int DEFAULT 50, penalty int DEFAULT 0)
+RETURNS int
+LANGUAGE SQL
+AS $$
+    SELECT $1 + $2 - $3;
+$$;
+
 CREATE FUNCTION update_msrp (product_id bigint, debit integer) RETURNS integer AS $$
     UPDATE product
         SET msrp = msrp - debit
@@ -423,10 +430,10 @@ $$ LANGUAGE SQL;
 
 CREATE OR REPLACE FUNCTION net_price_each(
     quantity INT,
-    list_price DECIMAL(10,2),
-    discount DECIMAL(4,2)
+    list_price DECIMAL,
+    discount DECIMAL
 )
-RETURNS DECIMAL(10,2) LANGUAGE plpgsql AS $$ 
+RETURNS DECIMAL(10,2) LANGUAGE plpgsql IMMUTABLE AS $$ 
 BEGIN
     RETURN quantity * list_price * (1 - discount);
 END;
@@ -471,10 +478,10 @@ LANGUAGE SQL;
 
 CREATE OR REPLACE FUNCTION net_price_each(
     quantity INT,
-    list_price DECIMAL(10,2),
-    discount DECIMAL(4,2)
+    list_price REAL,
+    discount REAL
 )
-RETURNS DECIMAL(10,2) LANGUAGE plpgsql AS $$ 
+RETURNS REAL LANGUAGE plpgsql AS $$ 
 BEGIN
     RETURN quantity * list_price * (1 - discount);
 END;

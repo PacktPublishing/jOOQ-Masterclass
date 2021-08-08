@@ -430,10 +430,10 @@ $$ LANGUAGE SQL;
 
 CREATE OR REPLACE FUNCTION net_price_each(
     quantity INT,
-    list_price DECIMAL(10,2),
-    discount DECIMAL(4,2)
+    list_price DECIMAL,
+    discount DECIMAL
 )
-RETURNS DECIMAL(10,2) LANGUAGE plpgsql AS $$ 
+RETURNS DECIMAL(10,2) LANGUAGE plpgsql IMMUTABLE AS $$ 
 BEGIN
     RETURN quantity * list_price * (1 - discount);
 END;
@@ -478,10 +478,10 @@ LANGUAGE SQL;
 
 CREATE OR REPLACE FUNCTION net_price_each(
     quantity INT,
-    list_price DECIMAL(10,2),
-    discount DECIMAL(4,2)
+    list_price REAL,
+    discount REAL
 )
-RETURNS DECIMAL(10,2) LANGUAGE plpgsql AS $$ 
+RETURNS REAL LANGUAGE plpgsql AS $$ 
 BEGIN
     RETURN quantity * list_price * (1 - discount);
 END;
