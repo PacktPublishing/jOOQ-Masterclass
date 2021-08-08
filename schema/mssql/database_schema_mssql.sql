@@ -58,11 +58,11 @@ END
 GO
 
 CREATE OR ALTER FUNCTION net_price_each(
-    @quantity INT,
-    @list_price DEC(10,2),
-    @discount DEC(4,2)
+    @quantity INTEGER,
+    @list_price REAL,
+    @discount REAL
 )
-RETURNS DEC(10,2)
+RETURNS REAL
 AS 
 BEGIN
     RETURN @quantity * @list_price * (1 - @discount);

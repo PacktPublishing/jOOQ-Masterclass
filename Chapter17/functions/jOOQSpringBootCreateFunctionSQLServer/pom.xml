@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.app</groupId>
-    <artifactId>jOOQSpringBootSFSQLServer</artifactId>
+    <artifactId>jOOQSpringBootCreateFunctionSQLServer</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQSpringBootSFSQLServer</name>
+    <name>jOOQSpringBootCreateFunctionSQLServer</name>
     <description>jOOQ - Spring Boot app</description>    
 
     <parent>
@@ -26,7 +26,7 @@
         <maven.compiler.source>14</maven.compiler.source>
         <maven.compiler.target>14</maven.compiler.target>
         
-        <jooq.version>3.14.11</jooq.version>             
+        <jooq.version>3.15.0</jooq.version>             
         <codehaus.mojo.version>1.0.0</codehaus.mojo.version>
         <maven.compiler.plugin.version>3.3</maven.compiler.plugin.version>
     </properties>
