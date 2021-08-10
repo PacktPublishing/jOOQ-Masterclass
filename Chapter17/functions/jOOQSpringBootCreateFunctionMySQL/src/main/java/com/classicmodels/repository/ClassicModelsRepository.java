@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-@Transactional
+@Transactional(readOnly = true)
 public class ClassicModelsRepository {
 
     private final DSLContext ctx;
@@ -24,6 +24,7 @@ public class ClassicModelsRepository {
         this.ctx = ctx;
     }
 
+    @Transactional
     public void createScalarFunction() {
 
         Parameter<Integer> quantity = in("quantity", INTEGER);
@@ -32,24 +33,26 @@ public class ClassicModelsRepository {
 
         ctx.dropFunctionIfExists("net_price_each_jooq")
                 .execute();
-        
+
         // or, use ctx.createOrReplaceFunction() instead of dropping via dropFunction()
-        ctx.createFunction("net_price_each_jooq")               
+        ctx.createFunction("net_price_each_jooq")
                 .parameters(
                         quantity, list_price, discount
                 )
                 .returns(DECIMAL(10, 2))
                 .deterministic()
-                .as(return_(quantity.mul(list_price).mul(inline(1).minus(discount))))                
+                .as(return_(quantity.mul(list_price).mul(inline(1).minus(discount))))
                 .execute();
-        
+    }
+
+    public void callScalarFunction() {
         // call this function (plain SQL)
-        float result = ctx.select(function(name("net_price_each_jooq"), 
+        float result = ctx.select(function(name("net_price_each_jooq"),
                 DECIMAL(10, 2), val(10), val(20.45), val(0.33)))
                 .fetchOneInto(Float.class);
-        
+
         System.out.println("Result: " + result);
-        
+
         // calling the previously created functions via the generated code
         // can be done as you saw in the application jOOQSpringBootSFMySQL
     }
