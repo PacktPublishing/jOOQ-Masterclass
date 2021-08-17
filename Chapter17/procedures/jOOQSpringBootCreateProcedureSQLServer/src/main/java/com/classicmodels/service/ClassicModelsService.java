@@ -13,11 +13,8 @@ public class ClassicModelsService {
     }
 
     public void callAll() {
-
-        classicModelsRepository.createScalarFunction();
-        classicModelsRepository.callScalarFunction();
         
-        classicModelsRepository.createRecordFunction();
-        classicModelsRepository.callRecordFunction();
+        classicModelsRepository.createProcedure();
+        classicModelsRepository.callProcedure();
     }
 }
