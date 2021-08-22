@@ -111,6 +111,20 @@ AS BEGIN
 END;
 GO
 
+CREATE OR ALTER PROCEDURE refresh_top3_product(@p_line_in VARCHAR(50))
+AS BEGIN
+	DELETE FROM [classicmodels].[dbo].[top3product]; 
+        INSERT INTO [classicmodels].[dbo].[top3product]([classicmodels].[dbo].[top3product].[product_id], [classicmodels].[dbo].[top3product].[product_name])        
+        SELECT TOP 3 [classicmodels].[dbo].[orderdetail].[product_id], [classicmodels].[dbo].[product].[product_name]
+         FROM [classicmodels].[dbo].[orderdetail]
+         JOIN [classicmodels].[dbo].[product]
+         ON [classicmodels].[dbo].[orderdetail].[product_id] = [classicmodels].[dbo].[product].[product_id]
+          AND @p_line_in = [classicmodels].[dbo].[product].[product_line]
+         GROUP BY [classicmodels].[dbo].[orderdetail].[product_id], [classicmodels].[dbo].[product].[product_name],[classicmodels].[dbo].[orderdetail].[quantity_ordered]
+         ORDER BY [classicmodels].[dbo].[orderdetail].[quantity_ordered];         
+END;
+GO
+
 CREATE PROCEDURE get_emps_in_office(@in_office_code VARCHAR(10))
 AS BEGIN
     SELECT [classicmodels].[dbo].[office].[city], 

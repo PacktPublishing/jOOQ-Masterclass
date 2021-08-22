@@ -839,75 +839,6 @@ BEGIN
 END;
 /
 
---Creating and Using a User-Defined Aggregate
-BEGIN
-   EXECUTE IMMEDIATE 'CREATE TYPE SecondMaxImpl AS OBJECT
-(
-  max NUMBER, 
-  secmax NUMBER, 
-  STATIC FUNCTION ODCIAggregateInitialize(sctx IN OUT SecondMaxImpl) 
-    RETURN NUMBER,
-  MEMBER FUNCTION ODCIAggregateIterate(self IN OUT SecondMaxImpl, 
-    value IN NUMBER) RETURN NUMBER,
-  MEMBER FUNCTION ODCIAggregateTerminate(self IN SecondMaxImpl, 
-    returnValue OUT NUMBER, flags IN NUMBER) RETURN NUMBER,
-  MEMBER FUNCTION ODCIAggregateMerge(self IN OUT SecondMaxImpl, 
-    ctx2 IN SecondMaxImpl) RETURN NUMBER
-);';
-EXCEPTION
-   WHEN OTHERS THEN NULL;
-END;
-/
-
-create or replace type body SecondMaxImpl is 
-static function ODCIAggregateInitialize(sctx IN OUT SecondMaxImpl) 
-return number is 
-begin
-  sctx := SecondMaxImpl(0, 0);
-  return ODCIConst.Success;
-end;
-
-member function ODCIAggregateIterate(self IN OUT SecondMaxImpl, value IN number) 
-return number is
-begin
-  if value > self.max then
-    self.secmax := self.max;
-    self.max := value;
-  elsif value > self.secmax then
-    self.secmax := value;
-  end if;
-  return ODCIConst.Success;
-end;
-
-member function ODCIAggregateTerminate(self IN SecondMaxImpl, returnValue OUT 
-number, flags IN number) return number is
-begin
-  returnValue := self.secmax;
-  return ODCIConst.Success;
-end;
-
-member function ODCIAggregateMerge(self IN OUT SecondMaxImpl, ctx2 IN 
-SecondMaxImpl) return number is
-begin
-  if ctx2.max > self.max then
-    if ctx2.secmax > self.secmax then 
-      self.secmax := ctx2.secmax;
-    else
-      self.secmax := self.max;
-    end if;
-    self.max := ctx2.max;
-  elsif ctx2.max > self.secmax then
-    self.secmax := ctx2.max;
-  end if;
-  return ODCIConst.Success;
-end;
-end;
-/
-
-CREATE OR REPLACE FUNCTION SecondMax (input NUMBER) RETURN NUMBER 
-PARALLEL_ENABLE AGGREGATE USING SecondMaxImpl;
-/
-
 -- USER-DEFINED PROCEDURES
 CREATE OR REPLACE PROCEDURE get_product(pid IN NUMBER, cursor_result OUT SYS_REFCURSOR)
 AS BEGIN
@@ -940,21 +871,6 @@ AS BEGIN
 	INTO average
 	FROM product
 	WHERE product_line = pl;
-END;
-/
-
-CREATE OR REPLACE PROCEDURE refresh_top3_product(p_line_in IN VARCHAR2)
-AS BEGIN
-	DELETE FROM "SYSTEM"."TOP3PRODUCT"; 
-        INSERT INTO "SYSTEM"."TOP3PRODUCT"("SYSTEM"."TOP3PRODUCT"."PRODUCT_ID", "SYSTEM"."TOP3PRODUCT"."PRODUCT_NAME")        
-        SELECT "SYSTEM"."ORDERDETAIL"."PRODUCT_ID", "SYSTEM"."PRODUCT"."PRODUCT_NAME"
-         FROM "SYSTEM"."ORDERDETAIL"
-         JOIN "SYSTEM"."PRODUCT"
-         ON "SYSTEM"."ORDERDETAIL"."PRODUCT_ID" = "SYSTEM"."PRODUCT"."PRODUCT_ID"
-          AND p_line_in = "SYSTEM"."PRODUCT"."PRODUCT_LINE"
-         GROUP BY "SYSTEM"."ORDERDETAIL"."PRODUCT_ID", "SYSTEM"."PRODUCT"."PRODUCT_NAME","SYSTEM"."ORDERDETAIL"."QUANTITY_ORDERED"
-         ORDER BY "SYSTEM"."ORDERDETAIL"."QUANTITY_ORDERED"
-		 FETCH NEXT 3 ROWS ONLY;         
 END;
 /
 

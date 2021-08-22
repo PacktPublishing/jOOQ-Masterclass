@@ -4,17 +4,17 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.app</groupId>
-    <artifactId>jOOQSpringBootSPSQLServer</artifactId>
+    <artifactId>jOOQSpringBootUDAFSQLServer</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQSpringBootSPSQLServer</name>
+    <name>jOOQSpringBootUDAFSQLServer</name>
     <description>jOOQ - Spring Boot app</description>    
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.6.RELEASE</version>        
+        <version>2.3.3.RELEASE</version>        
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 

@@ -8,7 +8,10 @@ import org.jooq.Result;
 import org.jooq.Results;
 import org.jooq.Table;
 import org.jooq.Record;
+import static org.jooq.impl.DSL.call;
+import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.table;
+import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,8 +23,8 @@ public class ClassicModelsRepository {
 
     public ClassicModelsRepository(DSLContext ctx) {
         this.ctx = ctx;
-    }  
-    
+    }
+
     public void executeStoredProcedureSelect() {
 
         // EXECUTION 1
@@ -49,11 +52,24 @@ public class ClassicModelsRepository {
 
         Results results = geio.getResults();
 
-        for (Result<?> result : results) {            
+        for (Result<?> result : results) {
             System.out.println("Result set:\n");
             for (Record record : result) {
                 System.out.println(record);
             }
-        }                        
+        }
+    }
+
+    public void executeStoredProcedureViaCallStatement() {
+
+        // CALL statement in an anonymous block
+        ctx.begin(call(name("refresh_top3_product"))
+                .args(val("Trains")))
+                .execute();
+
+        // CALL statement directly
+        ctx.call(name("refresh_top3_product"))
+                .args(val("Trains"))
+                .execute();
     }
 }

@@ -103,11 +103,43 @@ AS BEGIN
 END; 
 GO
 
+-- USER-DEFINED AGG FUNCTION
+EXEC sp_configure 'show advanced options', 1
+GO  
+RECONFIGURE;
+GO  
+EXEC sp_configure 'clr strict security', 0;
+GO  
+RECONFIGURE;
+GO  
+
+CREATE ASSEMBLY StringUtilities FROM 'C:\SBPBP\GitHub\Up-and-Running-with-jOOQ\Chapter17\functions\StringUtilities.dll'  
+GO  
+  
+CREATE AGGREGATE concatenate(@input nvarchar(4000))  
+RETURNS nvarchar(4000)  
+EXTERNAL NAME [StringUtilities].[Microsoft.Samples.SqlServer.Concatenate];  
+GO  
+
 /* USER-DEFINED PROCEDURES */
 CREATE PROCEDURE get_product(@pid BIGINT)
 AS BEGIN
 	SELECT * FROM [classicmodels].[dbo].[product] 
           WHERE [classicmodels].[dbo].[product].[product_id] = @pid;
+END;
+GO
+
+CREATE OR ALTER PROCEDURE refresh_top3_product(@p_line_in VARCHAR(50))
+AS BEGIN
+	DELETE FROM [classicmodels].[dbo].[top3product]; 
+        INSERT INTO [classicmodels].[dbo].[top3product]([classicmodels].[dbo].[top3product].[product_id], [classicmodels].[dbo].[top3product].[product_name])        
+        SELECT TOP 3 [classicmodels].[dbo].[orderdetail].[product_id], [classicmodels].[dbo].[product].[product_name]
+         FROM [classicmodels].[dbo].[orderdetail]
+         JOIN [classicmodels].[dbo].[product]
+         ON [classicmodels].[dbo].[orderdetail].[product_id] = [classicmodels].[dbo].[product].[product_id]
+          AND @p_line_in = [classicmodels].[dbo].[product].[product_line]
+         GROUP BY [classicmodels].[dbo].[orderdetail].[product_id], [classicmodels].[dbo].[product].[product_name],[classicmodels].[dbo].[orderdetail].[quantity_ordered]
+         ORDER BY [classicmodels].[dbo].[orderdetail].[quantity_ordered];         
 END;
 GO
 

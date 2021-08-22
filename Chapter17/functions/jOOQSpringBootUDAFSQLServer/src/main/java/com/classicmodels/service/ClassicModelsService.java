@@ -14,10 +14,6 @@ public class ClassicModelsService {
 
     public void callAll() {
 
-        classicModelsRepository.createProcedure1();
-        classicModelsRepository.callProcedure1();
-        
-        classicModelsRepository.createProcedure2();
-        classicModelsRepository.callProcedure2();
+       classicModelsRepository.callConcatenate();
     }
 }

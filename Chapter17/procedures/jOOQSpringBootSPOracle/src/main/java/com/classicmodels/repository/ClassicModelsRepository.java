@@ -83,7 +83,7 @@ public class ClassicModelsRepository {
         getProduct(ctx.configuration(), 1L);
 
         // EXECUTION 3
-        ctx.select().from(table(Routines.getProduct(ctx.configuration(), 1L))).fetch();
+        ctx.select().from(table(getProduct(ctx.configuration(), 1L))).fetch();
     }
 
     public void executeStoredProcedureMultipleSelect() {
