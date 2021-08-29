@@ -13,6 +13,8 @@ import org.jooq.DSLContext;
 import org.jooq.Result;
 import org.jooq.Record;
 import org.jooq.Results;
+import static org.jooq.impl.DSL.call;
+import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.table;
 import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
@@ -28,7 +30,7 @@ public class ClassicModelsRepository {
         this.ctx = ctx;
     }
 
-     public void executeStoredProcedureInAndOut() {
+    public void executeStoredProcedureInAndOut() {
 
         // EXECUTION 1
         GetAvgPriceByProductLine avg = new GetAvgPriceByProductLine();
@@ -50,7 +52,7 @@ public class ClassicModelsRepository {
                         .and(PRODUCT.PRODUCT_LINE.eq("Classic Cars")))
                 .fetch();
     }
-     
+
     public void executeStoredProcedureInOut() {
 
         // EXECUTION 1
@@ -64,19 +66,19 @@ public class ClassicModelsRepository {
 
         // EXECUTION 2
         ctx.insertInto(PRODUCT, PRODUCT.PRODUCT_ID, PRODUCT.CODE)
-                .values(Routines.setCounter(ctx.configuration(), BigInteger.valueOf(10000), 
+                .values(Routines.setCounter(ctx.configuration(), BigInteger.valueOf(10000),
                         BigInteger.valueOf((int) (Math.random() * 1000))).longValue(),
                         542123L)
                 .execute();
-    } 
-     
+    }
+
     public void executeStoredProcedureSelect() {
 
         // EXECUTION 1
         GetProduct gp = new GetProduct();
         gp.setPid(1L);
 
-        gp.execute(ctx.configuration());        
+        gp.execute(ctx.configuration());
         System.out.println("Result: \n" + gp.getCursorResult());   // Result<Record>
 
         // EXECUTION 2
@@ -96,14 +98,27 @@ public class ClassicModelsRepository {
 
         Results results = geio.getResults();
 
-        for (Result<?> result : results) {            
+        for (Result<?> result : results) {
             System.out.println("Result set:\n");
             for (Record record : result) {
                 System.out.println(record);
             }
-        }      
-        
+        }
+
         System.out.println("Office:\n" + geio.getCursorOffice());
         System.out.println("Employee:\n" + geio.getCursorEmployee());
+    }
+
+    public void executeStoredProcedureViaCallStatement() {
+        
+        // CALL statement in an anonymous block
+        ctx.begin(call(name("REFRESH_TOP3_PRODUCT"))
+                .args(val("Classic Cars")))
+                .execute();
+
+        // CALL statement directly
+        ctx.call(name("REFRESH_TOP3_PRODUCT"))
+                .args(val("Classic Cars"))
+                .execute();
     }
 }
