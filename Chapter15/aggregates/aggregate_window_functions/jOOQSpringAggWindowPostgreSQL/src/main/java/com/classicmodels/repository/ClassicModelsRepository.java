@@ -113,9 +113,45 @@ public class ClassicModelsRepository {
                         .rowsPreceding(2).as("avg_prec_3_prices"))
                 .from(ORDERDETAIL)
                 .fetch();
+
+        /*
+        SELECT
+ f.id, f.release_year, f.rating,
+ AVG(rating) OVER (PARTITION BY release_year ORDER BY rating 
+   GROUPS BETWEEN 1 FOLLOWING AND UNBOUNDED FOLLOWING) 
+AS avg_of_better
+FROM films f 
+ORDER BY release_year, rating;
+         */
+        ctx.select(EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.JOB_TITLE, EMPLOYEE.SALARY,
+                avg(EMPLOYEE.SALARY)
+                        .over()
+                        .partitionBy(EMPLOYEE.JOB_TITLE).orderBy(EMPLOYEE.SALARY)
+                        .groupsBetweenFollowing(1).andUnboundedFollowing().as("avg_of_better"))
+                .from(EMPLOYEE)
+                .orderBy(EMPLOYEE.JOB_TITLE, EMPLOYEE.SALARY)
+                .fetch();
+
+        /*
+        SELECT
+ f.id, f.release_year, f.rating,
+ AVG(rating) OVER (PARTITION BY release_year ORDER BY rating 
+   GROUPS BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING EXCLUDE GROUP)
+AS avg_of_better
+FROM films f 
+ORDER BY release_year, rating;
+         */
+        ctx.select(EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.JOB_TITLE, EMPLOYEE.SALARY,
+                avg(EMPLOYEE.SALARY)
+                        .over()
+                        .partitionBy(EMPLOYEE.JOB_TITLE).orderBy(EMPLOYEE.SALARY)
+                        .groupsBetweenCurrentRow().andUnboundedFollowing().excludeGroup().as("avg_of_better"))
+                .from(EMPLOYEE)
+                .orderBy(EMPLOYEE.JOB_TITLE, EMPLOYEE.SALARY)
+                .fetch();
     }
 
-// Calculate Running Totals via SUM()
+    // Calculate Running Totals via SUM()
     public void calculateRunningTotals() {
 
         ctx.selectDistinct(BANK_TRANSACTION.CACHING_DATE, BANK_TRANSACTION.CARD_TYPE,
