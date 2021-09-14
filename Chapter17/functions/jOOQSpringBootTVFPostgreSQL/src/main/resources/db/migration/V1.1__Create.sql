@@ -270,7 +270,7 @@ CREATE TABLE product (
   product_scale varchar(10) DEFAULT NULL,
   product_vendor varchar(50) DEFAULT NULL,
   product_description text DEFAULT NULL,
-  quantity_in_stock smallint DEFAULT 0,
+  quantity_in_stock int DEFAULT 0,
   buy_price decimal(10,2) NOT NULL DEFAULT 0.0,
   msrp decimal(10,2) NOT NULL DEFAULT 0.0,
   specs hstore DEFAULT NULL,
@@ -366,6 +366,13 @@ CREATE TABLE office_flights (
 
 /* USER-DEFINED FUNCTIONS */
 
+CREATE OR REPLACE FUNCTION make_array(anyelement, anyelement) RETURNS anyarray AS $$
+    SELECT ARRAY[$1, $2];
+$$ LANGUAGE SQL;
+
+CREATE FUNCTION dup (f1 anyelement, OUT f2 anyelement, OUT f3 anyarray)
+AS 'select $1, array[$1,$1]' LANGUAGE SQL;
+
 CREATE OR REPLACE FUNCTION get_avg_sale(len_from int, len_to int) 
   RETURNS int LANGUAGE plpgsql AS $$ 
 DECLARE avg_count integer; 
@@ -377,6 +384,107 @@ BEGIN
    
   RETURN avg_count; 
 END; 
+$$;
+
+create or replace function get_salary_stat(
+    out min_sal int,
+    out max_sal int,
+    out avg_sal numeric) 
+language plpgsql
+as $$
+begin
+  
+  select min(salary),
+         max(salary),
+		 avg(salary)::numeric(7,2)
+  into min_sal, max_sal, avg_sal
+  from employee;
+
+end;
+$$;
+
+create or replace function swap(
+	inout x int,
+	inout y int
+) 
+language plpgsql	
+as $$
+begin
+   select x,y into y,x;
+end; 
+$$;
+
+CREATE FUNCTION new_salary(salary int, bonus int DEFAULT 50, penalty int DEFAULT 0)
+RETURNS int
+LANGUAGE SQL
+AS $$
+    SELECT $1 + $2 - $3;
+$$;
+
+CREATE FUNCTION update_msrp (product_id bigint, debit integer) RETURNS integer AS $$
+    UPDATE product
+        SET msrp = msrp - debit
+        WHERE product_id = update_msrp.product_id
+    RETURNING msrp;
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION net_price_each(
+    quantity INT,
+    list_price DECIMAL,
+    discount DECIMAL
+)
+RETURNS DECIMAL(10,2) LANGUAGE plpgsql IMMUTABLE AS $$ 
+BEGIN
+    RETURN quantity * list_price * (1 - discount);
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION get_customer(cl INT) RETURNS refcursor AS $$
+    DECLARE
+      cur refcursor;                                                   
+    BEGIN
+      OPEN cur FOR SELECT * FROM customer WHERE credit_limit > cl ORDER BY customer_name;   
+      RETURN cur;                                    
+    END;
+    $$ LANGUAGE plpgsql;
+	
+-- Procedure that returns multiple result sets (cursors)
+   CREATE OR REPLACE FUNCTION get_offices_multiple() RETURNS SETOF refcursor AS $$
+    DECLARE
+      ref1 refcursor;           
+      ref2 refcursor;                             
+    BEGIN
+      OPEN ref1 FOR SELECT city, country FROM office WHERE internal_budget < 100000;  
+      RETURN NEXT ref1;                                                 
+ 
+      OPEN ref2 FOR SELECT city, country FROM office WHERE internal_budget > 100000;  
+      RETURN NEXT ref2;                                                 
+    END;
+    $$ LANGUAGE plpgsql;	
+	  
+CREATE OR REPLACE FUNCTION employee_office_array(VARCHAR(10))
+RETURNS bigint[] AS $$
+  SELECT ARRAY(SELECT "public"."employee"."employee_number"
+      FROM "public"."employee" WHERE "public"."employee"."office_code" = $1)
+$$
+LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION department_topic_arr(id bigint)
+RETURNS text[] AS $$
+  SELECT "public"."department"."topic"
+      FROM "public"."department" WHERE "public"."department"."department_id" = id
+$$
+LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION net_price_each(
+    quantity INT,
+    list_price REAL,
+    discount REAL
+)
+RETURNS REAL LANGUAGE plpgsql AS $$ 
+BEGIN
+    RETURN quantity * list_price * (1 - discount);
+END;
 $$;
 
 CREATE OR REPLACE FUNCTION top_three_sales_per_employee(employee_nr bigint)
@@ -395,8 +503,8 @@ BEGIN
 END; 
 $$;
 
-CREATE OR REPLACE FUNCTION product_of_product_line(p_line_in varchar(50))
-  RETURNS TABLE(p_id bigint, p_name varchar(70), p_line varchar(50)) LANGUAGE plpgsql AS $$ 
+CREATE OR REPLACE FUNCTION product_of_product_line(p_line_in VARCHAR)
+  RETURNS TABLE(p_id BIGINT, p_name VARCHAR, p_line VARCHAR) LANGUAGE plpgsql AS $$ 
 BEGIN
     RETURN QUERY
     SELECT 

@@ -503,8 +503,8 @@ BEGIN
 END; 
 $$;
 
-CREATE OR REPLACE FUNCTION product_of_product_line(p_line_in varchar(50))
-  RETURNS TABLE(p_id bigint, p_name varchar(70), p_line varchar(50)) LANGUAGE plpgsql AS $$ 
+CREATE OR REPLACE FUNCTION product_of_product_line(p_line_in VARCHAR)
+  RETURNS TABLE(p_id BIGINT, p_name VARCHAR, p_line VARCHAR) LANGUAGE plpgsql AS $$ 
 BEGIN
     RETURN QUERY
     SELECT 

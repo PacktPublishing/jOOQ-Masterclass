@@ -57,12 +57,12 @@ AS BEGIN
 END
 GO
 
-CREATE OR ALTER FUNCTION netPriceEach(
-    @quantity INT,
-    @list_price DEC(10,2),
-    @discount DEC(4,2)
+CREATE OR ALTER FUNCTION net_price_each(
+    @quantity INTEGER,
+    @list_price REAL,
+    @discount REAL
 )
-RETURNS DEC(10,2)
+RETURNS REAL
 AS 
 BEGIN
     RETURN @quantity * @list_price * (1 - @discount);
@@ -101,6 +101,62 @@ AS BEGIN
       @p_line_in = [classicmodels].[dbo].[product].[product_line];  
     RETURN	  
 END; 
+GO
+
+-- USER-DEFINED AGG FUNCTION
+EXEC sp_configure 'show advanced options', 1
+GO  
+RECONFIGURE;
+GO  
+EXEC sp_configure 'clr strict security', 0;
+GO  
+RECONFIGURE;
+GO  
+
+CREATE ASSEMBLY StringUtilities FROM 'C:\SBPBP\GitHub\Up-and-Running-with-jOOQ\Chapter17\functions\StringUtilities.dll'  
+GO  
+  
+CREATE AGGREGATE concatenate(@input nvarchar(4000))  
+RETURNS nvarchar(4000)  
+EXTERNAL NAME [StringUtilities].[Microsoft.Samples.SqlServer.Concatenate];  
+GO  
+
+/* USER-DEFINED PROCEDURES */
+CREATE PROCEDURE get_product(@pid BIGINT)
+AS BEGIN
+	SELECT * FROM [classicmodels].[dbo].[product] 
+          WHERE [classicmodels].[dbo].[product].[product_id] = @pid;
+END;
+GO
+
+CREATE OR ALTER PROCEDURE refresh_top3_product(@p_line_in VARCHAR(50))
+AS BEGIN
+	DELETE FROM [classicmodels].[dbo].[top3product]; 
+        INSERT INTO [classicmodels].[dbo].[top3product]([classicmodels].[dbo].[top3product].[product_id], [classicmodels].[dbo].[top3product].[product_name])        
+        SELECT TOP 3 [classicmodels].[dbo].[orderdetail].[product_id], [classicmodels].[dbo].[product].[product_name]
+         FROM [classicmodels].[dbo].[orderdetail]
+         JOIN [classicmodels].[dbo].[product]
+         ON [classicmodels].[dbo].[orderdetail].[product_id] = [classicmodels].[dbo].[product].[product_id]
+          AND @p_line_in = [classicmodels].[dbo].[product].[product_line]
+         GROUP BY [classicmodels].[dbo].[orderdetail].[product_id], [classicmodels].[dbo].[product].[product_name],[classicmodels].[dbo].[orderdetail].[quantity_ordered]
+         ORDER BY [classicmodels].[dbo].[orderdetail].[quantity_ordered];         
+END;
+GO
+
+CREATE PROCEDURE get_emps_in_office(@in_office_code VARCHAR(10))
+AS BEGIN
+    SELECT [classicmodels].[dbo].[office].[city], 
+	       [classicmodels].[dbo].[office].[country], 
+		   [classicmodels].[dbo].[office].[internal_budget]
+      FROM [classicmodels].[dbo].[office]
+     WHERE [classicmodels].[dbo].[office].[office_code]=@in_office_code;
+
+    SELECT [classicmodels].[dbo].[employee].[employee_number],
+	       [classicmodels].[dbo].[employee].[first_name],
+		   [classicmodels].[dbo].[employee].[last_name]
+      FROM [classicmodels].[dbo].[employee]
+     WHERE [classicmodels].[dbo].[employee].[office_code]=@in_office_code;
+END;
 GO
 
 IF OBJECT_ID('payment', 'U') IS NOT NULL 
@@ -359,7 +415,7 @@ CREATE TABLE product (
   [product_scale] varchar(10) DEFAULT NULL,
   [product_vendor] varchar(50) DEFAULT NULL,
   [product_description] varchar(max) DEFAULT NULL,
-  [quantity_in_stock] smallint DEFAULT 0,
+  [quantity_in_stock] int DEFAULT 0,
   [buy_price] decimal(10,2)  NOT NULL DEFAULT 0.0,
   [specs] varchar(max) DEFAULT NULL,
   [msrp] decimal(10,2) NOT NULL DEFAULT 0.0,
