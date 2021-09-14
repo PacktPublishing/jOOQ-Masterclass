@@ -344,26 +344,72 @@ BEGIN
 	-- return the customer level
 	RETURN (customerLevel);
 END$$
-DELIMITER$$
+DELIMITER;
 
+DELIMITER $$
 CREATE FUNCTION net_price_each(
     quantity INT,
-    list_price DECIMAL(10,2),
-    discount DECIMAL(4,2)
+    list_price REAL,
+    discount REAL
 )
 RETURNS DECIMAL(10,2)
 DETERMINISTIC
 BEGIN
     RETURN quantity * list_price * (1 - discount);
 END$$
-DELIMITER$$
+DELIMITER;
 
 DELIMITER $$
 CREATE TRIGGER product_uid_trigger BEFORE INSERT ON product FOR EACH ROW BEGIN
   UPDATE sequences set currval = currval + 10 where sequence_name = 'product_uid_seq';
   SET NEW.product_uid = (SELECT currval FROM sequences WHERE sequence_name = 'product_uid_seq');
 END$$
-DELIMITER ;
+DELIMITER;
+
+/* USER-DEFINED PROCEDURES */
+
+DELIMITER $$
+CREATE PROCEDURE get_product(IN pid BIGINT)
+BEGIN
+	SELECT * FROM product WHERE product_id = pid;
+END$$
+DELIMITER;
+
+DELIMITER $$
+CREATE PROCEDURE get_emps_in_office(in_office_code VARCHAR(10))
+BEGIN
+    SELECT city, country, internal_budget
+      FROM office
+     WHERE office_code=in_office_code;
+
+    SELECT employee_number,first_name,last_name
+      FROM employee
+     WHERE office_code=in_office_code;
+END$$
+DELIMITER;
+
+DELIMITER $$
+CREATE PROCEDURE get_avg_price_by_product_line (
+	IN  pl VARCHAR(25),
+	OUT average DECIMAL(10, 2)
+)
+BEGIN
+	SELECT AVG(buy_price)
+	INTO average
+	FROM product
+	WHERE product_line = pl;
+END$$
+DELIMITER;
+
+DELIMITER $$
+CREATE PROCEDURE set_counter(
+	INOUT counter INT,
+    IN inc INT
+)
+BEGIN
+	SET counter = counter + inc;
+END$$
+DELIMITER;
 
 -- VIEWS
 CREATE OR REPLACE VIEW customer_master AS

@@ -14,7 +14,7 @@ import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.sum;
 import static org.jooq.impl.DSL.val;
-import static org.jooq.impl.SQLDataType.DECIMAL;
+import static org.jooq.impl.SQLDataType.DOUBLE;
 import static org.jooq.impl.SQLDataType.INTEGER;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,8 +34,8 @@ public class ClassicModelsRepository {
         // EXECUTION 1
         NetPriceEach npe1 = new NetPriceEach();
         npe1.setQuantity(25);
-        npe1.setListPrice(BigDecimal.valueOf(15.5));
-        npe1.setDiscount(BigDecimal.valueOf(0.75));
+        npe1.setListPrice(15.5);
+        npe1.setDiscount(0.75);
 
         npe1.execute(ctx.configuration());
 
@@ -44,8 +44,8 @@ public class ClassicModelsRepository {
         // EXECUTION 2
         NetPriceEach npe2 = new NetPriceEach();
         npe2.set(in("quantity", INTEGER), 25);
-        npe2.set(in("list_price", DECIMAL), BigDecimal.valueOf(15.5));
-        npe2.set(in("discount", DECIMAL), BigDecimal.valueOf(0.75));
+        npe2.set(in("list_price", DOUBLE), 15.5);
+        npe2.set(in("discount", DOUBLE), 0.75);
 
         npe2.execute(ctx.configuration());
 
@@ -55,16 +55,16 @@ public class ClassicModelsRepository {
         NetPriceEach npe3 = new NetPriceEach();
         npe3.setQuantity(field(select(PRODUCT.QUANTITY_IN_STOCK)
                 .from(PRODUCT).where(PRODUCT.PRODUCT_ID.eq(1L))));
-        npe3.setListPrice(field(select(PRODUCT.MSRP)
+        npe3.setListPrice(field(select(PRODUCT.MSRP.coerce(Double.class))
                 .from(PRODUCT).where(PRODUCT.PRODUCT_ID.eq(1L))));
-        npe3.setDiscount(BigDecimal.valueOf(0.75));
+        npe3.setDiscount(0.75);
 
         System.out.println("Execution 3:\n"
                 + ctx.fetchValue(npe3.asField("netPriceEach"))); // or, ctx.select(npe3.asField("netPriceEach")).fetch()
 
         // EXECUTION 4
         BigDecimal npe4 = Routines.netPriceEach(
-                ctx.configuration(), 25, BigDecimal.valueOf(15.5), BigDecimal.valueOf(0.75));
+                ctx.configuration(), 25, 15.5, 0.75);
 
         System.out.println("Execution 4: " + npe4);
 
@@ -72,9 +72,9 @@ public class ClassicModelsRepository {
         Field<BigDecimal> npe5 = Routines.netPriceEach(
                 field(select(PRODUCT.QUANTITY_IN_STOCK)
                         .from(PRODUCT).where(PRODUCT.PRODUCT_ID.eq(1L))),
-                field(select(PRODUCT.MSRP)
+                field(select(PRODUCT.MSRP.coerce(Double.class))
                         .from(PRODUCT).where(PRODUCT.PRODUCT_ID.eq(1L))),
-                val(BigDecimal.valueOf(0.75)));
+                val(0.75));
 
         System.out.println("Execution 5:\n"
                 + ctx.fetchValue(npe5)); // or, ctx.select(npe5).fetch()
@@ -82,7 +82,7 @@ public class ClassicModelsRepository {
         // EXECUTION 6
         ctx.select(ORDERDETAIL.ORDER_ID,
                 sum(netPriceEach(ORDERDETAIL.QUANTITY_ORDERED,
-                        ORDERDETAIL.PRICE_EACH, val(BigDecimal.valueOf(0.75)))).as("sum_net_price"))
+                        ORDERDETAIL.PRICE_EACH.coerce(Double.class), val(0.75))).as("sum_net_price"))
                 .from(ORDERDETAIL)
                 .groupBy(ORDERDETAIL.ORDER_ID)
                 .orderBy(field(name("sum_net_price")).desc())

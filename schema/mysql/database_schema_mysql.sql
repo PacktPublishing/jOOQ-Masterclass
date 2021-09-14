@@ -344,19 +344,20 @@ BEGIN
 	-- return the customer level
 	RETURN (customerLevel);
 END$$
-DELIMITER$$
+DELIMITER;
 
+DELIMITER $$
 CREATE FUNCTION net_price_each(
     quantity INT,
-    list_price DECIMAL,
-    discount DECIMAL
+    list_price REAL,
+    discount REAL
 )
 RETURNS DECIMAL(10,2)
 DETERMINISTIC
 BEGIN
     RETURN quantity * list_price * (1 - discount);
 END$$
-DELIMITER$$
+DELIMITER;
 
 DELIMITER $$
 CREATE TRIGGER product_uid_trigger BEFORE INSERT ON product FOR EACH ROW BEGIN
