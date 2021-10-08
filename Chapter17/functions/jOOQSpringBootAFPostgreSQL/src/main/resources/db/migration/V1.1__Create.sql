@@ -366,6 +366,10 @@ CREATE TABLE office_flights (
 
 /* USER-DEFINED FUNCTIONS */
 
+CREATE FUNCTION make_array(anyelement, anyelement) RETURNS anyarray AS $$
+    SELECT ARRAY[$1, $2];
+$$ LANGUAGE SQL;
+
 CREATE FUNCTION dup (f1 anyelement, OUT f2 anyelement, OUT f3 anyarray)
 AS 'select $1, array[$1,$1]' LANGUAGE SQL;
 
@@ -433,20 +437,20 @@ BEGIN
 END;
 $$;
 
-CREATE OR REPLACE FUNCTION get_customer(cl INT) RETURNS refcursor AS $$
+CREATE OR REPLACE FUNCTION get_customer(cl INT) RETURNS REFCURSOR AS $$
     DECLARE
-      cur refcursor;                                                   
+      cur REFCURSOR;                                                   
     BEGIN
       OPEN cur FOR SELECT * FROM customer WHERE credit_limit > cl ORDER BY customer_name;   
       RETURN cur;                                    
     END;
     $$ LANGUAGE plpgsql;
 	
--- Procedure that returns multiple result sets (cursors)
-   CREATE OR REPLACE FUNCTION get_offices_multiple() RETURNS SETOF refcursor AS $$
+-- Function that returns multiple result sets (cursors)
+   CREATE OR REPLACE FUNCTION get_offices_multiple() RETURNS SETOF REFCURSOR AS $$
     DECLARE
-      ref1 refcursor;           
-      ref2 refcursor;                             
+      ref1 REFCURSOR;           
+      ref2 REFCURSOR;                             
     BEGIN
       OPEN ref1 FOR SELECT city, country FROM office WHERE internal_budget < 100000;  
       RETURN NEXT ref1;                                                 
