@@ -728,13 +728,39 @@ BEGIN
 END;
 /
 
+CREATE OR REPLACE FUNCTION get_salary_stat(
+    min_sal OUT INTEGER,
+    max_sal OUT INTEGER,
+    avg_sal OUT REAL) 
+RETURN REAL IS
+BEGIN
+  SELECT MIN(salary),
+         MAX(salary),
+		 AVG(salary)
+  INTO min_sal, max_sal, avg_sal
+  FROM employee;
+  RETURN avg_sal / sqrt(min_sal * max_sal);
+END;
+/
+
+CREATE OR REPLACE FUNCTION swap(
+	x IN OUT PLS_INTEGER,
+	y IN OUT PLS_INTEGER
+) 
+RETURN PLS_INTEGER IS
+BEGIN
+   SELECT x,y INTO y,x FROM dual;
+   RETURN x + y;
+END; 
+/
+
 CREATE OR REPLACE FUNCTION net_price_each(
     quantity IN PLS_INTEGER,
-    list_price IN NUMBER,
-    discount IN NUMBER
+    list_price IN REAL,
+    discount IN REAL
 )
-RETURN NUMBER IS
-    result NUMBER := quantity * list_price * (1 - discount);
+RETURN REAL IS
+    result REAL := quantity * list_price * (1 - discount);
 BEGIN
     RETURN result;
 END;

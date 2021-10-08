@@ -2,8 +2,8 @@ package com.classicmodels.repository;
 
 import java.util.Arrays;
 import static jooq.generated.Routines.departmentTopicArr;
-import static jooq.generated.Routines.employeeOfficeArray;
-import jooq.generated.routines.EmployeeOfficeArray;
+import static jooq.generated.Routines.employeeOfficeArr;
+import jooq.generated.routines.EmployeeOfficeArr;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.field;
@@ -26,7 +26,7 @@ public class ClassicModelsRepository {
     public void executeArrayFunction() {
 
         // EXECUTION 1
-        EmployeeOfficeArray eoa = new EmployeeOfficeArray();
+        EmployeeOfficeArr eoa = new EmployeeOfficeArr();
         eoa.set__1("1");
 
         eoa.execute(ctx.configuration());
@@ -39,7 +39,7 @@ public class ClassicModelsRepository {
         // EXECUTION 2
        ctx.select(field(name("t", "en")), sum(SALE.SALE_))
                .from(SALE)
-               .rightJoin(unnest(employeeOfficeArray("1")).as("t", "en"))
+               .rightJoin(unnest(employeeOfficeArr("1")).as("t", "en"))
                .on(field(name("t", "en")).eq(SALE.EMPLOYEE_NUMBER))
                .groupBy(field(name("t", "en")))
                .fetch();        

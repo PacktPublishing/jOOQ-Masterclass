@@ -740,6 +740,19 @@ BEGIN
 END;
 /
 
+CREATE OR REPLACE NONEDITIONABLE FUNCTION card_commission(card_type IN VARCHAR2)
+RETURN NUMBER IS
+ commision NUMBER := 0;
+ BEGIN
+   IF card_type = 'VisaElectron' THEN commision:= 0.15;
+      ELSIF card_type = 'MasterCard' THEN commision:= 0.22;
+      ELSE commision := 0.25;
+   END IF;   
+      
+    RETURN commision;
+END;
+/   
+
 CREATE OR REPLACE FUNCTION get_customer (cl IN NUMBER)
 RETURN SYS_REFCURSOR
   AS cur SYS_REFCURSOR;
@@ -823,6 +836,134 @@ BEGIN
         p_line_in = "SYSTEM"."PRODUCT"."PRODUCT_LINE";
 
     RETURN table_result;
+END;
+/
+
+--Creating and Using a User-Defined Aggregate
+BEGIN
+   EXECUTE IMMEDIATE 'CREATE TYPE SecondMaxImpl AS OBJECT
+(
+  max NUMBER, 
+  secmax NUMBER, 
+  STATIC FUNCTION ODCIAggregateInitialize(sctx IN OUT SecondMaxImpl) 
+    RETURN NUMBER,
+  MEMBER FUNCTION ODCIAggregateIterate(self IN OUT SecondMaxImpl, 
+    value IN NUMBER) RETURN NUMBER,
+  MEMBER FUNCTION ODCIAggregateTerminate(self IN SecondMaxImpl, 
+    returnValue OUT NUMBER, flags IN NUMBER) RETURN NUMBER,
+  MEMBER FUNCTION ODCIAggregateMerge(self IN OUT SecondMaxImpl, 
+    ctx2 IN SecondMaxImpl) RETURN NUMBER
+);';
+EXCEPTION
+   WHEN OTHERS THEN NULL;
+END;
+/
+
+create or replace type body SecondMaxImpl is 
+static function ODCIAggregateInitialize(sctx IN OUT SecondMaxImpl) 
+return number is 
+begin
+  sctx := SecondMaxImpl(0, 0);
+  return ODCIConst.Success;
+end;
+
+member function ODCIAggregateIterate(self IN OUT SecondMaxImpl, value IN number) 
+return number is
+begin
+  if value > self.max then
+    self.secmax := self.max;
+    self.max := value;
+  elsif value > self.secmax then
+    self.secmax := value;
+  end if;
+  return ODCIConst.Success;
+end;
+
+member function ODCIAggregateTerminate(self IN SecondMaxImpl, returnValue OUT 
+number, flags IN number) return number is
+begin
+  returnValue := self.secmax;
+  return ODCIConst.Success;
+end;
+
+member function ODCIAggregateMerge(self IN OUT SecondMaxImpl, ctx2 IN 
+SecondMaxImpl) return number is
+begin
+  if ctx2.max > self.max then
+    if ctx2.secmax > self.secmax then 
+      self.secmax := ctx2.secmax;
+    else
+      self.secmax := self.max;
+    end if;
+    self.max := ctx2.max;
+  elsif ctx2.max > self.secmax then
+    self.secmax := ctx2.max;
+  end if;
+  return ODCIConst.Success;
+end;
+end;
+/
+
+CREATE OR REPLACE FUNCTION SecondMax (input NUMBER) RETURN NUMBER 
+PARALLEL_ENABLE AGGREGATE USING SecondMaxImpl;
+/
+
+-- USER-DEFINED PROCEDURES
+CREATE OR REPLACE PROCEDURE get_product(pid IN NUMBER, cursor_result OUT SYS_REFCURSOR)
+AS BEGIN
+    OPEN cursor_result FOR
+	SELECT * FROM product WHERE product_id = pid;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE get_emps_in_office(in_office_code IN VARCHAR,
+  cursor_office OUT SYS_REFCURSOR, cursor_employee OUT SYS_REFCURSOR)
+AS BEGIN
+ OPEN cursor_office FOR
+    SELECT city, country, internal_budget
+      FROM office
+     WHERE office_code=in_office_code;
+
+ OPEN cursor_employee FOR
+    SELECT employee_number,first_name,last_name
+      FROM employee
+     WHERE office_code=in_office_code;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE get_avg_price_by_product_line (
+	pl IN VARCHAR2,
+	average OUT DECIMAL
+)
+AS BEGIN
+	SELECT AVG(buy_price)
+	INTO average
+	FROM product
+	WHERE product_line = pl;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE refresh_top3_product(p_line_in IN VARCHAR2)
+AS BEGIN
+	DELETE FROM "SYSTEM"."TOP3PRODUCT"; 
+        INSERT INTO "SYSTEM"."TOP3PRODUCT"("SYSTEM"."TOP3PRODUCT"."PRODUCT_ID", "SYSTEM"."TOP3PRODUCT"."PRODUCT_NAME")        
+        SELECT "SYSTEM"."ORDERDETAIL"."PRODUCT_ID", "product_name" 
+		FROM "SYSTEM"."ORDERDETAIL" 
+		CROSS APPLY (SELECT "SYSTEM"."PRODUCT"."PRODUCT_NAME" "product_name" 
+		  FROM "SYSTEM"."PRODUCT" WHERE ("SYSTEM"."ORDERDETAIL"."PRODUCT_ID" = "SYSTEM"."PRODUCT"."PRODUCT_ID" 
+		    AND "SYSTEM"."PRODUCT"."PRODUCT_LINE" = p_line_in))
+        GROUP BY "SYSTEM"."ORDERDETAIL"."PRODUCT_ID", "product_name", "SYSTEM"."ORDERDETAIL"."QUANTITY_ORDERED" 
+		ORDER BY "SYSTEM"."ORDERDETAIL"."QUANTITY_ORDERED" 
+		FETCH NEXT 3 ROWS ONLY;         
+END;
+/
+
+CREATE OR REPLACE PROCEDURE set_counter(
+	counter IN OUT INTEGER,
+    inc IN INTEGER
+)
+AS BEGIN
+	counter := counter + inc;
 END;
 /
 

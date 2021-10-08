@@ -352,7 +352,7 @@ CREATE FUNCTION net_price_each(
     list_price REAL,
     discount REAL
 )
-RETURNS DECIMAL(10,2)
+RETURNS REAL
 DETERMINISTIC
 BEGIN
     RETURN quantity * list_price * (1 - discount);

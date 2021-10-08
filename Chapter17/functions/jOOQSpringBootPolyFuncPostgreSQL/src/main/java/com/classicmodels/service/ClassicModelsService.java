@@ -1,6 +1,7 @@
 package com.classicmodels.service;
 
 import com.classicmodels.repository.ClassicModelsRepository;
+import java.sql.SQLException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,7 +13,7 @@ public class ClassicModelsService {
         this.classicModelsRepository = classicModelsRepository;
     }
 
-    public void callAll() {
+    public void callAll() throws SQLException {
 
         classicModelsRepository.executePolymorphicFunction();
     }

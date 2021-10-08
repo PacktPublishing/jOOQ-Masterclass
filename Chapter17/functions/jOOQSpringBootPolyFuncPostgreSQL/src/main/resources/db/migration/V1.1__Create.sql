@@ -366,7 +366,7 @@ CREATE TABLE office_flights (
 
 /* USER-DEFINED FUNCTIONS */
 
-CREATE OR REPLACE FUNCTION make_array(anyelement, anyelement) RETURNS anyarray AS $$
+CREATE FUNCTION make_array(anyelement, anyelement) RETURNS anyarray AS $$
     SELECT ARRAY[$1, $2];
 $$ LANGUAGE SQL;
 
@@ -386,12 +386,52 @@ BEGIN
 END; 
 $$;
 
+CREATE OR REPLACE FUNCTION get_salary_stat(
+    OUT min_sal INT,
+    OUT max_sal INT,
+    OUT avg_sal NUMERIC) 
+LANGUAGE plpgsql
+AS $$
+BEGIN  
+  SELECT MIN(salary),
+         MAX(salary),
+		 AVG(salary)::NUMERIC(7,2)
+  INTO min_sal, max_sal, avg_sal
+  FROM employee;
+END;
+$$;
+
+create or replace function swap(
+	inout x int,
+	inout y int
+) 
+language plpgsql	
+as $$
+begin
+   select x,y into y,x;
+end; 
+$$;
+
+CREATE OR REPLACE FUNCTION new_salary(salary int, bonus int DEFAULT 50, penalty int DEFAULT 0)
+RETURNS int
+LANGUAGE SQL
+AS $$
+    SELECT $1 + $2 - $3;
+$$;
+
+CREATE OR REPLACE FUNCTION update_msrp (product_id BIGINT, debit INTEGER) RETURNS REAL AS $$
+    UPDATE product
+        SET msrp = msrp - debit
+        WHERE product_id = update_msrp.product_id
+    RETURNING msrp;
+$$ LANGUAGE SQL;
+
 CREATE OR REPLACE FUNCTION net_price_each(
     quantity INT,
-    list_price DECIMAL(10,2),
-    discount DECIMAL(4,2)
+    list_price REAL,
+    discount REAL
 )
-RETURNS DECIMAL(10,2) LANGUAGE plpgsql AS $$ 
+RETURNS REAL LANGUAGE plpgsql IMMUTABLE AS $$ 
 BEGIN
     RETURN quantity * list_price * (1 - discount);
 END;
@@ -420,15 +460,15 @@ CREATE OR REPLACE FUNCTION get_customer(cl INT) RETURNS refcursor AS $$
     END;
     $$ LANGUAGE plpgsql;	
 	  
-CREATE OR REPLACE FUNCTION employee_office_array(VARCHAR(10))
-RETURNS bigint[] AS $$
+CREATE OR REPLACE FUNCTION employee_office_arr(VARCHAR(10))
+RETURNS BIGINT[] AS $$
   SELECT ARRAY(SELECT "public"."employee"."employee_number"
       FROM "public"."employee" WHERE "public"."employee"."office_code" = $1)
 $$
 LANGUAGE SQL;
 
-CREATE OR REPLACE FUNCTION department_topic_arr(id bigint)
-RETURNS text[] AS $$
+CREATE OR REPLACE FUNCTION department_topic_arr(id BIGINT)
+RETURNS TEXT[] AS $$
   SELECT "public"."department"."topic"
       FROM "public"."department" WHERE "public"."department"."department_id" = id
 $$
@@ -436,10 +476,10 @@ LANGUAGE SQL;
 
 CREATE OR REPLACE FUNCTION net_price_each(
     quantity INT,
-    list_price DECIMAL(10,2),
-    discount DECIMAL(4,2)
+    list_price REAL,
+    discount REAL
 )
-RETURNS DECIMAL(10,2) LANGUAGE plpgsql AS $$ 
+RETURNS REAL LANGUAGE plpgsql AS $$ 
 BEGIN
     RETURN quantity * list_price * (1 - discount);
 END;
@@ -461,8 +501,8 @@ BEGIN
 END; 
 $$;
 
-CREATE OR REPLACE FUNCTION product_of_product_line(p_line_in varchar(50))
-  RETURNS TABLE(p_id bigint, p_name varchar(70), p_line varchar(50)) LANGUAGE plpgsql AS $$ 
+CREATE OR REPLACE FUNCTION product_of_product_line(p_line_in VARCHAR)
+  RETURNS TABLE(p_id BIGINT, p_name VARCHAR, p_line VARCHAR) LANGUAGE plpgsql AS $$ 
 BEGIN
     RETURN QUERY
     SELECT 

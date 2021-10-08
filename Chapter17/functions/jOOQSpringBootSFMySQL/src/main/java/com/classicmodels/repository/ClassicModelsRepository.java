@@ -38,7 +38,7 @@ public class ClassicModelsRepository {
         npe1.setDiscount(0.75);
 
         npe1.execute(ctx.configuration());
-
+        
         System.out.println("Execution 1: " + npe1.getReturnValue());
 
         // EXECUTION 2
@@ -63,13 +63,13 @@ public class ClassicModelsRepository {
                 + ctx.fetchValue(npe3.asField("netPriceEach"))); // or, ctx.select(npe3.asField("netPriceEach")).fetch()
 
         // EXECUTION 4
-        BigDecimal npe4 = Routines.netPriceEach(
+        double npe4 = Routines.netPriceEach(
                 ctx.configuration(), 25, 15.5, 0.75);
 
         System.out.println("Execution 4: " + npe4);
 
         // EXECUTION 5
-        Field<BigDecimal> npe5 = Routines.netPriceEach(
+        Field<Double> npe5 = Routines.netPriceEach(
                 field(select(PRODUCT.QUANTITY_IN_STOCK)
                         .from(PRODUCT).where(PRODUCT.PRODUCT_ID.eq(1L))),
                 field(select(PRODUCT.MSRP.coerce(Double.class))

@@ -366,7 +366,7 @@ CREATE TABLE office_flights (
 
 /* USER-DEFINED FUNCTIONS */
 
-CREATE OR REPLACE FUNCTION make_array(anyelement, anyelement) RETURNS anyarray AS $$
+CREATE FUNCTION make_array(anyelement, anyelement) RETURNS anyarray AS $$
     SELECT ARRAY[$1, $2];
 $$ LANGUAGE SQL;
 
@@ -386,21 +386,19 @@ BEGIN
 END; 
 $$;
 
-create or replace function get_salary_stat(
-    out min_sal int,
-    out max_sal int,
-    out avg_sal numeric) 
-language plpgsql
-as $$
-begin
-  
-  select min(salary),
-         max(salary),
-		 avg(salary)::numeric(7,2)
-  into min_sal, max_sal, avg_sal
-  from employee;
-
-end;
+CREATE OR REPLACE FUNCTION get_salary_stat(
+    OUT min_sal INT,
+    OUT max_sal INT,
+    OUT avg_sal NUMERIC) 
+LANGUAGE plpgsql
+AS $$
+BEGIN  
+  SELECT MIN(salary),
+         MAX(salary),
+		 AVG(salary)::NUMERIC(7,2)
+  INTO min_sal, max_sal, avg_sal
+  FROM employee;
+END;
 $$;
 
 create or replace function swap(
@@ -414,14 +412,14 @@ begin
 end; 
 $$;
 
-CREATE FUNCTION new_salary(salary int, bonus int DEFAULT 50, penalty int DEFAULT 0)
+CREATE OR REPLACE FUNCTION new_salary(salary int, bonus int DEFAULT 50, penalty int DEFAULT 0)
 RETURNS int
 LANGUAGE SQL
 AS $$
     SELECT $1 + $2 - $3;
 $$;
 
-CREATE FUNCTION update_msrp (product_id bigint, debit integer) RETURNS integer AS $$
+CREATE OR REPLACE FUNCTION update_msrp (product_id BIGINT, debit INTEGER) RETURNS REAL AS $$
     UPDATE product
         SET msrp = msrp - debit
         WHERE product_id = update_msrp.product_id
@@ -430,29 +428,29 @@ $$ LANGUAGE SQL;
 
 CREATE OR REPLACE FUNCTION net_price_each(
     quantity INT,
-    list_price DECIMAL,
-    discount DECIMAL
+    list_price REAL,
+    discount REAL
 )
-RETURNS DECIMAL(10,2) LANGUAGE plpgsql IMMUTABLE AS $$ 
+RETURNS REAL LANGUAGE plpgsql IMMUTABLE AS $$ 
 BEGIN
     RETURN quantity * list_price * (1 - discount);
 END;
 $$;
 
-CREATE OR REPLACE FUNCTION get_customer(cl INT) RETURNS refcursor AS $$
+CREATE OR REPLACE FUNCTION get_customer(cl INT) RETURNS REFCURSOR AS $$
     DECLARE
-      cur refcursor;                                                   
+      cur REFCURSOR;                                                   
     BEGIN
       OPEN cur FOR SELECT * FROM customer WHERE credit_limit > cl ORDER BY customer_name;   
       RETURN cur;                                    
     END;
     $$ LANGUAGE plpgsql;
 	
--- Procedure that returns multiple result sets (cursors)
-   CREATE OR REPLACE FUNCTION get_offices_multiple() RETURNS SETOF refcursor AS $$
+-- Function that returns multiple result sets (cursors)
+   CREATE OR REPLACE FUNCTION get_offices_multiple() RETURNS SETOF REFCURSOR AS $$
     DECLARE
-      ref1 refcursor;           
-      ref2 refcursor;                             
+      ref1 REFCURSOR;           
+      ref2 REFCURSOR;                             
     BEGIN
       OPEN ref1 FOR SELECT city, country FROM office WHERE internal_budget < 100000;  
       RETURN NEXT ref1;                                                 
@@ -462,15 +460,15 @@ CREATE OR REPLACE FUNCTION get_customer(cl INT) RETURNS refcursor AS $$
     END;
     $$ LANGUAGE plpgsql;	
 	  
-CREATE OR REPLACE FUNCTION employee_office_array(VARCHAR(10))
-RETURNS bigint[] AS $$
+CREATE OR REPLACE FUNCTION employee_office_arr(VARCHAR(10))
+RETURNS BIGINT[] AS $$
   SELECT ARRAY(SELECT "public"."employee"."employee_number"
       FROM "public"."employee" WHERE "public"."employee"."office_code" = $1)
 $$
 LANGUAGE SQL;
 
-CREATE OR REPLACE FUNCTION department_topic_arr(id bigint)
-RETURNS text[] AS $$
+CREATE OR REPLACE FUNCTION department_topic_arr(id BIGINT)
+RETURNS TEXT[] AS $$
   SELECT "public"."department"."topic"
       FROM "public"."department" WHERE "public"."department"."department_id" = id
 $$
