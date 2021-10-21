@@ -57,15 +57,15 @@ AS BEGIN
 END
 GO
 
-CREATE OR ALTER FUNCTION net_price_each(
+CREATE OR ALTER FUNCTION sale_price(
     @quantity INTEGER,
     @list_price REAL,
-    @discount REAL
+    @fraction_of_price REAL
 )
 RETURNS REAL
 AS 
 BEGIN
-    RETURN @quantity * @list_price * (1 - @discount);
+    RETURN (@list_price - (@list_price * @fraction_of_price)) * @quantity;
 END;
 GO
 
@@ -103,11 +103,46 @@ AS BEGIN
 END; 
 GO
 
+-- USER-DEFINED AGG FUNCTION
+EXEC sp_configure 'show advanced options', 1
+GO  
+RECONFIGURE;
+GO  
+EXEC sp_configure 'clr strict security', 0;
+GO  
+RECONFIGURE;
+GO  
+
+DROP ASSEMBLY IF EXISTS StringUtilities;
+GO
+CREATE ASSEMBLY StringUtilities FROM 'C:\SBPBP\GitHub\Up-and-Running-with-jOOQ\Chapter17\functions\StringUtilities.dll'  
+GO  
+  
+CREATE AGGREGATE concatenate(@input nvarchar(4000))  
+RETURNS nvarchar(4000)  
+EXTERNAL NAME [StringUtilities].[Microsoft.Samples.SqlServer.Concatenate];  
+GO  
+
 /* USER-DEFINED PROCEDURES */
 CREATE PROCEDURE get_product(@pid BIGINT)
 AS BEGIN
 	SELECT * FROM [classicmodels].[dbo].[product] 
           WHERE [classicmodels].[dbo].[product].[product_id] = @pid;
+END;
+GO
+
+CREATE OR ALTER PROCEDURE refresh_top3_product(@p_line_in VARCHAR(50))
+AS BEGIN
+	DELETE FROM [classicmodels].[dbo].[top3product]; 
+        INSERT INTO [classicmodels].[dbo].[top3product]([classicmodels].[dbo].[top3product].[product_id], [classicmodels].[dbo].[top3product].[product_name])        
+		SELECT [t].[product_id], [t].[product_name] FROM (
+        SELECT TOP 3 [classicmodels].[dbo].[orderdetail].[product_id], [classicmodels].[dbo].[product].[product_name], max([classicmodels].[dbo].[orderdetail].[quantity_ordered]) as qo
+         FROM [classicmodels].[dbo].[orderdetail]
+         JOIN [classicmodels].[dbo].[product]
+         ON [classicmodels].[dbo].[orderdetail].[product_id] = [classicmodels].[dbo].[product].[product_id]
+          AND @p_line_in = [classicmodels].[dbo].[product].[product_line]
+         GROUP BY [classicmodels].[dbo].[orderdetail].[product_id], [classicmodels].[dbo].[product].[product_name]) AS t
+         ORDER BY [t].[qo];         
 END;
 GO
 

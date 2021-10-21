@@ -401,15 +401,15 @@ BEGIN
 END;
 $$;
 
-create or replace function swap(
-	inout x int,
-	inout y int
-) 
-language plpgsql	
-as $$
-begin
-   select x,y into y,x;
-end; 
+CREATE OR REPLACE FUNCTION swap(
+	INOUT x int,
+	INOUT y int
+) RETURNS RECORD
+LANGUAGE plpgsql	
+AS $$
+BEGIN
+   SELECT x,y INTO y,x;
+END; 
 $$;
 
 CREATE OR REPLACE FUNCTION new_salary(salary int, bonus int DEFAULT 50, penalty int DEFAULT 0)
@@ -417,24 +417,6 @@ RETURNS int
 LANGUAGE SQL
 AS $$
     SELECT $1 + $2 - $3;
-$$;
-
-CREATE OR REPLACE FUNCTION update_msrp (product_id BIGINT, debit INTEGER) RETURNS REAL AS $$
-    UPDATE product
-        SET msrp = msrp - debit
-        WHERE product_id = update_msrp.product_id
-    RETURNING msrp;
-$$ LANGUAGE SQL;
-
-CREATE OR REPLACE FUNCTION net_price_each(
-    quantity INT,
-    list_price REAL,
-    discount REAL
-)
-RETURNS REAL LANGUAGE plpgsql IMMUTABLE AS $$ 
-BEGIN
-    RETURN quantity * list_price * (1 - discount);
-END;
 $$;
 
 CREATE OR REPLACE FUNCTION get_customer(cl INT) RETURNS REFCURSOR AS $$
@@ -467,21 +449,21 @@ RETURNS BIGINT[] AS $$
 $$
 LANGUAGE SQL;
 
-CREATE OR REPLACE FUNCTION department_topic_arr(id BIGINT)
+CREATE OR REPLACE FUNCTION "department_topic_arr"("id" BIGINT)
 RETURNS TEXT[] AS $$
   SELECT "public"."department"."topic"
-      FROM "public"."department" WHERE "public"."department"."department_id" = id
+      FROM "public"."department" WHERE "public"."department"."department_id" = "id"
 $$
 LANGUAGE SQL;
 
-CREATE OR REPLACE FUNCTION net_price_each(
-    quantity INT,
-    list_price REAL,
-    discount REAL
+CREATE OR REPLACE FUNCTION "sale_price"(
+    "quantity" INT,
+    "list_price" REAL,
+    "fraction_of_price"	REAL
 )
 RETURNS REAL LANGUAGE plpgsql AS $$ 
 BEGIN
-    RETURN quantity * list_price * (1 - discount);
+    RETURN ("list_price" - ("list_price" * "fraction_of_price")) * "quantity";
 END;
 $$;
 
@@ -515,6 +497,13 @@ BEGIN
       p_line_in = "public"."product"."product_line";     
 END; 
 $$;
+
+CREATE OR REPLACE FUNCTION "update_msrp" ("id" BIGINT, "debit" INTEGER) RETURNS REAL AS $$
+    UPDATE "public"."product"
+        SET "msrp" = "public"."product"."msrp" - "debit"
+        WHERE "public"."product"."product_id" = "id"
+        RETURNING "public"."product"."msrp";
+$$ LANGUAGE SQL;
 
 -- VIEWS
 CREATE OR REPLACE VIEW customer_master AS

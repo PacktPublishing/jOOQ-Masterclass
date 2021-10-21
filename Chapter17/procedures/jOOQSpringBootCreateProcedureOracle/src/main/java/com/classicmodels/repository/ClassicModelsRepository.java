@@ -1,9 +1,6 @@
 package com.classicmodels.repository;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
-import static jooq.generated.Routines.getAvgPriceByProductLine;
-import jooq.generated.routines.GetAvgPriceByProductLineJooq;
 import static jooq.generated.tables.Product.PRODUCT;
 import org.jooq.DSLContext;
 import org.jooq.Parameter;
@@ -11,7 +8,6 @@ import static org.jooq.impl.DSL.avg;
 import static org.jooq.impl.DSL.in;
 import static org.jooq.impl.DSL.out;
 import static org.jooq.impl.DSL.select;
-import static org.jooq.impl.DSL.val;
 import static org.jooq.impl.SQLDataType.DECIMAL;
 import static org.jooq.impl.SQLDataType.VARCHAR;
 import org.springframework.stereotype.Repository;
@@ -47,23 +43,27 @@ public class ClassicModelsRepository {
     public void callProcedure() {
 
         // calling the previously created procedures via the generated code
+        /*
         // EXECUTION 1
-        GetAvgPriceByProductLineJooq proc = new GetAvgPriceByProductLineJooq();
-        proc.setPl("Classic Cars");
+        GetAvgPriceByProductLineJooq avg = new GetAvgPriceByProductLineJooq();
+        avg.setPl("Classic Cars");
 
-        proc.execute(ctx.configuration());
-        System.out.println("Result: \n" + proc.getAverage());
+        avg.execute(ctx.configuration());
+
+        BigInteger result1 = avg.getAverage();
+        System.out.println("Avg: " + result1);
 
         // EXECUTION 2
-        ctx.fetchValue(val(getAvgPriceByProductLine(
-                ctx.configuration(), "Classic Cars")));
+        BigInteger result2 = getAvgPriceByProductLine(ctx.configuration(), "Classic Cars");
+        System.out.println("Avg: " + result2);
 
-        // EXECUTION 3
+        // EXECUTION 3         
         ctx.select(PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME, PRODUCT.BUY_PRICE)
                 .from(PRODUCT)
                 .where(PRODUCT.BUY_PRICE.coerce(BigInteger.class).gt(getAvgPriceByProductLine(
                         ctx.configuration(), "Classic Cars"))
                         .and(PRODUCT.PRODUCT_LINE.eq("Classic Cars")))
                 .fetch();
-    }
+        */
+    }   
 }

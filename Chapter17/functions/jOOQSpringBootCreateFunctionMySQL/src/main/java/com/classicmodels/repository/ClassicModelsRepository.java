@@ -1,6 +1,5 @@
 package com.classicmodels.repository;
 
-import java.math.BigDecimal;
 import org.jooq.DSLContext;
 import org.jooq.Parameter;
 import static org.jooq.impl.DSL.function;
@@ -8,8 +7,8 @@ import static org.jooq.impl.DSL.in;
 import static org.jooq.impl.DSL.inline;
 import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.return_;
-import static org.jooq.impl.DSL.val;
 import static org.jooq.impl.SQLDataType.DECIMAL;
+import static org.jooq.impl.SQLDataType.DOUBLE;
 import static org.jooq.impl.SQLDataType.INTEGER;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,32 +27,30 @@ public class ClassicModelsRepository {
     public void createScalarFunction() {
 
         Parameter<Integer> quantity = in("quantity", INTEGER);
-        Parameter<BigDecimal> list_price = in("list_price", DECIMAL);
-        Parameter<BigDecimal> discount = in("discount", DECIMAL);
+        Parameter<Double> listPrice = in("list_price", DOUBLE);
+        Parameter<Double> fractionOfPrice = in("fraction_of_price", DOUBLE);
 
-        ctx.dropFunctionIfExists("net_price_each_jooq")
-                .execute();
-
-        // or, use ctx.createOrReplaceFunction() instead of dropping via dropFunction()
-        ctx.createFunction("net_price_each_jooq")
+        // ctx.dropFunctionIfExists("sale_price_jooq").execute(); followed by ctx.createFunction(...)
+        
+        ctx.createOrReplaceFunction("sale_price_jooq")
                 .parameters(
-                        quantity, list_price, discount
+                        quantity, listPrice, fractionOfPrice
                 )
                 .returns(DECIMAL(10, 2))
                 .deterministic()
-                .as(return_(quantity.mul(list_price).mul(inline(1).minus(discount))))
+                .as(return_(listPrice.minus(listPrice.mul(fractionOfPrice)).mul(quantity)))
                 .execute();
     }
 
     public void callScalarFunction() {
         // call this function (plain SQL)
-        float result = ctx.select(function(name("net_price_each_jooq"),
-                DECIMAL(10, 2), val(10), val(20.45), val(0.33)))
+        float result = ctx.select(function(name("sale_price_jooq"),
+                DECIMAL(10, 2), inline(10), inline(20.45), inline(0.33)))
                 .fetchOneInto(Float.class);
 
         System.out.println("Result: " + result);
 
         // calling the previously created functions via the generated code
-        // can be done as you saw in the application jOOQSpringBootSFMySQL
+        // can be done as you already know
     }
 }

@@ -9,7 +9,6 @@ import static jooq.generated.tables.Department.DEPARTMENT;
 import static jooq.generated.tables.Office.OFFICE;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.count;
-import static org.jooq.impl.DSL.table;
 import static org.jooq.impl.DSL.unnest;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,22 +28,25 @@ public class ClassicModelsRepository {
         // EXECUTION 1
         GetMaxCash gmc = new GetMaxCash();
         gmc.execute(ctx.configuration());
+        double resultGmc1 = gmc.getReturnValue();
+        System.out.println("Result (get_max_cash): " + resultGmc1);
 
-        GetBgt bg = new GetBgt();
-        bg.setPProfit(50000.0);
-        bg.execute(ctx.configuration());
+        GetBgt bgt = new GetBgt();
+        bgt.setPProfit(50000.0);
+        bgt.execute(ctx.configuration());
+        BgtArrRecord resultBgt1 = bgt.getReturnValue();
+        System.out.println("Result (get_bgt, first value): " 
+                + resultBgt1.get(0)); // get the first element from array
 
         // EXECUTION 2
-        Double maxCash = getMaxCash(ctx.configuration());
-        System.out.println("Max cash: " + maxCash);
+        double resultGmc2 = getMaxCash(ctx.configuration());
+        System.out.println("Max cash: " + resultGmc2);
 
-        BgtArrRecord bar = getBgt(ctx.configuration(), 50000.0);
-        System.out.println("Bgt: " + bar);
+        BgtArrRecord resultBgt2 = getBgt(ctx.configuration(), 50000.0);
+        System.out.println("Bgt: " + resultBgt2);
 
-        // EXECUTION 3
-        ctx.select().from(unnest(getBgt(ctx.configuration(), 50000.0)));
-        ctx.select().from(table(getBgt(ctx.configuration(), 50000.0)));
-
+        // EXECUTION 3        
+        ctx.select(getMaxCash()).fetch();
         ctx.select(count().as("c"))
                 .from(unnest(getBgt(ctx.configuration(), 50000.0)))
                 .fetch();

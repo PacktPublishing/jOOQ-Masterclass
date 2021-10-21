@@ -1,8 +1,8 @@
 package com.classicmodels.repository;
 
 import jooq.generated.Routines;
-import static jooq.generated.Routines.netPriceEach;
-import jooq.generated.routines.NetPriceEach;
+import static jooq.generated.Routines.salePrice;
+import jooq.generated.routines.SalePrice;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import static jooq.generated.tables.Product.PRODUCT;
 import org.jooq.DSLContext;
@@ -28,34 +28,34 @@ public class ClassicModelsRepository {
     public void executeScalarFunction() {
 
         // EXECUTION 1
-        NetPriceEach npe1 = new NetPriceEach();
-        npe1.setQuantity(25);
-        npe1.setListPrice(15.5f);
-        npe1.setDiscount(0.75f);
+        SalePrice sp1 = new SalePrice();
+        sp1.setQuantity(25);
+        sp1.setListPrice(15.5f);
+        sp1.setFractionOfPrice(0.75f);
 
-        npe1.execute(ctx.configuration());
+        sp1.execute(ctx.configuration());
 
-        System.out.println("Execution 1: " + npe1.getReturnValue());
-
+        System.out.println("Execution 1: " + sp1.getReturnValue());
+        
         // EXECUTION 2
-        NetPriceEach npe2 = new NetPriceEach();
-        npe2.setQuantity(field(select(PRODUCT.QUANTITY_IN_STOCK)
+        SalePrice sp2 = new SalePrice();
+        sp2.setQuantity(field(select(PRODUCT.QUANTITY_IN_STOCK)
                 .from(PRODUCT).where(PRODUCT.PRODUCT_ID.eq(1L))));
-        npe2.setListPrice(field(select(PRODUCT.MSRP.coerce(Float.class))
+        sp2.setListPrice(field(select(PRODUCT.MSRP.coerce(Float.class))
                 .from(PRODUCT).where(PRODUCT.PRODUCT_ID.eq(1L))));
-        npe2.setDiscount(0.75f);
+        sp2.setFractionOfPrice(0.75f);
 
         System.out.println("Execution 2:\n"
-                + ctx.fetchValue(npe2.asField("netPriceEach"))); // or, ctx.select(npe2.asField("netPriceEach")).fetch()
+                + ctx.fetchValue(sp2.asField("sale_price"))); // or, ctx.select(sp2.asField("sale_price")).fetch()
 
         // EXECUTION 3
-        float npe3 = Routines.netPriceEach(
+        float sp3 = Routines.salePrice(
                 ctx.configuration(), 25, 15.5f, 0.75f);
 
-        System.out.println("Execution 3: " + npe3);
+        System.out.println("Execution 3: " + sp3);
 
         // EXECUTION 4
-        Field<Float> npe4 = Routines.netPriceEach(
+        Field<Float> sp4 = Routines.salePrice(
                 field(select(PRODUCT.QUANTITY_IN_STOCK)
                         .from(PRODUCT).where(PRODUCT.PRODUCT_ID.eq(1L))),
                 field(select(PRODUCT.MSRP.coerce(Float.class))
@@ -63,15 +63,15 @@ public class ClassicModelsRepository {
                 val(0.75f));
 
         System.out.println("Execution 4:\n"
-                + ctx.fetchValue(npe4)); // or, ctx.select(npe4).fetch()
+                + ctx.fetchValue(sp4)); // or, ctx.select(sp4).fetch()
 
         // EXECUTION 5
         ctx.select(ORDERDETAIL.ORDER_ID,
-                sum(netPriceEach(ORDERDETAIL.QUANTITY_ORDERED,
-                        ORDERDETAIL.PRICE_EACH.coerce(Float.class), val(0.75f))).as("sum_net_price"))
+                sum(salePrice(ORDERDETAIL.QUANTITY_ORDERED,
+                        ORDERDETAIL.PRICE_EACH.coerce(Float.class), val(0.75f))).as("sum_sale_price"))
                 .from(ORDERDETAIL)
                 .groupBy(ORDERDETAIL.ORDER_ID)
-                .orderBy(field(name("sum_net_price")).desc())
+                .orderBy(field(name("sum_sale_price")).desc())
                 .fetch();
     }
 }

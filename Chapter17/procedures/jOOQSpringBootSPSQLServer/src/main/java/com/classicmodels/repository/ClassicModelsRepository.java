@@ -3,6 +3,8 @@ package com.classicmodels.repository;
 import static jooq.generated.Routines.getProduct;
 import jooq.generated.routines.GetEmpsInOffice;
 import jooq.generated.routines.GetProduct;
+import static jooq.generated.tables.Product.PRODUCT;
+import jooq.generated.tables.records.ProductRecord;
 import org.jooq.DSLContext;
 import org.jooq.Result;
 import org.jooq.Results;
@@ -32,13 +34,16 @@ public class ClassicModelsRepository {
         gp.setPid(1L);
 
         gp.execute(ctx.configuration());
-        System.out.println("Result: \n" + gp.getResults().get(0)); // Result<Record>
+
+        Result<Record> result1 = gp.getResults().get(0);
+        System.out.println("Result: \n" + result1);
 
         // EXECUTION 2
-        getProduct(ctx.configuration(), 1L);
+        getProduct(ctx.configuration(), 1L); // returns void       
 
         // EXECUTION 3
-        Table<?> t = table(gp.getResults().get(0));
+        // Table<?> t = table(gp.getResults().get(0));
+        Table<ProductRecord> t = table(gp.getResults().get(0).into(PRODUCT));
         ctx.selectFrom(t).fetch();
     }
 
@@ -50,9 +55,9 @@ public class ClassicModelsRepository {
 
         geio.execute(ctx.configuration());
 
-        Results results = geio.getResults();
+        Results results = geio.getResults();    
 
-        for (Result<?> result : results) {
+        for (Result<Record> result : results) {
             System.out.println("Result set:\n");
             for (Record record : result) {
                 System.out.println(record);

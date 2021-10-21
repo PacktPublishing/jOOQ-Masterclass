@@ -3,6 +3,7 @@ package com.classicmodels.repository;
 import java.math.BigDecimal;
 import jooq.generated.Routines;
 import static jooq.generated.Routines.getSalaryStat;
+import static jooq.generated.Routines.swap;
 import jooq.generated.routines.GetSalaryStat;
 import jooq.generated.routines.Swap;
 import static jooq.generated.tables.Employee.EMPLOYEE;
@@ -54,13 +55,18 @@ public class ClassicModelsRepository {
     public void executeInOutParamFunction() {
         
         // EXECUTION 1
-        Swap swap = new Swap();
-        swap.setX(5);
-        swap.setY(10);
+        Swap swap1 = new Swap();
+        swap1.setX(5);
+        swap1.setY(10);
         
-        swap.execute(ctx.configuration());               
+        swap1.execute(ctx.configuration());               
                 
-        System.out.println("Execution 1 (X): " + swap.getX());
-        System.out.println("Execution 1 (Y): " + swap.getY());
+        System.out.println("Execution 1 (X): " + swap1.getX());
+        System.out.println("Execution 1 (Y): " + swap1.getY());
+        
+        // EXECUTION 2
+        Swap swap2 = swap(ctx.configuration(), 5, 10);
+        System.out.println("Execution 2 (X): " + swap2.getX());
+        System.out.println("Execution 2 (Y): " + swap2.getY());
     }        
 }

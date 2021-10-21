@@ -366,11 +366,11 @@ CREATE TABLE office_flights (
 
 /* USER-DEFINED FUNCTIONS */
 
-CREATE FUNCTION make_array(anyelement, anyelement) RETURNS anyarray AS $$
+CREATE FUNCTION "make_array"(anyelement, anyelement) RETURNS anyarray AS $$
     SELECT ARRAY[$1, $2];
 $$ LANGUAGE SQL;
 
-CREATE FUNCTION dup (f1 anyelement, OUT f2 anyelement, OUT f3 anyarray)
+CREATE FUNCTION "dup" ("f1" anyelement, OUT "f2" anyelement, OUT "f3" anyarray)
 AS 'select $1, array[$1,$1]' LANGUAGE SQL;
 
 CREATE OR REPLACE FUNCTION get_avg_sale(len_from int, len_to int) 
@@ -386,30 +386,30 @@ BEGIN
 END; 
 $$;
 
-CREATE OR REPLACE FUNCTION get_salary_stat(
-    OUT min_sal INT,
-    OUT max_sal INT,
-    OUT avg_sal NUMERIC) 
+CREATE OR REPLACE FUNCTION "get_salary_stat"(
+    OUT "min_sal" INT,
+    OUT "max_sal" INT,
+    OUT "avg_sal" NUMERIC) 
 LANGUAGE plpgsql
 AS $$
 BEGIN  
-  SELECT MIN(salary),
-         MAX(salary),
-		 AVG(salary)::NUMERIC(7,2)
-  INTO min_sal, max_sal, avg_sal
-  FROM employee;
+  SELECT MIN("salary"),
+         MAX("salary"),
+		 AVG("salary")::NUMERIC(7,2)
+  INTO "min_sal", "max_sal", "avg_sal"
+  FROM "employee";
 END;
 $$;
 
-create or replace function swap(
-	inout x int,
-	inout y int
-) 
-language plpgsql	
-as $$
-begin
-   select x,y into y,x;
-end; 
+CREATE OR REPLACE FUNCTION "swap"(
+	INOUT "x" int,
+	INOUT "y" int
+) RETURNS RECORD
+LANGUAGE plpgsql	
+AS $$
+BEGIN
+   SELECT "x","y" INTO "y","x";
+END; 
 $$;
 
 CREATE OR REPLACE FUNCTION new_salary(salary int, bonus int DEFAULT 50, penalty int DEFAULT 0)
@@ -417,24 +417,6 @@ RETURNS int
 LANGUAGE SQL
 AS $$
     SELECT $1 + $2 - $3;
-$$;
-
-CREATE OR REPLACE FUNCTION update_msrp (product_id BIGINT, debit INTEGER) RETURNS REAL AS $$
-    UPDATE product
-        SET msrp = msrp - debit
-        WHERE product_id = update_msrp.product_id
-    RETURNING msrp;
-$$ LANGUAGE SQL;
-
-CREATE OR REPLACE FUNCTION net_price_each(
-    quantity INT,
-    list_price REAL,
-    discount REAL
-)
-RETURNS REAL LANGUAGE plpgsql IMMUTABLE AS $$ 
-BEGIN
-    RETURN quantity * list_price * (1 - discount);
-END;
 $$;
 
 CREATE OR REPLACE FUNCTION get_customer(cl INT) RETURNS REFCURSOR AS $$
@@ -447,41 +429,43 @@ CREATE OR REPLACE FUNCTION get_customer(cl INT) RETURNS REFCURSOR AS $$
     $$ LANGUAGE plpgsql;
 	
 -- Function that returns multiple result sets (cursors)
-   CREATE OR REPLACE FUNCTION get_offices_multiple() RETURNS SETOF REFCURSOR AS $$
+   CREATE OR REPLACE FUNCTION "get_offices_multiple"() RETURNS SETOF REFCURSOR AS $$
     DECLARE
-      ref1 REFCURSOR;           
-      ref2 REFCURSOR;                             
+      "ref1" REFCURSOR;           
+      "ref2" REFCURSOR;                             
     BEGIN
-      OPEN ref1 FOR SELECT city, country FROM office WHERE internal_budget < 100000;  
-      RETURN NEXT ref1;                                                 
+      OPEN "ref1" FOR SELECT "public"."office"."city", "public"."office"."country" 
+	    FROM "public"."office" WHERE "public"."office"."internal_budget" < 100000;  
+      RETURN NEXT "ref1"; 
  
-      OPEN ref2 FOR SELECT city, country FROM office WHERE internal_budget > 100000;  
-      RETURN NEXT ref2;                                                 
+      OPEN "ref2" FOR SELECT "public"."office"."city", "public"."office"."country"
+  	    FROM "public"."office" WHERE "public"."office"."internal_budget" > 100000;  
+      RETURN NEXT "ref2";                                                 
     END;
     $$ LANGUAGE plpgsql;	
 	  
-CREATE OR REPLACE FUNCTION employee_office_arr(VARCHAR(10))
+CREATE OR REPLACE FUNCTION "employee_office_arr"(VARCHAR(10))
 RETURNS BIGINT[] AS $$
   SELECT ARRAY(SELECT "public"."employee"."employee_number"
       FROM "public"."employee" WHERE "public"."employee"."office_code" = $1)
 $$
 LANGUAGE SQL;
 
-CREATE OR REPLACE FUNCTION department_topic_arr(id BIGINT)
+CREATE OR REPLACE FUNCTION "department_topic_arr"("id" BIGINT)
 RETURNS TEXT[] AS $$
   SELECT "public"."department"."topic"
-      FROM "public"."department" WHERE "public"."department"."department_id" = id
+      FROM "public"."department" WHERE "public"."department"."department_id" = "id"
 $$
 LANGUAGE SQL;
 
-CREATE OR REPLACE FUNCTION net_price_each(
-    quantity INT,
-    list_price REAL,
-    discount REAL
+CREATE OR REPLACE FUNCTION "sale_price"(
+    "quantity" INT,
+    "list_price" REAL,
+    "fraction_of_price"	REAL
 )
 RETURNS REAL LANGUAGE plpgsql AS $$ 
 BEGIN
-    RETURN quantity * list_price * (1 - discount);
+    RETURN ("list_price" - ("list_price" * "fraction_of_price")) * "quantity";
 END;
 $$;
 
@@ -515,6 +499,13 @@ BEGIN
       p_line_in = "public"."product"."product_line";     
 END; 
 $$;
+
+CREATE OR REPLACE FUNCTION "update_msrp" ("id" BIGINT, "debit" INTEGER) RETURNS REAL AS $$
+    UPDATE "public"."product"
+        SET "msrp" = "public"."product"."msrp" - "debit"
+        WHERE "public"."product"."product_id" = "id"
+        RETURNING "public"."product"."msrp";
+$$ LANGUAGE SQL;
 
 -- VIEWS
 CREATE OR REPLACE VIEW customer_master AS

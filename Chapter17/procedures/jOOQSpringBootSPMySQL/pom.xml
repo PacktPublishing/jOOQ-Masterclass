@@ -26,7 +26,7 @@
         <maven.compiler.source>14</maven.compiler.source>
         <maven.compiler.target>14</maven.compiler.target>
 
-        <jooq.version>3.14.9</jooq.version>        
+        <jooq.version>3.15.2</jooq.version>        
         <mysql.connector.java.version>8.0.20</mysql.connector.java.version>                
         <codehaus.mojo.version>1.0.0</codehaus.mojo.version>      
         <maven.compiler.plugin.version>3.3</maven.compiler.plugin.version>          
@@ -42,7 +42,7 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>               
         <dependency>
-            <groupId>org.jooq</groupId>
+            <groupId>org.jooq.trial-java-8</groupId>
             <artifactId>jooq</artifactId>         
             <version>${jooq.version}</version>
         </dependency>              
@@ -121,7 +121,7 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.jooq</groupId>
+                <groupId>org.jooq.trial-java-8</groupId>
                 <artifactId>jooq-codegen-maven</artifactId> 
                 <version>${jooq.version}</version>              
                 <executions>

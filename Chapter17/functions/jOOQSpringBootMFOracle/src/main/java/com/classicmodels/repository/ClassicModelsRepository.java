@@ -1,10 +1,13 @@
 package com.classicmodels.repository;
 
 import java.math.BigDecimal;
-import static jooq.generated.tables.Product.PRODUCT;
-import static jooq.generated.udt.ProductObj.PRODUCT_OBJ;
-import jooq.generated.udt.records.ProductObjRecord;
+import static jooq.generated.tables.Manager.MANAGER;
+import static jooq.generated.udt.EvaluationCriteria.EVALUATION_CRITERIA;
+import static jooq.generated.udt.EvaluationCriteria.improve;
+import static jooq.generated.udt.EvaluationCriteria.score;
+import jooq.generated.udt.records.EvaluationCriteriaRecord;
 import org.jooq.DSLContext;
+import static org.jooq.impl.DSL.inline;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,32 +23,55 @@ public class ClassicModelsRepository {
 
     public void executeMemberFunction() {
         
-        // ProductObjRecord po = new ProductObjRecord();        
-        // po.attach(ctx.configuration());
+        // EvaluationCriteriaRecord ecr = new EvaluationCriteriaRecord();        
+        // ecr.attach(ctx.configuration());
         
-        // ProductObjRecord po = PRODUCT_OBJ.newRecord();
-        // po.attach(ctx.configuration());
+        // EvaluationCriteriaRecord ecr = EVALUATION_CRITERIA.newRecord();
+        // ecr.attach(ctx.configuration());
         
-        ProductObjRecord po = ctx.newRecord(PRODUCT_OBJ);
+        EvaluationCriteriaRecord ecr = ctx.newRecord(EVALUATION_CRITERIA);        
+        ecr.setCommunicationAbility(58);
+        ecr.setEthics(30);
+        ecr.setPerformance(26);
+        ecr.setEmployeeInput(59);
+                
+        BigDecimal result = ecr.score();
+        System.out.println("Result: " + result);
         
-        po.setPrice(BigDecimal.valueOf(125.55));
-        po.setMsrp(BigDecimal.valueOf(145.55));
+        EvaluationCriteriaRecord newEcr = ecr.improve(10);        
         
-        po.display();
-        po.diff();
-        ProductObjRecord incPo = po.increase(10);
-        incPo.display();
+        System.out.println("Communication Ability: " + ecr.getCommunicationAbility());
+        System.out.println("Ethics: " + ecr.getEthics());
+        System.out.println("Performance: " + ecr.getPerformance());
+        System.out.println("Employee Input: " + ecr.getEmployeeInput());
+        System.out.println("Communication Ability (new): " + newEcr.getCommunicationAbility());
+        System.out.println("Ethics (new): " + newEcr.getEthics());
+        System.out.println("Performance (new): " + newEcr.getPerformance());
+        System.out.println("Employee Input (new): " + newEcr.getEmployeeInput());
+                
+        ctx.select(MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME)
+                .from(MANAGER)
+                .where(score(MANAGER.MANAGER_EVALUATION).lt(newEcr.score()))
+                .fetch();        
         
-        System.out.println("Price: " + po.getPrice());
-        System.out.println("MSRP: " + po.getMsrp());
-        System.out.println("Price (inc): " + incPo.getPrice());
-        System.out.println("MSRP (inc): " + incPo.getMsrp());
-        
-        ctx.select(PRODUCT.PRODUCT_NAME, PRODUCT.BUY_PRICE)
-                .from(PRODUCT)
-                .where(PRODUCT.BUY_PRICE.lt(incPo.diff()))
+        ctx.select(MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME, score(MANAGER.MANAGER_EVALUATION))
+                .from(MANAGER)
+                .where(score(MANAGER.MANAGER_EVALUATION)
+                        .gt(BigDecimal.valueOf(57)))
                 .fetch();
-    }
+        
+        ctx.select(MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME)
+                .from(MANAGER)
+                .where(score(improve(MANAGER.MANAGER_EVALUATION, inline(10)))
+                        .gt(BigDecimal.valueOf(57)))
+                .fetch();
+        
+        ctx.select(MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME)
+                .from(MANAGER)
+                .where(score(improve(MANAGER.MANAGER_EVALUATION, inline(10)))
+                        .gt(score(ecr.improve(5))))
+                .fetch();
+    }        
 
 }
 

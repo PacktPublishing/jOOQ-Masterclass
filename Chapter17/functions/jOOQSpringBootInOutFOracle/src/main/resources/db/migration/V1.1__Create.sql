@@ -403,9 +403,36 @@ END;
 
 /* Define a type using CREATE TYPE */
 BEGIN
-   EXECUTE IMMEDIATE 'CREATE OR REPLACE TYPE evaluation_criteria AS OBJECT (
-   communication_ability number(6), ethics number(6), performance number(6), employee_input number(6))';
-EXCEPTION
+   EXECUTE IMMEDIATE '
+CREATE OR REPLACE TYPE "evaluation_criteria" AS OBJECT (
+     "communication_ability" NUMBER(6), 
+     "ethics" NUMBER(6), 
+     "performance" NUMBER(6), 
+     "employee_input" NUMBER(6),
+   
+     MEMBER FUNCTION "improve"("k" NUMBER) RETURN "evaluation_criteria",
+     MAP MEMBER FUNCTION "score" RETURN NUMBER
+   );';
+   EXCEPTION
+   WHEN OTHERS THEN NULL;
+END;
+/
+COMMIT;
+
+BEGIN
+   EXECUTE IMMEDIATE '
+CREATE OR REPLACE TYPE BODY "evaluation_criteria" AS 
+   MEMBER FUNCTION "improve"("k" NUMBER) RETURN "evaluation_criteria" IS 
+   BEGIN 
+      RETURN "evaluation_criteria"(self."communication_ability" + "k", 
+	            self."ethics" + "k", self."performance" + "k", self."employee_input"); 
+   END "improve";     
+   MAP MEMBER FUNCTION "score" RETURN NUMBER IS 
+   BEGIN 
+      RETURN (SQRT("communication_ability" * "employee_input" - "ethics" * "performance")); 
+   END "score";    
+END;';
+   EXCEPTION
    WHEN OTHERS THEN NULL;
 END;
 /
@@ -416,7 +443,7 @@ CREATE TABLE manager (
   manager_name varchar2(50) NOT NULL,  
   manager_detail varchar2(4000),  
   -- for large JSON, use manager_detail blob,
-  manager_evaluation evaluation_criteria DEFAULT NULL, 
+  manager_evaluation "evaluation_criteria" DEFAULT NULL, 
   CONSTRAINT manager_pk PRIMARY KEY (manager_id),
   CONSTRAINT ENSURE_JSON CHECK (manager_detail IS JSON)
 ) ;
@@ -667,44 +694,46 @@ CREATE TABLE office_flights (
 COMMIT;
 
 /* USER-DEFINED FUNCTIONS */
-
-CREATE OR REPLACE PACKAGE department_pkg
+CREATE OR REPLACE PACKAGE "department_pkg"
 AS
-  TYPE bgt_arr IS TABLE OF float INDEX BY PLS_INTEGER;
+  TYPE "bgt_arr" IS TABLE OF FLOAT INDEX BY PLS_INTEGER;
 
-  FUNCTION get_bgt(p_profit IN float)
-    RETURN bgt_arr;
+  FUNCTION "get_bgt"("p_profit" IN FLOAT)
+    RETURN "bgt_arr";
 	
-  FUNCTION get_max_cash
-    RETURN float; 
-END;
+  FUNCTION "get_max_cash"
+    RETURN FLOAT; 
+END "department_pkg";
 /
-CREATE OR REPLACE PACKAGE BODY department_pkg
+CREATE OR REPLACE PACKAGE BODY "department_pkg"
  AS  
-  FUNCTION get_bgt(p_profit IN float)
-    RETURN bgt_arr
+  FUNCTION "get_bgt"("p_profit" IN FLOAT)
+    RETURN "bgt_arr"
   IS
-    r_bgt_arr bgt_arr;
+    "r_bgt_arr" "bgt_arr";
   BEGIN
-    SELECT LOCAL_BUDGET
-      BULK COLLECT INTO r_bgt_arr
-      FROM DEPARTMENT
-     WHERE PROFIT > p_profit;
+    SELECT "SYSTEM"."DEPARTMENT"."LOCAL_BUDGET"
+      BULK COLLECT INTO "r_bgt_arr"
+      FROM "SYSTEM"."DEPARTMENT"
+     WHERE "SYSTEM"."DEPARTMENT"."PROFIT" > "p_profit";
 
-    RETURN r_bgt_arr;
+    RETURN "r_bgt_arr";
+	BEGIN
+    dbms_output.put_line('Control is now executing the package initialization part');
+	END;
   END;
   
-  FUNCTION get_max_cash
-    RETURN float 
+  FUNCTION "get_max_cash"
+    RETURN FLOAT 
   IS
-    r_max_cash float;
+    "r_max_cash" FLOAT;
   BEGIN
-    SELECT max(CASH) INTO r_max_cash
-	  FROM DEPARTMENT;
+    SELECT max("SYSTEM"."DEPARTMENT"."CASH") INTO "r_max_cash"
+	  FROM "SYSTEM"."DEPARTMENT";
 	  
-	RETURN r_max_cash;  
+	RETURN "r_max_cash";  
   END;  
-END;
+END "department_pkg";
 /
 
 CREATE OR REPLACE FUNCTION get_total_sales(
@@ -754,41 +783,40 @@ BEGIN
 END; 
 /
 
-CREATE OR REPLACE FUNCTION net_price_each(
-    quantity IN PLS_INTEGER,
-    list_price IN REAL,
-    discount IN REAL
+CREATE OR REPLACE NONEDITIONABLE FUNCTION "sale_price"(
+    "quantity" IN PLS_INTEGER,
+    "list_price" IN REAL,
+    "fraction_of_price" IN REAL
 )
 RETURN REAL IS
-    result REAL := quantity * list_price * (1 - discount);
+    result REAL := ("list_price" - ("list_price" * "fraction_of_price")) * "quantity";    
 BEGIN
     RETURN result;
 END;
 /
 
-CREATE OR REPLACE NONEDITIONABLE FUNCTION card_commission(card_type IN VARCHAR2)
+CREATE OR REPLACE NONEDITIONABLE FUNCTION "card_commission"("card_type" IN VARCHAR2)
 RETURN NUMBER IS
- commision NUMBER := 0;
+ "commision" NUMBER := 0;
  BEGIN
-   IF card_type = 'VisaElectron' THEN commision:= 0.15;
-      ELSIF card_type = 'MasterCard' THEN commision:= 0.22;
-      ELSE commision := 0.25;
-   END IF;   
-      
-    RETURN commision;
-END;
+   RETURN CASE "card_type"
+     WHEN 'VisaElectron' THEN .15
+     WHEN 'Mastercard' THEN .22
+     ELSE .25
+   END;
+END;   
 /   
 
-CREATE OR REPLACE FUNCTION get_customer (cl IN NUMBER)
+CREATE OR REPLACE NONEDITIONABLE FUNCTION "get_customer" ("cl" IN NUMBER)
 RETURN SYS_REFCURSOR
-  AS cur SYS_REFCURSOR;
+  AS "cur" SYS_REFCURSOR;
 BEGIN
-  OPEN cur FOR
+  OPEN "cur" FOR
   SELECT *
-    FROM CUSTOMER
-	WHERE CREDIT_LIMIT > cl
-    ORDER BY CUSTOMER_NAME;
-  RETURN cur;
+    FROM "SYSTEM"."CUSTOMER"
+	WHERE "SYSTEM"."CUSTOMER"."CREDIT_LIMIT" > "cl"
+    ORDER BY "SYSTEM"."CUSTOMER"."CUSTOMER_NAME";
+  RETURN "cur";
 END;
 /
 
@@ -885,49 +913,45 @@ EXCEPTION
 END;
 /
 
-create or replace type body SecondMaxImpl is 
-static function ODCIAggregateInitialize(sctx IN OUT SecondMaxImpl) 
-return number is 
-begin
+CREATE OR REPLACE TYPE BODY SecondMaxImpl IS 
+STATIC FUNCTION ODCIAggregateInitialize(sctx IN OUT SecondMaxImpl) RETURN NUMBER IS 
+BEGIN
   sctx := SecondMaxImpl(0, 0);
-  return ODCIConst.Success;
-end;
+  RETURN ODCIConst.Success;
+END;
 
-member function ODCIAggregateIterate(self IN OUT SecondMaxImpl, value IN number) 
-return number is
-begin
-  if value > self.max then
+MEMBER FUNCTION ODCIAggregateIterate(self IN OUT SecondMaxImpl, value IN NUMBER) RETURN NUMBER IS
+BEGIN
+  IF value > self.max THEN
     self.secmax := self.max;
     self.max := value;
-  elsif value > self.secmax then
+  ELSIF value > self.secmax THEN
     self.secmax := value;
-  end if;
-  return ODCIConst.Success;
-end;
+  END IF;
+  RETURN ODCIConst.Success;
+END;
 
-member function ODCIAggregateTerminate(self IN SecondMaxImpl, returnValue OUT 
-number, flags IN number) return number is
-begin
+MEMBER FUNCTION ODCIAggregateTerminate(self IN SecondMaxImpl, returnValue OUT NUMBER, flags IN NUMBER) RETURN NUMBER IS
+BEGIN
   returnValue := self.secmax;
-  return ODCIConst.Success;
-end;
+  RETURN ODCIConst.Success;
+END;
 
-member function ODCIAggregateMerge(self IN OUT SecondMaxImpl, ctx2 IN 
-SecondMaxImpl) return number is
-begin
-  if ctx2.max > self.max then
-    if ctx2.secmax > self.secmax then 
+MEMBER FUNCTION ODCIAggregateMerge(self IN OUT SecondMaxImpl, ctx2 IN SecondMaxImpl) RETURN NUMBER IS
+BEGIN
+  IF ctx2.max > self.max THEN
+    IF ctx2.secmax > self.secmax THEN 
       self.secmax := ctx2.secmax;
-    else
+    ELSE
       self.secmax := self.max;
-    end if;
+    END IF;
     self.max := ctx2.max;
-  elsif ctx2.max > self.secmax then
+  ELSIF ctx2.max > self.secmax THEN
     self.secmax := ctx2.max;
-  end if;
-  return ODCIConst.Success;
-end;
-end;
+  END IF;
+  RETURN ODCIConst.Success;
+END;
+END;
 /
 
 CREATE OR REPLACE FUNCTION SecondMax (input NUMBER) RETURN NUMBER 
@@ -935,51 +959,52 @@ PARALLEL_ENABLE AGGREGATE USING SecondMaxImpl;
 /
 
 -- USER-DEFINED PROCEDURES
-CREATE OR REPLACE PROCEDURE get_product(pid IN NUMBER, cursor_result OUT SYS_REFCURSOR)
+CREATE OR REPLACE NONEDITIONABLE PROCEDURE "get_product"("pid" IN NUMBER, "cursor_result" OUT SYS_REFCURSOR)
 AS BEGIN
-    OPEN cursor_result FOR
-	SELECT * FROM product WHERE product_id = pid;
+    OPEN "cursor_result" FOR
+	SELECT * FROM "SYSTEM"."PRODUCT" WHERE "SYSTEM"."PRODUCT"."PRODUCT_ID" = "pid";
 END;
 /
 
-CREATE OR REPLACE PROCEDURE get_emps_in_office(in_office_code IN VARCHAR,
-  cursor_office OUT SYS_REFCURSOR, cursor_employee OUT SYS_REFCURSOR)
+CREATE OR REPLACE NONEDITIONABLE PROCEDURE "get_emps_in_office"("in_office_code" IN VARCHAR,
+  "cursor_office" OUT SYS_REFCURSOR, "cursor_employee" OUT SYS_REFCURSOR)
 AS BEGIN
- OPEN cursor_office FOR
-    SELECT city, country, internal_budget
-      FROM office
-     WHERE office_code=in_office_code;
+ OPEN "cursor_office" FOR
+    SELECT "SYSTEM"."OFFICE"."CITY", "SYSTEM"."OFFICE"."COUNTRY", "SYSTEM"."OFFICE"."INTERNAL_BUDGET"
+      FROM "SYSTEM"."OFFICE"
+     WHERE "SYSTEM"."OFFICE"."OFFICE_CODE" = "in_office_code";
 
- OPEN cursor_employee FOR
-    SELECT employee_number,first_name,last_name
-      FROM employee
-     WHERE office_code=in_office_code;
+ OPEN "cursor_employee" FOR
+    SELECT "SYSTEM"."EMPLOYEE"."EMPLOYEE_NUMBER", "SYSTEM"."EMPLOYEE"."FIRST_NAME", "SYSTEM"."EMPLOYEE"."LAST_NAME"
+      FROM "SYSTEM"."EMPLOYEE"
+     WHERE "SYSTEM"."EMPLOYEE"."OFFICE_CODE" = "in_office_code";
 END;
 /
 
-CREATE OR REPLACE PROCEDURE get_avg_price_by_product_line (
-	pl IN VARCHAR2,
-	average OUT DECIMAL
+CREATE OR REPLACE NONEDITIONABLE PROCEDURE "get_avg_price_by_product_line" (
+	"pl" IN VARCHAR2,
+	"average" OUT DECIMAL
 )
 AS BEGIN
-	SELECT AVG(buy_price)
-	INTO average
-	FROM product
-	WHERE product_line = pl;
+	SELECT AVG("SYSTEM"."PRODUCT"."BUY_PRICE")
+	INTO "average"
+	FROM "SYSTEM"."PRODUCT"
+	WHERE "SYSTEM"."PRODUCT"."PRODUCT_LINE" = "pl";
 END;
 /
 
-CREATE OR REPLACE PROCEDURE refresh_top3_product(p_line_in IN VARCHAR2)
+CREATE OR REPLACE NONEDITIONABLE PROCEDURE "refresh_top3_product"("p_line_in" IN VARCHAR2)
 AS BEGIN
 	DELETE FROM "SYSTEM"."TOP3PRODUCT"; 
         INSERT INTO "SYSTEM"."TOP3PRODUCT"("SYSTEM"."TOP3PRODUCT"."PRODUCT_ID", "SYSTEM"."TOP3PRODUCT"."PRODUCT_NAME")        
-        SELECT "SYSTEM"."ORDERDETAIL"."PRODUCT_ID", "product_name" 
+		SELECT "T"."PRODUCT_ID", "T"."PRODUCT_NAME" FROM (
+        SELECT "SYSTEM"."ORDERDETAIL"."PRODUCT_ID", "PRODUCT_NAME", max("SYSTEM"."ORDERDETAIL"."QUANTITY_ORDERED") "QO" 
 		FROM "SYSTEM"."ORDERDETAIL" 
-		CROSS APPLY (SELECT "SYSTEM"."PRODUCT"."PRODUCT_NAME" "product_name" 
+		CROSS APPLY (SELECT "SYSTEM"."PRODUCT"."PRODUCT_NAME" "PRODUCT_NAME" 
 		  FROM "SYSTEM"."PRODUCT" WHERE ("SYSTEM"."ORDERDETAIL"."PRODUCT_ID" = "SYSTEM"."PRODUCT"."PRODUCT_ID" 
-		    AND "SYSTEM"."PRODUCT"."PRODUCT_LINE" = p_line_in))
-        GROUP BY "SYSTEM"."ORDERDETAIL"."PRODUCT_ID", "product_name", "SYSTEM"."ORDERDETAIL"."QUANTITY_ORDERED" 
-		ORDER BY "SYSTEM"."ORDERDETAIL"."QUANTITY_ORDERED" 
+		    AND "SYSTEM"."PRODUCT"."PRODUCT_LINE" = "p_line_in"))
+        GROUP BY "SYSTEM"."ORDERDETAIL"."PRODUCT_ID", "PRODUCT_NAME") "T"
+		ORDER BY "T"."QO"        
 		FETCH NEXT 3 ROWS ONLY;         
 END;
 /

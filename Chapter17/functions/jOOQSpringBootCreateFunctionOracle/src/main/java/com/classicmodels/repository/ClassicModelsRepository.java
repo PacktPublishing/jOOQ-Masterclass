@@ -7,8 +7,6 @@ import static org.jooq.impl.DSL.in;
 import static org.jooq.impl.DSL.inline;
 import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.return_;
-import static org.jooq.impl.DSL.val;
-import static org.jooq.impl.SQLDataType.FLOAT;
 import static org.jooq.impl.SQLDataType.INTEGER;
 import static org.jooq.impl.SQLDataType.REAL;
 import org.springframework.stereotype.Repository;
@@ -28,28 +26,31 @@ public class ClassicModelsRepository {
     public void createScalarFunction() {
 
         Parameter<Integer> quantity = in("quantity", INTEGER);
-        Parameter<Double> list_price = in("list_price", FLOAT);
-        Parameter<Double> discount = in("discount", FLOAT);
+        Parameter<Float> listPrice = in("list_price", REAL);
+        Parameter<Float> fractionOfPrice = in("fraction_of_price", REAL);
 
-        // or, use ctx.dropFunctionIfExists() and createFunction()
-        ctx.createOrReplaceFunction("net_price_each_jooq")
-                .parameters(quantity, list_price, discount)
-                .returns(FLOAT)
+        // ctx.dropFunctionIfExists("sale_price_jooq").execute(); followed by ctx.createFunction(...)
+        
+        ctx.createOrReplaceFunction("sale_price_jooq")
+                .parameters(
+                        quantity, listPrice, fractionOfPrice
+                )
+                .returns(REAL)
                 .deterministic()
-                .as(return_(quantity.mul(list_price).mul(inline(1).minus(discount))))                
+                .as(return_(listPrice.minus(listPrice.mul(fractionOfPrice)).mul(quantity)))
                 .execute();
     }
 
     public void callScalarFunction() {
 
         // call this function (plain SQL)
-        double result = ctx.select(function(name("net_price_each_jooq"),
-                REAL, val(10), val(20.45f), val(0.33f)))
-                .fetchOneInto(Double.class);
+        float result = ctx.select(function(name("sale_price_jooq"),
+                REAL, inline(10), inline(20.45), inline(0.33)))
+                .fetchOneInto(Float.class);
 
         System.out.println("Result: " + result);
 
         // calling the previously created functions via the generated code
-        // can be done as you saw in the application jOOQSpringBootSFMySQL
+        // can be done as you already know
     }
 }

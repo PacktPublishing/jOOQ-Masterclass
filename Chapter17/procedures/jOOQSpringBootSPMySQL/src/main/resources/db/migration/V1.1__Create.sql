@@ -344,19 +344,20 @@ BEGIN
 	-- return the customer level
 	RETURN (customerLevel);
 END$$
-DELIMITER$$
+DELIMITER;
 
-CREATE FUNCTION net_price_each(
-    quantity INT,
-    list_price DECIMAL(10,2),
-    discount DECIMAL(4,2)
+DELIMITER $$
+CREATE FUNCTION `sale_price`(
+    `quantity` INT,
+    `list_price` REAL,
+    `fraction_of_price` REAL
 )
-RETURNS DECIMAL(10,2)
+RETURNS REAL
 DETERMINISTIC
 BEGIN
-    RETURN quantity * list_price * (1 - discount);
+     RETURN (`list_price` - (`list_price` * `fraction_of_price`)) * `quantity`;    
 END$$
-DELIMITER$$
+DELIMITER;
 
 DELIMITER $$
 CREATE TRIGGER product_uid_trigger BEFORE INSERT ON product FOR EACH ROW BEGIN
@@ -368,22 +369,22 @@ DELIMITER;
 /* USER-DEFINED PROCEDURES */
 
 DELIMITER $$
-CREATE PROCEDURE get_product(IN pid BIGINT)
+CREATE PROCEDURE `get_product`(IN `pid` BIGINT)
 BEGIN
-	SELECT * FROM product WHERE product_id = pid;
+	SELECT * FROM `classicmodels`.`product` WHERE `classicmodels`.`product`.`product_id` = `pid`;
 END$$
 DELIMITER;
 
 DELIMITER $$
-CREATE PROCEDURE get_emps_in_office(in_office_code VARCHAR(10))
+CREATE PROCEDURE `get_emps_in_office`(`in_office_code` VARCHAR(10))
 BEGIN
-    SELECT city, country, internal_budget
-      FROM office
-     WHERE office_code=in_office_code;
+    SELECT `classicmodels`.`office`.`city`, `classicmodels`.`office`.`country`, `classicmodels`.`office`.`internal_budget`
+      FROM `classicmodels`.`office`
+     WHERE `classicmodels`.`office`.`office_code`=`in_office_code`;
 
-    SELECT employee_number,first_name,last_name
-      FROM employee
-     WHERE office_code=in_office_code;
+    SELECT `classicmodels`.`employee`.`employee_number`,`classicmodels`.`employee`.`first_name`,`classicmodels`.`employee`.`last_name`
+      FROM `classicmodels`.`employee`
+     WHERE `classicmodels`.`employee`.`office_code`=`in_office_code`;
 END$$
 DELIMITER;
 
@@ -407,6 +408,23 @@ CREATE PROCEDURE set_counter(
 )
 BEGIN
 	SET counter = counter + inc;
+END$$
+DELIMITER;
+
+DELIMITER $$
+CREATE PROCEDURE refresh_top3_product(IN p_line_in VARCHAR(50))
+BEGIN
+	DELETE FROM `classicmodels`.`top3product`; 
+        INSERT INTO `classicmodels`.`top3product`
+		  (`classicmodels`.`top3product`.`product_id`, `classicmodels`.`top3product`.`product_name`)        
+        SELECT `classicmodels`.`orderdetail`.`product_id`, `t`.`product_name` 
+		FROM `classicmodels`.`orderdetail`, 
+		LATERAL (SELECT DISTINCT `classicmodels`.`product`.`product_name` AS `product_name` 
+		  FROM `classicmodels`.`product` WHERE (`classicmodels`.`orderdetail`.`product_id` = `classicmodels`.`product`.`product_id` 
+		    AND `classicmodels`.`product`.`product_line` = p_line_in)) AS `t`
+        GROUP BY `classicmodels`.`orderdetail`.`product_id`, `product_name`, `classicmodels`.`orderdetail`.`quantity_ordered` 
+		ORDER BY `classicmodels`.`orderdetail`.`quantity_ordered` 
+		LIMIT 3;         
 END$$
 DELIMITER;
 

@@ -7,7 +7,6 @@ import static org.jooq.impl.DSL.in;
 import static org.jooq.impl.DSL.inline;
 import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.return_;
-import static org.jooq.impl.DSL.val;
 import static org.jooq.impl.SQLDataType.INTEGER;
 import static org.jooq.impl.SQLDataType.REAL;
 import org.springframework.stereotype.Repository;
@@ -24,31 +23,34 @@ public class ClassicModelsRepository {
     }
 
     @Transactional
-    public void createScalarFunction() {
-
+    public void createScalarFunction() {       
+        
         Parameter<Integer> quantity = in("quantity", INTEGER);
-        Parameter<Float> list_price = in("list_price", REAL);
-        Parameter<Float> discount = in("discount", REAL);
+        Parameter<Float> listPrice = in("list_price", REAL);
+        Parameter<Float> fractionOfPrice = in("fraction_of_price", REAL);
 
-        // or, use ctx.dropFunctionIfExists() and createFunction()
-        ctx.createOrReplaceFunction(name("dbo", "net_price_each_jooq"))
-                .parameters(quantity, list_price, discount)
+        // ctx.dropFunctionIfExists("sale_price_jooq").execute(); followed by ctx.createFunction(...)
+        
+        ctx.createOrReplaceFunction(name("dbo","sale_price_jooq"))
+                .parameters(
+                        quantity, listPrice, fractionOfPrice
+                )
                 .returns(REAL)
                 .deterministic()
-                .as(return_(quantity.mul(list_price).mul(inline(1).minus(discount))))
+                .as(return_(listPrice.minus(listPrice.mul(fractionOfPrice)).mul(quantity)))
                 .execute();
     }
 
     public void callScalarFunction() {
 
         // call this function (plain SQL)
-        float result = ctx.select(function(name("dbo", "net_price_each_jooq"),
-                REAL, val(10), val(20.45f), val(0.33f)))
+        float result = ctx.select(function(name("dbo", "sale_price_jooq"),
+                REAL, inline(10), inline(20.45), inline(0.33)))
                 .fetchOneInto(Float.class);
 
         System.out.println("Result: " + result);
 
         // calling the previously created functions via the generated code
-        // can be done as you saw in the application jOOQSpringBootSFMySQL
+        // can be done as you already know
     }
 }

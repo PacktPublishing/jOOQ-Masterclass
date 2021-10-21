@@ -18,6 +18,6 @@ public class ClassicModelsService {
         classicModelsRepository.callProcedure1();
         
         classicModelsRepository.createProcedure2();
-        classicModelsRepository.callProcedure2();
+        classicModelsRepository.callProcedure2();                
     }
 }

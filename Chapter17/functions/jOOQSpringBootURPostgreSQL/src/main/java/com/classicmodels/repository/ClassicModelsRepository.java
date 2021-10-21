@@ -23,18 +23,18 @@ public class ClassicModelsRepository {
 
         // EXECUTION 1
         UpdateMsrp um = new UpdateMsrp();
-        um.setProductId(1L);
+        um.setId(1L);
         um.setDebit(10);
         um.execute(ctx.configuration());
 
         float newMsrp = um.getReturnValue();
 
-        System.out.println("Msrp: " + newMsrp);
-
+        System.out.println("Msrp: " + newMsrp);     
+        
         // EXECUTION 2
-        ctx.select(PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME, PRODUCT.MSRP)
-                .from(PRODUCT)
-                .where(updateMsrp(PRODUCT.PRODUCT_ID, inline(50)).gt(150f))
+        ctx.select(PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME, 
+                PRODUCT.MSRP.as("obsolete_msrp"), updateMsrp(PRODUCT.PRODUCT_ID, inline(50)))
+                .from(PRODUCT)               
                 .fetch();
     }
 }
