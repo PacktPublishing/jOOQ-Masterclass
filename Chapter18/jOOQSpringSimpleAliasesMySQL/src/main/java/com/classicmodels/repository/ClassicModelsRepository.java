@@ -1,11 +1,7 @@
 package com.classicmodels.repository;
 
 import static jooq.generated.Classicmodels.CLASSICMODELS;
-import jooq.generated.tables.Customerdetail;
-import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
 import static jooq.generated.tables.Employee.EMPLOYEE;
-import jooq.generated.tables.Office;
-import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Product.PRODUCT;
 import jooq.generated.tables.records.ProductRecord;
 import org.jooq.DSLContext;
@@ -13,7 +9,6 @@ import org.jooq.Field;
 import org.jooq.Table;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.name;
-import static org.jooq.impl.DSL.table;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,10 +54,10 @@ public class ClassicModelsRepository {
         Table<ProductRecord> p3 = PRODUCT;
         Table<ProductRecord> p4 = PRODUCT;
 
-        System.out.println("p1 = p2 ? " + (p1 == p2));
-        System.out.println("p3 = p4 ? " + (p3 == p4));
-        System.out.println("p1 = p3 ? " + (p1 == p3));
-        System.out.println("p2 = p4 ? " + (p2 == p4));
+        System.out.println("p1 = p2 ? " + (p1.equals(p2)));
+        System.out.println("p3 = p4 ? " + (p3.equals(p4)));
+        System.out.println("p1 = p3 ? " + (p1.equals(p3)));
+        System.out.println("p2 = p4 ? " + (p2.equals(p4)));                
     }
 
     public void simpleColumnAlias() {
@@ -97,101 +92,22 @@ public class ClassicModelsRepository {
         Field<String> f3 = PRODUCT.PRODUCT_NAME;
         Field<String> f4 = PRODUCT.PRODUCT_NAME;
 
-        System.out.println("f1 = f2 ? " + (f1 == f2));
-        System.out.println("f3 = f4 ? " + (f3 == f4));
-        System.out.println("f1 = f3 ? " + (f1 == f3));
-        System.out.println("f2 = f4 ? " + (f2 == f4));
+        System.out.println("f1 = f2 ? " + (f1.equals(f2)));
+        System.out.println("f3 = f4 ? " + (f3.equals(f4)));
+        System.out.println("f1 = f3 ? " + (f1.equals(f3)));
+        System.out.println("f2 = f4 ? " + (f2.equals(f4)));
     }
 
     public void simpleSelectAndAs() {
+        
+        // table aliases        
+        ctx.select(field(name("t", "first_name")), field(name("t", "last_name")))
+                .from(EMPLOYEE.as("t"))
+                .fetch();
 
         // column aliases in select
         ctx.select(EMPLOYEE.FIRST_NAME.as("fn"), EMPLOYEE.LAST_NAME.as("ln"))
                 .from(EMPLOYEE)
-                .fetch();
-
-        // select `classicmodels`.`office`.`city` from `classicmodels`.`office` as `t`
-        // Since we assigned an alias to `classicmodels`.`office` table then 
-        // 'classicmodels.office.city' column become unknown   
-        /*
-        ctx.select(OFFICE.CITY)
-                .from(OFFICE.as("t"))
-                .fetch();
-         */
-        
-        // This leads to Unknown column 't'
-        // select t from `classicmodels`.`office` as `t`      
-        /*
-        ctx.select(field("t", "city"))
-                .from(OFFICE.as("t"))
-                .fetch();
-         */
-        
-        // This selects all columns, obviously not what we want
-        // select `t`.`office_code`, `t`.`city`, ... , `t`.`location` from `classicmodels`.`office` as `t`
-        /*
-        ctx.select(table("t").field("city"))
-                .from(OFFICE.as("t"))
-                .fetch();
-        */
-        
-        // The next 2 works, but are prone to ambiguities
-        // select city from `classicmodels`.`office` as `t`
-        ctx.select(field("city"))
-                .from(OFFICE.as("t"))
-                .fetch();
-
-        // select `city` from `classicmodels`.`office` as `t`
-        ctx.select(field(name("city")))
-                .from(OFFICE.as("t"))
-                .fetch();
-
-        // This leads to an ambiguous column, city
-        /*
-        ctx.select(field(name("city"))) // or, field("city")
-                .from(OFFICE.as("t1"), CUSTOMERDETAIL.as("t2"))
-                .fetch();
-         */
-        
-        // This works, but as you can see is not quite a clean result
-        // select t.city from `classicmodels`.`office` as `t`
-        ctx.select(field("t.city"))
-                .from(OFFICE.as("t"))
-                .fetch();
-
-        // No more ambiguities, but still not the best we can do
-        // select t1.city, t2.city from `classicmodels`.`office` as `t1`, `classicmodels`.`customerdetail` as `t2`
-        ctx.select(field("t1.city"), field("t2.city"))
-                .from(OFFICE.as("t1"), CUSTOMERDETAIL.as("t2"))
-                .fetch();
-
-        // This is better since identifiers are correctly generated
-        // select `t`.`city` from `classicmodels`.`office` as `t`
-        ctx.select(field(name("t", "city")))
-                .from(OFFICE.as("t"))
-                .fetch();
-
-        // No risk for ambiguities and identifiers are correctly generated
-        ctx.select(field(name("t1", "city")), field(name("t2", "city")))
-                .from(OFFICE.as("t1"), CUSTOMERDETAIL.as("t2"))
-                .fetch();
-
-        ctx.select(field(name("t1", "city")).as("city_office"), field(name("t2", "city")).as("city_customer"))
-                .from(OFFICE.as("t1"), CUSTOMERDETAIL.as("t2"))
-                .fetch();
-
-        // much better is to declare alias before usage
-        Office t1 = OFFICE.as("t1");
-        Customerdetail t2 = CUSTOMERDETAIL.as("t2");
-
-        ctx.select(t1.CITY, t2.CITY)
-                .from(t1, t2)
-                .fetch();
-
-        Field<String> c1 = t1.CITY.as("city_office");
-        Field<String> c2 = t2.CITY.as("city_customer");
-        ctx.select(c1, c2)
-                .from(t1, t2)
-                .fetch();
+                .fetch();                
     }
 }

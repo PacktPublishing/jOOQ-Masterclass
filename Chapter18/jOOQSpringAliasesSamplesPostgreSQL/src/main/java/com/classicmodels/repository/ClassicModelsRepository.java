@@ -44,9 +44,9 @@ public class ClassicModelsRepository {
     public ClassicModelsRepository(DSLContext ctx) {
         this.ctx = ctx;
     }
-    
+
     public void sample0() {
-        
+       
         Field<String> pl1 = PRODUCT.PRODUCT_LINE.as("pl");                
         Field<String> pl2 = PRODUCT.PRODUCT_LINE;                
         ctx.select(pl1)
@@ -54,39 +54,36 @@ public class ClassicModelsRepository {
            .groupBy(pl2)
            .orderBy(pl1)
            .fetch();
-        
-        // select `classicmodels`.`office`.`city` from `classicmodels`.`office` as `t`
-        // Since we assigned an alias to `classicmodels`.`office` table then 
-        // 'classicmodels.office.city' column become unknown   
+
+        // select "public"."office"."city" from "public"."office" as "t"
+        // Since we assigned an alias to "public"."office" table then 
+        // 'public.office.city' column become unknown   
         /*
         ctx.select(OFFICE.CITY)
                 .from(OFFICE.as("t"))
                 .fetch();
          */
-        
-        // This leads to Unknown column 't'
-        // select t from `classicmodels`.`office` as `t`      
+        // This selects all columns separated by comma, obviously not what we want
+        // select t from "public"."office" as "t"    
         /*
         ctx.select(field("t", "city"))
                 .from(OFFICE.as("t"))
                 .fetch();
          */
-        
         // This selects all columns, obviously not what we want
-        // select `t`.`office_code`, `t`.`city`, ... , `t`.`location` from `classicmodels`.`office` as `t`
+        // select "t"."office_code", "t"."city", ..., "t"."location" from "public"."office" as "t"
         /*
         ctx.select(table("t").field("city"))
                 .from(OFFICE.as("t"))
                 .fetch();
-        */
-        
+         */
         // The next 2 works, but are prone to ambiguities
-        // select city from `classicmodels`.`office` as `t`
+        // select city from "public"."office" as "t"
         ctx.select(field("city"))
                 .from(OFFICE.as("t"))
                 .fetch();
 
-        // select `city` from `classicmodels`.`office` as `t`
+        // select "city" from "public"."office" as "t"
         ctx.select(field(name("city")))
                 .from(OFFICE.as("t"))
                 .fetch();
@@ -97,21 +94,20 @@ public class ClassicModelsRepository {
                 .from(OFFICE.as("t1"), CUSTOMERDETAIL.as("t2"))
                 .fetch();
          */
-        
         // This works, but as you can see is not quite a clean result
-        // select t.city from `classicmodels`.`office` as `t`
+        // select t.city from "public"."office" as "t"
         ctx.select(field("t.city"))
                 .from(OFFICE.as("t"))
                 .fetch();
 
         // No more ambiguities, but still not the best we can do
-        // select t1.city, t2.city from `classicmodels`.`office` as `t1`, `classicmodels`.`customerdetail` as `t2`
+        // select t1.city, t2.city from "public"."office" as "t1", "public"."customerdetail" as "t2"
         ctx.select(field("t1.city"), field("t2.city"))
                 .from(OFFICE.as("t1"), CUSTOMERDETAIL.as("t2"))
                 .fetch();
 
         // This is better since identifiers are correctly generated
-        // select `t`.`city` from `classicmodels`.`office` as `t`
+        // select "t"."city" from "public"."office" as "t"
         ctx.select(field(name("t", "city")))
                 .from(OFFICE.as("t"))
                 .fetch();
@@ -139,7 +135,7 @@ public class ClassicModelsRepository {
                 .from(t1, t2)
                 .fetch();
     }
-
+    
     public void sample1() {
 
         // no aliases
@@ -172,29 +168,29 @@ public class ClassicModelsRepository {
                 .join(t2)
                 .on(t1.OFFICE_CODE.eq(t2.OFFICE_CODE))
                 .fetch();
-
-        Table<Record1<String>> t3
+        
+        Table<Record1<String>> t3 
                 = ctx.select(t1.CITY).from(t1).asTable("t3");
-
+        
         // refer to t3'fields type-safe
         ctx.select(t3.field(t1.CITY), CUSTOMERDETAIL.CUSTOMER_NUMBER)
                 .from(t3)
                 .join(CUSTOMERDETAIL)
                 .on(t3.field(t1.CITY).eq(CUSTOMERDETAIL.CITY))
                 .fetch();
-
+        
         // refer to t3'fields non type-safe
         ctx.select(t3.field(name("city")), CUSTOMERDETAIL.CUSTOMER_NUMBER)
                 .from(t3)
                 .join(CUSTOMERDETAIL)
                 .on(t3.field(name("city"), String.class).eq(CUSTOMERDETAIL.CITY))
                 .fetch();
-
+        
         // no need to extract aliases in local variables
         ctx.select(concat(EMPLOYEE.FIRST_NAME, inline(" "), EMPLOYEE.LAST_NAME).as("name"),
                 EMPLOYEE.EMAIL.as("contact"), EMPLOYEE.REPORTS_TO.as("boss_id"))
                 .from(EMPLOYEE)
-                .fetch();
+                .fetch();  
     }
 
     public void sample2() {
@@ -229,7 +225,7 @@ public class ClassicModelsRepository {
     public void sample3() {
 
         // this is not type-safe and it has inconsistent identifiers
-        ctx.select(count(field("t.customer_number")).as("total_customers"), field("t.country").as("nationalityality"))
+        ctx.select(count(field("t.customer_number")).as("total_customers"), field("t.country").as("nationality"))
                 .from(CUSTOMERDETAIL.as("t"))
                 .groupBy(field("t.country"))
                 .fetch();
@@ -282,19 +278,20 @@ public class ClassicModelsRepository {
                                 .from(PAYMENT).asTable("t"))
                         .on(field("t.customer_number").eq(CUSTOMER.CUSTOMER_NUMBER)))
                 .fetch();
-         */
+        */
+        
         // Solution 1: extract the aliased table    
         System.out.println("Solution 1: extract the aliased table");
         var t = select(PAYMENT.CUSTOMER_NUMBER, PAYMENT.INVOICE_AMOUNT)
-                .from(PAYMENT).asTable("t");
+                                .from(PAYMENT).asTable("t");
         ctx.select()
-                .from(select(CUSTOMER.CUSTOMER_NUMBER, CUSTOMER.CUSTOMER_NAME,
+                .from(select(CUSTOMER.CUSTOMER_NUMBER, CUSTOMER.CUSTOMER_NAME, 
                         t.field(PAYMENT.INVOICE_AMOUNT))
                         .from(CUSTOMER)
                         .join(t)
                         .on(t.field(CUSTOMER.CUSTOMER_NUMBER).eq(CUSTOMER.CUSTOMER_NUMBER)))
                 .fetch();
-
+        
         // Solution 2: Use name() for proper quotation
         System.out.println("Solution 2: Use name() for proper quotation");
         ctx.select()
@@ -304,8 +301,8 @@ public class ClassicModelsRepository {
                         .join(select(PAYMENT.CUSTOMER_NUMBER, PAYMENT.INVOICE_AMOUNT)
                                 .from(PAYMENT).asTable("t"))
                         .on(field(name("t", "customer_number")).eq(CUSTOMER.CUSTOMER_NUMBER)))
-                .fetch();
-
+                .fetch();                        
+        
         // Solution 3: add an alias to field("t.invoice_amount")
         System.out.println("Solution 3: add an alias to field(\"t.invoice_amount\")");
         ctx.select()
@@ -315,8 +312,8 @@ public class ClassicModelsRepository {
                         .join(select(PAYMENT.CUSTOMER_NUMBER, PAYMENT.INVOICE_AMOUNT)
                                 .from(PAYMENT).asTable("t"))
                         .on(field("t.customer_number").eq(CUSTOMER.CUSTOMER_NUMBER)))
-                .fetch();
-
+                .fetch();                
+        
         // Solution 4: use field("invoice_amount"), so unquoted identifier        
         System.out.println("Solution 4: use field(\"invoice_amount\"), so unquoted identifier");
         ctx.select()
@@ -326,7 +323,7 @@ public class ClassicModelsRepository {
                                 .from(PAYMENT).asTable("t"))
                         .on(field("t.customer_number").eq(CUSTOMER.CUSTOMER_NUMBER)))
                 .fetch();
-
+        
         // enrich the query with another join
         ctx.select()
                 .from(select(CUSTOMER.CUSTOMER_NUMBER, CUSTOMER.CUSTOMER_NAME,
@@ -385,13 +382,13 @@ public class ClassicModelsRepository {
 
     public void sample6() {
 
-        ctx.select(EMPLOYEE.JOB_TITLE,
+        ctx.select(EMPLOYEE.JOB_TITLE, 
                 sum(EMPLOYEE.SALARY.minus(EMPLOYEE.COMMISSION)).as("amount"))
-                .from(EMPLOYEE)
-                .groupBy(EMPLOYEE.JOB_TITLE)
-                .orderBy(2) // or, .orderBy(field(name("amount")))
-                .fetch();
-
+           .from(EMPLOYEE)
+           .groupBy(EMPLOYEE.JOB_TITLE)
+           .orderBy(2) // or, .orderBy(field(name("amount")))
+           .fetch();
+         
         ctx.select(PRODUCT.PRODUCT_VENDOR.as("f"))
                 .from(PRODUCT)
                 .groupBy(field(name("f")))
@@ -460,7 +457,7 @@ public class ClassicModelsRepository {
 
     public void sample7() {
 
-        // This is not correct! It leads to: Column 'office_code' in on clause is ambiguous
+        // This is not correct! It leads to: Column reference "office_code" is ambiguous
         /*
         ctx.select().from(
                 OFFICE.leftOuterJoin(DEPARTMENT)
@@ -469,7 +466,8 @@ public class ClassicModelsRepository {
                 .on(EMPLOYEE.OFFICE_CODE.eq(field(name("office_code"), String.class)))
                 .fetch();
          */
-        // This is not correct! It leads to: Unknown column 'classicmodels.office.office_code' in 'on clause'
+        
+        // This is not correct! It leads to: Invalid reference to FROM-clause entry for table "office"
         /*
         ctx.select().from(
                 OFFICE.as("o").leftOuterJoin(DEPARTMENT.as("d"))
@@ -478,18 +476,19 @@ public class ClassicModelsRepository {
                 .on(EMPLOYEE.OFFICE_CODE.eq(OFFICE.OFFICE_CODE))
                 .fetch();
          */
+        
         ctx.select().from(
                 OFFICE.as("o").leftOuterJoin(DEPARTMENT.as("d"))
-                        .on(field(name("o", "office_code")).eq(field(name("d", "office_code")))))
+                        .on(field(name("o","office_code")).eq(field(name("d","office_code")))))
                 .innerJoin(EMPLOYEE)
-                .on(EMPLOYEE.OFFICE_CODE.eq(field(name("o", "office_code"), String.class)))
+                .on(EMPLOYEE.OFFICE_CODE.eq(field(name("o","office_code"), String.class)))
                 .fetch();
-
+        
         Office o = OFFICE.as("o");
         Department d = DEPARTMENT.as("d");
-
+        
         ctx.select().from(o.leftOuterJoin(d)
-                .on(o.OFFICE_CODE.eq(d.OFFICE_CODE)))
+                        .on(o.OFFICE_CODE.eq(d.OFFICE_CODE)))
                 .innerJoin(EMPLOYEE)
                 .on(EMPLOYEE.OFFICE_CODE.eq(o.OFFICE_CODE))
                 .fetch();
@@ -571,7 +570,7 @@ public class ClassicModelsRepository {
                         .on(field(name("t1", "emp_nr")).eq(SALE.EMPLOYEE_NUMBER)).asTable("t2"))
                 .fetch();
     }
-
+    
     public void sample10() {
 
         ctx.select().from(values(row("A", "John", 4333, false))
@@ -590,15 +589,15 @@ public class ClassicModelsRepository {
     }
 
     public void sample11() {
-
+        
         ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.COMMISSION,
                 field(EMPLOYEE.COMMISSION.isNotNull()).as("c"))
                 .from(EMPLOYEE)
                 .fetch();
     }
-
+    
     public void sample12() {
-
+        
         ctx.select(EMPLOYEE.SALARY,
                 count(case_().when(EMPLOYEE.SALARY.gt(0).and(EMPLOYEE.SALARY.lt(50000)), 1)).as("< 50000"),
                 count(case_().when(EMPLOYEE.SALARY.gt(50000).and(EMPLOYEE.SALARY.lt(100000)), 1)).as("50000 - 100000"),
@@ -606,11 +605,11 @@ public class ClassicModelsRepository {
                 .from(EMPLOYEE)
                 .groupBy(EMPLOYEE.SALARY)
                 .fetch();
-        
+
         ctx.select(EMPLOYEE.SALARY,
                 count().filterWhere(EMPLOYEE.SALARY.gt(0).and(EMPLOYEE.SALARY.lt(50000))).as("< 50000"),
                 count().filterWhere(EMPLOYEE.SALARY.gt(50000).and(EMPLOYEE.SALARY.lt(100000))).as("50000 - 100000"),
-                count().filterWhere(EMPLOYEE.SALARY.gt(100000)).as("> 100000"))
+                count().filterWhere(EMPLOYEE.SALARY.gt(100000)).as("> 100000"))               
                 .from(EMPLOYEE)
                 .groupBy(EMPLOYEE.SALARY)
                 .fetch();

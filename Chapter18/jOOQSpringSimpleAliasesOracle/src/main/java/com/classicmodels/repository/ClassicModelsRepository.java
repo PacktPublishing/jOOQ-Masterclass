@@ -58,10 +58,10 @@ public class ClassicModelsRepository {
         Table<ProductRecord> p3 = PRODUCT;
         Table<ProductRecord> p4 = PRODUCT;
 
-        System.out.println("p1 = p2 ? " + (p1 == p2));
-        System.out.println("p3 = p4 ? " + (p3 == p4));
-        System.out.println("p1 = p3 ? " + (p1 == p3));
-        System.out.println("p2 = p4 ? " + (p2 == p4));
+        System.out.println("p1 = p2 ? " + (p1.equals(p2)));
+        System.out.println("p3 = p4 ? " + (p3.equals(p4)));
+        System.out.println("p1 = p3 ? " + (p1.equals(p3)));
+        System.out.println("p2 = p4 ? " + (p2.equals(p4)));
     }
 
     public void simpleColumnAlias() {
@@ -96,139 +96,22 @@ public class ClassicModelsRepository {
         Field<String> f3 = PRODUCT.PRODUCT_NAME;
         Field<String> f4 = PRODUCT.PRODUCT_NAME;
 
-        System.out.println("f1 = f2 ? " + (f1 == f2));
-        System.out.println("f3 = f4 ? " + (f3 == f4));
-        System.out.println("f1 = f3 ? " + (f1 == f3));
-        System.out.println("f2 = f4 ? " + (f2 == f4));
+        System.out.println("f1 = f2 ? " + (f1.equals(f2)));
+        System.out.println("f3 = f4 ? " + (f3.equals(f4)));
+        System.out.println("f1 = f3 ? " + (f1.equals(f3)));
+        System.out.println("f2 = f4 ? " + (f2.equals(f4)));
     }
 
     public void simpleSelectAndAs() {
+        
+        // table aliases        
+        ctx.select(field(name("t", "first_name")), field(name("t", "last_name")))
+                .from(EMPLOYEE.as("t"))
+                .fetch();
 
         // column aliases in select
         ctx.select(EMPLOYEE.FIRST_NAME.as("fn"), EMPLOYEE.LAST_NAME.as("ln"))
                 .from(EMPLOYEE)
-                .fetch();
-
-        // select "SYSTEM"."OFFICE"."CITY" from "SYSTEM"."OFFICE" "t"
-        // Since we assigned an alias to "SYSTEM"."OFFICE" table then 
-        // "SYSTEM"."OFFICE"."CITY" column become unknown   
-        /*
-        ctx.select(OFFICE.CITY)
-                .from(OFFICE.as("t"))
-                .fetch();
-         */
-        
-        // This leads to ORA-00904: "T": invalid identifier
-        // select t from "SYSTEM"."OFFICE" "t"
-        /*
-        ctx.select(field("t", "city"))
-                .from(OFFICE.as("t"))
-                .fetch();
-        */
-        
-        // This selects all columns, obviously not what we want
-        // select "t"."OFFICE_CODE", "t"."CITY", ... , "t"."LOCATION" from "SYSTEM"."OFFICE" "t"
-        /*
-        ctx.select(table("t").field("city"))
-                .from(OFFICE.as("t"))
-                .fetch();
-        */
-        
-        // The next one works, but is prone to ambiguities
-        // It works because the unquoted city and CITY are the same identifiers
-        // select city from "SYSTEM"."OFFICE" "t"
-        ctx.select(field("city"))
-                .from(OFFICE.as("t"))
-                .fetch();
-
-        // This leads to ORA-00904: "city": invalid identifier
-        // This doesn't work because the quoted "city" and "CITY" are not the same
-        // select "city" from "SYSTEM"."OFFICE" "t"
-        /*
-        ctx.select(field(name("city")))
-                .from(OFFICE.as("t"))
-                .fetch();
-        */
-
-        // This leads to ORA-00918: column ambiguously defined
-        /*
-        ctx.select(field("city"))
-                .from(OFFICE.as("t1"), CUSTOMERDETAIL.as("t2"))
-                .fetch();
-        */ 
-        
-        // This lead to ORA-00904: "T"."CITY": invalid identifier
-        // select t.city from "SYSTEM"."OFFICE" "t"
-        /*
-        ctx.select(field("t.city"))
-                .from(OFFICE.as("t"))
-                .fetch();
-        */
-
-        // This leads to ORA-00904: "T2"."CITY": invalid identifier
-        // select t1.city, t2.city from "SYSTEM"."OFFICE" "t1", "SYSTEM"."CUSTOMERDETAIL" "t2"
-        /*
-        ctx.select(field("t1.city"), field("t2.city"))
-                .from(OFFICE.as("t1"), CUSTOMERDETAIL.as("t2"))
-                .fetch();
-        */
-
-        // This leads to ORA-00904: "t"."city": invalid identifier
-        // select "t"."city" from "SYSTEM"."OFFICE" "t"
-        /*
-        ctx.select(field(name("t", "city")))
-                .from(OFFICE.as("t"))
-                .fetch();
-        */
-        
-        // This finally works (but, prefer the next one)
-        // select T.CITY from "SYSTEM"."OFFICE" "T"
-        ctx.select(field("T.CITY"))
-                .from(OFFICE.as("T"))
-                .fetch();
-        // This DOES NOT work!
-        /*
-        ctx.select(field("t.CITY"))
-                .from(OFFICE.as("t"))
-                .fetch();
-        */
-        
-        // select "T"."CITY" from "SYSTEM"."OFFICE" "T"
-        ctx.select(field(name("T", "CITY")))
-                .from(OFFICE.as("T"))
-                .fetch();
-        // select "t"."CITY" from "SYSTEM"."OFFICE" "t"
-        ctx.select(field(name("t", "CITY")))
-                .from(OFFICE.as("t"))
-                .fetch();
-
-        // No risk for ambiguities and identifiers are correctly generated
-        ctx.select(field(name("T1", "CITY")), field(name("T2", "CITY")))
-                .from(OFFICE.as("T1"), CUSTOMERDETAIL.as("T2"))
-                .fetch();
-        ctx.select(field(name("t1", "CITY")), field(name("t2", "CITY")))
-                .from(OFFICE.as("t1"), CUSTOMERDETAIL.as("t2"))
-                .fetch();
-        
-        ctx.select(field(name("T1", "CITY")).as("city_office"), field(name("T2", "CITY")).as("city_customer"))
-                .from(OFFICE.as("T1"), CUSTOMERDETAIL.as("T2"))
-                .fetch();
-        ctx.select(field(name("t1", "CITY")).as("city_office"), field(name("t2", "CITY")).as("city_customer"))
-                .from(OFFICE.as("t1"), CUSTOMERDETAIL.as("t2"))
-                .fetch();
-
-        // much better is to declare alias before usage
-        Office t1 = OFFICE.as("t1");
-        Customerdetail t2 = CUSTOMERDETAIL.as("t2"); // you can put T2 as well
-
-        ctx.select(t1.CITY, t2.CITY)
-                .from(t1, t2)
-                .fetch();
-
-        Field<String> c1 = t1.CITY.as("city_office");
-        Field<String> c2 = t2.CITY.as("city_customer");
-        ctx.select(c1, c2)
-                .from(t1, t2)
-                .fetch();
+                .fetch();                
     }
 }

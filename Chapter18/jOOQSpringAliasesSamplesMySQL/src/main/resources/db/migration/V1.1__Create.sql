@@ -26,10 +26,13 @@ DROP TABLE IF EXISTS `manager`;
 DROP TABLE IF EXISTS `customerdetail`;
 DROP TABLE IF EXISTS `customer`;
 DROP TABLE IF EXISTS `sale`;
+DROP TABLE IF EXISTS `daily_activity`;
 DROP TABLE IF EXISTS `token`;
 DROP TABLE IF EXISTS `employee`;
+DROP TABLE IF EXISTS `employee_status`;
 DROP TABLE IF EXISTS `department`;
 DROP TABLE IF EXISTS `office`;
+DROP TABLE IF EXISTS `office_flights`;
 
 /*Table structure for table `office` */
 
@@ -44,6 +47,7 @@ CREATE TABLE `office` (
   `postal_code` varchar(15) NOT NULL,
   `territory` varchar(10) NOT NULL,
   `location` point DEFAULT NULL,
+  `internal_budget` int NOT NULL,
   CONSTRAINT `office_pk` PRIMARY KEY (`office_code`),
   CONSTRAINT `office_postal_code_uk` UNIQUE (`postal_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -56,6 +60,15 @@ CREATE TABLE `department` (
   `office_code` varchar(10) NOT NULL,
   `topic` varchar(100) DEFAULT NULL,  
   `dep_net_ipv4` varchar(16) DEFAULT NULL,
+  `local_budget` float DEFAULT NULL,
+  `profit` float DEFAULT NULL,
+  `forecast_profit` float DEFAULT NULL,
+  `cash` float DEFAULT NULL,
+  `accounts_receivable` float DEFAULT NULL,
+  `inventories` float DEFAULT NULL,
+  `accounts_payable` float DEFAULT NULL,
+  `st_borrowing` float DEFAULT NULL,
+  `accrued_liabilities` float DEFAULT NULL,
   CONSTRAINT `department_pk` PRIMARY KEY (`department_id`),  
   CONSTRAINT `department_code_uk` UNIQUE (`code`),
   CONSTRAINT `department_office_fk` FOREIGN KEY (`office_code`) REFERENCES `office` (`office_code`)
@@ -71,6 +84,7 @@ CREATE TABLE `employee` (
   `email` varchar(100) NOT NULL,
   `office_code` varchar(10) NOT NULL,
   `salary` int NOT NULL,
+  `commission` int DEFAULT NULL,
   `reports_to` bigint DEFAULT NULL,
   `job_title` varchar(50) NOT NULL, 
   `employee_of_year` varchar(50) DEFAULT NULL,
@@ -78,6 +92,17 @@ CREATE TABLE `employee` (
   CONSTRAINT `employee_pk` PRIMARY KEY (`employee_number`),
   CONSTRAINT `employee_employee_fk` FOREIGN KEY (`reports_to`) REFERENCES `employee` (`employee_number`),
   CONSTRAINT `employee_office_fk` FOREIGN KEY (`office_code`) REFERENCES `office` (`office_code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Table structure for table `employee_status` */
+
+CREATE TABLE `employee_status` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `employee_number` bigint NOT NULL,  
+  `status` varchar(50) NOT NULL,  
+  `acquired_date` date NOT NULL,
+  CONSTRAINT `id_pk` PRIMARY KEY (`id`),  
+  CONSTRAINT `employee_status_employee_fk` FOREIGN KEY (`employee_number`) REFERENCES `employee` (`employee_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Table structure for table `sale` */
@@ -90,9 +115,22 @@ CREATE TABLE `sale` (
   `hot` boolean DEFAULT FALSE,  
   `rate` enum ('SILVER', 'GOLD', 'PLATINUM') DEFAULT NULL,
   `vat` enum ('NONE', 'MIN', 'MAX') DEFAULT NULL,
+  `fiscal_month` int NOT NULL,
+  `revenue_growth` float NOT NULL, 
   `trend` varchar(10) DEFAULT NULL,
   CONSTRAINT `sale_pk` PRIMARY KEY (`sale_id`),    
   CONSTRAINT `sale_employee_fk` FOREIGN KEY (`employee_number`) REFERENCES `employee` (`employee_number`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Table structure for table `daily_activity` */
+
+CREATE TABLE `daily_activity` (
+  `day_id` bigint NOT NULL AUTO_INCREMENT, 
+  `day_date` date NOT NULL,
+  `sales` float NOT NULL,  
+  `visitors` float NOT NULL,    
+  `conversion` float NOT NULL,
+  CONSTRAINT `daily_activity_pk` PRIMARY KEY (`day_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Table structure for table `token` */
@@ -193,9 +231,9 @@ CREATE TABLE `product` (
   `product_scale` varchar(10) DEFAULT NULL,
   `product_vendor` varchar(50) DEFAULT NULL,
   `product_description` text DEFAULT NULL,
-  `quantity_in_stock` smallint DEFAULT 0,
-  `buy_price` decimal(10,2) DEFAULT 0.0,
-  `msrp` decimal(10,2) DEFAULT 0.0,
+  `quantity_in_stock` int DEFAULT 0,
+  `buy_price` decimal(10,2) NOT NULL DEFAULT 0.0,
+  `msrp` decimal(10,2) NOT NULL DEFAULT 0.0,
   `specs` mediumtext DEFAULT NULL,
   `product_uid` bigint DEFAULT 10,
   CONSTRAINT `product_pk` PRIMARY KEY (`product_id`),  
@@ -215,6 +253,7 @@ CREATE TABLE `order` (
   `status` varchar(15) NOT NULL,
   `comments` text,
   `customer_number` bigint NOT NULL,
+  `amount` decimal(10,2) NOT NULL,
   CONSTRAINT `order_pk` PRIMARY KEY (`order_id`),
   CONSTRAINT `order_customer_fk` FOREIGN KEY (`customer_number`) REFERENCES `customer` (`customer_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -227,8 +266,9 @@ CREATE TABLE `orderdetail` (
   `product_id` bigint NOT NULL,
   `quantity_ordered` int NOT NULL,
   `price_each` decimal(10,2) NOT NULL,
-  `order_line_number` smallint NOT NULL,
+  `order_line_number` smallint NOT NULL,  
   CONSTRAINT `orderdetail_pk` PRIMARY KEY (`orderdetail_id`),
+  CONSTRAINT `orderdetail_uk` UNIQUE KEY (`order_id`, `product_id`),
   CONSTRAINT `orderdetail_order_fk` FOREIGN KEY (`order_id`) REFERENCES `order` (`order_id`),
   CONSTRAINT `orderdetail_product_fk` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -267,9 +307,19 @@ CREATE TABLE `bank_transaction` (
   `caching_date` timestamp NOT NULL DEFAULT NOW(),
   `customer_number` bigint NOT NULL,
   `check_number` varchar(50) NOT NULL, 
+  `card_type` varchar(50) NOT NULL, 
   `status` varchar(50) NOT NULL DEFAULT 'SUCCESS',   
   CONSTRAINT `bank_transaction_pk` PRIMARY KEY (`transaction_id`),    
   CONSTRAINT `bank_transaction_customer_fk` FOREIGN KEY (`customer_number`,`check_number`) REFERENCES `payment` (`customer_number`,`check_number`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Table structure for table `office_flights` */
+
+CREATE TABLE `office_flights` (  
+  `depart_town` varchar(32) NOT NULL,
+  `arrival_town` varchar(32) NOT NULL,
+  `distance_km` integer NOT NULL,
+  CONSTRAINT `office_flights_pk` PRIMARY KEY (`depart_town`, `arrival_town`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /* USER-DEFINED FUNCTIONS */
@@ -294,14 +344,89 @@ BEGIN
 	-- return the customer level
 	RETURN (customerLevel);
 END$$
-DELIMITER ;
+DELIMITER;
+
+DELIMITER $$
+CREATE FUNCTION `sale_price`(
+    `quantity` INT,
+    `list_price` REAL,
+    `fraction_of_price` REAL
+)
+RETURNS REAL
+DETERMINISTIC
+BEGIN
+     RETURN (`list_price` - (`list_price` * `fraction_of_price`)) * `quantity`;    
+END$$
+DELIMITER;
 
 DELIMITER $$
 CREATE TRIGGER product_uid_trigger BEFORE INSERT ON product FOR EACH ROW BEGIN
   UPDATE sequences set currval = currval + 10 where sequence_name = 'product_uid_seq';
   SET NEW.product_uid = (SELECT currval FROM sequences WHERE sequence_name = 'product_uid_seq');
 END$$
-DELIMITER ;
+DELIMITER;
+
+/* USER-DEFINED PROCEDURES */
+
+DELIMITER $$
+CREATE PROCEDURE `get_product`(IN `pid` BIGINT)
+BEGIN
+	SELECT * FROM `classicmodels`.`product` WHERE `classicmodels`.`product`.`product_id` = `pid`;
+END$$
+DELIMITER;
+
+DELIMITER $$
+CREATE PROCEDURE `get_emps_in_office`(`in_office_code` VARCHAR(10))
+BEGIN
+    SELECT `classicmodels`.`office`.`city`, `classicmodels`.`office`.`country`, `classicmodels`.`office`.`internal_budget`
+      FROM `classicmodels`.`office`
+     WHERE `classicmodels`.`office`.`office_code`=`in_office_code`;
+
+    SELECT `classicmodels`.`employee`.`employee_number`,`classicmodels`.`employee`.`first_name`,`classicmodels`.`employee`.`last_name`
+      FROM `classicmodels`.`employee`
+     WHERE `classicmodels`.`employee`.`office_code`=`in_office_code`;
+END$$
+DELIMITER;
+
+DELIMITER $$
+CREATE PROCEDURE get_avg_price_by_product_line (
+	IN  pl VARCHAR(25),
+	OUT average DECIMAL(10, 2)
+)
+BEGIN
+	SELECT AVG(buy_price)
+	INTO average
+	FROM product
+	WHERE product_line = pl;
+END$$
+DELIMITER;
+
+DELIMITER $$
+CREATE PROCEDURE set_counter(
+	INOUT counter INT,
+    IN inc INT
+)
+BEGIN
+	SET counter = counter + inc;
+END$$
+DELIMITER;
+
+DELIMITER $$
+CREATE PROCEDURE refresh_top3_product(IN p_line_in VARCHAR(50))
+BEGIN
+	DELETE FROM `classicmodels`.`top3product`; 
+        INSERT INTO `classicmodels`.`top3product`
+		  (`classicmodels`.`top3product`.`product_id`, `classicmodels`.`top3product`.`product_name`)        
+        SELECT `classicmodels`.`orderdetail`.`product_id`, `t`.`product_name` 
+		FROM `classicmodels`.`orderdetail`, 
+		LATERAL (SELECT DISTINCT `classicmodels`.`product`.`product_name` AS `product_name` 
+		  FROM `classicmodels`.`product` WHERE (`classicmodels`.`orderdetail`.`product_id` = `classicmodels`.`product`.`product_id` 
+		    AND `classicmodels`.`product`.`product_line` = p_line_in)) AS `t`
+        GROUP BY `classicmodels`.`orderdetail`.`product_id`, `product_name`, `classicmodels`.`orderdetail`.`quantity_ordered` 
+		ORDER BY `classicmodels`.`orderdetail`.`quantity_ordered` 
+		LIMIT 3;         
+END$$
+DELIMITER;
 
 -- VIEWS
 CREATE OR REPLACE VIEW customer_master AS

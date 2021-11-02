@@ -24,7 +24,7 @@ public class ClassicModelsService {
         classicModelsRepository.sample7();
         classicModelsRepository.sample8();
         classicModelsRepository.sample9();
-        classicModelsRepository.sample10();        
+        classicModelsRepository.sample10();       
         classicModelsRepository.sample11();
         classicModelsRepository.sample12();
     }
