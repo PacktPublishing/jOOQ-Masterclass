@@ -7,8 +7,11 @@ import jooq.generated.tables.records.ProductRecord;
 import org.jooq.DSLContext;
 import org.jooq.Field;
 import org.jooq.Table;
+import static org.jooq.impl.DSL.concat;
 import static org.jooq.impl.DSL.field;
+import static org.jooq.impl.DSL.inline;
 import static org.jooq.impl.DSL.name;
+import static org.jooq.impl.DSL.selectCount;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -100,14 +103,25 @@ public class ClassicModelsRepository {
 
     public void simpleSelectAndAs() {
 
-        // table aliases        
         ctx.select(field(name("t", "first_name")), field(name("t", "last_name")))
                 .from(EMPLOYEE.as("t"))
                 .fetch();
 
-        // column aliases in select
+        ctx.select(field(name("t", "product_id")), field(name("t", "product_name")),
+                field(selectCount().from(PRODUCT)
+                        .where(PRODUCT.PRODUCT_ID
+                                .eq(field(name("t", "product_id"), Long.class)))).as("count"))
+                .from(PRODUCT.as("t"))
+                .fetch();
+
         ctx.select(EMPLOYEE.FIRST_NAME.as("fn"), EMPLOYEE.LAST_NAME.as("ln"))
                 .from(EMPLOYEE)
-                .fetch();                 
+                .fetch();
+
+        ctx.select(concat(EMPLOYEE.FIRST_NAME,
+                inline(" "), EMPLOYEE.LAST_NAME).as("name"),
+                EMPLOYEE.EMAIL.as("contact"),
+                EMPLOYEE.REPORTS_TO.as("boss_id"))
+                .from(EMPLOYEE).fetch();                 
     }
 }

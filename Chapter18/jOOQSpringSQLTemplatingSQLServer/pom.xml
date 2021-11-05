@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.app</groupId>
-    <artifactId>jOOQSpringSimpleAliasesOracle</artifactId>
+    <artifactId>jOOQSpringSQLTemplatingSQLServer</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQSpringSimpleAliasesOracle</name>
+    <name>jOOQSpringSQLTemplatingSQLServer</name>
     <description>jOOQ - Spring Boot app</description>    
 
     <parent>
@@ -17,7 +17,7 @@
         <version>2.3.3.RELEASE</version>        
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -26,14 +26,12 @@
         <maven.compiler.source>14</maven.compiler.source>
         <maven.compiler.target>14</maven.compiler.target>
         
-        <jaxb.version>2.3.0</jaxb.version>
         <jooq.version>3.15.2</jooq.version>             
-        <xdb6.version>18.3.0.0</xdb6.version>
         <codehaus.mojo.version>1.0.0</codehaus.mojo.version>
         <maven.compiler.plugin.version>3.3</maven.compiler.plugin.version>
     </properties>
 
-    <dependencies>               
+    <dependencies>        
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
@@ -52,27 +50,13 @@
             <artifactId>flyway-core</artifactId>
         </dependency>        
         <dependency>
-            <groupId>com.oracle.database.jdbc</groupId>
-            <artifactId>ojdbc8</artifactId>            
-        </dependency>
-        <dependency>
-            <groupId>com.oracle.database.jdbc</groupId>
-            <artifactId>ucp</artifactId>            
-        </dependency>         
-        <dependency>
-            <groupId>com.oracle.database.xml</groupId>
-            <artifactId>xdb6</artifactId>
-            <version>${xdb6.version}</version>
+            <groupId>com.microsoft.sqlserver</groupId>
+            <artifactId>mssql-jdbc</artifactId>
         </dependency>
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>    
-        </dependency>   
-        <dependency>
-            <groupId>com.sun.xml.bind</groupId>
-            <artifactId>jaxb-impl</artifactId>
-            <version>${jaxb.version}</version>
-        </dependency>
+        </dependency>         
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -112,7 +96,7 @@
             </plugin> 
             <plugin>
                 <groupId>org.flywaydb</groupId>
-                <artifactId>flyway-maven-plugin</artifactId>                
+                <artifactId>flyway-maven-plugin</artifactId>                                 
                 <executions>
                     <execution>
                         <phase>generate-sources</phase>
@@ -136,7 +120,7 @@
                 <version>${jooq.version}</version>            
                 <executions>
                     <execution>
-                        <id>generate-oracle</id>
+                        <id>generate-mssql</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>generate</goal>
@@ -162,45 +146,42 @@
                                 <database>                            
                                     <!-- The database type. The format here is:
                                     org.jooq.meta.[database].[database]Database -->
-                                    <name>org.jooq.meta.oracle.OracleDatabase</name>
+                                    <name>org.jooq.meta.sqlserver.SQLServerDatabase</name>
             
                                     <!-- The database schema (or in the absence of schema support, in your RDBMS this
-                                    can be the owner, user, database name) to be generated. This cannot be combined with the <schemata/> element.                                     
-                                    If <inputSchema/> is missing then all schemas will be considered. -->
-                                    <inputSchema>CLASSICMODELS</inputSchema>                 
+                                    can be the owner, user, database name) to be generated. This cannot be combined with the <schemata/> element. 
+                                    If <inputSchema/> is missing then all schemata will be considered. -->
+                                    <inputCatalog>classicmodels</inputCatalog>
+                                    <inputSchema>dbo</inputSchema>                   
             
                                     <!-- All elements that are generated from your schema
                                     (A Java regular expression. Use the pipe to separate several expressions)
                                     Watch out for case-sensitivity. Depending on your database, this might be important! 
                                     You can create case-insensitive regular expressions using this syntax: (?i:expr).
-                                    Whitespace is ignored and comments are possible. -->                                           
+                                    Whitespace is ignored and comments are possible. -->       
                                     <includes>.*</includes>
             
-                                    <!-- Schema version provider -->            
-                                    <schemaVersionProvider>SELECT MAX("version") FROM "SYSTEM"."flyway_schema_history"</schemaVersionProvider>
+                                    <!-- schema version provider -->            
+                                    <!--<schemaVersionProvider>SELECT MAX(version) FROM schema_version</schemaVersionProvider>-->
             
                                     <!-- All elements that are excluded from your schema
                                     (A Java regular expression. Use the pipe to separate several expressions).
                                     Excludes match before includes, i.e. excludes have a higher priority. -->
-                                    <excludes>
-                                        flyway_schema_history | HELP | ROLLING.* | LOGMNR.* | PRODUCT_PRIVS
-                                        | AQ.* | MVIEW.* | LOGMNRC.* | LOGMNRGGC.* | LOGMNRP.* 
-                                        | LOGMNRT.* | OL.* | REDO.* | SCHEDULER.* | SQLPLUS.* | LOGSTDBY.*
-                                    </excludes>
+                                    <excludes>schema_version</excludes>
                                     
                                     <!-- Give enough time to jOOQ to trigger the queries needed for generating sources 
                                     (default is 5 seconds) -->
-                                    <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>                                                                      
-                                </database>
-                                                                
+                                    <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>                                    
+                                </database>                          
+                                
                                 <!-- jOOQ will generate POJOs and DAOs in your behalf -->
                                 <generate>
                                     <pojos>true</pojos>                                   
-                                    <validationAnnotations>true</validationAnnotations>                            
+                                    <validationAnnotations>true</validationAnnotations>                                                             
                                 </generate>
                                 
                                 <target>
-                                    <!-- The destination package of your generated classes (within the destination directory).
+                                    <!-- The destination package of your generated classes (within the destination directory). 
                                  jOOQ may append the schema name to this package if generating multiple schemas,
                                     e.g. org.jooq.your.packagename.schema1
                                     org.jooq.your.packagename.schema2 -->

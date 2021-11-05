@@ -613,6 +613,6 @@ public class ClassicModelsRepository {
                 count().filterWhere(EMPLOYEE.SALARY.gt(100000)).as("> 100000"))
                 .from(EMPLOYEE)
                 .groupBy(EMPLOYEE.SALARY)
-                .fetch();
+                .fetch();                
     }
 }

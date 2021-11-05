@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.app</groupId>
-    <artifactId>jOOQSpringSimpleAliasesOracle</artifactId>
+    <artifactId>jOOQSpringSQLTemplatingOracle</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQSpringSimpleAliasesOracle</name>
+    <name>jOOQSpringSQLTemplatingOracle</name>
     <description>jOOQ - Spring Boot app</description>    
 
     <parent>

@@ -1,18 +1,18 @@
 package com.classicmodels.repository;
 
-import static jooq.generated.System.SYSTEM;
-import jooq.generated.tables.Customerdetail;
-import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
+import static ch.qos.logback.core.joran.action.ActionUtil.Scope.SYSTEM;
+import static jooq.generated.Classicmodels.CLASSICMODELS;
 import static jooq.generated.tables.Employee.EMPLOYEE;
-import jooq.generated.tables.Office;
-import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Product.PRODUCT;
 import jooq.generated.tables.records.ProductRecord;
 import org.jooq.DSLContext;
 import org.jooq.Field;
 import org.jooq.Table;
+import static org.jooq.impl.DSL.concat;
 import static org.jooq.impl.DSL.field;
+import static org.jooq.impl.DSL.inline;
 import static org.jooq.impl.DSL.name;
+import static org.jooq.impl.DSL.selectCount;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,7 +29,7 @@ public class ClassicModelsRepository {
     public void simpleTableAlias() {
 
         // using schema name
-        Table<ProductRecord> p0 = SYSTEM.PRODUCT;
+        Table<ProductRecord> p0 = CLASSICMODELS.PRODUCT;
 
         Table<ProductRecord> p1 = PRODUCT;
         Table<ProductRecord> p2 = PRODUCT.as("p");
@@ -67,7 +67,7 @@ public class ClassicModelsRepository {
     public void simpleColumnAlias() {
 
         // using schema name
-        Field<String> f0 = SYSTEM.PRODUCT.PRODUCT_NAME;
+        Field<String> f0 = CLASSICMODELS.PRODUCT.PRODUCT_NAME;
 
         Field<String> f1 = PRODUCT.PRODUCT_NAME;
         Field<String> f2 = PRODUCT.PRODUCT_NAME.as("f");
@@ -104,14 +104,25 @@ public class ClassicModelsRepository {
 
     public void simpleSelectAndAs() {
         
-        // table aliases        
-        ctx.select(field(name("t", "first_name")), field(name("t", "last_name")))
-                .from(EMPLOYEE.as("t"))
+        ctx.select(field(name("T", "FIRST_NAME")), field(name("T", "LAST_NAME")))
+                .from(EMPLOYEE.as("T"))
                 .fetch();
 
-        // column aliases in select
-        ctx.select(EMPLOYEE.FIRST_NAME.as("fn"), EMPLOYEE.LAST_NAME.as("ln"))
+        ctx.select(field(name("T", "PRODUCT_ID")), field(name("T", "PRODUCT_NAME")),
+                field(selectCount().from(PRODUCT)
+                        .where(PRODUCT.PRODUCT_ID
+                                .eq(field(name("T", "PRODUCT_ID"), Long.class)))).as("COUNT"))
+                .from(PRODUCT.as("T"))
+                .fetch();
+
+        ctx.select(EMPLOYEE.FIRST_NAME.as("FN"), EMPLOYEE.LAST_NAME.as("LN"))
                 .from(EMPLOYEE)
-                .fetch();                
+                .fetch();
+
+        ctx.select(concat(EMPLOYEE.FIRST_NAME,
+                inline(" "), EMPLOYEE.LAST_NAME).as("NAME"),
+                EMPLOYEE.EMAIL.as("CONTACT"),
+                EMPLOYEE.REPORTS_TO.as("BOSS_ID"))
+                .from(EMPLOYEE).fetch();               
     }
 }
