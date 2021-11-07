@@ -25,6 +25,8 @@
         <java.version>14</java.version>                
         <maven.compiler.source>14</maven.compiler.source>
         <maven.compiler.target>14</maven.compiler.target>        
+        
+        <jooq.version>3.15.2</jooq.version> 
     </properties>
 
     <dependencies>        
@@ -39,14 +41,17 @@
         <dependency>
             <groupId>org.jooq</groupId>
             <artifactId>jooq</artifactId>         
+            <version>${jooq.version}</version>
         </dependency>     
         <dependency>
             <groupId>org.jooq</groupId>
-            <artifactId>jooq-meta</artifactId>            
+            <artifactId>jooq-meta</artifactId>
+            <version>${jooq.version}</version>            
         </dependency>    
         <dependency>
             <groupId>org.jooq</groupId>
             <artifactId>jooq-codegen</artifactId>            
+            <version>${jooq.version}</version>
         </dependency>               
         <dependency>
             <groupId>org.flywaydb</groupId>
