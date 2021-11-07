@@ -1,29 +1,25 @@
 package com.classicmodels.repository;
 
-import java.util.List;
-import java.util.Map;
-import static jooq.generated.tables.Customer.CUSTOMER;
-import static jooq.generated.tables.Order.ORDER;
-import jooq.generated.tables.pojos.Order;
+import static jooq.generated.tables.Product.PRODUCT;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
+@Transactional(readOnly = true)
 public class ClassicModelsRepository {
 
-    private final DSLContext create;
+    private final DSLContext ctx;
 
-    public ClassicModelsRepository(DSLContext create) {
-        this.create = create;
+    public ClassicModelsRepository(DSLContext ctx) {
+        this.ctx = ctx;
     }
-    
-    public Map<Long, List<Order>> findAndGroupOrdersByCustomerId() {
 
-        Map<Long, List<Order>> result = create.selectFrom(ORDER)
-                .orderBy(ORDER.COMMENTS.asc().nullsLast())
-                .fetchGroups(CUSTOMER.CUSTOMER_NUMBER, Order.class);
+    @Transactional
+    public void tenant() {
 
-        return result;
+        ctx.insertInto(PRODUCT, PRODUCT.PRODUCT_NAME, PRODUCT.QUANTITY_IN_STOCK)
+                .values("Product", 100)
+                .execute();
     }
-    
 }
