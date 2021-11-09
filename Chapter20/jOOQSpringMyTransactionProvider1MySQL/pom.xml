@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.app</groupId>
-    <artifactId>jOOQSpringMyTransactionProviderMySQL</artifactId>
+    <artifactId>jOOQSpringMyTransactionProvider1MySQL</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQSpringMyTransactionProviderMySQL</name>
+    <name>jOOQSpringMyTransactionProvider1MySQL</name>
     <description>jOOQ - Spring Boot app</description>    
 
     <parent>
