@@ -1,13 +1,12 @@
 package com.classicmodels.jooq.config;
 
 import com.classicmodels.providers.MyTransactionProvider;
-import com.zaxxer.hikari.HikariDataSource;
+import javax.sql.DataSource;
 import org.jooq.ConnectionProvider;
-import org.jooq.DSLContext;
-import org.jooq.SQLDialect;
-import org.jooq.impl.DSL;
 import org.jooq.impl.DataSourceConnectionProvider;
 import org.jooq.impl.DefaultConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.jooq.JooqProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -15,15 +14,25 @@ import org.springframework.transaction.PlatformTransactionManager;
 @Configuration
 public class JooqConfig {
 
-    @Bean(name = "myDSLContext")
-    public DSLContext myDSLContext(HikariDataSource ds, PlatformTransactionManager txManager) {
+    @Bean
+    @ConditionalOnMissingBean(org.jooq.Configuration.class)
+    public DefaultConfiguration jooqConfiguration(
+            JooqProperties properties, DataSource ds, PlatformTransactionManager txManager) {
 
         final ConnectionProvider cp = new DataSourceConnectionProvider(ds);
-        final org.jooq.Configuration configuration = new DefaultConfiguration()
+        final DefaultConfiguration defaultConfig = new DefaultConfiguration();
+
+        defaultConfig
                 .set(cp)
-                .set(SQLDialect.MYSQL)
+                .set(properties.determineSqlDialect(ds))
                 .set(new MyTransactionProvider(txManager));
 
-        return DSL.using(configuration);
+        /* or, as a derived configuration
+        final org.jooq.Configuration derivedConfig
+                = defaultConfig.derive(cp)
+                        .derive(properties.determineSqlDialect(ds))
+                        .derive(new MyTransactionProvider(txManager));
+         */
+        return defaultConfig;
     }
 }
