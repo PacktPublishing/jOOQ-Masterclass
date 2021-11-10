@@ -18,14 +18,18 @@ public class ClassicModelsRepository {
 
         ctx.transaction(outer -> {
             outer.dsl()
-                    .insertInto(PRODUCT, PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME, PRODUCT.QUANTITY_IN_STOCK)
-                    .values(86L, "Product_86", 100)
+                    .insertInto(PRODUCT, PRODUCT.PRODUCT_ID, PRODUCT.CODE, 
+                            PRODUCT.PRODUCT_NAME, PRODUCT.QUANTITY_IN_STOCK)
+                    .values(865L, 599302L,"Product_86", 100)
+                    .onDuplicateKeyIgnore()
                     .execute();
 
             DSL.using(outer).transaction(inner -> {
                 inner.dsl()
-                        .insertInto(PRODUCT, PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME, PRODUCT.QUANTITY_IN_STOCK)
-                        .values(14L, "Product_1", 100)
+                        .insertInto(PRODUCT, PRODUCT.PRODUCT_ID, PRODUCT.CODE, 
+                                PRODUCT.PRODUCT_NAME, PRODUCT.QUANTITY_IN_STOCK)
+                        .values(987L, 599302L, "Product_1", 100)
+                        .onDuplicateKeyIgnore()
                         .execute();
             });
         });
