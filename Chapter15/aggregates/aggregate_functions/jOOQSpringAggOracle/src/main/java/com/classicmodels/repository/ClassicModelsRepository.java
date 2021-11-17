@@ -241,8 +241,8 @@ public class ClassicModelsRepository {
     // Using bool_and() / bool_or()
     public void boolAndOrSample() {
 
-        ctx.select(boolAnd(EMPLOYEE.SALARY.gt(BigInteger.valueOf(77000))),
-                every(EMPLOYEE.SALARY.gt(BigInteger.valueOf(77000)))) // the standard SQL version of the BOOL_AND function
+        ctx.select(boolAnd(EMPLOYEE.SALARY.gt(77000)),
+                every(EMPLOYEE.SALARY.gt(77000))) // the standard SQL version of the BOOL_AND function
                 .from(EMPLOYEE)
                 .where(EMPLOYEE.JOB_TITLE.like("Sales Manager%"))
                 .fetch();
@@ -318,6 +318,6 @@ public class ClassicModelsRepository {
                 .from(SALE)
                 .groupBy(SALE.EMPLOYEE_NUMBER)
                 .having(countDistinct(SALE.FISCAL_YEAR).gt(1))
-                .fetch();
+                .fetch();        
     }
 }

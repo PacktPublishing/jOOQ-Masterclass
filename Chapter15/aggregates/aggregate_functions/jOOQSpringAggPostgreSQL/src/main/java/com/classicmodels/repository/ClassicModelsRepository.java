@@ -169,7 +169,7 @@ public class ClassicModelsRepository {
 
     // Correlation(regression) functions
     public void regressionProductBuyPriceMSRP() {
-
+System.out.println("ddddddddddddddddddddddddddddddddd");
         ctx.select(PRODUCT.PRODUCT_LINE,
                 (regrSXY(PRODUCT.BUY_PRICE, PRODUCT.MSRP)).as("regr_sxy"))
                 .from(PRODUCT)

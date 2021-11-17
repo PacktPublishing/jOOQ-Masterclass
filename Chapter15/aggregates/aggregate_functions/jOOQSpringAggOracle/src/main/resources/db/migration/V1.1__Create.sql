@@ -128,12 +128,18 @@ EXCEPTION
    WHEN OTHERS THEN NULL;
 END;
 /
+BEGIN
+   EXECUTE IMMEDIATE 'DROP TABLE "OFFICE_FLIGHTS" CASCADE CONSTRAINTS';
+EXCEPTION
+   WHEN OTHERS THEN NULL;
+END;
+/
 COMMIT;
 
 /* Type used in collect() */
 
 BEGIN
-   EXECUTE IMMEDIATE 'CREATE TYPE salaryArr AS TABLE OF INTEGER;';
+   EXECUTE IMMEDIATE 'CREATE TYPE SALARY_ARR AS TABLE OF NUMBER(7);';
 EXCEPTION
    WHEN OTHERS THEN NULL;
 END;
@@ -180,7 +186,7 @@ CREATE TABLE employee (
   extension varchar2(10) NOT NULL,
   email varchar2(100) NOT NULL,
   office_code varchar2(10) NOT NULL,
-  salary int NOT NULL,
+  salary number(7) NOT NULL,
   commission int DEFAULT NULL,
   reports_to number(10) DEFAULT NULL,
   job_title varchar2(50) NOT NULL,
@@ -397,9 +403,36 @@ END;
 
 /* Define a type using CREATE TYPE */
 BEGIN
-   EXECUTE IMMEDIATE 'CREATE OR REPLACE TYPE evaluation_criteria AS OBJECT (
-   communication_ability number(6), ethics number(6), performance number(6), employee_input number(6))';
-EXCEPTION
+   EXECUTE IMMEDIATE '
+CREATE OR REPLACE TYPE "evaluation_criteria" AS OBJECT (
+     "communication_ability" NUMBER(6), 
+     "ethics" NUMBER(6), 
+     "performance" NUMBER(6), 
+     "employee_input" NUMBER(6),
+   
+     MEMBER FUNCTION "improve"("k" NUMBER) RETURN "evaluation_criteria",
+     MAP MEMBER FUNCTION "score" RETURN NUMBER
+   );';
+   EXCEPTION
+   WHEN OTHERS THEN NULL;
+END;
+/
+COMMIT;
+
+BEGIN
+   EXECUTE IMMEDIATE '
+CREATE OR REPLACE TYPE BODY "evaluation_criteria" AS 
+   MEMBER FUNCTION "improve"("k" NUMBER) RETURN "evaluation_criteria" IS 
+   BEGIN 
+      RETURN "evaluation_criteria"(self."communication_ability" + "k", 
+	            self."ethics" + "k", self."performance" + "k", self."employee_input"); 
+   END "improve";     
+   MAP MEMBER FUNCTION "score" RETURN NUMBER IS 
+   BEGIN 
+      RETURN (SQRT("communication_ability" * "employee_input" - "ethics" * "performance")); 
+   END "score";    
+END;';
+   EXCEPTION
    WHEN OTHERS THEN NULL;
 END;
 /
@@ -410,7 +443,7 @@ CREATE TABLE manager (
   manager_name varchar2(50) NOT NULL,  
   manager_detail varchar2(4000),  
   -- for large JSON, use manager_detail blob,
-  manager_evaluation evaluation_criteria DEFAULT NULL, 
+  manager_evaluation "evaluation_criteria" DEFAULT NULL, 
   CONSTRAINT manager_pk PRIMARY KEY (manager_id),
   CONSTRAINT ENSURE_JSON CHECK (manager_detail IS JSON)
 ) ;
@@ -478,9 +511,9 @@ CREATE TABLE product (
   product_scale varchar2(10) DEFAULT NULL,
   product_vendor varchar2(50) DEFAULT NULL,
   product_description clob DEFAULT NULL,
-  quantity_in_stock number(5) DEFAULT 0,
-  buy_price number(10,2) DEFAULT 0.0,
-  msrp number(10,2) DEFAULT 0.0,
+  quantity_in_stock number(7) DEFAULT 0,
+  buy_price number(10,2) DEFAULT 0.0 NOT NULL,
+  msrp number(10,2) DEFAULT 0.0 NOT NULL,
   specs clob DEFAULT NULL,
   product_uid number(10) NOT NULL,
   CONSTRAINT product_pk PRIMARY KEY (product_id)
@@ -534,6 +567,7 @@ CREATE TABLE "ORDER" (
   status varchar2(15) NOT NULL,
   comments clob,
   customer_number number(10) NOT NULL,
+  amount number(10,2) NOT NULL,
   CONSTRAINT order_pk PRIMARY KEY (order_id)
  ,
   CONSTRAINT order_customer_fk FOREIGN KEY (customer_number) REFERENCES customer (customer_number)
@@ -624,7 +658,8 @@ CREATE TABLE bank_transaction (
   caching_date timestamp DEFAULT SYSTIMESTAMP,
   customer_number number(10) NOT NULL,
   check_number varchar2(50) NOT NULL, 
-  status varchar(50) DEFAULT 'SUCCESS',
+  card_type varchar2(50) NOT NULL,
+  status varchar2(50) DEFAULT 'SUCCESS',
   CONSTRAINT bank_transaction_pk PRIMARY KEY (transaction_id),  
   CONSTRAINT bank_transaction_customer_fk FOREIGN KEY (customer_number,check_number) REFERENCES payment (customer_number,check_number)
 ) ;
@@ -647,12 +682,62 @@ BEGIN
 END;
 /
 
+/*Table structure for table `office_flights` */
+
+CREATE TABLE office_flights (  
+  depart_town varchar2(32) NOT NULL,
+  arrival_town varchar2(32) NOT NULL,
+  distance_km number(7) NOT NULL,
+  CONSTRAINT office_flights_pk PRIMARY KEY (depart_town, arrival_town)
+);
+
 COMMIT;
 
 /* USER-DEFINED FUNCTIONS */
+CREATE OR REPLACE PACKAGE "department_pkg"
+AS
+  TYPE "bgt_arr" IS TABLE OF FLOAT INDEX BY PLS_INTEGER;
+
+  FUNCTION "get_bgt"("p_profit" IN FLOAT)
+    RETURN "bgt_arr";
+	
+  FUNCTION "get_max_cash"
+    RETURN FLOAT; 
+END "department_pkg";
+/
+CREATE OR REPLACE PACKAGE BODY "department_pkg"
+ AS  
+  FUNCTION "get_bgt"("p_profit" IN FLOAT)
+    RETURN "bgt_arr"
+  IS
+    "r_bgt_arr" "bgt_arr";
+  BEGIN
+    SELECT "CLASSICMODELS"."DEPARTMENT"."LOCAL_BUDGET"
+      BULK COLLECT INTO "r_bgt_arr"
+      FROM "CLASSICMODELS"."DEPARTMENT"
+     WHERE "CLASSICMODELS"."DEPARTMENT"."PROFIT" > "p_profit";
+
+    RETURN "r_bgt_arr";
+	BEGIN
+    dbms_output.put_line('Control is now executing the package initialization part');
+	END;
+  END;
+  
+  FUNCTION "get_max_cash"
+    RETURN FLOAT 
+  IS
+    "r_max_cash" FLOAT;
+  BEGIN
+    SELECT max("CLASSICMODELS"."DEPARTMENT"."CASH") INTO "r_max_cash"
+	  FROM "CLASSICMODELS"."DEPARTMENT";
+	  
+	RETURN "r_max_cash";  
+  END;  
+END "department_pkg";
+/
 
 CREATE OR REPLACE FUNCTION get_total_sales(
-    in_year PLS_INTEGER
+    in_year IN PLS_INTEGER
 ) 
 RETURN NUMBER
 IS
@@ -669,6 +754,69 @@ BEGIN
     
     -- return the total sales
     RETURN l_total_sales;
+END;
+/
+
+CREATE OR REPLACE FUNCTION get_salary_stat(
+    min_sal OUT INTEGER,
+    max_sal OUT INTEGER,
+    avg_sal OUT REAL) 
+RETURN REAL IS
+BEGIN
+  SELECT MIN(salary),
+         MAX(salary),
+		 AVG(salary)
+  INTO min_sal, max_sal, avg_sal
+  FROM employee;
+  RETURN avg_sal / sqrt(min_sal * max_sal);
+END;
+/
+
+CREATE OR REPLACE FUNCTION swap(
+	x IN OUT PLS_INTEGER,
+	y IN OUT PLS_INTEGER
+) 
+RETURN PLS_INTEGER IS
+BEGIN
+   SELECT x,y INTO y,x FROM dual;
+   RETURN x + y;
+END; 
+/
+
+CREATE OR REPLACE NONEDITIONABLE FUNCTION "sale_price"(
+    "quantity" IN PLS_INTEGER,
+    "list_price" IN REAL,
+    "fraction_of_price" IN REAL
+)
+RETURN REAL IS
+    result REAL := ("list_price" - ("list_price" * "fraction_of_price")) * "quantity";    
+BEGIN
+    RETURN result;
+END;
+/
+
+CREATE OR REPLACE NONEDITIONABLE FUNCTION "card_commission"("card_type" IN VARCHAR2)
+RETURN NUMBER IS
+ "commision" NUMBER := 0;
+ BEGIN
+   RETURN CASE "card_type"
+     WHEN 'VisaElectron' THEN .15
+     WHEN 'Mastercard' THEN .22
+     ELSE .25
+   END;
+END;   
+/   
+
+CREATE OR REPLACE NONEDITIONABLE FUNCTION "get_customer" ("cl" IN NUMBER)
+RETURN SYS_REFCURSOR
+  AS "cur" SYS_REFCURSOR;
+BEGIN
+  OPEN "cur" FOR
+  SELECT *
+    FROM "CLASSICMODELS"."CUSTOMER"
+	WHERE "CLASSICMODELS"."CUSTOMER"."CREDIT_LIMIT" > "cl"
+    ORDER BY "CLASSICMODELS"."CUSTOMER"."CUSTOMER_NAME";
+  RETURN "cur";
 END;
 /
 
@@ -694,49 +842,210 @@ CREATE OR REPLACE NONEDITIONABLE FUNCTION top_three_sales_per_employee (
     table_result TABLE_RES;
 BEGIN
     SELECT
-        TABLE_RES_OBJ("SYSTEM"."SALE"."SALE") "sales"
+        TABLE_RES_OBJ("CLASSICMODELS"."SALE"."SALE") "sales"
     BULK COLLECT
     INTO table_result
     FROM
-        "SYSTEM"."SALE"
+        "CLASSICMODELS"."SALE"
     WHERE
-        employee_nr = "SYSTEM"."SALE"."EMPLOYEE_NUMBER"
+        employee_nr = "CLASSICMODELS"."SALE"."EMPLOYEE_NUMBER"
     ORDER BY
-        "SYSTEM"."SALE"."SALE" DESC
+        "CLASSICMODELS"."SALE"."SALE" DESC
     FETCH NEXT 3 ROWS ONLY;
 
     RETURN table_result;
 END;
 /
 
+-- Create Object of your table 2
+BEGIN
+   EXECUTE IMMEDIATE 'CREATE TYPE TABLE_POPL_OBJ AS OBJECT (P_ID NUMBER(10), P_NAME VARCHAR2(70), P_LINE VARCHAR2(50));';
+EXCEPTION
+   WHEN OTHERS THEN NULL;
+END;
+/
+
+--Create a type of your object 2
+BEGIN
+   EXECUTE IMMEDIATE 'CREATE TYPE TABLE_POPL AS TABLE OF TABLE_POPL_OBJ;';
+EXCEPTION
+   WHEN OTHERS THEN NULL;
+END;
+/
+
+CREATE OR REPLACE NONEDITIONABLE FUNCTION product_of_product_line (
+    p_line_in IN VARCHAR2
+) RETURN TABLE_POPL IS
+    table_result TABLE_POPL;
+BEGIN
+    SELECT
+        TABLE_POPL_OBJ("CLASSICMODELS"."PRODUCT"."PRODUCT_ID", 
+		"CLASSICMODELS"."PRODUCT"."PRODUCT_NAME", 
+		"CLASSICMODELS"."PRODUCT"."PRODUCT_LINE")
+    BULK COLLECT
+    INTO table_result
+    FROM
+        "CLASSICMODELS"."PRODUCT"
+    WHERE
+        p_line_in = "CLASSICMODELS"."PRODUCT"."PRODUCT_LINE";
+
+    RETURN table_result;
+END;
+/
+
+--Creating and Using a User-Defined Aggregate
+BEGIN
+   EXECUTE IMMEDIATE 'CREATE TYPE SecondMaxImpl AS OBJECT
+(
+  max NUMBER, 
+  secmax NUMBER, 
+  STATIC FUNCTION ODCIAggregateInitialize(sctx IN OUT SecondMaxImpl) 
+    RETURN NUMBER,
+  MEMBER FUNCTION ODCIAggregateIterate(self IN OUT SecondMaxImpl, 
+    value IN NUMBER) RETURN NUMBER,
+  MEMBER FUNCTION ODCIAggregateTerminate(self IN SecondMaxImpl, 
+    returnValue OUT NUMBER, flags IN NUMBER) RETURN NUMBER,
+  MEMBER FUNCTION ODCIAggregateMerge(self IN OUT SecondMaxImpl, 
+    ctx2 IN SecondMaxImpl) RETURN NUMBER
+);';
+EXCEPTION
+   WHEN OTHERS THEN NULL;
+END;
+/
+
+CREATE OR REPLACE TYPE BODY SecondMaxImpl IS 
+STATIC FUNCTION ODCIAggregateInitialize(sctx IN OUT SecondMaxImpl) RETURN NUMBER IS 
+BEGIN
+  sctx := SecondMaxImpl(0, 0);
+  RETURN ODCIConst.Success;
+END;
+
+MEMBER FUNCTION ODCIAggregateIterate(self IN OUT SecondMaxImpl, value IN NUMBER) RETURN NUMBER IS
+BEGIN
+  IF value > self.max THEN
+    self.secmax := self.max;
+    self.max := value;
+  ELSIF value > self.secmax THEN
+    self.secmax := value;
+  END IF;
+  RETURN ODCIConst.Success;
+END;
+
+MEMBER FUNCTION ODCIAggregateTerminate(self IN SecondMaxImpl, returnValue OUT NUMBER, flags IN NUMBER) RETURN NUMBER IS
+BEGIN
+  returnValue := self.secmax;
+  RETURN ODCIConst.Success;
+END;
+
+MEMBER FUNCTION ODCIAggregateMerge(self IN OUT SecondMaxImpl, ctx2 IN SecondMaxImpl) RETURN NUMBER IS
+BEGIN
+  IF ctx2.max > self.max THEN
+    IF ctx2.secmax > self.secmax THEN 
+      self.secmax := ctx2.secmax;
+    ELSE
+      self.secmax := self.max;
+    END IF;
+    self.max := ctx2.max;
+  ELSIF ctx2.max > self.secmax THEN
+    self.secmax := ctx2.max;
+  END IF;
+  RETURN ODCIConst.Success;
+END;
+END;
+/
+
+CREATE OR REPLACE FUNCTION SecondMax (input NUMBER) RETURN NUMBER 
+PARALLEL_ENABLE AGGREGATE USING SecondMaxImpl;
+/
+
+-- USER-DEFINED PROCEDURES
+CREATE OR REPLACE NONEDITIONABLE PROCEDURE "get_product"("pid" IN NUMBER, "cursor_result" OUT SYS_REFCURSOR)
+AS BEGIN
+    OPEN "cursor_result" FOR
+	SELECT * FROM "CLASSICMODELS"."PRODUCT" WHERE "CLASSICMODELS"."PRODUCT"."PRODUCT_ID" = "pid";
+END;
+/
+
+CREATE OR REPLACE NONEDITIONABLE PROCEDURE "get_emps_in_office"("in_office_code" IN VARCHAR,
+  "cursor_office" OUT SYS_REFCURSOR, "cursor_employee" OUT SYS_REFCURSOR)
+AS BEGIN
+ OPEN "cursor_office" FOR
+    SELECT "CLASSICMODELS"."OFFICE"."CITY", "CLASSICMODELS"."OFFICE"."COUNTRY", "CLASSICMODELS"."OFFICE"."INTERNAL_BUDGET"
+      FROM "CLASSICMODELS"."OFFICE"
+     WHERE "CLASSICMODELS"."OFFICE"."OFFICE_CODE" = "in_office_code";
+
+ OPEN "cursor_employee" FOR
+    SELECT "CLASSICMODELS"."EMPLOYEE"."EMPLOYEE_NUMBER", "CLASSICMODELS"."EMPLOYEE"."FIRST_NAME", "CLASSICMODELS"."EMPLOYEE"."LAST_NAME"
+      FROM "CLASSICMODELS"."EMPLOYEE"
+     WHERE "CLASSICMODELS"."EMPLOYEE"."OFFICE_CODE" = "in_office_code";
+END;
+/
+
+CREATE OR REPLACE NONEDITIONABLE PROCEDURE "get_avg_price_by_product_line" (
+	"pl" IN VARCHAR2,
+	"average" OUT DECIMAL
+)
+AS BEGIN
+	SELECT AVG("CLASSICMODELS"."PRODUCT"."BUY_PRICE")
+	INTO "average"
+	FROM "CLASSICMODELS"."PRODUCT"
+	WHERE "CLASSICMODELS"."PRODUCT"."PRODUCT_LINE" = "pl";
+END;
+/
+
+CREATE OR REPLACE NONEDITIONABLE PROCEDURE "refresh_top3_product"("p_line_in" IN VARCHAR2)
+AS BEGIN
+	DELETE FROM "CLASSICMODELS"."TOP3PRODUCT"; 
+        INSERT INTO "CLASSICMODELS"."TOP3PRODUCT"("CLASSICMODELS"."TOP3PRODUCT"."PRODUCT_ID", "CLASSICMODELS"."TOP3PRODUCT"."PRODUCT_NAME")        
+		SELECT "T"."PRODUCT_ID", "T"."PRODUCT_NAME" FROM (
+        SELECT "CLASSICMODELS"."ORDERDETAIL"."PRODUCT_ID", "PRODUCT_NAME", max("CLASSICMODELS"."ORDERDETAIL"."QUANTITY_ORDERED") "QO" 
+		FROM "CLASSICMODELS"."ORDERDETAIL" 
+		CROSS APPLY (SELECT "CLASSICMODELS"."PRODUCT"."PRODUCT_NAME" "PRODUCT_NAME" 
+		  FROM "CLASSICMODELS"."PRODUCT" WHERE ("CLASSICMODELS"."ORDERDETAIL"."PRODUCT_ID" = "CLASSICMODELS"."PRODUCT"."PRODUCT_ID" 
+		    AND "CLASSICMODELS"."PRODUCT"."PRODUCT_LINE" = "p_line_in"))
+        GROUP BY "CLASSICMODELS"."ORDERDETAIL"."PRODUCT_ID", "PRODUCT_NAME") "T"
+		ORDER BY "T"."QO"        
+		FETCH NEXT 3 ROWS ONLY;         
+END;
+/
+
+CREATE OR REPLACE PROCEDURE set_counter(
+	counter IN OUT INTEGER,
+    inc IN INTEGER
+)
+AS BEGIN
+	counter := counter + inc;
+END;
+/
+
 -- VIEWS
 CREATE OR REPLACE VIEW CUSTOMER_MASTER AS
-SELECT "SYSTEM"."CUSTOMER"."CUSTOMER_NAME",
-       "SYSTEM"."CUSTOMER"."CREDIT_LIMIT",
-       "SYSTEM"."CUSTOMERDETAIL"."CITY",
-       "SYSTEM"."CUSTOMERDETAIL"."COUNTRY",
-       "SYSTEM"."CUSTOMERDETAIL"."ADDRESS_LINE_FIRST",
-       "SYSTEM"."CUSTOMERDETAIL"."POSTAL_CODE",
-       "SYSTEM"."CUSTOMERDETAIL"."STATE"
-FROM "SYSTEM"."CUSTOMER"
-JOIN "SYSTEM"."CUSTOMERDETAIL" ON "SYSTEM"."CUSTOMERDETAIL"."CUSTOMER_NUMBER" = "SYSTEM"."CUSTOMER"."CUSTOMER_NUMBER"
-WHERE "SYSTEM"."CUSTOMER"."FIRST_BUY_DATE" IS NOT NULL;
+SELECT "CLASSICMODELS"."CUSTOMER"."CUSTOMER_NAME",
+       "CLASSICMODELS"."CUSTOMER"."CREDIT_LIMIT",
+       "CLASSICMODELS"."CUSTOMERDETAIL"."CITY",
+       "CLASSICMODELS"."CUSTOMERDETAIL"."COUNTRY",
+       "CLASSICMODELS"."CUSTOMERDETAIL"."ADDRESS_LINE_FIRST",
+       "CLASSICMODELS"."CUSTOMERDETAIL"."POSTAL_CODE",
+       "CLASSICMODELS"."CUSTOMERDETAIL"."STATE"
+FROM "CLASSICMODELS"."CUSTOMER"
+JOIN "CLASSICMODELS"."CUSTOMERDETAIL" ON "CLASSICMODELS"."CUSTOMERDETAIL"."CUSTOMER_NUMBER" = "CLASSICMODELS"."CUSTOMER"."CUSTOMER_NUMBER"
+WHERE "CLASSICMODELS"."CUSTOMER"."FIRST_BUY_DATE" IS NOT NULL;
 
 CREATE OR REPLACE VIEW OFFICE_MASTER AS
-SELECT "SYSTEM"."OFFICE"."OFFICE_CODE",
-       "SYSTEM"."OFFICE"."CITY",
-       "SYSTEM"."OFFICE"."COUNTRY",
-       "SYSTEM"."OFFICE"."STATE",
-       "SYSTEM"."OFFICE"."PHONE",
-	   "SYSTEM"."OFFICE"."POSTAL_CODE"
-FROM "SYSTEM"."OFFICE"
-WHERE "SYSTEM"."OFFICE"."CITY" IS NOT NULL;
+SELECT "CLASSICMODELS"."OFFICE"."OFFICE_CODE",
+       "CLASSICMODELS"."OFFICE"."CITY",
+       "CLASSICMODELS"."OFFICE"."COUNTRY",
+       "CLASSICMODELS"."OFFICE"."STATE",
+       "CLASSICMODELS"."OFFICE"."PHONE",
+	   "CLASSICMODELS"."OFFICE"."POSTAL_CODE"
+FROM "CLASSICMODELS"."OFFICE"
+WHERE "CLASSICMODELS"."OFFICE"."CITY" IS NOT NULL;
 
 CREATE OR REPLACE VIEW PRODUCT_MASTER AS
-SELECT "SYSTEM"."PRODUCT"."PRODUCT_LINE",
-       "SYSTEM"."PRODUCT"."PRODUCT_NAME",
-       "SYSTEM"."PRODUCT"."PRODUCT_SCALE"       
-FROM "SYSTEM"."PRODUCT";
+SELECT "CLASSICMODELS"."PRODUCT"."PRODUCT_LINE",
+       "CLASSICMODELS"."PRODUCT"."PRODUCT_NAME",
+       "CLASSICMODELS"."PRODUCT"."PRODUCT_SCALE"       
+FROM "CLASSICMODELS"."PRODUCT";
 
 /* END */
 /* END */

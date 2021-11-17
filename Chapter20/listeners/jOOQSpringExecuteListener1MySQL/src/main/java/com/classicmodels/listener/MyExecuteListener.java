@@ -2,6 +2,7 @@ package com.classicmodels.listener;
 
 import java.util.logging.Logger;
 import org.jooq.ExecuteContext;
+import org.jooq.Select;
 import org.jooq.impl.DefaultExecuteListener;
 
 public class MyExecuteListener extends DefaultExecuteListener {
@@ -11,7 +12,8 @@ public class MyExecuteListener extends DefaultExecuteListener {
     @Override
     public void renderEnd(ExecuteContext ctx) {
 
-        if (ctx.configuration().data().containsKey("timeout_hint_select")) {
+        if (ctx.configuration().data().containsKey("timeout_hint_select") &&
+                ctx.query() instanceof Select) {
 
             String sql = ctx.sql();
 

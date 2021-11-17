@@ -27,7 +27,7 @@
         <maven.compiler.target>14</maven.compiler.target>
         
         <jaxb.version>2.3.0</jaxb.version>
-        <jooq.version>3.14.9</jooq.version>             
+        <jooq.version>3.15.4</jooq.version>             
         <xdb6.version>18.3.0.0</xdb6.version>
         <codehaus.mojo.version>1.0.0</codehaus.mojo.version>
         <maven.compiler.plugin.version>3.3</maven.compiler.plugin.version>
