@@ -3,10 +3,9 @@ package com.classicmodels.jooq.config;
 import com.classicmodels.providers.MyTransactionProvider;
 import org.jooq.impl.DefaultConfiguration;
 import org.springframework.boot.autoconfigure.jooq.DefaultConfigurationCustomizer;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 
-@Configuration
+@org.springframework.context.annotation.Configuration
 public class JooqConfig implements DefaultConfigurationCustomizer {
 
     private final PlatformTransactionManager txManager;
