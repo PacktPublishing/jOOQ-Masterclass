@@ -4,20 +4,20 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.app</groupId>
-    <artifactId>jOOQSpringAliasesSamplesOracle</artifactId>
+    <artifactId>jOOQSpringB250ParseListenerOracle</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQSpringAliasesSamplesOracle</name>
+    <name>jOOQSpringB250ParseListenerOracle</name>
     <description>jOOQ - Spring Boot app</description>    
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.3.RELEASE</version>        
+        <version>2.4.9</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -25,15 +25,15 @@
         <java.version>14</java.version>                
         <maven.compiler.source>14</maven.compiler.source>
         <maven.compiler.target>14</maven.compiler.target>
-        
-        <jaxb.version>2.3.0</jaxb.version>
-        <jooq.version>3.15.4</jooq.version>             
+
+        <jooq.version>3.15.4</jooq.version>        
+        <flexjson.version>3.3</flexjson.version>
         <xdb6.version>18.3.0.0</xdb6.version>
-        <codehaus.mojo.version>1.0.0</codehaus.mojo.version>
-        <maven.compiler.plugin.version>3.3</maven.compiler.plugin.version>
+        <codehaus.mojo.version>1.0.0</codehaus.mojo.version>      
+        <maven.compiler.plugin.version>3.3</maven.compiler.plugin.version>          
     </properties>
 
-    <dependencies>               
+    <dependencies>            
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
@@ -41,12 +41,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>        
+        </dependency>               
         <dependency>
             <groupId>org.jooq.trial-java-8</groupId>
-            <artifactId>jooq</artifactId>
+            <artifactId>jooq</artifactId>         
             <version>${jooq.version}</version>
-        </dependency>                       
+        </dependency>              
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
@@ -67,21 +67,20 @@
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>    
-        </dependency>   
-        <dependency>
-            <groupId>com.sun.xml.bind</groupId>
-            <artifactId>jaxb-impl</artifactId>
-            <version>${jaxb.version}</version>
-        </dependency>
+        </dependency>        
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-    </dependencies>   
-    
+    </dependencies>
+
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>                
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -90,8 +89,9 @@
                     <compilerArgs>
                         <arg>--enable-preview</arg>
                     </compilerArgs>
+                    <debug>false</debug>
                 </configuration>
-            </plugin>        
+            </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>properties-maven-plugin</artifactId>
@@ -132,8 +132,8 @@
             </plugin>
             <plugin>
                 <groupId>org.jooq.trial-java-8</groupId>
-                <artifactId>jooq-codegen-maven</artifactId>               
-                <version>${jooq.version}</version>            
+                <artifactId>jooq-codegen-maven</artifactId> 
+                <version>${jooq.version}</version>              
                 <executions>
                     <execution>
                         <id>generate-oracle</id>
@@ -159,7 +159,8 @@
                                 Defaults to org.jooq.codegen.JavaGenerator -->
                                 <name>org.jooq.codegen.JavaGenerator</name>
         
-                                <database>                            
+                                <database>  
+                                                              
                                     <!-- The database type. The format here is:
                                     org.jooq.meta.[database].[database]Database -->
                                     <name>org.jooq.meta.oracle.OracleDatabase</name>
@@ -192,22 +193,22 @@
                                     (default is 5 seconds) -->
                                     <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>                                                                      
                                 </database>
-                                                                
-                                <!-- jOOQ will generate POJOs and DAOs in your behalf -->
+                                                                            
+                                <!-- jOOQ will generate POJOs in your behalf -->
                                 <generate>
-                                    <pojos>true</pojos>                                   
-                                    <validationAnnotations>true</validationAnnotations>                            
+                                    <pojos>true</pojos> 
+                                    <validationAnnotations>true</validationAnnotations>                     
                                 </generate>
                                 
                                 <target>
                                     <!-- The destination package of your generated classes (within the destination directory).
-                                 jOOQ may append the schema name to this package if generating multiple schemas,
+                                    jOOQ may append the schema name to this package if generating multiple schemas,
                                     e.g. org.jooq.your.packagename.schema1
-                                    org.jooq.your.packagename.schema2 -->
+                                    org.jooq.your.packagename.schema2 -->                                    
                                     <packageName>jooq.generated</packageName>
             
-                                    <!-- The destination directory of your generated classes. Using Maven directory layout here. -->
-                                    <directory>target/generated-sources/jooq</directory>
+                                    <!-- The destination directory of your generated classes. Using Maven directory layout here -->
+                                    <directory>target/generated-sources/jooq</directory>                                                                       
                                 </target>
                             </generator>    
                                                                                               

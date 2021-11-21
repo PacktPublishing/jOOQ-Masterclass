@@ -9,7 +9,7 @@ public class MyGeneratorStrategy extends DefaultGeneratorStrategy {
     public String getJavaMethodName(Definition definition, Mode mode) {
 
         if (definition.getQualifiedName().equals("classicmodels.employee") 
-                && mode.equals(mode.DEFAULT)) {
+                && mode.equals(Mode.DEFAULT)) {
             return "reportsTo";
         }
 

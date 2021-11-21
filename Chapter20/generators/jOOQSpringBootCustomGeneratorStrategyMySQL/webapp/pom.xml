@@ -140,7 +140,8 @@
                                 - org.jooq.codegen.JavaGenerator
                                 - org.jooq.codegen.ScalaGenerator
                                 Defaults to org.jooq.codegen.JavaGenerator -->
-                                <name>org.jooq.codegen.JavaGenerator</name>   
+                                <name>org.jooq.codegen.JavaGenerator</name> 
+                                  
                                 <!-- A programmatic naming strategy implementation, referened by class name. -->
                                 <strategy>
                                     <name>com.classicmodels.strategy.MyGeneratorStrategy</name>
