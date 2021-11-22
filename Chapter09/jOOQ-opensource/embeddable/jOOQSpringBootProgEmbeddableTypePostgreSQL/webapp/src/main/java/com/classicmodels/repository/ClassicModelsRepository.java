@@ -8,13 +8,17 @@ import jooq.generated.tables.pojos.Office;
 import org.jooq.DSLContext;
 import org.jooq.Record1;
 import org.jooq.Result;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional(readOnly = true)
 public class ClassicModelsRepository {
-
+    
+    @Value("${xxx.yyy}")
+    private String url;
+    
     private final DSLContext ctx;
 
     public ClassicModelsRepository(DSLContext ctx) {
@@ -23,7 +27,7 @@ public class ClassicModelsRepository {
 
     @Transactional
     public void insertOffice() {
-
+System.out.println("ffffffffffffffff: "  + url);
         // without embeddable        
         ctx.insertInto(OFFICE, OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.ADDRESS_LINE_FIRST,
                 OFFICE.STATE, OFFICE.COUNTRY, OFFICE.TERRITORY, OFFICE.PHONE,
