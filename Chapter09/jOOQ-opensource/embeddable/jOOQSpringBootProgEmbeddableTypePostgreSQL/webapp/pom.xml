@@ -105,9 +105,9 @@
                         <goals>
                             <goal>read-project-properties</goal>
                         </goals>
-                        <configuration>
-                            <files>                                
-                                <file>src/main/resources/application.properties</file>
+                        <configuration>                           
+                            <files>                                                                
+                                <file>../jooq-code-generator/src/main/resources/application-gen.properties</file>
                             </files>
                         </configuration>
                     </execution>

@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class ClassicModelsRepository {
     
-    @Value("${xxx.yyy}")
+    @Value("${spring.datasource.driverClassName}")
     private String url;
     
     private final DSLContext ctx;
