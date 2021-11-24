@@ -12,10 +12,14 @@ public class JooqConfig implements DefaultConfigurationCustomizer {
     @Override
     public void customize(DefaultConfiguration configuration) {
         
-        configuration.set(new DefaultParseListenerProvider(new MyParseListener()));
+        configuration.set(new DefaultParseListenerProvider(new MyParseListener()));        
         
         // or
+        // defaultConfig.set(new DefaultParseListenerProvider(new MyParseListener1()),
+        //                   new DefaultParseListenerProvider(new MyParseListener2()),
+        //                   ...)
         // configuration.set(new MyParseListener());
         // configuration.set(new MyParseListener1(), new MyParseListener2(), ...);
+        // configuration.setParseListener(new MyParseListener1(), new MyParseListener2());
     }
 }

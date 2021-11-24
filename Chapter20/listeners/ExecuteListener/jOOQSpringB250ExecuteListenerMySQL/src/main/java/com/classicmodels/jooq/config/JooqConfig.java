@@ -27,10 +27,14 @@ public class JooqConfig {
                 .set(properties.determineSqlDialect(ds))
                 .set(tp)
                 .set(new DefaultExecuteListenerProvider(new MyExecuteListener())); 
-
-                 // or, 
-                 // set(new MyExecuteListener())
-                 // set(new MyExecuteListener1(), new MyExecuteListener2(), ...); 
+ 
+                 // or,               
+                 // defaultConfig.set(new DefaultExecuteListenerProvider(new MyExecuteListener1(),
+                 //                   new DefaultExecuteListenerProvider(new MyExecuteListener2()),
+                 //                   ...)
+                 // defaultConfig.set(new MyExecuteListener())
+                 // defaultConfig.set(new MyExecuteListener1(), new MyExecuteListener2(), ...); 
+                 // defaultConfig.setExecuteListener(new MyExecuteListener1(), new MyExecuteListener2(), ...);
 
         return defaultConfig;
     }

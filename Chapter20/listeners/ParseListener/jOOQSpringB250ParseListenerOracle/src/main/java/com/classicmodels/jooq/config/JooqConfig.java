@@ -29,8 +29,12 @@ public class JooqConfig {
                 .set(new DefaultParseListenerProvider(new MyParseListener())); 
 
                  // or, 
-                 // set(new MyParseListener())
-                 // set(new MyParseListener1(), new MyParseListener2(), ...); 
+                 // defaultConfig.set(new DefaultParseListenerProvider(new MyParseListener1()),
+                 //                   new DefaultParseListenerProvider(new MyParseListener2()),
+                 //                   ...)
+                 // defaultConfig.set(new MyParseListener())
+                 // defaultConfig.set(new MyParseListener1(), new MyParseListener2(), ...); 
+                 // defaultConfig.setParseListener(new MyParseListener1(), new MyParseListener2(), ...);
 
         return defaultConfig;
     }

@@ -16,10 +16,12 @@ public class JooqConfig implements DefaultConfigurationCustomizer {
 
         configuration.set(new DefaultRecordListenerProvider(new MyRecordListener()));
         configuration.set(new DefaultTransactionListenerProvider(new MyTransactionListener()));
-        
+                
         // or, 
         // configuration.set(new MyRecordListener());
         // configuration.set(new MyTransactionListener());
+        // configuration.setRecordListener(new MyRecordListener());
+        // configuration.setTransactionListener(new MyTransactionListener());
     }
 
 }

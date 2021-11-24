@@ -1,5 +1,6 @@
 package com.classicmodels.jooq.config;
 
+import com.classicmodels.properties.JooqProperties;
 import org.jooq.codegen.GenerationTool;
 import org.jooq.meta.jaxb.Configuration;
 import org.jooq.meta.jaxb.Database;
@@ -9,11 +10,36 @@ import org.jooq.meta.jaxb.Generate;
 import org.jooq.meta.jaxb.Generator;
 import org.jooq.meta.jaxb.Jdbc;
 import org.jooq.meta.jaxb.Target;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
-public class JooqConfig {
+@org.springframework.context.annotation.Configuration
+//@SpringBootApplication
+public class JooqConfig extends SpringBootServletInitializer {
+    
+    ////https://coderedirect.com/questions/226178/spring-boot-value-returns-always-null
+    
+    
+private final JooqProperties jooqProperties;
 
+private static JooqProperties instance;       
+
+    public JooqConfig(JooqProperties jooqProperties) {
+        this.jooqProperties = jooqProperties;
+         instance = jooqProperties;
+        System.out.println("dddddddddddddddddddddddddddddddddd:" + jooqProperties+"    "+instance);
+    }        
+    
+    //public static @Qualifier("jooqProperties") JooqProperties jooqProperties;
+    
     public static void main(String[] args) throws Exception {
-
+System.out.println("kkkkkkkkkkkkkkkkkkkkkkkkkkkk");
+new SpringApplicationBuilder(JooqConfig.class)
+            .properties("application-gen.properties").build().run(args);
+        if(instance!=null){
+        System.out.println("kkkkkkkkkkkkkkkkkkkkkkkkkkkk: " + instance.getWithName());
+        }
         Configuration configuration = new Configuration()
                 .withJdbc(new Jdbc()
                         .withDriver("org.postgresql.Driver")

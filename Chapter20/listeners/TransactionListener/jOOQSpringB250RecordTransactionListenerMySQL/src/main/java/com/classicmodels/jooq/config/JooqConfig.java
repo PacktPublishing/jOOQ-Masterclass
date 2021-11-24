@@ -30,7 +30,12 @@ public class JooqConfig {
                 .set(tp)
                 .set(new DefaultRecordListenerProvider(new MyRecordListener()))
                 .set(new DefaultTransactionListenerProvider(new MyTransactionListener())); 
-
+        // or
+        // defaultConfig.setRecordListener(new MyRecordListener());
+        // defaultConfig.setTransactionListener(new MyTransactionListener());
+        // defaultConfig.set(new MyRecordListener());
+        // defaultConfig.set(new MyTransactionListener());
+        
         return defaultConfig;
     }
 }

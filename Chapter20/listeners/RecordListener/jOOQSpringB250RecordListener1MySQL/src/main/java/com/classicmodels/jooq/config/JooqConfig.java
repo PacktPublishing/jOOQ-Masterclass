@@ -28,9 +28,13 @@ public class JooqConfig {
                 .set(tp)
                 .set(new DefaultRecordListenerProvider(new MyRecordListener())); 
 
-                 // or, 
-                 // set(new MyRecordListener())
-                 // set(new MyRecordListener1(), new MyRecordListener2(), ...); 
+        // or
+        // defaultConfig.set(new DefaultRecordListenerProvider(new MyRecordListener1()),
+        //                   new DefaultRecordListenerProvider(new MyRecordListener2()),
+        //                   ...);        
+        // defaultConfig.setRecordListener(new MyRecordListener1(), new MyRecordListener2(), ...);
+        // defaultConfig.set(new MyRecordListener());
+        // defaultConfig.set(new MyRecordListener1(), new MyRecordListener2(), ...);
 
         return defaultConfig;
     }

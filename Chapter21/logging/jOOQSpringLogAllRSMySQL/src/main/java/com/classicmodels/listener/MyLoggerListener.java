@@ -16,7 +16,7 @@ public class MyLoggerListener extends DefaultExecuteListener {
 
         Result<?> result = ctx.result();
 
-        if (result != null && result.isNotEmpty()) {
+        if (result != null) {
 
             logMultiline("Total Fetched result", result.format(), Level.FINE, result.size());
             log.debug("Total fetched row(s)", result.size());
