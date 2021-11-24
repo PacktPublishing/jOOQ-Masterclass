@@ -107,7 +107,7 @@
                         </goals>
                         <configuration>                           
                             <files>                                                                
-                                <file>../jooq-code-generator/src/main/resources/application-gen.properties</file>
+                                <file>src/main/resources/application.properties</file>
                             </files>
                         </configuration>
                     </execution>
@@ -149,6 +149,10 @@
                                  useful if you have multiple profiles with dedicated application.properties. -->
                             <arguments>
                                 <argument>${project.build.directory}/generated-sources/jooq</argument>                                
+                                <argument>${spring.datasource.driverClassName}</argument>
+                                <argument>${spring.datasource.url}</argument>
+                                <argument>${spring.datasource.username}</argument>
+                                <argument>${spring.datasource.password}</argument>
                             </arguments>
                             <cleanupDaemonThreads>false</cleanupDaemonThreads> 
                         </configuration>  

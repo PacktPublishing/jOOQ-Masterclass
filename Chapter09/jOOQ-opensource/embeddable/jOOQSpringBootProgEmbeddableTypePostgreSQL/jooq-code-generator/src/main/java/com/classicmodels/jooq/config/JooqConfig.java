@@ -1,6 +1,5 @@
 package com.classicmodels.jooq.config;
 
-import com.classicmodels.properties.JooqProperties;
 import org.jooq.codegen.GenerationTool;
 import org.jooq.meta.jaxb.Configuration;
 import org.jooq.meta.jaxb.Database;
@@ -10,42 +9,21 @@ import org.jooq.meta.jaxb.Generate;
 import org.jooq.meta.jaxb.Generator;
 import org.jooq.meta.jaxb.Jdbc;
 import org.jooq.meta.jaxb.Target;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
-@org.springframework.context.annotation.Configuration
-//@SpringBootApplication
-public class JooqConfig extends SpringBootServletInitializer {
-    
-    ////https://coderedirect.com/questions/226178/spring-boot-value-returns-always-null
-    
-    
-private final JooqProperties jooqProperties;
+public class JooqConfig {
 
-private static JooqProperties instance;       
-
-    public JooqConfig(JooqProperties jooqProperties) {
-        this.jooqProperties = jooqProperties;
-         instance = jooqProperties;
-        System.out.println("dddddddddddddddddddddddddddddddddd:" + jooqProperties+"    "+instance);
-    }        
-    
-    //public static @Qualifier("jooqProperties") JooqProperties jooqProperties;
-    
     public static void main(String[] args) throws Exception {
-System.out.println("kkkkkkkkkkkkkkkkkkkkkkkkkkkk");
-new SpringApplicationBuilder(JooqConfig.class)
-            .properties("application-gen.properties").build().run(args);
-        if(instance!=null){
-        System.out.println("kkkkkkkkkkkkkkkkkkkkkkkkkkkk: " + instance.getWithName());
-        }
+System.out.println("1111111111111: " + args[0]);
+System.out.println("1111111111111: " + args[1]);
+System.out.println("1111111111111: " + args[2]);
+System.out.println("1111111111111: " + args[3]);
+System.out.println("1111111111111: " + args[4]);
         Configuration configuration = new Configuration()
                 .withJdbc(new Jdbc()
-                        .withDriver("org.postgresql.Driver")
-                        .withUrl("jdbc:postgresql://localhost:5432/classicmodels")
-                        .withUser("postgres")
-                        .withPassword("root"))
+                        .withDriver(args[1])
+                        .withUrl(args[2])
+                        .withUser(args[3])
+                        .withPassword(args[4]))
                 .withGenerator(new Generator()
                         .withDatabase(new Database()
                                 .withEmbeddables(
