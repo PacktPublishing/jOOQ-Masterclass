@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.5.6</version>
+        <version>2.3.3.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
         
     </parent>
@@ -26,7 +26,8 @@
         <jooq.version>3.14.4</jooq.version>        
         <mysql.connector.java.version>8.0.20</mysql.connector.java.version>                
         <codehaus.mojo.version>1.0.0</codehaus.mojo.version>      
-        <maven.compiler.plugin.version>3.3</maven.compiler.plugin.version>     
+        <exec.maven.plugin>3.0.0</exec.maven.plugin>
+        <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>     
     </properties>       
         
     <dependencies>               
@@ -141,23 +142,24 @@
                         <phase>generate-sources</phase>  
                         <goals>  
                             <goal>java</goal>  
-                        </goals>  
-                        <configuration>                                
+                        </goals>                     
+                        <configuration> 
+                            <executable>java</executable>     
                             <mainClass>com.classicmodels.jooq.config.JooqConfig</mainClass>
                             <!-- If you want, you can pass here as arguments the properties
-                                 imported from application.properties as well. This can be
-                                 useful if you have multiple profiles with dedicated application.properties. -->
-                            <arguments>
+                            imported from application.properties as well. This can be
+                            useful if you have multiple profiles with dedicated application.properties. -->
+                            <arguments>                                                 
                                 <argument>${project.build.directory}/generated-sources/jooq</argument>                                
-                                <argument>${spring.datasource.driverClassName}</argument>
+                                <!--<argument>${spring.datasource.driverClassName}</argument>
                                 <argument>${spring.datasource.url}</argument>
                                 <argument>${spring.datasource.username}</argument>
-                                <argument>${spring.datasource.password}</argument>
-                            </arguments>
+                                <argument>${spring.datasource.password}</argument>-->
+                            </arguments>                           
                             <cleanupDaemonThreads>false</cleanupDaemonThreads> 
                         </configuration>  
                     </execution>  
-                </executions>                 
+                </executions>                                    
             </plugin>
         </plugins>
     </build>  

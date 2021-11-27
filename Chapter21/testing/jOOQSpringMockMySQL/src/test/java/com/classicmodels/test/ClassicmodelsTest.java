@@ -52,7 +52,7 @@ public class ClassicmodelsTest {
                         .fetch();
 
         assertThat(result, hasSize(equalTo(1)));
-        assertThat(result.getValue(0, PRODUCT.PRODUCT_ID), is(equalTo(10L)));
+        assertThat(result.getValue(0, PRODUCT.PRODUCT_ID), is(equalTo(1L)));
         assertThat(result.getValue(0, PRODUCT.PRODUCT_NAME), is(equalTo("2002 Suzuki XREO")));
     }
 

@@ -58,7 +58,7 @@ public class ClassicmodelsMockProvider implements MockDataProvider {
                     = ctx.newResult(PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME);
             result.add(ctx
                     .newRecord(PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME)
-                    .values(10L, "2002 Suzuki XREO"));
+                    .values(1L, "2002 Suzuki XREO"));
 
             mock[0] = new MockResult(-1, result);
 
