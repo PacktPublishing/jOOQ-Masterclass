@@ -14,10 +14,12 @@ import org.jooq.DSLContext;
 import org.jooq.Record2;
 import org.jooq.Result;
 import org.jooq.Results;
-import org.jooq.conf.Settings;
+import org.jooq.conf.MappedSchema;
+import org.jooq.conf.RenderMapping;
 import org.jooq.impl.DSL;
 import static org.jooq.impl.DSL.row;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jooq.JooqTest;
@@ -33,8 +35,22 @@ import org.springframework.transaction.support.TransactionTemplate;
 @ActiveProfiles("test")
 public class ClassicmodelsIT {
 
-    @Autowired
-    private DSLContext ctx;
+    private static DSLContext ctx;
+
+    @BeforeAll
+    public static void setup() {
+
+        ctx = DSL.using("jdbc:mysql://localhost:3306/classicmodels_test"
+                + "?createDatabaseIfNotExist=true&allowMultiQueries=true",
+                "root", "root");
+
+        ctx.settings()
+                // .withExecuteLogging(Boolean.FALSE)
+                .withRenderMapping(new RenderMapping()
+                .withSchemata(
+                        new MappedSchema().withInput("classicmodels")
+                                .withOutput("classicmodels_test")));
+    }
 
     @Autowired
     private TransactionTemplate template;
@@ -57,7 +73,8 @@ public class ClassicmodelsIT {
     public void givenUpdateSelectsWhenFetchManyThenTwoResultsOneRecordEach() {
 
         Results results = ctx.resultQuery(
-                "update employee set employee.job_title='Sales Manager (NA)' where employee.employee_number={0};"
+                "use classicmodels_test;"
+                + "update employee set employee.job_title='Sales Manager (NA)' where employee.employee_number={0};"
                 + "select employee.job_title from employee where employee.employee_number={0};"
                 + "select office.city from office where office.office_code={1}", 1370L, "1"
         ).fetchMany();
@@ -79,7 +96,7 @@ public class ClassicmodelsIT {
     @Test
     public void givenInsertWhenSameIdThenException() {
 
-        Throwable ex = assertThrows(org.springframework.dao.DuplicateKeyException.class, () -> {
+        Throwable ex = assertThrows(org.jooq.exception.DataAccessException.class, () -> {
 
             ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)
                     .values(1L, 2005, 1370L, 1282.64, 1, 15.55)
@@ -116,9 +133,10 @@ public class ClassicmodelsIT {
     public void givenOptimisticLockingWhenDetectedThenException1() {
 
         // turn on jOOQ optimistic locking
-        DSLContext derivedCtx = ctx.configuration().derive(new Settings()
-                .withExecuteWithOptimisticLocking(true)
-                .withExecuteWithOptimisticLockingExcludeUnversioned(true))
+        DSLContext derivedCtx = ctx.configuration().derive(
+                ctx.settings()
+                        .withExecuteWithOptimisticLocking(true)
+                        .withExecuteWithOptimisticLockingExcludeUnversioned(true))
                 .dsl();
 
         template.setPropagationBehavior(
@@ -162,13 +180,14 @@ public class ClassicmodelsIT {
     }
 
     @Test
-    @Transactional(propagation=Propagation.NEVER)
+    @Transactional(propagation = Propagation.NEVER)
     public void givenOptimisticLockingWhenDetectedThenException2() {
 
         // turn on jOOQ optimistic locking
-        DSLContext derivedCtx = ctx.configuration().derive(new Settings()
-                .withExecuteWithOptimisticLocking(true)
-                .withExecuteWithOptimisticLockingExcludeUnversioned(true))
+        DSLContext derivedCtx = ctx.configuration().derive(
+                ctx.settings()
+                        .withExecuteWithOptimisticLocking(true)
+                        .withExecuteWithOptimisticLockingExcludeUnversioned(true))
                 .dsl();
 
         Throwable ex = assertThrows(org.jooq.exception.DataChangedException.class, () -> {

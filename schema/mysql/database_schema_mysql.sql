@@ -11,8 +11,6 @@ This is a modified version of the original schema for MySQL
 
 /* START */
 
-USE `classicmodels`;
-
 DROP TABLE IF EXISTS `payment`;
 DROP TABLE IF EXISTS `bank_transaction`;
 DROP TABLE IF EXISTS `orderdetail`;
@@ -371,20 +369,20 @@ DELIMITER;
 DELIMITER $$
 CREATE PROCEDURE `get_product`(IN `pid` BIGINT)
 BEGIN
-	SELECT * FROM `classicmodels`.`product` WHERE `classicmodels`.`product`.`product_id` = `pid`;
+	SELECT * FROM `product` WHERE `product`.`product_id` = `pid`;
 END$$
 DELIMITER;
 
 DELIMITER $$
 CREATE PROCEDURE `get_emps_in_office`(`in_office_code` VARCHAR(10))
 BEGIN
-    SELECT `classicmodels`.`office`.`city`, `classicmodels`.`office`.`country`, `classicmodels`.`office`.`internal_budget`
-      FROM `classicmodels`.`office`
-     WHERE `classicmodels`.`office`.`office_code`=`in_office_code`;
+    SELECT `office`.`city`, `office`.`country`, `office`.`internal_budget`
+      FROM `office`
+     WHERE `office`.`office_code`=`in_office_code`;
 
-    SELECT `classicmodels`.`employee`.`employee_number`,`classicmodels`.`employee`.`first_name`,`classicmodels`.`employee`.`last_name`
-      FROM `classicmodels`.`employee`
-     WHERE `classicmodels`.`employee`.`office_code`=`in_office_code`;
+    SELECT `employee`.`employee_number`, `employee`.`first_name`, `employee`.`last_name`
+      FROM `employee`
+     WHERE `employee`.`office_code`=`in_office_code`;
 END$$
 DELIMITER;
 
@@ -414,46 +412,46 @@ DELIMITER;
 DELIMITER $$
 CREATE PROCEDURE refresh_top3_product(IN p_line_in VARCHAR(50))
 BEGIN
-	DELETE FROM `classicmodels`.`top3product`; 
-        INSERT INTO `classicmodels`.`top3product`
-		  (`classicmodels`.`top3product`.`product_id`, `classicmodels`.`top3product`.`product_name`)        
-        SELECT `classicmodels`.`orderdetail`.`product_id`, `t`.`product_name` 
-		FROM `classicmodels`.`orderdetail`, 
-		LATERAL (SELECT DISTINCT `classicmodels`.`product`.`product_name` AS `product_name` 
-		  FROM `classicmodels`.`product` WHERE (`classicmodels`.`orderdetail`.`product_id` = `classicmodels`.`product`.`product_id` 
-		    AND `classicmodels`.`product`.`product_line` = p_line_in)) AS `t`
-        GROUP BY `classicmodels`.`orderdetail`.`product_id`, `product_name`, `classicmodels`.`orderdetail`.`quantity_ordered` 
-		ORDER BY `classicmodels`.`orderdetail`.`quantity_ordered` 
+	DELETE FROM `top3product`; 
+        INSERT INTO `top3product`
+		  (`top3product`.`product_id`, `top3product`.`product_name`)        
+        SELECT `orderdetail`.`product_id`, `t`.`product_name` 
+		FROM `orderdetail`, 
+		LATERAL (SELECT DISTINCT `product`.`product_name` AS `product_name` 
+		  FROM `product` WHERE (`orderdetail`.`product_id` = `product`.`product_id` 
+		    AND `product`.`product_line` = p_line_in)) AS `t`
+        GROUP BY `orderdetail`.`product_id`, `product_name`, `orderdetail`.`quantity_ordered` 
+		ORDER BY `orderdetail`.`quantity_ordered` 
 		LIMIT 3;         
 END$$
 DELIMITER;
 
 -- VIEWS
 CREATE OR REPLACE VIEW customer_master AS
-SELECT `classicmodels`.`customer`.`customer_name`,
-       `classicmodels`.`customer`.`credit_limit`,
-       `classicmodels`.`customerdetail`.`city`,
-       `classicmodels`.`customerdetail`.`country`,
-       `classicmodels`.`customerdetail`.`address_line_first`,
-       `classicmodels`.`customerdetail`.`postal_code`,
-       `classicmodels`.`customerdetail`.`state`
-FROM `classicmodels`.`customer`
-JOIN `classicmodels`.`customerdetail` ON `classicmodels`.`customerdetail`.`customer_number` = `classicmodels`.`customer`.`customer_number`
-WHERE `classicmodels`.`customer`.`first_buy_date` IS NOT NULL;
+SELECT `customer`.`customer_name`,
+       `customer`.`credit_limit`,
+       `customerdetail`.`city`,
+       `customerdetail`.`country`,
+       `customerdetail`.`address_line_first`,
+       `customerdetail`.`postal_code`,
+       `customerdetail`.`state`
+FROM `customer`
+JOIN `customerdetail` ON `customerdetail`.`customer_number` = `customer`.`customer_number`
+WHERE `customer`.`first_buy_date` IS NOT NULL;
 
 CREATE OR REPLACE VIEW office_master AS
-SELECT `classicmodels`.`office`.`office_code`,
-       `classicmodels`.`office`.`city`,
-       `classicmodels`.`office`.`country`,
-       `classicmodels`.`office`.`state`,
-       `classicmodels`.`office`.`phone`,
-	   `classicmodels`.`office`.`postal_code`
-FROM `classicmodels`.`office`
-WHERE `classicmodels`.`office`.`city` IS NOT NULL;
+SELECT `office`.`office_code`,
+       `office`.`city`,
+       `office`.`country`,
+       `office`.`state`,
+       `office`.`phone`,
+	   `office`.`postal_code`
+FROM `office`
+WHERE `office`.`city` IS NOT NULL;
 
 CREATE OR REPLACE VIEW product_master AS
-SELECT `classicmodels`.`product`.`product_line`,
-       `classicmodels`.`product`.`product_name`,
-       `classicmodels`.`product`.`product_scale`       
-FROM `classicmodels`.`product`;
+SELECT `product`.`product_line`,
+       `product`.`product_name`,
+       `product`.`product_scale`       
+FROM `product`;
 /* END */

@@ -11,8 +11,6 @@ This is a modified version of the original schema
 
 /* START */
 
-USE `classicmodels`;
-
 SET SESSION group_concat_max_len = 100000;
 
 /*Data for the table `office` */

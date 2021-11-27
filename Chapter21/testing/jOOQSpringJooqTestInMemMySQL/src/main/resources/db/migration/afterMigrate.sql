@@ -11,7 +11,7 @@ This is a modified version of the original schema
 
 /* START */
 
-SET SESSION group_concat_max_len = 100000;
+-- SET SESSION group_concat_max_len = 100000; suppressed for H2 compatibility
 
 /*Data for the table `office` */
 
@@ -689,7 +689,7 @@ insert  into `productline`(`product_line`,`code`,`text_description`,`html_descri
 
 ('Ships',433823,'The perfect holiday or anniversary gift for executives, clients, friends, and family. These handcrafted model ships are unique, stunning works of art that will be treasured for generations! They come fully assembled and ready for display in the home or office. We guarantee the highest quality, and best value.',NULL,NULL),
 
-('Trains',123333,'Model trains are a rewarding hobby for enthusiasts of all ages. Whether you\'re looking for collectible wooden trains, electric streetcars or locomotives, you\'ll find a number of great choices for any budget within this category. The interactive aspect of trains makes toy trains perfect for young children. The wooden train sets are ideal for children under the age of 5.',NULL,NULL),
+('Trains',123333,'Model trains are a rewarding hobby for enthusiasts of all ages. Whether you find a number of great choices for any budget within this category. The interactive aspect of trains makes toy trains perfect for young children. The wooden train sets are ideal for children under the age of 5.',NULL,NULL),
 
 ('Trucks and Buses',569331,'The Truck and Bus models are realistic replicas of buses and specialized trucks produced from the early 1920s to present. The models range in size from 1:12 to 1:50 scale and include numerous limited edition and several out-of-production vehicles. Materials used include tin, diecast and plastic. All models include a certificate of authenticity from their manufacturers and are a perfect ornament for the home and office.',NULL,NULL),
 
@@ -1069,13 +1069,13 @@ insert  into `order`(`order_id`,`order_date`,`required_date`,`shipped_date`,`sta
 
 (10163,'2003-10-20','2003-10-27','2003-10-24','Shipped',NULL,424,651.79),
 
-(10164,'2003-10-21','2003-10-30','2003-10-23','Resolved','This order was disputed, but resolved on 11/1/2003; Customer doesn\'t like the colors and precision of the models.',452,758.85),
+(10164,'2003-10-21','2003-10-30','2003-10-23','Resolved','This order was disputed, but resolved on 11/1/2003; Customer does not like the colors and precision of the models.',452,758.85),
 
-(10165,'2003-10-22','2003-10-31','2003-12-26','Shipped','This order was on hold because customers\'s credit limit had been exceeded. Order will ship when payment is received',148,1674.66),
+(10165,'2003-10-22','2003-10-31','2003-12-26','Shipped','This order was on hold because customers credit limit had been exceeded. Order will ship when payment is received',148,1674.66),
 
 (10166,'2003-10-21','2003-10-30','2003-10-27','Shipped',NULL,462,361.88),
 
-(10167,'2003-10-23','2003-10-30',NULL,'Cancelled','Customer called to cancel. The warehouse was notified in time and the order didn\'t ship. They have a new VP of Sales and are shifting their sales model. Our VP of Sales should contact them.',448,1271.62),
+(10167,'2003-10-23','2003-10-30',NULL,'Cancelled','Customer called to cancel. The warehouse was notified in time and the order did not ship. They have a new VP of Sales and are shifting their sales model. Our VP of Sales should contact them.',448,1271.62),
 
 (10168,'2003-10-28','2003-11-03','2003-11-01','Shipped',NULL,161,1472.5),
 
@@ -1395,7 +1395,7 @@ insert  into `order`(`order_id`,`order_date`,`required_date`,`shipped_date`,`sta
 
 (10326,'2004-11-09','2004-11-16','2004-11-10','Shipped',NULL,144,517.7),
 
-(10327,'2004-11-10','2004-11-19','2004-11-13','Resolved','Order was disputed and resolved on 12/1/04. The Sales Manager was involved. Customer claims the scales of the models don\'t match what was discussed.',145,665.06),
+(10327,'2004-11-10','2004-11-19','2004-11-13','Resolved','Order was disputed and resolved on 12/1/04. The Sales Manager was involved. Customer claims the scales of the models do not match what was discussed.',145,665.06),
 
 (10328,'2004-11-12','2004-11-21','2004-11-18','Shipped','Customer very concerned about the exact color of the models. There is high risk that he may dispute the order because there is a slight color mismatch',278,1054.8),
 
@@ -1475,7 +1475,7 @@ insert  into `order`(`order_id`,`order_date`,`required_date`,`shipped_date`,`sta
 
 (10366,'2005-01-10','2005-01-19','2005-01-12','Shipped',NULL,381,376.35),
 
-(10367,'2005-01-12','2005-01-21','2005-01-16','Resolved','This order was disputed and resolved on 2/1/2005. Customer claimed that container with shipment was damaged. FedEx\'s investigation proved this wrong.',205,1072.73),
+(10367,'2005-01-12','2005-01-21','2005-01-16','Resolved','This order was disputed and resolved on 2/1/2005. Customer claimed that container with shipment was damaged. FedEx investigation proved this wrong.',205,1072.73),
 
 (10368,'2005-01-19','2005-01-27','2005-01-24','Shipped','Can we renegotiate this one?',124,401.41),
 
@@ -1513,7 +1513,7 @@ insert  into `order`(`order_id`,`order_date`,`required_date`,`shipped_date`,`sta
 
 (10385,'2005-02-28','2005-03-09','2005-03-01','Shipped',NULL,124,140.83),
 
-(10386,'2005-03-01','2005-03-09','2005-03-06','Resolved','Disputed then Resolved on 3/15/2005. Customer doesn\'t like the craftsmaship of the models.',141,1352.06),
+(10386,'2005-03-01','2005-03-09','2005-03-06','Resolved','Disputed then Resolved on 3/15/2005. Customer does not like the craftsmaship of the models.',141,1352.06),
 
 (10387,'2005-03-02','2005-03-09','2005-03-06','Shipped','We need to keep in close contact with their Marketing VP. He is the decision maker for all their purchases.',148,79.91),
 
@@ -1571,11 +1571,11 @@ insert  into `order`(`order_id`,`order_date`,`required_date`,`shipped_date`,`sta
 
 (10414,'2005-05-06','2005-05-13',NULL,'On Hold','Customer credit limit exceeded. Will ship when a payment is received.',362,1163.89),
 
-(10415,'2005-05-09','2005-05-20','2005-05-12','Disputed','Customer claims the scales of the models don\'t match what was discussed. I keep all the paperwork though to prove otherwise',471,324.13),
+(10415,'2005-05-09','2005-05-20','2005-05-12','Disputed','Customer claims the scales of the models do not match what was discussed. I keep all the paperwork though to prove otherwise',471,324.13),
 
 (10416,'2005-05-10','2005-05-16','2005-05-14','Shipped',NULL,386,1084.51),
 
-(10417,'2005-05-13','2005-05-19','2005-05-19','Disputed','Customer doesn\'t like the colors and precision of the models.',141,671.33),
+(10417,'2005-05-13','2005-05-19','2005-05-19','Disputed','Customer does not like the colors and precision of the models.',141,671.33),
 
 (10418,'2005-05-16','2005-05-24','2005-05-20','Shipped',NULL,412,727.23),
 

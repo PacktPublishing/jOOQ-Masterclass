@@ -14,10 +14,14 @@ import org.jooq.DSLContext;
 import org.jooq.Record2;
 import org.jooq.Result;
 import org.jooq.Results;
+import org.jooq.conf.MappedSchema;
+import org.jooq.conf.RenderMapping;
+import org.jooq.conf.RenderNameCase;
 import org.jooq.conf.Settings;
 import org.jooq.impl.DSL;
 import static org.jooq.impl.DSL.row;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jooq.JooqTest;
@@ -33,8 +37,23 @@ import org.springframework.transaction.support.TransactionTemplate;
 @ActiveProfiles("test")
 public class ClassicmodelsIT {
 
-    @Autowired
-    private DSLContext ctx;
+    private static DSLContext ctx;
+
+    @BeforeAll
+    public static void setup() {
+
+        ctx = DSL.using("jdbc:h2:mem:classicmodels_inmem_test;"
+                + "MODE=MYSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE",
+                "sa", "");
+
+        ctx.settings()
+                // .withExecuteLogging(Boolean.FALSE)
+                .withRenderNameCase(RenderNameCase.UPPER)
+                .withRenderMapping(new RenderMapping()
+                        .withSchemata(
+                                new MappedSchema().withInput("classicmodels")
+                                        .withOutput("PUBLIC")));
+    }
 
     @Autowired
     private TransactionTemplate template;
@@ -52,21 +71,7 @@ public class ClassicmodelsIT {
         assertThat(result.getValue(0, PRODUCT.PRODUCT_ID), is(equalTo(1L)));
         assertThat(result.getValue(0, PRODUCT.PRODUCT_NAME), is(equalTo("1969 Harley Davidson Ultimate Chopper")));
     }
-
-    @Test
-    public void givenUpdateSelectsWhenFetchManyThenTwoResultsOneRecordEach() {
-
-        Results results = ctx.resultQuery(
-                "update employee set employee.job_title='Sales Manager (NA)' where employee.employee_number={0};"
-                + "select employee.job_title from employee where employee.employee_number={0};"
-                + "select office.city from office where office.office_code={1}", 1370L, "1"
-        ).fetchMany();
-
-        assertThat(results, hasSize(equalTo(2)));
-        assertThat(results.get(0).getValue(0, "job_title"), is(equalTo("Sales Manager (NA)")));
-        assertThat(results.get(1).getValue(0, "city"), is(equalTo("San Francisco")));
-    }
-
+    
     @Test
     public void givenUpdateWhenCorrectThenAffected() {
 
@@ -79,14 +84,14 @@ public class ClassicmodelsIT {
     @Test
     public void givenInsertWhenSameIdThenException() {
 
-        Throwable ex = assertThrows(org.springframework.dao.DuplicateKeyException.class, () -> {
+        Throwable ex = assertThrows(org.jooq.exception.DataAccessException.class, () -> {
 
             ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)
                     .values(1L, 2005, 1370L, 1282.64, 1, 15.55)
                     .execute();
         });
 
-        assertThat(ex.getCause().getMessage(), startsWith("Duplicate entry '1'"));
+        assertThat(ex.getCause().getMessage(), startsWith("Unique index or primary key violation"));
     }
 
     @Test
@@ -116,15 +121,16 @@ public class ClassicmodelsIT {
     public void givenOptimisticLockingWhenDetectedThenException1() {
 
         // turn on jOOQ optimistic locking
-        DSLContext derivedCtx = ctx.configuration().derive(new Settings()
-                .withExecuteWithOptimisticLocking(true)
-                .withExecuteWithOptimisticLockingExcludeUnversioned(true))
+        DSLContext derivedCtx = ctx.configuration().derive(
+                ctx.settings()
+                        .withExecuteWithOptimisticLocking(true)
+                        .withExecuteWithOptimisticLockingExcludeUnversioned(true))
                 .dsl();
 
         template.setPropagationBehavior(
                 TransactionDefinition.PROPAGATION_REQUIRES_NEW);
 
-        Throwable ex = assertThrows(org.jooq.exception.DataChangedException.class, () -> {
+        Throwable ex = assertThrows(org.jooq.exception.DataAccessException.class, () -> {
             template.execute(new TransactionCallbackWithoutResult() {
 
                 @Override
@@ -162,13 +168,14 @@ public class ClassicmodelsIT {
     }
 
     @Test
-    @Transactional(propagation=Propagation.NEVER)
+    @Transactional(propagation = Propagation.NEVER)
     public void givenOptimisticLockingWhenDetectedThenException2() {
 
         // turn on jOOQ optimistic locking
-        DSLContext derivedCtx = ctx.configuration().derive(new Settings()
-                .withExecuteWithOptimisticLocking(true)
-                .withExecuteWithOptimisticLockingExcludeUnversioned(true))
+        DSLContext derivedCtx = ctx.configuration().derive(
+                ctx.settings()
+                        .withExecuteWithOptimisticLocking(true)
+                        .withExecuteWithOptimisticLockingExcludeUnversioned(true))
                 .dsl();
 
         Throwable ex = assertThrows(org.jooq.exception.DataChangedException.class, () -> {
