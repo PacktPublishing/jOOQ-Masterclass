@@ -4,17 +4,17 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.app</groupId>
-    <artifactId>jOOQSpringJooqTestInMemMySQL</artifactId>
+    <artifactId>jOOQSpringTestR2DBCMySQL</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQSpringJooqTestInMemMySQL</name>
+    <name>jOOQSpringTestR2DBCMySQL</name>
     <description>jOOQ - Spring Boot app</description>    
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.5.6</version>
+        <version>2.5.7</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -41,7 +41,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>               
+        </dependency> 
+         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-r2dbc</artifactId>
+        </dependency>                         
         <dependency>
             <groupId>org.jooq</groupId>
             <artifactId>jooq</artifactId>         
@@ -56,10 +60,9 @@
             <artifactId>mysql-connector-java</artifactId>
         </dependency> 
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>    
-            <scope>runtime</scope>
-        </dependency>                      
+            <groupId>dev.miku</groupId>
+            <artifactId>r2dbc-mysql</artifactId>              
+        </dependency>   
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>    
@@ -87,7 +90,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>        
                 <configuration>
                     <skipTests>false</skipTests>                    
-                    <argLine>--enable-preview -Dfile.encoding=UTF-8</argLine>                    
+                    <argLine>--enable-preview -Dfile.encoding=UTF-8</argLine>                                        
                 </configuration>
             </plugin>
             <plugin>
@@ -95,7 +98,7 @@
                 <artifactId>maven-failsafe-plugin</artifactId>            
                 <configuration>
                     <skipTests>false</skipTests>                    
-                    <argLine>--enable-preview -Dfile.encoding=UTF-8</argLine>                    
+                    <argLine>--enable-preview -Dfile.encoding=UTF-8</argLine>                                        
                 </configuration>
             </plugin>
             <plugin>
@@ -124,14 +127,14 @@
                                 <file>src/main/resources/application.properties</file>
                             </files>
                         </configuration>
-                    </execution>
+                    </execution>                    
                 </executions>
             </plugin> 
             <plugin>
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>                
                 <executions>
-                    <execution>
+                    <execution>                        
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>migrate</goal>
@@ -144,7 +147,7 @@
                                 <location>filesystem:src/main/resources/db/migration</location>
                             </locations>
                         </configuration>
-                    </execution>                    
+                    </execution>                      
                 </executions>
             </plugin>
             <plugin>

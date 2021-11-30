@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.app</groupId>
-    <artifactId>jOOQSpringJooqTestInMemMySQL</artifactId>
+    <artifactId>jOOQSpringTestcontainersMySQL</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQSpringJooqTestInMemMySQL</name>
+    <name>jOOQSpringTestcontainersMySQL</name>
     <description>jOOQ - Spring Boot app</description>    
 
     <parent>
@@ -54,12 +54,25 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-        </dependency> 
+        </dependency>      
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>    
-            <scope>runtime</scope>
-        </dependency>                      
+            <groupId>org.testcontainers</groupId>
+            <artifactId>testcontainers</artifactId>
+            <version>1.16.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>1.16.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>mysql</artifactId>
+            <version>1.16.2</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>    
@@ -85,17 +98,17 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>        
-                <configuration>
+                <configuration>                    
                     <skipTests>false</skipTests>                    
-                    <argLine>--enable-preview -Dfile.encoding=UTF-8</argLine>                    
+                    <argLine>--enable-preview -Xmx1024m -XX:MaxPermSize=256m -Dfile.encoding=UTF-8</argLine>                                        
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>            
-                <configuration>
+                <configuration>                    
                     <skipTests>false</skipTests>                    
-                    <argLine>--enable-preview -Dfile.encoding=UTF-8</argLine>                    
+                    <argLine>--enable-preview -Xmx1024m -XX:MaxPermSize=256m -Dfile.encoding=UTF-8</argLine>                    
                 </configuration>
             </plugin>
             <plugin>
@@ -135,17 +148,17 @@
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>migrate</goal>
-                        </goals>                                    
-                        <configuration>
-                            <url>${spring.datasource.url}</url>
-                            <user>${spring.datasource.username}</user>
-                            <password>${spring.datasource.password}</password>  
-                            <locations>
-                                <location>filesystem:src/main/resources/db/migration</location>
-                            </locations>
-                        </configuration>
-                    </execution>                    
-                </executions>
+                        </goals>
+                    </execution>
+                </executions>                
+                <configuration>
+                    <url>${spring.datasource.url}</url>
+                    <user>${spring.datasource.username}</user>
+                    <password>${spring.datasource.password}</password>  
+                    <locations>
+                        <location>filesystem:src/main/resources/db/migration</location>
+                    </locations>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.jooq</groupId>

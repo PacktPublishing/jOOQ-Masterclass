@@ -15,8 +15,8 @@ import org.jooq.meta.jaxb.Target;
 public class JooqConfig {
 
     public static void main(String[] args) throws Exception {
-System.out.println("1111111111111: " + args[0]);
-//System.out.println("1111111111111: " + args[1]);
+System.out.println("1111111111111: " + args.length);
+if(args.length > 1) {System.out.println("1111111111111: " + args[1]);}
 //System.out.println("1111111111111: " + args[2]);
 //System.out.println("1111111111111: " + args[3]);
 //System.out.println("1111111111111: " + args[4]);

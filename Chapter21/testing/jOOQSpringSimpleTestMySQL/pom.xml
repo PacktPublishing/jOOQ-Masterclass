@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.app</groupId>
-    <artifactId>jOOQSpringJooqTestInMemMySQL</artifactId>
+    <artifactId>jOOQSpringSimpleTestMySQL</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQSpringJooqTestInMemMySQL</name>
+    <name>jOOQSpringSimpleTestMySQL</name>
     <description>jOOQ - Spring Boot app</description>    
 
     <parent>
@@ -54,12 +54,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-        </dependency> 
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>    
-            <scope>runtime</scope>
-        </dependency>                      
+        </dependency>                       
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>    
@@ -135,17 +130,17 @@
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>migrate</goal>
-                        </goals>                                    
-                        <configuration>
-                            <url>${spring.datasource.url}</url>
-                            <user>${spring.datasource.username}</user>
-                            <password>${spring.datasource.password}</password>  
-                            <locations>
-                                <location>filesystem:src/main/resources/db/migration</location>
-                            </locations>
-                        </configuration>
-                    </execution>                    
-                </executions>
+                        </goals>
+                    </execution>
+                </executions>                
+                <configuration>
+                    <url>${spring.datasource.url}</url>
+                    <user>${spring.datasource.username}</user>
+                    <password>${spring.datasource.password}</password>  
+                    <locations>
+                        <location>filesystem:src/main/resources/db/migration</location>
+                    </locations>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.jooq</groupId>

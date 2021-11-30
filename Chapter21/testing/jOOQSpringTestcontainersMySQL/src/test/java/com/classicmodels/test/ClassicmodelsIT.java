@@ -1,12 +1,13 @@
 package com.classicmodels.test;
 
 import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.SQLException;
 import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Sale.SALE;
 import jooq.generated.tables.records.PaymentRecord;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -14,47 +15,56 @@ import static org.hamcrest.Matchers.hasSize;
 import org.jooq.DSLContext;
 import org.jooq.Record2;
 import org.jooq.Result;
-import org.jooq.conf.MappedSchema;
-import org.jooq.conf.RenderMapping;
-import org.jooq.conf.RenderNameCase;
+import org.jooq.SQLDialect;
+import org.jooq.conf.Settings;
 import org.jooq.impl.DSL;
 import static org.jooq.impl.DSL.row;
+import org.junit.jupiter.api.AfterAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jooq.JooqTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionCallbackWithoutResult;
-import org.springframework.transaction.support.TransactionTemplate;
+import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.ext.ScriptUtils;
+import org.testcontainers.jdbc.JdbcDatabaseDelegate;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
-@JooqTest
-@ActiveProfiles("test")
-@TestInstance(Lifecycle.PER_CLASS)
+@Testcontainers
 public class ClassicmodelsIT {
 
-    @Autowired
-    private DSLContext ctx;
+    private static DSLContext ctx;
 
-    @Autowired
-    private TransactionTemplate template;
+    @Container
+    private static final MySQLContainer sqlContainer
+            = new MySQLContainer<>("mysql:8.0")
+                    .withDatabaseName("classicmodels")
+                    .withStartupTimeoutSeconds(1800) // 30 minutes (give enough time to container to start)
+                    .withCommand("--authentication-policy=mysql_native_password");
 
     @BeforeAll
-    public void setup() {
+    public static void setup() throws SQLException {
 
-        ctx.settings()
-                // .withExecuteLogging(Boolean.FALSE)
-                .withRenderNameCase(RenderNameCase.UPPER)
-                .withRenderMapping(new RenderMapping()
-                        .withSchemata(
-                                new MappedSchema().withInput("classicmodels")
-                                        .withOutput("PUBLIC")));
+        // load into the database the schema and data
+        var containerDelegate = new JdbcDatabaseDelegate(sqlContainer, "");
+        ScriptUtils.runInitScript(containerDelegate, "db/mysql/testSchema.sql");
+        ScriptUtils.runInitScript(containerDelegate, "db/mysql/testData.sql");
+
+        // obtain a connection to MySQL
+        Connection conn = sqlContainer.createConnection("");
+
+        // intialize jOOQ DSLContext
+        ctx = DSL.using(conn, SQLDialect.MYSQL);
+    }
+
+    @AfterAll
+    public static void tearDown() {
+        if (sqlContainer != null) {
+            if (sqlContainer.isRunning()) {
+                sqlContainer.stop();
+            }
+        }
     }
 
     @Test
@@ -83,14 +93,14 @@ public class ClassicmodelsIT {
     @Test
     public void givenInsertWhenSameIdThenException() {
 
-        Throwable ex = assertThrows(org.springframework.dao.DuplicateKeyException.class, () -> {
+        Throwable ex = assertThrows(org.jooq.exception.DataAccessException.class, () -> {
 
             ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)
                     .values(1L, 2005, 1370L, 1282.64, 1, 15.55)
                     .execute();
         });
 
-        assertThat(ex.getCause(), is(instanceOf(org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException.class)));
+        assertThat(ex.getCause().getMessage(), startsWith("Duplicate entry '1'"));
     }
 
     @Test
@@ -117,64 +127,13 @@ public class ClassicmodelsIT {
     }
 
     @Test
-    public void givenOptimisticLockingWhenDetectedThenException1() {
-
-        // turn on jOOQ optimistic locking
-        DSLContext derivedCtx = ctx.configuration().derive(
-                ctx.settings()
-                        .withExecuteWithOptimisticLocking(true)
-                        .withExecuteWithOptimisticLockingExcludeUnversioned(true))
-                .dsl();
-
-        template.setPropagationBehavior(
-                TransactionDefinition.PROPAGATION_REQUIRES_NEW);
-
-        Throwable ex = assertThrows(org.jooq.exception.DataAccessException.class, () -> {
-            template.execute(new TransactionCallbackWithoutResult() {
-
-                @Override
-                protected void doInTransactionWithoutResult(
-                        TransactionStatus status) {
-
-                    PaymentRecord record = derivedCtx.fetchOne(PAYMENT,
-                            row(PAYMENT.CUSTOMER_NUMBER, PAYMENT.CHECK_NUMBER)
-                                    .eq(103L, "HQ336336"));
-
-                    template.execute(new TransactionCallbackWithoutResult() {
-
-                        @Override
-                        protected void doInTransactionWithoutResult(
-                                TransactionStatus status) {
-
-                            PaymentRecord record = derivedCtx.fetchOne(PAYMENT,
-                                    row(PAYMENT.CUSTOMER_NUMBER, PAYMENT.CHECK_NUMBER)
-                                            .eq(103L, "HQ336336"));
-
-                            record.setInvoiceAmount(BigDecimal.valueOf(0));
-
-                            record.store();
-                        }
-                    });
-
-                    record.setInvoiceAmount(BigDecimal.valueOf(1000));
-
-                    record.store();
-                }
-            });
-        });
-
-        assertThat(ex.getMessage(), startsWith("Database record has been changed or doesn't exist any longer"));
-    }
-
-    @Test
     @Transactional(propagation = Propagation.NEVER)
-    public void givenOptimisticLockingWhenDetectedThenException2() {
+    public void givenOptimisticLockingWhenDetectedThenException() {
 
         // turn on jOOQ optimistic locking
-        DSLContext derivedCtx = ctx.configuration().derive(
-                ctx.settings()
-                        .withExecuteWithOptimisticLocking(true)
-                        .withExecuteWithOptimisticLockingExcludeUnversioned(true))
+        DSLContext derivedCtx = ctx.configuration().derive(new Settings()
+                .withExecuteWithOptimisticLocking(true)
+                .withExecuteWithOptimisticLockingExcludeUnversioned(true))
                 .dsl();
 
         Throwable ex = assertThrows(org.jooq.exception.DataChangedException.class, () -> {

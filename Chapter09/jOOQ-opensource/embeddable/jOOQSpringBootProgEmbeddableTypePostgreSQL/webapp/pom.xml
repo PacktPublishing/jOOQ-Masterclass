@@ -136,30 +136,30 @@
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
+                <artifactId>exec-maven-plugin</artifactId>                                
                 <executions>  
-                    <execution>  
+                    <execution>                                           
                         <phase>generate-sources</phase>  
                         <goals>  
-                            <goal>java</goal>  
-                        </goals>                     
-                        <configuration> 
-                            <executable>java</executable>     
+                            <goal>java</goal>                                                          
+                        </goals>                                                                           
+                        <configuration>                                                             
+                            <executable>${project.build.directory}</executable>                                                         
                             <mainClass>com.classicmodels.jooq.config.JooqConfig</mainClass>
                             <!-- If you want, you can pass here as arguments the properties
                             imported from application.properties as well. This can be
-                            useful if you have multiple profiles with dedicated application.properties. -->
-                            <arguments>                                                 
+                            useful if you have multiple profiles with dedicated application.properties. -->                            
+                            <arguments>                                                                                 
                                 <argument>${project.build.directory}/generated-sources/jooq</argument>                                
-                                <!--<argument>${spring.datasource.driverClassName}</argument>
+                                <argument>${spring.datasource.driverClassName}</argument>
                                 <argument>${spring.datasource.url}</argument>
                                 <argument>${spring.datasource.username}</argument>
-                                <argument>${spring.datasource.password}</argument>-->
+                                <argument>${spring.datasource.password}</argument>
                             </arguments>                           
                             <cleanupDaemonThreads>false</cleanupDaemonThreads> 
-                        </configuration>  
+                        </configuration>          
                     </execution>  
-                </executions>                                    
+                </executions>              
             </plugin>
         </plugins>
     </build>  

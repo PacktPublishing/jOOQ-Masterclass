@@ -21,6 +21,8 @@ import static org.jooq.impl.DSL.row;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jooq.JooqTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -33,27 +35,25 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 @JooqTest
 @ActiveProfiles("test")
+@TestInstance(Lifecycle.PER_CLASS)
 public class ClassicmodelsIT {
 
-    private static DSLContext ctx;
-
-    @BeforeAll
-    public static void setup() {
-
-        ctx = DSL.using("jdbc:mysql://localhost:3306/classicmodels_test"
-                + "?createDatabaseIfNotExist=true&allowMultiQueries=true",
-                "root", "root");
-
-        ctx.settings()
-                // .withExecuteLogging(Boolean.FALSE)
-                .withRenderMapping(new RenderMapping()
-                .withSchemata(
-                        new MappedSchema().withInput("classicmodels")
-                                .withOutput("classicmodels_test")));
-    }
+    @Autowired
+    private DSLContext ctx;
 
     @Autowired
     private TransactionTemplate template;
+
+    @BeforeAll
+    public void setup() {
+
+        ctx.settings()
+                // .withExecuteLogging(Boolean.FALSE)                
+                .withRenderMapping(new RenderMapping()
+                        .withSchemata(
+                                new MappedSchema().withInput("classicmodels")
+                                        .withOutput("classicmodels_test")));
+    }
 
     @Test
     public void givenSelectProductWhenFetchByIdThenResultOneRecord() {
@@ -96,7 +96,7 @@ public class ClassicmodelsIT {
     @Test
     public void givenInsertWhenSameIdThenException() {
 
-        Throwable ex = assertThrows(org.jooq.exception.DataAccessException.class, () -> {
+        Throwable ex = assertThrows(org.springframework.dao.DuplicateKeyException.class, () -> {
 
             ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)
                     .values(1L, 2005, 1370L, 1282.64, 1, 15.55)

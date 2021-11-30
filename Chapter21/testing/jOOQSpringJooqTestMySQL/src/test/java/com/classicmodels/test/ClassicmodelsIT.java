@@ -111,7 +111,7 @@ public class ClassicmodelsIT {
         assertThat(affected[3], is(equalTo(1)));
         assertThat(affected[4], is(equalTo(19)));
     }
-
+    
     @Test
     public void givenOptimisticLockingWhenDetectedThenException1() {
 
