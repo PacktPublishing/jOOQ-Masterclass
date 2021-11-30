@@ -20,7 +20,7 @@ public class ClassicModelsRepository {
 
         ctx.select(PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME)
                 .from(PRODUCT)
-                .where(PRODUCT.QUANTITY_IN_STOCK.gt(param("stock", 5000))
+                .where(PRODUCT.QUANTITY_IN_STOCK.gt(5000)
                         .and(PRODUCT.CODE.in(
                                 param("vintageCars", 223113L),
                                 param("trucksAndBuses", 569331L),

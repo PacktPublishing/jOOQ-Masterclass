@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.app</groupId>
-    <artifactId>jOOQSpringSimpleLoggingMySQL</artifactId>
+    <artifactId>jOOQSpringGenCodeLoggingMySQL</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQSpringSimpleLoggingMySQL</name>
+    <name>jOOQSpringGenCodeLoggingMySQL</name>
     <description>jOOQ - Spring Boot app</description>    
 
     <parent>
@@ -142,7 +142,7 @@
                             <!-- Mute everything that is less than WARN level
                                  The supported levels are: TRACE, DEBUG, INFO, WARN, ERROR ,FATAL -->
                             <logging>WARN</logging>
-                            
+                                                        
                             <!-- Configure the database connection here. -->
                             <jdbc>
                                 <driver>${spring.datasource.driverClassName}</driver>
