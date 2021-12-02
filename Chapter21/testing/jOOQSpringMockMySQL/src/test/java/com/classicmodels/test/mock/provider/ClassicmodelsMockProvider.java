@@ -51,7 +51,8 @@ public class ClassicmodelsMockProvider implements MockDataProvider {
         // Exceptions are propagated through the JDBC and jOOQ APIs
         if (!sql.toUpperCase().matches(ACCEPTED_SQL)) {
             throw new SQLException("Statement not supported: " + sql);
-        } // You decide, whether any given statement returns results, and how many
+            
+        } // From this point forward, you decide, whether any given statement returns results, and how many
         else if (sql.equals(SELECT_ONE_RESULT_ONE_RECORD)) {
 
             Result<Record2<Long, String>> result
