@@ -31,7 +31,7 @@ public class ClassicmodelsIT {
     public static void setup() {
         
         ctx = DSL.using("jdbc:mysql://localhost:3306/classicmodels"
-                + "?createDatabaseIfNotExist=true&allowMultiQueries=true", "root", "root");
+                + "?allowMultiQueries=true", "root", "root");
     }
 
     @Test
