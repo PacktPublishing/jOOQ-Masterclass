@@ -22,12 +22,14 @@ public class MyLoggerListener extends DefaultExecuteListener {
 
             if (result != null && !result.isEmpty()) {
 
-                if (result.field(PRODUCT.PRODUCT_ID) != null
-                        && result.field(PRODUCT.BUY_PRICE) != null) {
+                final int x = result.indexOf(PRODUCT.PRODUCT_ID);
+                final int y = result.indexOf(PRODUCT.BUY_PRICE);
+
+                if (x != -1 && y != -1) {
 
                     ChartFormat cf = new ChartFormat()
-                            .category(result.indexOf(PRODUCT.PRODUCT_ID))
-                            .values(result.indexOf(PRODUCT.BUY_PRICE))
+                            .category(x)
+                            .values(y)
                             .shades('x');
 
                     String[] chart = result.formatChart(cf).split("\n");
