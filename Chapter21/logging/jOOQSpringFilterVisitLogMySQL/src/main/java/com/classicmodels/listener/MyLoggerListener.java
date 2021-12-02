@@ -92,14 +92,14 @@ public class MyLoggerListener extends DefaultExecuteListener {
     private static class TablesExtractor extends DefaultVisitListener {
 
         @Override
-        public void visitEnd(VisitContext context) {
+        public void visitEnd(VisitContext vcx) {
 
-            if (context.renderContext() != null) {
-                if (context.queryPart() instanceof Table) {
+            if (vcx.renderContext() != null) {
+                if (vcx.queryPart() instanceof Table) {
 
-                    Table<?> t = (Table<?>) context.queryPart();
+                    Table<?> t = (Table<?>) vcx.queryPart();
 
-                    context.configuration().data()
+                    vcx.configuration().data()
                             .putIfAbsent(t.getQualifiedName(), "");
                 }
             }
