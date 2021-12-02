@@ -12,9 +12,9 @@ public class MyLoggerListener extends DefaultExecuteListener {
     private static final JooqLogger log = JooqLogger.getLogger(LoggerListener.class);
 
     @Override
-    public void fetchEnd(ExecuteContext ctx) {
+    public void resultEnd(ExecuteContext ecx) {
 
-        Result<?> result = ctx.result();
+        Result<?> result = ecx.result();
 
         if (result != null) {
 

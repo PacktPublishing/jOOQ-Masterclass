@@ -1,5 +1,6 @@
 package com.classicmodels.repository;
 
+import java.util.stream.Collectors;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Department.DEPARTMENT;
 import static jooq.generated.tables.Employee.EMPLOYEE;
@@ -28,9 +29,13 @@ public class ClassicModelsRepository {
     public void queries() {
 
         // log only queries (SELECT/INSERT/UPDATE/DELETE) that refer to these tables (a query should refer all tables)
-        ctx.configuration().data().put(EMPLOYEE.getQualifiedName(), "");
-        ctx.configuration().data().put(SALE.getQualifiedName(), "");
-
+        ctx.data().put(EMPLOYEE.getQualifiedName(), "");
+        ctx.data().put(SALE.getQualifiedName(), "");                
+        
+        ctx.selectFrom(PRODUCT).limit(10).fetch();
+        
+        ctx.selectFrom(PRODUCT).collect(Collectors.toList());
+        
         ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
                 .from(EMPLOYEE)
                 .where(select(avg(SALE.SALE_)).from(SALE).lt(
@@ -67,6 +72,6 @@ public class ClassicModelsRepository {
                 .where(PRODUCT.PRODUCT_NAME.eq("Amazing Car"))
                 .execute();
 
-        // batches and routines are not logged at all
+        // plain SQL, batches and routines are not logged at all
     }
 }

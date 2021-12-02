@@ -16,7 +16,8 @@ import org.jooq.tools.JooqLogger;
 public class MyLoggerListener extends DefaultExecuteListener {
 
     private static final JooqLogger log = JooqLogger.getLogger(MyLoggerListener.class);
-    private static final String FETCH_EXEC_EVENT = "fetch_exec_event";
+    private static final String RESULT_END_EVENT = "result_end_event";
+    private static final String RESULT_END_EVENT_CONSUMED = "result_end_event_consumed";
 
     @Override
     public void renderEnd(ExecuteContext ecx) {
@@ -27,9 +28,9 @@ public class MyLoggerListener extends DefaultExecuteListener {
                     ecx.configuration().data().keySet());
 
             ecx.configuration().data().clear();
-
-            Configuration configuration = ecx.configuration();
-            configuration = configuration.deriveAppending(new TablesQueryExtractor());
+           
+            Configuration configuration = ecx.configuration()
+                    .deriveAppending(new TablesExtractor());
 
             String inlined = DSL.using(configuration).renderInlined(ecx.query());
 
@@ -39,27 +40,38 @@ public class MyLoggerListener extends DefaultExecuteListener {
                     log.debug("-> with bind values", inlined);
                 }
 
-                ecx.configuration().data().put(FETCH_EXEC_EVENT, true);
+                ecx.configuration().data().put(RESULT_END_EVENT, true);
             }
         }
     }
 
     @Override
-    public void fetchEnd(ExecuteContext ecx) {
+    public void resultEnd(ExecuteContext ecx) {
 
+        ecx.configuration().data().put(RESULT_END_EVENT_CONSUMED, true);
+        
         Result<?> result = ecx.result();
 
-        if (result != null && ecx.configuration().data().containsKey(FETCH_EXEC_EVENT)) {
+        if (result != null && ecx.configuration().data().containsKey(RESULT_END_EVENT)) {
 
             logMultiline("Fetched result", result.format(5), Level.FINE);
-            log.debug("Total fetched row(s)", result.size());
+            log.debug("Total fetched row(s)", result.size());            
+        }
+    }
+
+    @Override
+    public void fetchEnd(ExecuteContext ecx) {
+        
+        if (!ecx.configuration().data().containsKey(RESULT_END_EVENT_CONSUMED) &&
+                ecx.configuration().data().containsKey(RESULT_END_EVENT)) {
+            log.debug("Fetched result:", "Cannot display result set for this query");
         }
     }
 
     @Override
     public void executeEnd(ExecuteContext ecx) {
 
-        if (ecx.rows() >= 0 && ecx.configuration().data().containsKey(FETCH_EXEC_EVENT)) {
+        if (ecx.rows() >= 0 && ecx.configuration().data().containsKey(RESULT_END_EVENT)) {
             log.debug("Affected row(s)", ecx.rows());
         }
     }
@@ -77,17 +89,19 @@ public class MyLoggerListener extends DefaultExecuteListener {
         }
     }
 
-    private static class TablesQueryExtractor extends DefaultVisitListener {
+    private static class TablesExtractor extends DefaultVisitListener {
 
         @Override
         public void visitEnd(VisitContext context) {
 
-            if (context.queryPart() instanceof Table) {
+            if (context.renderContext() != null) {
+                if (context.queryPart() instanceof Table) {
 
-                Table<?> t = (Table<?>) context.queryPart();
+                    Table<?> t = (Table<?>) context.queryPart();
 
-                context.renderContext().configuration().data()
-                        .putIfAbsent(t.getQualifiedName(), "");
+                    context.configuration().data()
+                            .putIfAbsent(t.getQualifiedName(), "");
+                }
             }
         }
     }

@@ -1,16 +1,13 @@
 package com.classicmodels.listener;
 
-import java.util.HashMap;
-import java.util.Map;
+import static jooq.generated.tables.Product.PRODUCT;
 import org.jooq.ChartFormat;
 import org.jooq.ExecuteContext;
-import org.jooq.Field;
 import org.jooq.impl.DefaultExecuteListener;
 import org.jooq.tools.JooqLogger;
 import org.jooq.tools.LoggerListener;
 import org.jooq.Result;
 import org.jooq.Select;
-import static org.jooq.impl.DSL.name;
 
 public class MyLoggerListener extends DefaultExecuteListener {
 
@@ -25,25 +22,12 @@ public class MyLoggerListener extends DefaultExecuteListener {
 
             if (result != null && !result.isEmpty()) {
 
-                Map<String, Integer> positions = new HashMap<>();
-
-                Field<?>[] fields = result.fields();
-                for (int i = 0; i < fields.length; i++) {
-                    if (fields[i].getQualifiedName()
-                            .equalsIgnoreCase(name("product", "product_id"))) {
-                        positions.put("category", i);
-                    }
-                    if (fields[i].getQualifiedName()
-                            .equalsIgnoreCase(name("product","buy_price"))) {
-                        positions.put("values", i);
-                    }
-                }
-
-                if (positions.size() == 2) {
+                if (result.field(PRODUCT.PRODUCT_ID) != null
+                        && result.field(PRODUCT.BUY_PRICE) != null) {
 
                     ChartFormat cf = new ChartFormat()
-                            .category(positions.get("category"))
-                            .values(positions.get("values"))
+                            .category(result.indexOf(PRODUCT.PRODUCT_ID))
+                            .values(result.indexOf(PRODUCT.BUY_PRICE))
                             .shades('x');
 
                     String[] chart = result.formatChart(cf).split("\n");

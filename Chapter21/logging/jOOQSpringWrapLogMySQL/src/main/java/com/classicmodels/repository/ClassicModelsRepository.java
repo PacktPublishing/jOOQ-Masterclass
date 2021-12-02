@@ -1,5 +1,6 @@
 package com.classicmodels.repository;
 
+import java.util.stream.Collectors;
 import static jooq.generated.Routines.getAvgPriceByProductLine;
 import static jooq.generated.Routines.salePrice;
 import jooq.generated.routines.SalePrice;
@@ -68,6 +69,9 @@ public class ClassicModelsRepository {
                 ctx.update(SALE).set(SALE.FISCAL_YEAR, 2004).where(SALE.FISCAL_YEAR.eq(2003))
         ).execute();
 
+        ctx.selectFrom(PRODUCT)
+                .collect(Collectors.toList());
+
         getAvgPriceByProductLine(ctx.configuration(), "Classic Cars");
 
         SalePrice sp = new SalePrice();
@@ -75,7 +79,7 @@ public class ClassicModelsRepository {
         sp.set(in("list_price", DOUBLE), 15.5);
         sp.set(in("fraction_of_price", DOUBLE), 0.75);
         sp.execute(ctx.configuration());
-        
+
         ctx.select(ORDERDETAIL.ORDER_ID,
                 sum(salePrice(ORDERDETAIL.QUANTITY_ORDERED,
                         ORDERDETAIL.PRICE_EACH.coerce(Double.class), val(0.75))).as("sum_sale_price"))

@@ -63,6 +63,11 @@ public class ClassicModelsRepository {
                 // not logged
                 ctx.update(SALE).set(SALE.FISCAL_YEAR, 2004).where(SALE.FISCAL_YEAR.eq(2003)) 
         ).execute();
+        
+        // this is logged
+        ctx.query("insert into `classicmodels`.`sale` (`fiscal_year`, `employee_number`, `sale`, `fiscal_month`, `revenue_growth`) "
+                + "values (2003, 1504, 5664.33, 1, 45.5)")
+                .execute();
                
         // this is not logged
         getAvgPriceByProductLine(ctx.configuration(), "Classic Cars");

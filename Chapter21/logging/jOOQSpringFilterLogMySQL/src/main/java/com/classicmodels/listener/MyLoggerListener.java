@@ -19,32 +19,32 @@ public class MyLoggerListener extends DefaultExecuteListener {
 
     // inspired from jOOQ source code            
     @Override
-    public void renderEnd(ExecuteContext ctx) {
+    public void renderEnd(ExecuteContext ecx) {
 
-        var query = ctx.query();
+        var query = ecx.query();
 
-        Configuration configuration = ctx.configuration();
+        Configuration configuration = ecx.configuration();
         String newline = TRUE.equals(configuration.settings().isRenderFormatted()) ? "\n" : "";
 
         if (query instanceof Insert || query instanceof Delete) {
 
-            log.debug("Executing query", newline + ctx.sql());
+            log.debug("Executing query", newline + ecx.sql());
 
-            String inlined = DSL.using(configuration).renderInlined(ctx.query());
-            if (!ctx.sql().equals(inlined)) {
+            String inlined = DSL.using(configuration).renderInlined(ecx.query());
+            if (!ecx.sql().equals(inlined)) {
                 log.debug("-> with bind values", newline + inlined);
             }
-        } else if (!StringUtils.isBlank(ctx.sql())) {
+        } else if (!StringUtils.isBlank(ecx.sql())) {
 
-            if (ctx.sql().matches(PATTERN)) {
-                if (ctx.type() == ExecuteType.BATCH) {
-                    log.debug("Executing batch query", newline + ctx.sql());
+            if (ecx.sql().matches(PATTERN)) {
+                if (ecx.type() == ExecuteType.BATCH) {
+                    log.debug("Executing batch query", newline + ecx.sql());
                 } else {
-                    log.debug("Executing query", newline + ctx.sql());
+                    log.debug("Executing query", newline + ecx.sql());
                 }
             }
         } else {
-            String[] batchSQL = ctx.batchSQL();
+            String[] batchSQL = ecx.batchSQL();
             if (batchSQL[batchSQL.length - 1] != null) {
                 for (String sql : batchSQL) {
                     if (sql.matches(PATTERN)) {

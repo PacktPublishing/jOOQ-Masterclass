@@ -12,7 +12,7 @@ public class JooqConfig implements DefaultConfigurationCustomizer {
     @Override
     public void customize(DefaultConfiguration configuration) {
 
-        configuration.set(new DefaultExecuteListenerProvider(new MyLoggerListener()));              
+        configuration.set(new DefaultExecuteListenerProvider(new MyLoggerListener()));
     }
 
 }
