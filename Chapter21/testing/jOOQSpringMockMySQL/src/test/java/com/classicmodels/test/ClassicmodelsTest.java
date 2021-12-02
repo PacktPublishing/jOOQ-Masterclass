@@ -30,14 +30,15 @@ public class ClassicmodelsTest {
 
     @BeforeAll
     public static void setup() {
-        // Initialise your data provider (implementation further down):
+        
+        // Initialise your data provider
         MockDataProvider provider = new ClassicmodelsMockProvider();
         MockConnection connection = new MockConnection(provider);
 
-        // Pass the mock connection to a jOOQ DSLContext:
+        // Pass the mock connection to a jOOQ DSLContext
         ClassicmodelsTest.ctx = DSL.using(connection, SQLDialect.MYSQL);
 
-        // Disable jOOQ logging
+        // Optionally, you may want to disable jOOQ logging
         ClassicmodelsTest.ctx.configuration().settings()
                 .withExecuteLogging(Boolean.FALSE);
     }
