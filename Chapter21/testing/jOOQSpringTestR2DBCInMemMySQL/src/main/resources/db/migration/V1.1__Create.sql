@@ -44,11 +44,11 @@ CREATE TABLE `office` (
   `country` varchar(50),
   `postal_code` varchar(15) NOT NULL,
   `territory` varchar(10) NOT NULL,
-  `location` point DEFAULT NULL,
+  -- `location` point DEFAULT NULL, suppressed for H2 compatibilty
   `internal_budget` int NOT NULL,
   CONSTRAINT `office_pk` PRIMARY KEY (`office_code`),
   CONSTRAINT `office_postal_code_uk` UNIQUE (`postal_code`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+); -- ENGINE=InnoDB DEFAULT CHARSET=latin1; suppressed for H2 compatibilty
 
 CREATE TABLE `department` (
   `department_id` bigint NOT NULL AUTO_INCREMENT,
@@ -70,7 +70,7 @@ CREATE TABLE `department` (
   CONSTRAINT `department_pk` PRIMARY KEY (`department_id`),  
   CONSTRAINT `department_code_uk` UNIQUE (`code`),
   CONSTRAINT `department_office_fk` FOREIGN KEY (`office_code`) REFERENCES `office` (`office_code`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+); -- ENGINE=InnoDB DEFAULT CHARSET=latin1; suppressed for H2 compatibilty
 
 /*Table structure for table `employee` */
 
@@ -90,7 +90,7 @@ CREATE TABLE `employee` (
   CONSTRAINT `employee_pk` PRIMARY KEY (`employee_number`),
   CONSTRAINT `employee_employee_fk` FOREIGN KEY (`reports_to`) REFERENCES `employee` (`employee_number`),
   CONSTRAINT `employee_office_fk` FOREIGN KEY (`office_code`) REFERENCES `office` (`office_code`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+); -- ENGINE=InnoDB DEFAULT CHARSET=latin1; suppressed for H2 compatibilty
 
 /*Table structure for table `employee_status` */
 
@@ -101,7 +101,7 @@ CREATE TABLE `employee_status` (
   `acquired_date` date NOT NULL,
   CONSTRAINT `id_pk` PRIMARY KEY (`id`),  
   CONSTRAINT `employee_status_employee_fk` FOREIGN KEY (`employee_number`) REFERENCES `employee` (`employee_number`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+); -- ENGINE=InnoDB DEFAULT CHARSET=latin1; suppressed for H2 compatibilty
 
 /*Table structure for table `sale` */
 
@@ -118,7 +118,7 @@ CREATE TABLE `sale` (
   `trend` varchar(10) DEFAULT NULL,
   CONSTRAINT `sale_pk` PRIMARY KEY (`sale_id`),    
   CONSTRAINT `sale_employee_fk` FOREIGN KEY (`employee_number`) REFERENCES `employee` (`employee_number`) ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+); -- ENGINE=InnoDB DEFAULT CHARSET=latin1; suppressed for H2 compatibilty
 
 /*Table structure for table `daily_activity` */
 
@@ -129,7 +129,7 @@ CREATE TABLE `daily_activity` (
   `visitors` float NOT NULL,    
   `conversion` float NOT NULL,
   CONSTRAINT `daily_activity_pk` PRIMARY KEY (`day_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+); -- ENGINE=InnoDB DEFAULT CHARSET=latin1; suppressed for H2 compatibilty
 
 /*Table structure for table `token` */
 
@@ -138,10 +138,9 @@ CREATE TABLE `token` (
   `sale_id` bigint NOT NULL,
   `amount` float NOT NULL,   
   `updated_on` timestamp NOT NULL DEFAULT NOW(),
-  CONSTRAINT `token_pk` PRIMARY KEY (`token_id`)
- ,  
+  CONSTRAINT `token_pk` PRIMARY KEY (`token_id`),  
   CONSTRAINT `token_sale_fk` FOREIGN KEY (`sale_id`) REFERENCES `sale` (`sale_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+); -- ENGINE=InnoDB DEFAULT CHARSET=latin1; suppressed for H2 compatibilty
 
 /*Table structure for table `customer` */
 
@@ -157,7 +156,7 @@ CREATE TABLE `customer` (
   CONSTRAINT `customer_pk` PRIMARY KEY (`customer_number`), 
   CONSTRAINT `customer_name_uk` UNIQUE (`customer_name`),
   CONSTRAINT `customer_employee_fk` FOREIGN KEY (`sales_rep_employee_number`) REFERENCES `employee` (`employee_number`) ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+); -- ENGINE=InnoDB DEFAULT CHARSET=latin1; suppressed for H2 compatibilty
 
 /*Table structure for table `customerdetail` */
 
@@ -172,7 +171,7 @@ CREATE TABLE `customerdetail` (
   CONSTRAINT `customerdetail_pk` PRIMARY KEY (`customer_number`),  
   CONSTRAINT customerdetail_address_line_first_uk UNIQUE (address_line_first),
   CONSTRAINT `customerdetail_customer_fk` FOREIGN KEY (`customer_number`) REFERENCES `customer` (`customer_number`)  
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+); -- ENGINE=InnoDB DEFAULT CHARSET=latin1; suppressed for H2 compatibilty
 
 /*Table structure for table `manager` */
 
@@ -182,7 +181,7 @@ CREATE TABLE `manager` (
   `manager_detail` json DEFAULT NULL,
   `manager_evaluation` varchar(200) DEFAULT NULL, 
   CONSTRAINT `manager_pk` PRIMARY KEY (`manager_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+); -- ENGINE=InnoDB DEFAULT CHARSET=latin1;  suppressed for H2 compatibilty
 
 /*Table structure for table `office_has_manager` */
 
@@ -192,7 +191,7 @@ CREATE TABLE `office_has_manager` (
   CONSTRAINT `office_manager_uk` UNIQUE (`offices_office_code`, `managers_manager_id`),
   CONSTRAINT `office_fk` FOREIGN KEY (`offices_office_code`) REFERENCES office (`office_code`) ON UPDATE NO ACTION ON DELETE NO ACTION,
   CONSTRAINT `manager_fk` FOREIGN KEY (`managers_manager_id`) REFERENCES manager (`manager_id`) ON UPDATE NO ACTION ON DELETE NO ACTION  
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+); -- ENGINE=InnoDB DEFAULT CHARSET=latin1; suppressed for H2 compatibilty
 
 /*Table structure for table `productline` */
 
@@ -205,7 +204,7 @@ CREATE TABLE `productline` (
   `created_on` date DEFAULT (CURRENT_DATE),
   CONSTRAINT `productline_pk` PRIMARY KEY (`product_line`,`code`),
   CONSTRAINT productline_uk UNIQUE(product_line)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+); -- ENGINE=InnoDB DEFAULT CHARSET=latin1; suppressed for H2 compatibilty
 
 /*Table structure for table `productdetail` */
 
@@ -217,7 +216,7 @@ CREATE TABLE `productlinedetail` (
   CONSTRAINT `productlinedetail_pk` PRIMARY KEY (`product_line`,`code`),  
   CONSTRAINT `productlinedetail_uk` UNIQUE(product_line),
   CONSTRAINT `productlinedetail_productline_fk` FOREIGN KEY (`product_line`,`code`) REFERENCES `productline` (`product_line`,`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+); -- ENGINE=InnoDB DEFAULT CHARSET=latin1; suppressed for H2 compatibilty
 
 /*Table structure for table `product` */
 
@@ -236,7 +235,7 @@ CREATE TABLE `product` (
   `product_uid` bigint DEFAULT 10,
   CONSTRAINT `product_pk` PRIMARY KEY (`product_id`),  
   CONSTRAINT `product_productline_fk` FOREIGN KEY (`product_line`,`code`) REFERENCES `productline` (`product_line`,`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+); -- ENGINE=InnoDB DEFAULT CHARSET=latin1;  suppressed for H2 compatibilty
 
 CREATE TABLE sequences (sequence_name VARCHAR(50),currval INT);
 INSERT INTO sequences (sequence_name,currval) VALUES ('product_uid_seq',0);
@@ -254,7 +253,7 @@ CREATE TABLE `order` (
   `amount` decimal(10,2) NOT NULL,
   CONSTRAINT `order_pk` PRIMARY KEY (`order_id`),
   CONSTRAINT `order_customer_fk` FOREIGN KEY (`customer_number`) REFERENCES `customer` (`customer_number`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+); -- ENGINE=InnoDB DEFAULT CHARSET=latin1; suppressed for H2 compatibilty
 
 /*Table structure for table `orderdetail` */
 
@@ -269,7 +268,7 @@ CREATE TABLE `orderdetail` (
   CONSTRAINT `orderdetail_uk` UNIQUE KEY (`order_id`, `product_id`),
   CONSTRAINT `orderdetail_order_fk` FOREIGN KEY (`order_id`) REFERENCES `order` (`order_id`),
   CONSTRAINT `orderdetail_product_fk` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+); -- ENGINE=InnoDB DEFAULT CHARSET=latin1; suppressed for H2 compatibilty
 
 /*Table structure for table `top3product` */
 
@@ -278,7 +277,7 @@ CREATE TABLE `top3product` (
   `product_name` varchar(70) DEFAULT NULL,  
   CONSTRAINT `top3product_pk` PRIMARY KEY (`product_id`),
   CONSTRAINT `top3product_product_fk` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+); -- ENGINE=InnoDB DEFAULT CHARSET=latin1; suppressed for H2 compatibilty
 
 /*Table structure for table `payment` */
 
@@ -293,7 +292,7 @@ CREATE TABLE `payment` (
   CONSTRAINT `payment_pk` PRIMARY KEY (`customer_number`,`check_number`),
   CONSTRAINT `check_number_uk` UNIQUE (`check_number`),
   CONSTRAINT `payment_customer_fk` FOREIGN KEY (`customer_number`) REFERENCES `customer` (`customer_number`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+); -- ENGINE=InnoDB DEFAULT CHARSET=latin1; suppressed for H2 compatibilty
 
 /*Table structure for table `bank_transaction` */
 
@@ -309,7 +308,7 @@ CREATE TABLE `bank_transaction` (
   `status` varchar(50) NOT NULL DEFAULT 'SUCCESS',   
   CONSTRAINT `bank_transaction_pk` PRIMARY KEY (`transaction_id`),    
   CONSTRAINT `bank_transaction_customer_fk` FOREIGN KEY (`customer_number`,`check_number`) REFERENCES `payment` (`customer_number`,`check_number`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+); -- ENGINE=InnoDB DEFAULT CHARSET=latin1; suppressed for H2 compatibilty
 
 /*Table structure for table `office_flights` */
 
@@ -318,140 +317,4 @@ CREATE TABLE `office_flights` (
   `arrival_town` varchar(32) NOT NULL,
   `distance_km` integer NOT NULL,
   CONSTRAINT `office_flights_pk` PRIMARY KEY (`depart_town`, `arrival_town`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-/* USER-DEFINED FUNCTIONS */
-DELIMITER $$
-
-CREATE FUNCTION CustomerLevel(
-	credit DECIMAL(10,2)
-) 
-RETURNS VARCHAR(20)
-DETERMINISTIC
-BEGIN
-    DECLARE customerLevel VARCHAR(20);
-
-    IF credit > 50000 THEN
-		SET customerLevel = 'PLATINUM';
-    ELSEIF (credit >= 50000 AND 
-			credit <= 100000) THEN
-        SET customerLevel = 'GOLD';
-    ELSEIF credit < 10000 THEN
-        SET customerLevel = 'SILVER';
-    END IF;
-	-- return the customer level
-	RETURN (customerLevel);
-END$$
-DELIMITER;
-
-DELIMITER $$
-CREATE FUNCTION `sale_price`(
-    `quantity` INT,
-    `list_price` REAL,
-    `fraction_of_price` REAL
-)
-RETURNS REAL
-DETERMINISTIC
-BEGIN
-     RETURN (`list_price` - (`list_price` * `fraction_of_price`)) * `quantity`;    
-END$$
-DELIMITER;
-
-DELIMITER $$
-CREATE TRIGGER product_uid_trigger BEFORE INSERT ON product FOR EACH ROW BEGIN
-  UPDATE sequences set currval = currval + 10 where sequence_name = 'product_uid_seq';
-  SET NEW.product_uid = (SELECT currval FROM sequences WHERE sequence_name = 'product_uid_seq');
-END$$
-DELIMITER;
-
-/* USER-DEFINED PROCEDURES */
-
-DELIMITER $$
-CREATE PROCEDURE `get_product`(IN `pid` BIGINT)
-BEGIN
-	SELECT * FROM `product` WHERE `product`.`product_id` = `pid`;
-END$$
-DELIMITER;
-
-DELIMITER $$
-CREATE PROCEDURE `get_emps_in_office`(`in_office_code` VARCHAR(10))
-BEGIN
-    SELECT `office`.`city`, `office`.`country`, `office`.`internal_budget`
-      FROM `office`
-     WHERE `office`.`office_code`=`in_office_code`;
-
-    SELECT `employee`.`employee_number`, `employee`.`first_name`, `employee`.`last_name`
-      FROM `employee`
-     WHERE `employee`.`office_code`=`in_office_code`;
-END$$
-DELIMITER;
-
-DELIMITER $$
-CREATE PROCEDURE get_avg_price_by_product_line (
-	IN  pl VARCHAR(25),
-	OUT average DECIMAL(10, 2)
-)
-BEGIN
-	SELECT AVG(buy_price)
-	INTO average
-	FROM product
-	WHERE product_line = pl;
-END$$
-DELIMITER;
-
-DELIMITER $$
-CREATE PROCEDURE set_counter(
-	INOUT counter INT,
-    IN inc INT
-)
-BEGIN
-	SET counter = counter + inc;
-END$$
-DELIMITER;
-
-DELIMITER $$
-CREATE PROCEDURE refresh_top3_product(IN p_line_in VARCHAR(50))
-BEGIN
-	DELETE FROM `top3product`; 
-        INSERT INTO `top3product`
-		  (`top3product`.`product_id`, `top3product`.`product_name`)        
-        SELECT `orderdetail`.`product_id`, `t`.`product_name` 
-		FROM `orderdetail`, 
-		LATERAL (SELECT DISTINCT `product`.`product_name` AS `product_name` 
-		  FROM `product` WHERE (`orderdetail`.`product_id` = `product`.`product_id` 
-		    AND `product`.`product_line` = p_line_in)) AS `t`
-        GROUP BY `orderdetail`.`product_id`, `product_name`, `orderdetail`.`quantity_ordered` 
-		ORDER BY `orderdetail`.`quantity_ordered` 
-		LIMIT 3;         
-END$$
-DELIMITER;
-
--- VIEWS
-CREATE OR REPLACE VIEW customer_master AS
-SELECT `customer`.`customer_name`,
-       `customer`.`credit_limit`,
-       `customerdetail`.`city`,
-       `customerdetail`.`country`,
-       `customerdetail`.`address_line_first`,
-       `customerdetail`.`postal_code`,
-       `customerdetail`.`state`
-FROM `customer`
-JOIN `customerdetail` ON `customerdetail`.`customer_number` = `customer`.`customer_number`
-WHERE `customer`.`first_buy_date` IS NOT NULL;
-
-CREATE OR REPLACE VIEW office_master AS
-SELECT `office`.`office_code`,
-       `office`.`city`,
-       `office`.`country`,
-       `office`.`state`,
-       `office`.`phone`,
-	   `office`.`postal_code`
-FROM `office`
-WHERE `office`.`city` IS NOT NULL;
-
-CREATE OR REPLACE VIEW product_master AS
-SELECT `product`.`product_line`,
-       `product`.`product_name`,
-       `product`.`product_scale`       
-FROM `product`;
-/* END */
+); -- ENGINE=InnoDB DEFAULT CHARSET=latin1; suppressed for H2 compatibilty

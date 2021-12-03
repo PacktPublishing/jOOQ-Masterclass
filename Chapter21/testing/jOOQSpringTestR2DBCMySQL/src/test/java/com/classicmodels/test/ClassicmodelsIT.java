@@ -23,7 +23,7 @@ public class ClassicmodelsIT {
         ConnectionFactory connectionFactory = ConnectionFactories.get(
                 ConnectionFactoryOptions
                         .parse("r2dbcs:mysql://root:root@localhost:3306/classicmodels?"
-                                + "createDatabaseIfNotExist=true&allowMultiQueries=true")
+                                + "allowMultiQueries=true")
                         .mutate()
                         .option(ConnectionFactoryOptions.USER, "root")
                         .option(ConnectionFactoryOptions.PASSWORD, "root")
@@ -42,5 +42,5 @@ public class ClassicmodelsIT {
                 .block();
 
         assertThat(result, hasSize(greaterThan(50)));
-    } 
+    }
 }

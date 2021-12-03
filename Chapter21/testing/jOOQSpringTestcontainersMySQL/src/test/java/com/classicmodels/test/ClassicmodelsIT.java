@@ -7,6 +7,7 @@ import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Sale.SALE;
 import jooq.generated.tables.records.PaymentRecord;
+import org.flywaydb.core.Flyway;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.startsWith;
@@ -23,18 +24,28 @@ import org.junit.jupiter.api.AfterAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jooq.JooqTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.testcontainers.containers.MySQLContainer;
-import org.testcontainers.ext.ScriptUtils;
-import org.testcontainers.jdbc.JdbcDatabaseDelegate;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+@JooqTest
 @Testcontainers
+@ActiveProfiles("test")
 public class ClassicmodelsIT {
 
     private static DSLContext ctx;
+
+    @Autowired
+    private TransactionTemplate template;
 
     @Container
     private static final MySQLContainer sqlContainer
@@ -46,11 +57,20 @@ public class ClassicmodelsIT {
     @BeforeAll
     public static void setup() throws SQLException {
 
-        // load into the database the schema and data
-        var containerDelegate = new JdbcDatabaseDelegate(sqlContainer, "");
-        ScriptUtils.runInitScript(containerDelegate, "db/mysql/testSchema.sql");
-        ScriptUtils.runInitScript(containerDelegate, "db/mysql/testData.sql");
-
+        // load into the database the schema and data                
+        Flyway flyway = Flyway.configure()
+                .dataSource(sqlContainer.getJdbcUrl(), 
+                        sqlContainer.getUsername(), 
+                        sqlContainer.getPassword())
+                .baselineOnMigrate(true)                                                
+                .load();        
+        flyway.migrate();
+        
+        // or, like this (you can use other utilities as well)
+        // var containerDelegate = new JdbcDatabaseDelegate(sqlContainer, "");
+        // ScriptUtils.runInitScript(containerDelegate, "integration/migration/V1.1__CreateTest.sql");
+        // ScriptUtils.runInitScript(containerDelegate, "integration/migration/afterMigrate.sql");
+        
         // obtain a connection to MySQL
         Connection conn = sqlContainer.createConnection("");
 
@@ -128,7 +148,57 @@ public class ClassicmodelsIT {
 
     @Test
     @Transactional(propagation = Propagation.NEVER)
-    public void givenOptimisticLockingWhenDetectedThenException() {
+    public void givenOptimisticLockingWhenDetectedThenException1() {
+
+        // turn on jOOQ optimistic locking
+        DSLContext derivedCtx = ctx.configuration().derive(new Settings()
+                .withExecuteWithOptimisticLocking(true)
+                .withExecuteWithOptimisticLockingExcludeUnversioned(true))
+                .dsl();
+
+        template.setPropagationBehavior(
+                TransactionDefinition.PROPAGATION_REQUIRES_NEW);
+
+        Throwable ex = assertThrows(org.jooq.exception.DataChangedException.class, () -> {
+            template.execute(new TransactionCallbackWithoutResult() {
+
+                @Override
+                protected void doInTransactionWithoutResult(
+                        TransactionStatus status) {
+
+                    PaymentRecord record = derivedCtx.fetchOne(PAYMENT,
+                            row(PAYMENT.CUSTOMER_NUMBER, PAYMENT.CHECK_NUMBER)
+                                    .eq(103L, "HQ336336"));
+
+                    template.execute(new TransactionCallbackWithoutResult() {
+
+                        @Override
+                        protected void doInTransactionWithoutResult(
+                                TransactionStatus status) {
+
+                            PaymentRecord record = derivedCtx.fetchOne(PAYMENT,
+                                    row(PAYMENT.CUSTOMER_NUMBER, PAYMENT.CHECK_NUMBER)
+                                            .eq(103L, "HQ336336"));
+
+                            record.setInvoiceAmount(BigDecimal.valueOf(0));
+
+                            record.store();
+                        }
+                    });
+
+                    record.setInvoiceAmount(BigDecimal.valueOf(1000));
+
+                    record.store();
+                }
+            });
+        });
+
+        assertThat(ex.getMessage(), startsWith("Database record has been changed or doesn't exist any longer"));
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.NEVER)
+    public void givenOptimisticLockingWhenDetectedThenException2() {
 
         // turn on jOOQ optimistic locking
         DSLContext derivedCtx = ctx.configuration().derive(new Settings()

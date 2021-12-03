@@ -4,11 +4,10 @@ import com.classicmodels.service.ClassicModelsService;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.r2dbc.R2dbcAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
-@SpringBootApplication(exclude = {R2dbcAutoConfiguration.class})
+@SpringBootApplication
 @ComponentScan(basePackages="com.classicmodels")
 public class MainApplication {
 
@@ -26,7 +25,7 @@ public class MainApplication {
     public ApplicationRunner init() {
         return args -> {
 
-            // intentionally left blank
+            // intentionally left blank           
         };
     }
 }

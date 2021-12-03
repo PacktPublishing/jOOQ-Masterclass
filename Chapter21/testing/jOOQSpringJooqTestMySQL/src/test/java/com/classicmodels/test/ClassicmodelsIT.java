@@ -113,6 +113,7 @@ public class ClassicmodelsIT {
     }
     
     @Test
+    @Transactional(propagation=Propagation.NEVER)
     public void givenOptimisticLockingWhenDetectedThenException1() {
 
         // turn on jOOQ optimistic locking
