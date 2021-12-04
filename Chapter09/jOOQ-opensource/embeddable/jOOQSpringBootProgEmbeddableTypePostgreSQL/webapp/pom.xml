@@ -66,7 +66,7 @@
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>                
+                <artifactId>spring-boot-maven-plugin</artifactId>                               
             </plugin>            
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -136,27 +136,17 @@
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>                                
-                <executions>  
+                <artifactId>exec-maven-plugin</artifactId>                  
+                <executions>                      
                     <execution>                                           
+                        <id>runjOOQGen</id>
                         <phase>generate-sources</phase>  
                         <goals>  
-                            <goal>java</goal>                                                          
+                            <goal>java</goal>                                                                                      
                         </goals>                                                                           
-                        <configuration>                                                             
-                            <executable>${project.build.directory}</executable>                                                         
-                            <mainClass>com.classicmodels.jooq.config.JooqConfig</mainClass>
-                            <!-- If you want, you can pass here as arguments the properties
-                            imported from application.properties as well. This can be
-                            useful if you have multiple profiles with dedicated application.properties. -->                            
-                            <arguments>                                                                                 
-                                <argument>${project.build.directory}/generated-sources/jooq</argument>                                
-                                <argument>${spring.datasource.driverClassName}</argument>
-                                <argument>${spring.datasource.url}</argument>
-                                <argument>${spring.datasource.username}</argument>
-                                <argument>${spring.datasource.password}</argument>
-                            </arguments>                           
-                            <cleanupDaemonThreads>false</cleanupDaemonThreads> 
+                        <configuration>                                
+                            <mainClass>com.classicmodels.jooq.config.JooqConfig</mainClass>                                                        
+                            <cleanupDaemonThreads>true</cleanupDaemonThreads> 
                         </configuration>          
                     </execution>  
                 </executions>              

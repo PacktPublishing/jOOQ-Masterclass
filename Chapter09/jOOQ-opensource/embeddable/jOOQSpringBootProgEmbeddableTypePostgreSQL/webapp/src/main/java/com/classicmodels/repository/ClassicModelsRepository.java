@@ -27,7 +27,7 @@ public class ClassicModelsRepository {
 
     @Transactional
     public void insertOffice() {
-System.out.println("ffffffffffffffff: "  + url);
+
         // without embeddable        
         ctx.insertInto(OFFICE, OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.ADDRESS_LINE_FIRST,
                 OFFICE.STATE, OFFICE.COUNTRY, OFFICE.TERRITORY, OFFICE.PHONE,

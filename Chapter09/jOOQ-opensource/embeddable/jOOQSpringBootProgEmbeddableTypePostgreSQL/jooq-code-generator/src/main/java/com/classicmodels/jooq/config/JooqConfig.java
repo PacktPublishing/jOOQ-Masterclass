@@ -1,6 +1,5 @@
 package com.classicmodels.jooq.config;
 
-import java.nio.file.Paths;
 import org.jooq.codegen.GenerationTool;
 import org.jooq.meta.jaxb.Configuration;
 import org.jooq.meta.jaxb.Database;
@@ -11,15 +10,10 @@ import org.jooq.meta.jaxb.Generator;
 import org.jooq.meta.jaxb.Jdbc;
 import org.jooq.meta.jaxb.Target;
 
-
 public class JooqConfig {
 
     public static void main(String[] args) throws Exception {
-System.out.println("1111111111111: " + args.length);
-if(args.length > 1) {System.out.println("1111111111111: " + args[1]);}
-//System.out.println("1111111111111: " + args[2]);
-//System.out.println("1111111111111: " + args[3]);
-//System.out.println("1111111111111: " + args[4]);
+
         Configuration configuration = new Configuration()
                 .withJdbc(new Jdbc()
                         .withDriver("org.postgresql.Driver")
@@ -58,9 +52,9 @@ if(args.length > 1) {System.out.println("1111111111111: " + args[1]);}
                         )
                         .withTarget(new Target()
                                 .withPackageName("jooq.generated")
-                                .withDirectory(System.getProperty("user.dir").endsWith("webapp") ? 
-                                        "target/generated-sources/jooq" :
-                                        "webapp/target/generated-sources/jooq")));
+                                .withDirectory(System.getProperty("user.dir").endsWith("webapp")
+                                        ? "target/generated-sources/jooq"
+                                        : "webapp/target/generated-sources/jooq")));
 
         GenerationTool.generate(configuration);
     }

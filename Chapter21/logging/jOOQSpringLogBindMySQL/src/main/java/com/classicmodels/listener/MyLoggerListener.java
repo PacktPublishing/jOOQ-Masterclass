@@ -10,9 +10,9 @@ public class MyLoggerListener extends DefaultExecuteListener {
     private static final JooqLogger log = JooqLogger.getLogger(LoggerListener.class);
 
     @Override
-    public void renderEnd(ExecuteContext ctx) {
+    public void renderEnd(ExecuteContext ecx) {
 
-        var query = ctx.query();
+        var query = ecx.query();
 
         if (query != null) {
             var params = query.getParams();
