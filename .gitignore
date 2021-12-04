@@ -1,8 +1,10 @@
 build/
 target/
+target/generated-sources/jooq
 dist/
 nbproject/
 nbactions.xml
+nbactions.tmp
 nb-configuration.xml
 build.xml
 manifest.mf
