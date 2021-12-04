@@ -11,57 +11,85 @@ This is a modified version of the original schema
 
 /* START */
 
-USE `classicmodels`;
+SET SESSION group_concat_max_len = 100000;
 
 /*Data for the table `office` */
 
-insert  into `office`(`office_code`,`city`,`phone`,`address_line_first`,`address_line_second`,`state`,`country`,`postal_code`,`territory`) values 
+insert  into `office`(`office_code`,`city`,`phone`,`address_line_first`,`address_line_second`,`state`,`country`,`postal_code`,`territory`,`internal_budget`) values 
 
-('1','San Francisco','+1 650 219 4782','100 Market Street','Suite 300','CA','USA','94080','NA'),
+('1','San Francisco','+1 650 219 4782','100 Market Street','Suite 300','CA','USA','AZ934VB','NA',90000),
 
-('2','Boston','+1 215 837 0825','1550 Court Place','Suite 102','MA','USA','02107','NA'),
+('2','Boston','+1 215 837 0825','1550 Court Place','Suite 102','MA','USA','XX021SS','NA',85000),
 
-('3','NYC','+1 212 555 3000','523 East 53rd Street','apt. 5A','NY','USA','10022','NA'),
+('3','NYC','+1 212 555 3000','523 East 53rd Street','apt. 5A','NY','USA','AA100CV','NA', 100000),
 
-('4','Paris','+33 14 723 4404','43 Rue Jouffroy D\'abbans',NULL,NULL,'France','75017','EMEA'),
+('4','Paris','+33 14 723 4404','43 Rue Jouffroy D''abbans',NULL,NULL,'France','MN750CV','EMEA',35000),
 
-('5','Tokyo','+81 33 224 5000','4-1 Kioicho',NULL,'Chiyoda-Ku','Japan','102-8578','Japan'),
+('5','Tokyo','+81 33 224 5000','4-1 Kioicho',NULL,'Chiyoda-Ku','Japan','RT102TT','Japan',90000),
 
-('6','Sydney','+61 2 9264 2451','5-11 Wentworth Avenue','Floor #2',NULL,'Australia','NSW 2010','APAC'),
+('6','Sydney','+61 2 9264 2451','5-11 Wentworth Avenue','Floor --2',NULL,'Australia','XC344VD','APAC',45500),
 
-('7','London','+44 20 7877 2041','25 Old Broad Street','Level 7',NULL,'UK','EC2N 1HN','EMEA'),
+('7','London','+44 20 7877 2041','25 Old Broad Street','Level 7','N/A','UK','CV555RR','EMEA',50000),
 
-('8',NULL,'+44 20 1827 21411','25 Hum Street','Level 2',NULL,'USA','EC2N 1HN','EMEA'), 
+('8',NULL,'+44 20 1827 21411','25 Hum Street','Level 2',NULL,'USA','CV556RR','EMEA',95000), 
 
-('9','Bucharest','+44 20 1827 21411','22 DN1','Level 12',NULL,NULL,'EC2N 1HN','NA'), 
+('9','Bucharest','+44 20 1827 21411','22 DN1','Level 12',NULL,'','CV557RR','NA',120000), 
 
-('10',NULL,'+44 20 1827 21411','12 Home','Level 22',NULL,NULL,'EC2N 1HN','NA'), 
+('10',NULL,'+44 20 1827 21411','12 Home','Level 22',NULL,NULL,'CV558RR','NA',110000), 
 
-('11','Paris','+32 12 713 4304','43 Rue 2',NULL,NULL,'France','25017','EMEA'),
+('11','Paris','+32 12 713 4304','43 Rue 2',NULL,NULL,'France','DT975HH','EMEA',78000),
 
-('12','Tokyo','+81 33 224 3444','4-1 Kioicho',NULL,'Koil-Ku','Japan','101-6578','Japan') ON DUPLICATE KEY UPDATE office_code=office_code;
+('12','Tokyo','+81 33 224 3444','4-2 Kioicho',NULL,'Koil-Ku','Japan','DD578YU','Japan',55000),
 
-/* Data for the table `department` */
+('13','Los Angeles','+3 223 7995','110 Only Street','Alio 0','CA','USA','AZ944VB','NA',40000), 
 
-insert into department(department_id,name,phone,code,office_code) values 
+('14','San Diego','+1 222 4345 5553','220 Ternary Street','Alio 73','CA','USA','AZ948VB','NA',65000), 
 
-('1','Lumber','-int 4782','1333','1'),
+('15','Springfield','+1 0009 9000 777','155 Market Place','Suite 107','MA','USA','XX521SS','NA',55000) ON DUPLICATE KEY UPDATE office_code=office_code;
 
-('2','Sales','-int 41233','1441','1'),
+/*Data for the table `department` */
 
-('3','Accounting','-int 8233','2311','2'),
+insert into `department`(`department_id`,`name`,`phone`,`code`,`office_code`,`topic`, `local_budget`, `profit`, `forecast_profit`,`cash`,`accounts_receivable`,`inventories`,`accounts_payable`,`st_borrowing`,`accrued_liabilities`) values 
 
-('4','Finance','-int 4421','3222','3') ON DUPLICATE KEY UPDATE department_id=department_id;
+('1','Advertising','-int 4782','1333','1','publicity, promotion', NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+
+('2','Sales','-int 41233','1441','1', 'commerce, trade, sellout, transaction', 650000, 900000, 800000,20000,NULL,10000,NULL,NULL,NULL),
+
+('3','Accounting','-int 8233','2311','2', 'monetary, business', NULL, 450000, NULL,25000,NULL,NULL,NULL,NULL,NULL),
+
+('4','Finance','-int 4421','3229','3', 'commerce, fiscal, monetary, business', 120000, 90000, NULL,NULL,NULL,NULL,40000,10000,NULL), 
+
+('5','Sales','-int 34443','6554','2', 'commerce, sellout, transaction', 345000, 350000, 450000,11000,25000,5000,10000,85000,12000),
+
+('6','Sales','-int 7664','1234','4', NULL, NULL, 100000, NULL,NULL,NULL,NULL,50000,NULL,NULL),
+
+('7','Marketing','-int 1266','9090','4', 'market, research, advertising', NULL, 500000, 250000,NULL,11000,NULL,5000,NULL,1000),
+
+('8','Marketing','-int 4543','4544','5', 'market, research, advertising', NULL, 430000, 900000,NULL,NULL,NULL,NULL,NULL,NULL),
+
+('9','Assembly','-int 8777','5455','6', 'gathering, construction, joining', 500000, 500000, 450000,NULL,NULL,NULL,7000,NULL,NULL),
+
+('10','Accounting','-int 6765','4555','6', 'monetary, business', NULL, NULL, 100000,10000,NULL,NULL,4000,NULL,NULL),
+
+('11','Finance','-int 1111','7876','7', 'commerce, fiscal, monetary, business', 450000, NULL, 450000,NULL,NULL,NULL,NULL,NULL,NULL), 
+
+('12','Logistics','-int 4421','3222','8', 'facilities, supplies', NULL, 120000, 300000,10000,NULL,11000,NULL,16000,NULL), 
+
+('13','Logistics','-int 7453','7884','9', 'facilities, supplies', NULL, 80000, 100000,9000,NULL,6000,2300,4400,NULL), 
+
+('14','Logistics','-int 3433','6777','12','facilities, supplies', 235000, 233000, NULL,NULL,NULL,1000,NULL,NULL,9000), 
+
+('15','HR','-int 2323','7888','12', 'people, interview, hiring', NULL, 120000, 120000,NULL,544,NULL,NULL,2300,NULL) ON DUPLICATE KEY UPDATE department_id=department_id;
 
 /*Data for the table `manager` */
 
-insert into `manager` (`manager_id`, `manager_name`) values 
+insert into `manager` (`manager_id`, `manager_name`, `manager_evaluation`, `manager_detail`) values 
 
-('1', 'Joana Nimar'),
+('1', 'Joana Nimar', '67, 34, 33, 66', '{"firstName":"Joana","lastName":"Nimar","gender":"Female","dob":"1983-01-01","email":"joananimar@gmail.com","age":30,"address":{"streetAddress":"21 Fake Street","city":"New York City","state":"NY","zipOrPostal":"10021"},"phoneNumber":[{"type":"home","number":["212 555-1234","212 543-0933"]},{"type":"mobile","number":["646 555-4567","644 153-3527","626 231-6743"]}],"summary":"6 years of management experience","computerSkills":[{"OS":["Linux"],"Office":["MS Word","Excel"],"Management":["X10Mangement","ManPlat1","AllCeo"],"Tools":["GMail","Meet"]}],"shareholder":"5%","projects":[{"name":"SBS (aka. Shared Business Services)","start":"2015-08-01","end":"2019-11-21","type":"development","role":"Sr. Manager","details":"Develop a powerful team in a short time"},{"name":"RLCM (aka. Role Lifecycle Management)","start":"2011-03-01","end":"2015-07-01","type":"development","role":"Manager Leader","details":"Increase income"},{"name":"Member-Provider Portal Enhancement","start":"2009-03-01","end":"2011-03-01","type":"enhancement","role":"Technical Leader","details":"Managing the enhancement and defects fixing team"}]}'),
 
-('2', 'Mark Janel'),
+('2', 'Mark Janel', '99, 23, 11, 23', '{"firstName":"Mark","lastName":"Janel","gender":"Male","dob":"1985-03-07","email":"markjanel@yahoo.com","age":37,"address":{"streetAddress":"24 Red Street","city":"Banesti","state":"Prahova","zipOrPostal":"506734"},"phoneNumber":[{"type":"home","number":["0727 823 989","0723 621 723","0712 212 676"]},{"type":"mobile","number":["378 555 233","678 154 227"]}],"summary":"4 years of management experience","computerSkills":[{"OS":["Windows"],"Office":["Power Point","Access","FoxPro"],"Management":["AllCeo","ManagementTools Suite"],"Tools":["Skype","GMail","Meet","Google Calendar"]}],"projects":[{"name":"Business Retail","start":"2012-02-05","end":"2014-10-11","type":"retail","role":"General Manager","details":"Expand retail business"},{"name":"Selling Point","start":"2011-01-01","end":"2012-02-05","type":"selling","role":"Manager Leader","details":"Manager of selling department"}]}'),
 
-('3', 'Olivia Goy') ON DUPLICATE KEY UPDATE manager_id=manager_id;
+('3', 'Olivia Goy', '99, 34, 11, 78', '{"firstName":"Olivia","lastName":"Goy","gender":"Female","dob":"1978-08-04","email":"oliviagoy@gmail.com","age":42,"address":{"streetAddress":"118 National Street","city":"Barcelona","state":"Catalonia","zipOrPostal":"660933"},"phoneNumber":[{"type":"home","number":["0999 3844 3333","0223 1333 4455","0265 7883 4422"]},{"type":"mobile","number":["980 992 122","112 644 212","322 323 642"]}],"summary":"10 years of management experience","computerSkills":[{"OS":["Linux","Windows"],"Office":["MS Word","Power Point"],"Management":["ManPlat1","AllCeo","TeamManagement"],"Tools":["Slack"]}],"projects":[{"name":"Marketing Share","start":"2016-08-02","end":"2021-06-02","type":"administrator","role":"Principal Manager","details":"Marketing share for small companies"},{"name":"Draft Management","start":"2014-06-06","end":"2016-08-02","type":"development","role":"Manager Leader","details":"First e-management platform"},{"name":"Car Management","start":"2005-03-21","end":"2014-06-06","type":"enhancement","role":"Leader of retail","details":"Enhancement of cars management"}]}') ON DUPLICATE KEY UPDATE manager_id=manager_id;
 
 /*Data for the table `office_has_manager` */
 
@@ -71,325 +99,333 @@ insert into `office_has_manager` (`offices_office_code`, `managers_manager_id`) 
 
 ('2', '1'),
 
+('1', '3'),
+
 ('3', '1'),
 
 ('4', '2'),
 
 ('5', '3'),
 
+('5', '2'),
+
 ('6', '3'),
+
+('6', '2'),
+
+('6', '1'),
 
 ('7', '2') ON DUPLICATE KEY UPDATE offices_office_code=offices_office_code;
 
 /*Data for the table `employee` */
 
-insert  into `employee`(`employee_number`,`last_name`,`first_name`,`extension`,`email`,`office_code`,`salary`, `reports_to`,`job_title`) values 
+insert  into `employee`(`employee_number`,`last_name`,`first_name`,`extension`,`email`,`office_code`,`salary`, `commission`, `reports_to`,`job_title`,`employee_of_year`, `monthly_bonus`) values 
 
-(1002,'Murphy','Diane','x5800','dmurphy@classicmodelcars.com','1',120000,NULL,'President'),
+(1002,'Murphy','Diane','x5800','dmurphy@classicmodelcars.com','1',120000,10000,NULL,'President',NULL,'450, 210, 222, 123, 110, 0, 0, 0, 560, 440, 315, 125, 0, 900'),
 
-(1056,'Patterson','Mary','x4611','mpatterso@classicmodelcars.com','1',100000,1002,'VP Sales'),
+(1056,'Patterson','Mary','x4611','mpatterso@classicmodelcars.com','1',100000,5000,1002,'VP Sales', NULL, NULL),
 
-(1076,'Firrelli','Jeff','x9273','jfirrelli@classicmodelcars.com','1',100000,1002,'VP Marketing'),
+(1076,'Firrelli','Jeff','x9273','jfirrelli@classicmodelcars.com','1',100000,3500,1002,'VP Marketing', NULL,'0, 0, 0, 125, 125, 150, 232, 100, 0'),
 
-(1088,'Patterson','William','x4871','wpatterson@classicmodelcars.com','6',80000,1056,'Sales Manager (APAC)'),
+(1088,'Patterson','William','x4871','wpatterson@classicmodelcars.com','6',80000,NULL,1056,'Sales Manager (APAC)', NULL,'560, 120, 440, 320, 315, 0, 0, 100, 125, 0, 900'),
 
-(1102,'Bondur','Gerard','x5408','gbondur@classicmodelcars.com','4',80000,1056,'Sale Manager (EMEA)'),
+(1102,'Bondur','Gerard','x5408','gbondur@classicmodelcars.com','4',80000,NULL,1056,'Sales Manager (EMEA)', NULL, NULL),
 
-(1143,'Bow','Anthony','x5428','abow@classicmodelcars.com','1',75000,1056,'Sales Manager (NA)'),
+(1143,'Bow','Anthony','x5428','abow@classicmodelcars.com','1',75000,5000,1056,'Sales Manager (NA)',NULL, NULL),
 
-(1165,'Jennings','Leslie','x3291','ljennings@classicmodelcars.com','1',60000,1143,'Sales Rep'),
+(1165,'Jennings','Leslie','x3291','ljennings@classicmodelcars.com','1',60000,NULL,1143,'Sales Rep','2003, 2004', NULL),
 
-(1166,'Thompson','Leslie','x4065','lthompson@classicmodelcars.com','1',60000,1143,'Sales Rep'),
+(1166,'Thompson','Leslie','x4065','lthompson@classicmodelcars.com','1',60000,NULL,1143,'Sales Rep','2003, 2005', NULL),
 
-(1188,'Firrelli','Julie','x2173','jfirrelli@classicmodelcars.com','2',60000,1143,'Sales Rep'),
+(1188,'Firrelli','Julie','x2173','jfirrelli@classicmodelcars.com','2',60000,NULL,1143,'Sales Rep','2004, 2005', NULL),
 
-(1216,'Patterson','Steve','x4334','spatterson@classicmodelcars.com','2',55000,1143,'Sales Rep'),
+(1216,'Patterson','Steve','x4334','spatterson@classicmodelcars.com','2',55000,1000,1143,'Sales Rep','2005, 2006', NULL),
 
-(1286,'Tseng','Foon Yue','x2248','ftseng@classicmodelcars.com','3',55000,1143,'Sales Rep'),
+(1286,'Tseng','Foon Yue','x2248','ftseng@classicmodelcars.com','3',55000,2000,1143,'Sales Rep','2002, 2003, 2004', NULL),
 
-(1323,'Vanauf','George','x4102','gvanauf@classicmodelcars.com','3',55000,1143,'Sales Rep'),
+(1323,'Vanauf','George','x4102','gvanauf@classicmodelcars.com','3',55000,1500,1143,'Sales Rep','2000, 2001, 2005', NULL),
 
-(1337,'Bondur','Loui','x6493','lbondur@classicmodelcars.com','4',60000,1102,'Sales Rep'),
+(1337,'Bondur','Loui','x6493','lbondur@classicmodelcars.com','4',60000,NULL,1102,'Sales Rep','2004, 2007', NULL),
 
-(1370,'Hernandez','Gerard','x2028','ghernande@classicmodelcars.com','4',65000,1102,'Sales Rep'),
+(1370,'Hernandez','Gerard','x2028','ghernande@classicmodelcars.com','4',65000,NULL,1102,'Sales Rep','2000, 2001', NULL),
 
-(1401,'Castillo','Pamela','x2759','pcastillo@classicmodelcars.com','4',55000,1102,'Sales Rep'),
+(1401,'Castillo','Pamela','x2759','pcastillo@classicmodelcars.com','4',55000,NULL,1102,'Sales Rep','2000, 2001, 2003, 2005', NULL),
 
-(1501,'Bott','Larry','x2311','lbott@classicmodelcars.com','7',50000,1102,'Sales Rep'),
+(1501,'Bott','Larry','x2311','lbott@classicmodelcars.com','7',50000,1000,1102,'Sales Rep','2004, 2008', NULL),
 
-(1504,'Jones','Barry','x102','bjones@classicmodelcars.com','7',50000,1102,'Sales Rep'),
+(1504,'Jones','Barry','x102','bjones@classicmodelcars.com','7',50000,500,1102,'Sales Rep','2002, 2003, 2005', NULL),
 
-(1611,'Fixter','Andy','x101','afixter@classicmodelcars.com','6',50000,1088,'Sales Rep'),
+(1611,'Fixter','Andy','x101','afixter@classicmodelcars.com','6',50000,1000,1088,'Sales Rep','2002, 2005', NULL),
 
-(1612,'Marsh','Peter','x102','pmarsh@classicmodelcars.com','6',55000,1088,'Sales Rep'),
+(1612,'Marsh','Peter','x102','pmarsh@classicmodelcars.com','6',55000,NULL,1088,'Sales Rep','2003, 2005, 2006, 2007', NULL),
 
-(1619,'King','Tom','x103','tking@classicmodelcars.com','6',60000,1088,'Sales Rep'),
+(1619,'King','Tom','x103','tking@classicmodelcars.com','6',60000,1000,1088,'Sales Rep','2002, 2004', NULL),
 
-(1621,'Nishi','Mami','x101','mnishi@classicmodelcars.com','5',55000,1056,'Sales Rep'),
+(1621,'Nishi','Mami','x101','mnishi@classicmodelcars.com','5',55000,2000,1056,'Sales Rep','2003, 2005', NULL),
 
-(1625,'Kato','Yoshimi','x102','ykato@classicmodelcars.com','5',60000,1621,'Sales Rep'),
+(1625,'Kato','Yoshimi','x102','ykato@classicmodelcars.com','5',60000,2500,1621,'Sales Rep','2004, 2005, 2006', NULL),
 
-(1702,'Gerard','Martin','x2312','mgerard@classicmodelcars.com','4',50000,1102,'Sales Rep') ON DUPLICATE KEY UPDATE employee_number=employee_number;
+(1702,'Gerard','Martin','x2312','mgerard@classicmodelcars.com','4',50000,3400,1102,'Sales Rep','2005, 2007', NULL) ON DUPLICATE KEY UPDATE employee_number=employee_number;
 
 /*Data for the table `customer` */
 
-insert  into `customer`(`customer_number`,`customer_name`,`contact_last_name`,`contact_first_name`,`phone`,`sales_rep_employee_number`,`credit_limit`) values 
+insert  into `customer`(`customer_number`,`customer_name`,`contact_last_name`,`contact_first_name`,`phone`,`sales_rep_employee_number`,`credit_limit`,`first_buy_date`) values 
 
-(99,'Australian Home','Paoule','Sart ','40.11.2555',1370,'21000.00'),
+(99,'Australian Home','Paoule','Sart ','40.11.2555',1370,'21000.00',20210),
 
-(100,'Joliyon','Schmitt','Rue ','10.22.2535',1370,'21000.00'),
+(100,'Joliyon','Schmitt','Rue ','10.22.2535',1370,'21000.00',20201),
 
-(101,'Marquez Xioa','Calor','Sar ','`11.12.2525',1370,'21000.00'),
+(101,'Marquez Xioa','Calor','Sar ','`11.12.2525',1370,'21000.00',21805),
 
-(102,'Falafel 3','Hor','Carine ','20.12.2525',1370,'21000.00'),
+(102,'Falafel 3','Hor','Carine ','20.12.2525',1370,'21000.00',21805),
 
-(103,'Atelier graphique','Schmitt','Carine ','40.32.2555',1370,'21000.00'),
+(103,'Atelier graphique','Schmitt','Carine ','40.32.2555',1370,'21000.00',20186),
 
-(112,'Signal Gift Stores','King','Jean','7025551838',1166,'71800.00'),
+(112,'Signal Gift Stores','King','Jean','7025551838',1166,'71800.00',21803),
 
-(114,'Australian Collectors, Co.','Ferguson','Peter','03 9520 4555',1611,'117300.00'),
+(114,'Australian Collectors, Co.','Ferguson','Peter','03 9520 4555',1611,'117300.00',20105),
 
-(119,'La Rochelle Gifts','Labrune','Janine ','40.67.8555',1370,'118200.00'),
+(119,'La Rochelle Gifts','Labrune','Janine ','40.67.8555',1370,'118200.00',20140),
 
-(121,'Baane Mini Imports','Bergulfsen','Jonas ','07-98 9555',1504,'81700.00'),
+(121,'Baane Mini Imports','Bergulfsen','Jonas ','07-98 9555',1504,'81700.00',21403),
 
-(124,'Mini Gifts Distributors Ltd.','Nelson','Susan','4155551450',1165,'210500.00'),
+(124,'Mini Gifts Distributors Ltd.','Nelson','Susan','4155551450',1165,'210500.00',20143),
 
-(125,'Havel & Zbyszek Co','Piestrzeniewicz','Zbyszek ','(26) 642-7555',NULL,'0.00'),
+(125,'Havel & Zbyszek Co','Piestrzeniewicz','Zbyszek ','(26) 642-7555',NULL,'0.00',NULL),
 
-(128,'Blauer See Auto, Co.','Keitel','Roland','+49 69 66 90 2555',1504,'59700.00'),
+(128,'Blauer See Auto, Co.','Keitel','Roland','+49 69 66 90 2555',1504,'59700.00',20101),
 
-(129,'Mini Wheels Co.','Murphy','Julie','6505555787',1165,'64600.00'),
+(129,'Mini Wheels Co.','Murphy','Julie','6505555787',1165,'64600.00',20190),
 
-(131,'Land of Toys Inc.','Lee','Kwai','2125557818',1323,'114900.00'),
+(131,'Land of Toys Inc.','Lee','Kwai','2125557818',1323,'114900.00',20903),
 
-(141,'Euro+ Shopping Channel','Freyre','Diego ','(91) 555 94 44',1370,'227600.00'),
+(141,'Euro+ Shopping Channel','Freyre','Diego ','(91) 555 94 44',1370,'227600.00',20191),
 
-(144,'Volvo Model Replicas, Co','Berglund','Christina ','0921-12 3555',1504,'53100.00'),
+(144,'Volvo Model Replicas, Co','Berglund','Christina ','0921-12 3555',1504,'53100.00',20192),
 
-(145,'Danish Wholesale Imports','Petersen','Jytte ','31 12 3555',1401,'83400.00'),
+(145,'Danish Wholesale Imports','Petersen','Jytte ','31 12 3555',1401,'83400.00',20405),
 
-(146,'Saveley & Henriot, Co.','Saveley','Mary ','78.32.5555',1337,'123900.00'),
+(146,'Saveley & Henriot, Co.','Saveley','Mary ','78.32.5555',1337,'123900.00',20407),
 
-(148,'Dragon Souveniers, Ltd.','Natividad','Eric','+65 221 7555',1621,'103800.00'),
+(148,'Dragon Souveniers, Ltd.','Natividad','Eric','+65 221 7555',1621,'103800.00',20505),
 
-(151,'Muscle Machine Inc','Young','Jeff','2125557413',1286,'138500.00'),
+(151,'Muscle Machine Inc','Young','Jeff','2125557413',1286,'138500.00',20409),
 
-(157,'Diecast Classics Inc.','Leong','Kelvin','2155551555',1216,'100600.00'),
+(157,'Diecast Classics Inc.','Leong','Kelvin','2155551555',1216,'100600.00',20410),
 
-(161,'Technics Stores Inc.','Hashimoto','Juri','6505556809',1165,'84600.00'),
+(161,'Technics Stores Inc.','Hashimoto','Juri','6505556809',1165,'84600.00',21407),
 
-(166,'Handji Gifts& Co','Victorino','Wendy','+65 224 1555',1612,'97900.00'),
+(166,'Handji Gifts& Co','Victorino','Wendy','+65 224 1555',1612,'97900.00',20143),
 
-(167,'Herkku Gifts','Oeztan','Veysel','+47 2267 3215',1504,'96800.00'),
+(167,'Herkku Gifts','Oeztan','Veysel','+47 2267 3215',1504,'96800.00',20147),
 
-(168,'American Souvenirs Inc','Franco','Keith','2035557845',1286,'0.00'),
+(168,'American Souvenirs Inc','Franco','Keith','2035557845',1286,'0.00',20103),
 
-(169,'Porto Imports Co.','de Castro','Isabel ','(1) 356-5555',NULL,'0.00'),
+(169,'Porto Imports Co.','de Castro','Isabel ','(1) 356-5555',NULL,'0.00',NULL),
 
-(171,'Daedalus Designs Imports','RancÃ©','Martine ','20.16.1555',1370,'82900.00'),
+(171,'Daedalus Designs Imports','Rancé','Martine ','20.16.1555',1370,'82900.00',20045),
 
-(172,'La Corne D\'abondance, Co.','Bertrand','Marie','(1) 42.34.2555',1337,'84300.00'),
+(172,'La Corne D''abondance, Co.','Bertrand','Marie','(1) 42.34.2555',1337,'84300.00',20405),
 
-(173,'Cambridge Collectables Co.','Tseng','Jerry','6175555555',1188,'43400.00'),
+(173,'Cambridge Collectables Co.','Tseng','Jerry','6175555555',1188,'43400.00',20110),
 
-(175,'Gift Depot Inc.','King','Julie','2035552570',1323,'84300.00'),
+(175,'Gift Depot Inc.','King','Julie','2035552570',1323,'84300.00',20011),
 
-(177,'Osaka Souveniers Co.','Kentary','Mory','+81 06 6342 5555',1621,'81200.00'),
+(177,'Osaka Souveniers Co.','Kentary','Mory','+81 06 6342 5555',1621,'81200.00',20102),
 
-(181,'Vitachrome Inc.','Frick','Michael','2125551500',1286,'76400.00'),
+(181,'Vitachrome Inc.','Frick','Michael','2125551500',1286,'76400.00',20092),
 
-(186,'Toys of Finland, Co.','Karttunen','Matti','90-224 8555',1501,'96500.00'),
+(186,'Toys of Finland, Co.','Karttunen','Matti','90-224 8555',1501,'96500.00',20002),
 
-(187,'AV Stores, Co.','Ashworth','Rachel','(171) 555-1555',1501,'136800.00'),
+(187,'AV Stores, Co.','Ashworth','Rachel','(171) 555-1555',1501,'136800.00',20002),
 
-(189,'Clover Collections, Co.','Cassidy','Dean','+353 1862 1555',1504,'69400.00'),
+(189,'Clover Collections, Co.','Cassidy','Dean','+353 1862 1555',1504,'69400.00',20903),
 
-(198,'Auto-Moto Classics Inc.','Taylor','Leslie','6175558428',1216,'23000.00'),
+(198,'Auto-Moto Classics Inc.','Taylor','Leslie','6175558428',1216,'23000.00',20094),
 
-(201,'UK Collectables, Ltd.','Devon','Elizabeth','(171) 555-2282',1501,'92700.00'),
+(201,'UK Collectables, Ltd.','Devon','Elizabeth','(171) 555-2282',1501,'92700.00',20905),
 
-(202,'Canadian Gift Exchange Network','Tamuri','Yoshi ','(604) 555-3392',1323,'90300.00'),
+(202,'Canadian Gift Exchange Network','Tamuri','Yoshi ','(604) 555-3392',1323,'90300.00',20908),
 
-(204,'Online Mini Collectables','Barajas','Miguel','6175557555',1188,'68700.00'),
+(204,'Online Mini Collectables','Barajas','Miguel','6175557555',1188,'68700.00',20503),
 
-(205,'Toys4GrownUps.com','Young','Julie','6265557265',1166,'90700.00'),
+(205,'Toys4GrownUps.com','Young','Julie','6265557265',1166,'90700.00',20504),
 
-(206,'Asian Shopping Network, Co','Walker','Brydey','+612 9411 1555',NULL,'0.00'),
+(206,'Asian Shopping Network, Co','Walker','Brydey','+612 9411 1555',NULL,'0.00',NULL),
 
-(209,'Mini Caravy','Citeaux','FrÃ©dÃ©rique ','88.60.1555',1370,'53800.00'),
+(209,'Mini Caravy','Citeaux','Frédérique ','88.60.1555',1370,'53800.00',20506),
 
-(211,'King Kong Collectables, Co.','Gao','Mike','+852 2251 1555',1621,'58600.00'),
+(211,'King Kong Collectables, Co.','Gao','Mike','+852 2251 1555',1621,'58600.00',20143),
 
-(216,'Enaco Distributors','Saavedra','Eduardo ','(93) 203 4555',1702,'60300.00'),
+(216,'Enaco Distributors','Saavedra','Eduardo ','(93) 203 4555',1702,'60300.00',20003),
 
-(219,'Boards & Toys Co.','Young','Mary','3105552373',1166,'11000.00'),
+(219,'Boards & Toys Co.','Young','Mary','3105552373',1166,'11000.00',20003),
 
-(223,'NatÃ¼rlich Autos','Kloss','Horst ','0372-555188',NULL,'0.00'),
+(223,'Natürlich Autos','Kloss','Horst ','0372-555188',NULL,'0.00',NULL),
 
-(227,'Heintze Collectables','Ibsen','Palle','86 21 3555',1401,'120800.00'),
+(227,'Heintze Collectables','Ibsen','Palle','86 21 3555',1401,'120800.00',20103),
 
-(233,'QuÃ©bec Home Shopping Network','FresniÃ¨re','Jean ','(514) 555-8054',1286,'48700.00'),
+(233,'Québec Home Shopping Network','Fresnière','Jean ','(514) 555-8054',1286,'48700.00',20012),
 
-(237,'ANG Resellers','Camino','Alejandra ','(91) 745 6555',NULL,'0.00'),
+(237,'ANG Resellers','Camino','Alejandra ','(91) 745 6555',NULL,'0.00',NULL),
 
-(239,'Collectable Mini Designs Co.','Thompson','Valarie','7605558146',1166,'105000.00'),
+(239,'Collectable Mini Designs Co.','Thompson','Valarie','7605558146',1166,'105000.00',20111),
 
-(240,'giftsbymail.co.uk','Bennett','Helen ','(198) 555-8888''UK',1501,'93900.00'),
+(240,'giftsbymail.co.uk','Bennett','Helen ','(198) 555-8888''UK',1501,'93900.00',20103),
 
-(242,'Alpha Cognac','Roulet','Annette ','61.77.6555',1370,'61100.00'),
+(242,'Alpha Cognac','Roulet','Annette ','61.77.6555',1370,'61100.00',20121),
 
-(247,'Messner Shopping Network','Messner','Renate ','069-0555984',NULL,'0.00'),
+(247,'Messner Shopping Network','Messner','Renate ','069-0555984',NULL,'0.00',NULL),
 
-(249,'Amica Models & Co.','Accorti','Paolo ','011-4988555',1401,'113000.00'),
+(249,'Amica Models & Co.','Accorti','Paolo ','011-4988555',1401,'113000.00',20161),
 
-(250,'Lyon Souveniers','Da Silva','Daniel','+33 1 46 62 7555',1337,'68100.00'),
+(250,'Lyon Souveniers','Da Silva','Daniel','+33 1 46 62 7555',1337,'68100.00',20102),
 
-(256,'Auto AssociÃ©s & Cie.','Tonini','Daniel ','30.59.8555',1370,'77900.00'),
+(256,'Auto Associés & Cie.','Tonini','Daniel ','30.59.8555',1370,'77900.00',20163),
 
-(259,'Toms SpezialitÃ¤ten, Ltd','Pfalzheim','Henriette ','0221-5554327',1504,'120400.00'),
+(259,'Toms Spezialitäten, Ltd','Pfalzheim','Henriette ','0221-5554327',1504,'120400.00',20104),
 
-(260,'Royal Canadian Collectables, Ltd.','Lincoln','Elizabeth ','(604) 555-4555',1323,'89600.00'),
+(260,'Royal Canadian Collectables, Ltd.','Lincoln','Elizabeth ','(604) 555-4555',1323,'89600.00',20165),
 
-(273,'Franken Gifts, Co','Franken','Peter ','089-0877555',NULL,'0.00'),
+(273,'Franken Gifts, Co','Franken','Peter ','089-0877555',NULL,'0.00',NULL),
 
-(276,'Anna\'s Decorations, Ltd','O\'Hara','Anna','02 9936 8555',1611,'107800.00'),
+(276,'Anna''s Decorations, Ltd','O''Hara','Anna','02 9936 8555',1611,'107800.00',21604),
 
-(278,'Rovelli Gifts','Rovelli','Giovanni ','035-640555',1401,'119600.00'),
+(278,'Rovelli Gifts','Rovelli','Giovanni ','035-640555',1401,'119600.00',21611),
 
-(282,'Souveniers And Things Co.','Huxley','Adrian','+61 2 9495 8555',1611,'93300.00'),
+(282,'Souveniers And Things Co.','Huxley','Adrian','+61 2 9495 8555',1611,'93300.00',20106),
 
-(286,'Marta\'s Replicas Co.','Hernandez','Marta','6175558555',1216,'123700.00'),
+(286,'Marta''s Replicas Co.','Hernandez','Marta','6175558555',1216,'123700.00',20607),
 
-(293,'BG&E Collectables','Harrison','Ed','+41 26 425 50 01',NULL,'0.00'),
+(293,'BG&E Collectables','Harrison','Ed','+41 26 425 50 01',NULL,'0.00',NULL),
 
-(298,'Vida Sport, Ltd','Holz','Mihael','0897-034555',1702,'141300.00'),
+(298,'Vida Sport, Ltd','Holz','Mihael','0897-034555',1702,'141300.00',20161),
 
-(299,'Norway Gifts By Mail, Co.','Klaeboe','Jan','+47 2212 1555',1504,'95100.00'),
+(299,'Norway Gifts By Mail, Co.','Klaeboe','Jan','+47 2212 1555',1504,'95100.00',20161),
 
-(303,'Schuyler Imports','Schuyler','Bradley','+31 20 491 9555',NULL,'0.00'),
+(303,'Schuyler Imports','Schuyler','Bradley','+31 20 491 9555',NULL,'0.00',NULL),
 
-(307,'Der Hund Imports','Andersen','Mel','030-0074555',NULL,'0.00'),
+(307,'Der Hund Imports','Andersen','Mel','030-0074555',NULL,'0.00',NULL),
 
-(311,'Oulu Toy Supplies, Inc.','Koskitalo','Pirkko','981-443655',1501,'90500.00'),
+(311,'Oulu Toy Supplies, Inc.','Koskitalo','Pirkko','981-443655',1501,'90500.00',20161),
 
-(314,'Petit Auto','Dewey','Catherine ','(02) 5554 67',1401,'79900.00'),
+(314,'Petit Auto','Dewey','Catherine ','(02) 5554 67',1401,'79900.00',20160),
 
-(319,'Mini Classics','Frick','Steve','9145554562',1323,'102700.00'),
+(319,'Mini Classics','Frick','Steve','9145554562',1323,'102700.00',20001),
 
-(320,'Mini Creations Ltd.','Huang','Wing','5085559555',1188,'94500.00'),
+(320,'Mini Creations Ltd.','Huang','Wing','5085559555',1188,'94500.00',20002),
 
-(321,'Corporate Gift Ideas Co.','Brown','Julie','6505551386',1165,'105000.00'),
+(321,'Corporate Gift Ideas Co.','Brown','Julie','6505551386',1165,'105000.00',20003),
 
-(323,'Down Under Souveniers, Inc','Graham','Mike','+64 9 312 5555',1612,'88000.00'),
+(323,'Down Under Souveniers, Inc','Graham','Mike','+64 9 312 5555',1612,'88000.00',20004),
 
-(324,'Stylish Desk Decors, Co.','Brown','Ann ','(171) 555-0297',1501,'77000.00'),
+(324,'Stylish Desk Decors, Co.','Brown','Ann ','(171) 555-0297',1501,'77000.00',20005),
 
-(328,'Tekni Collectables Inc.','Brown','William','2015559350',1323,'43000.00'),
+(328,'Tekni Collectables Inc.','Brown','William','2015559350',1323,'43000.00',20006),
 
-(333,'Australian Gift Network, Co','Calaghan','Ben','61-7-3844-6555',1611,'51600.00'),
+(333,'Australian Gift Network, Co','Calaghan','Ben','61-7-3844-6555',1611,'51600.00',20101),
 
-(334,'Suominen Souveniers','Suominen','Kalle','+358 9 8045 555',1501,'98800.00'),
+(334,'Suominen Souveniers','Suominen','Kalle','+358 9 8045 555',1501,'98800.00',20103),
 
-(335,'Cramer SpezialitÃ¤ten, Ltd','Cramer','Philip ','0555-09555',NULL,'0.00'),
+(335,'Cramer Spezialitäten, Ltd','Cramer','Philip ','0555-09555',NULL,'0.00',NULL),
 
-(339,'Classic Gift Ideas, Inc','Cervantes','Francisca','2155554695',1188,'81100.00'),
+(339,'Classic Gift Ideas, Inc','Cervantes','Francisca','2155554695',1188,'81100.00',20007),
 
-(344,'CAF Imports','Fernandez','Jesus','+34 913 728 555',1702,'59600.00'),
+(344,'CAF Imports','Fernandez','Jesus','+34 913 728 555',1702,'59600.00',20001),
 
-(347,'Men \'R\' US Retailers, Ltd.','Chandler','Brian','2155554369',1166,'57700.00'),
+(347,'Men ''R'' US Retailers, Ltd.','Chandler','Brian','2155554369',1166,'57700.00',20001),
 
-(348,'Asian Treasures, Inc.','McKenna','Patricia ','2967 555',NULL,'0.00'),
+(348,'Asian Treasures, Inc.','McKenna','Patricia ','2967 555',NULL,'0.00',NULL),
 
-(350,'Marseille Mini Autos','Lebihan','Laurence ','91.24.4555',1337,'65000.00'),
+(350,'Marseille Mini Autos','Lebihan','Laurence ','91.24.4555',1337,'65000.00',20030),
 
-(353,'Reims Collectables','Henriot','Paul ','26.47.1555',1337,'81100.00'),
+(353,'Reims Collectables','Henriot','Paul ','26.47.1555',1337,'81100.00',20030),
 
-(356,'SAR Distributors, Co','Kuger','Armand','+27 21 550 3555',NULL,'0.00'),
+(356,'SAR Distributors, Co','Kuger','Armand','+27 21 550 3555',NULL,'0.00',NULL),
 
-(357,'GiftsForHim.com','MacKinlay','Wales','64-9-3763555',1612,'77700.00'),
+(357,'GiftsForHim.com','MacKinlay','Wales','64-9-3763555',1612,'77700.00',20038),
 
-(361,'Kommission Auto','Josephs','Karin','0251-555259',NULL,'0.00'),
+(361,'Kommission Auto','Josephs','Karin','0251-555259',NULL,'0.00',NULL),
 
-(362,'Gifts4AllAges.com','Yoshido','Juri','6175559555',1216,'41900.00'),
+(362,'Gifts4AllAges.com','Yoshido','Juri','6175559555',1216,'41900.00',20010),
 
-(363,'Online Diecast Creations Co.','Young','Dorothy','6035558647',1216,'114200.00'),
+(363,'Online Diecast Creations Co.','Young','Dorothy','6035558647',1216,'114200.00',20310),
 
-(369,'Lisboa Souveniers, Inc','Rodriguez','Lino ','(1) 354-2555',NULL,'0.00'),
+(369,'Lisboa Souveniers, Inc','Rodriguez','Lino ','(1) 354-2555',NULL,'0.00',NULL),
 
-(376,'Precious Collectables','Urs','Braun','0452-076555',1702,'0.00'),
+(376,'Precious Collectables','Urs','Braun','0452-076555',1702,'0.00',20310),
 
-(379,'Collectables For Less Inc.','Nelson','Allen','6175558555',1188,'70700.00'),
+(379,'Collectables For Less Inc.','Nelson','Allen','6175558555',1188,'70700.00',20310),
 
-(381,'Royale Belge','Cartrain','Pascale ','(071) 23 67 2555',1401,'23500.00'),
+(381,'Royale Belge','Cartrain','Pascale ','(071) 23 67 2555',1401,'23500.00',20310),
 
-(382,'Salzburg Collectables','Pipps','Georg ','6562-9555',1401,'71700.00'),
+(382,'Salzburg Collectables','Pipps','Georg ','6562-9555',1401,'71700.00',20030),
 
-(385,'Cruz & Sons Co.','Cruz','Arnold','+63 2 555 3587',1621,'81500.00'),
+(385,'Cruz & Sons Co.','Cruz','Arnold','+63 2 555 3587',1621,'81500.00',20310),
 
-(386,'L\'ordine Souveniers','Moroni','Maurizio ','0522-556555',1401,'121400.00'),
+(386,'L''ordine Souveniers','Moroni','Maurizio ','0522-556555',1401,'121400.00',20310),
 
-(398,'Tokyo Collectables, Ltd','Shimamura','Akiko','+81 3 3584 0555',1621,'94400.00'),
+(398,'Tokyo Collectables, Ltd','Shimamura','Akiko','+81 3 3584 0555',1621,'94400.00',20311),
 
-(406,'Auto Canal+ Petit','Perrier','Dominique','(1) 47.55.6555',1337,'95000.00'),
+(406,'Auto Canal+ Petit','Perrier','Dominique','(1) 47.55.6555',1337,'95000.00',23312),
 
-(409,'Stuttgart Collectable Exchange','MÃ¼ller','Rita ','0711-555361',NULL,'0.00'),
+(409,'Stuttgart Collectable Exchange','Müller','Rita ','0711-555361',NULL,'0.00',NULL),
 
-(412,'Extreme Desk Decorations, Ltd','McRoy','Sarah','04 499 9555',1612,'86800.00'),
+(412,'Extreme Desk Decorations, Ltd','McRoy','Sarah','04 499 9555',1612,'86800.00',20311),
 
-(415,'Bavarian Collectables Imports, Co.','Donnermeyer','Michael',' +49 89 61 08 9555',1504,'77000.00'),
+(415,'Bavarian Collectables Imports, Co.','Donnermeyer','Michael',' +49 89 61 08 9555',1504,'77000.00',20012),
 
-(424,'Classic Legends Inc.','Hernandez','Maria','2125558493',1286,'67500.00'),
+(424,'Classic Legends Inc.','Hernandez','Maria','2125558493',1286,'67500.00',21010),
 
-(443,'Feuer Online Stores, Inc','Feuer','Alexander ','0342-555176',NULL,'0.00'),
+(443,'Feuer Online Stores, Inc','Feuer','Alexander ','0342-555176',NULL,'0.00',NULL),
 
-(447,'Gift Ideas Corp.','Lewis','Dan','2035554407',1323,'49700.00'),
+(447,'Gift Ideas Corp.','Lewis','Dan','2035554407',1323,'49700.00',20111),
 
-(448,'Scandinavian Gift Ideas','Larsson','Martha','0695-34 6555',1504,'116400.00'),
+(448,'Scandinavian Gift Ideas','Larsson','Martha','0695-34 6555',1504,'116400.00',20102),
 
-(450,'The Sharp Gifts Warehouse','Frick','Sue','4085553659',1165,'77600.00'),
+(450,'The Sharp Gifts Warehouse','Frick','Sue','4085553659',1165,'77600.00',20104),
 
-(452,'Mini Auto Werke','Mendel','Roland ','7675-3555',1401,'45300.00'),
+(452,'Mini Auto Werke','Mendel','Roland ','7675-3555',1401,'45300.00',20104),
 
-(455,'Super Scale Inc.','Murphy','Leslie','2035559545',1286,'95400.00'),
+(455,'Super Scale Inc.','Murphy','Leslie','2035559545',1286,'95400.00',20125),
 
-(456,'Microscale Inc.','Choi','Yu','2125551957',1286,'39800.00'),
+(456,'Microscale Inc.','Choi','Yu','2125551957',1286,'39800.00',20120),
 
-(458,'Corrida Auto Replicas, Ltd','Sommer','MartÃ­n ','(91) 555 22 82',1702,'104600.00'),
+(458,'Corrida Auto Replicas, Ltd','Sommer','Martín ','(91) 555 22 82',1702,'104600.00',20109),
 
-(459,'Warburg Exchange','Ottlieb','Sven ','0241-039123',NULL,'0.00'),
+(459,'Warburg Exchange','Ottlieb','Sven ','0241-039123',NULL,'0.00',NULL),
 
-(462,'FunGiftIdeas.com','Benitez','Violeta','5085552555',1216,'85800.00'),
+(462,'FunGiftIdeas.com','Benitez','Violeta','5085552555',1216,'85800.00',20112),
 
-(465,'Anton Designs, Ltd.','Anton','Carmen','+34 913 728555',NULL,'0.00'),
+(465,'Anton Designs, Ltd.','Anton','Carmen','+34 913 728555',NULL,'0.00',NULL),
 
-(471,'Australian Collectables, Ltd','Clenahan','Sean','61-9-3844-6555',1611,'60300.00'),
+(471,'Australian Collectables, Ltd','Clenahan','Sean','61-9-3844-6555',1611,'60300.00',20107),
 
-(473,'Frau da Collezione','Ricotti','Franco','+39 022515555',1401,'34800.00'),
+(473,'Frau da Collezione','Ricotti','Franco','+39 022515555',1401,'34800.00',21502),
 
-(475,'West Coast Collectables Co.','Thompson','Steve','3105553722',1166,'55400.00'),
+(475,'West Coast Collectables Co.','Thompson','Steve','3105553722',1166,'55400.00',20104),
 
-(477,'Mit VergnÃ¼gen & Co.','Moos','Hanna ','0621-08555',NULL,'0.00'),
+(477,'Mit Vergnügen & Co.','Moos','Hanna ','0621-08555',NULL,'0.00',NULL),
 
-(480,'Kremlin Collectables, Co.','Semenov','Alexander ','+7 812 293 0521',NULL,'0.00'),
+(480,'Kremlin Collectables, Co.','Semenov','Alexander ','+7 812 293 0521',NULL,'0.00',NULL),
 
-(481,'Raanan Stores, Inc','Altagar,G M','Raanan','+ 972 9 959 8555',NULL,'0.00'),
+(481,'Raanan Stores, Inc','Altagar,G M','Raanan','+ 972 9 959 8555',NULL,'0.00',NULL),
 
-(484,'Iberia Gift Imports, Corp.','Roel','JosÃ© Pedro ','(95) 555 82 82',1702,'65700.00'),
+(484,'Iberia Gift Imports, Corp.','Roel','José Pedro ','(95) 555 82 82',1702,'65700.00',20154),
 
-(486,'Motor Mint Distributors Inc.','Salazar','Rosa','2155559857',1323,'72600.00'),
+(486,'Motor Mint Distributors Inc.','Salazar','Rosa','2155559857',1323,'72600.00',20154),
 
-(487,'Signal Collectibles Ltd.','Taylor','Sue','4155554312',1165,'60300.00'),
+(487,'Signal Collectibles Ltd.','Taylor','Sue','4155554312',1165,'60300.00',21504),
 
-(489,'Double Decker Gift Stores, Ltd','Smith','Thomas ','(171) 555-7555',1501,'43300.00'),
+(489,'Double Decker Gift Stores, Ltd','Smith','Thomas ','(171) 555-7555',1501,'43300.00',20103),
 
-(495,'Diecast Collectables','Franco','Valarie','6175552555',1188,'85100.00'),
+(495,'Diecast Collectables','Franco','Valarie','6175552555',1188,'85100.00',20409),
 
-(496,'Kelly\'s Gift Shop','Snowden','Tony','+64 9 5555500',1612,'110000.00') ON DUPLICATE KEY UPDATE customer_number=customer_number;
+(496,'Kelly''s Gift Shop','Snowden','Tony','+64 9 5555500',1612,'110000.00',20142) ON DUPLICATE KEY UPDATE customer_number=customer_number;
 
 insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_line_second`,`city`,`state`,`postal_code`,`country`) values 
 
-(99,'32, Avenue 90',NULL, 'Paris' ,NULL,'43000','France'),
+(99,'43 Rue 2',NULL, 'Paris' ,NULL,'25017','France'),
 
 (100,'51, Avenue 3',NULL, NULL ,NULL,'43000',NULL),
 
@@ -399,7 +435,7 @@ insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_li
 
 (103,'54, rue Royale',NULL,'Nantes',NULL,'44000','France'),
 
-(112,'8489 Strong St.',NULL,'Las Vegas','NV','83030','USA'),
+(112,'8489 Strong St.',NULL,'Las Vegas','NV','75017','USA'),
 
 (114,'636 St Kilda Road','Level 3','Melbourne','Victoria','3004','Australia'),
 
@@ -413,21 +449,21 @@ insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_li
 
 (128,'Lyonerstr. 34',NULL,'Frankfurt',NULL,'60528','Germany'),
 
-(129,'5557 North Pendale Street',NULL,'San Francisco','CA','94217','USA'),
+(129,'5557 North Pendale Street',NULL,'San Francisco','CA','AZ934VB','USA'),
 
-(131,'897 Long Airport Avenue',NULL,'NYC','NY','10022','USA'),
+(131,'897 Long Airport Avenue',NULL,'NYC','NY','AA100CV','USA'),
 
 (141,'C/ Moralzarzal, 86',NULL,'Madrid',NULL,'28034','Spain'),
 
-(144,'BerguvsvÃ¤gen  8',NULL,'LuleÃ¥',NULL,'S-958 22','Sweden'),
+(144,'Berguvsvägen  8',NULL,'Luleå',NULL,'S-958 22','Sweden'),
 
-(145,'VinbÃ¦ltet 34',NULL,'Kobenhavn',NULL,'1734','Denmark'),
+(145,'Vinbæltet 34',NULL,'Kobenhavn',NULL,'1734','Denmark'),
 
 (146,'2, rue du Commerce',NULL,'Lyon',NULL,'69004','France'),
 
 (148,'Bronz Sok.','Bronz Apt. 3/6 Tesvikiye','Singapore',NULL,'079903','Singapore'),
 
-(151,'4092 Furth Circle','Suite 400','NYC','NY','10022','USA'),
+(151,'4092 Furth Circle','Suite 400','NYC','NY','AA100CV','USA'),
 
 (157,'7586 Pompton St.',NULL,'Allentown','PA','70267','USA'),
 
@@ -439,9 +475,9 @@ insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_li
 
 (168,'149 Spinnaker Dr.','Suite 101','New Haven','CT','97823','USA'),
 
-(169,'Estrada da saÃºde n. 58',NULL,'Lisboa',NULL,'1756','Portugal'),
+(169,'Estrada da saúde n. 58',NULL,'Lisboa',NULL,'1756','Portugal'),
 
-(171,'184, chaussÃ©e de Tournai',NULL,'Lille',NULL,'59000','France'),
+(171,'184, chaussée de Tournai',NULL,'Lille',NULL,'59000','France'),
 
 (172,'265, boulevard Charonne',NULL,'Paris',NULL,'75012','France'),
 
@@ -451,7 +487,7 @@ insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_li
 
 (177,'1-6-20 Dojima',NULL,'Kita-ku','Osaka',' 530-0003','Japan'),
 
-(181,'2678 Kingston Rd.','Suite 101','NYC','NY','10022','USA'),
+(181,'2678 Kingston Rd.','Suite 101','NYC','NY','AA100CV','USA'),
 
 (186,'Keskuskatu 45',NULL,'Helsinki',NULL,'21240','Finland'),
 
@@ -471,21 +507,21 @@ insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_li
 
 (206,'Suntec Tower Three','8 Temasek','Singapore',NULL,'038988','Singapore'),
 
-(209,'24, place KlÃ©ber',NULL,'Strasbourg',NULL,'67000','France'),
+(209,'24, place Kléber',NULL,'Strasbourg',NULL,'67000','France'),
 
 (211,'Bank of China Tower','1 Garden Road','Central Hong Kong',NULL,NULL,'Hong Kong'),
 
-(216,'Rambla de CataluÃ±a, 23',NULL,'Barcelona',NULL,'08022','Spain'),
+(216,'Rambla de Cataluña, 23',NULL,'Barcelona',NULL,'08022','Spain'),
 
 (219,'4097 Douglas Av.',NULL,'Glendale','CA','92561','USA'),
 
-(223,'TaucherstraÃŸe 10',NULL,'Cunewalde',NULL,'01307','Germany'),
+(223,'Taucherstraße 10',NULL,'Cunewalde',NULL,'01307','Germany'),
 
-(227,'Smagsloget 45',NULL,'Ã…rhus',NULL,'8200','Denmark'),
+(227,'Smagsloget 45',NULL,'Århus',NULL,'8200','Denmark'),
 
-(233,'43 rue St. Laurent',NULL,'MontrÃ©al','QuÃ©bec','H1J 1C3','Canada'),
+(233,'43 rue St. Laurent',NULL,'Montréal','Québec','H1J 1C3','Canada'),
 
-(237,'Gran VÃ­a, 1',NULL,'Madrid',NULL,'28001','Spain'),
+(237,'Gran Vía, 1',NULL,'Madrid',NULL,'28001','Spain'),
 
 (239,'361 Furth Circle',NULL,'San Diego','CA','91217','USA'),
 
@@ -499,13 +535,13 @@ insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_li
 
 (250,'27 rue du Colonel Pierre Avia',NULL,'Paris',NULL,'75508','France'),
 
-(256,'67, avenue de l\'Europe',NULL,'Versailles',NULL,'78000','France'),
+(256,'67, avenue de l''Europe',NULL,'Versailles',NULL,'78000','France'),
 
-(259,'Mehrheimerstr. 369',NULL,'KÃ¶ln',NULL,'50739','Germany'),
+(259,'Mehrheimerstr. 369',NULL,'Köln',NULL,'50739','Germany'),
 
 (260,'23 Tsawassen Blvd.',NULL,'Tsawassen','BC','T2F 8M4','Canada'),
 
-(273,'Berliner Platz 43',NULL,'MÃ¼nchen',NULL,'80805','Germany'),
+(273,'Berliner Platz 43',NULL,'München',NULL,'80805','Germany'),
 
 (276,'201 Miller Street','Level 15','North Sydney','NSW','2060','Australia'),
 
@@ -517,7 +553,7 @@ insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_li
 
 (293,'Rte des Arsenaux 41 ',NULL,'Fribourg',NULL,'1700','Switzerland'),
 
-(298,'Grenzacherweg 237',NULL,'GenÃ¨ve',NULL,'1203','Switzerland'),
+(298,'Grenzacherweg 237',NULL,'Genève',NULL,'1203','Switzerland'),
 
 (299,'Drammensveien 126A','PB 211 Sentrum','Oslo',NULL,'N 0106','Norway  '),
 
@@ -533,11 +569,11 @@ insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_li
 
 (320,'4575 Hillside Dr.',NULL,'New Bedford','MA','50553','USA'),
 
-(321,'7734 Strong St.',NULL,'San Francisco','CA','94217','USA'),
+(321,'7734 Strong St.',NULL,'San Francisco','CA','AZ934VB','USA'),
 
 (323,'162-164 Grafton Road','Level 2','Auckland  ',NULL,NULL,'New Zealand'),
 
-(324,'35 King George',NULL,'London',NULL,'WX3 6FW','UK'),
+(324,'25 Old Broad Street','Level 7','London','N/A','CV555RR','UK'),
 
 (328,'7476 Moss Rd.',NULL,'Newark','NJ','94019','USA'),
 
@@ -549,7 +585,7 @@ insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_li
 
 (339,'782 First Street',NULL,'Philadelphia','PA','71270','USA'),
 
-(344,'Merchants House','27-30 Merchant\'s Quay','Madrid',NULL,'28023','Spain'),
+(344,'Merchants House','27-30 Merchant''s Quay','Madrid',NULL,'28023','Spain'),
 
 (347,'6047 Douglas Av.',NULL,'Los Angeles','CA','91003','USA'),
 
@@ -557,15 +593,15 @@ insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_li
 
 (350,'12, rue des Bouchers',NULL,'Marseille',NULL,'13008','France'),
 
-(353,'59 rue de l\'Abbaye',NULL,'Reims',NULL,'51100','France'),
+(353,'59 rue de l''Abbaye',NULL,'Reims',NULL,'51100','France'),
 
 (356,'1250 Pretorius Street',NULL,'Hatfield','Pretoria','0028','South Africa'),
 
 (357,'199 Great North Road',NULL,'Auckland',NULL,NULL,'New Zealand'),
 
-(361,'Luisenstr. 48',NULL,'MÃ¼nster',NULL,'44087','Germany'),
+(361,'Luisenstr. 48',NULL,'Münster',NULL,'44087','Germany'),
 
-(362,'8616 Spinnaker Dr.',NULL,'Boston','MA','51003','USA'),
+(362,'8616 Spinnaker Dr.',NULL,'Boston','MA','XX021SS','USA'),
 
 (363,'2304 Long Airport Avenue',NULL,'Nashua','NH','62005','USA'),
 
@@ -593,13 +629,13 @@ insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_li
 
 (415,'Hansastr. 15',NULL,'Munich',NULL,'80686','Germany'),
 
-(424,'5905 Pompton St.','Suite 750','NYC','NY','10022','USA'),
+(424,'5905 Pompton St.','Suite 750','NYC','NY','AA100CV','USA'),
 
 (443,'Heerstr. 22',NULL,'Leipzig',NULL,'04179','Germany'),
 
 (447,'2440 Pompton St.',NULL,'Glendale','CT','97561','USA'),
 
-(448,'Ã…kergatan 24',NULL,'BrÃ¤cke',NULL,'S-844 67','Sweden'),
+(448,'Åkergatan 24',NULL,'Bräcke',NULL,'S-844 67','Sweden'),
 
 (450,'3086 Ingle Ln.',NULL,'San Jose','CA','94217','USA'),
 
@@ -607,7 +643,7 @@ insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_li
 
 (455,'567 North Pendale Street',NULL,'New Haven','CT','97823','USA'),
 
-(456,'5290 North Pendale Street','Suite 200','NYC','NY','10022','USA'),
+(456,'5290 North Pendale Street','Suite 200','NYC','NY','AA100CV','USA'),
 
 (458,'C/ Araquil, 67',NULL,'Madrid',NULL,'28023','Spain'),
 
@@ -637,907 +673,925 @@ insert  into `customerdetail`(`customer_number`,`address_line_first`,`address_li
 
 (489,'120 Hanover Sq.',NULL,'London',NULL,'WA1 1DP','UK'),
 
-(495,'6251 Ingle Ln.',NULL,'Boston','MA','51003','USA'),
+(495,'6251 Ingle Ln.',NULL,'Boston','MA','XX021SS','USA'),
 
-(496,'Arenales 1938 3\'A\'',NULL,'Auckland  ',NULL,NULL,'New Zealand') ON DUPLICATE KEY UPDATE customer_number=customer_number;
+(496,'Arenales 1938 3''A''',NULL,'Auckland  ',NULL,NULL,'New Zealand') ON DUPLICATE KEY UPDATE customer_number=customer_number;
 
 /*Data for the table `productline` */
 
-insert  into `productline`(`product_line`,`text_description`,`html_description`,`image`,`created_on`) values 
+insert  into `productline`(`product_line`,`code`,`text_description`,`html_description`,`image`) values 
 
-('Classic Cars','Attention car enthusiasts: Make your wildest car ownership dreams come true. Whether you are looking for classic muscle cars, dream sports cars or movie-inspired miniatures, you will find great choices in this category. These replicas feature superb attention to detail and craftsmanship and offer features such as working steering system, opening forward compartment, opening rear trunk with removable spare wheel, 4-wheel independent spring suspension, and so on. The models range in size from 1:10 to 1:24 scale and include numerous limited edition and several out-of-production vehicles. All models include a certificate of authenticity from their manufacturers and come fully assembled and ready for display in the home or office.',NULL,NULL,'2005-02-03'),
+('Classic Cars',599302, 'Attention car enthusiasts: Make your wildest car ownership dreams come true. Whether you are looking for classic muscle cars, dream sports cars or movie-inspired miniatures, you will find great choices in this category. These replicas feature superb attention to detail and craftsmanship and offer features such as working steering system, opening forward compartment, opening rear trunk with removable spare wheel, 4-wheel independent spring suspension, and so on. The models range in size from 1:10 to 1:24 scale and include numerous limited edition and several out-of-production vehicles. All models include a certificate of authenticity from their manufacturers and come fully assembled and ready for display in the home or office.',NULL,NULL),
 
-('Motorcycles','Our motorcycles are state of the art replicas of classic as well as contemporary motorcycle legends such as Harley Davidson, Ducati and Vespa. Models contain stunning details such as official logos, rotating wheels, working kickstand, front suspension, gear-shift lever, footbrake lever, and drive chain. Materials used include diecast and plastic. The models range in size from 1:10 to 1:50 scale and include numerous limited edition and several out-of-production vehicles. All models come fully assembled and ready for display in the home or office. Most include a certificate of authenticity.',NULL,NULL,'2004-12-12'),
+('Motorcycles',599302,'Our motorcycles are state of the art replicas of classic as well as contemporary motorcycle legends such as Harley Davidson, Ducati and Vespa. Models contain stunning details such as official logos, rotating wheels, working kickstand, front suspension, gear-shift lever, footbrake lever, and drive chain. Materials used include diecast and plastic. The models range in size from 1:10 to 1:50 scale and include numerous limited edition and several out-of-production vehicles. All models come fully assembled and ready for display in the home or office. Most include a certificate of authenticity.',NULL,NULL),
 
-('Planes','Unique, diecast airplane and helicopter replicas suitable for collections, as well as home, office or classroom decorations. Models contain stunning details such as official logos and insignias, rotating jet engines and propellers, retractable wheels, and so on. Most come fully assembled and with a certificate of authenticity from their manufacturers.',NULL,NULL,'2004-02-14'),
+('Planes',433823,'Unique, diecast airplane and helicopter replicas suitable for collections, as well as home, office or classroom decorations. Models contain stunning details such as official logos and insignias, rotating jet engines and propellers, retractable wheels, and so on. Most come fully assembled and with a certificate of authenticity from their manufacturers.',NULL,NULL),
 
-('Ships','The perfect holiday or anniversary gift for executives, clients, friends, and family. These handcrafted model ships are unique, stunning works of art that will be treasured for generations! They come fully assembled and ready for display in the home or office. We guarantee the highest quality, and best value.',NULL,NULL,'2005-12-12'),
+('Ships',433823,'The perfect holiday or anniversary gift for executives, clients, friends, and family. These handcrafted model ships are unique, stunning works of art that will be treasured for generations! They come fully assembled and ready for display in the home or office. We guarantee the highest quality, and best value.',NULL,NULL),
 
-('Trains','Model trains are a rewarding hobby for enthusiasts of all ages. Whether you\'re looking for collectible wooden trains, electric streetcars or locomotives, you\'ll find a number of great choices for any budget within this category. The interactive aspect of trains makes toy trains perfect for young children. The wooden train sets are ideal for children under the age of 5.',NULL,NULL,'2004-03-03'),
+('Trains',123333,'Model trains are a rewarding hobby for enthusiasts of all ages. Whether you\'re looking for collectible wooden trains, electric streetcars or locomotives, you\'ll find a number of great choices for any budget within this category. The interactive aspect of trains makes toy trains perfect for young children. The wooden train sets are ideal for children under the age of 5.',NULL,NULL),
 
-('Trucks and Buses','The Truck and Bus models are realistic replicas of buses and specialized trucks produced from the early 1920s to present. The models range in size from 1:12 to 1:50 scale and include numerous limited edition and several out-of-production vehicles. Materials used include tin, diecast and plastic. All models include a certificate of authenticity from their manufacturers and are a perfect ornament for the home and office.',NULL,NULL,'2005-02-25'),
+('Trucks and Buses',569331,'The Truck and Bus models are realistic replicas of buses and specialized trucks produced from the early 1920s to present. The models range in size from 1:12 to 1:50 scale and include numerous limited edition and several out-of-production vehicles. Materials used include tin, diecast and plastic. All models include a certificate of authenticity from their manufacturers and are a perfect ornament for the home and office.',NULL,NULL),
 
-('Vintage Cars','Our Vintage Car models realistically portray automobiles produced from the early 1900s through the 1940s. Materials used include Bakelite, diecast, plastic and wood. Most of the replicas are in the 1:18 and 1:24 scale sizes, which provide the optimum in detail and accuracy. Prices range from $30.00 up to $180.00 for some special limited edition replicas. All models include a certificate of authenticity from their manufacturers and come fully assembled and ready for display in the home or office.',NULL,NULL,'2004-04-02') ON DUPLICATE KEY UPDATE product_line=product_line;
+('Vintage Cars',223113,'Our Vintage Car models realistically portray automobiles produced from the early 1900s through the 1940s. Materials used include Bakelite, diecast, plastic and wood. Most of the replicas are in the 1:18 and 1:24 scale sizes, which provide the optimum in detail and accuracy. Prices range from $30.00 up to $180.00 for some special limited edition replicas. All models include a certificate of authenticity from their manufacturers and come fully assembled and ready for display in the home or office.',NULL,NULL) ON DUPLICATE KEY UPDATE product_line=product_line;
+
+/*Data for the table `productlinedetail` */
+
+insert  into `productlinedetail`(`product_line`,`code`,`line_capacity`,`line_type`) values 
+
+('Classic Cars',599302,'200A', 1),
+
+('Motorcycles',599302,'150B', 1),
+
+('Planes',433823,'450C',2),
+
+('Ships',433823,'100A',3),
+
+('Trains',123333,'150A',2),
+
+('Trucks and Buses',569331,'566C',2),
+
+('Vintage Cars',223113,'1000A', 3) ON DUPLICATE KEY UPDATE product_line=product_line;
 
 /*Data for the table `product` */
 
-insert  into `product`(`product_id`,`product_name`,`product_line`,`product_scale`,`product_vendor`,`product_description`,`quantity_in_stock`,`buy_price`,`msrp`) values 
+insert  into `product`(`product_id`,`product_name`,`product_line`,`code`,`product_scale`,`product_vendor`,`product_description`,`quantity_in_stock`,`buy_price`,`msrp`) values 
 
-(1,'1969 Harley Davidson Ultimate Chopper','Motorcycles','1:10','Min Lin Diecast','This replica features working kickstand, front suspension, gear-shift lever, footbrake lever, drive chain, wheels and steering. All parts are particularly delicate due to their precise scale and require special care and attention.',7933,'48.81','95.70'),
+(1,'1969 Harley Davidson Ultimate Chopper','Motorcycles',599302,'1:10','Min Lin Diecast','PENDING',7933,'48.81','95.70'),
 
-(2,'1952 Alpine Renault 1300','Classic Cars','1:10','Classic Metal Creations','Turnable front wheels; steering function; detailed interior; detailed engine; opening hood; opening trunk; opening doors; and detailed chassis.',7305,'98.58','214.30'),
+(2,'1952 Alpine Renault 1300','Classic Cars',599302,'1:10','Classic Metal Creations','PENDING',7305,'98.58','214.30'),
 
-(3,'1996 Moto Guzzi 1100i','Motorcycles','1:10','Highway 66 Mini Classics','Official Moto Guzzi logos and insignias, saddle bags located on side of motorcycle, detailed engine, working steering, working suspension, two leather seats, luggage rack, dual exhaust pipes, small saddle bag located on handle bars, two-tone paint with chrome accents, superior die-cast detail , rotating wheels , working kick stand, diecast metal with plastic parts and baked enamel finish.',6625,'68.99','118.94'),
+(3,'1996 Moto Guzzi 1100i','Motorcycles',599302,'1:10','Highway 66 Mini Classics','PENDING',6625,'68.99','118.94'),
 
-(4,'2003 Harley-Davidson Eagle Drag Bike','Motorcycles','1:10','Red Start Diecast','Model features, official Harley Davidson logos and insignias, detachable rear wheelie bar, heavy diecast metal with resin parts, authentic multi-color tampo-printed graphics, separate engine drive belts, free-turning front fork, rotating tires and rear racing slick, certificate of authenticity, detailed engine, display stand\r\n, precision diecast replica, baked enamel finish, 1:10 scale model, removable fender, seat and tank cover piece for displaying the superior detail of the v-twin engine',5582,'91.02','193.66'),
+(4,'2003 Harley-Davidson Eagle Drag Bike','Motorcycles',599302,'1:10','Red Start Diecast','PENDING',5582,'91.02','193.66'),
 
-(5,'1972 Alfa Romeo GTA','Classic Cars','1:10','Motor City Art Classics','Features include: Turnable front wheels; steering function; detailed interior; detailed engine; opening hood; opening trunk; opening doors; and detailed chassis.',3252,'85.68','136.00'),
+(5,'1972 Alfa Romeo GTA','Classic Cars',599302,'1:10','Motor City Art Classics','PENDING',3252,'85.68','136.00'),
 
-(6,'1962 LanciaA Delta 16V','Classic Cars','1:10','Second Gear Diecast','Features include: Turnable front wheels; steering function; detailed interior; detailed engine; opening hood; opening trunk; opening doors; and detailed chassis.',6791,'103.42','147.74'),
+(6,'1962 LanciaA Delta 16V','Classic Cars',599302,'1:10','Welly Diecast Productions', 'PENDING',6791,'103.42','147.74'),
 
-(7,'1968 Ford Mustang','Classic Cars','1:12','Autoart Studio Design','Hood, doors and trunk all open to reveal highly detailed interior features. Steering wheel actually turns the front wheels. Color dark green.',68,'95.34','194.57'),
+(7,'1968 Ford Mustang','Classic Cars',599302,'1:12','Autoart Studio Design','Hood, doors and trunk all open to reveal highly detailed interior features. Steering wheel actually turns the front wheels. Color dark green.',68,'95.34','194.57'),
 
-(8,'2001 Ferrari Enzo','Classic Cars','1:12','Second Gear Diecast','Turnable front wheels; steering function; detailed interior; detailed engine; opening hood; opening trunk; opening doors; and detailed chassis.',3619,'95.59','207.80'),
+(8,'2001 Ferrari Enzo','Classic Cars',599302,'1:12','Second Gear Diecast','Turnable front wheels; steering function; detailed interior; detailed engine; opening hood; opening trunk; opening doors; and detailed chassis.',3619,'95.59','207.80'),
 
-(9,'1958 Setra Bus','Trucks and Buses','1:12','Welly Diecast Productions','Model features 30 windows, skylights & glare resistant glass, working steering system, original logos',1579,'77.90','136.67'),
+(9,'1958 Setra Bus','Trucks and Buses',569331,'1:12','Welly Diecast Productions','Model features 30 windows, skylights & glare resistant glass, working steering system, original logos',1579,'77.90','136.67'),
 
-(10,'2002 Suzuki XREO','Motorcycles','1:12','Unimax Art Galleries','Official logos and insignias, saddle bags located on side of motorcycle, detailed engine, working steering, working suspension, two leather seats, luggage rack, dual exhaust pipes, small saddle bag located on handle bars, two-tone paint with chrome accents, superior die-cast detail , rotating wheels , working kick stand, diecast metal with plastic parts and baked enamel finish.',9997,'66.27','150.62'),
+(10,'2002 Suzuki XREO','Motorcycles',599302,'1:12','Unimax Art Galleries','Official logos and insignias, saddle bags located on side of motorcycle, detailed engine, working steering, working suspension, two leather seats, luggage rack, dual exhaust pipes, small saddle bag located on handle bars, two-tone paint with chrome accents, superior die-cast detail , rotating wheels , working kick stand, diecast metal with plastic parts and baked enamel finish.',9997,'66.27','150.62'),
 
-(11,'1969 Corvair Monza','Classic Cars','1:18','Welly Diecast Productions','1:18 scale die-cast about 10\" long doors open, hood opens, trunk opens and wheels roll',6906,'89.14','151.08'),
+(11,'1969 Corvair Monza','Classic Cars',599302,'1:18','Welly Diecast Productions','1:18 scale die-cast about 10" long doors open, hood opens, trunk opens and wheels roll',6906,'89.14','151.08'),
 
-(12,'1968 Dodge Charger','Classic Cars','1:12','Welly Diecast Productions','1:12 scale model of a 1968 Dodge Charger. Hood, doors and trunk all open to reveal highly detailed interior features. Steering wheel actually turns the front wheels. Color black',9123,'75.16','117.44'),
+(12,'1968 Dodge Charger','Classic Cars',599302,'1:12','Welly Diecast Productions','1:12 scale model of a 1968 Dodge Charger. Hood, doors and trunk all open to reveal highly detailed interior features. Steering wheel actually turns the front wheels. Color black',9123,'75.16','117.44'),
 
-(13,'1969 Ford Falcon','Classic Cars','1:12','Second Gear Diecast','Turnable front wheels; steering function; detailed interior; detailed engine; opening hood; opening trunk; opening doors; and detailed chassis.',1049,'83.05','173.02'),
+(13,'1969 Ford Falcon','Classic Cars',599302,'1:12','Second Gear Diecast','Turnable front wheels; steering function; detailed interior; detailed engine; opening hood; opening trunk; opening doors; and detailed chassis.',1049,'83.05','173.02'),
 
-(14,'1970 Plymouth Hemi Cuda','Classic Cars','1:12','Studio M Art Models','Very detailed 1970 Plymouth Cuda model in 1:12 scale. The Cuda is generally accepted as one of the fastest original muscle cars from the 1970s. This model is a reproduction of one of the orginal 652 cars built in 1970. Red color.',5663,'31.92','79.80'),
+(14,'1970 Plymouth Hemi Cuda','Classic Cars',599302,'1:12','Studio M Art Models','Very detailed 1970 Plymouth Cuda model in 1:12 scale. The Cuda is generally accepted as one of the fastest original muscle cars from the 1970s. This model is a reproduction of one of the orginal 652 cars built in 1970. Red color.',5663,'31.92','79.80'),
 
-(15,'1957 Chevy Pickup','Trucks and Buses','1:12','Exoto Designs','1:12 scale die-cast about 20\" long Hood opens, Rubber wheels',6125,'55.70','118.50'),
+(15,'1957 Chevy Pickup','Trucks and Buses',569331,'1:12','Exoto Designs','1:12 scale die-cast about 20" long Hood opens, Rubber wheels',6125,'55.70','118.50'),
 
-(16,'1969 Dodge Charger','Classic Cars','1:12','Welly Diecast Productions','Detailed model of the 1969 Dodge Charger. This model includes finely detailed interior and exterior features. Painted in red and white.',7323,'58.73','115.16'),
+(16,'1969 Dodge Charger','Classic Cars',599302,'1:12','Welly Diecast Productions','Detailed model of the 1969 Dodge Charger. This model includes finely detailed interior and exterior features. Painted in red and white.',7323,'58.73','115.16'),
 
-(17,'1940 Ford Pickup Truck','Trucks and Buses','1:18','Studio M Art Models','This model features soft rubber tires, working steering, rubber mud guards, authentic Ford logos, detailed undercarriage, opening doors and hood,  removable split rear gate, full size spare mounted in bed, detailed interior with opening glove box',2613,'58.33','116.67'),
+(17,'1940 Ford Pickup Truck','Trucks and Buses',569331,'1:18','Studio M Art Models','This model features soft rubber tires, working steering, rubber mud guards, authentic Ford logos, detailed undercarriage, opening doors and hood,  removable split rear gate, full size spare mounted in bed, detailed interior with opening glove box',2613,'58.33','116.67'),
 
-(18,'1993 Mazda RX-7','Classic Cars','1:18','Highway 66 Mini Classics','This model features, opening hood, opening doors, detailed engine, rear spoiler, opening trunk, working steering, tinted windows, baked enamel finish. Color red.',3975,'83.51','141.54'),
+(18,'1993 Mazda RX-7','Classic Cars',599302,'1:18','Highway 66 Mini Classics','This model features, opening hood, opening doors, detailed engine, rear spoiler, opening trunk, working steering, tinted windows, baked enamel finish. Color red.',3975,'83.51','141.54'),
 
-(19,'1937 Lincoln Berline','Vintage Cars','1:18','Motor City Art Classics','Features opening engine cover, doors, trunk, and fuel filler cap. Color black',8693,'60.62','102.74'),
+(19,'1937 Lincoln Berline','Vintage Cars',223113,'1:18','Motor City Art Classics','Features opening engine cover, doors, trunk, and fuel filler cap. Color black',8693,'60.62','102.74'),
 
-(20,'1936 Mercedes-Benz 500K Special Roadster','Vintage Cars','1:18','Studio M Art Models','This 1:18 scale replica is constructed of heavy die-cast metal and has all the features of the original: working doors and rumble seat, independent spring suspension, detailed interior, working steering system, and a bifold hood that reveals an engine so accurate that it even includes the wiring. All this is topped off with a baked enamel finish. Color white.',8635,'24.26','53.91'),
+(20,'1936 Mercedes-Benz 500K Special Roadster','Vintage Cars',223113,'1:18','Studio M Art Models','This 1:18 scale replica is constructed of heavy die-cast metal and has all the features of the original: working doors and rumble seat, independent spring suspension, detailed interior, working steering system, and a bifold hood that reveals an engine so accurate that it even includes the wiring. All this is topped off with a baked enamel finish. Color white.',8635,'24.26','53.91'),
 
-(21,'1965 Aston Martin DB5','Classic Cars','1:18','Classic Metal Creations','Die-cast model of the silver 1965 Aston Martin DB5 in silver. This model includes full wire wheels and doors that open with fully detailed passenger compartment. In 1:18 scale, this model measures approximately 10 inches/20 cm long.',9042,'65.96','124.44'),
+(21,'1965 Aston Martin DB5','Classic Cars',599302,'1:18','Classic Metal Creations','Die-cast model of the silver 1965 Aston Martin DB5 in silver. This model includes full wire wheels and doors that open with fully detailed passenger compartment. In 1:18 scale, this model measures approximately 10 inches/20 cm long.',9042,'65.96','124.44'),
 
-(22,'1980s Black Hawk Helicopter','Planes','1:18','Red Start Diecast','1:18 scale replica of actual Army\'s UH-60L BLACK HAWK Helicopter. 100% hand-assembled. Features rotating rotor blades, propeller blades and rubber wheels.',5330,'77.27','157.69'),
+(22,'1980s Black Hawk Helicopter','Planes',433823,'1:18','Red Start Diecast','1:18 scale replica of actual Army''s UH-60L BLACK HAWK Helicopter. 100% hand-assembled. Features rotating rotor blades, propeller blades and rubber wheels.',5330,'77.27','157.69'),
 
-(23,'1917 Grand Touring Sedan','Vintage Cars','1:18','Welly Diecast Productions','This 1:18 scale replica of the 1917 Grand Touring car has all the features you would expect from museum quality reproductions: all four doors and bi-fold hood opening, detailed engine and instrument panel, chrome-look trim, and tufted upholstery, all topped off with a factory baked-enamel finish.',2724,'86.70','170.00'),
+(23,'1917 Grand Touring Sedan','Vintage Cars',223113,'1:18','Welly Diecast Productions','This 1:18 scale replica of the 1917 Grand Touring car has all the features you would expect from museum quality reproductions: all four doors and bi-fold hood opening, detailed engine and instrument panel, chrome-look trim, and tufted upholstery, all topped off with a factory baked-enamel finish.',2724,'86.70','170.00'),
 
-(24,'1948 Porsche 356-A Roadster','Classic Cars','1:18','Gearbox Collectibles','This precision die-cast replica features opening doors, superb detail and craftsmanship, working steering system, opening forward compartment, opening rear trunk with removable spare, 4 wheel independent spring suspension as well as factory baked enamel finish.',8826,'53.90','77.00'),
+(24,'1948 Porsche 356-A Roadster','Classic Cars',599302,'1:18','Gearbox Collectibles','This precision die-cast replica features opening doors, superb detail and craftsmanship, working steering system, opening forward compartment, opening rear trunk with removable spare, 4 wheel independent spring suspension as well as factory baked enamel finish.',8826,'53.90','77.00'),
 
-(25,'1995 Honda Civic','Classic Cars','1:18','Min Lin Diecast','This model features, opening hood, opening doors, detailed engine, rear spoiler, opening trunk, working steering, tinted windows, baked enamel finish. Color yellow.',9772,'93.89','142.25'),
+(25,'1995 Honda Civic','Classic Cars',599302,'1:18','Min Lin Diecast','This model features, opening hood, opening doors, detailed engine, rear spoiler, opening trunk, working steering, tinted windows, baked enamel finish. Color yellow.',9772,'93.89','142.25'),
 
-(26,'1998 Chrysler Plymouth Prowler','Classic Cars','1:18','Gearbox Collectibles','Turnable front wheels; steering function; detailed interior; detailed engine; opening hood; opening trunk; opening doors; and detailed chassis.',4724,'101.51','163.73'),
+(26,'1998 Chrysler Plymouth Prowler','Classic Cars',599302,'1:18','Gearbox Collectibles','Turnable front wheels; steering create function; detailed interior; detailed engine; opening hood; opening trunk; opening doors; and detailed chassis.',4724,'101.51','163.73'),
 
-(27,'1911 Ford Town Car','Vintage Cars','1:18','Motor City Art Classics','Features opening hood, opening doors, opening trunk, wide white wall tires, front door arm rests, working steering system.',540,'33.30','60.54'),
+(27,'1911 Ford Town Car','Vintage Cars',223113,'1:18','Motor City Art Classics','Features opening hood, opening doors, opening trunk, wide white wall tires, front door arm rests, working steering system.',540,'33.30','60.54'),
 
-(28,'1964 Mercedes Tour Bus','Trucks and Buses','1:18','Unimax Art Galleries','Exact replica. 100+ parts. working steering system, original logos',8258,'74.86','122.73'),
+(28,'1964 Mercedes Tour Bus','Trucks and Buses',569331,'1:18','Unimax Art Galleries','Exact replica. 100+ parts. working steering system, original logos',8258,'74.86','122.73'),
 
-(29,'1932 Model A Ford J-Coupe','Vintage Cars','1:18','Autoart Studio Design','This model features grille-mounted chrome horn, lift-up louvered hood, fold-down rumble seat, working steering system, chrome-covered spare, opening doors, detailed and wired engine',9354,'58.48','127.13'),
+(29,'1932 Model A Ford J-Coupe','Vintage Cars',223113,'1:18','Autoart Studio Design','This model features grille-mounted chrome horn, lift-up louvered hood, fold-down rumble seat, working steering system, chrome-covered spare, opening doors, detailed and wired engine',9354,'58.48','127.13'),
 
-(30,'1926 Ford Fire Engine','Trucks and Buses','1:18','Carousel DieCast Legends','Gleaming red handsome appearance. Everything is here the fire hoses, ladder, axes, bells, lanterns, ready to fight any inferno.',2018,'24.92','60.77'),
+(30,'1926 Ford Fire Engine','Trucks and Buses',569331,'1:18','Carousel DieCast Legends','Gleaming red handsome appearance. Everything is here the fire hoses, ladder, axes, bells, lanterns, ready to fight any inferno.',2018,'24.92','60.77'),
 
-(31,'P-51-D Mustang','Planes','1:72','Gearbox Collectibles','Has retractable wheels and comes with a stand',992,'49.00','84.48'),
+(31,'P-51-D Mustang','Planes',433823,'1:72','Gearbox Collectibles','Has retractable wheels and comes with a stand',992,'49.00','84.48'),
 
-(32,'1936 Harley Davidson El Knucklehead','Motorcycles','1:18','Welly Diecast Productions','Intricately detailed with chrome accents and trim, official die-struck logos and baked enamel finish.',4357,'24.23','60.57'),
+(32,'1936 Harley Davidson El Knucklehead','Motorcycles',599302,'1:18','Welly Diecast Productions','Intricately detailed with chrome accents and trim, official die-struck logos and baked enamel finish.',4357,'24.23','60.57'),
 
-(33,'1928 Mercedes-Benz SSK','Vintage Cars','1:18','Gearbox Collectibles','This 1:18 replica features grille-mounted chrome horn, lift-up louvered hood, fold-down rumble seat, working steering system, chrome-covered spare, opening doors, detailed and wired engine. Color black.',548,'72.56','168.75'),
+(33,'1928 Mercedes-Benz SSK','Vintage Cars',223113,'1:18','Gearbox Collectibles','This 1:18 replica features grille-mounted chrome horn, lift-up louvered hood, fold-down rumble seat, working steering system, chrome-covered spare, opening doors, detailed and wired engine. Color black.',548,'72.56','168.75'),
 
-(34,'1999 Indy 500 Monte Carlo SS','Classic Cars','1:18','Red Start Diecast','Features include opening and closing doors. Color: Red',8164,'56.76','132.00'),
+(34,'1999 Indy 500 Monte Carlo SS','Classic Cars',599302,'1:18','Red Start Diecast','Features include opening and closing doors. Color: Red',8164,'56.76','132.00'),
 
-(35,'1913 Ford Model T Speedster','Vintage Cars','1:18','Carousel DieCast Legends','This 250 part reproduction includes moving handbrakes, clutch, throttle and foot pedals, squeezable horn, detailed wired engine, removable water, gas, and oil cans, pivoting monocle windshield, all topped with a baked enamel red finish. Each replica comes with an Owners Title and Certificate of Authenticity. Color red.',4189,'60.78','101.31'),
+(35,'1913 Ford Model T Speedster','Vintage Cars',223113,'1:18','Carousel DieCast Legends','This 250 part reproduction includes moving handbrakes, clutch, throttle and foot pedals, squeezable horn, detailed wired engine, removable water, gas, and oil cans, pivoting monocle windshield, all topped with a baked enamel red finish. Each replica comes with an Owners Title and Certificate of Authenticity. Color red.',4189,'60.78','101.31'),
 
-(36,'1934 Ford V8 Coupe','Vintage Cars','1:18','Min Lin Diecast','Chrome Trim, Chrome Grille, Opening Hood, Opening Doors, Opening Trunk, Detailed Engine, Working Steering System',5649,'34.35','62.46'),
+(36,'1934 Ford V8 Coupe','Vintage Cars',223113,'1:18','Min Lin Diecast','Chrome Trim, Chrome Grille, Opening Hood, Opening Doors, Opening Trunk, Detailed Engine, Working Steering System',5649,'34.35','62.46'),
 
-(37,'1999 Yamaha Speed Boat','Ships','1:18','Min Lin Diecast','Exact replica. Wood and Metal. Many extras including rigging, long boats, pilot house, anchors, etc. Comes with three masts, all square-rigged.',4259,'51.61','86.02'),
+(37,'1999 Yamaha Speed Boat','Ships',433823,'1:18','Min Lin Diecast','Exact replica. Wood and Metal. Many extras including rigging, long boats, pilot house, anchors, etc. Comes with three masts, all square-rigged.',4259,'51.61','86.02'),
 
-(38,'18th Century Vintage Horse Carriage','Vintage Cars','1:18','Red Start Diecast','Hand crafted diecast-like metal horse carriage is re-created in about 1:18 scale of antique horse carriage. This antique style metal Stagecoach is all hand-assembled with many different parts.\r\n\r\nThis collectible metal horse carriage is painted in classic Red, and features turning steering wheel and is entirely hand-finished.',5992,'60.74','104.72'),
+(38,'18th Century Vintage Horse Carriage','Vintage Cars',223113,'1:18','Red Start Diecast','Hand crafted diecast-like metal horse carriage is re-created in about 1:18 scale of antique horse carriage. This antique style metal Stagecoach is all hand-assembled with many different parts.rnrnThis collectible metal horse carriage is painted in classic Red, and features turning steering wheel and is entirely hand-finished.',5992,'60.74','104.72'),
 
-(39,'1903 Ford Model A','Vintage Cars','1:18','Unimax Art Galleries','Features opening trunk,  working steering system',3913,'68.30','136.59'),
+(39,'1903 Ford Model A','Vintage Cars',223113,'1:18','Unimax Art Galleries','Features opening trunk,  working steering system',3913,'68.30','136.59'),
 
-(40,'1992 Ferrari 360 Spider red','Classic Cars','1:18','Unimax Art Galleries','his replica features opening doors, superb detail and craftsmanship, working steering system, opening forward compartment, opening rear trunk with removable spare, 4 wheel independent spring suspension as well as factory baked enamel finish.',8347,'77.90','169.34'),
+(40,'1992 Ferrari 360 Spider red','Classic Cars',599302,'1:18','Unimax Art Galleries','his replica features opening doors, superb detail and craftsmanship, working steering system, opening forward compartment, opening rear trunk with removable spare, 4 wheel independent spring suspension as well as factory baked enamel finish.',8347,'77.90','169.34'),
 
-(41,'1985 Toyota Supra','Classic Cars','1:18','Highway 66 Mini Classics','This model features soft rubber tires, working steering, rubber mud guards, authentic Ford logos, detailed undercarriage, opening doors and hood, removable split rear gate, full size spare mounted in bed, detailed interior with opening glove box',7733,'57.01','107.57'),
+(41,'1985 Toyota Supra','Classic Cars',599302,'1:18','Highway 66 Mini Classics','This model features soft rubber tires, working steering, rubber mud guards, authentic Ford logos, detailed undercarriage, opening doors and hood, removable split rear gate, full size spare mounted in bed, detailed interior with opening glove box',7733,'57.01','107.57'),
 
-(42,'Collectable Wooden Train','Trains','1:18','Carousel DieCast Legends','Hand crafted wooden toy train set is in about 1:18 scale, 25 inches in total length including 2 additional carts, of actual vintage train. This antique style wooden toy train model set is all hand-assembled with 100% wood.',6450,'67.56','100.84'),
+(42,'Collectable Wooden Train','Trains',123333,'1:18','Carousel DieCast Legends','Hand crafted wooden toy train set is in about 1:18 scale, 25 inches in total length including 2 additional carts, of actual vintage train. This antique style wooden toy train model set is all hand-assembled with 100% wood.',6450,'67.56','100.84'),
 
-(43,'1969 Dodge Super Bee','Classic Cars','1:18','Min Lin Diecast','This replica features opening doors, superb detail and craftsmanship, working steering system, opening forward compartment, opening rear trunk with removable spare, 4 wheel independent spring suspension as well as factory baked enamel finish.',1917,'49.05','80.41'),
+(43,'1969 Dodge Super Bee','Classic Cars',599302,'1:18','Min Lin Diecast','This replica features opening doors, superb detail and craftsmanship, working steering system, opening forward compartment, opening rear trunk with removable spare, 4 wheel independent spring suspension as well as factory baked enamel finish.',1917,'49.05','80.41'),
 
-(44,'1917 Maxwell Touring Car','Vintage Cars','1:18','Exoto Designs','Features Gold Trim, Full Size Spare Tire, Chrome Trim, Chrome Grille, Opening Hood, Opening Doors, Opening Trunk, Detailed Engine, Working Steering System',7913,'57.54','99.21'),
+(44,'1917 Maxwell Touring Car','Vintage Cars',223113,'1:18','Exoto Designs','Features Gold Trim, Full Size Spare Tire, Chrome Trim, Chrome Grille, Opening Hood, Opening Doors, Opening Trunk, Detailed Engine, Working Steering System',7913,'57.54','99.21'),
 
-(45,'1976 Ford Gran Torino','Classic Cars','1:18','Gearbox Collectibles','Highly detailed 1976 Ford Gran Torino \"Starsky and Hutch\" diecast model. Very well constructed and painted in red and white patterns.',9127,'73.49','146.99'),
+(45,'1976 Ford Gran Torino','Classic Cars',599302,'1:18','Gearbox Collectibles','Highly detailed 1976 Ford Gran Torino "Starsky and Hutch" diecast model. Very well constructed and painted in red and white patterns.',9127,'73.49','146.99'),
 
-(46,'1948 Porsche Type 356 Roadster','Classic Cars','1:18','Gearbox Collectibles','This model features working front and rear suspension on accurately replicated and actuating shock absorbers as well as opening engine cover, rear stabilizer flap,  and 4 opening doors.',8990,'62.16','141.28'),
+(46,'1948 Porsche Type 356 Roadster','Classic Cars',599302,'1:18','Gearbox Collectibles','This model features working front and rear suspension on accurately replicated and actuating shock absorbers as well as opening engine cover, rear stabilizer flap,  and 4 opening doors.',8990,'62.16','141.28'),
 
-(47,'1957 Vespa GS150','Motorcycles','1:18','Studio M Art Models','Features rotating wheels , working kick stand. Comes with stand.',7689,'32.95','62.17'),
+(47,'1957 Vespa GS150','Motorcycles',599302,'1:18','Studio M Art Models','Features rotating wheels , working kick stand. Comes with stand.',7689,'32.95','62.17'),
 
-(48,'1941 Chevrolet Special Deluxe Cabriolet','Vintage Cars','1:18','Exoto Designs','Features opening hood, opening doors, opening trunk, wide white wall tires, front door arm rests, working steering system, leather upholstery. Color black.',2378,'64.58','105.87'),
+(48,'1941 Chevrolet Special Deluxe Cabriolet','Vintage Cars',223113,'1:18','Exoto Designs','Features opening hood, opening doors, opening trunk, wide white wall tires, front door arm rests, working steering system, leather upholstery. Color black.',2378,'64.58','105.87'),
 
-(49,'1970 Triumph Spitfire','Classic Cars','1:18','Min Lin Diecast','Features include opening and closing doors. Color: White.',5545,'91.92','143.62'),
+(49,'1970 Triumph Spitfire','Classic Cars',599302,'1:18','Min Lin Diecast','Features include opening and closing doors. Color: White.',5545,'91.92','143.62'),
 
-(50,'1932 Alfa Romeo 8C2300 Spider Sport','Vintage Cars','1:18','Exoto Designs','This 1:18 scale precision die cast replica features the 6 front headlights of the original, plus a detailed version of the 142 horsepower straight 8 engine, dual spares and their famous comprehensive dashboard. Color black.',6553,'43.26','92.03'),
+(50,'1932 Alfa Romeo 8C2300 Spider Sport','Vintage Cars',223113,'1:18','Exoto Designs','This 1:18 scale precision die cast replica features the 6 front headlights of the original, plus a detailed version of the 142 horsepower straight 8 engine, dual spares and their famous comprehensive dashboard. Color black.',6553,'43.26','92.03'),
 
-(51,'1904 Buick Runabout','Vintage Cars','1:18','Exoto Designs','Features opening trunk,  working steering system',8290,'52.66','87.77'),
+(51,'1904 Buick Runabout','Vintage Cars',223113,'1:18','Exoto Designs','Features opening trunk,  working steering system',8290,'52.66','87.77'),
 
-(52,'1940s Ford truck','Trucks and Buses','1:18','Motor City Art Classics','This 1940s Ford Pick-Up truck is re-created in 1:18 scale of original 1940s Ford truck. This antique style metal 1940s Ford Flatbed truck is all hand-assembled. This collectible 1940\'s Pick-Up truck is painted in classic dark green color, and features rotating wheels.',3128,'84.76','121.08'),
+(52,'1940s Ford truck','Trucks and Buses',569331,'1:18','Motor City Art Classics','This 1940s Ford Pick-Up truck is re-created in 1:18 scale of original 1940s Ford truck. This antique style metal 1940s Ford Flatbed truck is all hand-assembled. This collectible 1940''s Pick-Up truck is painted in classic dark green color, and features rotating wheels.',3128,'84.76','121.08'),
 
-(53,'1939 Cadillac Limousine','Vintage Cars','1:18','Studio M Art Models','Features completely detailed interior including Velvet flocked drapes,deluxe wood grain floor, and a wood grain casket with seperate chrome handles',6645,'23.14','50.31'),
+(53,'1939 Cadillac Limousine','Vintage Cars',223113,'1:18','Studio M Art Models','Features completely detailed interior including Velvet flocked drapes,deluxe wood grain floor, and a wood grain casket with seperate chrome handles',6645,'23.14','50.31'),
 
-(54,'1957 Corvette Convertible','Classic Cars','1:18','Classic Metal Creations','1957 die cast Corvette Convertible in Roman Red with white sides and whitewall tires. 1:18 scale quality die-cast with detailed engine and underbvody. Now you can own The Classic Corvette.',1249,'69.93','148.80'),
+(54,'1957 Corvette Convertible','Classic Cars',599302,'1:18','Classic Metal Creations','1957 die cast Corvette Convertible in Roman Red with white sides and whitewall tires. 1:18 scale quality die-cast with detailed engine and underbvody. Now you can own The Classic Corvette.',1249,'69.93','148.80'),
 
-(55,'1957 Ford Thunderbird','Classic Cars','1:18','Studio M Art Models','This 1:18 scale precision die-cast replica, with its optional porthole hardtop and factory baked-enamel Thunderbird Bronze finish, is a 100% accurate rendition of this American classic.',3209,'34.21','71.27'),
+(55,'1957 Ford Thunderbird','Classic Cars',599302,'1:18','Studio M Art Models','This 1:18 scale precision die-cast replica, with its optional porthole hardtop and factory baked-enamel Thunderbird Bronze finish, is a 100% accurate rendition of this American classic.',3209,'34.21','71.27'),
 
-(56,'1970 Chevy Chevelle SS 454','Classic Cars','1:24','Unimax Art Galleries','This model features rotating wheels, working streering system and opening doors. All parts are particularly delicate due to their precise scale and require special care and attention. It should not be picked up by the doors, roof, hood or trunk.',1005,'49.24','73.49'),
+(56,'1970 Chevy Chevelle SS 454','Classic Cars',599302,'1:24','Unimax Art Galleries','This model features rotating wheels, working streering system and opening doors. All parts are particularly delicate due to their precise scale and require special care and attention. It should not be picked up by the doors, roof, hood or trunk.',1005,'49.24','73.49'),
 
-(57,'1970 Dodge Coronet','Classic Cars','1:24','Highway 66 Mini Classics','1:24 scale die-cast about 18\" long doors open, hood opens and rubber wheels',4074,'32.37','57.80'),
+(57,'1970 Dodge Coronet','Classic Cars',599302,'1:24','Highway 66 Mini Classics','1:24 scale die-cast about 18" long doors open, hood opens and rubber wheels',4074,'32.37','57.80'),
 
-(58,'1997 BMW R 1100 S','Motorcycles','1:24','Autoart Studio Design','Detailed scale replica with working suspension and constructed from over 70 parts',7003,'60.86','112.70'),
+(58,'1997 BMW R 1100 S','Motorcycles',599302,'1:24','Autoart Studio Design','Detailed scale replica with working suspension and constructed from over 70 parts',7003,'60.86','112.70'),
 
-(59,'1966 Shelby Cobra 427 S/C','Classic Cars','1:24','Carousel DieCast Legends','This diecast model of the 1966 Shelby Cobra 427 S/C includes many authentic details and operating parts. The 1:24 scale model of this iconic lighweight sports car from the 1960s comes in silver and it\'s own display case.',8197,'29.18','50.31'),
+(59,'1966 Shelby Cobra 427 S/C','Classic Cars',599302,'1:24','Carousel DieCast Legends','This diecast model of the 1966 Shelby Cobra 427 S/C includes many authentic details and operating parts. The 1:24 scale model of this iconic lighweight sports car from the 1960s comes in silver and it''s own display case.',8197,'29.18','50.31'),
 
-(60,'1928 British Royal Navy Airplane','Planes','1:24','Classic Metal Creations','Official logos and insignias',3627,'66.74','109.42'),
+(60,'1928 British Royal Navy Airplane','Planes',433823,'1:24','Classic Metal Creations','Official logos and insignias',3627,'66.74','109.42'),
 
-(61,'1939 Chevrolet Deluxe Coupe','Vintage Cars','1:24','Motor City Art Classics','This 1:24 scale die-cast replica of the 1939 Chevrolet Deluxe Coupe has the same classy look as the original. Features opening trunk, hood and doors and a showroom quality baked enamel finish.',7332,'22.57','33.19'),
+(61,'1939 Chevrolet Deluxe Coupe','Vintage Cars',223113,'1:24','Motor City Art Classics','This 1:24 scale die-cast replica of the 1939 Chevrolet Deluxe Coupe has the same classy look as the original. Features opening trunk, hood and doors and a showroom quality baked enamel finish.',7332,'22.57','33.19'),
 
-(62,'1960 BSA Gold Star DBD34','Motorcycles','1:24','Highway 66 Mini Classics','Detailed scale replica with working suspension and constructed from over 70 parts',15,'37.32','76.17'),
+(62,'1960 BSA Gold Star DBD34','Motorcycles',599302,'1:24','Highway 66 Mini Classics','Detailed scale replica with working suspension and constructed from over 70 parts',15,'37.32','76.17'),
 
-(63,'18th century schooner','Ships','1:24','Carousel DieCast Legends','All wood with canvas sails. Many extras including rigging, long boats, pilot house, anchors, etc. Comes with 4 masts, all square-rigged.',1898,'82.34','122.89'),
+(63,'18th century schooner','Ships',433823,'1:24','Carousel DieCast Legends','All wood with canvas sails. Many extras including rigging, long boats, pilot house, anchors, etc. Comes with 4 masts, all square-rigged.',1898,'82.34','122.89'),
 
-(64,'1938 Cadillac V-16 Presidential Limousine','Vintage Cars','1:24','Classic Metal Creations','This 1:24 scale precision die cast replica of the 1938 Cadillac V-16 Presidential Limousine has all the details of the original, from the flags on the front to an opening back seat compartment complete with telephone and rifle. Features factory baked-enamel black finish, hood goddess ornament, working jump seats.',2847,'20.61','44.80'),
+(64,'1938 Cadillac V-16 Presidential Limousine','Vintage Cars',223113,'1:24','Classic Metal Creations','This 1:24 scale precision die cast replica of the 1938 Cadillac V-16 Presidential Limousine has all the details of the original, from the flags on the front to an opening back seat compartment complete with telephone and rifle. Features factory baked-enamel black finish, hood goddess ornament, working jump seats.',2847,'20.61','44.80'),
 
-(65,'1962 Volkswagen Microbus','Trucks and Buses','1:24','Autoart Studio Design','This 1:18 scale die cast replica of the 1962 Microbus is loaded with features: A working steering system, opening front doors and tailgate, and famous two-tone factory baked enamel finish, are all topped of by the sliding, real fabric, sunroof.',2327,'61.34','127.79'),
+(65,'1962 Volkswagen Microbus','Trucks and Buses',569331,'1:24','Autoart Studio Design','This 1:18 scale die cast replica of the 1962 Microbus is loaded with features: A working steering system, opening front doors and tailgate, and famous two-tone factory baked enamel finish, are all topped of by the sliding, real fabric, sunroof.',2327,'61.34','127.79'),
 
-(66,'1982 Ducati 900 Monster','Motorcycles','1:24','Highway 66 Mini Classics','Features two-tone paint with chrome accents, superior die-cast detail , rotating wheels , working kick stand',6840,'47.10','69.26'),
+(66,'1982 Ducati 900 Monster','Motorcycles',599302,'1:24','Highway 66 Mini Classics','Features two-tone paint with chrome accents, superior die-cast detail , rotating wheels , working kick stand',6840,'47.10','69.26'),
 
-(67,'1949 Jaguar XK 120','Classic Cars','1:24','Classic Metal Creations','Precision-engineered from original Jaguar specification in perfect scale ratio. Features opening doors, superb detail and craftsmanship, working steering system, opening forward compartment, opening rear trunk with removable spare, 4 wheel independent spring suspension as well as factory baked enamel finish.',2350,'47.25','90.87'),
+(67,'1949 Jaguar XK 120','Classic Cars',599302,'1:24','Classic Metal Creations','Precision-engineered from original Jaguar specification in perfect scale ratio. Features opening doors, superb detail and craftsmanship, working steering system, opening forward compartment, opening rear trunk with removable spare, 4 wheel independent spring suspension as well as factory baked enamel finish.',2350,'47.25','90.87'),
 
-(68,'1958 Chevy Corvette Limited Edition','Classic Cars','1:24','Carousel DieCast Legends','The operating parts of this 1958 Chevy Corvette Limited Edition are particularly delicate due to their precise scale and require special care and attention. Features rotating wheels, working streering, opening doors and trunk. Color dark green.',2542,'15.91','35.36'),
+(68,'1958 Chevy Corvette Limited Edition','Classic Cars',599302,'1:24','Carousel DieCast Legends','The operating parts of this 1958 Chevy Corvette Limited Edition are particularly delicate due to their precise scale and require special care and attention. Features rotating wheels, working streering, opening doors and trunk. Color dark green.',2542,'15.91','35.36'),
 
-(69,'1900s Vintage Bi-Plane','Planes','1:24','Autoart Studio Design','Hand crafted diecast-like metal bi-plane is re-created in about 1:24 scale of antique pioneer airplane. All hand-assembled with many different parts. Hand-painted in classic yellow and features correct markings of original airplane.',5942,'34.25','68.51'),
+(69,'1900s Vintage Bi-Plane','Planes',433823,'1:24','Autoart Studio Design','Hand crafted diecast-like metal bi-plane is re-created in about 1:24 scale of antique pioneer airplane. All hand-assembled with many different parts. Hand-painted in classic yellow and features correct markings of original airplane.',5942,'34.25','68.51'),
 
-(70,'1952 Citroen-15CV','Classic Cars','1:24','Exoto Designs','Precision crafted hand-assembled 1:18 scale reproduction of the 1952 15CV, with its independent spring suspension, working steering system, opening doors and hood, detailed engine and instrument panel, all topped of with a factory fresh baked enamel finish.',1452,'72.82','117.44'),
+(70,'1952 Citroen-15CV','Classic Cars',599302,'1:24','Exoto Designs','Precision crafted hand-assembled 1:18 scale reproduction of the 1952 15CV, with its independent spring suspension, working steering system, opening doors and hood, detailed engine and instrument panel, all topped of with a factory fresh baked enamel finish.',1452,'72.82','117.44'),
 
-(71,'1982 Lamborghini Diablo','Classic Cars','1:24','Second Gear Diecast','This replica features opening doors, superb detail and craftsmanship, working steering system, opening forward compartment, opening rear trunk with removable spare, 4 wheel independent spring suspension as well as factory baked enamel finish.',7723,'16.24','37.76'),
+(71,'1982 Lamborghini Diablo','Classic Cars',599302,'1:24','Second Gear Diecast','This replica features opening doors, superb detail and craftsmanship, working steering system, opening forward compartment, opening rear trunk with removable spare, 4 wheel independent spring suspension as well as factory baked enamel finish.',7723,'16.24','37.76'),
 
-(72,'1912 Ford Model T Delivery Wagon','Vintage Cars','1:24','Min Lin Diecast','This model features chrome trim and grille, opening hood, opening doors, opening trunk, detailed engine, working steering system. Color white.',9173,'46.91','88.51'),
+(72,'1912 Ford Model T Delivery Wagon','Vintage Cars',223113,'1:24','Min Lin Diecast','This model features chrome trim and grille, opening hood, opening doors, opening trunk, detailed engine, working steering system. Color white.',9173,'46.91','88.51'),
 
-(73,'1969 Chevrolet Camaro Z28','Classic Cars','1:24','Exoto Designs','1969 Z/28 Chevy Camaro 1:24 scale replica. The operating parts of this limited edition 1:24 scale diecast model car 1969 Chevy Camaro Z28- hood, trunk, wheels, streering, suspension and doors- are particularly delicate due to their precise scale and require special care and attention.',4695,'50.51','85.61'),
+(73,'1969 Chevrolet Camaro Z28','Classic Cars',599302,'1:24','Exoto Designs','1969 Z/28 Chevy Camaro 1:24 scale replica. The operating parts of this limited edition 1:24 scale diecast model car 1969 Chevy Camaro Z28- hood, trunk, wheels, streering, suspension and doors- are particularly delicate due to their precise scale and require special care and attention.',4695,'50.51','85.61'),
 
-(74,'1971 Alpine Renault 1600s','Classic Cars','1:24','Welly Diecast Productions','This 1971 Alpine Renault 1600s replica Features opening doors, superb detail and craftsmanship, working steering system, opening forward compartment, opening rear trunk with removable spare, 4 wheel independent spring suspension as well as factory baked enamel finish.',7995,'38.58','61.23'),
+(74,'1971 Alpine Renault 1600s','Classic Cars',599302,'1:24','Welly Diecast Productions','This 1971 Alpine Renault 1600s replica Features opening doors, superb detail and craftsmanship, working steering system, opening forward compartment, opening rear trunk with removable spare, 4 wheel independent spring suspension as well as factory baked enamel finish.',7995,'38.58','61.23'),
 
-(75,'1937 Horch 930V Limousine','Vintage Cars','1:24','Autoart Studio Design','Features opening hood, opening doors, opening trunk, wide white wall tires, front door arm rests, working steering system',2902,'26.30','65.75'),
+(75,'1937 Horch 930V Limousine','Vintage Cars',223113,'1:24','Autoart Studio Design','Features opening hood, opening doors, opening trunk, wide white wall tires, front door arm rests, working steering system',2902,'26.30','65.75'),
 
-(76,'2002 Chevy Corvette','Classic Cars','1:24','Gearbox Collectibles','The operating parts of this limited edition Diecast 2002 Chevy Corvette 50th Anniversary Pace car Limited Edition are particularly delicate due to their precise scale and require special care and attention. Features rotating wheels, poseable streering, opening doors and trunk.',9446,'62.11','107.08'),
+(76,'2002 Chevy Corvette','Classic Cars',599302,'1:24','Gearbox Collectibles','The operating parts of this limited edition Diecast 2002 Chevy Corvette 50th Anniversary Pace car Limited Edition are particularly delicate due to their precise scale and require special care and attention. Features rotating wheels, poseable streering, opening doors and trunk.',9446,'62.11','107.08'),
 
-(77,'1940 Ford Delivery Sedan','Vintage Cars','1:24','Carousel DieCast Legends','Chrome Trim, Chrome Grille, Opening Hood, Opening Doors, Opening Trunk, Detailed Engine, Working Steering System. Color black.',6621,'48.64','83.86'),
+(77,'1940 Ford Delivery Sedan','Vintage Cars',223113,'1:24','Carousel DieCast Legends','Chrome Trim, Chrome Grille, Opening Hood, Opening Doors, Opening Trunk, Detailed Engine, Working Steering System. Color black.',6621,'48.64','83.86'),
 
-(78,'1956 Porsche 356A Coupe','Classic Cars','1:18','Classic Metal Creations','Features include: Turnable front wheels; steering function; detailed interior; detailed engine; opening hood; opening trunk; opening doors; and detailed chassis.',6600,'98.30','140.43'),
+(78,'1956 Porsche 356A Coupe','Classic Cars',599302,'1:18','Classic Metal Creations','Features include: Turnable front wheels; steering create function; detailed interior; detailed engine; opening hood; opening trunk; opening doors; and detailed chassis.',6600,'98.30','140.43'),
 
-(79,'Corsair F4U ( Bird Cage)','Planes','1:24','Second Gear Diecast','Has retractable wheels and comes with a stand. Official logos and insignias.',6812,'29.34','68.24'),
+(79,'Corsair F4U ( Bird Cage)','Planes',433823,'1:24','Second Gear Diecast','Has retractable wheels and comes with a stand. Official logos and insignias.',6812,'29.34','68.24'),
 
-(80,'1936 Mercedes Benz 500k Roadster','Vintage Cars','1:24','Red Start Diecast','This model features grille-mounted chrome horn, lift-up louvered hood, fold-down rumble seat, working steering system and rubber wheels. Color black.',2081,'21.75','41.03'),
+(80,'1936 Mercedes Benz 500k Roadster','Vintage Cars',223113,'1:24','Red Start Diecast','This model features grille-mounted chrome horn, lift-up louvered hood, fold-down rumble seat, working steering system and rubber wheels. Color black.',2081,'21.75','41.03'),
 
-(81,'1992 Porsche Cayenne Turbo Silver','Classic Cars','1:24','Exoto Designs','This replica features opening doors, superb detail and craftsmanship, working steering system, opening forward compartment, opening rear trunk with removable spare, 4 wheel independent spring suspension as well as factory baked enamel finish.',6582,'69.78','118.28'),
+(81,'1992 Porsche Cayenne Turbo Silver','Classic Cars',599302,'1:24','Exoto Designs','This replica features opening doors, superb detail and craftsmanship, working steering system, opening forward compartment, opening rear trunk with removable spare, 4 wheel independent spring suspension as well as factory baked enamel finish.',6582,'69.78','118.28'),
 
-(82,'1936 Chrysler Airflow','Vintage Cars','1:24','Second Gear Diecast','Features opening trunk,  working steering system. Color dark green.',4710,'57.46','97.39'),
+(82,'1936 Chrysler Airflow','Vintage Cars',223113,'1:24','Second Gear Diecast','Features opening trunk,  working steering system. Color dark green.',4710,'57.46','97.39'),
 
-(83,'1900s Vintage Tri-Plane','Planes','1:24','Unimax Art Galleries','Hand crafted diecast-like metal Triplane is Re-created in about 1:24 scale of antique pioneer airplane. This antique style metal triplane is all hand-assembled with many different parts.',2756,'36.23','72.45'),
+(83,'1900s Vintage Tri-Plane','Planes',433823,'1:24','Unimax Art Galleries','Hand crafted diecast-like metal Triplane is Re-created in about 1:24 scale of antique pioneer airplane. This antique style metal triplane is all hand-assembled with many different parts.',2756,'36.23','72.45'),
 
-(84,'1961 Chevrolet Impala','Classic Cars','1:18','Classic Metal Creations','This 1:18 scale precision die-cast reproduction of the 1961 Chevrolet Impala has all the features-doors, hood and trunk that open; detailed 409 cubic-inch engine; chrome dashboard and stick shift, two-tone interior; working steering system; all topped of with a factory baked-enamel finish.',7869,'32.33','80.84'),
+(84,'1961 Chevrolet Impala','Classic Cars',599302,'1:18','Classic Metal Creations','This 1:18 scale precision die-cast reproduction of the 1961 Chevrolet Impala has all the features-doors, hood and trunk that open; detailed 409 cubic-inch engine; chrome dashboard and stick shift, two-tone interior; working steering system; all topped of with a factory baked-enamel finish.',7869,'32.33','80.84'),
 
-(85,'1980â€™s GM Manhattan Express','Trucks and Buses','1:32','Motor City Art Classics','This 1980â€™s era new look Manhattan express is still active, running from the Bronx to mid-town Manhattan. Has 35 opeining windows and working lights. Needs a battery.',5099,'53.93','96.31'),
+(85,'1980’s GM Manhattan Express','Trucks and Buses',569331,'1:32','Motor City Art Classics','This 1980’s era new look Manhattan express is still active, running from the Bronx to mid-town Manhattan. Has 35 opeining windows and working lights. Needs a battery.',5099,'53.93','96.31'),
 
-(86,'1997 BMW F650 ST','Motorcycles','1:32','Exoto Designs','Features official die-struck logos and baked enamel finish. Comes with stand.',178,'66.92','99.89'),
+(86,'1997 BMW F650 ST','Motorcycles',599302,'1:32','Exoto Designs','Features official die-struck logos and baked enamel finish. Comes with stand.',178,'66.92','99.89'),
 
-(87,'1982 Ducati 996 R','Motorcycles','1:32','Gearbox Collectibles','Features rotating wheels , working kick stand. Comes with stand.',9241,'24.14','40.23'),
+(87,'1982 Ducati 996 R','Motorcycles',599302,'1:32','Gearbox Collectibles','Features rotating wheels , working kick stand. Comes with stand.',9241,'24.14','40.23'),
 
-(88,'1954 Greyhound Scenicruiser','Trucks and Buses','1:32','Classic Metal Creations','Model features bi-level seating, 50 windows, skylights & glare resistant glass, working steering system, original logos',2874,'25.98','54.11'),
+(88,'1954 Greyhound Scenicruiser','Trucks and Buses',569331,'1:32','Classic Metal Creations','Model features bi-level seating, 50 windows, skylights & glare resistant glass, working steering system, original logos',2874,'25.98','54.11'),
 
-(89,'1950\'s Chicago Surface Lines Streetcar','Trains','1:32','Gearbox Collectibles','This streetcar is a joy to see. It has 80 separate windows, electric wire guides, detailed interiors with seats, poles and drivers controls, rolling and turning wheel assemblies, plus authentic factory baked-enamel finishes (Green Hornet for Chicago and Cream and Crimson for Boston).',8601,'26.72','62.14'),
+(89,'1950''s Chicago Surface Lines Streetcar','Trains',123333,'1:32','Gearbox Collectibles','This streetcar is a joy to see. It has 80 separate windows, electric wire guides, detailed interiors with seats, poles and drivers controls, rolling and turning wheel assemblies, plus authentic factory baked-enamel finishes (Green Hornet for Chicago and Cream and Crimson for Boston).',8601,'26.72','62.14'),
 
-(90,'1996 Peterbilt 379 Stake Bed with Outrigger','Trucks and Buses','1:32','Red Start Diecast','This model features, opening doors, detailed engine, working steering, tinted windows, detailed interior, die-struck logos, removable stakes operating outriggers, detachable second trailer, functioning 360-degree self loader, precision molded resin trailer and trim, baked enamel finish on cab',814,'33.61','64.64'),
+(90,'1996 Peterbilt 379 Stake Bed with Outrigger','Trucks and Buses',569331,'1:32','Red Start Diecast','This model features, opening doors, detailed engine, working steering, tinted windows, detailed interior, die-struck logos, removable stakes operating outriggers, detachable second trailer, functioning 360-degree self loader, precision molded resin trailer and trim, baked enamel finish on cab',814,'33.61','64.64'),
 
-(91,'1928 Ford Phaeton Deluxe','Vintage Cars','1:32','Highway 66 Mini Classics','This model features grille-mounted chrome horn, lift-up louvered hood, fold-down rumble seat, working steering system',136,'33.02','68.79'),
+(91,'1928 Ford Phaeton Deluxe','Vintage Cars',223113,'1:32','Highway 66 Mini Classics','This model features grille-mounted chrome horn, lift-up louvered hood, fold-down rumble seat, working steering system',136,'33.02','68.79'),
 
-(92,'1974 Ducati 350 Mk3 Desmo','Motorcycles','1:32','Second Gear Diecast','This model features two-tone paint with chrome accents, superior die-cast detail , rotating wheels , working kick stand',3341,'56.13','102.05'),
+(92,'1974 Ducati 350 Mk3 Desmo','Motorcycles',599302,'1:32','Second Gear Diecast','This model features two-tone paint with chrome accents, superior die-cast detail , rotating wheels , working kick stand',3341,'56.13','102.05'),
 
-(93,'1930 Buick Marquette Phaeton','Vintage Cars','1:50','Studio M Art Models','Features opening trunk,  working steering system',7062,'27.06','43.64'),
+(93,'1930 Buick Marquette Phaeton','Vintage Cars',223113,'1:50','Studio M Art Models','Features opening trunk,  working steering system',7062,'27.06','43.64'),
 
-(94,'Diamond T620 Semi-Skirted Tanker','Trucks and Buses','1:50','Highway 66 Mini Classics','This limited edition model is licensed and perfectly scaled for Lionel Trains. The Diamond T620 has been produced in solid precision diecast and painted with a fire baked enamel finish. It comes with a removable tanker and is a perfect model to add authenticity to your static train or car layout or to just have on display.',1016,'68.29','115.75'),
+(94,'Diamond T620 Semi-Skirted Tanker','Trucks and Buses',569331,'1:50','Highway 66 Mini Classics','This limited edition model is licensed and perfectly scaled for Lionel Trains. The Diamond T620 has been produced in solid precision diecast and painted with a fire baked enamel finish. It comes with a removable tanker and is a perfect model to add authenticity to your static train or car layout or to just have on display.',1016,'68.29','115.75'),
 
-(95,'1962 City of Detroit Streetcar','Trains','1:50','Classic Metal Creations','This streetcar is a joy to see. It has 99 separate windows, electric wire guides, detailed interiors with seats, poles and drivers controls, rolling and turning wheel assemblies, plus authentic factory baked-enamel finishes (Green Hornet for Chicago and Cream and Crimson for Boston).',1645,'37.49','58.58'),
+(95,'1962 City of Detroit Streetcar','Trains',123333,'1:50','Classic Metal Creations','This streetcar is a joy to see. It has 99 separate windows, electric wire guides, detailed interiors with seats, poles and drivers controls, rolling and turning wheel assemblies, plus authentic factory baked-enamel finishes (Green Hornet for Chicago and Cream and Crimson for Boston).',1645,'37.49','58.58'),
 
-(96,'2002 Yamaha YZR M1','Motorcycles','1:50','Autoart Studio Design','Features rotating wheels , working kick stand. Comes with stand.',600,'34.17','81.36'),
+(96,'2002 Yamaha YZR M1','Motorcycles',599302,'1:50','Autoart Studio Design','Features rotating wheels , working kick stand. Comes with stand.',600,'34.17','81.36'),
 
-(97,'The Schooner Bluenose','Ships','1:700','Autoart Studio Design','All wood with canvas sails. Measures 31 1/2 inches in Length, 22 inches High and 4 3/4 inches Wide. Many extras.\r\nThe schooner Bluenose was built in Nova Scotia in 1921 to fish the rough waters off the coast of Newfoundland. Because of the Bluenose racing prowess she became the pride of all Canadians. Still featured on stamps and the Canadian dime, the Bluenose was lost off Haiti in 1946.',1897,'34.00','66.67'),
+(97,'The Schooner Bluenose','Ships',433823,'1:700','Autoart Studio Design','All wood with canvas sails. Measures 31 1/2 inches in Length, 22 inches High and 4 3/4 inches Wide. Many extras.rnThe schooner Bluenose was built in Nova Scotia in 1921 to fish the rough waters off the coast of Newfoundland. Because of the Bluenose racing prowess she became the pride of all Canadians. Still featured on stamps and the Canadian dime, the Bluenose was lost off Haiti in 1946.',1897,'34.00','66.67'),
 
-(98,'American Airlines: B767-300','Planes','1:700','Min Lin Diecast','Exact replia with official logos and insignias and retractable wheels',5841,'51.15','91.34'),
+(98,'American Airlines: B767-300','Planes',433823,'1:700','Min Lin Diecast','Exact replia with official logos and insignias and retractable wheels',5841,'51.15','91.34'),
 
-(99,'The Mayflower','Ships','1:700','Studio M Art Models','Measures 31 1/2 inches Long x 25 1/2 inches High x 10 5/8 inches Wide\r\nAll wood with canvas sail. Extras include long boats, rigging, ladders, railing, anchors, side cannons, hand painted, etc.',737,'43.30','86.61'),
+(99,'The Mayflower','Ships',433823,'1:700','Studio M Art Models','Measures 31 1/2 inches Long x 25 1/2 inches High x 10 5/8 inches WidernAll wood with canvas sail. Extras include long boats, rigging, ladders, railing, anchors, side cannons, hand painted, etc.',737,'43.30','86.61'),
 
-(100,'HMS Bounty','Ships','1:700','Unimax Art Galleries','Measures 30 inches Long x 27 1/2 inches High x 4 3/4 inches Wide. \r\nMany extras including rigging, long boats, pilot house, anchors, etc. Comes with three masts, all square-rigged.',3501,'39.83','90.52'),
+(100,'HMS Bounty','Ships',433823,'1:700','Unimax Art Galleries','Measures 30 inches Long x 27 1/2 inches High x 4 3/4 inches Wide. rnMany extras including rigging, long boats, pilot house, anchors, etc. Comes with three masts, all square-rigged.',3501,'39.83','90.52'),
 
-(101,'America West Airlines B757-200','Planes','1:700','Motor City Art Classics','Official logos and insignias. Working steering system. Rotating jet engines',9653,'68.80','99.72'),
+(101,'America West Airlines B757-200','Planes',433823,'1:700','Motor City Art Classics','Official logos and insignias. Working steering system. Rotating jet engines',9653,'68.80','99.72'),
 
-(102,'The USS Constitution Ship','Ships','1:700','Red Start Diecast','All wood with canvas sails. Measures 31 1/2\" Length x 22 3/8\" High x 8 1/4\" Width. Extras include 4 boats on deck, sea sprite on bow, anchors, copper railing, pilot houses, etc.',7083,'33.97','72.28'),
+(102,'The USS Constitution Ship','Ships',433823,'1:700','Red Start Diecast','All wood with canvas sails. Measures 31 1/2" Length x 22 3/8" High x 8 1/4" Width. Extras include 4 boats on deck, sea sprite on bow, anchors, copper railing, pilot houses, etc.',7083,'33.97','72.28'),
 
-(103,'1982 Camaro Z28','Classic Cars','1:18','Carousel DieCast Legends','Features include opening and closing doors. Color: White. \r\nMeasures approximately 9 1/2\" Long.',6934,'46.53','101.15'),
+(103,'1982 Camaro Z28','Classic Cars',599302,'1:18','Carousel DieCast Legends','Features include opening and closing doors. Color: White. rnMeasures approximately 9 1/2" Long.',6934,'46.53','101.15'),
 
-(104,'ATA: B757-300','Planes','1:700','Highway 66 Mini Classics','Exact replia with official logos and insignias and retractable wheels',7106,'59.33','118.65'),
+(104,'ATA: B757-300','Planes',433823,'1:700','Highway 66 Mini Classics','Exact replia with official logos and insignias and retractable wheels',7106,'59.33','118.65'),
 
-(105,'F/A 18 Hornet 1/72','Planes','1:72','Motor City Art Classics','10\" Wingspan with retractable landing gears.Comes with pilot',551,'54.40','80.00'),
+(105,'F/A 18 Hornet 1/72','Planes',433823,'1:72','Motor City Art Classics','10" Wingspan with retractable landing gears.Comes with pilot',551,'54.40','80.00'),
 
-(106,'The Titanic','Ships','1:700','Carousel DieCast Legends','Completed model measures 19 1/2 inches long, 9 inches high, 3inches wide and is in barn red/black. All wood and metal.',1956,'51.09','100.17'),
+(106,'The Titanic','Ships',433823,'1:700','Carousel DieCast Legends','Completed model measures 19 1/2 inches long, 9 inches high, 3inches wide and is in barn red/black. All wood and metal.',1956,'51.09','100.17'),
 
-(107,'The Queen Mary','Ships','1:700','Welly Diecast Productions','Exact replica. Wood and Metal. Many extras including rigging, long boats, pilot house, anchors, etc. Comes with three masts, all square-rigged.',5088,'53.63','99.31'),
+(107,'The Queen Mary','Ships',433823,'1:700','Welly Diecast Productions','Exact replica. Wood and Metal. Many extras including rigging, long boats, pilot house, anchors, etc. Comes with three masts, all square-rigged.',5088,'53.63','99.31'),
 
-(108,'American Airlines: MD-11S','Planes','1:700','Second Gear Diecast','Polished finish. Exact replia with official logos and insignias and retractable wheels',8820,'36.27','74.03'),
+(108,'American Airlines: MD-11S','Planes',433823,'1:700','Second Gear Diecast','Polished finish. Exact replia with official logos and insignias and retractable wheels',8820,'36.27','74.03'),
 
-(109,'Boeing X-32A JSF','Planes','1:72','Motor City Art Classics','10\" Wingspan with retractable landing gears.Comes with pilot',4857,'32.77','49.66'),
+(109,'Boeing X-32A JSF','Planes',433823,'1:72','Motor City Art Classics','10" Wingspan with retractable landing gears.Comes with pilot',4857,'32.77','49.66'),
 
-(110,'Pont Yacht','Ships','1:72','Unimax Art Galleries','Measures 38 inches Long x 33 3/4 inches High. Includes a stand.\r\nMany extras including rigging, long boats, pilot house, anchors, etc. Comes with 2 masts, all square-rigged',414,'33.30','54.60') ON DUPLICATE KEY UPDATE product_id=product_id;
+(110,'Pont Yacht','Ships',433823,'1:72','Unimax Art Galleries','Measures 38 inches Long x 33 3/4 inches High. Includes a stand.rnMany extras including rigging, long boats, pilot house, anchors, etc. Comes with 2 masts, all square-rigged',414,'33.30','54.60') ON DUPLICATE KEY UPDATE product_id=product_id;
 
 /*Data for the table `order` */
 
-insert  into `order`(`order_id`,`order_date`,`required_date`,`shipped_date`,`status`,`comments`,`customer_number`) values 
+insert  into `order`(`order_id`,`order_date`,`required_date`,`shipped_date`,`status`,`comments`,`customer_number`,`amount`) values 
 
-(10100,'2003-01-06','2003-01-13','2003-01-10','Shipped',NULL,363),
+(10100,'2003-01-06','2003-01-13','2003-01-10','Shipped',NULL,363,301.84),
 
-(10101,'2003-01-09','2003-01-18','2003-01-11','Shipped','Check on availability.',128),
+(10101,'2003-01-09','2003-01-18','2003-01-11','Shipped','Check on availability.',128,352),
 
-(10102,'2003-01-10','2003-01-18','2003-01-14','Shipped',NULL,181),
+(10102,'2003-01-10','2003-01-18','2003-01-14','Shipped',NULL,181,138.68),
 
-(10103,'2003-01-29','2003-02-07','2003-02-02','Shipped',NULL,121),
+(10103,'2003-01-29','2003-02-07','2003-02-02','Shipped',NULL,121,1520.37),
 
-(10104,'2003-01-31','2003-02-09','2003-02-01','Shipped',NULL,141),
+(10104,'2003-01-31','2003-02-09','2003-02-01','Shipped',NULL,141,1198.58),
 
-(10105,'2003-02-11','2003-02-21','2003-02-12','Shipped',NULL,145),
+(10105,'2003-02-11','2003-02-21','2003-02-12','Shipped',NULL,145,1479.71),
 
-(10106,'2003-02-17','2003-02-24','2003-02-21','Shipped',NULL,278),
+(10106,'2003-02-17','2003-02-24','2003-02-21','Shipped',NULL,278,1427.28),
 
-(10107,'2003-02-24','2003-03-03','2003-02-26','Shipped','Difficult to negotiate with customer. We need more marketing materials',131),
+(10107,'2003-02-24','2003-03-03','2003-02-26','Shipped','Difficult to negotiate with customer. We need more marketing materials',131,793.21),
 
-(10108,'2003-03-03','2003-03-12','2003-03-08','Shipped',NULL,385),
+(10108,'2003-03-03','2003-03-12','2003-03-08','Shipped',NULL,385,1267.48),
 
-(10109,'2003-03-10','2003-03-19','2003-03-11','Shipped','Customer requested that FedEx Ground is used for this shipping',486),
+(10109,'2003-03-10','2003-03-19','2003-03-11','Shipped','Customer requested that FedEx Ground is used for this shipping',486,700.89),
 
-(10110,'2003-03-18','2003-03-24','2003-03-20','Shipped',NULL,187),
+(10110,'2003-03-18','2003-03-24','2003-03-20','Shipped',NULL,187,1338.47),
 
-(10111,'2003-03-25','2003-03-31','2003-03-30','Shipped',NULL,129),
+(10111,'2003-03-25','2003-03-31','2003-03-30','Shipped',NULL,129,460.16),
 
-(10112,'2003-03-24','2003-04-03','2003-03-29','Shipped','Customer requested that ad materials (such as posters, pamphlets) be included in the shippment',144),
+(10112,'2003-03-24','2003-04-03','2003-03-29','Shipped','Customer requested that ad materials (such as posters, pamphlets) be included in the shippment',144,282.26),
 
-(10113,'2003-03-26','2003-04-02','2003-03-27','Shipped',NULL,124),
+(10113,'2003-03-26','2003-04-02','2003-03-27','Shipped',NULL,124,325.23),
 
-(10114,'2003-04-01','2003-04-07','2003-04-02','Shipped',NULL,172),
+(10114,'2003-04-01','2003-04-07','2003-04-02','Shipped',NULL,172,909.72),
 
-(10115,'2003-04-04','2003-04-12','2003-04-07','Shipped',NULL,424),
+(10115,'2003-04-04','2003-04-12','2003-04-07','Shipped',NULL,424,515.99),
 
-(10116,'2003-04-11','2003-04-19','2003-04-13','Shipped',NULL,381),
+(10116,'2003-04-11','2003-04-19','2003-04-13','Shipped',NULL,381,60.28),
 
-(10117,'2003-04-16','2003-04-24','2003-04-17','Shipped',NULL,148),
+(10117,'2003-04-16','2003-04-24','2003-04-17','Shipped',NULL,148,1307.47),
 
-(10118,'2003-04-21','2003-04-29','2003-04-26','Shipped','Customer has worked with some of our vendors in the past and is aware of their MSRP',216),
+(10118,'2003-04-21','2003-04-29','2003-04-26','Shipped','Customer has worked with some of our vendors in the past and is aware of their MSRP',216,86.15),
 
-(10119,'2003-04-28','2003-05-05','2003-05-02','Shipped',NULL,382),
+(10119,'2003-04-28','2003-05-05','2003-05-02','Shipped',NULL,382,1007.21),
 
-(10120,'2003-04-29','2003-05-08','2003-05-01','Shipped',NULL,114),
+(10120,'2003-04-29','2003-05-08','2003-05-01','Shipped',NULL,114,1322.67),
 
-(10121,'2003-05-07','2003-05-13','2003-05-13','Shipped',NULL,353),
+(10121,'2003-05-07','2003-05-13','2003-05-13','Shipped',NULL,353,439.17),
 
-(10122,'2003-05-08','2003-05-16','2003-05-13','Shipped',NULL,350),
+(10122,'2003-05-08','2003-05-16','2003-05-13','Shipped',NULL,350,1598.27),
 
-(10123,'2003-05-20','2003-05-29','2003-05-22','Shipped',NULL,103),
+(10123,'2003-05-20','2003-05-29','2003-05-22','Shipped',NULL,103,396.08),
 
-(10124,'2003-05-21','2003-05-29','2003-05-25','Shipped','Customer very concerned about the exact color of the models. There is high risk that he may dispute the order because there is a slight color mismatch',112),
+(10124,'2003-05-21','2003-05-29','2003-05-25','Shipped','Customer very concerned about the exact color of the models. There is high risk that he may dispute the order because there is a slight color mismatch',112,976.44),
 
-(10125,'2003-05-21','2003-05-27','2003-05-24','Shipped',NULL,114),
+(10125,'2003-05-21','2003-05-27','2003-05-24','Shipped',NULL,114,227.76),
 
-(10126,'2003-05-28','2003-06-07','2003-06-02','Shipped',NULL,458),
+(10126,'2003-05-28','2003-06-07','2003-06-02','Shipped',NULL,458,1623.71),
 
-(10127,'2003-06-03','2003-06-09','2003-06-06','Shipped','Customer requested special shippment. The instructions were passed along to the warehouse',151),
+(10127,'2003-06-03','2003-06-09','2003-06-06','Shipped','Customer requested special shippment. The instructions were passed along to the warehouse',151,1601.39),
 
-(10128,'2003-06-06','2003-06-12','2003-06-11','Shipped',NULL,141),
+(10128,'2003-06-06','2003-06-12','2003-06-11','Shipped',NULL,141,350.86),
 
-(10129,'2003-06-12','2003-06-18','2003-06-14','Shipped',NULL,324),
+(10129,'2003-06-12','2003-06-18','2003-06-14','Shipped',NULL,324,754.23),
 
-(10130,'2003-06-16','2003-06-24','2003-06-21','Shipped',NULL,198),
+(10130,'2003-06-16','2003-06-24','2003-06-21','Shipped',NULL,198,168.34),
 
-(10131,'2003-06-16','2003-06-25','2003-06-21','Shipped',NULL,447),
+(10131,'2003-06-16','2003-06-25','2003-06-21','Shipped',NULL,447,577.67),
 
-(10132,'2003-06-25','2003-07-01','2003-06-28','Shipped',NULL,323),
+(10132,'2003-06-25','2003-07-01','2003-06-28','Shipped',NULL,323,80.00),
 
-(10133,'2003-06-27','2003-07-04','2003-07-03','Shipped',NULL,141),
+(10133,'2003-06-27','2003-07-04','2003-07-03','Shipped',NULL,141,628.49),
 
-(10134,'2003-07-01','2003-07-10','2003-07-05','Shipped',NULL,250),
+(10134,'2003-07-01','2003-07-10','2003-07-05','Shipped',NULL,250,747.93),
 
-(10135,'2003-07-02','2003-07-12','2003-07-03','Shipped',NULL,124),
+(10135,'2003-07-02','2003-07-12','2003-07-03','Shipped',NULL,124,1494.89),
 
-(10136,'2003-07-04','2003-07-14','2003-07-06','Shipped','Customer is interested in buying more Ferrari models',242),
+(10136,'2003-07-04','2003-07-14','2003-07-06','Shipped','Customer is interested in buying more Ferrari models',242,407.73),
 
-(10137,'2003-07-10','2003-07-20','2003-07-14','Shipped',NULL,353),
+(10137,'2003-07-10','2003-07-20','2003-07-14','Shipped',NULL,353,385.54),
 
-(10138,'2003-07-07','2003-07-16','2003-07-13','Shipped',NULL,496),
+(10138,'2003-07-07','2003-07-16','2003-07-13','Shipped',NULL,496,970.09),
 
-(10139,'2003-07-16','2003-07-23','2003-07-21','Shipped',NULL,282),
+(10139,'2003-07-16','2003-07-23','2003-07-21','Shipped',NULL,282,714.16),
 
-(10140,'2003-07-24','2003-08-02','2003-07-30','Shipped',NULL,161),
+(10140,'2003-07-24','2003-08-02','2003-07-30','Shipped',NULL,161,992.83),
 
-(10141,'2003-08-01','2003-08-09','2003-08-04','Shipped',NULL,334),
+(10141,'2003-08-01','2003-08-09','2003-08-04','Shipped',NULL,334,857.52),
 
-(10142,'2003-08-08','2003-08-16','2003-08-13','Shipped',NULL,124),
+(10142,'2003-08-08','2003-08-16','2003-08-13','Shipped',NULL,124,1570.77),
 
-(10143,'2003-08-10','2003-08-18','2003-08-12','Shipped','Can we deliver the new Ford Mustang models by end-of-quarter?',320),
+(10143,'2003-08-10','2003-08-18','2003-08-12','Shipped','Can we deliver the new Ford Mustang models by end-of-quarter?',320,1227.49),
 
-(10144,'2003-08-13','2003-08-21','2003-08-14','Shipped',NULL,381),
+(10144,'2003-08-13','2003-08-21','2003-08-14','Shipped',NULL,381,56.41),
 
-(10145,'2003-08-25','2003-09-02','2003-08-31','Shipped',NULL,205),
+(10145,'2003-08-25','2003-09-02','2003-08-31','Shipped',NULL,205,1412.17),
 
-(10146,'2003-09-03','2003-09-13','2003-09-06','Shipped',NULL,447),
+(10146,'2003-09-03','2003-09-13','2003-09-06','Shipped',NULL,447,191.24),
 
-(10147,'2003-09-05','2003-09-12','2003-09-09','Shipped',NULL,379),
+(10147,'2003-09-05','2003-09-12','2003-09-09','Shipped',NULL,379,997.5),
 
-(10148,'2003-09-11','2003-09-21','2003-09-15','Shipped','They want to reevaluate their terms agreement with Finance.',276),
+(10148,'2003-09-11','2003-09-21','2003-09-15','Shipped','They want to reevaluate their terms agreement with Finance.',276,1374.9),
 
-(10149,'2003-09-12','2003-09-18','2003-09-17','Shipped',NULL,487),
+(10149,'2003-09-12','2003-09-18','2003-09-17','Shipped',NULL,487,925.52),
 
-(10150,'2003-09-19','2003-09-27','2003-09-21','Shipped','They want to reevaluate their terms agreement with Finance.',148),
+(10150,'2003-09-19','2003-09-27','2003-09-21','Shipped','They want to reevaluate their terms agreement with Finance.',148,1096.9),
 
-(10151,'2003-09-21','2003-09-30','2003-09-24','Shipped',NULL,311),
+(10151,'2003-09-21','2003-09-30','2003-09-24','Shipped',NULL,311,976.09),
 
-(10152,'2003-09-25','2003-10-03','2003-10-01','Shipped',NULL,333),
+(10152,'2003-09-25','2003-10-03','2003-10-01','Shipped',NULL,333,336.44),
 
-(10153,'2003-09-28','2003-10-05','2003-10-03','Shipped',NULL,141),
+(10153,'2003-09-28','2003-10-05','2003-10-03','Shipped',NULL,141,304.98),
 
-(10154,'2003-10-02','2003-10-12','2003-10-08','Shipped',NULL,219),
+(10154,'2003-10-02','2003-10-12','2003-10-08','Shipped',NULL,219,134.5),
 
-(10155,'2003-10-06','2003-10-13','2003-10-07','Shipped',NULL,186),
+(10155,'2003-10-06','2003-10-13','2003-10-07','Shipped',NULL,186,1084.82),
 
-(10156,'2003-10-08','2003-10-17','2003-10-11','Shipped',NULL,141),
+(10156,'2003-10-08','2003-10-17','2003-10-11','Shipped',NULL,141,121.28),
 
-(10157,'2003-10-09','2003-10-15','2003-10-14','Shipped',NULL,473),
+(10157,'2003-10-09','2003-10-15','2003-10-14','Shipped',NULL,473,475.12),
 
-(10158,'2003-10-10','2003-10-18','2003-10-15','Shipped',NULL,121),
+(10158,'2003-10-10','2003-10-18','2003-10-15','Shipped',NULL,121,67.79),
 
-(10159,'2003-10-10','2003-10-19','2003-10-16','Shipped',NULL,321),
+(10159,'2003-10-10','2003-10-19','2003-10-16','Shipped',NULL,321,1687.12),
 
-(10160,'2003-10-11','2003-10-17','2003-10-17','Shipped',NULL,347),
+(10160,'2003-10-11','2003-10-17','2003-10-17','Shipped',NULL,347,562.16),
 
-(10161,'2003-10-17','2003-10-25','2003-10-20','Shipped',NULL,227),
+(10161,'2003-10-17','2003-10-25','2003-10-20','Shipped',NULL,227,1068.37),
 
-(10162,'2003-10-18','2003-10-26','2003-10-19','Shipped',NULL,321),
+(10162,'2003-10-18','2003-10-26','2003-10-19','Shipped',NULL,321,782.94),
 
-(10163,'2003-10-20','2003-10-27','2003-10-24','Shipped',NULL,424),
+(10163,'2003-10-20','2003-10-27','2003-10-24','Shipped',NULL,424,651.79),
 
-(10164,'2003-10-21','2003-10-30','2003-10-23','Resolved','This order was disputed, but resolved on 11/1/2003; Customer doesn\'t like the colors and precision of the models.',452),
+(10164,'2003-10-21','2003-10-30','2003-10-23','Resolved','This order was disputed, but resolved on 11/1/2003; Customer doesn\'t like the colors and precision of the models.',452,758.85),
 
-(10165,'2003-10-22','2003-10-31','2003-12-26','Shipped','This order was on hold because customers\'s credit limit had been exceeded. Order will ship when payment is received',148),
+(10165,'2003-10-22','2003-10-31','2003-12-26','Shipped','This order was on hold because customers\'s credit limit had been exceeded. Order will ship when payment is received',148,1674.66),
 
-(10166,'2003-10-21','2003-10-30','2003-10-27','Shipped',NULL,462),
+(10166,'2003-10-21','2003-10-30','2003-10-27','Shipped',NULL,462,361.88),
 
-(10167,'2003-10-23','2003-10-30',NULL,'Cancelled','Customer called to cancel. The warehouse was notified in time and the order didn\'t ship. They have a new VP of Sales and are shifting their sales model. Our VP of Sales should contact them.',448),
+(10167,'2003-10-23','2003-10-30',NULL,'Cancelled','Customer called to cancel. The warehouse was notified in time and the order didn\'t ship. They have a new VP of Sales and are shifting their sales model. Our VP of Sales should contact them.',448,1271.62),
 
-(10168,'2003-10-28','2003-11-03','2003-11-01','Shipped',NULL,161),
+(10168,'2003-10-28','2003-11-03','2003-11-01','Shipped',NULL,161,1472.5),
 
-(10169,'2003-11-04','2003-11-14','2003-11-09','Shipped',NULL,276),
+(10169,'2003-11-04','2003-11-14','2003-11-09','Shipped',NULL,276,1130.7),
 
-(10170,'2003-11-04','2003-11-12','2003-11-07','Shipped',NULL,452),
+(10170,'2003-11-04','2003-11-12','2003-11-07','Shipped',NULL,452,410.22),
 
-(10171,'2003-11-05','2003-11-13','2003-11-07','Shipped',NULL,233),
+(10171,'2003-11-05','2003-11-13','2003-11-07','Shipped',NULL,233,463.18),
 
-(10172,'2003-11-05','2003-11-14','2003-11-11','Shipped',NULL,175),
+(10172,'2003-11-05','2003-11-14','2003-11-11','Shipped',NULL,175,716.82),
 
-(10173,'2003-11-05','2003-11-15','2003-11-09','Shipped','Cautious optimism. We have happy customers here, if we can keep them well stocked.  I need all the information I can get on the planned shippments of Porches',278),
+(10173,'2003-11-05','2003-11-15','2003-11-09','Shipped','Cautious optimism. We have happy customers here, if we can keep them well stocked.  I need all the information I can get on the planned shippments of Porches',278,1310.96),
 
-(10174,'2003-11-06','2003-11-15','2003-11-10','Shipped',NULL,333),
+(10174,'2003-11-06','2003-11-15','2003-11-10','Shipped',NULL,333,530.11),
 
-(10175,'2003-11-06','2003-11-14','2003-11-09','Shipped',NULL,324),
+(10175,'2003-11-06','2003-11-14','2003-11-09','Shipped',NULL,324,1074.91),
 
-(10176,'2003-11-06','2003-11-15','2003-11-12','Shipped',NULL,386),
+(10176,'2003-11-06','2003-11-15','2003-11-12','Shipped',NULL,386,1133.56),
 
-(10177,'2003-11-07','2003-11-17','2003-11-12','Shipped',NULL,344),
+(10177,'2003-11-07','2003-11-17','2003-11-12','Shipped',NULL,344,878.84),
 
-(10178,'2003-11-08','2003-11-16','2003-11-10','Shipped','Custom shipping instructions sent to warehouse',242),
+(10178,'2003-11-08','2003-11-16','2003-11-10','Shipped','Custom shipping instructions sent to warehouse',242,989.95),
 
-(10179,'2003-11-11','2003-11-17','2003-11-13','Cancelled','Customer cancelled due to urgent budgeting issues. Must be cautious when dealing with them in the future. Since order shipped already we must discuss who would cover the shipping charges.',496),
+(10179,'2003-11-11','2003-11-17','2003-11-13','Cancelled','Customer cancelled due to urgent budgeting issues. Must be cautious when dealing with them in the future. Since order shipped already we must discuss who would cover the shipping charges.',496,702.84),
 
-(10180,'2003-11-11','2003-11-19','2003-11-14','Shipped',NULL,171),
+(10180,'2003-11-11','2003-11-19','2003-11-14','Shipped',NULL,171,1226.65),
 
-(10181,'2003-11-12','2003-11-19','2003-11-15','Shipped',NULL,167),
+(10181,'2003-11-12','2003-11-19','2003-11-15','Shipped',NULL,167,1760.39),
 
-(10182,'2003-11-12','2003-11-21','2003-11-18','Shipped',NULL,124),
+(10182,'2003-11-12','2003-11-21','2003-11-18','Shipped',NULL,124,1360.43),
 
-(10183,'2003-11-13','2003-11-22','2003-11-15','Shipped','We need to keep in close contact with their Marketing VP. He is the decision maker for all their purchases.',339),
+(10183,'2003-11-13','2003-11-22','2003-11-15','Shipped','We need to keep in close contact with their Marketing VP. He is the decision maker for all their purchases.',339,1143.9),
 
-(10184,'2003-11-14','2003-11-22','2003-11-20','Shipped',NULL,484),
+(10184,'2003-11-14','2003-11-22','2003-11-20','Shipped',NULL,484,1205.41),
 
-(10185,'2003-11-14','2003-11-21','2003-11-20','Shipped',NULL,320),
+(10185,'2003-11-14','2003-11-21','2003-11-20','Shipped',NULL,320,1605.19),
 
-(10186,'2003-11-14','2003-11-20','2003-11-18','Shipped','They want to reevaluate their terms agreement with the VP of Sales',489),
+(10186,'2003-11-14','2003-11-20','2003-11-18','Shipped','They want to reevaluate their terms agreement with the VP of Sales',489,729.73),
 
-(10187,'2003-11-15','2003-11-24','2003-11-16','Shipped',NULL,211),
+(10187,'2003-11-15','2003-11-24','2003-11-16','Shipped',NULL,211,1440.52),
 
-(10188,'2003-11-18','2003-11-26','2003-11-24','Shipped',NULL,167),
+(10188,'2003-11-18','2003-11-26','2003-11-24','Shipped',NULL,167,777.15),
 
-(10189,'2003-11-18','2003-11-25','2003-11-24','Shipped','They want to reevaluate their terms agreement with Finance.',205),
+(10189,'2003-11-18','2003-11-25','2003-11-24','Shipped','They want to reevaluate their terms agreement with Finance.',205,138.57),
 
-(10190,'2003-11-19','2003-11-29','2003-11-20','Shipped',NULL,141),
+(10190,'2003-11-19','2003-11-29','2003-11-20','Shipped',NULL,141,254.82),
 
-(10191,'2003-11-20','2003-11-30','2003-11-24','Shipped','We must be cautions with this customer. Their VP of Sales resigned. Company may be heading down.',259),
+(10191,'2003-11-20','2003-11-30','2003-11-24','Shipped','We must be cautions with this customer. Their VP of Sales resigned. Company may be heading down.',259,853.76),
 
-(10192,'2003-11-20','2003-11-29','2003-11-25','Shipped',NULL,363),
+(10192,'2003-11-20','2003-11-29','2003-11-25','Shipped',NULL,363,1541.08),
 
-(10193,'2003-11-21','2003-11-28','2003-11-27','Shipped',NULL,471),
+(10193,'2003-11-21','2003-11-28','2003-11-27','Shipped',NULL,471,1294.46),
 
-(10194,'2003-11-25','2003-12-02','2003-11-26','Shipped',NULL,146),
+(10194,'2003-11-25','2003-12-02','2003-11-26','Shipped',NULL,146,1110.74),
 
-(10195,'2003-11-25','2003-12-01','2003-11-28','Shipped',NULL,319),
+(10195,'2003-11-25','2003-12-01','2003-11-28','Shipped',NULL,319,911.46),
 
-(10196,'2003-11-26','2003-12-03','2003-12-01','Shipped',NULL,455),
+(10196,'2003-11-26','2003-12-03','2003-12-01','Shipped',NULL,455,978.59),
 
-(10197,'2003-11-26','2003-12-02','2003-12-01','Shipped','Customer inquired about remote controlled models and gold models.',216),
+(10197,'2003-11-26','2003-12-02','2003-12-01','Shipped','Customer inquired about remote controlled models and gold models.',216,1109.13),
 
-(10198,'2003-11-27','2003-12-06','2003-12-03','Shipped',NULL,385),
+(10198,'2003-11-27','2003-12-06','2003-12-03','Shipped',NULL,385,506.86),
 
-(10199,'2003-12-01','2003-12-10','2003-12-06','Shipped',NULL,475),
+(10199,'2003-12-01','2003-12-10','2003-12-06','Shipped',NULL,475,189.66),
 
-(10200,'2003-12-01','2003-12-09','2003-12-06','Shipped',NULL,211),
+(10200,'2003-12-01','2003-12-09','2003-12-06','Shipped',NULL,211,505.54),
 
-(10201,'2003-12-01','2003-12-11','2003-12-02','Shipped',NULL,129),
+(10201,'2003-12-01','2003-12-11','2003-12-02','Shipped',NULL,129,725.37),
 
-(10202,'2003-12-02','2003-12-09','2003-12-06','Shipped',NULL,357),
+(10202,'2003-12-02','2003-12-09','2003-12-06','Shipped',NULL,357,506.36),
 
-(10203,'2003-12-02','2003-12-11','2003-12-07','Shipped',NULL,141),
+(10203,'2003-12-02','2003-12-11','2003-12-07','Shipped',NULL,141,1107.92),
 
-(10204,'2003-12-02','2003-12-10','2003-12-04','Shipped',NULL,151),
+(10204,'2003-12-02','2003-12-10','2003-12-04','Shipped',NULL,151,1619.73),
 
-(10205,'2003-12-03','2003-12-09','2003-12-07','Shipped',' I need all the information I can get on our competitors.',141),
+(10205,'2003-12-03','2003-12-09','2003-12-07','Shipped',' I need all the information I can get on our competitors.',141,347.45),
 
-(10206,'2003-12-05','2003-12-13','2003-12-08','Shipped','Can we renegotiate this one?',202),
+(10206,'2003-12-05','2003-12-13','2003-12-08','Shipped','Can we renegotiate this one?',202,1065.55),
 
-(10207,'2003-12-09','2003-12-17','2003-12-11','Shipped','Check on availability.',495),
+(10207,'2003-12-09','2003-12-17','2003-12-11','Shipped','Check on availability.',495,1560.08),
 
-(10208,'2004-01-02','2004-01-11','2004-01-04','Shipped',NULL,146),
+(10208,'2004-01-02','2004-01-11','2004-01-04','Shipped',NULL,146,1438.31),
 
-(10209,'2004-01-09','2004-01-15','2004-01-12','Shipped',NULL,347),
+(10209,'2004-01-09','2004-01-15','2004-01-12','Shipped',NULL,347,646.57),
 
-(10210,'2004-01-12','2004-01-22','2004-01-20','Shipped',NULL,177),
+(10210,'2004-01-12','2004-01-22','2004-01-20','Shipped',NULL,177,1443.06),
 
-(10211,'2004-01-15','2004-01-25','2004-01-18','Shipped',NULL,406),
+(10211,'2004-01-15','2004-01-25','2004-01-18','Shipped',NULL,406,1399.57),
 
-(10212,'2004-01-16','2004-01-24','2004-01-18','Shipped',NULL,141),
+(10212,'2004-01-16','2004-01-24','2004-01-18','Shipped',NULL,141,1541.83),
 
-(10213,'2004-01-22','2004-01-28','2004-01-27','Shipped','Difficult to negotiate with customer. We need more marketing materials',489),
+(10213,'2004-01-22','2004-01-28','2004-01-27','Shipped','Difficult to negotiate with customer. We need more marketing materials',489,240.59),
 
-(10214,'2004-01-26','2004-02-04','2004-01-29','Shipped',NULL,458),
+(10214,'2004-01-26','2004-02-04','2004-01-29','Shipped',NULL,458,623.43),
 
-(10215,'2004-01-29','2004-02-08','2004-02-01','Shipped','Customer requested that FedEx Ground is used for this shipping',475),
+(10215,'2004-01-29','2004-02-08','2004-02-01','Shipped','Customer requested that FedEx Ground is used for this shipping',475,916.49),
 
-(10216,'2004-02-02','2004-02-10','2004-02-04','Shipped',NULL,256),
+(10216,'2004-02-02','2004-02-10','2004-02-04','Shipped',NULL,256,133.94),
 
-(10217,'2004-02-04','2004-02-14','2004-02-06','Shipped',NULL,166),
+(10217,'2004-02-04','2004-02-14','2004-02-06','Shipped',NULL,166,638.71),
 
-(10218,'2004-02-09','2004-02-16','2004-02-11','Shipped','Customer requested that ad materials (such as posters, pamphlets) be included in the shippment',473),
+(10218,'2004-02-09','2004-02-16','2004-02-11','Shipped','Customer requested that ad materials (such as posters, pamphlets) be included in the shippment',473,262.87),
 
-(10219,'2004-02-10','2004-02-17','2004-02-12','Shipped',NULL,487),
+(10219,'2004-02-10','2004-02-17','2004-02-12','Shipped',NULL,487,306.16),
 
-(10220,'2004-02-12','2004-02-19','2004-02-16','Shipped',NULL,189),
+(10220,'2004-02-12','2004-02-19','2004-02-16','Shipped',NULL,189,982.07),
 
-(10221,'2004-02-18','2004-02-26','2004-02-19','Shipped',NULL,314),
+(10221,'2004-02-18','2004-02-26','2004-02-19','Shipped',NULL,314,490.22),
 
-(10222,'2004-02-19','2004-02-27','2004-02-20','Shipped',NULL,239),
+(10222,'2004-02-19','2004-02-27','2004-02-20','Shipped',NULL,239,1389.51),
 
-(10223,'2004-02-20','2004-02-29','2004-02-24','Shipped',NULL,114),
+(10223,'2004-02-20','2004-02-29','2004-02-24','Shipped',NULL,114,1304.29),
 
-(10224,'2004-02-21','2004-03-02','2004-02-26','Shipped','Customer has worked with some of our vendors in the past and is aware of their MSRP',171),
+(10224,'2004-02-21','2004-03-02','2004-02-26','Shipped','Customer has worked with some of our vendors in the past and is aware of their MSRP',171,472.32),
 
-(10225,'2004-02-22','2004-03-01','2004-02-24','Shipped',NULL,298),
+(10225,'2004-02-22','2004-03-01','2004-02-24','Shipped',NULL,298,1392.48),
 
-(10226,'2004-02-26','2004-03-06','2004-03-02','Shipped',NULL,239),
+(10226,'2004-02-26','2004-03-06','2004-03-02','Shipped',NULL,239,694.52),
 
-(10227,'2004-03-02','2004-03-12','2004-03-08','Shipped',NULL,146),
+(10227,'2004-03-02','2004-03-12','2004-03-08','Shipped',NULL,146,1220.54),
 
-(10228,'2004-03-10','2004-03-18','2004-03-13','Shipped',NULL,173),
+(10228,'2004-03-10','2004-03-18','2004-03-13','Shipped',NULL,173,658.67),
 
-(10229,'2004-03-11','2004-03-20','2004-03-12','Shipped',NULL,124),
+(10229,'2004-03-11','2004-03-20','2004-03-12','Shipped',NULL,124,1246.31),
 
-(10230,'2004-03-15','2004-03-24','2004-03-20','Shipped','Customer very concerned about the exact color of the models. There is high risk that he may dispute the order because there is a slight color mismatch',128),
+(10230,'2004-03-15','2004-03-24','2004-03-20','Shipped','Customer very concerned about the exact color of the models. There is high risk that he may dispute the order because there is a slight color mismatch',128,788.41),
 
-(10231,'2004-03-19','2004-03-26','2004-03-25','Shipped',NULL,344),
+(10231,'2004-03-19','2004-03-26','2004-03-25','Shipped',NULL,344,340.32),
 
-(10232,'2004-03-20','2004-03-30','2004-03-25','Shipped',NULL,240),
+(10232,'2004-03-20','2004-03-30','2004-03-25','Shipped',NULL,240,723.9),
 
-(10233,'2004-03-29','2004-04-04','2004-04-02','Shipped','Customer requested special shippment. The instructions were passed along to the warehouse',328),
+(10233,'2004-03-29','2004-04-04','2004-04-02','Shipped','Customer requested special shippment. The instructions were passed along to the warehouse',328,204.75),
 
-(10234,'2004-03-30','2004-04-05','2004-04-02','Shipped',NULL,412),
+(10234,'2004-03-30','2004-04-05','2004-04-02','Shipped',NULL,412,775.05),
 
-(10235,'2004-04-02','2004-04-12','2004-04-06','Shipped',NULL,260),
+(10235,'2004-04-02','2004-04-12','2004-04-06','Shipped',NULL,260,926.24),
 
-(10236,'2004-04-03','2004-04-11','2004-04-08','Shipped',NULL,486),
+(10236,'2004-04-03','2004-04-11','2004-04-08','Shipped',NULL,486,224.07),
 
-(10237,'2004-04-05','2004-04-12','2004-04-10','Shipped',NULL,181),
+(10237,'2004-04-05','2004-04-12','2004-04-10','Shipped',NULL,181,809.92),
 
-(10238,'2004-04-09','2004-04-16','2004-04-10','Shipped',NULL,145),
+(10238,'2004-04-09','2004-04-16','2004-04-10','Shipped',NULL,145,794.15),
 
-(10239,'2004-04-12','2004-04-21','2004-04-17','Shipped',NULL,311),
+(10239,'2004-04-12','2004-04-21','2004-04-17','Shipped',NULL,311,471.61),
 
-(10240,'2004-04-13','2004-04-20','2004-04-20','Shipped',NULL,177),
+(10240,'2004-04-13','2004-04-20','2004-04-20','Shipped',NULL,177,396.75),
 
-(10241,'2004-04-13','2004-04-20','2004-04-19','Shipped',NULL,209),
+(10241,'2004-04-13','2004-04-20','2004-04-19','Shipped',NULL,209,1097.13),
 
-(10242,'2004-04-20','2004-04-28','2004-04-25','Shipped','Customer is interested in buying more Ferrari models',456),
+(10242,'2004-04-20','2004-04-28','2004-04-25','Shipped','Customer is interested in buying more Ferrari models',456,36.52),
 
-(10243,'2004-04-26','2004-05-03','2004-04-28','Shipped',NULL,495),
+(10243,'2004-04-26','2004-05-03','2004-04-28','Shipped',NULL,495,142.74),
 
-(10244,'2004-04-29','2004-05-09','2004-05-04','Shipped',NULL,141),
+(10244,'2004-04-29','2004-05-09','2004-05-04','Shipped',NULL,141,744.69),
 
-(10245,'2004-05-04','2004-05-12','2004-05-09','Shipped',NULL,455),
+(10245,'2004-05-04','2004-05-12','2004-05-09','Shipped',NULL,455,956.28),
 
-(10246,'2004-05-05','2004-05-13','2004-05-06','Shipped',NULL,141),
+(10246,'2004-05-05','2004-05-13','2004-05-06','Shipped',NULL,141,1006.78),
 
-(10247,'2004-05-05','2004-05-11','2004-05-08','Shipped',NULL,334),
+(10247,'2004-05-05','2004-05-11','2004-05-08','Shipped',NULL,334,757.24),
 
-(10248,'2004-05-07','2004-05-14',NULL,'Cancelled','Order was mistakenly placed. The warehouse noticed the lack of documentation.',131),
+(10248,'2004-05-07','2004-05-14',NULL,'Cancelled','Order was mistakenly placed. The warehouse noticed the lack of documentation.',131,1263.34),
 
-(10249,'2004-05-08','2004-05-17','2004-05-11','Shipped','Can we deliver the new Ford Mustang models by end-of-quarter?',173),
+(10249,'2004-05-08','2004-05-17','2004-05-11','Shipped','Can we deliver the new Ford Mustang models by end-of-quarter?',173,344.64),
 
-(10250,'2004-05-11','2004-05-19','2004-05-15','Shipped',NULL,450),
+(10250,'2004-05-11','2004-05-19','2004-05-15','Shipped',NULL,450,1146.61),
 
-(10251,'2004-05-18','2004-05-24','2004-05-24','Shipped',NULL,328),
+(10251,'2004-05-18','2004-05-24','2004-05-24','Shipped',NULL,328,660.49),
 
-(10252,'2004-05-26','2004-06-04','2004-05-29','Shipped',NULL,406),
+(10252,'2004-05-26','2004-06-04','2004-05-29','Shipped',NULL,406,733.69),
 
-(10253,'2004-06-01','2004-06-09','2004-06-02','Cancelled','Customer disputed the order and we agreed to cancel it. We must be more cautions with this customer going forward, since they are very hard to please. We must cover the shipping fees.',201),
+(10253,'2004-06-01','2004-06-09','2004-06-02','Cancelled','Customer disputed the order and we agreed to cancel it. We must be more cautions with this customer going forward, since they are very hard to please. We must cover the shipping fees.',201,1469.39),
 
-(10254,'2004-06-03','2004-06-13','2004-06-04','Shipped','Customer requested that DHL is used for this shipping',323),
+(10254,'2004-06-03','2004-06-13','2004-06-04','Shipped','Customer requested that DHL is used for this shipping',323,983.52),
 
-(10255,'2004-06-04','2004-06-12','2004-06-09','Shipped',NULL,209),
+(10255,'2004-06-04','2004-06-12','2004-06-09','Shipped',NULL,209,172.63),
 
-(10256,'2004-06-08','2004-06-16','2004-06-10','Shipped',NULL,145),
+(10256,'2004-06-08','2004-06-16','2004-06-10','Shipped',NULL,145,146.32),
 
-(10257,'2004-06-14','2004-06-24','2004-06-15','Shipped',NULL,450),
+(10257,'2004-06-14','2004-06-24','2004-06-15','Shipped',NULL,450,408.39),
 
-(10258,'2004-06-15','2004-06-25','2004-06-23','Shipped',NULL,398),
+(10258,'2004-06-15','2004-06-25','2004-06-23','Shipped',NULL,398,624.48),
 
-(10259,'2004-06-15','2004-06-22','2004-06-17','Shipped',NULL,166),
+(10259,'2004-06-15','2004-06-22','2004-06-17','Shipped',NULL,166,1259.09),
 
-(10260,'2004-06-16','2004-06-22',NULL,'Cancelled','Customer heard complaints from their customers and called to cancel this order. Will notify the Sales Manager.',357),
+(10260,'2004-06-16','2004-06-22',NULL,'Cancelled','Customer heard complaints from their customers and called to cancel this order. Will notify the Sales Manager.',357,1152.26),
 
-(10261,'2004-06-17','2004-06-25','2004-06-22','Shipped',NULL,233),
+(10261,'2004-06-17','2004-06-25','2004-06-22','Shipped',NULL,233,726.83),
 
-(10262,'2004-06-24','2004-07-01',NULL,'Cancelled','This customer found a better offer from one of our competitors. Will call back to renegotiate.',141),
+(10262,'2004-06-24','2004-07-01',NULL,'Cancelled','This customer found a better offer from one of our competitors. Will call back to renegotiate.',141,1217.38),
 
-(10263,'2004-06-28','2004-07-04','2004-07-02','Shipped',NULL,175),
+(10263,'2004-06-28','2004-07-04','2004-07-02','Shipped',NULL,175,1078.64),
 
-(10264,'2004-06-30','2004-07-06','2004-07-01','Shipped','Customer will send a truck to our local warehouse on 7/1/2004',362),
+(10264,'2004-06-30','2004-07-06','2004-07-01','Shipped','Customer will send a truck to our local warehouse on 7/1/2004',362,526.81),
 
-(10265,'2004-07-02','2004-07-09','2004-07-07','Shipped',NULL,471),
+(10265,'2004-07-02','2004-07-09','2004-07-07','Shipped',NULL,471,198.25),
 
-(10266,'2004-07-06','2004-07-14','2004-07-10','Shipped',NULL,386),
+(10266,'2004-07-06','2004-07-14','2004-07-10','Shipped',NULL,386,1556.31),
 
-(10267,'2004-07-07','2004-07-17','2004-07-09','Shipped',NULL,151),
+(10267,'2004-07-07','2004-07-17','2004-07-09','Shipped',NULL,151,495.98),
 
-(10268,'2004-07-12','2004-07-18','2004-07-14','Shipped',NULL,412),
+(10268,'2004-07-12','2004-07-18','2004-07-14','Shipped',NULL,412,924.64),
 
-(10269,'2004-07-16','2004-07-22','2004-07-18','Shipped',NULL,382),
+(10269,'2004-07-16','2004-07-22','2004-07-18','Shipped',NULL,382,152.9),
 
-(10270,'2004-07-19','2004-07-27','2004-07-24','Shipped','Can we renegotiate this one?',282),
+(10270,'2004-07-19','2004-07-27','2004-07-24','Shipped','Can we renegotiate this one?',282,1088.2),
 
-(10271,'2004-07-20','2004-07-29','2004-07-23','Shipped',NULL,124),
+(10271,'2004-07-20','2004-07-29','2004-07-23','Shipped',NULL,124,1054.03),
 
-(10272,'2004-07-20','2004-07-26','2004-07-22','Shipped',NULL,157),
+(10272,'2004-07-20','2004-07-26','2004-07-22','Shipped',NULL,157,696.54),
 
-(10273,'2004-07-21','2004-07-28','2004-07-22','Shipped',NULL,314),
+(10273,'2004-07-21','2004-07-28','2004-07-22','Shipped',NULL,314,1309.01),
 
-(10274,'2004-07-21','2004-07-29','2004-07-22','Shipped',NULL,379),
+(10274,'2004-07-21','2004-07-29','2004-07-22','Shipped',NULL,379,376.05),
 
-(10275,'2004-07-23','2004-08-02','2004-07-29','Shipped',NULL,119),
+(10275,'2004-07-23','2004-08-02','2004-07-29','Shipped',NULL,119,1455.41),
 
-(10276,'2004-08-02','2004-08-11','2004-08-08','Shipped',NULL,204),
+(10276,'2004-08-02','2004-08-11','2004-08-08','Shipped',NULL,204,1285.44),
 
-(10277,'2004-08-04','2004-08-12','2004-08-05','Shipped',NULL,148),
+(10277,'2004-08-04','2004-08-12','2004-08-05','Shipped',NULL,148,93.28),
 
-(10278,'2004-08-06','2004-08-16','2004-08-09','Shipped',NULL,112),
+(10278,'2004-08-06','2004-08-16','2004-08-09','Shipped',NULL,112,920.21),
 
-(10279,'2004-08-09','2004-08-19','2004-08-15','Shipped','Cautious optimism. We have happy customers here, if we can keep them well stocked.  I need all the information I can get on the planned shippments of Porches',141),
+(10279,'2004-08-09','2004-08-19','2004-08-15','Shipped','Cautious optimism. We have happy customers here, if we can keep them well stocked.  I need all the information I can get on the planned shippments of Porches',141,494.03),
 
-(10280,'2004-08-17','2004-08-27','2004-08-19','Shipped',NULL,249),
+(10280,'2004-08-17','2004-08-27','2004-08-19','Shipped',NULL,249,1518.1),
 
-(10281,'2004-08-19','2004-08-28','2004-08-23','Shipped',NULL,157),
+(10281,'2004-08-19','2004-08-28','2004-08-23','Shipped',NULL,157,1224.88),
 
-(10282,'2004-08-20','2004-08-26','2004-08-22','Shipped',NULL,124),
+(10282,'2004-08-20','2004-08-26','2004-08-22','Shipped',NULL,124,1426.43),
 
-(10283,'2004-08-20','2004-08-30','2004-08-23','Shipped',NULL,260),
+(10283,'2004-08-20','2004-08-30','2004-08-23','Shipped',NULL,260,1107.44),
 
-(10284,'2004-08-21','2004-08-29','2004-08-26','Shipped','Custom shipping instructions sent to warehouse',299),
+(10284,'2004-08-21','2004-08-29','2004-08-26','Shipped','Custom shipping instructions sent to warehouse',299,985.48),
 
-(10285,'2004-08-27','2004-09-04','2004-08-31','Shipped',NULL,286),
+(10285,'2004-08-27','2004-09-04','2004-08-31','Shipped',NULL,286,1170.23),
 
-(10286,'2004-08-28','2004-09-06','2004-09-01','Shipped',NULL,172),
+(10286,'2004-08-28','2004-09-06','2004-09-01','Shipped',NULL,172,51.60),
 
-(10287,'2004-08-30','2004-09-06','2004-09-01','Shipped',NULL,298),
+(10287,'2004-08-30','2004-09-06','2004-09-01','Shipped',NULL,298,1801.52),
 
-(10288,'2004-09-01','2004-09-11','2004-09-05','Shipped',NULL,166),
+(10288,'2004-09-01','2004-09-11','2004-09-05','Shipped',NULL,166,1144.49),
 
-(10289,'2004-09-03','2004-09-13','2004-09-04','Shipped','We need to keep in close contact with their Marketing VP. He is the decision maker for all their purchases.',167),
+(10289,'2004-09-03','2004-09-13','2004-09-04','Shipped','We need to keep in close contact with their Marketing VP. He is the decision maker for all their purchases.',167,320.19),
 
-(10290,'2004-09-07','2004-09-15','2004-09-13','Shipped',NULL,198),
+(10290,'2004-09-07','2004-09-15','2004-09-13','Shipped',NULL,198,164.12),
 
-(10291,'2004-09-08','2004-09-17','2004-09-14','Shipped',NULL,448),
+(10291,'2004-09-08','2004-09-17','2004-09-14','Shipped',NULL,448,1348.49),
 
-(10292,'2004-09-08','2004-09-18','2004-09-11','Shipped','They want to reevaluate their terms agreement with Finance.',131),
+(10292,'2004-09-08','2004-09-18','2004-09-11','Shipped','They want to reevaluate their terms agreement with Finance.',131,1074.32),
 
-(10293,'2004-09-09','2004-09-18','2004-09-14','Shipped',NULL,249),
+(10293,'2004-09-09','2004-09-18','2004-09-14','Shipped',NULL,249,1004.59),
 
-(10294,'2004-09-10','2004-09-17','2004-09-14','Shipped',NULL,204),
+(10294,'2004-09-10','2004-09-17','2004-09-14','Shipped',NULL,204,98.32),
 
-(10295,'2004-09-10','2004-09-17','2004-09-14','Shipped','They want to reevaluate their terms agreement with Finance.',362),
+(10295,'2004-09-10','2004-09-17','2004-09-14','Shipped','They want to reevaluate their terms agreement with Finance.',362,446.8),
 
-(10296,'2004-09-15','2004-09-22','2004-09-16','Shipped',NULL,415),
+(10296,'2004-09-15','2004-09-22','2004-09-16','Shipped',NULL,415,1079.12),
 
-(10297,'2004-09-16','2004-09-22','2004-09-21','Shipped','We must be cautions with this customer. Their VP of Sales resigned. Company may be heading down.',189),
+(10297,'2004-09-16','2004-09-22','2004-09-21','Shipped','We must be cautions with this customer. Their VP of Sales resigned. Company may be heading down.',189,594.71),
 
-(10298,'2004-09-27','2004-10-05','2004-10-01','Shipped',NULL,103),
+(10298,'2004-09-27','2004-10-05','2004-10-01','Shipped',NULL,103,166.43),
 
-(10299,'2004-09-30','2004-10-10','2004-10-01','Shipped',NULL,186),
+(10299,'2004-09-30','2004-10-10','2004-10-01','Shipped',NULL,186,976.32),
 
-(10300,'2003-10-04','2003-10-13','2003-10-09','Shipped',NULL,128),
+(10300,'2003-10-04','2003-10-13','2003-10-09','Shipped',NULL,128,798.48),
 
-(10301,'2003-10-05','2003-10-15','2003-10-08','Shipped',NULL,299),
+(10301,'2003-10-05','2003-10-15','2003-10-08','Shipped',NULL,299,1084.81),
 
-(10302,'2003-10-06','2003-10-16','2003-10-07','Shipped',NULL,201),
+(10302,'2003-10-06','2003-10-16','2003-10-07','Shipped',NULL,201,574.41),
 
-(10303,'2004-10-06','2004-10-14','2004-10-09','Shipped','Customer inquired about remote controlled models and gold models.',484),
+(10303,'2004-10-06','2004-10-14','2004-10-09','Shipped','Customer inquired about remote controlled models and gold models.',484,92.61),
 
-(10304,'2004-10-11','2004-10-20','2004-10-17','Shipped',NULL,256),
+(10304,'2004-10-11','2004-10-20','2004-10-17','Shipped',NULL,256,1479.94),
 
-(10305,'2004-10-13','2004-10-22','2004-10-15','Shipped','Check on availability.',286),
+(10305,'2004-10-13','2004-10-22','2004-10-15','Shipped','Check on availability.',286,1378.68),
 
-(10306,'2004-10-14','2004-10-21','2004-10-17','Shipped',NULL,187),
+(10306,'2004-10-14','2004-10-21','2004-10-17','Shipped',NULL,187,1612.26),
 
-(10307,'2004-10-14','2004-10-23','2004-10-20','Shipped',NULL,339),
+(10307,'2004-10-14','2004-10-23','2004-10-20','Shipped',NULL,339,741.25),
 
-(10308,'2004-10-15','2004-10-24','2004-10-20','Shipped','Customer requested that FedEx Ground is used for this shipping',319),
+(10308,'2004-10-15','2004-10-24','2004-10-20','Shipped','Customer requested that FedEx Ground is used for this shipping',319,1334.48),
 
-(10309,'2004-10-15','2004-10-24','2004-10-18','Shipped',NULL,121),
+(10309,'2004-10-15','2004-10-24','2004-10-18','Shipped',NULL,121,563.75),
 
-(10310,'2004-10-16','2004-10-24','2004-10-18','Shipped',NULL,259),
+(10310,'2004-10-16','2004-10-24','2004-10-18','Shipped',NULL,259,1656.26),
 
-(10311,'2004-10-16','2004-10-23','2004-10-20','Shipped','Difficult to negotiate with customer. We need more marketing materials',141),
+(10311,'2004-10-16','2004-10-23','2004-10-20','Shipped','Difficult to negotiate with customer. We need more marketing materials',141,1033.82),
 
-(10312,'2004-10-21','2004-10-27','2004-10-23','Shipped',NULL,124),
+(10312,'2004-10-21','2004-10-27','2004-10-23','Shipped',NULL,124,1494.19),
 
-(10313,'2004-10-22','2004-10-28','2004-10-25','Shipped','Customer requested that FedEx Ground is used for this shipping',202),
+(10313,'2004-10-22','2004-10-28','2004-10-25','Shipped','Customer requested that FedEx Ground is used for this shipping',202,1088.17),
 
-(10314,'2004-10-22','2004-11-01','2004-10-23','Shipped',NULL,227),
+(10314,'2004-10-22','2004-11-01','2004-10-23','Shipped',NULL,227,1549.34),
 
-(10315,'2004-10-29','2004-11-08','2004-10-30','Shipped',NULL,119),
+(10315,'2004-10-29','2004-11-08','2004-10-30','Shipped',NULL,119,568.27),
 
-(10316,'2004-11-01','2004-11-09','2004-11-07','Shipped','Customer requested that ad materials (such as posters, pamphlets) be included in the shippment',240),
+(10316,'2004-11-01','2004-11-09','2004-11-07','Shipped','Customer requested that ad materials (such as posters, pamphlets) be included in the shippment',240,1375.59),
 
-(10317,'2004-11-02','2004-11-12','2004-11-08','Shipped',NULL,161),
+(10317,'2004-11-02','2004-11-12','2004-11-08','Shipped',NULL,161,69.55),
 
-(10318,'2004-11-02','2004-11-09','2004-11-07','Shipped',NULL,157),
+(10318,'2004-11-02','2004-11-09','2004-11-07','Shipped',NULL,157,846.35),
 
-(10319,'2004-11-03','2004-11-11','2004-11-06','Shipped','Customer requested that DHL is used for this shipping',456),
+(10319,'2004-11-03','2004-11-11','2004-11-06','Shipped','Customer requested that DHL is used for this shipping',456,742.37),
 
-(10320,'2004-11-03','2004-11-13','2004-11-07','Shipped',NULL,144),
+(10320,'2004-11-03','2004-11-13','2004-11-07','Shipped',NULL,144,551.11),
 
-(10321,'2004-11-04','2004-11-12','2004-11-07','Shipped',NULL,462),
+(10321,'2004-11-04','2004-11-12','2004-11-07','Shipped',NULL,462,1397.94),
 
-(10322,'2004-11-04','2004-11-12','2004-11-10','Shipped','Customer has worked with some of our vendors in the past and is aware of their MSRP',363),
+(10322,'2004-11-04','2004-11-12','2004-11-10','Shipped','Customer has worked with some of our vendors in the past and is aware of their MSRP',363,1345.23),
 
-(10323,'2004-11-05','2004-11-12','2004-11-09','Shipped',NULL,128),
+(10323,'2004-11-05','2004-11-12','2004-11-09','Shipped',NULL,128,185.16),
 
-(10324,'2004-11-05','2004-11-11','2004-11-08','Shipped',NULL,181),
+(10324,'2004-11-05','2004-11-11','2004-11-08','Shipped',NULL,181,1319.42),
 
-(10325,'2004-11-05','2004-11-13','2004-11-08','Shipped',NULL,121),
+(10325,'2004-11-05','2004-11-13','2004-11-08','Shipped',NULL,121,955.8),
 
-(10326,'2004-11-09','2004-11-16','2004-11-10','Shipped',NULL,144),
+(10326,'2004-11-09','2004-11-16','2004-11-10','Shipped',NULL,144,517.7),
 
-(10327,'2004-11-10','2004-11-19','2004-11-13','Resolved','Order was disputed and resolved on 12/1/04. The Sales Manager was involved. Customer claims the scales of the models don\'t match what was discussed.',145),
+(10327,'2004-11-10','2004-11-19','2004-11-13','Resolved','Order was disputed and resolved on 12/1/04. The Sales Manager was involved. Customer claims the scales of the models don\'t match what was discussed.',145,665.06),
 
-(10328,'2004-11-12','2004-11-21','2004-11-18','Shipped','Customer very concerned about the exact color of the models. There is high risk that he may dispute the order because there is a slight color mismatch',278),
+(10328,'2004-11-12','2004-11-21','2004-11-18','Shipped','Customer very concerned about the exact color of the models. There is high risk that he may dispute the order because there is a slight color mismatch',278,1054.8),
 
-(10329,'2004-11-15','2004-11-24','2004-11-16','Shipped',NULL,131),
+(10329,'2004-11-15','2004-11-24','2004-11-16','Shipped',NULL,131,1445.1),
 
-(10330,'2004-11-16','2004-11-25','2004-11-21','Shipped',NULL,385),
+(10330,'2004-11-16','2004-11-25','2004-11-21','Shipped',NULL,385,385.78),
 
-(10331,'2004-11-17','2004-11-23','2004-11-23','Shipped','Customer requested special shippment. The instructions were passed along to the warehouse',486),
+(10331,'2004-11-17','2004-11-23','2004-11-23','Shipped','Customer requested special shippment. The instructions were passed along to the warehouse',486,1451.43),
 
-(10332,'2004-11-17','2004-11-25','2004-11-18','Shipped',NULL,187),
+(10332,'2004-11-17','2004-11-25','2004-11-18','Shipped',NULL,187,1347.08),
 
-(10333,'2004-11-18','2004-11-27','2004-11-20','Shipped',NULL,129),
+(10333,'2004-11-18','2004-11-27','2004-11-20','Shipped',NULL,129,811.28),
 
-(10334,'2004-11-19','2004-11-28',NULL,'On Hold','The outstaniding balance for this customer exceeds their credit limit. Order will be shipped when a payment is received.',144),
+(10334,'2004-11-19','2004-11-28',NULL,'On Hold','The outstaniding balance for this customer exceeds their credit limit. Order will be shipped when a payment is received.',144,657.49),
 
-(10335,'2004-11-19','2004-11-29','2004-11-23','Shipped',NULL,124),
+(10335,'2004-11-19','2004-11-29','2004-11-23','Shipped',NULL,124,159.71),
 
-(10336,'2004-11-20','2004-11-26','2004-11-24','Shipped','Customer requested that DHL is used for this shipping',172),
+(10336,'2004-11-20','2004-11-26','2004-11-24','Shipped','Customer requested that DHL is used for this shipping',172,1357.7),
 
-(10337,'2004-11-21','2004-11-30','2004-11-26','Shipped',NULL,424),
+(10337,'2004-11-21','2004-11-30','2004-11-26','Shipped',NULL,424,813.03),
 
-(10338,'2004-11-22','2004-12-02','2004-11-27','Shipped',NULL,381),
+(10338,'2004-11-22','2004-12-02','2004-11-27','Shipped',NULL,381,311.22),
 
-(10339,'2004-11-23','2004-11-30','2004-11-30','Shipped',NULL,398),
+(10339,'2004-11-23','2004-11-30','2004-11-30','Shipped',NULL,398,1274.96),
 
-(10340,'2004-11-24','2004-12-01','2004-11-25','Shipped','Customer is interested in buying more Ferrari models',216),
+(10340,'2004-11-24','2004-12-01','2004-11-25','Shipped','Customer is interested in buying more Ferrari models',216,580.85),
 
-(10341,'2004-11-24','2004-12-01','2004-11-29','Shipped',NULL,382),
+(10341,'2004-11-24','2004-12-01','2004-11-29','Shipped',NULL,382,1003.19),
 
-(10342,'2004-11-24','2004-12-01','2004-11-29','Shipped',NULL,114),
+(10342,'2004-11-24','2004-12-01','2004-11-29','Shipped',NULL,114,1063.74),
 
-(10343,'2004-11-24','2004-12-01','2004-11-26','Shipped',NULL,353),
+(10343,'2004-11-24','2004-12-01','2004-11-26','Shipped',NULL,353,514.45),
 
-(10344,'2004-11-25','2004-12-02','2004-11-29','Shipped',NULL,350),
+(10344,'2004-11-25','2004-12-02','2004-11-29','Shipped',NULL,350,573.86),
 
-(10345,'2004-11-25','2004-12-01','2004-11-26','Shipped',NULL,103),
+(10345,'2004-11-25','2004-12-01','2004-11-26','Shipped',NULL,103,38.98),
 
-(10346,'2004-11-29','2004-12-05','2004-11-30','Shipped',NULL,112),
+(10346,'2004-11-29','2004-12-05','2004-11-30','Shipped',NULL,112,515.95),
 
-(10347,'2004-11-29','2004-12-07','2004-11-30','Shipped','Can we deliver the new Ford Mustang models by end-of-quarter?',114),
+(10347,'2004-11-29','2004-12-07','2004-11-30','Shipped','Can we deliver the new Ford Mustang models by end-of-quarter?',114,1240.73),
 
-(10348,'2004-11-01','2004-11-08','2004-11-05','Shipped',NULL,458),
+(10348,'2004-11-01','2004-11-08','2004-11-05','Shipped',NULL,458,817.43),
 
-(10349,'2004-12-01','2004-12-07','2004-12-03','Shipped',NULL,151),
+(10349,'2004-12-01','2004-12-07','2004-12-03','Shipped',NULL,151,1083.64),
 
-(10350,'2004-12-02','2004-12-08','2004-12-05','Shipped',NULL,141),
+(10350,'2004-12-02','2004-12-08','2004-12-05','Shipped',NULL,141,1412.81),
 
-(10351,'2004-12-03','2004-12-11','2004-12-07','Shipped',NULL,324),
+(10351,'2004-12-03','2004-12-11','2004-12-07','Shipped',NULL,324,434.87),
 
-(10352,'2004-12-03','2004-12-12','2004-12-09','Shipped',NULL,198),
+(10352,'2004-12-03','2004-12-12','2004-12-09','Shipped',NULL,198,271.25),
 
-(10353,'2004-12-04','2004-12-11','2004-12-05','Shipped',NULL,447),
+(10353,'2004-12-04','2004-12-11','2004-12-05','Shipped',NULL,447,685.32),
 
-(10354,'2004-12-04','2004-12-10','2004-12-05','Shipped',NULL,323),
+(10354,'2004-12-04','2004-12-10','2004-12-05','Shipped',NULL,323,1285.99),
 
-(10355,'2004-12-07','2004-12-14','2004-12-13','Shipped',NULL,141),
+(10355,'2004-12-07','2004-12-14','2004-12-13','Shipped',NULL,141,796.66),
 
-(10356,'2004-12-09','2004-12-15','2004-12-12','Shipped',NULL,250),
+(10356,'2004-12-09','2004-12-15','2004-12-12','Shipped',NULL,250,795.62),
 
-(10357,'2004-12-10','2004-12-16','2004-12-14','Shipped',NULL,124),
+(10357,'2004-12-10','2004-12-16','2004-12-14','Shipped',NULL,124,1060.42),
 
-(10358,'2004-12-10','2004-12-16','2004-12-16','Shipped','Customer requested that DHL is used for this shipping',141),
+(10358,'2004-12-10','2004-12-16','2004-12-16','Shipped','Customer requested that DHL is used for this shipping',141,1297.97),
 
-(10359,'2004-12-15','2004-12-23','2004-12-18','Shipped',NULL,353),
+(10359,'2004-12-15','2004-12-23','2004-12-18','Shipped',NULL,353,829.24),
 
-(10360,'2004-12-16','2004-12-22','2004-12-18','Shipped',NULL,496),
+(10360,'2004-12-16','2004-12-22','2004-12-18','Shipped',NULL,496,1524.68),
 
-(10361,'2004-12-17','2004-12-24','2004-12-20','Shipped',NULL,282),
+(10361,'2004-12-17','2004-12-24','2004-12-20','Shipped',NULL,282,1052.87),
 
-(10362,'2005-01-05','2005-01-16','2005-01-10','Shipped',NULL,161),
+(10362,'2005-01-05','2005-01-16','2005-01-10','Shipped',NULL,161,458.28),
 
-(10363,'2005-01-06','2005-01-12','2005-01-10','Shipped',NULL,334),
+(10363,'2005-01-06','2005-01-12','2005-01-10','Shipped',NULL,334,1352.37),
 
-(10364,'2005-01-06','2005-01-17','2005-01-09','Shipped',NULL,350),
+(10364,'2005-01-06','2005-01-17','2005-01-09','Shipped',NULL,350,38.22),
 
-(10365,'2005-01-07','2005-01-18','2005-01-11','Shipped',NULL,320),
+(10365,'2005-01-07','2005-01-18','2005-01-11','Shipped',NULL,320,267.06),
 
-(10366,'2005-01-10','2005-01-19','2005-01-12','Shipped',NULL,381),
+(10366,'2005-01-10','2005-01-19','2005-01-12','Shipped',NULL,381,376.35),
 
-(10367,'2005-01-12','2005-01-21','2005-01-16','Resolved','This order was disputed and resolved on 2/1/2005. Customer claimed that container with shipment was damaged. FedEx\'s investigation proved this wrong.',205),
+(10367,'2005-01-12','2005-01-21','2005-01-16','Resolved','This order was disputed and resolved on 2/1/2005. Customer claimed that container with shipment was damaged. FedEx\'s investigation proved this wrong.',205,1072.73),
 
-(10368,'2005-01-19','2005-01-27','2005-01-24','Shipped','Can we renegotiate this one?',124),
+(10368,'2005-01-19','2005-01-27','2005-01-24','Shipped','Can we renegotiate this one?',124,401.41),
 
-(10369,'2005-01-20','2005-01-28','2005-01-24','Shipped',NULL,379),
+(10369,'2005-01-20','2005-01-28','2005-01-24','Shipped',NULL,379,746.8),
 
-(10370,'2005-01-20','2005-02-01','2005-01-25','Shipped',NULL,276),
+(10370,'2005-01-20','2005-02-01','2005-01-25','Shipped',NULL,276,898.11),
 
-(10371,'2005-01-23','2005-02-03','2005-01-25','Shipped',NULL,124),
+(10371,'2005-01-23','2005-02-03','2005-01-25','Shipped',NULL,124,1116.35),
 
-(10372,'2005-01-26','2005-02-05','2005-01-28','Shipped',NULL,398),
+(10372,'2005-01-26','2005-02-05','2005-01-28','Shipped',NULL,398,941.08),
 
-(10373,'2005-01-31','2005-02-08','2005-02-06','Shipped',NULL,311),
+(10373,'2005-01-31','2005-02-08','2005-02-06','Shipped',NULL,311,1316.57),
 
-(10374,'2005-02-02','2005-02-09','2005-02-03','Shipped',NULL,333),
+(10374,'2005-02-02','2005-02-09','2005-02-03','Shipped',NULL,333,617.75),
 
-(10375,'2005-02-03','2005-02-10','2005-02-06','Shipped',NULL,119),
+(10375,'2005-02-03','2005-02-10','2005-02-06','Shipped',NULL,119,1299.1),
 
-(10376,'2005-02-08','2005-02-18','2005-02-13','Shipped',NULL,219),
+(10376,'2005-02-08','2005-02-18','2005-02-13','Shipped',NULL,219,98.65),
 
-(10377,'2005-02-09','2005-02-21','2005-02-12','Shipped','Cautious optimism. We have happy customers here, if we can keep them well stocked.  I need all the information I can get on the planned shippments of Porches',186),
+(10377,'2005-02-09','2005-02-21','2005-02-12','Shipped','Cautious optimism. We have happy customers here, if we can keep them well stocked.  I need all the information I can get on the planned shippments of Porches',186,633.58),
 
-(10378,'2005-02-10','2005-02-18','2005-02-11','Shipped',NULL,141),
+(10378,'2005-02-10','2005-02-18','2005-02-11','Shipped',NULL,141,847.09),
 
-(10379,'2005-02-10','2005-02-18','2005-02-11','Shipped',NULL,141),
+(10379,'2005-02-10','2005-02-18','2005-02-11','Shipped',NULL,141,503.79),
 
-(10380,'2005-02-16','2005-02-24','2005-02-18','Shipped',NULL,141),
+(10380,'2005-02-16','2005-02-24','2005-02-18','Shipped',NULL,141,1034.1),
 
-(10381,'2005-02-17','2005-02-25','2005-02-18','Shipped',NULL,321),
+(10381,'2005-02-17','2005-02-25','2005-02-18','Shipped',NULL,321,923.04),
 
-(10382,'2005-02-17','2005-02-23','2005-02-18','Shipped','Custom shipping instructions sent to warehouse',124),
+(10382,'2005-02-17','2005-02-23','2005-02-18','Shipped','Custom shipping instructions sent to warehouse',124,1426.01),
 
-(10383,'2005-02-22','2005-03-02','2005-02-25','Shipped',NULL,141),
+(10383,'2005-02-22','2005-03-02','2005-02-25','Shipped',NULL,141,1155.3),
 
-(10384,'2005-02-23','2005-03-06','2005-02-27','Shipped',NULL,321),
+(10384,'2005-02-23','2005-03-06','2005-02-27','Shipped',NULL,321,386.2),
 
-(10385,'2005-02-28','2005-03-09','2005-03-01','Shipped',NULL,124),
+(10385,'2005-02-28','2005-03-09','2005-03-01','Shipped',NULL,124,140.83),
 
-(10386,'2005-03-01','2005-03-09','2005-03-06','Resolved','Disputed then Resolved on 3/15/2005. Customer doesn\'t like the craftsmaship of the models.',141),
+(10386,'2005-03-01','2005-03-09','2005-03-06','Resolved','Disputed then Resolved on 3/15/2005. Customer doesn\'t like the craftsmaship of the models.',141,1352.06),
 
-(10387,'2005-03-02','2005-03-09','2005-03-06','Shipped','We need to keep in close contact with their Marketing VP. He is the decision maker for all their purchases.',148),
+(10387,'2005-03-02','2005-03-09','2005-03-06','Shipped','We need to keep in close contact with their Marketing VP. He is the decision maker for all their purchases.',148,79.91),
 
-(10388,'2005-03-03','2005-03-11','2005-03-09','Shipped',NULL,462),
+(10388,'2005-03-03','2005-03-11','2005-03-09','Shipped',NULL,462,667.12),
 
-(10389,'2005-03-03','2005-03-09','2005-03-08','Shipped',NULL,448),
+(10389,'2005-03-03','2005-03-09','2005-03-08','Shipped',NULL,448,747.53),
 
-(10390,'2005-03-04','2005-03-11','2005-03-07','Shipped','They want to reevaluate their terms agreement with Finance.',124),
+(10390,'2005-03-04','2005-03-11','2005-03-07','Shipped','They want to reevaluate their terms agreement with Finance.',124,1479.36),
 
-(10391,'2005-03-09','2005-03-20','2005-03-15','Shipped',NULL,276),
+(10391,'2005-03-09','2005-03-20','2005-03-15','Shipped',NULL,276,911.23),
 
-(10392,'2005-03-10','2005-03-18','2005-03-12','Shipped',NULL,452),
+(10392,'2005-03-10','2005-03-18','2005-03-12','Shipped',NULL,452,263.1),
 
-(10393,'2005-03-11','2005-03-22','2005-03-14','Shipped','They want to reevaluate their terms agreement with Finance.',323),
+(10393,'2005-03-11','2005-03-22','2005-03-14','Shipped','They want to reevaluate their terms agreement with Finance.',323,1067.87),
 
-(10394,'2005-03-15','2005-03-25','2005-03-19','Shipped',NULL,141),
+(10394,'2005-03-15','2005-03-25','2005-03-19','Shipped',NULL,141,556.06),
 
-(10395,'2005-03-17','2005-03-24','2005-03-23','Shipped','We must be cautions with this customer. Their VP of Sales resigned. Company may be heading down.',250),
+(10395,'2005-03-17','2005-03-24','2005-03-23','Shipped','We must be cautions with this customer. Their VP of Sales resigned. Company may be heading down.',250,487.22),
 
-(10396,'2005-03-23','2005-04-02','2005-03-28','Shipped',NULL,124),
+(10396,'2005-03-23','2005-04-02','2005-03-28','Shipped',NULL,124,778.38),
 
-(10397,'2005-03-28','2005-04-09','2005-04-01','Shipped',NULL,242),
+(10397,'2005-03-28','2005-04-09','2005-04-01','Shipped',NULL,242,351.72),
 
-(10398,'2005-03-30','2005-04-09','2005-03-31','Shipped',NULL,353),
+(10398,'2005-03-30','2005-04-09','2005-03-31','Shipped',NULL,353,1355.03),
 
-(10399,'2005-04-01','2005-04-12','2005-04-03','Shipped',NULL,496),
+(10399,'2005-04-01','2005-04-12','2005-04-03','Shipped',NULL,496,787.39),
 
-(10400,'2005-04-01','2005-04-11','2005-04-04','Shipped','Customer requested that DHL is used for this shipping',450),
+(10400,'2005-04-01','2005-04-11','2005-04-04','Shipped','Customer requested that DHL is used for this shipping',450,741.11),
 
-(10401,'2005-04-03','2005-04-14',NULL,'On Hold','Customer credit limit exceeded. Will ship when a payment is received.',328),
+(10401,'2005-04-03','2005-04-14',NULL,'On Hold','Customer credit limit exceeded. Will ship when a payment is received.',328,886.7),
 
-(10402,'2005-04-07','2005-04-14','2005-04-12','Shipped',NULL,406),
+(10402,'2005-04-07','2005-04-14','2005-04-12','Shipped',NULL,406,238.79),
 
-(10403,'2005-04-08','2005-04-18','2005-04-11','Shipped',NULL,201),
+(10403,'2005-04-08','2005-04-18','2005-04-11','Shipped',NULL,201,793.27),
 
-(10404,'2005-04-08','2005-04-14','2005-04-11','Shipped',NULL,323),
+(10404,'2005-04-08','2005-04-14','2005-04-11','Shipped',NULL,323,771.8),
 
-(10405,'2005-04-14','2005-04-24','2005-04-20','Shipped',NULL,209),
+(10405,'2005-04-14','2005-04-24','2005-04-20','Shipped',NULL,209,500.04),
 
-(10406,'2005-04-15','2005-04-25','2005-04-21','Disputed','Customer claims container with shipment was damaged during shipping and some items were missing. I am talking to FedEx about this.',145),
+(10406,'2005-04-15','2005-04-25','2005-04-21','Disputed','Customer claims container with shipment was damaged during shipping and some items were missing. I am talking to FedEx about this.',145,375.54),
 
-(10407,'2005-04-22','2005-05-04',NULL,'On Hold','Customer credit limit exceeded. Will ship when a payment is received.',450),
+(10407,'2005-04-22','2005-05-04',NULL,'On Hold','Customer credit limit exceeded. Will ship when a payment is received.',450,1074.29),
 
-(10408,'2005-04-22','2005-04-29','2005-04-27','Shipped',NULL,398),
+(10408,'2005-04-22','2005-04-29','2005-04-27','Shipped',NULL,398,41.03),
 
-(10409,'2005-04-23','2005-05-05','2005-04-24','Shipped',NULL,166),
+(10409,'2005-04-23','2005-05-05','2005-04-24','Shipped',NULL,166,132.13),
 
-(10410,'2005-04-29','2005-05-10','2005-04-30','Shipped',NULL,357),
+(10410,'2005-04-29','2005-05-10','2005-04-30','Shipped',NULL,357,743.35),
 
-(10411,'2005-05-01','2005-05-08','2005-05-06','Shipped',NULL,233),
+(10411,'2005-05-01','2005-05-08','2005-05-06','Shipped',NULL,233,946.47),
 
-(10412,'2005-05-03','2005-05-13','2005-05-05','Shipped',NULL,141),
+(10412,'2005-05-03','2005-05-13','2005-05-05','Shipped',NULL,141,1034.15),
 
-(10413,'2005-05-05','2005-05-14','2005-05-09','Shipped','Customer requested that DHL is used for this shipping',175),
+(10413,'2005-05-05','2005-05-14','2005-05-09','Shipped','Customer requested that DHL is used for this shipping',175,763.06),
 
-(10414,'2005-05-06','2005-05-13',NULL,'On Hold','Customer credit limit exceeded. Will ship when a payment is received.',362),
+(10414,'2005-05-06','2005-05-13',NULL,'On Hold','Customer credit limit exceeded. Will ship when a payment is received.',362,1163.89),
 
-(10415,'2005-05-09','2005-05-20','2005-05-12','Disputed','Customer claims the scales of the models don\'t match what was discussed. I keep all the paperwork though to prove otherwise',471),
+(10415,'2005-05-09','2005-05-20','2005-05-12','Disputed','Customer claims the scales of the models don\'t match what was discussed. I keep all the paperwork though to prove otherwise',471,324.13),
 
-(10416,'2005-05-10','2005-05-16','2005-05-14','Shipped',NULL,386),
+(10416,'2005-05-10','2005-05-16','2005-05-14','Shipped',NULL,386,1084.51),
 
-(10417,'2005-05-13','2005-05-19','2005-05-19','Disputed','Customer doesn\'t like the colors and precision of the models.',141),
+(10417,'2005-05-13','2005-05-19','2005-05-19','Disputed','Customer doesn\'t like the colors and precision of the models.',141,671.33),
 
-(10418,'2005-05-16','2005-05-24','2005-05-20','Shipped',NULL,412),
+(10418,'2005-05-16','2005-05-24','2005-05-20','Shipped',NULL,412,727.23),
 
-(10419,'2005-05-17','2005-05-28','2005-05-19','Shipped',NULL,382),
+(10419,'2005-05-17','2005-05-28','2005-05-19','Shipped',NULL,382,1471.49),
 
-(10420,'2005-05-29','2005-06-07',NULL,'In Process',NULL,282),
+(10420,'2005-05-29','2005-06-07',NULL,'In Process',NULL,282,1014.01),
 
-(10421,'2005-05-29','2005-06-06',NULL,'In Process','Custom shipping instructions were sent to warehouse',124),
+(10421,'2005-05-29','2005-06-06',NULL,'In Process','Custom shipping instructions were sent to warehouse',124,211.86),
 
-(10422,'2005-05-30','2005-06-11',NULL,'In Process',NULL,157),
+(10422,'2005-05-30','2005-06-11',NULL,'In Process',NULL,157,138.88),
 
-(10423,'2005-05-30','2005-06-05',NULL,'In Process',NULL,314),
+(10423,'2005-05-30','2005-06-05',NULL,'In Process',NULL,314,403.05),
 
-(10424,'2005-05-31','2005-06-08',NULL,'In Process',NULL,141),
+(10424,'2005-05-31','2005-06-08',NULL,'In Process',NULL,141,612.75),
 
-(10425,'2005-05-31','2005-06-07',NULL,'In Process',NULL,119) ON DUPLICATE KEY UPDATE order_id=order_id;
+(10425,'2005-05-31','2005-06-07',NULL,'In Process',NULL,119,1231.98) ON DUPLICATE KEY UPDATE order_id=order_id;
 
 /*Data for the table `orderdetail` */
 
@@ -4747,9 +4801,9 @@ insert  into `orderdetail`(`order_id`,`product_id`,`quantity_ordered`,`price_eac
 
 (10275,1,45,'81.35',1),
 
-(10275,3,22,'115.37',4),
+(10275,2,22,'115.37',4),
 
-(10275,4,36,'154.93',3),
+(10275,40,36,'154.93',3),
 
 (10275,31,35,'70.12',9),
 
@@ -5645,9 +5699,9 @@ insert  into `orderdetail`(`order_id`,`product_id`,`quantity_ordered`,`price_eac
 
 (10318,1,46,'84.22',1),
 
-(10318,3,45,'102.29',4),
+(10318,2,45,'102.29',4),
 
-(10318,4,37,'189.79',3),
+(10318,40,37,'189.79',3),
 
 (10318,31,31,'81.95',9),
 
@@ -7533,9 +7587,9 @@ insert  into `orderdetail`(`order_id`,`product_id`,`quantity_ordered`,`price_eac
 
 (10425,88,11,'50.32',6),
 
-(10425,94,18,'94.92',2) ON DUPLICATE KEY UPDATE order_id=order_id;
+(10425,94,18,'94.92',2) ON DUPLICATE KEY UPDATE orderdetail_id=orderdetail_id;
 
-/*Data for the table `payment` */
+/* Data for the table `payment` */
 
 insert  into `payment`(`customer_number`,`check_number`,`payment_date`,`invoice_amount`, `caching_date`) values 
 
@@ -8085,44 +8139,304 @@ insert  into `payment`(`customer_number`,`check_number`,`payment_date`,`invoice_
 
 (496,'MN89921','2004-12-31 09:02:11','52166.00', '2004-12-31 09:02:11') ON DUPLICATE KEY UPDATE customer_number=customer_number;
 
-insert into sale(sale_id,fiscal_year,sale,employee_number) values 
+/*Data for the table `bank_transaction` */
 
-(1, 2003, 5282.64, 1370),
+insert  into `bank_transaction`(`transaction_id`,`bank_name`,`bank_iban`,`transfer_amount`,`customer_number`,`check_number`,`caching_date`,`card_type`,`status`) values 
 
-(2, 2004, 1938.24, 1370),
+(1,'Bank Ltd. US','DN44398834N34','6631.36',447,'AO757239','2003-09-15 18:22:54','VisaElectron','SUCCESS'),
 
-(3, 2004, 1676.14, 1370),
+(2,'Bank Ltd. US','348398H3493HG93','26304.13',447,'OU516561','2004-12-17 16:45:22','VisaElectron','FAILED'),
 
-(4, 2003, 3213, 1166),
+(3,'Transilvania Bank','8TVN598N454VN84T','9977.85',462,'GC60330','2003-11-08 18:57:25','VisaElectron','SUCCESS'),
 
-(5, 2004, 2121.35, 1166),
+(4,'5 Stars Bank','8VN8UNT5U45T8','48355.87',462,'PE176846', '2004-11-27 14:30:22','VisaElectron','SUCCESS'),
 
-(6, 2004, 3711.12, 1166),
+(5,'5 Stars Bank','TVU58NU58U84N4YUG','33967.73',398,'AJ478695','2005-02-14 12:09:15','VisaElectron','FAILED'),
 
-(7, 2003, 3449.26, 1611),
+(6,'Optimus Bank','8V34VN5U435334','4588.36',333,'NF959653','2005-03-01 12:12:00','VisaElectron','UNAUTHORIZED'),
 
-(8, 2003, 4704.92, 1611),
+(7,'Optimus Bank','8V34VN5U435334','8987.36',333,'NF959653','2005-03-01 14:00:00','MasterCard','UNAUTHORIZED'),
 
-(9, 2004, 2974.43, 1611),
+(8,'Optimus Bank','8V34VN5U435334','2544.36',333,'NF959653','2005-03-01 18:20:10','VisaElectron','FAILED'),
 
-(10, 2004, 4755.6, 1611),
+(9,'Optimus Bank','8V34VN5U435334','5312.23',333,'NF959653','2005-03-01 19:32:56','MasterCard','RETRIED'),
 
-(11, 2004, 5657.4, 1611),
+(10,'5 Stars Bank','8VN8UNT5U45T8','3382.13',462,'GC60330','2004-07-01 12:31:56','VisaElectron','SUCCESS'),
 
-(12, 2004, 3660.75, 1370),
+(11,'5 Stars Bank','8VN8UNT5U45T8','2566.17',462,'GC60330','2004-07-03 11:21:16','VisaElectron','SUCCESS'),
 
-(13, 2004, 2812.32, 1370),
+(12,'Bank Ltd. US','348398H3493HG93','12304.13',447,'OU516561','2004-12-27 16:15:22','VisaElectron','SUCCESS'),
 
-(14, 2005, 1607.76, 1370),
+(13,'BRT Bank','TVNU343T38TUNU3T','52151.81',278,'GP636783', '2003-03-02 12:32:00','MasterCard','FAILED'),
 
-(15, 2005, 4996.62, 1370),
+(14,'Optimus Bank','GH390439i344F','56321.33',124,'AE215433','2005-03-05 12:32:56','VisaElectron','SUCCESS'),
 
-(16, 2003, 5571.8, 1504),
+(15,'Optimus Bank','GH390439i344F','9866.21',124,'AE215433','2005-03-05 13:00:00','VisaElectron','SUCCESS'),
 
-(17, 2003, 1491.38, 1504),
+(16,'Optimus Bank','GH390439i344F','35057.05',124,'AE215433','2005-03-05 14:12:00','VisaElectron','SUCCESS'),
 
-(18, 2004, 3884.34, 1504),
+(17,'5 Stars Bank','QQQ333330944','6522.99',141,'IN446258','2005-03-25 13:44:11','VisaElectron','SUCCESS'),
 
-(19, 2004, 5241.44, 1504) ON DUPLICATE KEY UPDATE sale_id=sale_id;
+(18,'5 Stars Bank','QQQ333330944','2566.17',141,'IN446258','2005-03-25 14:00:05','VisaElectron','SUCCESS'),
+
+(19,'5 Stars Bank','QQQ333330944','15800.30',141,'IN446258','2005-03-25 14:03:05','VisaElectron','SUCCESS'),
+
+(20,'5 Stars Bank','QQQ333330944','21455.32',141,'IN446258','2005-03-25 15:13:05','VisaElectron','SUCCESS'),
+
+(21,'5 Stars Bank','QQQ333330944','9883.22',141,'IN446258','2005-03-25 15:25:05','VisaElectron','SUCCESS'),
+
+(22,'5 Stars Bank','QQQ333330944','8843.26',141,'IN446258','2005-03-25 16:00:05','VisaElectron','SUCCESS') ON DUPLICATE KEY UPDATE transaction_id=transaction_id;
+
+/*Data for the table `sale` */
+
+insert into sale(sale_id,fiscal_year,sale,employee_number,fiscal_month,revenue_growth,trend) values 
+
+(1, 2003, 5282.64, 1370, 1, 0, 'CONSTANT'),
+
+(2, 2004, 1938.24, 1370, 2, 0, 'CONSTANT'),
+
+(3, 2004, 1676.14, 1370, 3, -13.52, 'DOWN'),
+
+(4, 2003, 3213, 1166, 1, -39.17, 'DOWN'),
+
+(5, 2004, 2121.35, 1166, 4, 26.56, 'UP'),
+
+(6, 2004, 3711.12, 1166, 4, 74.94, 'UP'),
+
+(7, 2003, 3449.26, 1611, 3, 7.35, 'UP'),
+
+(8, 2003, 4704.92, 1611, 4, 36.40, 'UP'),
+
+(9, 2004, 2974.43, 1611, 5, -19.85, 'DOWN'),
+
+(10, 2004, 4755.6, 1611, 6, 59.88, 'UP'),
+
+(11, 2004, 5657.4, 1611, 6, 18.96, 'UP'),
+
+(12, 2004, 3660.75, 1370, 7, -35.29, 'DOWN'),
+
+(13, 2004, 2812.32, 1370, 8, -23.17, 'DOWN'),
+
+(14, 2005, 1607.76, 1370, 2, 0, 'CONSTANT'),
+
+(15, 2005, 4996.62, 1370, 3, 210.78, 'UP'),
+
+(16, 2003, 5571.8, 1504, 4, 18.42, 'UP'),
+
+(17, 2003, 1491.38, 1504, 6, -73.23, 'DOWN'),
+
+(18, 2004, 3884.34, 1504, 9, 38.11, 'UP'),
+
+(19, 2004, 5241.44, 1504, 10, 34.93, 'UP'),
+
+(20, 2004, 51241.54, 1143, 11, 877.62, 'UP'),
+
+(21, 2003, 25241.43, 1143, 8, 1592.48, 'UP'),
+
+(22, 2000, 12434.22, 1370, 11, 0, 'CONSTANT'),
+
+(23, 2007, 9008.22, 1504, 3, 0, 'CONSTANT'),
+
+(24, 2007, 150399.34, 1611, 7, 1569.57, 'UP'),
+
+(25, 2005, 52343.12, 1102, 5, 947.57, 'UP')
+
+ON DUPLICATE KEY UPDATE sale_id=sale_id;
+
+/*Data for the table `top3product` */
+
+insert into `top3product`(`product_id`,`product_name`) values 
+
+(40, '1992 Ferrari 360 Spider red'),
+
+(1, '1969 Harley Davidson Ultimate Chopper'),
+
+(2, '1952 Alpine Renault 1300') ON DUPLICATE KEY UPDATE product_id=product_id;
+
+/*Data for the table `token` */
+
+insert into `token`(`token_id`,`sale_id`,`amount`) values 
+
+(1, 1, 1500),
+
+(2, 1, 2687.55),
+
+(3, 1, 1095.09) ON DUPLICATE KEY UPDATE token_id=token_id;
+
+/*Data for the table `employee_status` */
+
+insert into `employee_status`(`id`,`employee_number`,`status`, `acquired_date`) values 
+
+(1, 1002, 'REGULAR', '2004-04-14'),
+
+(2, 1056, 'REGULAR', '2003-06-10'),
+
+(3, 1076, 'REGULAR', '2005-01-10'),
+
+(4, 1088, 'REGULAR', '2005-04-10'),
+
+(5, 1102, 'REGULAR', '2003-07-12'),
+
+(6, 1143, 'REGULAR', '2003-05-12'),
+
+(7, 1143, 'AVERAGE', '2004-12-05'),
+
+(8, 1165, 'REGULAR', '2005-11-15'),
+
+(9, 1166, 'REGULAR', '2003-06-15'),
+
+(10, 1166, 'AVERAGE', '2004-11-15'),
+
+(11, 1188, 'REGULAR', '2003-10-25'),
+
+(12, 1216, 'REGULAR', '2003-11-25'),
+
+(13, 1286, 'REGULAR', '2004-09-25'),
+
+(14, 1323, 'REGULAR', '2006-01-25'),
+
+(15, 1337, 'REGULAR', '2003-02-23'),
+
+(16, 1370, 'REGULAR', '2000-02-23'),
+
+(17, 1370, 'AVERAGE', '2002-06-21'),
+
+(18, 1370, 'GOOD', '2004-01-11'),
+
+(19, 1370, 'EXCELLENT', '2005-11-11'),
+
+(20, 1401, 'REGULAR', '2005-10-11'),
+
+(21, 1401, 'AVERAGE', '2006-02-12'),
+
+(22, 1501, 'REGULAR', '2004-02-12'),
+
+(23, 1501, 'AVERAGE', '2005-02-12'),
+
+(24, 1504, 'REGULAR', '2003-02-12'),
+
+(25, 1504, 'AVERAGE', '2006-02-12'),
+
+(26, 1504, 'GOOD', '2007-06-10'),
+
+(27, 1611, 'REGULAR', '2003-01-10'),
+
+(28, 1611, 'AVERAGE', '2004-05-17'),
+
+(29, 1611, 'GOOD', '2005-03-22'),
+
+(30, 1611, 'EXCELLENT', '2007-03-20'),
+
+(31, 1612, 'REGULAR', '2003-01-22'),
+
+(32, 1612, 'AVERAGE', '2004-05-11'),
+
+(33, 1619, 'REGULAR', '2000-05-11'),
+
+(34, 1619, 'AVERAGE', '2001-05-11'),
+
+(35, 1619, 'GOOD', '2004-01-15'),
+
+(36, 1621, 'REGULAR', '2004-03-15'),
+
+(37, 1621, 'AVERAGE', '2005-12-15'),
+
+(38, 1625, 'REGULAR', '2002-12-15'),
+
+(39, 1702, 'REGULAR', '2002-11-25'),
+
+(40, 1702, 'AVERAGE', '2004-09-02') ON DUPLICATE KEY UPDATE id=id;
+
+/*Data for the table `daily_activity` */
+
+insert into `daily_activity`(`day_id`,`day_date`,`sales`, `visitors`, `conversion`) values 
+
+(1, '2004-01-01', 21, 3373, 0.62),
+
+(2, '2004-01-02', 50, 3820, 1.31),
+
+(3, '2004-01-03', 50, 3175, 1.57),
+
+(4, '2004-01-04', 33, 4013, 0.82),
+
+(5, '2004-01-05', 58, 4022, 1.44),
+
+(6, '2004-01-06', 5, 4873, 0.25),
+
+(7, '2004-01-07', 36, 1924, 1.87),
+
+(8, '2004-01-08', 44, 3867, 1.14),
+
+(9, '2004-01-09', 28, 3621, 0.77),
+
+(10, '2004-01-10', 50, 1722, 2.90) ON DUPLICATE KEY UPDATE day_id=day_id;
+
+/*Data for the table `office_flights` */
+
+insert  into `office_flights`(`depart_town`,`arrival_town`,`distance_km`) values 
+
+('Paris', 'Los Angeles', 9080),
+
+('Los Angeles', 'Paris', 9080),
+
+('Paris', 'Boston', 5528),
+
+('Boston', 'Paris', 5528),
+
+('Paris', 'Sydney', 16950),
+
+('Sydney', 'Paris', 16950),
+
+('Paris', 'London', 344),
+
+('London', 'Paris', 344),
+
+('Paris', 'Bucharest', 1871),
+
+('Bucharest', 'Paris', 1871),
+
+('Los Angeles', 'San Diego', 180),
+
+('San Diego', 'Los Angeles', 180),
+
+('Los Angeles', 'Sydney', 12073),
+
+('Sydney', 'Los Angeles', 12073),
+
+('San Diego', 'Boston', 4150),
+
+('Boston', 'San Diego', 4150),
+
+('Boston', 'New York', 305),
+
+('New York', 'Boston', 305),
+
+('Boston', 'Springfield', 1580),
+
+('Springfield', 'Boston', 1580),
+
+('New York', 'Springfield', 1329),
+
+('Springfield', 'New York', 1329),
+
+('New York', 'Sydney', 15979),
+
+('Sydney', 'New York', 15979),
+
+('New York', 'London', 5567),
+
+('London', 'New York', 5567),
+
+('Sydney', 'Tokyo', 7819),
+
+('Tokyo', 'Sydney', 7819),
+
+('Sydney', 'London', 16983),
+
+('London', 'Sydney', 16983),
+
+('London', 'Tokyo', 9559),
+
+('Tokyo', 'London', 9559) ON DUPLICATE KEY UPDATE depart_town=depart_town;
 
 /* END */
