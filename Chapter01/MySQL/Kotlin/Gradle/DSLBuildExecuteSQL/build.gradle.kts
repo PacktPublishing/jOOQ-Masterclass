@@ -2,12 +2,12 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("application")
-	id("org.springframework.boot") version "2.5.7"
-	id("io.spring.dependency-management") version "1.0.11.RELEASE"
+    id("org.springframework.boot") version "2.5.7"
+    id("io.spring.dependency-management") version "1.0.11.RELEASE"
     id("nu.studer.jooq") version "6.0.1"
     id("org.flywaydb.flyway") version "8.2.0"
-	kotlin("jvm") version "1.6.0"
-	kotlin("plugin.spring") version "1.6.0"
+    kotlin("jvm") version "1.6.0"
+    kotlin("plugin.spring") version "1.6.0"
 }
 
 group = "com.classicmodels"
@@ -20,7 +20,7 @@ application {
 
 repositories {
     mavenLocal()
-	mavenCentral()
+    mavenCentral()
 }
 
 jooq {
@@ -29,10 +29,10 @@ jooq {
 }
 
 dependencies {
-	implementation("org.springframework.boot:spring-boot-starter")
+    implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-jooq")
-	implementation("org.jetbrains.kotlin:kotlin-reflect")
-	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("mysql:mysql-connector-java")
     implementation("org.flywaydb:flyway-core")        
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
