@@ -30,8 +30,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'	
         implementation 'org.springframework.boot:spring-boot-starter-web'        
         implementation("org.springframework.boot:spring-boot-starter-jooq")
-        implementation 'com.oracle.database.jdbc:ojdbc8'        
-        implementation 'com.oracle.database.jdbc:ucp'
+        implementation 'com.microsoft.sqlserver:mssql-jdbc'                
         implementation 'org.flywaydb:flyway-core'        
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'

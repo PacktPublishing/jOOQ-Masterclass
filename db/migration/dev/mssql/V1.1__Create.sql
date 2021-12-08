@@ -148,32 +148,23 @@ GO
 /* DROP FUNCTIONS AND PROCEDURES */
 
 IF OBJECT_ID('split_part') IS NOT NULL 
-  DROP FUNCTION [split_part]; 
-  
+  DROP FUNCTION [split_part];   
 IF OBJECT_ID('sale_price') IS NOT NULL 
-  DROP FUNCTION [sale_price]; 
-  
+  DROP FUNCTION [sale_price];   
 IF OBJECT_ID('top_three_sales_per_employee') IS NOT NULL 
   DROP FUNCTION [top_three_sales_per_employee]; 
-
 IF OBJECT_ID('product_of_product_line') IS NOT NULL 
-  DROP FUNCTION [product_of_product_line];   
-  
+  DROP FUNCTION [product_of_product_line];     
 IF OBJECT_ID('get_product') IS NOT NULL 
-  DROP PROCEDURE [get_product];    
-  
+  DROP PROCEDURE [get_product];      
 IF OBJECT_ID('refresh_top3_product') IS NOT NULL 
-  DROP PROCEDURE [refresh_top3_product];
-  
+  DROP PROCEDURE [refresh_top3_product];  
 IF OBJECT_ID('get_emps_in_office') IS NOT NULL 
-  DROP PROCEDURE [get_emps_in_office];
-  
+  DROP PROCEDURE [get_emps_in_office];  
 IF OBJECT_ID('customer_master') IS NOT NULL 
   DROP VIEW [customer_master];  
-
 IF OBJECT_ID('office_master') IS NOT NULL 
-  DROP VIEW [office_master];  
-  
+  DROP VIEW [office_master];    
 IF OBJECT_ID('product_master') IS NOT NULL 
   DROP VIEW [product_master];  
 
