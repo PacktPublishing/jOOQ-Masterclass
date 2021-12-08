@@ -3,17 +3,17 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.app</groupId>
-    <artifactId>jOOQSpringBootSQLBuilderMySQL</artifactId>
+    <groupId>com.classicmodels</groupId>
+    <artifactId>DSLBuildExecuteSQL</artifactId>
     <version>1.0</version>    
 
-    <name>jOOQSpringBootSQLBuilderMySQL</name>
-    <description>jOOQ - Spring Boot app</description>    
+    <name>DSLBuildExecuteSQL</name>
+    <description>Using jOOQ DSL to build and execute SQL</description>    
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.3.RELEASE</version>
+        <version>2.5.7</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
         
@@ -21,13 +21,13 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         
-        <java.version>14</java.version>    
-        <kotlin.version>1.4.10</kotlin.version>           
-        <maven.compiler.source>14</maven.compiler.source>
-        <maven.compiler.target>14</maven.compiler.target>
+        <java.version>17</java.version>    
+        <kotlin.version>1.6.0</kotlin.version>           
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         
-        <mysql.connector.java.version>8.0.20</mysql.connector.java.version>                        
-        <maven.compiler.plugin.version>3.3</maven.compiler.plugin.version>
+        <jooq.version>3.15.5</jooq.version>     
+                
         <main.class>com.classicmodels.MainApplicationKt</main.class>
     </properties>
 
@@ -55,6 +55,7 @@
         <dependency>
             <groupId>org.jooq</groupId>
             <artifactId>jooq</artifactId>         
+            <version>${jooq.version}</version>
         </dependency>                   
         <dependency>
             <groupId>org.flywaydb</groupId>
@@ -124,11 +125,10 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven.compiler.plugin.version}</version>
+                <artifactId>maven-compiler-plugin</artifactId>    
                 <configuration>
                     <compilerArgs>
-                        <arg>--enable-preview</arg>
+                        <arg>--enable-preview</arg>                        
                     </compilerArgs>
                 </configuration>
                 <executions>

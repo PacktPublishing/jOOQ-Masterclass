@@ -10,7 +10,7 @@ import org.jooq.impl.DSL.table;
 @Repository
 class ClassicModelsRepository(private val ctx: DSLContext) {
 
-    /* Using jOOQ to build and execute the SQL */
+    /* Using jOOQ DSL to build and execute SQL */
     fun findOfficesInTerritory(territory: String): MutableList<Office> {        
         
         return ctx.selectFrom(table("office"))
