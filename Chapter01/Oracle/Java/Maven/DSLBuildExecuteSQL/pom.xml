@@ -4,17 +4,17 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.app</groupId>
-    <artifactId>jOOQSpringBootSQLBuilder</artifactId>
+    <artifactId>DSLBuildExecuteSQL</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQSpringBootSQLBuilder</name>
-    <description>jOOQ kickoff for Spring Boot</description>    
+    <name>DSLBuildExecuteSQL</name>
+    <description>Using jOOQ DSL to build and execute SQL</description>    
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.3.RELEASE</version>
+        <version>2.5.7</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     
@@ -22,12 +22,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         
-        <java.version>14</java.version>                
-        <maven.compiler.source>14</maven.compiler.source>
-        <maven.compiler.target>14</maven.compiler.target>
+        <java.version>17</java.version>                
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         
-        <jooq.version>3.13.5</jooq.version>             
-        <maven.compiler.plugin.version>3.3</maven.compiler.plugin.version>
+        <jooq.version>3.15.5</jooq.version>                     
     </properties>
 
     <dependencies>        
@@ -67,8 +66,7 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven.compiler.plugin.version}</version>
+                <artifactId>maven-compiler-plugin</artifactId>            
                 <configuration>
                     <compilerArgs>
                         <arg>--enable-preview</arg>
