@@ -6,9 +6,10 @@ import java.util.List;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.r2dbc.R2dbcAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 
-@SpringBootApplication
+@SpringBootApplication(exclude = {R2dbcAutoConfiguration.class})
 public class MainApplication {
 
     private final ClassicModelsService classicModelsService;
@@ -27,7 +28,7 @@ public class MainApplication {
 
             System.out.println("Fetching offices from 'NA' territory:");
             List<Office> offices = classicModelsService.fetchOfficesInTerritory("NA");
-            System.out.println(offices);
+            System.out.println("The fetched offices from 'NA' territory:\n" + offices);
         };
     }
 }
