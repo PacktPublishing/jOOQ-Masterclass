@@ -1,10 +1,11 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
+    id("application")
 	id("org.springframework.boot") version "2.5.7"
 	id("io.spring.dependency-management") version "1.0.11.RELEASE"
-        id("nu.studer.jooq") version "6.0.1"
-        id("org.flywaydb.flyway") version "8.2.0"
+    id("nu.studer.jooq") version "6.0.1"
+    id("org.flywaydb.flyway") version "8.2.0"
 	kotlin("jvm") version "1.6.0"
 	kotlin("plugin.spring") version "1.6.0"
 }
@@ -12,6 +13,10 @@ plugins {
 group = "com.classicmodels"
 version = "1.0"
 java.sourceCompatibility = JavaVersion.VERSION_17
+
+application {
+    mainClass.value("com.classicmodels.MainApplicationKt")
+}
 
 repositories {
     mavenLocal()
@@ -40,10 +45,6 @@ tasks.withType<Test> {
 tasks.withType<KotlinCompile> {
 	kotlinOptions {
 		freeCompilerArgs = listOf("-Xjsr305=strict")
-		jvmTarget = "14"
+		jvmTarget = "17"
 	}
-}
-
-sourceSets.main {
-    java.srcDirs("src/main/java", "src/main/kotlin")
 }
