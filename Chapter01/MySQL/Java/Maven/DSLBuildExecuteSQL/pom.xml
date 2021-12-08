@@ -26,8 +26,7 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         
-        <jooq.version>3.15.5</jooq.version>
-        <mysql.connector.java.version>8.0.20</mysql.connector.java.version>                                
+        <jooq.version>3.15.5</jooq.version>        
     </properties>
 
     <dependencies>        

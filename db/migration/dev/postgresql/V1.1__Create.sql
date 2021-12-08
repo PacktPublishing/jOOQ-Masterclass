@@ -50,8 +50,8 @@ DROP FUNCTION IF EXISTS "product_of_product_line";
 DROP FUNCTION IF EXISTS "update_msrp";
 
 DROP VIEW IF EXISTS "customer_master";
-DROP VIEW IF EXISTS "office_master"
-DROP VIEW IF EXISTS "product_master"
+DROP VIEW IF EXISTS "office_master";
+DROP VIEW IF EXISTS "product_master";
 
 CREATE EXTENSION IF NOT EXISTS hstore;
 
@@ -65,12 +65,12 @@ OR VALUE ~ '^[A-Z]{2}[0-9]{3}[A-Z]{2}$'
 
 CREATE TABLE "office" (
   "office_code"         VARCHAR(10) NOT NULL,
-  "city"                VARCHAR(50) DEFAULT NULL,,
+  "city"                VARCHAR(50) DEFAULT NULL,
   "phone"               VARCHAR(50) NOT NULL,
   "address_line_first"  VARCHAR(50) NOT NULL,
   "address_line_second" VARCHAR(50) DEFAULT NULL,
   "state"               VARCHAR(50) DEFAULT NULL,
-  "country"             VARCHAR(50) DEFAULT NULL,,
+  "country"             VARCHAR(50) DEFAULT NULL,
   "postal_code"         postal_code NOT NULL,
   "territory"           VARCHAR(10) NOT NULL,
   "location"            POINT       DEFAULT NULL,
@@ -251,7 +251,7 @@ CREATE TABLE "productline" (
   "html_description" XML           DEFAULT NULL,
   "image"            BYTEA         DEFAULT NULL,
   "created_on"       DATE          NOT NULL DEFAULT NOW(),
-  CONSTRAINT "productline_pk" PRIMARY KEY ("product_line, code"),
+  CONSTRAINT "productline_pk" PRIMARY KEY ("product_line", "code"),
   CONSTRAINT "productline_uk" UNIQUE("product_line")
 );
 
