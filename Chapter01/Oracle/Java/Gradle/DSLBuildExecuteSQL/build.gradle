@@ -1,10 +1,10 @@
 plugins {
-        id 'application'
-	id 'org.springframework.boot' version '2.5.7'
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'    
-        id 'org.flywaydb.flyway' version '8.2.0'        
-        id 'nu.studer.jooq' version '6.0.1'
-	id 'java'
+    id 'application'
+    id 'org.springframework.boot' version '2.5.7'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'    
+    id 'org.flywaydb.flyway' version '8.2.0'        
+    id 'nu.studer.jooq' version '6.0.1'
+    id 'java'
 }
 
 group = 'com.classicmodels'
@@ -17,8 +17,8 @@ application {
 }
 
 repositories {
-	mavenLocal()
-	mavenCentral()    
+    mavenLocal()
+    mavenCentral()    
 }
 
 jooq {
@@ -27,13 +27,13 @@ jooq {
 }
 
 dependencies {        
-	implementation 'org.springframework.boot:spring-boot-starter-jdbc'	
-        implementation 'org.springframework.boot:spring-boot-starter-web'        
-        implementation("org.springframework.boot:spring-boot-starter-jooq")
-        implementation 'com.oracle.database.jdbc:ojdbc8'        
-        implementation 'com.oracle.database.jdbc:ucp'
-        implementation 'org.flywaydb:flyway-core'        
-	testImplementation('org.springframework.boot:spring-boot-starter-test') {
-		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-	}
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'	
+    implementation 'org.springframework.boot:spring-boot-starter-web'        
+    implementation("org.springframework.boot:spring-boot-starter-jooq")
+    implementation 'com.oracle.database.jdbc:ojdbc8'        
+    implementation 'com.oracle.database.jdbc:ucp'
+    implementation 'org.flywaydb:flyway-core'        
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+	     exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
 }
