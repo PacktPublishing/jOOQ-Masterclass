@@ -1,5 +1,6 @@
 /* START */
 
+/* [jooq ignore start] */
 DROP TABLE IF EXISTS `payment`;
 DROP TABLE IF EXISTS `bank_transaction`;
 DROP TABLE IF EXISTS `orderdetail`;
@@ -36,6 +37,7 @@ DROP TRIGGER IF EXISTS `product_uid_trigger`;
 DROP VIEW IF EXISTS `customer_master`;
 DROP VIEW IF EXISTS `office_master`;
 DROP VIEW IF EXISTS `product_master`;
+/* [jooq ignore stop] */
 
 -- TABLE OFFICE
 
@@ -49,7 +51,9 @@ CREATE TABLE `office` (
   `country`             VARCHAR(50) DEFAULT NULL,
   `postal_code`         VARCHAR(15) NOT NULL, 
   `territory`           VARCHAR(10) NOT NULL,
+  /* [jooq ignore start] */
   `location`            POINT       DEFAULT NULL,
+  /* [jooq ignore stop] */
   `internal_budget`     INT         NOT NULL,
   CONSTRAINT `office_pk` PRIMARY KEY (`office_code`),
   CONSTRAINT `office_postal_code_uk` UNIQUE (`postal_code`)
@@ -328,6 +332,7 @@ CREATE TABLE `office_flights` (
 
 /* USER-DEFINED FUNCTIONS */
 
+/* [jooq ignore start] */
 DELIMITER $$
 
 CREATE FUNCTION `customer_pgs`(`credit` DECIMAL(10,2)) 
@@ -424,6 +429,7 @@ CREATE PROCEDURE `refresh_top3_product`(IN `p_line_in` VARCHAR(50))
 		LIMIT 3;         
   END$$
 DELIMITER;
+/* [jooq ignore stop] */
 
 /* USER-DEFINED VIEWS */
 

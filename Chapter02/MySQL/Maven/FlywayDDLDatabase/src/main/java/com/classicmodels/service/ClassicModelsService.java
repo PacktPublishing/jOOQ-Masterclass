@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 public class ClassicModelsService {
 
     private final ClassicModelsRepository classicModelsRepository;
@@ -17,23 +18,19 @@ public class ClassicModelsService {
     public ClassicModelsService(ClassicModelsRepository classicModelsRepository) {
         this.classicModelsRepository = classicModelsRepository;
     }
-
-    @Transactional(readOnly = true)
+    
     public List<Office> fetchOfficesInTerritory(String territory) {
 
         return classicModelsRepository.findOfficesInTerritory(territory);
     }
-
-    @Transactional(readOnly = true)
+    
     public List<Order> fetchOrdersByRequiredDate(LocalDate startDate, LocalDate endDate) {
 
         return classicModelsRepository.findOrdersByRequiredDate(startDate, endDate);
     }
 
-    @Transactional(readOnly = true)
     public List<CustomerAndOrder> fetchCustomersAndOrders() {
 
         return classicModelsRepository.findCustomersAndOrders();
     }
-
 }
