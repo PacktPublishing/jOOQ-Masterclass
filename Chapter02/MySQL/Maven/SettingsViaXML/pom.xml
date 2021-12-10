@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.classicmodels</groupId>
-    <artifactId>SimpleSettings</artifactId>
+    <artifactId>SettingsViaXML</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>SimpleSettings</name>
+    <name>SettingsViaXML</name>
     <description>Working with simple settings</description>    
 
     <parent>
