@@ -3,18 +3,18 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.app</groupId>
-    <artifactId>jOOQSpringBootSQLFlywayDDLDatabasePostgreSQL</artifactId>
+    <groupId>com.classicmodels</groupId>
+    <artifactId>FlywayDDLDatabase</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQSpringBootSQLFlywayDDLDatabasePostgreSQL</name>
-    <description>jOOQ - Spring Boot app</description>    
+    <name>FlywayDDLDatabase</name>
+    <description>jOOQ artifacts via Flyway and DDLDatabase</description>    
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.3.RELEASE</version>
+        <version>2.5.7</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -22,16 +22,12 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         
-        <java.version>14</java.version>                
-        <maven.compiler.source>14</maven.compiler.source>
-        <maven.compiler.target>14</maven.compiler.target>
+        <java.version>17</java.version>                
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         
-        <jooq.version>3.14.4</jooq.version>
-        <javax.xml.bind.version>2.3.1</javax.xml.bind.version>
-        <org.glassfish.jaxb.version>2.3.1</org.glassfish.jaxb.version>
-        <mysql.connector.java.version>8.0.20</mysql.connector.java.version>                
-        <codehaus.mojo.version>1.0.0</codehaus.mojo.version>      
-        <maven.compiler.plugin.version>3.3</maven.compiler.plugin.version>          
+        <jooq.version>3.15.5</jooq.version>
+        <codehaus.mojo.version>1.0.0</codehaus.mojo.version>              
     </properties>
 
     <dependencies>        
@@ -52,25 +48,11 @@
             <groupId>org.jooq</groupId>
             <artifactId>jooq-meta-extensions</artifactId>
             <version>${jooq.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate.validator</groupId>
-            <artifactId>hibernate-validator</artifactId>            
-        </dependency>
+        </dependency>       
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>            
-            <version>${javax.xml.bind.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jaxb</groupId>
-            <artifactId>jaxb-runtime</artifactId>            
-            <version>${org.glassfish.jaxb.version}</version>
-        </dependency>        
+        </dependency>             
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
@@ -90,8 +72,7 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven.compiler.plugin.version}</version>
+                <artifactId>maven-compiler-plugin</artifactId>        
                 <configuration>
                     <compilerArgs>
                         <arg>--enable-preview</arg>
@@ -103,12 +84,12 @@
                 <artifactId>jooq-codegen-maven</artifactId>               
                 <executions>
                     <execution>
-                        <id>generate-mysql</id>
+                        <id>generate-for-postgresql</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>generate</goal>
                         </goals>                                  
-                        <configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.14.0.xsd">
+                        <configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.15.0.xsd">
                             <generator>
                                 <database>
                                     <name>org.jooq.meta.extensions.ddl.DDLDatabase</name>
@@ -129,7 +110,7 @@
                                         - ? matches a single character in a directory / file name -->
                                         <property>
                                             <key>scripts</key>
-                                            <value>src/main/resources/db/migration</value>
+                                            <value>./../../../../db/migration/ddl/postgresql/sql</value>
                                         </property>
         
                                         <!-- The sort order of the scripts within a directory, where:
@@ -164,6 +145,18 @@
                                             <value>lower</value>
                                         </property>                                                                                                               
                                     </properties>
+                                    
+                                    <excludes>
+                                        flyway_schema_history | akeys | avals | defined | delete.*
+                                        | department_topic_arr | dup | employee_office_arr | exist.*                                   
+                                        | fetchval | get_avg_sale | get_customer | get_salary_stat
+                                        | ghstore.* | gin.* | hs.* | hstore.* | isdefined | isexists
+                                        | make_array | new_salary | populate_record | sale_price
+                                        | slice.* | swap | tconvert | update_msrp | evaluation_criteria
+                                        | rate_type | vat_type | customer_master | each | office_master
+                                        | product_master | skeys | svals | top_three_sales_per_employee
+                                        | get_offices_multiple | product_of_product_line
+                                    </excludes>
                                 </database>
                                 
                                 <!-- Rename the generated POJOs and DAOs classes -->                      
