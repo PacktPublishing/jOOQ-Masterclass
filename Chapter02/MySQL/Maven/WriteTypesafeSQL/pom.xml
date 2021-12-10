@@ -173,6 +173,7 @@
                                         | get_avg_price_by_product_line | get_emps_in_office 
                                         | get_product | refresh_top3_product | sale_price 
                                         | set_counter | sale_rate | sale_vat
+                                        | customer_master | office_master | product_master
                                     </excludes>
                                     
                                     <!-- Give enough time to jOOQ to trigger the queries needed for generating sources 
