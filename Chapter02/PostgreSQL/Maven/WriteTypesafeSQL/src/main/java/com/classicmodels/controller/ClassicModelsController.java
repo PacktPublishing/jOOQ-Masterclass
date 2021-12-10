@@ -20,14 +20,16 @@ public class ClassicModelsController {
     }
 
     @GetMapping("/officesInTerritory")
-    public List<Office> fetchOfficesInTerritory(@RequestParam String territory) {
+    public List<Office> fetchOfficesInTerritory(
+            @RequestParam(name = "territory") String territory) {
 
         return classicModelsService.fetchOfficesInTerritory(territory);
     }
 
     @GetMapping("/ordersByRequiredDate")
     public List<Order> fetchOrdersByRequiredDate(
-            @RequestParam String startDate, @RequestParam String endDate) {
+            @RequestParam(name = "startDate") String startDate,
+            @RequestParam(name = "endDate") String endDate) {
 
         return classicModelsService.fetchOrdersByRequiredDate(
                 LocalDate.parse(startDate), LocalDate.parse(endDate));
