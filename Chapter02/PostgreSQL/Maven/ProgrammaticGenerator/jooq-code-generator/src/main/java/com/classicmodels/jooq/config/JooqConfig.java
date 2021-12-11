@@ -26,7 +26,7 @@ public class JooqConfig {
                 .withGenerator(new Generator()
                         .withDatabase(new Database()
                                 .withName("org.jooq.meta.postgres.PostgresDatabase")
-                                .withSchemaVersionProvider("SELECT MAX(version) FROM flyway_schema_history")
+                                .withSchemaVersionProvider("SELECT MAX(\"version\") FROM \"flyway_schema_history\"")
                                 .withIncludes(".*")
                                 .withExcludes("flyway_schema_history | akeys | avals | defined | delete.*"
                                         + "| department_topic_arr | dup | employee_office_arr | exist.*"

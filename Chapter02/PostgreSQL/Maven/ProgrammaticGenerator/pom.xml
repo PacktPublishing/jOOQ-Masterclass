@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.springframework</groupId>
-    <artifactId>ProgrammaticConfiguration</artifactId>
+    <artifactId>ProgrammaticGenerator</artifactId>
     <version>1.0</version>
     <packaging>pom</packaging>
     
@@ -22,5 +22,5 @@
         <module>jooq-code-generator</module>
     </modules>
     
-    <name>ProgrammaticConfiguration</name>    
+    <name>ProgrammaticGenerator</name>    
 </project>
