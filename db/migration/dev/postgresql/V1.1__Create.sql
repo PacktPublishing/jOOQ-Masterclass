@@ -147,7 +147,7 @@ CREATE TYPE "rate_type" AS enum('SILVER', 'GOLD', 'PLATINUM');
 CREATE TYPE "vat_type" AS enum('NONE', 'MIN', 'MAX');
 
 CREATE TABLE "sale" (
-  "sale_id"         BIGINT      NOT NULL DEFAULT NEXTVAL ('sale_seq'),  
+  "sale_id"         BIGINT      NOT NULL DEFAULT NEXTVAL ('"sale_seq"'),  
   "fiscal_year"     INT         NOT NULL,  
   "sale"            FLOAT       NOT NULL,  
   "employee_number" BIGINT      DEFAULT NULL,  
@@ -177,7 +177,7 @@ CREATE TABLE "daily_activity" (
 CREATE SEQUENCE "token_seq" START 1000000;
 
 CREATE TABLE "token" (
-  "token_id"   BIGINT    NOT NULL DEFAULT NEXTVAL ('sale_seq'),    
+  "token_id"   BIGINT    NOT NULL DEFAULT NEXTVAL ('"token_seq"'),    
   "sale_id"    BIGINT    NOT NULL,
   "amount"     FLOAT     NOT NULL,   
   "updated_on" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -190,7 +190,7 @@ CREATE TABLE "token" (
 CREATE SEQUENCE "customer_seq" START 1000000;
 
 CREATE TABLE "customer" (
-  "customer_number"           BIGINT        NOT NULL DEFAULT NEXTVAL ('customer_seq'),
+  "customer_number"           BIGINT        NOT NULL DEFAULT NEXTVAL ('"customer_seq"'),
   "customer_name"             VARCHAR(50)   NOT NULL,
   "contact_last_name"         VARCHAR(50)   NOT NULL,
   "contact_first_name"        VARCHAR(50)   NOT NULL,
@@ -225,7 +225,7 @@ CREATE TYPE "evaluation_criteria" AS ("communication_ability" INT, "ethics" INT,
 CREATE SEQUENCE "manager_seq" START 1000000;
 
 CREATE TABLE "manager" (
-  "manager_id"         BIGINT              NOT NULL DEFAULT NEXTVAL ('manager_seq'),
+  "manager_id"         BIGINT              NOT NULL DEFAULT NEXTVAL ('"manager_seq"'),
   "manager_name"       VARCHAR(50)         NOT NULL,
   "manager_detail"     JSON                DEFAULT NULL,
   "manager_evaluation" evaluation_criteria DEFAULT NULL, 
@@ -272,7 +272,7 @@ CREATE TABLE "productlinedetail" (
 CREATE SEQUENCE "product_seq" START 1000000;
 
 CREATE TABLE "product" (
-  "product_id"          BIGINT        NOT NULL DEFAULT NEXTVAL ('product_seq'),
+  "product_id"          BIGINT        NOT NULL DEFAULT NEXTVAL ('"product_seq"'),
   "product_name"        VARCHAR(70)   DEFAULT NULL,
   "product_line"        VARCHAR(50)   DEFAULT NULL,
   "code"                BIGINT        NOT NULL,
@@ -293,7 +293,7 @@ CREATE TABLE "product" (
 CREATE SEQUENCE "order_seq" START 1000000;
 
 CREATE TABLE "order" (
-  "order_id"        BIGINT        NOT NULL DEFAULT NEXTVAL ('order_seq'),
+  "order_id"        BIGINT        NOT NULL DEFAULT NEXTVAL ('"order_seq"'),
   "order_date"      DATE          NOT NULL,
   "required_date"   DATE          NOT NULL,
   "shipped_date"    DATE          DEFAULT NULL,
