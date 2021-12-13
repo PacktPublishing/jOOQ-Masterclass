@@ -157,7 +157,7 @@ jooq {
                     
                     target {
                         packageName = 'jooq.generated'
-                        directory = 'target/generated-sources/jooq'
+                        directory = 'build/generated-sources'
                     }
                 }
             }
