@@ -22,12 +22,12 @@ repositories {
 }
 
 dependencies {        
-    jooqGenerator 'mysql:mysql-connector-java' 
+    jooqGenerator 'org.postgresql:postgresql' 
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-jooq'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'mysql:mysql-connector-java'
+    implementation 'org.postgresql:postgresql'
     implementation 'org.flywaydb:flyway-core'
     implementation 'org.glassfish.hk2:osgi-resource-locator:2.5.0-b42'	
     implementation 'com.sun.xml.bind:jaxb-core:2.3.0.1'
@@ -54,7 +54,7 @@ flywayMigrate {
     url = project.properties['url']
     user = project.properties['username']
     password = project.properties['password']
-    locations = ['filesystem:./../../../../db/migration/dev/mysql']
+    locations = ['filesystem:./../../../../db/migration/dev/postgresql']
 }
 
 jooq {
@@ -76,16 +76,20 @@ jooq {
                 generator {
                     name = 'org.jooq.codegen.JavaGenerator'                    
                     database {
-                        name = 'org.jooq.meta.mysql.MySQLDatabase'                        
-                        inputSchema = 'classicmodels'
+                        name = 'org.jooq.meta.postgres.PostgresDatabase'                        
+                        inputSchema = 'public'
                         includes = '.*'
-                        schemaVersionProvider = 'SELECT MAX(`version`) FROM `flyway_schema_history`'
+                        schemaVersionProvider = 'SELECT MAX("version") FROM "flyway_schema_history"'
                         excludes = '''\
-                                    flyway_schema_history | sequences | customer_pgs 
-                                  | get_avg_price_by_product_line | get_emps_in_office 
-                                  | get_product | refresh_top3_product | sale_price 
-                                  | set_counter | sale_rate | sale_vat
-                                  | customer_master | office_master | product_master
+                                 flyway_schema_history | akeys | avals | defined | delete.*
+                                 | department_topic_arr | dup | employee_office_arr | exist.*                                   
+                                 | fetchval | get_avg_sale | get_customer | get_salary_stat
+                                 | ghstore.* | gin.* | hs.* | hstore.* | isdefined | isexists
+                                 | make_array | new_salary | populate_record | sale_price
+                                 | slice.* | swap | tconvert | update_msrp | evaluation_criteria
+                                 | rate_type | vat_type | customer_master | each | office_master
+                                 | product_master | skeys | svals | top_three_sales_per_employee
+                                 | get_offices_multiple | product_of_product_line
                                   ''' 
                         logSlowQueriesAfterSeconds = 20
                     }
@@ -113,7 +117,7 @@ jooq {
                     }                    
                     target {
                         packageName = 'jooq.generated'
-                        directory = 'target/generated-sources/jooq'
+                        directory = 'build/generated-sources'
                     }
                     strategy.name = "org.jooq.codegen.DefaultGeneratorStrategy"
                 }
@@ -134,7 +138,7 @@ tasks.named('generateJooq').configure {
     dependsOn tasks.named('flywayMigrate')
 
     // declare Flyway migration scripts as inputs on the jOOQ task
-    inputs.files(fileTree('./../../../../db/migration/dev/mysql'))
+    inputs.files(fileTree('${rootDir}/../../../../db/migration/dev/postgresql'))
         .withPropertyName('migrations')
         .withPathSensitivity(PathSensitivity.RELATIVE)
 
