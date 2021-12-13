@@ -36,6 +36,12 @@ application {
     mainClass = 'com.classicmodels.MainApplication'
 }
 
+processResources {
+    filesMatching("**/application.properties") {
+        expand( project.properties )
+    }
+}
+
 flywayMigrate{
     driver = project.properties['driverClassName']
     url = project.properties['url']
