@@ -53,7 +53,7 @@ public class JooqConfig {
                         .withTarget(new Target()
                                 .withPackageName("jooq.generated")
                                 .withDirectory(System.getProperty("user.dir")  
-                                + "/../webapp/build/generated-sources/jooq")));
+                                + "/../webapp/build/generated-sources")));
 
         GenerationTool.generate(configuration);
     }
