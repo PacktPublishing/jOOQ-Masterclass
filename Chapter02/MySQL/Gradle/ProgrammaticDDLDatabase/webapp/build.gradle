@@ -36,7 +36,17 @@ application {
     mainClass = 'com.classicmodels.MainApplication'
 }
 
-flywayMigrate{
+processResources {
+    filesMatching("**/application.properties") {
+        expand( project.properties )
+    }
+}
+
+configurations {
+    flywayMigrate
+}
+
+flywayMigrate {
     driver = project.properties['driverClassName']
     url = project.properties['url']
     user = project.properties['username']
