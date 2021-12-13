@@ -108,7 +108,7 @@ jooq {
                     }                    
                     target {
                         packageName = 'jooq.generated'
-                        directory = 'target/generated-sources/jooq'
+                        directory = 'build/generated-sources'
                     }
                     strategy.name = "org.jooq.codegen.DefaultGeneratorStrategy"
                 }
@@ -129,7 +129,7 @@ tasks.named('generateJooq').configure {
     dependsOn tasks.named('flywayMigrate')
 
     // declare Flyway migration scripts as inputs on the jOOQ task
-    inputs.files(fileTree('./../../../../db/migration/dev/mysql'))
+    inputs.files(fileTree('${rootDir}/../../../../db/migration/dev/mysql'))
         .withPropertyName('migrations')
         .withPathSensitivity(PathSensitivity.RELATIVE)
 
