@@ -200,11 +200,9 @@
                                     (A Java regular expression. Use the pipe to separate several expressions).
                                     Excludes match before includes, i.e. excludes have a higher priority. -->
                                     <excludes>
-                                        flyway_schema_history | sequences | customer_pgs 
-                                        | get_avg_price_by_product_line | get_emps_in_office 
-                                        | get_product | refresh_top3_product | sale_price 
-                                        | set_counter | sale_rate | sale_vat
-                                        | customer_master | office_master | product_master
+                                        flyway_schema_history | sequences 
+                                        | customer_pgs | refresh_top3_product
+                                        | sale_.* | set_.* | get_.* | .*_master
                                     </excludes>
                                     
                                     <!-- Give enough time to jOOQ to trigger the queries needed for generating sources 

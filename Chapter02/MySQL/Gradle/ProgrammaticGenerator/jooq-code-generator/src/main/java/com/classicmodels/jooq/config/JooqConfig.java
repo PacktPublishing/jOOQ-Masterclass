@@ -28,11 +28,9 @@ public class JooqConfig {
                                 .withName("org.jooq.meta.mysql.MySQLDatabase")
                                 .withSchemaVersionProvider("SELECT MAX(`version`) FROM `flyway_schema_history`")
                                 .withIncludes(".*")
-                                .withExcludes("flyway_schema_history | sequences | customer_pgs"
-                                        + " | get_avg_price_by_product_line | get_emps_in_office"
-                                        + " | get_product | refresh_top3_product | sale_price"
-                                        + " | set_counter | sale_rate | sale_vat"
-                                        + " | customer_master | office_master | product_master")
+                                .withExcludes("flyway_schema_history | sequences" 
+                                         + " | customer_pgs | refresh_top3_product"
+                                         + " | sale_.* | set_.* | get_.* | .*_master")
                                 .withInputSchema("classicmodels")
                         )
                         .withGenerate(new Generate()
