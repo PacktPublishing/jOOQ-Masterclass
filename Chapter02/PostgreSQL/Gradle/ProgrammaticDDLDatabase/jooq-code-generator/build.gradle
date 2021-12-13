@@ -1,0 +1,29 @@
+plugins {    
+    id 'java'
+    id 'org.springframework.boot' version '2.5.7' apply false
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'	
+}
+
+group = 'com.classicmodels'
+version = '1.0'
+sourceCompatibility = '17'
+targetCompatibility = '17'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencyManagement {
+    imports {
+        mavenBom org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
+    }
+}
+
+dependencies {    
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.jooq:jooq:3.15.5'
+    implementation 'org.jooq:jooq-codegen-maven:3.15.5'    
+	implementation 'org.postgresql:postgresql:42.2.5'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
