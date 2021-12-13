@@ -34,6 +34,12 @@ dependencies {
     }
 }
 
+processResources {
+    filesMatching("**/application.properties") {
+        expand( project.properties )
+    }
+}
+
 configurations {
     flywayMigrate
 }
