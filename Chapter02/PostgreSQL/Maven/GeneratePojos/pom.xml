@@ -225,7 +225,7 @@
                                     <packageName>jooq.generated</packageName>
             
                                     <!-- The destination directory of your generated classes. Using Maven directory layout here. -->
-                                    <directory>target/generated-sources/jooq</directory>
+                                    <directory>target/generated-sources</directory>
                                 </target>
                             </generator>    
                                                                                               
