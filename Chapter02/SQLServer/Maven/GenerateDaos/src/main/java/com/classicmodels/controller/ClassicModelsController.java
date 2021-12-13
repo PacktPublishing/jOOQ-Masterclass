@@ -18,16 +18,18 @@ public class ClassicModelsController {
     public ClassicModelsController(ClassicModelsService classicModelsService) {
         this.classicModelsService = classicModelsService;
     }
-   
+
     @GetMapping("/officesInTerritory")
-    public List<JooqOffice> fetchOfficesInTerritory(@RequestParam String territory) {
+    public List<JooqOffice> fetchOfficesInTerritory(
+            @RequestParam(name = "territory") String territory) {
 
         return classicModelsService.fetchOfficesInTerritory(territory);
     }
 
     @GetMapping("/ordersByRequiredDate")
     public List<JooqOrder> fetchOrdersByRequiredDate(
-            @RequestParam String startDate, @RequestParam String endDate) {
+            @RequestParam(name = "startDate") String startDate,
+            @RequestParam(name = "endDate") String endDate) {
 
         return classicModelsService.fetchOrdersByRequiredDate(
                 LocalDate.parse(startDate), LocalDate.parse(endDate));
