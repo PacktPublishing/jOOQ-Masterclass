@@ -49,7 +49,7 @@ configurations {
     flywayMigrate
 }
 
-flywayMigrate{
+flywayMigrate {
     driver = project.properties['driverClassName']
     url = project.properties['url']
     user = project.properties['username']
