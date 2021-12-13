@@ -42,6 +42,10 @@ processResources {
     }
 }
 
+configurations {
+    flywayMigrate
+}
+
 flywayMigrate {
     driver = project.properties['driverClassName']
     url = project.properties['url']
