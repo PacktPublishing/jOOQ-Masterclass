@@ -33,17 +33,11 @@ dependencies {
     }
 }
 
-processResources {
-    filesMatching("**/application.properties") {
-        expand( project.properties )
-    }
-}
-
 configurations {
     flywayMigrate
 }
 
-flyway{
+flywayMigrate{
     driver = project.properties['driverClassName']
     url = project.properties['url']
     user = project.properties['username']
