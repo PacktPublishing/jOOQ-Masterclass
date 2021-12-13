@@ -1,39 +1,39 @@
 plugins {
-    id 'org.springframework.boot' version '2.3.3.RELEASE'
-    id 'io.spring.dependency-management' version '1.0.10.RELEASE'   
-    id "org.flywaydb.flyway" version "7.2.0"
-    id 'nu.studer.jooq' version '5.2'        
+    id 'application'
+    id 'org.springframework.boot' version '2.5.7'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'org.flywaydb.flyway' version '8.2.0'
+    id 'nu.studer.jooq' version '6.0.1'
     id 'java'
 }
 
+def schemaVersion = '1'
+
 group = 'com.classicmodels'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '14'
-targetCompatibility = '14'
+version = '1.0'
+sourceCompatibility = '17'
+targetCompatibility = '17'
+
+application {
+    mainClass = 'com.classicmodels.MainApplication' 
+}
 
 repositories {
+    mavenLocal()
     mavenCentral()   
 }
 
 dependencies {            
     jooqGenerator 'mysql:mysql-connector-java' 
-    jooqGenerator 'org.jooq:jooq-meta-extensions:3.14.4'
+    jooqGenerator 'org.jooq:jooq-meta-extensions:3.15.5'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-jooq'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'mysql:mysql-connector-java'
-    implementation 'org.flywaydb:flyway-core'           
-    implementation 'javax.xml.bind:jaxb-api:2.3.1'
-    implementation 'org.glassfish.jaxb:jaxb-runtime:2.3.1'
+    implementation 'org.flywaydb:flyway-core'               
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-    }
-}
-
-processResources {
-    filesMatching("**/application.properties") {
-        expand( project.properties )
     }
 }
 
@@ -41,15 +41,17 @@ configurations {
     flywayMigrate
 }
 
-flyway{
+flywayMigrate{
     driver = project.properties['driverClassName']
     url = project.properties['url']
     user = project.properties['username']
-    password = project.properties['password']                    
+    password = project.properties['password']    
+    locations = ['filesystem:./../../../../db/migration/ddl/mysql/sql',
+                 'filesystem:./../../../../db/migration/ddl/mysql/data']	
 }
 
 jooq {
-    version = '3.14.4'
+    version = '3.15.5'
     edition = nu.studer.gradle.jooq.JooqEdition.OSS
 
     configurations {
@@ -76,7 +78,7 @@ jooq {
                             // - ? matches a single character in a directory / file name
                             property {
                                 key = 'scripts'
-                                value = 'src/main/resources/db/migration'
+                                value = './../../../../db/migration/ddl/mysql/sql'								
                             }
 
                             // The sort order of the scripts within a directory, where:
@@ -112,7 +114,15 @@ jooq {
                             }
                         }
                         
-                        inputSchema = 'PUBLIC'                        
+                        inputSchema = 'PUBLIC'
+                        schemaVersionProvider=schemaVersion                        
+                        excludes = '''\
+                                    flyway_schema_history | sequences | customer_pgs 
+                                  | get_avg_price_by_product_line | get_emps_in_office 
+                                  | get_product | refresh_top3_product | sale_price 
+                                  | set_counter | sale_rate | sale_vat
+                                  | customer_master | office_master | product_master
+                                  ''' 
                         logSlowQueriesAfterSeconds = 20
                     }                                        
                     
@@ -149,19 +159,12 @@ jooq {
     }
 }
 
-// Configure jOOQ task such that it only executes when something has changed 
-// that potentially affects the generated JOOQ sources:
-// - the jOOQ configuration has changed (Jdbc, Generator, Strategy, etc.)
-// - the classpath used to execute the jOOQ generation tool has changed 
-//   (jOOQ library, database driver, strategy classes, etc.)
-// - the schema files from which the schema is generated and which is 
-//   used by jOOQ to generate the sources have changed (scripts added, modified, etc.)
 tasks.named('generateJooq').configure {
     // ensure database schema has been prepared by Flyway before generating the jOOQ sources
     dependsOn tasks.named('flywayMigrate')
 
     // declare Flyway migration scripts as inputs on the jOOQ task
-    inputs.files(fileTree('src/main/resources/db/migration'))
+    inputs.files(fileTree('${rootDir}/../../../../db/migration/ddl/mysql/sql'))
     .withPropertyName('migrations')
     .withPathSensitivity(PathSensitivity.RELATIVE)
 
