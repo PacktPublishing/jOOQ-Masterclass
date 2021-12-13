@@ -1,13 +1,13 @@
 package com.classicmodels.repository;
 
-import com.classicmodels.pojo.Order;
 import com.classicmodels.pojo.CustomerAndOrder;
-import com.classicmodels.pojo.Office;
 import java.time.LocalDate;
 import java.util.List;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Order.ORDER;
+import jooq.generated.tables.pojos.JooqOffice;
+import jooq.generated.tables.pojos.JooqOrder;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
@@ -20,22 +20,22 @@ public class ClassicModelsRepository {
         this.ctx = ctx;
     }
 
-    public List<Office> findOfficesInTerritory(String territory) {
+    public List<JooqOffice> findOfficesInTerritory(String territory) {
 
         /* Using jOOQ to build the typesafe SQL and to execute it */
-        List<Office> result = ctx.selectFrom(OFFICE) // or, ctx.select().from(OFFICE)
+        List<JooqOffice> result = ctx.selectFrom(OFFICE) // or, ctx.select().from(OFFICE)
                 .where(OFFICE.TERRITORY.eq(territory))
-                .fetchInto(Office.class); // or, fetch().into(Office.class)
+                .fetchInto(JooqOffice.class); // or, fetch().into(JooqOffice.class)
 
         return result;
     }
 
-    public List<Order> findOrdersByRequiredDate(LocalDate startDate, LocalDate endDate) {
+    public List<JooqOrder> findOrdersByRequiredDate(LocalDate startDate, LocalDate endDate) {
 
         /* Using jOOQ to build the typesafe SQL and to execute it */
-        List<Order> result = ctx.selectFrom(ORDER)
-                .where(ORDER.REQUIRED_DATE.between(startDate, endDate))                
-                .fetchInto(Order.class); // or, fetch().into(Order.class)
+        List<JooqOrder> result = ctx.selectFrom(ORDER)
+                .where(ORDER.REQUIRED_DATE.between(startDate, endDate))
+                .fetchInto(JooqOrder.class); // or, fetch().into(Order.class)
 
         return result;
     }
