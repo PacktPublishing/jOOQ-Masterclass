@@ -1,7 +1,8 @@
-﻿/* START */
+/* START */
 
 /* USER-DEFINED FUNCTIONS */
 
+/* [jooq ignore start] */
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -144,9 +145,11 @@ AS BEGIN
   WHERE [employee].[office_code]=@in_office_code;
 END;
 GO
+/* [jooq ignore stop] */
 
 /* DROP FUNCTIONS AND PROCEDURES */
 
+/* [jooq ignore start] */
 IF OBJECT_ID('split_part') IS NOT NULL 
   DROP FUNCTION [split_part];   
 IF OBJECT_ID('sale_price') IS NOT NULL 
@@ -213,6 +216,7 @@ IF OBJECT_ID('office_flights', 'U') IS NOT NULL
   
 DROP SEQUENCE IF EXISTS [employee_seq];
 DROP SEQUENCE IF EXISTS [product_uid_seq];
+/* [jooq ignore stop] */
 
 -- TABLE OFFICE
 
@@ -288,7 +292,7 @@ CREATE TABLE [department] (
   [accrued_liabilities] FLOAT        DEFAULT NULL,
   CONSTRAINT [department_pk] PRIMARY KEY ([department_id]),
   CONSTRAINT [department_code_uk] UNIQUE ([code]),
-  CONSTRAINT [department_office_fk] FOREIGN KEY ([office_code]) REFERENCES office ([office_code])
+  CONSTRAINT [department_office_fk] FOREIGN KEY ([office_code]) REFERENCES [office] ([office_code])
 );
 
 -- TABLE SALE
@@ -298,14 +302,14 @@ CREATE TABLE [sale] (
   [fiscal_year]     INT         NOT NULL,  
   [sale]            FLOAT       NOT NULL,  
   [employee_number] BIGINT      DEFAULT NULL,  
-  [hot]             BIT         DEFAULT 0 CHECK (hot IN(1, 0)),  
-  [rate]            VARCHAR(10) DEFAULT NULL CHECK (rate IN('SILVER', 'GOLD', 'PLATINUM')),
-  [vat]             VARCHAR(10) DEFAULT NULL CHECK (vat IN('NONE', 'MIN', 'MAX')),
+  [hot]             BIT         DEFAULT 0 CHECK ([hot] IN(1, 0)),  
+  [rate]            VARCHAR(10) DEFAULT NULL CHECK ([rate] IN('SILVER', 'GOLD', 'PLATINUM')),
+  [vat]             VARCHAR(10) DEFAULT NULL CHECK ([vat] IN('NONE', 'MIN', 'MAX')),
   [fiscal_month]    INT         NOT NULL,
   [revenue_growth]  FLOAT       NOT NULL,
   [trend]           VARCHAR(10) DEFAULT NULL,  
   CONSTRAINT [sale_pk] PRIMARY KEY ([sale_id]),    
-  CONSTRAINT [sale_employee_fk] FOREIGN KEY ([employee_number]) REFERENCES employee ([employee_number]) ON UPDATE CASCADE
+  CONSTRAINT [sale_employee_fk] FOREIGN KEY ([employee_number]) REFERENCES [employee] ([employee_number]) ON UPDATE CASCADE
 );
 
 -- TABLE DAILY_ACTIVITY
@@ -368,8 +372,10 @@ CREATE TABLE [manager] (
   [manager_name]       VARCHAR(50)    NOT NULL,
   [manager_detail]     NVARCHAR(4000) DEFAULT NULL, -- or, NVARCHAR(max) up to 2GB
   [manager_evaluation] VARCHAR(500)   DEFAULT NULL, 
-  CONSTRAINT [manager_pk] PRIMARY KEY ([manager_id]),
-  CONSTRAINT ENSURE_JSON CHECK(ISJSON([manager_detail]) = 1)
+  CONSTRAINT [manager_pk] PRIMARY KEY ([manager_id])
+  /* [jooq ignore start] */
+  , CONSTRAINT ENSURE_JSON CHECK(ISJSON([manager_detail]) = 1)
+  /* [jooq ignore stop] */
 );
 
 -- TABLE OFFICE_HAS_MANAGER
@@ -388,7 +394,9 @@ CREATE TABLE [productline] (
   [product_line]     VARCHAR(50)    NOT NULL,
   [code]             BIGINT         NOT NULL,
   [text_description] VARCHAR(4000)  DEFAULT NULL,
+  /* [jooq ignore start] */
   [html_description] XML            DEFAULT NULL,
+  /* [jooq ignore stop] */
   [image]            VARBINARY(max) DEFAULT NULL,
   [created_on]       DATE           DEFAULT GETDATE(),
   CONSTRAINT [productline_pk] PRIMARY KEY ([product_line],[code]),
@@ -456,7 +464,7 @@ CREATE TABLE [orderdetail] (
   CONSTRAINT [orderdetail_pk] PRIMARY KEY ([orderdetail_id]),
   CONSTRAINT [orderdetail_uk] UNIQUE ([order_id], [product_id]),
   CONSTRAINT [orderdetail_order_fk] FOREIGN KEY ([order_id]) REFERENCES [order] ([order_id]),
-  CONSTRAINT [orderdetail_product_fk] FOREIGN KEY ([product_id]) REFERENCES product ([product_id])
+  CONSTRAINT [orderdetail_product_fk] FOREIGN KEY ([product_id]) REFERENCES [product] ([product_id])
 );
 
 -- TABLE TOP3PRODUCT
@@ -465,7 +473,7 @@ CREATE TABLE [top3product] (
   [product_id]   BIGINT      NOT NULL,
   [product_name] VARCHAR(70) DEFAULT NULL,  
   CONSTRAINT [top3product_pk] PRIMARY KEY ([product_id]),  
-  CONSTRAINT [top3product_product_fk] FOREIGN KEY ([product_id]) REFERENCES [product] (product_id)
+  CONSTRAINT [top3product_product_fk] FOREIGN KEY ([product_id]) REFERENCES [product] ([product_id])
 );
 
 -- TABLE PAYMENT

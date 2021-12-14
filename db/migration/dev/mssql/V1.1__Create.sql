@@ -288,7 +288,7 @@ CREATE TABLE [department] (
   [accrued_liabilities] FLOAT        DEFAULT NULL,
   CONSTRAINT [department_pk] PRIMARY KEY ([department_id]),
   CONSTRAINT [department_code_uk] UNIQUE ([code]),
-  CONSTRAINT [department_office_fk] FOREIGN KEY ([office_code]) REFERENCES office ([office_code])
+  CONSTRAINT [department_office_fk] FOREIGN KEY ([office_code]) REFERENCES [office] ([office_code])
 );
 
 -- TABLE SALE
@@ -298,14 +298,14 @@ CREATE TABLE [sale] (
   [fiscal_year]     INT         NOT NULL,  
   [sale]            FLOAT       NOT NULL,  
   [employee_number] BIGINT      DEFAULT NULL,  
-  [hot]             BIT         DEFAULT 0 CHECK (hot IN(1, 0)),  
-  [rate]            VARCHAR(10) DEFAULT NULL CHECK (rate IN('SILVER', 'GOLD', 'PLATINUM')),
-  [vat]             VARCHAR(10) DEFAULT NULL CHECK (vat IN('NONE', 'MIN', 'MAX')),
+  [hot]             BIT         DEFAULT 0 CHECK ([hot] IN(1, 0)),  
+  [rate]            VARCHAR(10) DEFAULT NULL CHECK ([rate] IN('SILVER', 'GOLD', 'PLATINUM')),
+  [vat]             VARCHAR(10) DEFAULT NULL CHECK ([vat] IN('NONE', 'MIN', 'MAX')),
   [fiscal_month]    INT         NOT NULL,
   [revenue_growth]  FLOAT       NOT NULL,
   [trend]           VARCHAR(10) DEFAULT NULL,  
   CONSTRAINT [sale_pk] PRIMARY KEY ([sale_id]),    
-  CONSTRAINT [sale_employee_fk] FOREIGN KEY ([employee_number]) REFERENCES employee ([employee_number]) ON UPDATE CASCADE
+  CONSTRAINT [sale_employee_fk] FOREIGN KEY ([employee_number]) REFERENCES [employee] ([employee_number]) ON UPDATE CASCADE
 );
 
 -- TABLE DAILY_ACTIVITY
@@ -456,7 +456,7 @@ CREATE TABLE [orderdetail] (
   CONSTRAINT [orderdetail_pk] PRIMARY KEY ([orderdetail_id]),
   CONSTRAINT [orderdetail_uk] UNIQUE ([order_id], [product_id]),
   CONSTRAINT [orderdetail_order_fk] FOREIGN KEY ([order_id]) REFERENCES [order] ([order_id]),
-  CONSTRAINT [orderdetail_product_fk] FOREIGN KEY ([product_id]) REFERENCES product ([product_id])
+  CONSTRAINT [orderdetail_product_fk] FOREIGN KEY ([product_id]) REFERENCES [product] ([product_id])
 );
 
 -- TABLE TOP3PRODUCT
@@ -465,7 +465,7 @@ CREATE TABLE [top3product] (
   [product_id]   BIGINT      NOT NULL,
   [product_name] VARCHAR(70) DEFAULT NULL,  
   CONSTRAINT [top3product_pk] PRIMARY KEY ([product_id]),  
-  CONSTRAINT [top3product_product_fk] FOREIGN KEY ([product_id]) REFERENCES [product] (product_id)
+  CONSTRAINT [top3product_product_fk] FOREIGN KEY ([product_id]) REFERENCES [product] ([product_id])
 );
 
 -- TABLE PAYMENT
