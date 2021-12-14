@@ -1,0 +1,27 @@
+plugins {    
+    id 'java'
+    id 'org.springframework.boot' version '2.5.7' apply false
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'	
+}
+
+group = 'com.classicmodels'
+version = '1.0'
+sourceCompatibility = '17'
+targetCompatibility = '17'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencyManagement {
+    imports {
+        mavenBom org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
+    }
+}
+
+dependencies {        
+    implementation 'org.jooq.trial-java-8:jooq:3.15.5'
+    implementation 'org.jooq.trial-java-8:jooq-codegen:3.15.5'    
+	implementation 'com.microsoft.sqlserver:mssql-jdbc:9.2.1.jre8'      
+}
