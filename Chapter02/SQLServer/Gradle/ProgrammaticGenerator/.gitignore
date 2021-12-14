@@ -2,9 +2,6 @@ HELP.md
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
-!libs/jooq-3.15.5.jar
-!libs/jooq-meta-3.15.5.jar
-!libs/mssql-jdbc-9.2.1.jre8.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
 
