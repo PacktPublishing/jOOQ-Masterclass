@@ -23,6 +23,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.flywaydb:flyway-core'
     implementation 'org.jooq:jooq'
+    implementation 'mysql:mysql-connector-java'    
     implementation 'org.glassfish.hk2:osgi-resource-locator:2.5.0-b42'	
     implementation 'com.sun.xml.bind:jaxb-core:2.3.0.1'
     implementation 'javax.xml.bind:jaxb-api:2.3.1'

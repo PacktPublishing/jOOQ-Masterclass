@@ -28,5 +28,4 @@ dependencyManagement {
 
 dependencies {    
     implementation 'org.jooq:jooq-codegen'    
-    implementation 'mysql:mysql-connector-java'    
 }
