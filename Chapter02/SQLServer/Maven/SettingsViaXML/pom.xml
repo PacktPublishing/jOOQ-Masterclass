@@ -151,7 +151,7 @@
                 <version>${jooq.version}</version>
                 <executions>
                     <execution>
-                        <id>generate-for-mysql</id>
+                        <id>generate-for-sqlserver</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>generate</goal>
