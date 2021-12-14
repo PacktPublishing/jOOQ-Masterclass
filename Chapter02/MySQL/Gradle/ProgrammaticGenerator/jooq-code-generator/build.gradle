@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '2.5.7' apply false
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'	
+    id 'nu.studer.jooq' version '6.0.1'
 }
 
 group = 'com.classicmodels'
@@ -20,10 +21,12 @@ dependencyManagement {
     }
 }
 
-dependencies {    
-    implementation 'org.springframework.boot:spring-boot-starter'
-    implementation 'org.jooq:jooq:3.15.5'
-    implementation 'org.jooq:jooq-codegen-maven:3.15.5'    
-	implementation 'mysql:mysql-connector-java:8.0.25'		
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+jooq {
+    version = project.properties['jooq']
+    edition = nu.studer.gradle.jooq.JooqEdition.OSS
+}
+
+dependencies {            
+    implementation 'org.jooq:jooq-codegen'    
+    implementation 'mysql:mysql-connector-java'
 }
