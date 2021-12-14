@@ -23,8 +23,7 @@ repositories {
 
 dependencies {        
     jooqGenerator 'org.postgresql:postgresql' 
-    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-    implementation 'org.springframework.boot:spring-boot-starter-jooq'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'    
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.postgresql:postgresql'
     implementation 'org.flywaydb:flyway-core'
@@ -52,7 +51,7 @@ flywayMigrate{
 }
 
 jooq {
-    version = '3.15.5'
+    version = project.properties['jooq']
     edition = nu.studer.gradle.jooq.JooqEdition.OSS
 
     configurations {
