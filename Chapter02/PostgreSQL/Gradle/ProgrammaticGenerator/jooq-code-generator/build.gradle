@@ -24,6 +24,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.jooq:jooq:3.15.5'
     implementation 'org.jooq:jooq-codegen-maven:3.15.5'    
-	implementation 'org.postgresql:postgresql:42.2.5'	
+    implementation 'org.postgresql:postgresql:42.2.5'	
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
