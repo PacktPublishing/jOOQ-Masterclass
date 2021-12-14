@@ -68,21 +68,21 @@ task runProgrammaticGenerator(type: JavaExec) {
     configurations {
       codegen   
       metaext
-	  mysqljdbc
-	  h2jdbc
+      mysqljdbc
+      h2jdbc
     }
 
     dependencies {
        codegen "org.jooq:jooq-codegen"       
        metaext "org.jooq:jooq-meta-extensions"
        mysqljdbc "mysql:mysql-connector-java"
-	   h2jdbc "com.h2database:h2"
+       h2jdbc "com.h2database:h2"
     }
 
     classpath = files([
          "${rootDir}/jooq-code-generator/build/classes/java/main",
          configurations.codegen, configurations.metaext, 
-		 configurations.mysqljdbc, configurations.h2jdbc
+         configurations.mysqljdbc, configurations.h2jdbc
     ])
 	
     mainClass = 'com.classicmodels.jooq.config.JooqConfig'	
