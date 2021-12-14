@@ -2,9 +2,6 @@ HELP.md
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
-!libs/mysql-connector-java-8.0.25.jar
-!libs/jooq-meta-extensions-3.15.1.jar
-!libs/h2-1.4.200.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
 
