@@ -17,12 +17,12 @@ repositories {
     mavenCentral()
 }
 
-dependencies {    
+dependencies {   
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.flywaydb:flyway-core'
-    implementation 'org.jooq:jooq:3.15.5'	
+    implementation 'org.jooq:jooq'
     implementation 'org.glassfish.hk2:osgi-resource-locator:2.5.0-b42'	
     implementation 'com.sun.xml.bind:jaxb-core:2.3.0.1'
     implementation 'javax.xml.bind:jaxb-api:2.3.1'
@@ -42,6 +42,11 @@ processResources {
     }
 }
 
+jooq {
+    version = project.properties['jooq']
+    edition = nu.studer.gradle.jooq.JooqEdition.OSS
+}
+
 configurations {
     flywayMigrate
 }
@@ -59,10 +64,19 @@ task runProgrammaticGenerator(type: JavaExec) {
     dependsOn tasks.named('flywayMigrate')
     dependsOn(':jooq-code-generator:compileJava')
 
+    configurations {
+      codegen
+      postgresqljdbc
+    }
+
+    dependencies {
+       codegen "org.jooq:jooq-codegen"
+       postgresqljdbc "org.postgresql:postgresql"
+    }
+
     classpath = files([
          "${rootDir}/jooq-code-generator/build/classes/java/main",
-         buildscript.configurations.classpath,
-         "${rootDir}/libs/postgresql-42.2.5.jar"
+         configurations.codegen, configurations.postgresqljdbc
     ])
 	
     mainClass = 'com.classicmodels.jooq.config.JooqConfig'	
