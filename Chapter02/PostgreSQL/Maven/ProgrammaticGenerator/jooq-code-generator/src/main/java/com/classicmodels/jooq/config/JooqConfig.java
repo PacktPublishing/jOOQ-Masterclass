@@ -29,14 +29,12 @@ public class JooqConfig {
                                 .withSchemaVersionProvider("SELECT MAX(\"version\") FROM \"flyway_schema_history\"")
                                 .withIncludes(".*")
                                 .withExcludes("flyway_schema_history | akeys | avals | defined | delete.*"
-                                        + "| department_topic_arr | dup | employee_office_arr | exist.*"
-                                        + "| fetchval | get_avg_sale | get_customer | get_salary_stat"
-                                        + "| ghstore.* | gin.* | hs.* | hstore.* | isdefined | isexists"
-                                        + "| make_array | new_salary | populate_record | sale_price"
-                                        + "| slice.* | swap | tconvert | update_msrp | evaluation_criteria"
-                                        + "| rate_type | vat_type | customer_master | each | office_master"
-                                        + "| product_master | skeys | svals | top_three_sales_per_employee"
-                                        + "| get_offices_multiple | product_of_product_line")
+                                        + " | department_topic_arr | dup | employee_office_arr | exist.*"
+                                        + " | fetchval | get_.* | ghstore.* | gin.* | hs.* | hstore.*"
+                                        + " | isdefined | isexists | make_array | new_salary | populate_record"
+                                        + " | sale_price | slice.* | swap | tconvert | update_msrp"
+                                        + " | evaluation_criteria | rate_type | vat_type | .*_master | each"
+                                        + " | skeys | svals | top_three_sales_per_employee | product_of_product_line")
                                 .withInputSchema("public")
                         )
                         .withGenerate(new Generate()
