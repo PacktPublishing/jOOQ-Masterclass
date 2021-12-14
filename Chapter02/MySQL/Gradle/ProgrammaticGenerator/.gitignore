@@ -2,7 +2,6 @@ HELP.md
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
-!libs/mysql-connector-java-8.0.25.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
 
