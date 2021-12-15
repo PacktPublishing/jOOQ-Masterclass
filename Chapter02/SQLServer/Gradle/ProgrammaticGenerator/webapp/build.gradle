@@ -18,7 +18,7 @@ repositories {
 }
 
 jooq {
-    version = '3.15.5'
+    version = project.properties['jooq']
     edition = nu.studer.gradle.jooq.JooqEdition.TRIAL_JAVA_8
 }
 
@@ -27,7 +27,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'	
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.flywaydb:flyway-core'    
-	implementation 'org.jooq.trial-java-8:jooq:3.15.5' 
+    implementation 'org.jooq.trial-java-8:jooq' 
     implementation 'org.glassfish.hk2:osgi-resource-locator:2.5.0-b42'	
     implementation 'com.sun.xml.bind:jaxb-core:2.3.0.1'
     implementation 'javax.xml.bind:jaxb-api:2.3.1'
@@ -46,7 +46,7 @@ processResources {
         expand( project.properties )
     }
 }
-	
+
 configurations {
     flywayMigrate
 }
@@ -57,7 +57,7 @@ flywayMigrate {
     user = project.properties['username']
     password = project.properties['password']   
     locations = ['filesystem:./../../../../../db/migration/dev/mssql']	
-	mixed = true
+    mixed = true
 }
 
 task runProgrammaticGenerator(type: JavaExec) {    
@@ -65,15 +65,22 @@ task runProgrammaticGenerator(type: JavaExec) {
     dependsOn tasks.named('flywayMigrate')
     dependsOn(':jooq-code-generator:compileJava')
 
+    configurations {
+      codegen
+      mssqljdbc
+    }
+
+    dependencies {
+       codegen "org.jooq:jooq-codegen"
+       mssqljdbc "com.microsoft.sqlserver:mssql-jdbc"
+    }
+
     classpath = files([
-         "${rootDir}/jooq-code-generator/build/classes/java/main",         
-         "${rootDir}/libs/mssql-jdbc-9.2.1.jre8.jar",
-		 "${rootDir}/libs/jooq-3.15.5.jar",
-		 "${rootDir}/libs/jooq-meta-3.15.5.jar",
-		 buildscript.configurations.classpath
+         "${rootDir}/jooq-code-generator/build/classes/java/main",
+         configurations.codegen, configurations.mssqljdbc
     ])
-	
-    mainClass = 'com.classicmodels.jooq.config.JooqConfig'	
+
+    mainClass = 'com.classicmodels.jooq.config.JooqConfig'
 }
 
 sourceSets.main.java.srcDirs = ['build/generated-sources/jooq', 'src/main/java']
