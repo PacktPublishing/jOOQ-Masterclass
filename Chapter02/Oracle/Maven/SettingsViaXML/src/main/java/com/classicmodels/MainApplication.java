@@ -1,17 +1,20 @@
 package com.classicmodels;
 
 import com.classicmodels.pojo.CustomerAndOrder;
-import com.classicmodels.pojo.Order;
-import com.classicmodels.pojo.Office;
 import com.classicmodels.service.ClassicModelsService;
 import java.time.LocalDate;
 import java.util.List;
+import jooq.generated.tables.pojos.JooqOffice;
+import jooq.generated.tables.pojos.JooqOrder;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.r2dbc.R2dbcAutoConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 
-@SpringBootApplication
+@SpringBootApplication(exclude = {R2dbcAutoConfiguration.class})
+@ComponentScan(basePackages = { "jooq.generated.tables.daos", "com.classicmodels.*" })
 public class MainApplication {
 
     private final ClassicModelsService classicModelsService;
@@ -29,11 +32,11 @@ public class MainApplication {
         return args -> {
 
             System.out.println("Fetching offices from 'NA' territory:");
-            List<Office> offices = classicModelsService.fetchOfficesInTerritory("NA");
+            List<JooqOffice> offices = classicModelsService.fetchOfficesInTerritory("NA");
             System.out.println(offices);
 
             System.out.println("Fetching orders between 2002-01-01 and 2004-12-31:");
-            List<Order> orders = classicModelsService
+            List<JooqOrder> orders = classicModelsService
                     .fetchOrdersByRequiredDate(LocalDate.of(2002, 1, 1), LocalDate.of(2004, 12, 31));
             System.out.println(orders);
 
