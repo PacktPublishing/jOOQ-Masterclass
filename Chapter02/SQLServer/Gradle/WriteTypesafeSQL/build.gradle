@@ -52,7 +52,7 @@ flywayMigrate {
 }
 
 jooq {
-    version = project.properties['url']
+    version = project.properties['jooq']
     edition = nu.studer.gradle.jooq.JooqEdition.TRIAL_JAVA_8
 
     configurations {
