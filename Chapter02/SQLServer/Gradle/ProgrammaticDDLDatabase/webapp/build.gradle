@@ -22,7 +22,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.flywaydb:flyway-core'
-    implementation 'org.jooq.trial-java-8:jooq:3.15.5'
+    implementation 'org.jooq.trial-java-8:jooq'
+    implementation 'com.microsoft.sqlserver:mssql-jdbc'
     implementation 'org.glassfish.hk2:osgi-resource-locator:2.5.0-b42'	
     implementation 'com.sun.xml.bind:jaxb-core:2.3.0.1'
     implementation 'javax.xml.bind:jaxb-api:2.3.1'
@@ -37,9 +38,9 @@ application {
 }
 
 jooq {
-    version = '3.15.5'
+    version = project.properties['jooq']
     edition = nu.studer.gradle.jooq.JooqEdition.TRIAL_JAVA_8
-	}
+}
 
 processResources {
     filesMatching("**/application.properties") {
@@ -62,25 +63,27 @@ flywayMigrate {
 }
 
 task runProgrammaticGenerator(type: JavaExec) {    
-configurations {
-	alfresco
-	gigel
-	costel
-}
 
-  dependencies {
-    alfresco "org.jooq.trial-java-8:jooq-meta-extensions"
-	gigel "org.jooq.trial-java-8:jooq-codegen"
-	costel "org.jooq.trial-java-8:jooq"
-}
     dependsOn tasks.named('flywayMigrate')
     dependsOn(':jooq-code-generator:compileJava')
 
+    configurations {
+      codegen
+      metaext 
+      h2jdbc
+    }
+
+    dependencies {
+       codegen "org.jooq:jooq-codegen"
+       metaext "org.jooq:jooq-meta-extensions"
+       h2jdbc "com.h2database:h2"
+    }
+
     classpath = files([
-         "${rootDir}/jooq-code-generator/build/classes/java/main",         
-		 configurations.alfresco, configurations.gigel, configurations.costel
+         "${rootDir}/jooq-code-generator/build/classes/java/main",
+         configurations.codegen, configurations.metaext, configurations.h2jdbc
     ])
-	
+
     mainClass = 'com.classicmodels.jooq.config.JooqConfig'	
 }
 
