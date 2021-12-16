@@ -19,6 +19,9 @@ public class ClassicModelsRepositoryImpl implements ClassicModelsRepository {
     @Override
     public List<EmployeeNoCntr> findEmployeesAndLeastSalary() {
 
+        ctx.configuration().settings()
+                 .withRenderNameCase​(org.jooq.conf.RenderNameCase.LOWER);
+        
         List<EmployeeNoCntr> result = ctx.select(EMPLOYEE.FIRST_NAME,
                 EMPLOYEE.LAST_NAME,
                 EMPLOYEE.SALARY,
