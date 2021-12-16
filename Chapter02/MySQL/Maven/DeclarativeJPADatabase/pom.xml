@@ -28,29 +28,6 @@
         <module>entities</module>
         <module>webapp</module>
     </modules>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-        </dependency>
-    </dependencies>       
-    <build>
-        <plugins>           
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>       
-                <configuration>
-                    <skip>true</skip>
-                </configuration>         
-            </plugin>
-        </plugins>
-    </build>
     
     <name>DeclarativeJPADatabase</name>
 </project>
