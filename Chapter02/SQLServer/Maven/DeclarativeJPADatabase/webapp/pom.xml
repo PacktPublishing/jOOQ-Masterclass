@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    
+    <groupId>com-jooq-jpa</groupId>
+    <artifactId>webapp</artifactId>
+    <version>1.0</version>        
+    <name>webapp</name>
+
+    <parent>
+        <groupId>org-jooq-jpa</groupId>
+        <artifactId>DeclarativeJPADatabase</artifactId>
+        <version>1.0</version>        
+    </parent>
+    
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        
+        <java.version>17</java.version>                
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        
+        <jooq.version>3.15.5</jooq.version>
+        <jooq.meta.extensions.hibernate.version>3.15.5</jooq.meta.extensions.hibernate.version>        
+        <codehaus.mojo.version>1.0.0</codehaus.mojo.version>    
+        <javax.persistence.api.version>2.2</javax.persistence.api.version>     
+        <validation.api.version>2.0.1.Final</validation.api.version>
+        
+        <!-- property used as a schema version provider -->
+        <schema.version>1</schema.version>
+    </properties>       
+        
+    <dependencies>               
+        <dependency>
+            <groupId>com-jooq-jpa</groupId>
+            <artifactId>entities</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>                           
+        <dependency>
+            <groupId>com.microsoft.sqlserver</groupId>
+            <artifactId>mssql-jdbc</artifactId>
+        </dependency>       
+        <dependency>
+            <groupId>org.jooq.trial-java-8</groupId>
+            <artifactId>jooq</artifactId> 
+            <version>${jooq.version}</version>                             
+        </dependency>                          
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>         
+        </dependency>                  
+    </dependencies>
+
+    <build>
+        <plugins>                     
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>                               
+            </plugin>    
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>properties-maven-plugin</artifactId>
+                <version>${codehaus.mojo.version}</version>
+                <executions>
+                    <execution>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>read-project-properties</goal>
+                        </goals>
+                        <configuration>
+                            <files>                                
+                                <file>src/main/resources/application.properties</file>
+                            </files>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin> 
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>                
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>migrate</goal>
+                        </goals>
+                    </execution>
+                </executions>                
+                <configuration>
+                    <driver>${spring.datasource.driverClassName}</driver>
+                    <url>${spring.datasource.url}</url>
+                    <user>${spring.datasource.username}</user>
+                    <password>${spring.datasource.password}</password>  
+                    <locations>
+                        <location>filesystem:./../../../../../db/migration/min/mssql</location>
+                    </locations>
+                </configuration>
+            </plugin>
+
+            <!-- The jOOQ code generator plugin -->
+            <plugin>
+                <groupId>org.jooq.trial-java-8</groupId>
+                <artifactId>jooq-codegen-maven</artifactId>            
+                <executions>
+                    <execution>
+                        <id>generate-jooq-from-jpa-entities</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.15.0.xsd">
+                            
+                            <!-- JDBC connection to the H2 in-memory database -->
+                            <jdbc>
+                                <driver>org.h2.Driver</driver>
+                                <url>jdbc:h2:~/classicmodels</url>                                
+                            </jdbc>
+                            <generator>
+                                <database>                                    
+                                    <name>org.jooq.meta.extensions.jpa.JPADatabase</name>
+                                                                                                              
+                                    <properties>
+                                        <!-- The current versions of jOOQ use Hibernate behind the scenes 
+                                        to generate an in-memory H2 database from which to reverse engineer 
+                                        jOOQ code. In order to influence Hibernate's schema generation, 
+                                        Hibernate specific flags can be passed to MetadataSources. 
+                                        All properties that are prefixed with hibernate. 
+                                        or javax.persistence. will be passed along to Hibernate. -->
+                                        <property>
+                                            <key>hibernate.physical_naming_strategy</key>
+                                            <value>org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy</value>
+                                        </property>
+                                        
+                                        <!-- A comma separated list of Java packages, that contain your entities -->
+                                        <property>
+                                            <key>packages</key>
+                                            <value>
+                                                com.classicmodels.entity
+                                            </value>
+                                        </property>
+                                        
+                                        <!-- Whether JPA 2.1 AttributeConverters should be auto-mapped to jOOQ Converters.
+                                        Custom <forcedType/> configurations will have a higher priority than these auto-mapped converters. 
+                                        This defaults to true. -->
+                                        <property>
+                                            <key>useAttributeConverters</key>
+                                            <value>true</value>
+                                        </property> 
+                                        
+                                        <!-- The default schema for unqualified objects:
+  
+                                        - public: all unqualified objects are located in the PUBLIC (upper case) schema
+                                        - none: all unqualified objects are located in the default schema (default) 
+                
+                                        This configuration can be overridden with the schema mapping feature -->
+                                        <property>
+                                            <key>unqualifiedSchema</key>
+                                            <value>none</value>
+                                        </property>                                                                               
+                                    </properties>
+                                    <includes>.*</includes> 
+                                                                        
+                                    <!-- Schema version provider -->            
+                                    <schemaVersionProvider>${schema.version}</schemaVersionProvider>                                                                    
+                                </database>
+                                
+                                <!-- Rename the generated POJOs and DAOs classes -->                      
+                                <strategy>
+                                    <matchers>
+                                        <tables>
+                                            <table>
+                                                <pojoClass>                                                         
+                                                    <expression>JOOQ_$0</expression>
+                                                    <transform>PASCAL</transform>                                                                                      
+                                                </pojoClass>
+                                                <daoClass>
+                                                    <expression>$0_Repository</expression>
+                                                    <transform>PASCAL</transform>                                                                                      
+                                                </daoClass>
+                                            </table>
+                                        </tables>
+                                    </matchers>
+                                </strategy>
+                                
+                                <generate>
+                                    <interfaces>true</interfaces>
+                                    <daos>true</daos>            <!-- daos will generate pojos as well -->
+                                    <!-- <pojos>true</pojos> --> <!-- this is needed to generated pojos without daos -->                             
+                                    <validationAnnotations>true</validationAnnotations>
+                                    <springAnnotations>true</springAnnotations>   
+                                </generate>
+                                <target>                                    
+                                    <packageName>jooq.generated</packageName>
+                                    <directory>target/generated-sources</directory>
+                                </target>
+                            </generator>                            
+                        </configuration>
+                    </execution>
+                </executions>    
+                <dependencies>              
+                    <!-- This is needed for the JPADatabase -->
+                    <dependency>
+                        <groupId>org.jooq.trial-java-8</groupId>
+                        <!-- before jOOQ 3.14.x <artifactId>jooq-meta-extensions -->
+                        <artifactId>jooq-meta-extensions-hibernate</artifactId>
+                        <version>${jooq.meta.extensions.hibernate.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>javax.persistence</groupId>
+                        <artifactId>javax.persistence-api</artifactId>
+                        <version>${javax.persistence.api.version}</version>
+                    </dependency>                                    
+                    <dependency>
+                        <groupId>javax.validation</groupId>
+                        <artifactId>validation-api</artifactId>
+                        <version>${validation.api.version}</version>
+                    </dependency>                  
+                </dependencies>                  
+            </plugin>            
+        </plugins>
+    </build>
+</project>
