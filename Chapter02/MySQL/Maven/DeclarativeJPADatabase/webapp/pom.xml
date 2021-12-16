@@ -23,8 +23,7 @@
         <maven.compiler.target>17</maven.compiler.target>
         
         <jooq.version>3.15.5</jooq.version>
-        <jooq.meta.extensions.hibernate.version>3.15.5</jooq.meta.extensions.hibernate.version>
-        <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>            
+        <jooq.meta.extensions.hibernate.version>3.15.5</jooq.meta.extensions.hibernate.version>        
         <codehaus.mojo.version>1.0.0</codehaus.mojo.version>    
         <javax.persistence.api.version>2.2</javax.persistence.api.version>     
         <validation.api.version>2.0.1.Final</validation.api.version>
@@ -41,16 +40,17 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
-        </dependency>              
+        </dependency>                           
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jooq</artifactId>       
-        </dependency>        
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>  
         <dependency>
             <groupId>org.jooq</groupId>
             <artifactId>jooq</artifactId> 
@@ -58,30 +58,16 @@
         </dependency>                      
         <dependency>
             <groupId>javax.validation</groupId>
-            <artifactId>validation-api</artifactId>
-            <version>${validation.api.version}</version>
+            <artifactId>validation-api</artifactId>         
         </dependency>                  
     </dependencies>
 
     <build>
-        <plugins>
+        <plugins>                     
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven.compiler.plugin.version}</version>
-                <configuration>                    
-                    <fork>true</fork>
-                    <maxmem>1024m</maxmem>
-                    <meminitial>256m</meminitial>
-                    <encoding>UTF-8</encoding>                   
-                    <debug>true</debug>
-                    <debuglevel>lines,vars,source</debuglevel>           
-                    <compilerArgs>
-                        <arg>-Xlint:varargs</arg>                        
-                    </compilerArgs>
-                </configuration>
-            </plugin>
-            
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>                               
+            </plugin>    
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>properties-maven-plugin</artifactId>
@@ -180,7 +166,7 @@
                                         </property>                                       
                                     </properties>
                                     <includes>.*</includes> 
-                                                                                                                                             <!-- Schema version provider -->            
+                                    <!-- Schema version provider -->            
                                     <schemaVersionProvider>${schema.version}</schemaVersionProvider>                                                                    
                                 </database>
                                 
