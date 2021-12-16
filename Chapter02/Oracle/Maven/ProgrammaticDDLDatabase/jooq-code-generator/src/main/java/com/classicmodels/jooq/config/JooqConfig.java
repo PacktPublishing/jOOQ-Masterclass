@@ -33,7 +33,7 @@ public class JooqConfig {
                                         new Property().withKey("unqualifiedSchema").withValue("none"),
                                         new Property().withKey("defaultNameCase").withValue("as_is"))
                                 .withExcludes("flyway_schema_history | DEPARTMENT_PKG | GET_.*"
-                                        + " | CARD_COMMISSION | PRODUCT_OF_PRODUCT_LINE |"
+                                        + " | CARD_COMMISSION | PRODUCT_OF_PRODUCT_LINE"
                                         + " | REFRESH_TOP3_PRODUCT | SALE_PRICE | SECOND_MAX"
                                         + " | SET_COUNTER | SWAP | TOP_THREE_SALES_PER_EMPLOYEE"
                                         + " | EVALUATION_CRITERIA | SECOND_MAX_IMPL | TABLE_.*_OBJ"
