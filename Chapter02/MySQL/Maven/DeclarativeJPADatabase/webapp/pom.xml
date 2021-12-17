@@ -144,6 +144,7 @@
                                             <key>hibernate.physical_naming_strategy</key>
                                             <value>org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy</value>
                                         </property>
+                                             
                                         <!-- A comma separated list of Java packages, that contain your entities -->
                                         <property>
                                             <key>packages</key>
@@ -151,6 +152,7 @@
                                                 com.classicmodels.entity
                                             </value>
                                         </property>
+                                             
                                         <!-- Whether JPA 2.1 AttributeConverters should be auto-mapped to jOOQ Converters.
                                         Custom <forcedType/> configurations will have a higher priority than these auto-mapped converters. 
                                         This defaults to true. -->
@@ -158,6 +160,7 @@
                                             <key>useAttributeConverters</key>
                                             <value>true</value>
                                         </property> 
+                                             
                                         <!-- The default schema for unqualified objects:
   
                                         - public: all unqualified objects are located in the PUBLIC (upper case) schema
@@ -169,7 +172,9 @@
                                             <value>none</value>
                                         </property>                                       
                                     </properties>
+                                         
                                     <includes>.*</includes> 
+                                         
                                     <!-- Schema version provider -->            
                                     <schemaVersionProvider>${schema.version}</schemaVersionProvider>                                                                    
                                 </database>
