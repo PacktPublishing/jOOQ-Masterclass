@@ -178,6 +178,7 @@
                                             <value>none</value>
                                         </property>                                                                               
                                     </properties>
+                                         
                                     <includes>.*</includes> 
                                                                         
                                     <!-- Schema version provider -->            
