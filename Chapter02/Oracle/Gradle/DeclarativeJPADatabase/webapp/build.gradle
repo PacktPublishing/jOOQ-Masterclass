@@ -1,0 +1,172 @@
+plugins {
+    id 'application'
+    id 'org.springframework.boot' version '2.5.7'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'org.flywaydb.flyway' version '7.7.3'
+    id 'nu.studer.jooq' version '6.0.1'
+    id 'java'
+}
+
+def schemaVersion = '1'
+
+group = 'com.classicmodels'
+version = '1.0'
+sourceCompatibility = '17'
+targetCompatibility = '17'
+
+application {
+    mainClass = 'com.classicmodels.MainApplication' 
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()   
+}
+
+dependencies {                
+    jooqGenerator 'org.jooq:jooq-meta-extensions-hibernate'
+    jooqGenerator 'javax.persistence:javax.persistence-api'
+    jooqGenerator 'javax.validation:validation-api'
+    jooqGenerator project(':entities')	
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'    
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation project(':entities')	
+    implementation 'com.oracle.database.jdbc:ojdbc8'
+    implementation 'com.oracle.database.jdbc:ucp'
+    implementation 'org.flywaydb:flyway-core'  
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+}
+
+processResources {
+    filesMatching("**/application.properties") {
+        expand( project.properties )
+    }
+}
+
+configurations {
+    flywayMigrate
+}
+
+flywayMigrate {
+    driver = project.properties['driverClassName']
+    url = project.properties['url']
+    user = project.properties['username']
+    password = project.properties['password']    
+    locations = ['filesystem:./../../../../db/migration/min/oracle']	
+}
+
+jooq {
+    version = project.properties['jooq']
+    edition = nu.studer.gradle.jooq.JooqEdition.TRIAL_JAVA_8
+
+    configurations {
+        main {
+            generateSchemaSourceOnCompilation = true  // default (can be omitted)                        
+                    
+            generationTool {
+                logging = org.jooq.meta.jaxb.Logging.WARN
+                jdbc {
+                    driver = 'org.h2.Driver'
+                    url = 'jdbc:h2:~/classicmodels'
+                }                
+                generator {
+                    name = 'org.jooq.codegen.JavaGenerator' 
+                    
+                    database {
+                        name = 'org.jooq.meta.extensions.jpa.JPADatabase' 
+                        
+                        properties {
+
+                            // The current versions of jOOQ use Hibernate behind the scenes 
+                            // to generate an in-memory H2 database from which to reverse engineer 
+                            // jOOQ code. In order to influence Hibernate's schema generation, 
+                            // Hibernate specific flags can be passed to MetadataSources. 
+                            // All properties that are prefixed with hibernate. 
+                            // or javax.persistence. will be passed along to Hibernate. -->
+                            property {
+                                key = 'hibernate.physical_naming_strategy'
+                                value = 'org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy'
+                            }
+
+                            // A comma separated list of Java packages, that contain your entities
+                            property {
+                                key = 'packages'
+                                value = 'com.classicmodels.entity'
+                            }
+
+                            // Whether JPA 2.1 AttributeConverters should be auto-mapped to jOOQ Converters.
+                            // Custom <forcedType/> configurations will have a higher priority than these auto-mapped converters. 
+                            // This defaults to true.
+                            property {
+                                key = 'useAttributeConverters'
+                                value = 'true'
+                            }
+
+                            // The default schema for unqualified objects:
+  
+                            // - public: all unqualified objects are located in the PUBLIC (upper case) schema
+                            // - none: all unqualified objects are located in the default schema (default) 
+                
+                            // This configuration can be overridden with the schema mapping feature
+                            property {
+                                key = 'unqualifiedSchema'
+                                value = 'none'
+                            }
+                        }
+                                                                        
+                        includes = '.*' 
+                        schemaVersionProvider=schemaVersion
+                    }                                        
+                    
+                    strategy {
+                        matchers {
+                            tables {
+                                table {
+                                    pojoClass{
+                                        expression = 'JOOQ_$0'
+                                        transform = 'PASCAL'
+                                    }
+                                    daoClass{
+                                        expression = '$0_Repository'
+                                        transform = 'PASCAL'
+                                    }
+                                }
+                            }
+                        }
+                    }                                        
+                    
+                    generate {  
+                        interfaces = true
+                        daos = true
+                        validationAnnotations = true
+                        springAnnotations = true
+                    }
+                    
+                    target {
+                        packageName = 'jooq.generated'
+                        directory = 'build/generated-sources'
+                    }
+                }
+            }
+        }
+    }
+}
+
+// jOOQ generator run after Flyway but it doesn't depend on it!
+tasks.named('generateJooq').configure {
+    // ensure database schema has been prepared by Flyway before generating the jOOQ sources
+    dependsOn tasks.named('flywayMigrate')
+
+    // declare Flyway migration scripts as inputs on the jOOQ task
+    inputs.files(fileTree('${rootDir}/../../../../db/migration/min/oracle'))
+    .withPropertyName('migrations')
+    .withPathSensitivity(PathSensitivity.RELATIVE)
+
+    // make jOOQ task participate in incremental builds and build caching
+    allInputsDeclared = true
+    outputs.cacheIf { true }
+}
