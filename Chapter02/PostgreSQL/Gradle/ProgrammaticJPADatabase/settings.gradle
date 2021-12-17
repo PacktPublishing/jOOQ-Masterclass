@@ -1,4 +1,4 @@
-rootProject.name = 'DeclarativeJPADatabase'
+rootProject.name = 'ProgrammaticJPADatabase'
 
 include 'entities'
 include 'webapp'
