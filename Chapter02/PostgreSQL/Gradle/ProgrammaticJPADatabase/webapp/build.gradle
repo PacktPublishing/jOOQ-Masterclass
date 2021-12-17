@@ -1,0 +1,94 @@
+plugins {
+    id 'application'
+    id 'org.springframework.boot' version '2.5.7'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'org.flywaydb.flyway' version '8.2.0'
+    id 'nu.studer.jooq' version '6.0.1'
+    id 'java'
+}
+
+def schemaVersion = '1'
+
+group = 'com.classicmodels'
+version = '1.0'
+sourceCompatibility = '17'
+targetCompatibility = '17'
+
+application {
+    mainClass = 'com.classicmodels.MainApplication' 
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()   
+}
+
+dependencies {                
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'    
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation project(':entities')	
+    implementation 'org.jooq:jooq'
+    implementation 'org.postgresql:postgresql'
+    implementation 'org.flywaydb:flyway-core'  
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+}
+
+processResources {
+    filesMatching("**/application.properties") {
+        expand( project.properties )
+    }
+}
+
+configurations {
+    flywayMigrate
+}
+
+flywayMigrate {
+    driver = project.properties['driverClassName']
+    url = project.properties['url']
+    user = project.properties['username']
+    password = project.properties['password']    
+    locations = ['filesystem:./../../../../db/migration/min/postgresql']	
+}
+
+jooq {
+    version = project.properties['jooq']
+    edition = nu.studer.gradle.jooq.JooqEdition.OSS
+}
+
+task runProgrammaticGenerator(type: JavaExec) {    
+
+    dependsOn tasks.named('flywayMigrate')
+    dependsOn(':entities:compileJava')
+
+    configurations {
+      h2jdbc
+      codegen
+      metaext
+      sbjpa
+    }
+
+    dependencies {
+       h2jdbc "com.h2database:h2"
+       codegen "org.jooq:jooq-codegen"
+       metaext "org.jooq:jooq-meta-extensions-hibernate"
+       sbjpa "org.springframework.boot:spring-boot-starter-data-jpa"
+    }
+
+    classpath = files([
+         "${rootDir}/entities/build/classes/java/main",
+         configurations.codegen, configurations.h2jdbc, 
+         configurations.metaext, configurations.sbjpa
+    ])
+
+    mainClass = 'com.classicmodels.jooq.config.JooqConfig'	
+}
+
+sourceSets.main.java.srcDirs = ['build/generated-sources/jooq', 'src/main/java']
+
+assemble.dependsOn('runProgrammaticGenerator')
+compileJava.dependsOn('runProgrammaticGenerator')
