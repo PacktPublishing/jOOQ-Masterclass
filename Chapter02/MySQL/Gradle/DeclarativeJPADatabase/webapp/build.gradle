@@ -24,9 +24,9 @@ repositories {
 }
 
 dependencies {                
-	jooqGenerator 'org.jooq:jooq-meta-extensions-hibernate'
+    jooqGenerator 'org.jooq:jooq-meta-extensions-hibernate'
     jooqGenerator 'javax.persistence:javax.persistence-api'
-	jooqGenerator 'javax.validation:validation-api'
+    jooqGenerator 'javax.validation:validation-api'
     jooqGenerator project(':entities')	
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-web'
