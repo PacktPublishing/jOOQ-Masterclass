@@ -98,7 +98,7 @@
                         <configuration>
                             <sourceDirs>
                                 <sourceDir>${project.basedir}/src/main/kotlin</sourceDir>                    
-                                <sourceDir>${project.basedir}/target/generated-sources/jooq/generated</sourceDir>                    
+                                <sourceDir>${project.basedir}/target/generated-sources/jooq/generated</sourceDir>                                                   
                                 <!-- <sourceDir>${project.basedir}/src/main/java</sourceDir> -->
                             </sourceDirs>
                         </configuration>
