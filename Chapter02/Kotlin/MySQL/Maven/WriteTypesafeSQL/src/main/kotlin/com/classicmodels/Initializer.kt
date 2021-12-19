@@ -11,14 +11,14 @@ class Initializer (private val classicModelsService: ClassicModelsService) : App
 
     @Throws(Exception::class)
     override fun run(args: ApplicationArguments) {
-        println("Fetching offices from 'NA' territory:");
-        println(classicModelsService.fetchOfficesInTerritory("NA"));
+        println("Fetching offices from 'NA' territory:")
+        println(classicModelsService.fetchOfficesInTerritory("NA"))
 
-        println("Fetching orders between 2002-01-01 and 2004-12-31:");
+        println("Fetching orders between 2002-01-01 and 2004-12-31:")
         println(classicModelsService
-             .fetchOrdersByRequiredDate(LocalDate.of(2002, 1, 1), LocalDate.of(2004, 12, 31)));
+             .fetchOrdersByRequiredDate(LocalDate.of(2002, 1, 1), LocalDate.of(2004, 12, 31)))
 
-        println("Fetching customers and orders:");
-        println(classicModelsService.fetchCustomersAndOrders());            
+        println("Fetching customers and orders:")
+        println(classicModelsService.fetchCustomersAndOrders())
     }
 }

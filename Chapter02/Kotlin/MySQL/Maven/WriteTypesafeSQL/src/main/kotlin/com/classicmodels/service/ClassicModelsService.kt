@@ -17,10 +17,10 @@ class ClassicModelsService(private val classicModelsRepository: ClassicModelsRep
     }
 
     fun fetchOrdersByRequiredDate(startDate: LocalDate, endDate: LocalDate): MutableList<Order> {
-        return classicModelsRepository.findOrdersByRequiredDate(startDate, endDate);
+        return classicModelsRepository.findOrdersByRequiredDate(startDate, endDate)
     }
 
     fun fetchCustomersAndOrders(): MutableList<CustomerAndOrder> {
-        return classicModelsRepository.findCustomersAndOrders();
+        return classicModelsRepository.findCustomersAndOrders()
     }
 }
