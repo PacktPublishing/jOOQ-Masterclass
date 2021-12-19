@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>jooq.code.gen</groupId>
+    <groupId>classicmodels.jooq.code.gen</groupId>
     <artifactId>webapp</artifactId>
     <version>1.0</version>    
 
@@ -35,7 +35,7 @@
 
     <dependencies>        
         <dependency>
-            <groupId>jooq.code.gen</groupId>
+            <groupId>classicmodels.jooq.code.gen</groupId>
             <artifactId>jooq-code-generator</artifactId>
             <version>1.0</version>
         </dependency>
