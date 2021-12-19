@@ -1,11 +1,11 @@
 package com.classicmodels.repository
 
-import org.jooq.DSLContext;
-import org.springframework.stereotype.Repository;
-import com.classicmodels.pojo.Office;
+import org.jooq.DSLContext
+import org.springframework.stereotype.Repository
+import com.classicmodels.pojo.Office
 
-import org.jooq.impl.DSL.field;
-import org.jooq.impl.DSL.table;
+import org.jooq.impl.DSL.field
+import org.jooq.impl.DSL.table
 
 @Repository
 class ClassicModelsRepository(private val ctx: DSLContext) {
