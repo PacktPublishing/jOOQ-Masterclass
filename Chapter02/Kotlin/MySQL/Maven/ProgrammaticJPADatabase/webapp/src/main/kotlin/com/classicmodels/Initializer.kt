@@ -12,11 +12,11 @@ class Initializer (private val classicModelsService: ClassicModelsService) : App
     override fun run(args: ApplicationArguments) {
 
         // uses jOOQ
-        println("Fetch employees and least salary:");
-        println(classicModelsService.fetchEmployeesAndLeastSalary());
+        println("Fetch employees and least salary:")
+        println(classicModelsService.fetchEmployeesAndLeastSalary())
 
         // uses Spring Data JPA
-        println("Fetch the employees  by job title:");
-        println(classicModelsService.fetchByJobTitle("Sales Rep"));        
+        println("Fetch the employees  by job title:")
+        println(classicModelsService.fetchByJobTitle("Sales Rep"))
     }
 }
