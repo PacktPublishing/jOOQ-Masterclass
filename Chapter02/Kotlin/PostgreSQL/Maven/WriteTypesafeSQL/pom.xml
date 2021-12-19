@@ -219,7 +219,7 @@
                 <artifactId>jooq-codegen-maven</artifactId>               
                 <executions>
                     <execution>
-                        <id>generate-for-mysql</id>
+                        <id>generate-for-postgresql</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>generate</goal>
