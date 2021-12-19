@@ -10,7 +10,7 @@ class Initializer (private val classicModelsService: ClassicModelsService) : App
 
     @Throws(Exception::class)
     override fun run(args: ApplicationArguments) {
-        println("Fetching offices from 'NA' territory:");
-        println(classicModelsService.fetchOfficesInTerritory("NA"));
+        println("Fetching offices from 'NA' territory:")
+        println(classicModelsService.fetchOfficesInTerritory("NA"))
     }
 }
