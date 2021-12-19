@@ -12,12 +12,12 @@ public class ClassicModelsController(private val classicModelsService: ClassicMo
 
     @GetMapping("/leastsalary")
     fun fetchEmployeesAndLeastSalary(): MutableList<EmployeeNoCntr> {
-        return classicModelsService.fetchEmployeesAndLeastSalary();
+        return classicModelsService.fetchEmployeesAndLeastSalary()
     }
 
     @GetMapping("/employeescsv")
     fun fetchByJobTitle(
             @RequestParam(name = "jobTitle") jobTitle: String): MutableList<Employee> {
-        return classicModelsService.fetchByJobTitle(jobTitle);
+        return classicModelsService.fetchByJobTitle(jobTitle)
     }
 }

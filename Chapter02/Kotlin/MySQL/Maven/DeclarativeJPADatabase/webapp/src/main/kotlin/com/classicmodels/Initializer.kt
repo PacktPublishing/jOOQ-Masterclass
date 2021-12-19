@@ -13,10 +13,10 @@ class Initializer (private val classicModelsService: ClassicModelsService) : App
 
         // uses jOOQ
         println("Fetch employees and least salary:");
-        println(classicModelsService.fetchEmployeesAndLeastSalary());
+        println(classicModelsService.fetchEmployeesAndLeastSalary())
 
         // uses Spring Data JPA
         println("Fetch the employees  by job title:");
-        println(classicModelsService.fetchByJobTitle("Sales Rep"));        
+        println(classicModelsService.fetchByJobTitle("Sales Rep"))       
     }
 }
