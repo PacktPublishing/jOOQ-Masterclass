@@ -16,6 +16,7 @@ public class ClassicModelsController(private val classicModelsService: ClassicMo
     @GetMapping("/officesInTerritory")
     fun fetchOfficesInTerritory(
             @RequestParam(name = "territory") territory: String): MutableList<Office> {        
+        return classicModelsService.fetchOfficesInTerritory(territory)
     }
 
     @GetMapping("/ordersByRequiredDate")
