@@ -18,14 +18,14 @@ class ClassicModelsService(private val classicModelsRepository: ClassicModelsRep
                            private val orderRepository: OrderRepository) {
 
     fun fetchOfficesInTerritory(territory: String): List<JooqOffice> {
-        return officeRepository.fetchByTerritory(territory);
+        return officeRepository.fetchByTerritory(territory)
     }
     
     fun fetchOrdersByRequiredDate(startDate: LocalDate, endDate: LocalDate): List<JooqOrder> {
-        return orderRepository.fetchRangeOfRequiredDate(startDate, endDate);
+        return orderRepository.fetchRangeOfRequiredDate(startDate, endDate)
     }
 
     fun fetchCustomersAndOrders(): MutableList<CustomerAndOrder> {
-        return classicModelsRepository.findCustomersAndOrders();
+        return classicModelsRepository.findCustomersAndOrders()
     }
 }
