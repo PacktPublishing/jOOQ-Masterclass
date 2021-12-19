@@ -15,7 +15,7 @@ public class ClassicModelsController(private val classicModelsService: ClassicMo
     @GetMapping("/officesInTerritory")
     fun fetchOfficesInTerritory(
             @RequestParam(name = "territory") territory: String): MutableList<JooqOffice> {        
-        return classicModelsService.fetchOfficesInTerritory(territory);
+        return classicModelsService.fetchOfficesInTerritory(territory)
     }
 
     @GetMapping("/ordersByRequiredDate")
@@ -23,11 +23,11 @@ public class ClassicModelsController(private val classicModelsService: ClassicMo
             @RequestParam(name = "startDate") startDate: String,
             @RequestParam(name = "endDate") endDate: String): MutableList<JooqOrder> {        
         return classicModelsService.fetchOrdersByRequiredDate(
-                LocalDate.parse(startDate), LocalDate.parse(endDate));
+                LocalDate.parse(startDate), LocalDate.parse(endDate))
     }
 
     @GetMapping("/customersAndOrders")
     fun fetchCustomersAndOrders(): MutableList<CustomerAndOrder> {
-        return classicModelsService.fetchCustomersAndOrders();
+        return classicModelsService.fetchCustomersAndOrders()
     }
 }
