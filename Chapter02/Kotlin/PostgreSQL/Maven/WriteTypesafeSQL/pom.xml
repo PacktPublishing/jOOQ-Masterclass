@@ -282,6 +282,11 @@
                                     (default is 5 seconds) -->
                                     <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>
                                 </database>
+                                
+                                <generate>
+                                    <deprecationOnUnknownTypes>false</deprecationOnUnknownTypes>                                                                                        
+                                </generate>
+                                
                                 <target>
                                     <!-- The destination package of your generated classes (within the destination directory).
                                     jOOQ may append the schema name to this package if generating multiple schemas,
@@ -292,7 +297,7 @@
                                     <!-- The destination directory of your generated classes. Using Maven directory layout here -->
                                     <directory>target/generated-sources</directory>
                                 </target>
-                            </generator>    
+                            </generator>                                
                                                                                               
                             <!-- A boolean property (or constant) can be specified here to tell the plugin not to do anything -->
                             <skip>false</skip>
