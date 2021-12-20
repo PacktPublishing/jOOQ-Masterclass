@@ -12,7 +12,7 @@ class ClassicModelsRepositoryImpl(private val ctx: DSLContext) : ClassicModelsRe
 
     override fun findEmployeesAndLeastSalary(): MutableList<EmployeeNoCntr> {
 
-       (ctx.configuration().settings()::setRenderNameCase)(RenderNameCase.LOWER)
+       (ctx.configuration().settings()::setRenderNameCase)(RenderNameCase.UPPER) // this is the default anyway
 
        return ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY,
                 firstValue(EMPLOYEE.FIRST_NAME)
