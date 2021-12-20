@@ -34,7 +34,7 @@ public class JooqConfig {
                                         + " | SET_COUNTER | SWAP | TOP_THREE_SALES_PER_EMPLOYEE"
                                         + " | EVALUATION_CRITERIA | SECOND_MAX_IMPL | TABLE_.*_OBJ"
                                         + " | .*_MASTER | BGT | .*_ARR | TABLE_POPL | TABLE_RES")
-                                .withInputSchema("classicmodels")
+                                .withInputSchema("CLASSICMODELS")
                         )
                         .withGenerate(new Generate()
                                 .withDaos(true)
