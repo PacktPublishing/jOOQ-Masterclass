@@ -4,10 +4,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.classicmodels</groupId>
-    <artifactId>GenerateDaos</artifactId>
+    <artifactId>GenerateDaos1</artifactId>
     <version>1.0</version>    
 
-    <name>GenerateDaos</name>
+    <name>GenerateDaos1</name>
     <description>Using jOOQ to build the typesafe SQL and to execute it</description>    
 
     <parent>
