@@ -110,7 +110,8 @@
                     <password>${spring.datasource.password}</password>                                          
                     <locations>
                         <location>filesystem:./../../../../db/migration/dev/mssql</location>                        
-                    </locations>                   
+                    </locations>     
+                    <mixed>true</mixed>  
                 </configuration>                
             </plugin>
             <plugin>
