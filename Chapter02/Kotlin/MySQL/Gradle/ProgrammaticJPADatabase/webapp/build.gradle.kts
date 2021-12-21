@@ -1,7 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.gradle.language.jvm.tasks.ProcessResources
-import org.jooq.meta.jaxb.Logging
-import org.jooq.meta.jaxb.Property
 
 plugins {
     id("application")
