@@ -76,9 +76,13 @@ jooq {
                         includes = ".*"
                         schemaVersionProvider = "SELECT MAX(\"version\") FROM \"flyway_schema_history\""
                         excludes = """
-                                    flyway_schema_history | sequences 
-                                  | customer_pgs | refresh_top3_product
-                                  | sale_.* | set_.* | get_.* | .*_master
+                                  flyway_schema_history | akeys | avals | defined | delete.*
+                                | department_topic_arr | dup | employee_office_arr | exist.*                                   
+                                | fetchval | get_.* | ghstore.* | gin.* | hs.* | hstore.* 
+                                | isdefined | isexists | make_array | new_salary | populate_record 
+                                | sale_price | slice.* | swap | tconvert | update_msrp | postal_code
+                                | evaluation_criteria | rate_type | vat_type | .*_master | each 
+                                | skeys | svals | top_three_sales_per_employee | product_of_product_line
                                   """
                         logSlowQueriesAfterSeconds = 20	
                     }
