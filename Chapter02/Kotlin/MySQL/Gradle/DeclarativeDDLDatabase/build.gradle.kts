@@ -57,8 +57,8 @@ flyway {
     url = project.properties["url"].toString()
     user = project.properties["username"].toString()
     password = project.properties["password"].toString()
-    locations = arrayOf("filesystem:./../../../../db/migration/ddl/mysql/sql",
-                        "filesystem:./../../../../db/migration/ddl/mysql/data")
+    locations = arrayOf("filesystem:./../../../../../db/migration/ddl/mysql/sql",
+                        "filesystem:./../../../../../db/migration/ddl/mysql/data")
 }
 
 jooq {
