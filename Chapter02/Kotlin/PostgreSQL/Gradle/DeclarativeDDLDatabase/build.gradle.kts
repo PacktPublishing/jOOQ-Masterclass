@@ -33,7 +33,7 @@ repositories {
 }
 
 dependencies {
-    jooqGenerator("mysql:mysql-connector-java")	
+    jooqGenerator("org.postgresql:postgresql")	
     jooqGenerator("org.jooq:jooq-meta-extensions")
     implementation("org.springframework.boot:spring-boot-starter-jdbc")
     implementation("org.springframework.boot:spring-boot-starter-web")
