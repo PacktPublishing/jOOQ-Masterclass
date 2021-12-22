@@ -64,7 +64,7 @@
             <artifactId>jackson-module-kotlin</artifactId>    
         </dependency>
         <dependency>
-            <groupId>org.jooq.trial-java-8</groupId>
+            <groupId>org.jooq</groupId>
             <artifactId>jooq</artifactId>         
             <version>${jooq.version}</version>
         </dependency>                   
@@ -73,9 +73,9 @@
             <artifactId>flyway-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.microsoft.sqlserver</groupId>
-            <artifactId>mssql-jdbc</artifactId>
-        </dependency>      
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>   
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>    
@@ -246,9 +246,8 @@
                     <user>${spring.datasource.username}</user>
                     <password>${spring.datasource.password}</password>                                          
                     <locations>
-                        <location>filesystem:./../../../../../../db/migration/dev/mssql</location>                        
+                        <location>filesystem:./../../../../../../db/migration/min/mysql</location>                        
                     </locations>                   
-                    <mixed>true</mixed>
                 </configuration>                
             </plugin>
             <!-- The jOOQ code generator plugin -->
