@@ -109,7 +109,7 @@
                     <user>${spring.datasource.username}</user>
                     <password>${spring.datasource.password}</password>                                          
                     <locations>
-                        <location>filesystem:./../../../../db/migration/dev/mssql</location>                        
+                        <location>filesystem:./../../../../../db/migration/dev/mssql</location>                        
                     </locations>     
                     <mixed>true</mixed>  
                 </configuration>                
