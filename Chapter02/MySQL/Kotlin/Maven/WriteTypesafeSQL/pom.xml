@@ -63,9 +63,9 @@
             <artifactId>flyway-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-        </dependency>              
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>        
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -211,7 +211,7 @@
                     <user>${spring.datasource.username}</user>
                     <password>${spring.datasource.password}</password>                                          
                     <locations>
-                        <location>filesystem:./../../../../../db/migration/dev/postgresql</location>                        
+                        <location>filesystem:./../../../../../db/migration/dev/mysql</location>                        
                     </locations>                   
                 </configuration>                
             </plugin>
@@ -220,7 +220,7 @@
                 <artifactId>jooq-codegen-maven</artifactId>               
                 <executions>
                     <execution>
-                        <id>generate-for-postgresql</id>
+                        <id>generate-for-mysql</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>generate</goal>
@@ -249,12 +249,12 @@
                                 <database>                            
                                     <!-- The database type. The format here is:
                                     org.jooq.meta.[database].[database]Database -->
-                                    <name>org.jooq.meta.postgres.PostgresDatabase</name>
+                                    <name>org.jooq.meta.mysql.MySQLDatabase</name>
             
                                     <!-- The database schema (or in the absence of schema support, in your RDBMS this
                                     can be the owner, user, database name) to be generated. This cannot be combined with the <schemata/> element.                                     
                                     If <inputSchema/> is missing then all schemas will be considered. -->
-                                    <inputSchema>public</inputSchema>                 
+                                    <inputSchema>classicmodels</inputSchema>                 
             
                                     <!-- All elements that are generated from your schema
                                     (A Java regular expression. Use the pipe to separate several expressions)
@@ -264,30 +264,26 @@
                                     <includes>.*</includes>
             
                                     <!-- Schema version provider -->            
-                                    <schemaVersionProvider>SELECT MAX("version") FROM "flyway_schema_history"</schemaVersionProvider>
+                                    <schemaVersionProvider>SELECT MAX(`version`) FROM `flyway_schema_history`</schemaVersionProvider>
             
                                     <!-- All elements that are excluded from your schema
                                     (A Java regular expression. Use the pipe to separate several expressions).
                                     Excludes match before includes, i.e. excludes have a higher priority. -->
                                     <excludes>
-                                        flyway_schema_history | akeys | avals | defined | delete.*
-                                        | department_topic_arr | dup | employee_office_arr | exist.*                                   
-                                        | fetchval | get_.* | ghstore.* | gin.* | hs.* | hstore.* 
-                                        | isdefined | isexists | make_array | new_salary | populate_record 
-                                        | sale_price | slice.* | swap | tconvert | update_msrp | postal_code 
-                                        | evaluation_criteria | rate_type | vat_type | .*_master | each 
-                                        | skeys | svals | top_three_sales_per_employee | product_of_product_line
+                                        flyway_schema_history | sequences 
+                                        | customer_pgs | refresh_top3_product
+                                        | sale_.* | set_.* | get_.* | .*_master
                                     </excludes>
                                     
                                     <!-- Give enough time to jOOQ to trigger the queries needed for generating sources 
                                     (default is 5 seconds) -->
                                     <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>
                                 </database>
-                                
+
                                 <generate>
                                     <deprecationOnUnknownTypes>false</deprecationOnUnknownTypes>                                                                                        
                                 </generate>
-                                
+
                                 <target>
                                     <!-- The destination package of your generated classes (within the destination directory).
                                     jOOQ may append the schema name to this package if generating multiple schemas,
@@ -298,7 +294,7 @@
                                     <!-- The destination directory of your generated classes. Using Maven directory layout here -->
                                     <directory>target/generated-sources</directory>
                                 </target>
-                            </generator>                                
+                            </generator>    
                                                                                               
                             <!-- A boolean property (or constant) can be specified here to tell the plugin not to do anything -->
                             <skip>false</skip>
