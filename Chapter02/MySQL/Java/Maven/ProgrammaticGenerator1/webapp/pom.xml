@@ -43,14 +43,14 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>                               
         <dependency>
-            <groupId>org.jooq.trial-java-8</groupId>
+            <groupId>org.jooq</groupId>
             <artifactId>jooq</artifactId>         
             <version>${jooq.version}</version>
         </dependency>               
         <dependency>
-            <groupId>com.microsoft.sqlserver</groupId>
-            <artifactId>mssql-jdbc</artifactId>
-        </dependency>        
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>       
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
@@ -126,11 +126,10 @@
                     <driver>${spring.datasource.driverClassName}</driver>
                     <url>${spring.datasource.url}</url>
                     <user>${spring.datasource.username}</user>
-                    <password>${spring.datasource.password}</password>                      
+                    <password>${spring.datasource.password}</password>  
                     <locations>
-                        <location>filesystem:./../../../../../../db/migration/dev/mssql</location>
+                        <location>filesystem:./../../../../../../db/migration/dev/mysql</location>
                     </locations>
-					<mixed>true</mixed>
                 </configuration>
             </plugin>
             <plugin>

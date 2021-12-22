@@ -10,7 +10,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>               
         
-    <groupId>jooq.code.gen</groupId>
+    <groupId>classicmodels.jooq.code.gen</groupId>
     <artifactId>jooq-code-generator</artifactId>
     <version>1.0</version>        
     <name>jooq-code-generator</name>    

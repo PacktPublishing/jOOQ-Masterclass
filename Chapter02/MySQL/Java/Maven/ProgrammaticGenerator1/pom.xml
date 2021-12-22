@@ -18,8 +18,8 @@
     </properties>
     
     <modules>
-	    <module>jooq-code-generator</module>
-        <module>webapp</module>        
+        <module>jooq-code-generator</module>
+        <module>webapp</module>
     </modules>
     
     <name>ProgrammaticGenerator</name>    

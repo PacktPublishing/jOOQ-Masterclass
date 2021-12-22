@@ -32,7 +32,7 @@ public class JooqConfig {
                                         + " | department_topic_arr | dup | employee_office_arr | exist.*"
                                         + " | fetchval | get_.* | ghstore.* | gin.* | hs.* | hstore.*"
                                         + " | isdefined | isexists | make_array | new_salary | populate_record"
-                                        + " | sale_price | slice.* | swap | tconvert | update_msrp"
+                                        + " | sale_price | slice.* | swap | tconvert | update_msrp | postal_code"
                                         + " | evaluation_criteria | rate_type | vat_type | .*_master | each"
                                         + " | skeys | svals | top_three_sales_per_employee | product_of_product_line")
                                 .withInputSchema("public")

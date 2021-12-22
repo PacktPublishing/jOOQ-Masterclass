@@ -10,7 +10,7 @@
         <relativePath/> <!-- lookup parent from repository -->        
     </parent>
     
-    <groupId>jooq.code.gen</groupId>
+    <groupId>classicmodels.jooq.code.gen</groupId>
     <artifactId>webapp</artifactId>
     <version>1.0</version>
     <name>webapp</name>	
@@ -30,7 +30,7 @@
         
     <dependencies>               
         <dependency>
-            <groupId>jooq.code.gen</groupId>
+            <groupId>classicmodels.jooq.code.gen</groupId>
             <artifactId>jooq-code-generator</artifactId>
             <version>1.0</version>
         </dependency>       
@@ -132,7 +132,7 @@
                     <user>${spring.datasource.username}</user>
                     <password>${spring.datasource.password}</password>  
                     <locations>
-                        <location>filesystem:./../../../../../db/migration/dev/oracle</location>
+                        <location>filesystem:./../../../../../../db/migration/dev/oracle</location>
                     </locations>
                     <baselineOnMigrate>true</baselineOnMigrate>
                 </configuration>
