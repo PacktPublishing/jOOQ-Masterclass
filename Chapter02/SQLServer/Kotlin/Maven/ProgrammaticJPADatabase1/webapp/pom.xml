@@ -66,7 +66,7 @@
             <artifactId>jackson-module-kotlin</artifactId>    
         </dependency>
         <dependency>
-            <groupId>org.jooq</groupId>
+            <groupId>org.jooq.trial-java-8</groupId>
             <artifactId>jooq</artifactId>         
             <version>${jooq.version}</version>
         </dependency>                   
@@ -74,10 +74,10 @@
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
         </dependency>
-         <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-        </dependency>    
+        <dependency>
+            <groupId>com.microsoft.sqlserver</groupId>
+            <artifactId>mssql-jdbc</artifactId>
+        </dependency>      
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>    
@@ -130,6 +130,7 @@
                             <goal>test-compile</goal>
                         </goals>
                         <configuration>
+                            <skip>true</skip>
                             <sourceDirs>
                                 <sourceDir>${project.basedir}/src/test/kotlin</sourceDir>                 
                                 <!-- <sourceDir>${project.basedir}/src/test/java</sourceDir> -->
@@ -247,8 +248,9 @@
                     <user>${spring.datasource.username}</user>
                     <password>${spring.datasource.password}</password>                                          
                     <locations>
-                        <location>filesystem:./../../../../../../db/migration/dev/postgresql</location>                        
-                    </locations>                   
+                        <location>filesystem:./../../../../../../db/migration/min/mssql</location>                        
+                    </locations>  
+                    <mixed>true</mixed>                 
                 </configuration>                
             </plugin>
             <plugin>

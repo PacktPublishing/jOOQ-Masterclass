@@ -28,10 +28,7 @@
         <jooq.version>3.15.5</jooq.version>        
         <codehaus.mojo.version>1.0.0</codehaus.mojo.version>                    
         <exec.maven.plugin>3.0.0</exec.maven.plugin>     
-                
-        <!-- property used as a schema version provider -->
-        <schema.version>1</schema.version>
-                
+
         <main.class>com.classicmodels.MainApplicationKt</main.class>
     </properties>
 
@@ -66,7 +63,7 @@
             <artifactId>jackson-module-kotlin</artifactId>    
         </dependency>
         <dependency>
-            <groupId>org.jooq.trial-java-8</groupId>
+            <groupId>org.jooq</groupId>
             <artifactId>jooq</artifactId>         
             <version>${jooq.version}</version>
         </dependency>                   
@@ -74,10 +71,10 @@
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.microsoft.sqlserver</groupId>
-            <artifactId>mssql-jdbc</artifactId>
-        </dependency>      
+         <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>    
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>    
@@ -248,9 +245,8 @@
                     <user>${spring.datasource.username}</user>
                     <password>${spring.datasource.password}</password>                                          
                     <locations>
-                        <location>filesystem:./../../../../../../db/migration/dev/mssql</location>                        
-                    </locations>  
-                    <mixed>true</mixed>                 
+                        <location>filesystem:./../../../../../../db/migration/min/postgresql</location>                        
+                    </locations>                   
                 </configuration>                
             </plugin>
             <plugin>

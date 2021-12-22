@@ -29,9 +29,6 @@
         <codehaus.mojo.version>1.0.0</codehaus.mojo.version>                    
         <exec.maven.plugin>3.0.0</exec.maven.plugin>     
                 
-        <!-- property used as a schema version provider -->
-        <schema.version>1</schema.version>
-                
         <main.class>com.classicmodels.MainApplicationKt</main.class>
     </properties>
 
@@ -130,6 +127,7 @@
                             <goal>test-compile</goal>
                         </goals>
                         <configuration>
+                            <skip>true</skip>
                             <sourceDirs>
                                 <sourceDir>${project.basedir}/src/test/kotlin</sourceDir>                 
                                 <!-- <sourceDir>${project.basedir}/src/test/java</sourceDir> -->
@@ -247,7 +245,7 @@
                     <user>${spring.datasource.username}</user>
                     <password>${spring.datasource.password}</password>                                          
                     <locations>
-                        <location>filesystem:./../../../../../../db/migration/dev/mysql</location>                        
+                        <location>filesystem:./../../../../../../db/migration/min/mysql</location>                        
                     </locations>                   
                 </configuration>                
             </plugin>
