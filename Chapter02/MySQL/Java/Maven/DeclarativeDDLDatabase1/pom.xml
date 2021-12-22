@@ -43,12 +43,12 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>        
         <dependency>
-            <groupId>org.jooq.trial-java-8</groupId>
+            <groupId>org.jooq</groupId>
             <artifactId>jooq</artifactId>       
             <version>${jooq.version}</version>  
         </dependency>              
         <dependency>  
-            <groupId>org.jooq.trial-java-8</groupId>
+            <groupId>org.jooq</groupId>
             <artifactId>jooq-meta-extensions</artifactId>
             <version>${jooq.version}</version>
         </dependency>
@@ -61,9 +61,9 @@
             <artifactId>flyway-core</artifactId>
         </dependency>             
         <dependency>
-            <groupId>com.microsoft.sqlserver</groupId>
-            <artifactId>mssql-jdbc</artifactId>
-        </dependency>           
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>        
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -87,12 +87,11 @@
                 </configuration>
             </plugin>            
             <plugin>
-                <groupId>org.jooq.trial-java-8</groupId>
+                <groupId>org.jooq</groupId>
                 <artifactId>jooq-codegen-maven</artifactId>                   
-                <version>${jooq.version}</version>
                 <executions>
                     <execution>
-                        <id>generate-for-sqlserver</id>
+                        <id>generate-for-mysql</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>generate</goal>
@@ -117,7 +116,7 @@
                                         - ? matches a single character in a directory / file name -->
                                         <property>
                                             <key>scripts</key>
-                                            <value>./../../../../db/migration/ddl/mssql/sql</value>
+                                            <value>./../../../../../db/migration/ddl/mysql/sql</value>
                                         </property>
         
                                         <!-- The sort order of the scripts within a directory, where:
@@ -160,7 +159,9 @@
                                     (A Java regular expression. Use the pipe to separate several expressions).
                                     Excludes match before includes, i.e. excludes have a higher priority. -->
                                     <excludes>
-                                        flyway_schema_history | concatenate | .*_master
+                                        flyway_schema_history | sequences 
+                                        | customer_pgs | refresh_top3_product
+                                        | sale_.* | set_.* | get_.* | .*_master
                                     </excludes>
                                 </database>
                                 

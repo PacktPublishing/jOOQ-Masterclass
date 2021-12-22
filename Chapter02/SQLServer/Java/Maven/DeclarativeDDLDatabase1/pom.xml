@@ -61,13 +61,9 @@
             <artifactId>flyway-core</artifactId>
         </dependency>             
         <dependency>
-            <groupId>com.oracle.database.jdbc</groupId>
-            <artifactId>ojdbc8</artifactId>            
-        </dependency>
-        <dependency>
-            <groupId>com.oracle.database.jdbc</groupId>
-            <artifactId>ucp</artifactId>            
-        </dependency>         
+            <groupId>com.microsoft.sqlserver</groupId>
+            <artifactId>mssql-jdbc</artifactId>
+        </dependency>           
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -92,11 +88,11 @@
             </plugin>            
             <plugin>
                 <groupId>org.jooq.trial-java-8</groupId>
-                <artifactId>jooq-codegen-maven</artifactId>        
-                <version>${jooq.version}</version>           
+                <artifactId>jooq-codegen-maven</artifactId>                   
+                <version>${jooq.version}</version>
                 <executions>
                     <execution>
-                        <id>generate-for-oracle</id>
+                        <id>generate-for-sqlserver</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>generate</goal>
@@ -121,7 +117,7 @@
                                         - ? matches a single character in a directory / file name -->
                                         <property>
                                             <key>scripts</key>
-                                            <value>./../../../../db/migration/ddl/oracle/sql</value>
+                                            <value>./../../../../../db/migration/ddl/mssql/sql</value>
                                         </property>
         
                                         <!-- The sort order of the scripts within a directory, where:
@@ -164,12 +160,7 @@
                                     (A Java regular expression. Use the pipe to separate several expressions).
                                     Excludes match before includes, i.e. excludes have a higher priority. -->
                                     <excludes>
-                                        flyway_schema_history | DEPARTMENT_PKG | GET_.*
-                                        | CARD_COMMISSION | PRODUCT_OF_PRODUCT_LINE
-                                        | REFRESH_TOP3_PRODUCT | SALE_PRICE | SECOND_MAX
-                                        | SET_COUNTER | SWAP | TOP_THREE_SALES_PER_EMPLOYEE
-                                        | EVALUATION_CRITERIA | SECOND_MAX_IMPL | TABLE_.*_OBJ
-                                        | .*_MASTER | BGT | .*_ARR | TABLE_POPL | TABLE_RES
+                                        flyway_schema_history | concatenate | .*_master
                                     </excludes>
                                 </database>
                                 
