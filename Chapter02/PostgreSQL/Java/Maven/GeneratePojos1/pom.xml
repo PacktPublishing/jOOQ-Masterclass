@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.classicmodles</groupId>
+    <groupId>com.classicmodels</groupId>
     <artifactId>GeneratePojos</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
@@ -25,10 +25,9 @@
         <java.version>17</java.version>                
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
-                
+        
         <jooq.version>3.15.5</jooq.version>  
-        <codehaus.mojo.version>1.0.0</codehaus.mojo.version>              
-        <hibernate.validator>5.2.4.Final</hibernate.validator>
+        <codehaus.mojo.version>1.0.0</codehaus.mojo.version>    
     </properties>
 
     <dependencies>        
@@ -41,7 +40,7 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>        
         <dependency>
-            <groupId>org.jooq.trial-java-8</groupId>
+            <groupId>org.jooq</groupId>
             <artifactId>jooq</artifactId>   
             <version>${jooq.version}</version>      
         </dependency>              
@@ -50,22 +49,17 @@
             <artifactId>flyway-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.oracle.database.jdbc</groupId>
-            <artifactId>ojdbc8</artifactId>            
-        </dependency>
-        <dependency>
-            <groupId>com.oracle.database.jdbc</groupId>
-            <artifactId>ucp</artifactId>            
-        </dependency>   
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>     
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>    
-        </dependency>
+        </dependency>   
         <dependency>
-            <groupId>org.hibernate</groupId>
+            <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
-            <version>${hibernate.validator}</version>
-        </dependency>     
+        </dependency> 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -123,23 +117,25 @@
                     <user>${spring.datasource.username}</user>
                     <password>${spring.datasource.password}</password>  
                     <locations>
-                        <location>filesystem:./../../../../db/migration/dev/oracle</location>
+                        <location>filesystem:./../../../../../db/migration/dev/postgresql</location>
                     </locations>
+                    <schemas>
+                        <schema>public</schema>
+                    </schemas>
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.jooq.trial-java-8</groupId>
+                <groupId>org.jooq</groupId>
                 <artifactId>jooq-codegen-maven</artifactId>               
-                <version>${jooq.version}</version>
                 <executions>
                     <execution>
-                        <id>generate-for-oracle</id>
+                        <id>generate-for-postgresql</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>generate</goal>
                         </goals>                                  
                         <configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.15.0.xsd">                                                 
-                            <!-- Configure the database connection here. -->
+                            <!-- Configure the database connection here -->
                             <jdbc>
                                 <driver>${spring.datasource.driverClassName}</driver>
                                 <url>${spring.datasource.url}</url>
@@ -162,12 +158,12 @@
                                 <database>                            
                                     <!-- The database type. The format here is:
                                     org.jooq.meta.[database].[database]Database -->
-                                    <name>org.jooq.meta.oracle.OracleDatabase</name>
+                                    <name>org.jooq.meta.postgres.PostgresDatabase</name>
             
                                     <!-- The database schema (or in the absence of schema support, in your RDBMS this
                                     can be the owner, user, database name) to be generated. This cannot be combined with the <schemata/> element.                                     
                                     If <inputSchema/> is missing then all schemas will be considered. -->
-                                    <inputSchema>CLASSICMODELS</inputSchema>                 
+                                    <inputSchema>public</inputSchema>                 
             
                                     <!-- All elements that are generated from your schema
                                     (A Java regular expression. Use the pipe to separate several expressions)
@@ -183,12 +179,13 @@
                                     (A Java regular expression. Use the pipe to separate several expressions).
                                     Excludes match before includes, i.e. excludes have a higher priority. -->
                                     <excludes>
-                                        flyway_schema_history | DEPARTMENT_PKG | GET_.*
-                                        | CARD_COMMISSION | PRODUCT_OF_PRODUCT_LINE
-                                        | REFRESH_TOP3_PRODUCT | SALE_PRICE | SECOND_MAX
-                                        | SET_COUNTER | SWAP | TOP_THREE_SALES_PER_EMPLOYEE
-                                        | EVALUATION_CRITERIA | SECOND_MAX_IMPL | TABLE_.*_OBJ
-                                        | .*_MASTER | BGT | .*_ARR | TABLE_POPL | TABLE_RES
+                                        flyway_schema_history | akeys | avals | defined | delete.*
+                                        | department_topic_arr | dup | employee_office_arr | exist.*                                   
+                                        | fetchval | get_.* | ghstore.* | gin.* | hs.* | hstore.* 
+                                        | isdefined | isexists | make_array | new_salary | populate_record 
+                                        | sale_price | slice.* | swap | tconvert | update_msrp | postal_code 
+                                        | evaluation_criteria | rate_type | vat_type | .*_master | each 
+                                        | skeys | svals | top_three_sales_per_employee | product_of_product_line
                                     </excludes>
                                     
                                     <!-- Give enough time to jOOQ to trigger the queries needed for generating sources 
@@ -210,7 +207,7 @@
                                     </matchers>
                                 </strategy>
                                 
-                                <!-- jOOQ will generate POJOs on our behalf -->
+                                <!-- jOOQ will generate POJOs in your behalf -->
                                 <generate>
                                     <pojos>true</pojos> 
                                     <validationAnnotations>true</validationAnnotations>                            
@@ -218,13 +215,13 @@
                                 
                                 <target>
                                     <!-- The destination package of your generated classes (within the destination directory).
-                                    jOOQ may append the schema name to this package if generating multiple schemas,
+                                 jOOQ may append the schema name to this package if generating multiple schemas,
                                     e.g. org.jooq.your.packagename.schema1
-                                    org.jooq.your.packagename.schema2 -->                                    
+                                    org.jooq.your.packagename.schema2 -->
                                     <packageName>jooq.generated</packageName>
             
-                                    <!-- The destination directory of your generated classes. Using Maven directory layout here -->
-                                    <directory>target/generated-sources</directory>                                                                       
+                                    <!-- The destination directory of your generated classes. Using Maven directory layout here. -->
+                                    <directory>target/generated-sources</directory>
                                 </target>
                             </generator>    
                                                                                               

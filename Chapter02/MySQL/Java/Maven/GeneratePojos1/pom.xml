@@ -27,8 +27,7 @@
         <maven.compiler.target>17</maven.compiler.target>
                 
         <jooq.version>3.15.5</jooq.version>  
-        <codehaus.mojo.version>1.0.0</codehaus.mojo.version>              
-        <hibernate.validator>5.2.4.Final</hibernate.validator>
+        <codehaus.mojo.version>1.0.0</codehaus.mojo.version>
     </properties>
 
     <dependencies>        
@@ -58,9 +57,8 @@
             <artifactId>validation-api</artifactId>    
         </dependency>
         <dependency>
-            <groupId>org.hibernate</groupId>
+            <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
-            <version>${hibernate.validator}</version>
         </dependency>     
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -119,7 +117,7 @@
                     <user>${spring.datasource.username}</user>
                     <password>${spring.datasource.password}</password>  
                     <locations>
-                        <location>filesystem:./../../../../db/migration/dev/mysql</location>
+                        <location>filesystem:./../../../../../db/migration/dev/mysql</location>
                     </locations>
                 </configuration>
             </plugin>
