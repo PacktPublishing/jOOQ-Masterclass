@@ -3,13 +3,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     
-    <groupId>com-jooq-jpa</groupId>
+    <groupId>classicmodels.jooq.code.gen</groupId>
     <artifactId>webapp</artifactId>
     <version>1.0</version>        
     <name>webapp</name>
 
     <parent>
-        <groupId>org-jooq-jpa</groupId>
+        <groupId>classicmodels.jooq.code.gen</groupId>
         <artifactId>ProgrammaticJPADatabase</artifactId>
         <version>1.0</version>        
     </parent>
@@ -29,7 +29,7 @@
         
     <dependencies>               
         <dependency>
-            <groupId>com-jooq-jpa</groupId>
+            <groupId>classicmodels.jooq.code.gen</groupId>
             <artifactId>entities</artifactId>
             <version>1.0</version>
         </dependency>
@@ -51,17 +51,21 @@
             <version>${jooq.version}</version>
         </dependency>          
         <dependency>
-            <groupId>com.microsoft.sqlserver</groupId>
-            <artifactId>mssql-jdbc</artifactId>
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ojdbc8</artifactId>            
+        </dependency>
+        <dependency>
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ucp</artifactId>            
         </dependency>                                 
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>        
-        </dependency>      
+        </dependency>        
         <dependency>
             <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>    
-        </dependency>            
+        </dependency>          
     </dependencies>
 
     <build>
@@ -122,7 +126,7 @@
                     <user>${spring.datasource.username}</user>
                     <password>${spring.datasource.password}</password>  
                     <locations>
-                        <location>filesystem:./../../../../../db/migration/min/mssql</location>
+                        <location>filesystem:./../../../../../../db/migration/min/oracle</location>
                     </locations>
                     <baselineOnMigrate>true</baselineOnMigrate>
                 </configuration>
