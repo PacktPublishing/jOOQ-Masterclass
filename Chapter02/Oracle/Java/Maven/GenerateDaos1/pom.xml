@@ -27,8 +27,7 @@
         <maven.compiler.target>17</maven.compiler.target>
                 
         <jooq.version>3.15.5</jooq.version>          
-        <codehaus.mojo.version>1.0.0</codehaus.mojo.version>    
-        <hibernate.validator>5.2.4.Final</hibernate.validator>          
+        <codehaus.mojo.version>1.0.0</codehaus.mojo.version>
     </properties>
 
     <dependencies>        
@@ -41,7 +40,7 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>        
         <dependency>
-            <groupId>org.jooq</groupId>
+            <groupId>org.jooq.trial-java-8</groupId>
             <artifactId>jooq</artifactId>         
             <version>${jooq.version}</version>
         </dependency>              
@@ -50,9 +49,13 @@
             <artifactId>flyway-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>                
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ojdbc8</artifactId>            
+        </dependency>
+        <dependency>
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ucp</artifactId>            
+        </dependency>               
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>    
@@ -119,16 +122,18 @@
                     <user>${spring.datasource.username}</user>
                     <password>${spring.datasource.password}</password>  
                     <locations>
-                        <location>filesystem:./../../../../db/migration/dev/mysql</location>
+                        <location>filesystem:./../../../../../db/migration/dev/oracle</location>
                     </locations>
+                    <baselineOnMigrate>true</baselineOnMigrate>
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.jooq</groupId>
-                <artifactId>jooq-codegen-maven</artifactId>               
+                <groupId>org.jooq.trial-java-8</groupId>
+                <artifactId>jooq-codegen-maven</artifactId>  
+                <version>${jooq.version}</version>             
                 <executions>
                     <execution>
-                        <id>generate-for-mysql</id>
+                        <id>generate-for-oracle</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>generate</goal>
@@ -157,12 +162,12 @@
                                 <database>                            
                                     <!-- The database type. The format here is:
                                     org.jooq.meta.[database].[database]Database -->
-                                    <name>org.jooq.meta.mysql.MySQLDatabase</name>
+                                    <name>org.jooq.meta.oracle.OracleDatabase</name>
             
                                     <!-- The database schema (or in the absence of schema support, in your RDBMS this
                                     can be the owner, user, database name) to be generated. This cannot be combined with the <schemata/> element.                                     
                                     If <inputSchema/> is missing then all schemas will be considered. -->
-                                    <inputSchema>classicmodels</inputSchema>                 
+                                    <inputSchema>CLASSICMODELS</inputSchema>                 
             
                                     <!-- All elements that are generated from your schema
                                     (A Java regular expression. Use the pipe to separate several expressions)
@@ -172,15 +177,18 @@
                                     <includes>.*</includes>
             
                                     <!-- Schema version provider -->            
-                                    <schemaVersionProvider>SELECT MAX(`version`) FROM `flyway_schema_history`</schemaVersionProvider>
+                                    <schemaVersionProvider>SELECT MAX("version") FROM "flyway_schema_history"</schemaVersionProvider>
             
                                     <!-- All elements that are excluded from your schema
                                     (A Java regular expression. Use the pipe to separate several expressions).
                                     Excludes match before includes, i.e. excludes have a higher priority. -->
                                     <excludes>
-                                        flyway_schema_history | sequences 
-                                        | customer_pgs | refresh_top3_product
-                                        | sale_.* | set_.* | get_.* | .*_master
+                                        flyway_schema_history | DEPARTMENT_PKG | GET_.*
+                                        | CARD_COMMISSION | PRODUCT_OF_PRODUCT_LINE
+                                        | REFRESH_TOP3_PRODUCT | SALE_PRICE | SECOND_MAX
+                                        | SET_COUNTER | SWAP | TOP_THREE_SALES_PER_EMPLOYEE
+                                        | EVALUATION_CRITERIA | SECOND_MAX_IMPL | TABLE_.*_OBJ
+                                        | .*_MASTER | BGT | .*_ARR | TABLE_POPL | TABLE_RES
                                     </excludes>
                                     
                                     <!-- Give enough time to jOOQ to trigger the queries needed for generating sources 

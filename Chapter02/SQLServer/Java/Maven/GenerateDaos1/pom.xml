@@ -27,8 +27,7 @@
         <maven.compiler.target>17</maven.compiler.target>
                 
         <jooq.version>3.15.5</jooq.version>          
-        <codehaus.mojo.version>1.0.0</codehaus.mojo.version>              
-        <hibernate.validator>5.2.4.Final</hibernate.validator>
+        <codehaus.mojo.version>1.0.0</codehaus.mojo.version>
     </properties>
 
     <dependencies>        
@@ -41,27 +40,26 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>        
         <dependency>
-            <groupId>org.jooq</groupId>
-            <artifactId>jooq</artifactId>    
-            <version>${jooq.version}</version>     
+            <groupId>org.jooq.trial-java-8</groupId>
+            <artifactId>jooq</artifactId>         
+            <version>${jooq.version}</version>
         </dependency>              
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-        </dependency>     
+            <groupId>com.microsoft.sqlserver</groupId>
+            <artifactId>mssql-jdbc</artifactId>
+        </dependency>                      
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>    
-        </dependency>   
+        </dependency>
         <dependency>
-            <groupId>org.hibernate</groupId>
+            <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
-            <version>${hibernate.validator}</version>
-        </dependency> 
+        </dependency>     
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -119,25 +117,24 @@
                     <user>${spring.datasource.username}</user>
                     <password>${spring.datasource.password}</password>  
                     <locations>
-                        <location>filesystem:./../../../../db/migration/dev/postgresql</location>
+                        <location>filesystem:./../../../../../db/migration/dev/mssql</location>
                     </locations>
-                    <schemas>
-                        <schema>public</schema>
-                    </schemas>
+                    <mixed>true</mixed>
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.jooq</groupId>
-                <artifactId>jooq-codegen-maven</artifactId>               
+                <groupId>org.jooq.trial-java-8</groupId>
+                <artifactId>jooq-codegen-maven</artifactId>     
+                <version>${jooq.version}</version>          
                 <executions>
                     <execution>
-                        <id>generate-for-postgresql</id>
+                        <id>generate-for-sqlserver</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>generate</goal>
                         </goals>                                  
                         <configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.15.0.xsd">                                                 
-                            <!-- Configure the database connection here -->
+                            <!-- Configure the database connection here. -->
                             <jdbc>
                                 <driver>${spring.datasource.driverClassName}</driver>
                                 <url>${spring.datasource.url}</url>
@@ -146,7 +143,7 @@
                             </jdbc>                                        
 
                             <generator>
-                                <!-- The default code generator. 
+                               <!-- The default code generator. 
                                      You can override this one, to generate your own code style.
                                      
                                 Supported generators:                                
@@ -160,12 +157,13 @@
                                 <database>                            
                                     <!-- The database type. The format here is:
                                     org.jooq.meta.[database].[database]Database -->
-                                    <name>org.jooq.meta.postgres.PostgresDatabase</name>
+                                    <name>org.jooq.meta.sqlserver.SQLServerDatabase</name>
             
                                     <!-- The database schema (or in the absence of schema support, in your RDBMS this
                                     can be the owner, user, database name) to be generated. This cannot be combined with the <schemata/> element.                                     
                                     If <inputSchema/> is missing then all schemas will be considered. -->
-                                    <inputSchema>public</inputSchema>                 
+                                    <inputCatalog>classicmodels</inputCatalog>
+                                    <inputSchema>dbo</inputSchema>
             
                                     <!-- All elements that are generated from your schema
                                     (A Java regular expression. Use the pipe to separate several expressions)
@@ -175,19 +173,13 @@
                                     <includes>.*</includes>
             
                                     <!-- Schema version provider -->            
-                                    <schemaVersionProvider>SELECT MAX("version") FROM "flyway_schema_history"</schemaVersionProvider>
+                                    <schemaVersionProvider>SELECT MAX([version]) FROM [flyway_schema_history]</schemaVersionProvider>
             
                                     <!-- All elements that are excluded from your schema
                                     (A Java regular expression. Use the pipe to separate several expressions).
                                     Excludes match before includes, i.e. excludes have a higher priority. -->
                                     <excludes>
-                                        flyway_schema_history | akeys | avals | defined | delete.*
-                                        | department_topic_arr | dup | employee_office_arr | exist.*                                   
-                                        | fetchval | get_.* | ghstore.* | gin.* | hs.* | hstore.* 
-                                        | isdefined | isexists | make_array | new_salary | populate_record 
-                                        | sale_price | slice.* | swap | tconvert | update_msrp 
-                                        | evaluation_criteria | rate_type | vat_type | .*_master | each 
-                                        | skeys | svals | top_three_sales_per_employee | product_of_product_line
+                                        flyway_schema_history | concatenate | .*_master
                                     </excludes>
                                     
                                     <!-- Give enough time to jOOQ to trigger the queries needed for generating sources 
@@ -213,7 +205,7 @@
                                     </matchers>
                                 </strategy>
                                 
-                                <!-- jOOQ will generate DAOs and POJOs in your behalf -->
+                                <!-- jOOQ will generate POJOs and DAOs in your behalf -->
                                 <generate>
                                     <daos>true</daos>                                   
                                     <validationAnnotations>true</validationAnnotations>                            
@@ -222,13 +214,13 @@
                                 
                                 <target>
                                     <!-- The destination package of your generated classes (within the destination directory).
-                                 jOOQ may append the schema name to this package if generating multiple schemas,
+                                    jOOQ may append the schema name to this package if generating multiple schemas,
                                     e.g. org.jooq.your.packagename.schema1
-                                    org.jooq.your.packagename.schema2 -->
+                                    org.jooq.your.packagename.schema2 -->                                    
                                     <packageName>jooq.generated</packageName>
             
-                                    <!-- The destination directory of your generated classes. Using Maven directory layout here. -->
-                                    <directory>target/generated-sources</directory>
+                                    <!-- The destination directory of your generated classes. Using Maven directory layout here -->
+                                    <directory>target/generated-sources</directory>                                                                       
                                 </target>
                             </generator>    
                                                                                               
