@@ -31,10 +31,7 @@ dependencies {
     implementation project(':entities')	
     implementation 'org.jooq:jooq'
     implementation 'mysql:mysql-connector-java'
-    implementation 'org.flywaydb:flyway-core'  
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-    }
+    implementation 'org.flywaydb:flyway-core'
 }
 
 processResources {
@@ -43,16 +40,12 @@ processResources {
     }
 }
 
-configurations {
-    flywayMigrate
-}
-
-flywayMigrate {
+flyway {
     driver = project.properties['driverClassName']
     url = project.properties['url']
     user = project.properties['username']
     password = project.properties['password']    
-    locations = ['filesystem:./../../../../db/migration/min/mysql']	
+    locations = ['filesystem:./../../../../../../db/migration/min/mysql']
 }
 
 jooq {
