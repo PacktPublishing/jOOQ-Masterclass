@@ -192,8 +192,8 @@ end;
         employee_number number(19,0),
         primary key (sale_id)
     );
-    
-    alter table "order" 
+
+    alter table "ORDER" 
        add constraint FKro9uh5sg5ig4ei75p2h20lbby 
        foreign key (customer_number) 
        references customer;
