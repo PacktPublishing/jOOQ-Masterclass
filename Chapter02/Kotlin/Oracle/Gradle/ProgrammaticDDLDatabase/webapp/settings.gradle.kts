@@ -1,0 +1,3 @@
+rootProject.name = "webapp"
+
+include("jooq-code-generator")
