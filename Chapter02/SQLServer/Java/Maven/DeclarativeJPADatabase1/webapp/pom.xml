@@ -3,13 +3,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     
-    <groupId>com-jooq-jpa</groupId>
+    <groupId>classicmodels.jooq.code.gen</groupId>
     <artifactId>webapp</artifactId>
     <version>1.0</version>        
     <name>webapp</name>
 
     <parent>
-        <groupId>org-jooq-jpa</groupId>
+        <groupId>classicmodels.jooq.code.gen</groupId>
         <artifactId>DeclarativeJPADatabase</artifactId>
         <version>1.0</version>        
     </parent>
@@ -34,7 +34,7 @@
         
     <dependencies>               
         <dependency>
-            <groupId>com-jooq-jpa</groupId>
+            <groupId>classicmodels.jooq.code.gen</groupId>
             <artifactId>entities</artifactId>
             <version>1.0</version>
         </dependency>
@@ -47,22 +47,22 @@
             <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>                           
         <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-        </dependency>    
+            <groupId>com.microsoft.sqlserver</groupId>
+            <artifactId>mssql-jdbc</artifactId>
+        </dependency>       
         <dependency>
-            <groupId>org.jooq</groupId>
+            <groupId>org.jooq.trial-java-8</groupId>
             <artifactId>jooq</artifactId> 
             <version>${jooq.version}</version>                             
         </dependency>                          
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>         
-        </dependency>       
+        </dependency>     
         <dependency>
             <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>    
-        </dependency>           
+        </dependency>             
     </dependencies>
 
     <build>
@@ -106,14 +106,15 @@
                     <user>${spring.datasource.username}</user>
                     <password>${spring.datasource.password}</password>  
                     <locations>
-                        <location>filesystem:./../../../../../db/migration/min/postgresql</location>
+                        <location>filesystem:./../../../../../../db/migration/min/mssql</location>
                     </locations>
+                    <mixed>true</mixed>
                 </configuration>
             </plugin>
 
             <!-- The jOOQ code generator plugin -->
             <plugin>
-                <groupId>org.jooq</groupId>
+                <groupId>org.jooq.trial-java-8</groupId>
                 <artifactId>jooq-codegen-maven</artifactId>            
                 <executions>
                     <execution>
@@ -215,7 +216,7 @@
                 <dependencies>              
                     <!-- This is needed for the JPADatabase -->
                     <dependency>
-                        <groupId>org.jooq</groupId>
+                        <groupId>org.jooq.trial-java-8</groupId>
                         <!-- before jOOQ 3.14.x <artifactId>jooq-meta-extensions -->
                         <artifactId>jooq-meta-extensions-hibernate</artifactId>
                         <version>${jooq.meta.extensions.hibernate.version}</version>
