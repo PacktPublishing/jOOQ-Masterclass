@@ -33,13 +33,13 @@ public class JooqConfig {
                                         new Property().withKey("sort").withValue("flyway"),
                                         new Property().withKey("unqualifiedSchema").withValue("none"),
                                         new Property().withKey("defaultNameCase").withValue("as_is"))
-                                .withExcludes("flyway_schema_history | akeys | avals | defined | delete.*\"\n" +
-"                                        + \" | department_topic_arr | dup | employee_office_arr | exist.*\"\n" +
-"                                        + \" | fetchval | get_.* | ghstore.* | gin.* | hs.* | hstore.*\"\n" +
-"                                        + \" | isdefined | isexists | make_array | new_salary | populate_record\"\n" +
-"                                        + \" | sale_price | slice.* | swap | tconvert | update_msrp\"\n" +
-"                                        + \" | evaluation_criteria | rate_type | vat_type | .*_master | each\"\n" +
-"                                        + \" | skeys | svals | top_three_sales_per_employee | product_of_product_line")
+                                .withExcludes("flyway_schema_history | akeys | avals | defined | delete.*"
+                                      + " | department_topic_arr | dup | employee_office_arr | exist.*"
+                                      + " | fetchval | get_.* | ghstore.* | gin.* | hs.* | hstore.*"
+                                      + " | isdefined | isexists | make_array | new_salary | populate_record"
+                                      + " | sale_price | slice.* | swap | tconvert | update_msrp | postal_code"
+                                      + " | evaluation_criteria | rate_type | vat_type | .*_master | each"
+                                      + " | skeys | svals | top_three_sales_per_employee | product_of_product_line")
                         )
                         .withGenerate(new Generate()
                                 .withDaos(true)

@@ -69,9 +69,9 @@
             <artifactId>flyway-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-        </dependency>     
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>   
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>    
@@ -124,6 +124,7 @@
                             <goal>test-compile</goal>
                         </goals>
                         <configuration>
+                            <skip>true</skip>
                             <sourceDirs>
                                 <sourceDir>${project.basedir}/src/test/kotlin</sourceDir>                 
                                 <!-- <sourceDir>${project.basedir}/src/test/java</sourceDir> -->
