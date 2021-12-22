@@ -124,7 +124,7 @@
                     <locations>
                         <location>filesystem:./../../../../../../db/migration/min/mssql</location>
                     </locations>
-                    <baselineOnMigrate>true</baselineOnMigrate>
+                    <mixed>true</mixed>
                 </configuration>
             </plugin>
             <plugin>
