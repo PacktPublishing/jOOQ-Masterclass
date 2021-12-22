@@ -1,0 +1,83 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'org.springframework.boot' version '2.5.7'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'org.flywaydb.flyway' version '7.7.3'    
+    id 'nu.studer.jooq' version '6.0.1'
+}
+
+group = 'com.classicmodels'
+version = '1.0'
+sourceCompatibility = '17'
+targetCompatibility = '17'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {   
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.flywaydb:flyway-core'
+    implementation 'org.jooq:jooq'
+    implementation 'org.glassfish.hk2:osgi-resource-locator:2.5.0-b42'	
+    implementation 'com.sun.xml.bind:jaxb-core:2.3.0.1'
+    implementation 'javax.xml.bind:jaxb-api:2.3.1'
+    implementation 'com.sun.xml.bind:jaxb-impl:2.3.1'
+    implementation 'org.glassfish.jaxb:jaxb-runtime:2.3.1'
+    implementation project(':jooq-code-generator')
+}
+
+application {
+    mainClass = 'com.classicmodels.MainApplication'
+}
+
+processResources {
+    filesMatching("**/application.properties") {
+        expand( project.properties )
+    }
+}
+
+jooq {
+    version = project.properties['jooq']
+    edition = nu.studer.gradle.jooq.JooqEdition.OSS
+}
+
+flyway {
+    driver = project.properties['driverClassName']
+    url = project.properties['url']
+    user = project.properties['username']
+    password = project.properties['password']   
+    locations = ['filesystem:./../../../../../../db/migration/dev/postgresql']
+}
+
+task runProgrammaticGenerator(type: JavaExec) {    
+
+    dependsOn tasks.named('flywayMigrate')
+    dependsOn(':jooq-code-generator:compileJava')
+
+    configurations {
+      codegen
+      postgresqljdbc
+    }
+
+    dependencies {
+       codegen "org.jooq:jooq-codegen"
+       postgresqljdbc "org.postgresql:postgresql"
+    }
+
+    classpath = files([
+         "${rootDir}/jooq-code-generator/build/classes/java/main",
+         configurations.codegen, configurations.postgresqljdbc
+    ])
+	
+    mainClass = 'com.classicmodels.jooq.config.JooqConfig'	
+}
+
+sourceSets.main.java.srcDirs = ['build/generated-sources/jooq', 'src/main/java']
+
+assemble.dependsOn('runProgrammaticGenerator')
+compileJava.dependsOn('runProgrammaticGenerator')
