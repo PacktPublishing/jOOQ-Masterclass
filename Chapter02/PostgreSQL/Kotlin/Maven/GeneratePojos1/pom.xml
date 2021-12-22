@@ -118,6 +118,7 @@
                             <goal>test-compile</goal>
                         </goals>
                         <configuration>
+                            <skip>true</skip>
                             <sourceDirs>
                                 <sourceDir>${project.basedir}/src/test/kotlin</sourceDir>                 
                                 <!-- <sourceDir>${project.basedir}/src/test/java</sourceDir> -->
