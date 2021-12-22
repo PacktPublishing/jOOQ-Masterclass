@@ -28,9 +28,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.postgresql:postgresql'
     implementation 'org.flywaydb:flyway-core'
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-    }
 }
 
 processResources {
@@ -39,16 +36,12 @@ processResources {
     }
 }
 
-configurations {
-    flywayMigrate
-}
-
-flywayMigrate {
+flyway {
     driver = project.properties['driverClassName']
     url = project.properties['url']
     user = project.properties['username']
     password = project.properties['password']
-    locations = ['filesystem:./../../../../db/migration/dev/postgresql']
+    locations = ['filesystem:./../../../../../db/migration/dev/postgresql']
 }
 
 jooq {
@@ -79,7 +72,7 @@ jooq {
                                 | department_topic_arr | dup | employee_office_arr | exist.*                                   
                                 | fetchval | get_.* | ghstore.* | gin.* | hs.* | hstore.* 
                                 | isdefined | isexists | make_array | new_salary | populate_record 
-                                | sale_price | slice.* | swap | tconvert | update_msrp 
+                                | sale_price | slice.* | swap | tconvert | update_msrp | postal_code
                                 | evaluation_criteria | rate_type | vat_type | .*_master | each 
                                 | skeys | svals | top_three_sales_per_employee | product_of_product_line
                                   ''' 
@@ -124,7 +117,7 @@ tasks.named('generateJooq').configure {
     dependsOn tasks.named('flywayMigrate')
 
     // declare Flyway migration scripts as inputs on the jOOQ task
-    inputs.files(fileTree('${rootDir}/../../../../db/migration/dev/postgresql'))
+    inputs.files(fileTree('${rootDir}/../../../../../db/migration/dev/postgresql'))
         .withPropertyName('migrations')
         .withPathSensitivity(PathSensitivity.RELATIVE)
 
