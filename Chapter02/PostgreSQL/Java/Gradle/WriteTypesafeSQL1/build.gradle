@@ -2,7 +2,7 @@ plugins {
     id 'application'
     id 'org.springframework.boot' version '2.5.7'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-    id 'org.flywaydb.flyway' version '7.7.3'
+    id 'org.flywaydb.flyway' version '8.2.0'
     id 'nu.studer.jooq' version '6.0.1'
     id 'java'
 }
@@ -22,14 +22,11 @@ repositories {
 }
 
 dependencies {        
-    jooqGenerator 'com.microsoft.sqlserver:mssql-jdbc' 
-    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    jooqGenerator 'org.postgresql:postgresql' 
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'    
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'com.microsoft.sqlserver:mssql-jdbc'
+    implementation 'org.postgresql:postgresql'
     implementation 'org.flywaydb:flyway-core'
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-    }
 }
 
 processResources {
@@ -38,22 +35,17 @@ processResources {
     }
 }
 
-configurations {
-    flywayMigrate
-}
-
-flywayMigrate {
+flyway{
     driver = project.properties['driverClassName']
     url = project.properties['url']
     user = project.properties['username']
     password = project.properties['password']
-    locations = ['filesystem:./../../../../db/migration/dev/mssql']
-    mixed = true
+    locations = ['filesystem:./../../../../../db/migration/dev/postgresql']
 }
 
 jooq {
     version = project.properties['jooq']
-    edition = nu.studer.gradle.jooq.JooqEdition.TRIAL_JAVA_8
+    edition = nu.studer.gradle.jooq.JooqEdition.OSS
 
     configurations {
         main {
@@ -70,13 +62,18 @@ jooq {
                 generator {
                     name = 'org.jooq.codegen.JavaGenerator'                    
                     database {
-                        name = 'org.jooq.meta.sqlserver.SQLServerDatabase'                                                
-                        inputCatalog = 'classicmodels'
-                        inputSchema = 'dbo'
+                        name = 'org.jooq.meta.postgres.PostgresDatabase'                        
+                        inputSchema = 'public'
                         includes = '.*'
-                        schemaVersionProvider = 'SELECT MAX([version]) FROM [flyway_schema_history]'
+                        schemaVersionProvider = 'SELECT MAX("version") FROM "flyway_schema_history"'
                         excludes = '''\
-                                    flyway_schema_history | concatenate | .*_master
+                                  flyway_schema_history | akeys | avals | defined | delete.*
+                                | department_topic_arr | dup | employee_office_arr | exist.*                                   
+                                | fetchval | get_.* | ghstore.* | gin.* | hs.* | hstore.* 
+                                | isdefined | isexists | make_array | new_salary | populate_record 
+                                | sale_price | slice.* | swap | tconvert | update_msrp | postal_code
+                                | evaluation_criteria | rate_type | vat_type | .*_master | each 
+                                | skeys | svals | top_three_sales_per_employee | product_of_product_line
                                   ''' 
                         logSlowQueriesAfterSeconds = 20
                     }
@@ -105,7 +102,7 @@ tasks.named('generateJooq').configure {
     dependsOn tasks.named('flywayMigrate')
 
     // declare Flyway migration scripts as inputs on the jOOQ task
-    inputs.files(fileTree('${rootDir}/../../../../db/migration/dev/mssql'))
+    inputs.files(fileTree('${rootDir}/../../../../../db/migration/dev/postgresql'))
         .withPropertyName('migrations')
         .withPathSensitivity(PathSensitivity.RELATIVE)
 

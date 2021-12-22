@@ -22,14 +22,11 @@ repositories {
 }
 
 dependencies {        
-    jooqGenerator 'org.postgresql:postgresql' 
+    jooqGenerator 'mysql:mysql-connector-java' 
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'    
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.postgresql:postgresql'
+    implementation 'mysql:mysql-connector-java'
     implementation 'org.flywaydb:flyway-core'
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-    }
 }
 
 processResources {
@@ -38,16 +35,12 @@ processResources {
     }
 }
 
-configurations {
-    flywayMigrate
-}
-
-flywayMigrate{
+flyway {
     driver = project.properties['driverClassName']
     url = project.properties['url']
     user = project.properties['username']
     password = project.properties['password']
-    locations = ['filesystem:./../../../../db/migration/dev/postgresql']
+    locations = ['filesystem:./../../../../../db/migration/dev/mysql']
 }
 
 jooq {
@@ -69,18 +62,14 @@ jooq {
                 generator {
                     name = 'org.jooq.codegen.JavaGenerator'                    
                     database {
-                        name = 'org.jooq.meta.postgres.PostgresDatabase'                        
-                        inputSchema = 'public'
+                        name = 'org.jooq.meta.mysql.MySQLDatabase'                        
+                        inputSchema = 'classicmodels'
                         includes = '.*'
-                        schemaVersionProvider = 'SELECT MAX("version") FROM "flyway_schema_history"'
+                        schemaVersionProvider = 'SELECT MAX(`version`) FROM `flyway_schema_history`'
                         excludes = '''\
-                                  flyway_schema_history | akeys | avals | defined | delete.*
-                                | department_topic_arr | dup | employee_office_arr | exist.*                                   
-                                | fetchval | get_.* | ghstore.* | gin.* | hs.* | hstore.* 
-                                | isdefined | isexists | make_array | new_salary | populate_record 
-                                | sale_price | slice.* | swap | tconvert | update_msrp 
-                                | evaluation_criteria | rate_type | vat_type | .*_master | each 
-                                | skeys | svals | top_three_sales_per_employee | product_of_product_line
+                                    flyway_schema_history | sequences 
+                                  | customer_pgs | refresh_top3_product
+                                  | sale_.* | set_.* | get_.* | .*_master
                                   ''' 
                         logSlowQueriesAfterSeconds = 20
                     }
@@ -109,7 +98,7 @@ tasks.named('generateJooq').configure {
     dependsOn tasks.named('flywayMigrate')
 
     // declare Flyway migration scripts as inputs on the jOOQ task
-    inputs.files(fileTree('${rootDir}/../../../../db/migration/dev/postgresql'))
+    inputs.files(fileTree('${rootDir}/../../../../../db/migration/dev/mysql'))
         .withPropertyName('migrations')
         .withPathSensitivity(PathSensitivity.RELATIVE)
 
