@@ -69,8 +69,8 @@ task runProgrammaticGenerator(type: JavaExec) {
     }
 
     dependencies {
-       codegen "org.jooq:jooq-codegen"
-       metaext "org.jooq:jooq-meta-extensions"
+       codegen "org.jooq.trial-java-8:jooq-codegen"
+       metaext "org.jooq.trial-java-8:jooq-meta-extensions"
        h2jdbc "com.h2database:h2"
     }
 
