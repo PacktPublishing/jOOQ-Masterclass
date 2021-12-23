@@ -6,7 +6,7 @@ plugins {
     id("org.springframework.boot") version "2.5.7"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     id("nu.studer.jooq") version "6.0.1"
-    id("org.flywaydb.flyway") version "7.7.3"
+    id("org.flywaydb.flyway") version "8.2.0"
     kotlin("jvm") version "1.6.0"
     kotlin("plugin.spring") version "1.6.0"
 }
@@ -35,7 +35,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation(project(":entities"))
     implementation("org.jooq:jooq")
-    implementation("com.microsoft.sqlserver:mssql-jdbc")
+    implementation("mysql:mysql-connector-java")
     implementation("org.flywaydb:flyway-core")
 }
 
@@ -52,12 +52,7 @@ flyway {
     url = project.properties["url"].toString()
     user = project.properties["username"].toString()
     password = project.properties["password"].toString()
-    locations = arrayOf("filesystem:./../../../../../../db/migration/dev/mssql")
-}
-
-jooq {
-    version.set(project.properties["jooq"].toString())  // if omitted, then the default is used
-    edition.set(nu.studer.gradle.jooq.JooqEdition.TRIAL_JAVA_8)
+    locations = arrayOf("filesystem:./../../../../../../db/migration/min/mysql")
 }
 
 task("runProgrammaticGenerator", JavaExec::class) {

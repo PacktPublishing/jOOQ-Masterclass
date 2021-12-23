@@ -35,9 +35,8 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation(project(":entities"))
     implementation("org.jooq:jooq")
-    implementation("mysql:mysql-connector-java")
-    implementation("org.flywaydb:flyway-core")        
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    implementation("org.postgresql:postgresql")
+    implementation("org.flywaydb:flyway-core")
 }
 
 tasks {
@@ -53,7 +52,7 @@ flyway {
     url = project.properties["url"].toString()
     user = project.properties["username"].toString()
     password = project.properties["password"].toString()
-    locations = arrayOf("filesystem:./../../../../../../db/migration/dev/mysql")
+    locations = arrayOf("filesystem:./../../../../../../db/migration/min/postgresql")
 }
 
 task("runProgrammaticGenerator", JavaExec::class) {
@@ -92,8 +91,4 @@ tasks.withType<KotlinCompile> {
         freeCompilerArgs = listOf("-Xjsr305=strict")
         jvmTarget = "17"
     }
-}
-
-tasks.withType<Test> {
-    useJUnitPlatform()
 }
