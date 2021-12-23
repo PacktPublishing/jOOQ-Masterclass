@@ -66,7 +66,7 @@ task runProgrammaticGenerator(type: JavaExec) {
     }
 
     dependencies {
-       codegen "org.jooq:jooq-codegen"
+       codegen "org.jooq.trial-java-8:jooq-codegen"
        mssqljdbc "com.microsoft.sqlserver:mssql-jdbc"
     }
 
