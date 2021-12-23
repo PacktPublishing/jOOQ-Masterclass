@@ -35,7 +35,6 @@ dependencies {
     implementation("org.jooq:jooq")
     implementation("mysql:mysql-connector-java")
     implementation("org.flywaydb:flyway-core")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
 tasks {
@@ -94,8 +93,4 @@ tasks.withType<KotlinCompile> {
         freeCompilerArgs = listOf("-Xjsr305=strict")
         jvmTarget = "17"
     }
-}
-
-tasks.withType<Test> {
-    useJUnitPlatform()
 }

@@ -27,5 +27,5 @@ dependencyManagement {
 }
 
 dependencies {    
-    implementation 'org.jooq:jooq-codegen'    
+    implementation 'org.jooq.trial-java-8:jooq-codegen'    
 }

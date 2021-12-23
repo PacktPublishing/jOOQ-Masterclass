@@ -32,7 +32,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation(project(":jooq-code-generator"))
-    implementation("org.jooq:jooq")
+    implementation("org.jooq.trial-java-8:jooq")
     implementation("com.microsoft.sqlserver:mssql-jdbc")
     implementation("org.flywaydb:flyway-core")
 }
@@ -70,8 +70,8 @@ task("runProgrammaticGenerator", JavaExec::class) {
     val metaext by configurations.creating   
 
     dependencies {
-       codegen("org.jooq:jooq-codegen")
-       metaext("org.jooq:jooq-meta-extensions")
+       codegen("org.jooq.trial-java-8:jooq-codegen")
+       metaext("org.jooq.trial-java-8:jooq-meta-extensions")
        h2jdbc("com.h2database:h2")
     }
 
