@@ -33,7 +33,7 @@ repositories {
 }
 
 dependencies {
-    jooqGenerator("org.jooq:jooq-meta-extensions-hibernate")
+    jooqGenerator("org.jooq.trial-java-8:jooq-meta-extensions-hibernate")
     jooqGenerator("javax.persistence:javax.persistence-api")
     jooqGenerator("javax.validation:validation-api")
     jooqGenerator(project(":entities"))
