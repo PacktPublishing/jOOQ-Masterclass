@@ -2,7 +2,7 @@ plugins {
     id 'application'
     id 'org.springframework.boot' version '2.5.7'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-    id 'org.flywaydb.flyway' version '8.2.0'
+    id 'org.flywaydb.flyway' version '7.7.3'
     id 'nu.studer.jooq' version '6.0.1'
     id 'java'
 }
@@ -22,17 +22,12 @@ repositories {
 }
 
 dependencies {        
-    jooqGenerator 'com.oracle.database.jdbc:ojdbc8'
-    jooqGenerator 'com.oracle.database.jdbc:ucp'
+    jooqGenerator 'com.microsoft.sqlserver:mssql-jdbc' 
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'com.oracle.database.jdbc:ojdbc8'
-    implementation 'com.oracle.database.jdbc:ucp'
+    implementation 'com.microsoft.sqlserver:mssql-jdbc'
     implementation 'org.flywaydb:flyway-core'
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-    }
 }
 
 processResources {
@@ -41,17 +36,13 @@ processResources {
     }
 }
 
-configurations {
-    flywayMigrate
-}
-
-flywayMigrate {
+flyway {
     driver = project.properties['driverClassName']
     url = project.properties['url']
     user = project.properties['username']
     password = project.properties['password']
-    locations = ['filesystem:./../../../../db/migration/dev/oracle']
-    baselineOnMigrate=true
+    locations = ['filesystem:./../../../../../db/migration/dev/mssql']
+    mixed = true
 }
 
 jooq {
@@ -73,18 +64,14 @@ jooq {
                 generator {
                     name = 'org.jooq.codegen.JavaGenerator'                    
                     database {
-                        name = 'org.jooq.meta.oracle.OracleDatabase'                        
-                        inputSchema = 'CLASSICMODELS'
+                        name = 'org.jooq.meta.sqlserver.SQLServerDatabase'                                                
+                        inputCatalog = 'classicmodels'
+                        inputSchema = 'dbo'
                         includes = '.*'
-                        schemaVersionProvider = 'SELECT MAX("version") FROM "flyway_schema_history"'
+                        schemaVersionProvider = 'SELECT MAX([version]) FROM [flyway_schema_history]'
                         excludes = '''\
-                                    flyway_schema_history | DEPARTMENT_PKG | GET_.*
-                                  | CARD_COMMISSION | PRODUCT_OF_PRODUCT_LINE  
-                                  | REFRESH_TOP3_PRODUCT | SALE_PRICE | SECOND_MAX
-                                  | SET_COUNTER | SWAP | TOP_THREE_SALES_PER_EMPLOYEE
-                                  | EVALUATION_CRITERIA | SECOND_MAX_IMPL | TABLE_.*_OBJ
-                                  | .*_MASTER | BGT | .*_ARR | TABLE_POPL | TABLE_RES
-                                  ''' 
+                                    flyway_schema_history | concatenate | .*_master
+                                   ''' 
                         logSlowQueriesAfterSeconds = 20
                     }
                     strategy {
@@ -132,7 +119,7 @@ tasks.named('generateJooq').configure {
     dependsOn tasks.named('flywayMigrate')
 
     // declare Flyway migration scripts as inputs on the jOOQ task
-    inputs.files(fileTree('${rootDir}/../../../../db/migration/dev/oracle'))
+    inputs.files(fileTree('${rootDir}/../../../../../db/migration/dev/mssql'))
         .withPropertyName('migrations')
         .withPathSensitivity(PathSensitivity.RELATIVE)
 
