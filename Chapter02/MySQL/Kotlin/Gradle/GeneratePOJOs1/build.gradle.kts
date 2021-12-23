@@ -12,7 +12,7 @@ plugins {
     id("org.springframework.boot") version "2.5.7"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     id("nu.studer.jooq") version "6.0.1"
-    id("org.flywaydb.flyway") version "7.7.3"
+    id("org.flywaydb.flyway") version "8.2.0"
     kotlin("jvm") version "1.6.0"
     kotlin("plugin.spring") version "1.6.0"
 }
@@ -31,16 +31,14 @@ repositories {
 }
 
 dependencies {
-    jooqGenerator("com.oracle.database.jdbc:ojdbc8")
-	jooqGenerator("com.oracle.database.jdbc:ucp")
+    jooqGenerator("mysql:mysql-connector-java")
     implementation("org.springframework.boot:spring-boot-starter")   
     implementation("org.springframework.boot:spring-boot-starter-jdbc")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("com.oracle.database.jdbc:ojdbc8")
-    implementation("com.oracle.database.jdbc:ucp")
+    implementation("mysql:mysql-connector-java")
     implementation("org.flywaydb:flyway-core")
 }
 
@@ -57,13 +55,12 @@ flyway {
     url = project.properties["url"].toString()
     user = project.properties["username"].toString()
     password = project.properties["password"].toString()
-    locations = arrayOf("filesystem:./../../../../../db/migration/dev/oracle")
-    baselineOnMigrate = true
+    locations = arrayOf("filesystem:./../../../../../db/migration/dev/mysql")
 }
 
 jooq {
-  version.set(project.properties["jooq"].toString())
-  edition.set(nu.studer.gradle.jooq.JooqEdition.TRIAL_JAVA_8)
+  version.set(project.properties["jooq"].toString())  // if omitted, then the default is used
+  edition.set(nu.studer.gradle.jooq.JooqEdition.OSS)  // jOOQ Open-Source is the default (can be omitted)
   
   configurations {
         create("main") {  // name of the jOOQ configuration
@@ -76,21 +73,19 @@ jooq {
                     url = project.properties["url"].toString()
                     user = project.properties["username"].toString()
                     password = project.properties["password"].toString()
+                    properties.add(Property().withKey("ssl").withValue("true"))
                 }
                 generator.apply {
                     name = "org.jooq.codegen.KotlinGenerator"
                     database.apply {
-                        name = "org.jooq.meta.oracle.OracleDatabase"
-                        inputSchema = "CLASSICMODELS"                        
+                        name = "org.jooq.meta.mysql.MySQLDatabase"
+                        inputSchema = "classicmodels" 
                         includes = ".*"
-                        schemaVersionProvider = "SELECT MAX(\"version\") FROM \"flyway_schema_history\""
+                        schemaVersionProvider = "SELECT MAX(`version`) FROM `flyway_schema_history`"
                         excludes = """
-                                     flyway_schema_history | DEPARTMENT_PKG | GET_.*
-                                   | CARD_COMMISSION | PRODUCT_OF_PRODUCT_LINE  
-                                   | REFRESH_TOP3_PRODUCT | SALE_PRICE | SECOND_MAX
-                                   | SET_COUNTER | SWAP | TOP_THREE_SALES_PER_EMPLOYEE
-                                   | EVALUATION_CRITERIA | SECOND_MAX_IMPL | TABLE_.*_OBJ
-                                   | .*_MASTER | BGT | .*_ARR | TABLE_POPL | TABLE_RES
+                                    flyway_schema_history | sequences 
+                                  | customer_pgs | refresh_top3_product
+                                  | sale_.* | set_.* | get_.* | .*_master
                                   """
                         logSlowQueriesAfterSeconds = 20	
                     }
@@ -128,7 +123,7 @@ tasks.named<nu.studer.gradle.jooq.JooqGenerate>("generateJooq") {
     dependsOn("flywayMigrate")
 
     // declare Flyway migration scripts as inputs on the jOOQ task
-    inputs.files(fileTree("${rootDir}/../../../../../db/migration/dev/oracle"))
+    inputs.files(fileTree("${rootDir}/../../../../../db/migration/dev/mysql"))
         .withPropertyName("migrations")
         .withPathSensitivity(PathSensitivity.RELATIVE)
 
