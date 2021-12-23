@@ -35,7 +35,7 @@ repositories {
 dependencies {
     jooqGenerator("com.oracle.database.jdbc:ojdbc8")	
     jooqGenerator("com.oracle.database.jdbc:ucp")	
-    jooqGenerator("org.jooq:jooq-meta-extensions")
+    jooqGenerator("org.jooq.trial-java-8:jooq-meta-extensions")
     implementation("org.springframework.boot:spring-boot-starter-jdbc")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
