@@ -6,7 +6,7 @@ plugins {
     id("org.springframework.boot") version "2.5.7"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     id("nu.studer.jooq") version "6.0.1"
-    id("org.flywaydb.flyway") version "7.7.3"
+    id("org.flywaydb.flyway") version "8.2.0"
     kotlin("jvm") version "1.6.0"
     kotlin("plugin.spring") version "1.6.0"
 }
@@ -33,8 +33,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation(project(":jooq-code-generator"))
     implementation("org.jooq:jooq")
-    implementation("com.oracle.database.jdbc:ojdbc8")
-    implementation("com.oracle.database.jdbc:ucp")
+    implementation("mysql:mysql-connector-java")
     implementation("org.flywaydb:flyway-core")
 }
 
@@ -51,13 +50,12 @@ flyway {
     url = project.properties["url"].toString()
     user = project.properties["username"].toString()
     password = project.properties["password"].toString()
-    locations = arrayOf("filesystem:./../../../../../../db/migration/dev/oracle")
-    baselineOnMigrate = true
+    locations = arrayOf("filesystem:./../../../../../../db/migration/dev/mysql")
 }
 
 jooq {
     version.set(project.properties["jooq"].toString())
-    edition.set(nu.studer.gradle.jooq.JooqEdition.TRIAL_JAVA_8) 
+    edition.set(nu.studer.gradle.jooq.JooqEdition.OSS) 
 }
 
 task("runProgrammaticGenerator", JavaExec::class) {
@@ -65,19 +63,17 @@ task("runProgrammaticGenerator", JavaExec::class) {
     dependsOn("flywayMigrate")
     dependsOn(":jooq-code-generator:compileJava")
 
-    val oracleojdbc by configurations.creating
-    val oracleucp by configurations.creating
+    val mysqljdbc by configurations.creating
     val codegen by configurations.creating   
 
     dependencies {
-       oracleojdbc("com.oracle.database.jdbc:ojdbc8")
-       oracleucp("com.oracle.database.jdbc:ucp")
+       mysqljdbc("mysql:mysql-connector-java")
        codegen("org.jooq:jooq-codegen")
     }
 
     classpath = files(arrayOf(
          "${rootDir}/jooq-code-generator/build/classes/java/main",
-         codegen, oracleojdbc, oracleucp
+         codegen, mysqljdbc
     ))
 
     mainClass.value("com.classicmodels.jooq.config.JooqConfig")

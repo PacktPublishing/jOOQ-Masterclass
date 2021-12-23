@@ -32,8 +32,9 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation(project(":jooq-code-generator"))
-    implementation("org.jooq:jooq")
-    implementation("com.microsoft.sqlserver:mssql-jdbc")
+    implementation("org.jooq.trial-java-8:jooq")
+    implementation("com.oracle.database.jdbc:ojdbc8")
+    implementation("com.oracle.database.jdbc:ucp")
     implementation("org.flywaydb:flyway-core")
 }
 
@@ -50,7 +51,8 @@ flyway {
     url = project.properties["url"].toString()
     user = project.properties["username"].toString()
     password = project.properties["password"].toString()
-    locations = arrayOf("filesystem:./../../../../../../db/migration/dev/mssql")
+    locations = arrayOf("filesystem:./../../../../../../db/migration/dev/oracle")
+    baselineOnMigrate = true
 }
 
 jooq {
@@ -63,17 +65,19 @@ task("runProgrammaticGenerator", JavaExec::class) {
     dependsOn("flywayMigrate")
     dependsOn(":jooq-code-generator:compileJava")
 
-    val mssqljdbc by configurations.creating
+    val oracleojdbc by configurations.creating
+    val oracleucp by configurations.creating
     val codegen by configurations.creating   
 
     dependencies {
-       mssqljdbc("com.microsoft.sqlserver:mssql-jdbc")
-       codegen("org.jooq:jooq-codegen")
+       oracleojdbc("com.oracle.database.jdbc:ojdbc8")
+       oracleucp("com.oracle.database.jdbc:ucp")
+       codegen("org.jooq.trial-java-8:jooq-codegen")
     }
 
     classpath = files(arrayOf(
          "${rootDir}/jooq-code-generator/build/classes/java/main",
-         codegen, mssqljdbc
+         codegen, oracleojdbc, oracleucp
     ))
 
     mainClass.value("com.classicmodels.jooq.config.JooqConfig")

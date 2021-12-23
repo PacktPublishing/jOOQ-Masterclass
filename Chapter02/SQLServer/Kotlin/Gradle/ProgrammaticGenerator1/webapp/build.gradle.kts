@@ -6,7 +6,7 @@ plugins {
     id("org.springframework.boot") version "2.5.7"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     id("nu.studer.jooq") version "6.0.1"
-    id("org.flywaydb.flyway") version "8.2.0"
+    id("org.flywaydb.flyway") version "7.7.3"
     kotlin("jvm") version "1.6.0"
     kotlin("plugin.spring") version "1.6.0"
 }
@@ -32,10 +32,9 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation(project(":jooq-code-generator"))
-    implementation("org.jooq:jooq")
-    implementation("mysql:mysql-connector-java")
-    implementation("org.flywaydb:flyway-core")        
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    implementation("org.jooq.trial-java-8:jooq")
+    implementation("com.microsoft.sqlserver:mssql-jdbc")
+    implementation("org.flywaydb:flyway-core")
 }
 
 tasks {
@@ -51,12 +50,13 @@ flyway {
     url = project.properties["url"].toString()
     user = project.properties["username"].toString()
     password = project.properties["password"].toString()
-    locations = arrayOf("filesystem:./../../../../../../db/migration/dev/mysql")
+    locations = arrayOf("filesystem:./../../../../../../db/migration/dev/mssql")
+    mixed = true
 }
 
 jooq {
     version.set(project.properties["jooq"].toString())
-    edition.set(nu.studer.gradle.jooq.JooqEdition.OSS) 
+    edition.set(nu.studer.gradle.jooq.JooqEdition.TRIAL_JAVA_8) 
 }
 
 task("runProgrammaticGenerator", JavaExec::class) {
@@ -64,17 +64,17 @@ task("runProgrammaticGenerator", JavaExec::class) {
     dependsOn("flywayMigrate")
     dependsOn(":jooq-code-generator:compileJava")
 
-    val mysqljdbc by configurations.creating
+    val mssqljdbc by configurations.creating
     val codegen by configurations.creating   
 
     dependencies {
-       mysqljdbc("mysql:mysql-connector-java")
-       codegen("org.jooq:jooq-codegen")
+       mssqljdbc("com.microsoft.sqlserver:mssql-jdbc")
+       codegen("org.jooq.trial-java-8:jooq-codegen")
     }
 
     classpath = files(arrayOf(
          "${rootDir}/jooq-code-generator/build/classes/java/main",
-         codegen, mysqljdbc
+         codegen, mssqljdbc
     ))
 
     mainClass.value("com.classicmodels.jooq.config.JooqConfig")
@@ -91,8 +91,4 @@ tasks.withType<KotlinCompile> {
         freeCompilerArgs = listOf("-Xjsr305=strict")
         jvmTarget = "17"
     }
-}
-
-tasks.withType<Test> {
-    useJUnitPlatform()
 }
