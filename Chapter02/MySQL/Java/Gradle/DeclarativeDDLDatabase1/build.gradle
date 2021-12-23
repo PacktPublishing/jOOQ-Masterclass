@@ -24,18 +24,13 @@ repositories {
 }
 
 dependencies {            
-    jooqGenerator 'com.oracle.database.jdbc:ojdbc8'
-    jooqGenerator 'com.oracle.database.jdbc:ucp'
-    jooqGenerator 'org.jooq.trial-java-8:jooq-meta-extensions'
+    jooqGenerator 'mysql:mysql-connector-java' 
+    jooqGenerator 'org.jooq:jooq-meta-extensions'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'com.oracle.database.jdbc:ojdbc8'
-    implementation 'com.oracle.database.jdbc:ucp'
-    implementation 'org.flywaydb:flyway-core'               
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-    }
+    implementation 'mysql:mysql-connector-java'
+    implementation 'org.flywaydb:flyway-core'
 }
 
 processResources {
@@ -44,23 +39,18 @@ processResources {
     }
 }
 
-configurations {
-    flywayMigrate
-}
-
-flywayMigrate {
+flyway {
     driver = project.properties['driverClassName']
     url = project.properties['url']
     user = project.properties['username']
     password = project.properties['password']    
-    locations = ['filesystem:./../../../../db/migration/ddl/oracle/sql',
-                 'filesystem:./../../../../db/migration/ddl/oracle/data']
-    baselineOnMigrate=true
+    locations = ['filesystem:./../../../../../db/migration/ddl/mysql/sql',
+                 'filesystem:./../../../../../db/migration/ddl/mysql/data']
 }
 
 jooq {
     version = project.properties['jooq']
-    edition = nu.studer.gradle.jooq.JooqEdition.TRIAL_JAVA_8
+    edition = nu.studer.gradle.jooq.JooqEdition.OSS
 
     configurations {
         main {
@@ -86,7 +76,7 @@ jooq {
                             // - ? matches a single character in a directory / file name
                             property {
                                 key = 'scripts'
-                                value = './../../../../db/migration/ddl/oracle/sql'
+                                value = './../../../../../db/migration/ddl/mysql/sql'
                             }
 
                             // The sort order of the scripts within a directory, where:
@@ -125,12 +115,9 @@ jooq {
                         inputSchema = 'PUBLIC'
                         schemaVersionProvider=schemaVersion                        
                         excludes = '''\
-                                    flyway_schema_history | DEPARTMENT_PKG | GET_.*
-                                  | CARD_COMMISSION | PRODUCT_OF_PRODUCT_LINE
-                                  | REFRESH_TOP3_PRODUCT | SALE_PRICE | SECOND_MAX
-                                  | SET_COUNTER | SWAP | TOP_THREE_SALES_PER_EMPLOYEE
-                                  | EVALUATION_CRITERIA | SECOND_MAX_IMPL | TABLE_.*_OBJ
-                                  | .*_MASTER | BGT | .*_ARR | TABLE_POPL | TABLE_RES
+                                    flyway_schema_history | sequences 
+                                  | customer_pgs | refresh_top3_product
+                                  | sale_.* | set_.* | get_.* | .*_master
                                   ''' 
                         logSlowQueriesAfterSeconds = 20
                     }                                        
@@ -173,7 +160,7 @@ tasks.named('generateJooq').configure {
     dependsOn tasks.named('flywayMigrate')
 
     // declare Flyway migration scripts as inputs on the jOOQ task
-    inputs.files(fileTree('${rootDir}/../../../../db/migration/ddl/oracle/sql'))
+    inputs.files(fileTree('${rootDir}/../../../../../db/migration/ddl/mysql/sql'))
     .withPropertyName('migrations')
     .withPathSensitivity(PathSensitivity.RELATIVE)
 

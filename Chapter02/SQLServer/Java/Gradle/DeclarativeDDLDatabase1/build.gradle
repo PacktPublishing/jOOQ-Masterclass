@@ -2,7 +2,7 @@ plugins {
     id 'application'
     id 'org.springframework.boot' version '2.5.7'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-    id 'org.flywaydb.flyway' version '8.2.0'
+    id 'org.flywaydb.flyway' version '7.7.3'
     id 'nu.studer.jooq' version '6.0.1'
     id 'java'
 }
@@ -24,16 +24,13 @@ repositories {
 }
 
 dependencies {            
-    jooqGenerator 'org.postgresql:postgresql' 
+    jooqGenerator 'com.microsoft.sqlserver:mssql-jdbc' 
     jooqGenerator 'org.jooq:jooq-meta-extensions'
-    implementation 'org.springframework.boot:spring-boot-starter-jdbc'    
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.postgresql:postgresql'
-    implementation 'org.flywaydb:flyway-core'               
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-    }
+    implementation 'com.microsoft.sqlserver:mssql-jdbc'
+    implementation 'org.flywaydb:flyway-core'
 }
 
 processResources {
@@ -42,22 +39,19 @@ processResources {
     }
 }
 
-configurations {
-    flywayMigrate
-}
-
-flywayMigrate {
+flyway {
     driver = project.properties['driverClassName']
     url = project.properties['url']
     user = project.properties['username']
     password = project.properties['password']    
-    locations = ['filesystem:./../../../../db/migration/ddl/postgresql/sql',
-                 'filesystem:./../../../../db/migration/ddl/postgresql/data']	
+    locations = ['filesystem:./../../../../../db/migration/ddl/mssql/sql',
+                 'filesystem:./../../../../../db/migration/ddl/mssql/data']
+    mixed = true
 }
 
 jooq {
     version = project.properties['jooq']
-    edition = nu.studer.gradle.jooq.JooqEdition.OSS
+    edition = nu.studer.gradle.jooq.JooqEdition.TRIAL_JAVA_8
 
     configurations {
         main {
@@ -83,7 +77,7 @@ jooq {
                             // - ? matches a single character in a directory / file name
                             property {
                                 key = 'scripts'
-                                value = './../../../../db/migration/ddl/postgresql/sql'								
+                                value = './../../../../../db/migration/ddl/mssql/sql'
                             }
 
                             // The sort order of the scripts within a directory, where:
@@ -122,14 +116,8 @@ jooq {
                         inputSchema = 'PUBLIC'
                         schemaVersionProvider=schemaVersion                        
                         excludes = '''\
-                                  flyway_schema_history | akeys | avals | defined | delete.*
-                                | department_topic_arr | dup | employee_office_arr | exist.*                                   
-                                | fetchval | get_.* | ghstore.* | gin.* | hs.* | hstore.* 
-                                | isdefined | isexists | make_array | new_salary | populate_record 
-                                | sale_price | slice.* | swap | tconvert | update_msrp 
-                                | evaluation_criteria | rate_type | vat_type | .*_master | each 
-                                | skeys | svals | top_three_sales_per_employee | product_of_product_line
-                                  ''' 
+                                     flyway_schema_history | concatenate | .*_master
+                                   ''' 
                         logSlowQueriesAfterSeconds = 20
                     }                                        
                     
@@ -171,7 +159,7 @@ tasks.named('generateJooq').configure {
     dependsOn tasks.named('flywayMigrate')
 
     // declare Flyway migration scripts as inputs on the jOOQ task
-    inputs.files(fileTree('${rootDir}/../../../../db/migration/ddl/postgresql/sql'))
+    inputs.files(fileTree('${rootDir}/../../../../../db/migration/ddl/mssql/sql'))
     .withPropertyName('migrations')
     .withPathSensitivity(PathSensitivity.RELATIVE)
 
