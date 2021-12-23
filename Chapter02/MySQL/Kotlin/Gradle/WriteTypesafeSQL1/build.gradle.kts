@@ -34,8 +34,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("mysql:mysql-connector-java")
-    implementation("org.flywaydb:flyway-core")        
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    implementation("org.flywaydb:flyway-core")
 }
 
 tasks {
@@ -120,10 +119,6 @@ tasks.named<nu.studer.gradle.jooq.JooqGenerate>("generateJooq") {
     // make jOOQ task participate in incremental builds and build caching
     allInputsDeclared.set(true)
     outputs.cacheIf { true }
-}
-
-tasks.withType<Test> {
-    useJUnitPlatform()
 }
 
 tasks.withType<KotlinCompile> {
