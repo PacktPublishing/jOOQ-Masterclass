@@ -29,7 +29,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'    
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation project(':entities')	
-    implementation 'org.jooq:jooq'
+    implementation 'org.jooq.trial-java-8:jooq'
     implementation 'com.microsoft.sqlserver:mssql-jdbc'
     implementation 'org.flywaydb:flyway-core'
 }
@@ -68,8 +68,8 @@ task runProgrammaticGenerator(type: JavaExec) {
 
     dependencies {
        h2jdbc "com.h2database:h2"
-       codegen "org.jooq:jooq-codegen"
-       metaext "org.jooq:jooq-meta-extensions-hibernate"
+       codegen "org.jooq.trial-java-8:jooq-codegen"
+       metaext "org.jooq.trial-java-8:jooq-meta-extensions-hibernate"
        sbjpa "org.springframework.boot:spring-boot-starter-data-jpa"
     }
 

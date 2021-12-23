@@ -34,7 +34,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation(project(":entities"))
-    implementation("org.jooq:jooq")
+    implementation("org.jooq.trial-java-8:jooq")
     implementation("com.oracle.database.jdbc:ojdbc8")
     implementation("com.oracle.database.jdbc:ucp")
     implementation("org.flywaydb:flyway-core")
@@ -74,8 +74,8 @@ task("runProgrammaticGenerator", JavaExec::class) {
 
     dependencies {
        h2jdbc("com.h2database:h2")
-       codegen("org.jooq:jooq-codegen")
-       metaext("org.jooq:jooq-meta-extensions-hibernate")
+       codegen("org.jooq.trial-java-8:jooq-codegen")
+       metaext("org.jooq.trial-java-8:jooq-meta-extensions-hibernate")
        sbjpa("org.springframework.boot:spring-boot-starter-data-jpa")
     }
 

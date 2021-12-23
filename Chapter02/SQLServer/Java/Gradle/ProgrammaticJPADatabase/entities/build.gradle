@@ -28,5 +28,5 @@ dependencyManagement {
 
 dependencies {    
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.jooq:jooq-codegen'    
+    implementation 'org.jooq.trial-java-8:jooq-codegen'    
 }
