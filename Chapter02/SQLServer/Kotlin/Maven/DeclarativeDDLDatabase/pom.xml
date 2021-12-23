@@ -214,12 +214,7 @@
                                 <name>org.jooq.codegen.KotlinGenerator</name>                                
 
                                 <database>                                    
-                                    <name>org.jooq.meta.extensions.ddl.DDLDatabase</name>
-                                    
-                                    <!-- The database schema (or in the absence of schema support, in your RDBMS this
-                                    can be the owner, user, database name) to be generated. This cannot be combined with the <schemata/> element.                                     
-                                    If <inputSchema/> is missing then all schemas will be considered. -->
-                                    <inputSchema>PUBLIC</inputSchema>  
+                                    <name>org.jooq.meta.extensions.ddl.DDLDatabase</name>                                                              
                                     
                                     <properties>            
                                         <!-- Specify the location of your SQL script.
@@ -266,6 +261,8 @@
                                             <value>as_is</value>
                                         </property>                                                                                                               
                                     </properties>
+                                         
+                                    <inputSchema>PUBLIC</inputSchema>  
                                     
                                     <!-- Schema version provider -->            
                                     <schemaVersionProvider>${schema.version}</schemaVersionProvider>                                                                        
