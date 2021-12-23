@@ -35,6 +35,7 @@ public class JooqConfig {
                                         + " | EVALUATION_CRITERIA | SECOND_MAX_IMPL | TABLE_.*_OBJ"
                                         + " | .*_MASTER | BGT | .*_ARR | TABLE_POPL | TABLE_RES")
                                 .withInputSchema("CLASSICMODELS")
+                                .withLogSlowQueriesAfterSeconds(20)
                         )
                         .withGenerate(new Generate()
                                 .withDaos(true)
