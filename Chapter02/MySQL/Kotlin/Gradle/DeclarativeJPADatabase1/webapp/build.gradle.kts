@@ -12,7 +12,7 @@ plugins {
     id("org.springframework.boot") version "2.5.7"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     id("nu.studer.jooq") version "6.0.1"
-    id("org.flywaydb.flyway") version "7.7.3"
+    id("org.flywaydb.flyway") version "8.2.0"
     kotlin("jvm") version "1.6.0"
     kotlin("plugin.spring") version "1.6.0"
 }
@@ -43,9 +43,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation(project(":entities"))
-    implementation("com.oracle.database.jdbc:ojdbc8")
-    implementation("com.oracle.database.jdbc:ucp")
+    implementation(project(":entities"))    
+    implementation("mysql:mysql-connector-java")
     implementation("org.flywaydb:flyway-core")
 }
 
@@ -62,13 +61,12 @@ flyway {
     url = project.properties["url"].toString()
     user = project.properties["username"].toString()
     password = project.properties["password"].toString()
-    locations = arrayOf("filesystem:./../../../../../../db/migration/min/oracle")
-    baselineOnMigrate = true
+    locations = arrayOf("filesystem:./../../../../../../db/migration/min/mysql")
 }
 
 jooq {
-  version.set(project.properties["jooq"].toString())
-  edition.set(nu.studer.gradle.jooq.JooqEdition.TRIAL_JAVA_8)
+  version.set(project.properties["jooq"].toString())  // if omitted, then the default is used
+  edition.set(nu.studer.gradle.jooq.JooqEdition.OSS)  // jOOQ Open-Source is the default (can be omitted)
   
   configurations {
         create("main") {  // name of the jOOQ configuration
@@ -122,6 +120,7 @@ jooq {
                         isDaos = true
                         isValidationAnnotations = true
                         isSpringAnnotations = true
+
                     }
                     strategy.withMatchers(Matchers()
                             .withTables(arrayOf(
@@ -156,7 +155,7 @@ tasks.named<nu.studer.gradle.jooq.JooqGenerate>("generateJooq") {
     dependsOn("flywayMigrate")
 
     // declare Flyway migration scripts as inputs on the jOOQ task
-    inputs.files(fileTree("${rootDir}/../../../../../db/migration/min/oracle"))
+    inputs.files(fileTree("${rootDir}/../../../../../db/migration/min/mysql"))
         .withPropertyName("migrations")
         .withPathSensitivity(PathSensitivity.RELATIVE)
 

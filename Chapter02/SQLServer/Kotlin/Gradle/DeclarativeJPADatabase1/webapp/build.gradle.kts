@@ -62,6 +62,7 @@ flyway {
     user = project.properties["username"].toString()
     password = project.properties["password"].toString()
     locations = arrayOf("filesystem:./../../../../../../db/migration/min/mssql")
+    mixed = true
 }
 
 jooq {
@@ -154,7 +155,7 @@ tasks.named<nu.studer.gradle.jooq.JooqGenerate>("generateJooq") {
     dependsOn("flywayMigrate")
 
     // declare Flyway migration scripts as inputs on the jOOQ task
-    inputs.files(fileTree("${rootDir}/../../../../../db/migration/min/mssql"))
+    inputs.files(fileTree("${rootDir}/../../../../../../db/migration/min/mssql"))
         .withPropertyName("migrations")
         .withPathSensitivity(PathSensitivity.RELATIVE)
 
