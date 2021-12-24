@@ -148,7 +148,14 @@
                                     </properties>
                                     
                                     <inputSchema>PUBLIC</inputSchema>  
-                                                                             
+                                                 
+                                    <!-- All elements that are generated from your schema
+                                    (A Java regular expression. Use the pipe to separate several expressions)
+                                    Watch out for case-sensitivity. Depending on your database, this might be important! 
+                                    You can create case-insensitive regular expressions using this syntax: (?i:expr).
+                                    Whitespace is ignored and comments are possible. -->       
+                                    <includes>.*</includes>
+                                                                                                                                     
                                     <!-- Schema version provider -->            
                                     <schemaVersionProvider>${schema.version}</schemaVersionProvider>
                                     
@@ -160,6 +167,10 @@
                                         | customer_pgs | refresh_top3_product
                                         | sale_.* | set_.* | get_.* | .*_master
                                     </excludes>
+                                    
+                                    <!-- Give enough time to jOOQ to trigger the queries needed for generating sources 
+                                    (default is 5 seconds) -->
+                                    <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>
                                 </database>
                                 
                                 <!-- Rename the generated POJOs and DAOs classes -->                      
