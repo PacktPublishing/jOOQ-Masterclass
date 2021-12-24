@@ -103,6 +103,10 @@
                         </goals>                                  
                         <configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.15.0.xsd">
                             <generator>
+
+                                <!-- Defaults to org.jooq.codegen.JavaGenerator -->
+                                <name>org.jooq.codegen.JavaGenerator</name>
+
                                 <database>
                                     <name>org.jooq.meta.extensions.ddl.DDLDatabase</name>                                                                         
                                     
@@ -153,10 +157,14 @@
                                     </properties>
                                     
                                     <inputSchema>PUBLIC</inputSchema> 
-                                         
-                                    <!-- Schema version provider -->            
-                                    <schemaVersionProvider>${schema.version}</schemaVersionProvider>
-                                    
+
+                                    <!-- All elements that are generated from your schema
+                                    (A Java regular expression. Use the pipe to separate several expressions)
+                                    Watch out for case-sensitivity. Depending on your database, this might be important! 
+                                    You can create case-insensitive regular expressions using this syntax: (?i:expr).
+                                    Whitespace is ignored and comments are possible. -->       
+                                    <includes>.*</includes>
+                                                                             
                                     <!-- All elements that are excluded from your schema
                                     (A Java regular expression. Use the pipe to separate several expressions).
                                     Excludes match before includes, i.e. excludes have a higher priority. -->
@@ -168,6 +176,9 @@
                                         | EVALUATION_CRITERIA | SECOND_MAX_IMPL | TABLE_.*_OBJ
                                         | .*_MASTER | BGT | .*_ARR | TABLE_POPL | TABLE_RES
                                     </excludes>
+
+                                    <!-- Schema version provider -->            
+                                    <schemaVersionProvider>${schema.version}</schemaVersionProvider>                                    
                                 </database>
                                 
                                 <!-- Rename the generated POJOs and DAOs classes -->                      
