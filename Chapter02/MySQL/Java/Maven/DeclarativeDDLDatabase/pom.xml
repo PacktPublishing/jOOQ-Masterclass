@@ -170,11 +170,7 @@
                                     </excludes>
                                     
                                     <!-- Schema version provider -->            
-                                    <schemaVersionProvider>${schema.version}</schemaVersionProvider>
-                                    
-                                    <!-- Give enough time to jOOQ to trigger the queries needed for generating sources 
-                                    (default is 5 seconds) -->
-                                    <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>
+                                    <schemaVersionProvider>${schema.version}</schemaVersionProvider>                                    
                                 </database>
                                 
                                 <!-- Rename the generated POJOs and DAOs classes -->                      
