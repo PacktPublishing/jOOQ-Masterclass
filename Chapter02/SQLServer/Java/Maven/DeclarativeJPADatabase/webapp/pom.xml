@@ -115,7 +115,8 @@
             <!-- The jOOQ code generator plugin -->
             <plugin>
                 <groupId>org.jooq.trial-java-8</groupId>
-                <artifactId>jooq-codegen-maven</artifactId>            
+                <artifactId>jooq-codegen-maven</artifactId>  
+                <version>${jooq.version}</version>          
                 <executions>
                     <execution>
                         <id>generate-jooq-from-jpa-entities</id>
@@ -199,7 +200,6 @@
                                 </strategy>
                                 
                                 <generate>
-                                    <interfaces>true</interfaces>
                                     <daos>true</daos>            <!-- daos will generate pojos as well -->
                                     <!-- <pojos>true</pojos> --> <!-- this is needed to generated pojos without daos -->                             
                                     <validationAnnotations>true</validationAnnotations>
