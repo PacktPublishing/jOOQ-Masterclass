@@ -98,6 +98,10 @@
                         </goals>                                  
                         <configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.15.0.xsd">
                             <generator>
+
+                                <!-- Defaults to org.jooq.codegen.JavaGenerator -->
+                                <name>org.jooq.codegen.JavaGenerator</name>
+
                                 <database>
                                     <name>org.jooq.meta.extensions.ddl.DDLDatabase</name>
                                                                                                             
@@ -155,10 +159,7 @@
                                     You can create case-insensitive regular expressions using this syntax: (?i:expr).
                                     Whitespace is ignored and comments are possible. -->       
                                     <includes>.*</includes>
-                                                                                                                                     
-                                    <!-- Schema version provider -->            
-                                    <schemaVersionProvider>${schema.version}</schemaVersionProvider>
-                                    
+                                                                                                                                                                         
                                     <!-- All elements that are excluded from your schema
                                     (A Java regular expression. Use the pipe to separate several expressions).
                                     Excludes match before includes, i.e. excludes have a higher priority. -->
@@ -167,6 +168,9 @@
                                         | customer_pgs | refresh_top3_product
                                         | sale_.* | set_.* | get_.* | .*_master
                                     </excludes>
+                                    
+                                    <!-- Schema version provider -->            
+                                    <schemaVersionProvider>${schema.version}</schemaVersionProvider>
                                     
                                     <!-- Give enough time to jOOQ to trigger the queries needed for generating sources 
                                     (default is 5 seconds) -->
