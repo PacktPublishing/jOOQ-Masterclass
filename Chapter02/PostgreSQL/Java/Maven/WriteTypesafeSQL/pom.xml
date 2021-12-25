@@ -164,9 +164,6 @@
                                     Whitespace is ignored and comments are possible. -->       
                                     <includes>.*</includes>
             
-                                    <!-- Schema version provider -->            
-                                    <schemaVersionProvider>SELECT MAX("version") FROM "flyway_schema_history"</schemaVersionProvider>
-            
                                     <!-- All elements that are excluded from your schema
                                     (A Java regular expression. Use the pipe to separate several expressions).
                                     Excludes match before includes, i.e. excludes have a higher priority. -->
@@ -179,11 +176,15 @@
                                         | evaluation_criteria | rate_type | vat_type | .*_master | each 
                                         | skeys | svals | top_three_sales_per_employee | product_of_product_line
                                     </excludes>
+
+                                    <!-- Schema version provider -->            
+                                    <schemaVersionProvider>SELECT MAX("version") FROM "flyway_schema_history"</schemaVersionProvider>
                                     
                                     <!-- Give enough time to jOOQ to trigger the queries needed for generating sources 
                                     (default is 5 seconds) -->
                                     <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>
                                 </database>
+
                                 <target>
                                     <!-- The destination package of your generated classes (within the destination directory).
                                  jOOQ may append the schema name to this package if generating multiple schemas,
