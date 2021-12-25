@@ -5,7 +5,6 @@ import org.jooq.meta.jaxb.Configuration;
 import org.jooq.meta.jaxb.Database;
 import org.jooq.meta.jaxb.Generate;
 import org.jooq.meta.jaxb.Generator;
-import org.jooq.meta.jaxb.Jdbc;
 import org.jooq.meta.jaxb.MatcherRule;
 import org.jooq.meta.jaxb.MatcherTransformType;
 import org.jooq.meta.jaxb.Matchers;
@@ -18,22 +17,21 @@ public class JooqConfig {
 
     public static void main(String[] args) throws Exception {
 
-        Configuration configuration = new Configuration()
-                .withJdbc(new Jdbc()
-                        .withDriver("org.h2.Driver")
-                        .withUrl("jdbc:h2:~/classicmodels"))
+        Configuration configuration = new Configuration()               
                 .withGenerator(new Generator()
+                        .withName("org.jooq.codegen.JavaGenerator")
                         .withDatabase(new Database()
-                                .withName("org.jooq.meta.extensions.jpa.JPADatabase")                                
-                                .withSchemaVersionProvider("com.classicmodels.jooq.config.MySchemaVersionProvider")
+                                .withName("org.jooq.meta.extensions.jpa.JPADatabase")  
+                                .withInputSchema("PUBLIC")                                  
                                 .withProperties(
                                         new Property().withKey("hibernate.physical_naming_strategy").withValue("org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy"),
                                         new Property().withKey("packages").withValue("com.classicmodels.entity"),
                                         new Property().withKey("useAttributeConverters").withValue("true"),
-                                        new Property().withKey("unqualifiedSchema").withValue("none"))                                
+                                        new Property().withKey("unqualifiedSchema").withValue("none"))  
+                                .withIncludes(".*")
+                                .withSchemaVersionProvider("com.classicmodels.jooq.config.MySchemaVersionProvider")
                         )
-                        .withGenerate(new Generate()
-                                .withInterfaces(true)
+                        .withGenerate(new Generate()                           
                                 .withDaos(true)
                                 .withValidationAnnotations(Boolean.TRUE)
                                 .withSpringAnnotations(Boolean.TRUE)

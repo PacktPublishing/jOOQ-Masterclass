@@ -20,10 +20,10 @@ public class JooqConfig {
 
         Configuration configuration = new Configuration()
                 .withGenerator(new Generator()
+                        .withName("org.jooq.codegen.JavaGenerator")
                         .withDatabase(new Database()
                                 .withName("org.jooq.meta.extensions.ddl.DDLDatabase")
                                 .withInputSchema("PUBLIC")  
-                                .withSchemaVersionProvider("com.classicmodels.jooq.config.MySchemaVersionProvider")
                                 .withProperties(
                                         new Property().withKey("scripts").withValue(
                                                 System.getProperty("user.dir").endsWith("webapp")
@@ -32,9 +32,11 @@ public class JooqConfig {
                                         new Property().withKey("sort").withValue("flyway"),
                                         new Property().withKey("unqualifiedSchema").withValue("none"),
                                         new Property().withKey("defaultNameCase").withValue("as_is"))
+                                .withIncludes(".*")
                                 .withExcludes("flyway_schema_history | sequences" 
                                         + " | customer_pgs | refresh_top3_product"
                                         + " | sale_.* | set_.* | get_.* | .*_master")
+                                .withSchemaVersionProvider("com.classicmodels.jooq.config.MySchemaVersionProvider")
                         )
                         .withGenerate(new Generate()
                                 .withDaos(true)

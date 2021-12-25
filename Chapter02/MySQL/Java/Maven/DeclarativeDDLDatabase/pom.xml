@@ -104,6 +104,8 @@
 
                                 <database>
                                     <name>org.jooq.meta.extensions.ddl.DDLDatabase</name>
+
+                                    <inputSchema>PUBLIC</inputSchema>
                                                                                                             
                                     <properties>            
                                         <!-- Specify the location of your SQL script.
@@ -149,9 +151,7 @@
                                             <key>defaultNameCase</key>
                                             <value>as_is</value>
                                         </property>                                                                                                               
-                                    </properties>
-                                    
-                                    <inputSchema>PUBLIC</inputSchema>  
+                                    </properties>                                                
                                                  
                                     <!-- All elements that are generated from your schema
                                     (A Java regular expression. Use the pipe to separate several expressions)
