@@ -165,11 +165,8 @@
                                     Watch out for case-sensitivity. Depending on your database, this might be important! 
                                     You can create case-insensitive regular expressions using this syntax: (?i:expr).
                                     Whitespace is ignored and comments are possible. -->       
-                                    <includes>.*</includes>
-            
-                                    <!-- Schema version provider -->            
-                                    <schemaVersionProvider>SELECT MAX("version") FROM "flyway_schema_history"</schemaVersionProvider>
-            
+                                    <includes>.*</includes>            
+                                    
                                     <!-- All elements that are excluded from your schema
                                     (A Java regular expression. Use the pipe to separate several expressions).
                                     Excludes match before includes, i.e. excludes have a higher priority. -->
@@ -181,11 +178,15 @@
                                         | EVALUATION_CRITERIA | SECOND_MAX_IMPL | TABLE_.*_OBJ
                                         | .*_MASTER | BGT | .*_ARR | TABLE_POPL | TABLE_RES
                                     </excludes>
-                                    
+
+                                    <!-- Schema version provider -->            
+                                    <schemaVersionProvider>SELECT MAX("version") FROM "flyway_schema_history"</schemaVersionProvider>
+                                               
                                     <!-- Give enough time to jOOQ to trigger the queries needed for generating sources 
                                     (default is 5 seconds) -->
                                     <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>
                                 </database>
+
                                 <target>
                                     <!-- The destination package of your generated classes (within the destination directory).
                                     jOOQ may append the schema name to this package if generating multiple schemas,

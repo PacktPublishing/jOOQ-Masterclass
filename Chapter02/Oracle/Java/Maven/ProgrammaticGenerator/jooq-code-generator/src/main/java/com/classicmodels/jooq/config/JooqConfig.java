@@ -24,17 +24,18 @@ public class JooqConfig {
                         .withUser("CLASSICMODELS")
                         .withPassword("root"))
                 .withGenerator(new Generator()
+                        .withName("org.jooq.codegen.JavaGenerator")
                         .withDatabase(new Database()
-                                .withName("org.jooq.meta.oracle.OracleDatabase")
-                                .withSchemaVersionProvider("SELECT MAX(\"version\") FROM \"flyway_schema_history\"")
+                                .withName("org.jooq.meta.oracle.OracleDatabase")                                
+                                .withInputSchema("CLASSICMODELS")
                                 .withIncludes(".*")
                                 .withExcludes("flyway_schema_history | DEPARTMENT_PKG | GET_.*"
                                         + " | CARD_COMMISSION | PRODUCT_OF_PRODUCT_LINE"
                                         + " | REFRESH_TOP3_PRODUCT | SALE_PRICE | SECOND_MAX"
                                         + " | SET_COUNTER | SWAP | TOP_THREE_SALES_PER_EMPLOYEE"
                                         + " | EVALUATION_CRITERIA | SECOND_MAX_IMPL | TABLE_.*_OBJ"
-                                        + " | .*_MASTER | BGT | .*_ARR | TABLE_POPL | TABLE_RES")
-                                .withInputSchema("CLASSICMODELS")
+                                        + " | .*_MASTER | BGT | .*_ARR | TABLE_POPL | TABLE_RES")                                
+                                .withSchemaVersionProvider("SELECT MAX(\"version\") FROM \"flyway_schema_history\"")
                         )
                         .withGenerate(new Generate()
                                 .withDaos(true)

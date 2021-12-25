@@ -129,15 +129,15 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.15.0.xsd">
-                            
-                            <!-- JDBC connection to the H2 in-memory database -->
-                            <jdbc>
-                                <driver>org.h2.Driver</driver>
-                                <url>jdbc:h2:~/classicmodels</url>                                
-                            </jdbc>
                             <generator>
+
+                                <!-- Defaults to org.jooq.codegen.JavaGenerator -->
+                                <name>org.jooq.codegen.JavaGenerator</name>
+
                                 <database>                                    
                                     <name>org.jooq.meta.extensions.jpa.JPADatabase</name>
+
+                                     <inputSchema>PUBLIC</inputSchema> 
                                                                                                               
                                     <properties>
                                         <!-- The current versions of jOOQ use Hibernate behind the scenes 
@@ -204,7 +204,6 @@
                                 </strategy>
                                 
                                 <generate>
-                                    <interfaces>true</interfaces>
                                     <daos>true</daos>            <!-- daos will generate pojos as well -->
                                     <!-- <pojos>true</pojos> --> <!-- this is needed to generated pojos without daos -->                             
                                     <validationAnnotations>true</validationAnnotations>
