@@ -215,6 +215,8 @@
 
                                 <database>                                    
                                     <name>org.jooq.meta.extensions.ddl.DDLDatabase</name>                                                                        
+
+                                    <inputSchema>PUBLIC</inputSchema>  
                                     
                                     <properties>            
                                         <!-- Specify the location of your SQL script.
@@ -262,10 +264,12 @@
                                         </property>                                                                                                               
                                     </properties>
                                          
-                                    <inputSchema>PUBLIC</inputSchema>  
-                                    
-                                    <!-- Schema version provider -->            
-                                    <schemaVersionProvider>${schema.version}</schemaVersionProvider>                                                                        
+                                    <!-- All elements that are generated from your schema
+                                    (A Java regular expression. Use the pipe to separate several expressions)
+                                    Watch out for case-sensitivity. Depending on your database, this might be important! 
+                                    You can create case-insensitive regular expressions using this syntax: (?i:expr).
+                                    Whitespace is ignored and comments are possible. -->       
+                                    <includes>.*</includes>
                                     
                                     <!-- All elements that are excluded from your schema
                                     (A Java regular expression. Use the pipe to separate several expressions).
@@ -275,6 +279,10 @@
                                         | customer_pgs | refresh_top3_product
                                         | sale_.* | set_.* | get_.* | .*_master
                                     </excludes>
+
+                                    <!-- Schema version provider -->            
+                                    <schemaVersionProvider>${schema.version}</schemaVersionProvider>                                                                        
+                                    
                                 </database>
                                 
                                 <!-- Rename the generated POJOs and DAOs classes -->                      
