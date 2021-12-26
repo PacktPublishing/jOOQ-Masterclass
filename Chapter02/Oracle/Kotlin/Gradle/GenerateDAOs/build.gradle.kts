@@ -70,19 +70,47 @@ jooq {
 
             jooqConfiguration.apply {
                 logging = Logging.WARN
+                
                 jdbc.apply {
+                    // Configure the database connection here
                     driver = project.properties["driverClassName"].toString()
                     url = project.properties["url"].toString()
                     user = project.properties["username"].toString()
                     password = project.properties["password"].toString()
                 }
+                
                 generator.apply {
+                    // The default code generator. 
+                    // You can override this one, to generate your own code style.
+                                     
+                    // Supported generators:                                
+                    //  - org.jooq.codegen.JavaGenerator
+                    //  - org.jooq.codegen.ScalaGenerator
+                    //  - org.jooq.codegen.KotlinGenerator
+                           
+                    // Defaults to org.jooq.codegen.JavaGenerator
                     name = "org.jooq.codegen.KotlinGenerator"
+                    
                     database.apply {
+                        // The database type. The format here is:
+                        // org.jooq.meta.[database].[database]Database
                         name = "org.jooq.meta.oracle.OracleDatabase"
+                        
+                        // The database schema (or in the absence of schema support, in your RDBMS this
+                        // can be the owner, user, database name) to be generated. This cannot be combined with the <schemata/> element.                                     
+                        // If <inputSchema/> is missing then all schemas will be considered.
                         inputSchema = "CLASSICMODELS"                        
+                        
+                        // All elements that are generated from your schema
+                        // (A Java regular expression. Use the pipe to separate several expressions)
+                        // Watch out for case-sensitivity. Depending on your database, this might be important! 
+                        // You can create case-insensitive regular expressions using this syntax: (?i:expr).
+                        // Whitespace is ignored and comments are possible.
                         includes = ".*"
-                        schemaVersionProvider = "SELECT MAX(\"version\") FROM \"flyway_schema_history\""
+                        
+                        // All elements that are excluded from your schema
+                        // (A Java regular expression. Use the pipe to separate several expressions).
+                        // Excludes match before includes, i.e. excludes have a higher priority.
                         excludes = """
                                      flyway_schema_history | DEPARTMENT_PKG | GET_.*
                                    | CARD_COMMISSION | PRODUCT_OF_PRODUCT_LINE  
@@ -91,15 +119,23 @@ jooq {
                                    | EVALUATION_CRITERIA | SECOND_MAX_IMPL | TABLE_.*_OBJ
                                    | .*_MASTER | BGT | .*_ARR | TABLE_POPL | TABLE_RES
                                   """
-                        logSlowQueriesAfterSeconds = 20	
+                                  
+                        // Schema version provider
+                        schemaVersionProvider = "SELECT MAX(\"version\") FROM \"flyway_schema_history\""
+                        
+                        // Give enough time to jOOQ to trigger the queries needed for generating sources 
+                        // (default is 5 seconds)
+                        logSlowQueriesAfterSeconds = 20    
                     }
+                    
                     generate.apply {  
                         isDeprecated = false
                         isRecords = true
                         isDaos = true
                         isValidationAnnotations = true
                         isSpringAnnotations = true
-                    }                      
+                    }        
+                    
                     strategy.withMatchers(Matchers()
                             .withTables(arrayOf(
                                MatchersTableType()
@@ -111,6 +147,7 @@ jooq {
                                       .withExpression("$0_Repository")
                                       .withTransform(MatcherTransformType.PASCAL))
                             ).toList()))
+                            
                     target.apply {
                         packageName = "jooq.generated"
                         directory = "build/generated-sources"

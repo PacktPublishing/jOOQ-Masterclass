@@ -25,16 +25,17 @@ public class JooqConfig {
                 .withGenerator(new Generator()
                         .withName("org.jooq.codegen.KotlinGenerator")   
                         .withDatabase(new Database()
-                                .withName("org.jooq.meta.extensions.jpa.JPADatabase")                                
-                                .withSchemaVersionProvider("com.classicmodels.jooq.config.MySchemaVersionProvider")
+                                .withName("org.jooq.meta.extensions.jpa.JPADatabase")
+                                .withInputSchema("PUBLIC")
                                 .withProperties(
                                         new Property().withKey("hibernate.physical_naming_strategy").withValue("org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy"),
                                         new Property().withKey("packages").withValue("com.classicmodels.entity"),
                                         new Property().withKey("useAttributeConverters").withValue("true"),
-                                        new Property().withKey("unqualifiedSchema").withValue("none"))                                
+                                        new Property().withKey("unqualifiedSchema").withValue("none"))
+                                .withIncludes(".*")
+                                .withSchemaVersionProvider("com.classicmodels.jooq.config.MySchemaVersionProvider")
                         )
                         .withGenerate(new Generate()
-                                .withInterfaces(true)
                                 .withDaos(true)
                                 .withValidationAnnotations(Boolean.TRUE)
                                 .withSpringAnnotations(Boolean.TRUE)

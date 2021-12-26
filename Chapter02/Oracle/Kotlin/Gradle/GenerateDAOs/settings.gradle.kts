@@ -1,1 +1,1 @@
-rootProject.name = "GenerateDAOs"
+rootProject.name = "GenerateDaos"

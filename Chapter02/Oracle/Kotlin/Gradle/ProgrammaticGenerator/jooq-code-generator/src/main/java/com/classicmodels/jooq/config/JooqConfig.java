@@ -27,7 +27,7 @@ public class JooqConfig {
                         .withName("org.jooq.codegen.KotlinGenerator")   
                         .withDatabase(new Database()
                                 .withName("org.jooq.meta.oracle.OracleDatabase")
-                                .withSchemaVersionProvider("SELECT MAX(\"version\") FROM \"flyway_schema_history\"")
+                                .withInputSchema("CLASSICMODELS")
                                 .withIncludes(".*")
                                 .withExcludes("flyway_schema_history | DEPARTMENT_PKG | GET_.*"
                                         + " | CARD_COMMISSION | PRODUCT_OF_PRODUCT_LINE" 
@@ -35,7 +35,8 @@ public class JooqConfig {
                                         + " | SET_COUNTER | SWAP | TOP_THREE_SALES_PER_EMPLOYEE"
                                         + " | EVALUATION_CRITERIA | SECOND_MAX_IMPL | TABLE_.*_OBJ"
                                         + " | .*_MASTER | BGT | .*_ARR | TABLE_POPL | TABLE_RES")
-                                .withInputSchema("CLASSICMODELS")
+                                .withSchemaVersionProvider("SELECT MAX(\"version\") FROM \"flyway_schema_history\"")
+                                .withLogSlowQueriesAfterSeconds(20)
                         )
                         .withGenerate(new Generate()
                                 .withDaos(true)

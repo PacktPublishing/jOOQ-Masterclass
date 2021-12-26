@@ -33,8 +33,8 @@ repositories {
 }
 
 dependencies {
-    jooqGenerator("com.oracle.database.jdbc:ojdbc8")	
-    jooqGenerator("com.oracle.database.jdbc:ucp")	
+    jooqGenerator("com.oracle.database.jdbc:ojdbc8")    
+    jooqGenerator("com.oracle.database.jdbc:ucp")    
     jooqGenerator("org.jooq.trial-java-8:jooq-meta-extensions")
     implementation("org.springframework.boot:spring-boot-starter-jdbc")
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -73,11 +73,28 @@ jooq {
             generateSchemaSourceOnCompilation.set(true)  // default (can be omitted)
 
             jooqConfiguration.apply {
-                logging = Logging.WARN                
+                logging = Logging.WARN
+                
                 generator.apply {
+                
+                    // The default code generator. 
+                    // You can override this one, to generate your own code style.
+                                     
+                    // Supported generators:                                
+                    //  - org.jooq.codegen.JavaGenerator
+                    //  - org.jooq.codegen.ScalaGenerator
+                    //  - org.jooq.codegen.KotlinGenerator
+                           
+                    // Defaults to org.jooq.codegen.JavaGenerator
                     name = "org.jooq.codegen.KotlinGenerator"
+                    
                     database.apply {
+                        // Rely on jOOQ DDL Database API
                         name = "org.jooq.meta.extensions.ddl.DDLDatabase"
+                        
+                        // H2 database schema
+                        inputSchema = "PUBLIC" 
+                        
                         properties.add(
                            // Specify the location of your SQL script.
                            // You may use ant-style file matching, e.g. /path/**/to/*.sql
@@ -94,7 +111,7 @@ jooq {
                            // - semantic: sorts versions, e.g. v-3.10.0 is after v-3.9.0 (default)
                            // - alphanumeric: sorts strings, e.g. v-3.10.0 is before v-3.9.0
                            // - flyway: sorts files the same way as flyway does
-                           // - none: doesn't sort directory contents after fetching them from the directory   						
+                           // - none: doesn't sort directory contents after fetching them from the directory                           
                            Property().withKey("sort").withValue("semantic"))
 
                         properties.add(
@@ -114,9 +131,16 @@ jooq {
                            // - lower: unquoted object names are turned into lower case (e.g. PostgreSQL)
                            Property().withKey("defaultNameCase").withValue("as_is"))
 
-                        inputSchema = "PUBLIC" 
+                        // All elements that are generated from your schema
+                        // (A Java regular expression. Use the pipe to separate several expressions)
+                        // Watch out for case-sensitivity. Depending on your database, this might be important! 
+                        // You can create case-insensitive regular expressions using this syntax: (?i:expr).
+                        // Whitespace is ignored and comments are possible.
                         includes = ".*"                        
-                        schemaVersionProvider=schemaVersion    
+                        
+                        // All elements that are excluded from your schema
+                        // (A Java regular expression. Use the pipe to separate several expressions).
+                        // Excludes match before includes, i.e. excludes have a higher priority.
                         excludes = """
                                      flyway_schema_history | DEPARTMENT_PKG | GET_.*
                                    | CARD_COMMISSION | PRODUCT_OF_PRODUCT_LINE  
@@ -125,16 +149,19 @@ jooq {
                                    | EVALUATION_CRITERIA | SECOND_MAX_IMPL | TABLE_.*_OBJ
                                    | .*_MASTER | BGT | .*_ARR | TABLE_POPL | TABLE_RES
                                   """
-                        logSlowQueriesAfterSeconds = 20	
+                                  
+                        // Schema version provider
+                        schemaVersionProvider = schemaVersion
                     }
+                    
                     generate.apply {
                         isDeprecated = false
                         isRecords = true
-                        isInterfaces = true
                         isDaos = true
                         isValidationAnnotations = true
                         isSpringAnnotations = true
                     }
+                    
                     strategy.withMatchers(Matchers()
                             .withTables(arrayOf(
                                MatchersTableType()
@@ -146,6 +173,7 @@ jooq {
                                       .withExpression("$0_Repository")
                                       .withTransform(MatcherTransformType.PASCAL))
                             ).toList()))
+                            
                     target.apply {
                         packageName = "jooq.generated"
                         directory = "build/generated-sources"
