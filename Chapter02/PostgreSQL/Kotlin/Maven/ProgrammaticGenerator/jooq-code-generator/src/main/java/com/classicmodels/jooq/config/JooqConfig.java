@@ -27,7 +27,7 @@ public class JooqConfig {
                         .withName("org.jooq.codegen.KotlinGenerator")
                         .withDatabase(new Database()
                                 .withName("org.jooq.meta.postgres.PostgresDatabase")
-                                .withSchemaVersionProvider("SELECT MAX(\"version\") FROM \"flyway_schema_history\"")
+                                .withInputSchema("public")                                
                                 .withIncludes(".*")
                                 .withExcludes("flyway_schema_history | akeys | avals | defined | delete.*"
                                       + " | department_topic_arr | dup | employee_office_arr | exist.*"
@@ -36,7 +36,8 @@ public class JooqConfig {
                                       + " | sale_price | slice.* | swap | tconvert | update_msrp | postal_code"
                                       + " | evaluation_criteria | rate_type | vat_type | .*_master | each"
                                       + " | skeys | svals | top_three_sales_per_employee | product_of_product_line")
-                                .withInputSchema("public")
+                                .withSchemaVersionProvider("SELECT MAX(\"version\") FROM \"flyway_schema_history\"")
+                                .withLogSlowQueriesAfterSeconds(20)
                         )
                         .withGenerate(new Generate()
                                 .withDaos(true)

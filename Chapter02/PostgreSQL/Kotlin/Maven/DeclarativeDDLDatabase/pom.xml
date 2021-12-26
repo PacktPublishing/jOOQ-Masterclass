@@ -214,7 +214,12 @@
                                 <name>org.jooq.codegen.KotlinGenerator</name>                                
 
                                 <database>                                    
+
+                                    <!-- Rely on jOOQ DDL Database API -->
                                     <name>org.jooq.meta.extensions.ddl.DDLDatabase</name>                                                                      
+
+                                    <!-- H2 database schema -->
+                                    <inputSchema>PUBLIC</inputSchema>  
                                     
                                     <properties>            
                                         <!-- Specify the location of your SQL script.
@@ -262,11 +267,13 @@
                                         </property>                                                                                                               
                                     </properties>
                                     
-                                    <inputSchema>PUBLIC</inputSchema>  
-                                         
-                                    <!-- Schema version provider -->            
-                                    <schemaVersionProvider>${schema.version}</schemaVersionProvider>                                                                        
-                                    
+                                    <!-- All elements that are generated from your schema
+                                    (A Java regular expression. Use the pipe to separate several expressions)
+                                    Watch out for case-sensitivity. Depending on your database, this might be important! 
+                                    You can create case-insensitive regular expressions using this syntax: (?i:expr).
+                                    Whitespace is ignored and comments are possible. -->       
+                                    <includes>.*</includes>
+                                                                             
                                     <!-- All elements that are excluded from your schema
                                     (A Java regular expression. Use the pipe to separate several expressions).
                                     Excludes match before includes, i.e. excludes have a higher priority. -->
@@ -279,6 +286,9 @@
                                         | evaluation_criteria | rate_type | vat_type | .*_master | each 
                                         | skeys | svals | top_three_sales_per_employee | product_of_product_line
                                     </excludes>
+
+                                    <!-- Schema version provider -->            
+                                    <schemaVersionProvider>${schema.version}</schemaVersionProvider>                                                                                                            
                                 </database>
                                 
                                 <!-- Rename the generated POJOs and DAOs classes -->                      

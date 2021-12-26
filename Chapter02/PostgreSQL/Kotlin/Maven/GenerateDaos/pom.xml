@@ -234,6 +234,7 @@
                             <goal>generate</goal>
                         </goals>                                  
                         <configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.15.0.xsd">                                                 
+
                             <!-- Configure the database connection here -->
                             <jdbc>
                                 <driver>${spring.datasource.driverClassName}</driver>
@@ -270,10 +271,7 @@
                                     You can create case-insensitive regular expressions using this syntax: (?i:expr).
                                     Whitespace is ignored and comments are possible. -->       
                                     <includes>.*</includes>
-            
-                                    <!-- Schema version provider -->            
-                                    <schemaVersionProvider>SELECT MAX("version") FROM "flyway_schema_history"</schemaVersionProvider>
-            
+                       
                                     <!-- All elements that are excluded from your schema
                                     (A Java regular expression. Use the pipe to separate several expressions).
                                     Excludes match before includes, i.e. excludes have a higher priority. -->
@@ -287,6 +285,9 @@
                                         | skeys | svals | top_three_sales_per_employee | product_of_product_line
                                     </excludes>
                                     
+                                    <!-- Schema version provider -->            
+                                    <schemaVersionProvider>SELECT MAX("version") FROM "flyway_schema_history"</schemaVersionProvider>
+
                                     <!-- Give enough time to jOOQ to trigger the queries needed for generating sources 
                                     (default is 5 seconds) -->
                                     <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>

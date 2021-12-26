@@ -24,7 +24,6 @@ public class JooqConfig {
                         .withDatabase(new Database()
                                 .withName("org.jooq.meta.extensions.ddl.DDLDatabase")
                                 .withInputSchema("PUBLIC")  
-                                .withSchemaVersionProvider("com.classicmodels.jooq.config.MySchemaVersionProvider")
                                 .withProperties(
                                         new Property().withKey("scripts").withValue(
                                                 System.getProperty("user.dir").endsWith("webapp")
@@ -33,6 +32,7 @@ public class JooqConfig {
                                         new Property().withKey("sort").withValue("flyway"),
                                         new Property().withKey("unqualifiedSchema").withValue("none"),
                                         new Property().withKey("defaultNameCase").withValue("as_is"))
+                                .withIncludes(".*")
                                 .withExcludes("flyway_schema_history | akeys | avals | defined | delete.*"
                                       + " | department_topic_arr | dup | employee_office_arr | exist.*"
                                       + " | fetchval | get_.* | ghstore.* | gin.* | hs.* | hstore.*"
@@ -40,6 +40,7 @@ public class JooqConfig {
                                       + " | sale_price | slice.* | swap | tconvert | update_msrp | postal_code"
                                       + " | evaluation_criteria | rate_type | vat_type | .*_master | each"
                                       + " | skeys | svals | top_three_sales_per_employee | product_of_product_line")
+                                .withSchemaVersionProvider("com.classicmodels.jooq.config.MySchemaVersionProvider")
                         )
                         .withGenerate(new Generate()
                                 .withDaos(true)
