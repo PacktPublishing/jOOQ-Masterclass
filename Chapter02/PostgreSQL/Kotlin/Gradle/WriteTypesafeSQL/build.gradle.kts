@@ -120,12 +120,12 @@ jooq {
                         // (default is 5 seconds)
                         logSlowQueriesAfterSeconds = 20    
                     }
-					
+                    
                     generate.apply {
                         isDeprecated = false
                         isRecords = true
                     }
-					
+                    
                     target.apply {
                         packageName = "jooq.generated"
                         directory = "build/generated-sources"

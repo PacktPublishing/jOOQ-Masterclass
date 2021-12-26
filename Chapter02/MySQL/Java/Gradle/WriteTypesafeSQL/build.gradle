@@ -108,8 +108,10 @@ jooq {
                         // (default is 5 seconds)
                         logSlowQueriesAfterSeconds = 20
                     }
+                    
                     generate {                        
                     }
+                    
                     target {
                         packageName = 'jooq.generated'
                         directory = 'build/generated-sources'

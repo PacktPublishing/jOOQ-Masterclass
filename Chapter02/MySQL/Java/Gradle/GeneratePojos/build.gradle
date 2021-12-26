@@ -108,6 +108,7 @@ jooq {
                         // (default is 5 seconds)
                         logSlowQueriesAfterSeconds = 20
                     }
+                    
                     strategy {
                         matchers {
                             tables {
@@ -120,10 +121,12 @@ jooq {
                             }
                         }
                     }                    
+                    
                     generate {  
                         pojos = true
                         validationAnnotations = true
                     }                   
+                    
                     target {
                         packageName = 'jooq.generated'
                         directory = 'build/generated-sources'
