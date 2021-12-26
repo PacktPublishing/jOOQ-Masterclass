@@ -74,14 +74,26 @@ jooq {
 
             jooqConfiguration.apply {
                 logging = Logging.WARN
-                jdbc.apply {
-                    driver = "org.h2.Driver"
-                    url = "jdbc:h2:~/classicmodels"
-                }
+                
                 generator.apply {
+                    // The default code generator. 
+                    // You can override this one, to generate your own code style.
+                                     
+                    // Supported generators:                                
+                    //  - org.jooq.codegen.JavaGenerator
+                    //  - org.jooq.codegen.ScalaGenerator
+                    //  - org.jooq.codegen.KotlinGenerator
+                           
+                    // Defaults to org.jooq.codegen.JavaGenerator
                     name = "org.jooq.codegen.KotlinGenerator"
+                    
                     database.apply {
+                        // Rely on jOOQ JPA Database API
                         name = "org.jooq.meta.extensions.jpa.JPADatabase"
+                        
+                        // H2 database schema
+                        inputSchema = "PUBLIC"
+                        
                         properties.add(
                            // The current versions of jOOQ use Hibernate behind the scenes 
                            // to generate an in-memory H2 database from which to reverse engineer 
@@ -108,20 +120,27 @@ jooq {
                            // - none: all unqualified objects are located in the default schema (dfault) 
                 
                            // This configuration can be overridden with the schema mapping feature
-                           Property().withKey("unqualifiedSchema").withValue("none"))						
-                                                                        
+                           Property().withKey("unqualifiedSchema").withValue("none"))                        
+                                 
+                        // All elements that are generated from your schema
+                        // (A Java regular expression. Use the pipe to separate several expressions)
+                        // Watch out for case-sensitivity. Depending on your database, this might be important! 
+                        // You can create case-insensitive regular expressions using this syntax: (?i:expr).
+                        // Whitespace is ignored and comments are possible.                                 
                         includes = ".*"
-                        schemaVersionProvider=schemaVersion
+                        
+                        // Schema version provider
+                        schemaVersionProvider = schemaVersion
                     }
+                    
                     generate.apply {
                         isDeprecated = false
                         isRecords = true
-                        isInterfaces = true
                         isDaos = true
                         isValidationAnnotations = true
                         isSpringAnnotations = true
-
                     }
+                    
                     strategy.withMatchers(Matchers()
                             .withTables(arrayOf(
                                MatchersTableType()
@@ -133,6 +152,7 @@ jooq {
                                       .withExpression("$0_Repository")
                                       .withTransform(MatcherTransformType.PASCAL))
                             ).toList()))
+                            
                     target.apply {
                         packageName = "jooq.generated"
                         directory = "build/generated-sources"
