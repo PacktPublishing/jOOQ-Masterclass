@@ -114,7 +114,6 @@ jooq {
                         packageName = 'jooq.generated'
                         directory = 'build/generated-sources'
                     }
-                    strategy.name = "org.jooq.codegen.DefaultGeneratorStrategy"
                 }
             }
         }
