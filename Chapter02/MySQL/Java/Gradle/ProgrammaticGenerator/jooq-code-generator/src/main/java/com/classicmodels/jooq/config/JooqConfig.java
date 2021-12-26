@@ -24,14 +24,16 @@ public class JooqConfig {
                         .withUser("root")
                         .withPassword("root"))
                 .withGenerator(new Generator()
+                        .withName("org.jooq.codegen.JavaGenerator")
                         .withDatabase(new Database()
                                 .withName("org.jooq.meta.mysql.MySQLDatabase")
-                                .withSchemaVersionProvider("SELECT MAX(`version`) FROM `flyway_schema_history`")
+                                .withInputSchema("classicmodels")                                
                                 .withIncludes(".*")
                                 .withExcludes("flyway_schema_history | sequences" 
                                          + " | customer_pgs | refresh_top3_product"
                                          + " | sale_.* | set_.* | get_.* | .*_master")
-                                .withInputSchema("classicmodels")
+                                .withSchemaVersionProvider("SELECT MAX(`version`) FROM `flyway_schema_history`")
+                                .withLogSlowQueriesAfterSeconds(20)
                         )
                         .withGenerate(new Generate()
                                 .withDaos(true)

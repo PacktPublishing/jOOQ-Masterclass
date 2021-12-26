@@ -60,10 +60,23 @@ jooq {
                 logging = org.jooq.meta.jaxb.Logging.WARN
                 
                 generator {
+                    // The default code generator. 
+                    // You can override this one, to generate your own code style.
+                                     
+                    // Supported generators:                                
+                    //  - org.jooq.codegen.JavaGenerator
+                    //  - org.jooq.codegen.ScalaGenerator
+                    //  - org.jooq.codegen.KotlinGenerator
+                           
+                    // Defaults to org.jooq.codegen.JavaGenerator
                     name = 'org.jooq.codegen.JavaGenerator' 
                     
                     database {
+                        // Rely on jOOQ DDL Database API
                         name = 'org.jooq.meta.extensions.ddl.DDLDatabase' 
+
+                        // H2 database schema
+                        inputSchema = 'PUBLIC'
                         
                         properties {
 
@@ -111,14 +124,28 @@ jooq {
                                 value = 'as_is'
                             }
                         }
-                        
-                        inputSchema = 'PUBLIC'
-                        schemaVersionProvider=schemaVersion                        
+
+                        // All elements that are generated from your schema
+                        // (A Java regular expression. Use the pipe to separate several expressions)
+                        // Watch out for case-sensitivity. Depending on your database, this might be important! 
+                        // You can create case-insensitive regular expressions using this syntax: (?i:expr).
+                        // Whitespace is ignored and comments are possible.
+                        includes = '.*'
+
+                        // All elements that are excluded from your schema
+                        // (A Java regular expression. Use the pipe to separate several expressions).
+                        // Excludes match before includes, i.e. excludes have a higher priority.
                         excludes = '''\
                                     flyway_schema_history | sequences 
                                   | customer_pgs | refresh_top3_product
                                   | sale_.* | set_.* | get_.* | .*_master
                                   ''' 
+
+                        // Schema version provider
+                        schemaVersionProvider=schemaVersion
+
+                        // Give enough time to jOOQ to trigger the queries needed for generating sources 
+                        // (default is 5 seconds)
                         logSlowQueriesAfterSeconds = 20
                     }                                        
                     

@@ -60,16 +60,27 @@ jooq {
             generateSchemaSourceOnCompilation = true  // default (can be omitted)                        
                     
             generationTool {
+
                 logging = org.jooq.meta.jaxb.Logging.WARN
-                jdbc {
-                    driver = 'org.h2.Driver'
-                    url = 'jdbc:h2:~/classicmodels'
-                }                
+
                 generator {
+                    // The default code generator. 
+                    // You can override this one, to generate your own code style.
+                                     
+                    // Supported generators:                                
+                    //  - org.jooq.codegen.JavaGenerator
+                    //  - org.jooq.codegen.ScalaGenerator
+                    //  - org.jooq.codegen.KotlinGenerator
+                           
+                    // Defaults to org.jooq.codegen.JavaGenerator
                     name = 'org.jooq.codegen.JavaGenerator' 
                     
                     database {
+                        // Rely on jOOQ JPA Database API
                         name = 'org.jooq.meta.extensions.jpa.JPADatabase' 
+
+                        // H2 database schema
+                        inputSchema = 'PUBLIC'
                         
                         properties {
 
@@ -109,9 +120,16 @@ jooq {
                                 value = 'none'
                             }
                         }
-                                                                        
+                                  
+                        // All elements that are generated from your schema
+                        // (A Java regular expression. Use the pipe to separate several expressions)
+                        // Watch out for case-sensitivity. Depending on your database, this might be important! 
+                        // You can create case-insensitive regular expressions using this syntax: (?i:expr).
+                        // Whitespace is ignored and comments are possible.
                         includes = '.*' 
-                        schemaVersionProvider=schemaVersion
+
+                        // Schema version provider
+                        schemaVersionProvider = schemaVersion
                     }                                        
                     
                     strategy {
@@ -132,7 +150,6 @@ jooq {
                     }                                        
                     
                     generate {  
-                        interfaces = true
                         daos = true
                         validationAnnotations = true
                         springAnnotations = true
