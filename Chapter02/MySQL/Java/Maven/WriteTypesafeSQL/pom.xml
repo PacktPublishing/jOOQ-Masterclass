@@ -124,6 +124,7 @@
                             <goal>generate</goal>
                         </goals>                                  
                         <configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.15.0.xsd">                                                 
+
                             <!-- Configure the database connection here -->
                             <jdbc>
                                 <driver>${spring.datasource.driverClassName}</driver>

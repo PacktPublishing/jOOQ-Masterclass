@@ -126,12 +126,22 @@
                         <configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.15.0.xsd">
                             <generator>
 
-                                <!-- Defaults to org.jooq.codegen.JavaGenerator -->
+                                <!-- The default code generator. 
+                                     You can override this one, to generate your own code style.
+                                     
+                                Supported generators:                                
+                                - org.jooq.codegen.JavaGenerator
+                                - org.jooq.codegen.ScalaGenerator
+                                - org.jooq.codegen.KotlinGenerator
+                                
+                                Defaults to org.jooq.codegen.JavaGenerator -->
                                 <name>org.jooq.codegen.JavaGenerator</name>
 
                                 <database>
+                                    <!-- Rely on jOOQ JPA Database API -->
                                     <name>org.jooq.meta.extensions.jpa.JPADatabase</name>
                                            
+                                    <!-- H2 database schema -->
                                     <inputSchema>PUBLIC</inputSchema>
                                                                                                                                                                                  
                                     <properties>

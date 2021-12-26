@@ -257,8 +257,9 @@
             </plugin>
             <!-- The jOOQ code generator plugin -->
             <plugin>
-                <groupId>org.jooq</groupId>
+                <groupId>org.jooq.trial-java-8</groupId>
                 <artifactId>jooq-codegen-maven</artifactId>            
+                <version>${jooq.version}</version>
                 <executions>
                     <execution>
                         <id>generate-jooq-from-jpa-entities</id>
@@ -267,11 +268,7 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.15.0.xsd">
-                            <!-- JDBC connection to the H2 in-memory database -->
-                            <jdbc>
-                                <driver>org.h2.Driver</driver>
-                                <url>jdbc:h2:~/classicmodels</url>
-                            </jdbc>
+
                             <generator>
                                 <!-- The default code generator. 
                                      You can override this one, to generate your own code style.
@@ -285,8 +282,12 @@
                                 <name>org.jooq.codegen.KotlinGenerator</name>
                                 
                                 <database>
+                                    <!-- Rely on jOOQ JPA Database API -->
                                     <name>org.jooq.meta.extensions.jpa.JPADatabase</name>
-                                                                                                              
+                                                 
+                                    <!-- H2 database schema -->
+                                    <inputSchema>PUBLIC</inputSchema> 
+
                                     <properties>
                                         <!-- The current versions of jOOQ use Hibernate behind the scenes 
                                         to generate an in-memory H2 database from which to reverse engineer 
@@ -327,7 +328,12 @@
                                         </property>                                       
                                     </properties>
                                          
-                                    <includes>.*</includes> 
+                                    <!-- All elements that are generated from your schema
+                                    (A Java regular expression. Use the pipe to separate several expressions)
+                                    Watch out for case-sensitivity. Depending on your database, this might be important! 
+                                    You can create case-insensitive regular expressions using this syntax: (?i:expr).
+                                    Whitespace is ignored and comments are possible. -->       
+                                    <includes>.*</includes>
                                          
                                     <!-- Schema version provider -->            
                                     <schemaVersionProvider>${schema.version}</schemaVersionProvider>                                                                    
@@ -352,7 +358,6 @@
                                 </strategy>
                                 
                                 <generate>
-                                    <interfaces>true</interfaces>
                                     <daos>true</daos>            <!-- daos will generate pojos as well -->
                                     <!-- <pojos>true</pojos> --> <!-- this is needed to generated pojos without daos -->                             
                                     <validationAnnotations>true</validationAnnotations>
