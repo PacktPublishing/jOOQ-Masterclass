@@ -218,9 +218,11 @@
                                 Defaults to org.jooq.codegen.JavaGenerator -->
                                 <name>org.jooq.codegen.KotlinGenerator</name>                                
 
-                                <database>                                    
+                                <database>                           
+                                    <!-- Rely on jOOQ DDL Database API -->
                                     <name>org.jooq.meta.extensions.ddl.DDLDatabase</name>                    
 
+                                    <!-- H2 database schema -->
                                     <inputSchema>PUBLIC</inputSchema> 
                                     
                                     <properties>            

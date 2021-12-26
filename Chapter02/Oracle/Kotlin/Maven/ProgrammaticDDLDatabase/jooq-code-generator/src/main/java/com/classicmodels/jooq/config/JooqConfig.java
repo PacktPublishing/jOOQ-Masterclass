@@ -23,8 +23,7 @@ public class JooqConfig {
                         .withName("org.jooq.codegen.KotlinGenerator")
                         .withDatabase(new Database()
                                 .withName("org.jooq.meta.extensions.ddl.DDLDatabase")
-                                .withInputSchema("PUBLIC")  
-                                .withSchemaVersionProvider("com.classicmodels.jooq.config.MySchemaVersionProvider")
+                                .withInputSchema("PUBLIC")                                  
                                 .withProperties(
                                         new Property().withKey("scripts").withValue(
                                                 System.getProperty("user.dir").endsWith("webapp")
@@ -33,12 +32,14 @@ public class JooqConfig {
                                         new Property().withKey("sort").withValue("flyway"),
                                         new Property().withKey("unqualifiedSchema").withValue("none"),
                                         new Property().withKey("defaultNameCase").withValue("as_is"))
+                                .withIncludes(".*")
                                 .withExcludes("flyway_schema_history | DEPARTMENT_PKG | GET_.*"
                                         + " | CARD_COMMISSION | PRODUCT_OF_PRODUCT_LINE"
                                         + " | REFRESH_TOP3_PRODUCT | SALE_PRICE | SECOND_MAX"
                                         + " | SET_COUNTER | SWAP | TOP_THREE_SALES_PER_EMPLOYEE"
                                         + " | EVALUATION_CRITERIA | SECOND_MAX_IMPL | TABLE_.*_OBJ"
                                         + " | .*_MASTER | BGT | .*_ARR | TABLE_POPL | TABLE_RES")
+                                .withSchemaVersionProvider("com.classicmodels.jooq.config.MySchemaVersionProvider")
                         )
                         .withGenerate(new Generate()
                                 .withDaos(true)
