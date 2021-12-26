@@ -192,6 +192,7 @@
             <plugin>
                 <groupId>org.jooq.trial-java-8</groupId>
                 <artifactId>jooq-codegen-maven</artifactId>                   
+				<version>${jooq.version}</version>
                 <executions>
                     <execution>
                         <id>generate-for-sqlserver</id>
@@ -213,9 +214,14 @@
                                 Defaults to org.jooq.codegen.JavaGenerator -->
                                 <name>org.jooq.codegen.KotlinGenerator</name>                                
 
+
                                 <database>                                    
+                                    <!-- Rely on jOOQ DDL Database API -->
                                     <name>org.jooq.meta.extensions.ddl.DDLDatabase</name>                                                              
                                     
+                                    <!-- H2 database schema -->
+                                    <inputSchema>PUBLIC</inputSchema>
+
                                     <properties>            
                                         <!-- Specify the location of your SQL script.
                                         You may use ant-style file matching, e.g. /path/**/to/*.sql
@@ -262,10 +268,12 @@
                                         </property>                                                                                                               
                                     </properties>
                                          
-                                    <inputSchema>PUBLIC</inputSchema>  
-                                    
-                                    <!-- Schema version provider -->            
-                                    <schemaVersionProvider>${schema.version}</schemaVersionProvider>                                                                        
+                                    <!-- All elements that are generated from your schema
+                                    (A Java regular expression. Use the pipe to separate several expressions)
+                                    Watch out for case-sensitivity. Depending on your database, this might be important! 
+                                    You can create case-insensitive regular expressions using this syntax: (?i:expr).
+                                    Whitespace is ignored and comments are possible. -->       
+                                    <includes>.*</includes>
                                     
                                     <!-- All elements that are excluded from your schema
                                     (A Java regular expression. Use the pipe to separate several expressions).
@@ -273,6 +281,9 @@
                                     <excludes>
                                         flyway_schema_history | concatenate | .*_master
                                     </excludes>
+
+                                    <!-- Schema version provider -->            
+                                    <schemaVersionProvider>${schema.version}</schemaVersionProvider>
                                 </database>
                                 
                                 <!-- Rename the generated POJOs and DAOs classes -->                      
