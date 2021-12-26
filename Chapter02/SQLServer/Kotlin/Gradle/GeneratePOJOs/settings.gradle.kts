@@ -1,1 +1,1 @@
-rootProject.name = "GeneratePOJOs"
+rootProject.name = "GeneratePojos"
