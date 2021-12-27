@@ -4,11 +4,11 @@ import java.math.BigDecimal;
 import java.util.List;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
-import static jooq.generated.tables.Sale.SALE;
+import static jooq.generated.tables.Manager.MANAGER;
 import jooq.generated.tables.records.CustomerRecord;
 import jooq.generated.tables.records.CustomerdetailRecord;
-import jooq.generated.tables.records.SaleRecord;
-import jooq.generated.udt.records.SaletypeRecord;
+import jooq.generated.tables.records.ManagerRecord;
+import jooq.generated.udt.records.EvaluationCriteriaRecord;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 import org.jooq.Record;
@@ -168,6 +168,7 @@ public class ClassicModelsRepository {
         
         var result = ...
         */
+        
         Result<Record14<Long, String, String, String, String, Long, 
                 BigDecimal, Long, String, String, String, String, String, String>> result
                 = ctx.select(CUSTOMER.CUSTOMER_NUMBER, CUSTOMER.CUSTOMER_NAME,
@@ -191,6 +192,7 @@ public class ClassicModelsRepository {
         
         var result = ...
         */
+        
         /*
         Result<Record14<Long, String, String, String, String, Long, 
                 BigDecimal, Long, String, String, String, String, String, String>> result = ctx.select()
@@ -340,39 +342,45 @@ public class ClassicModelsRepository {
     public void typesafeUdtType() {
         
         /* type-safe Result<Record> */
-        Result<Record2<Long, SaletypeRecord>> result 
-                = ctx.select(SALE.EMPLOYEE_NUMBER, SALE.SALE_)
-                        .from(SALE)
+        Result<Record2<String, EvaluationCriteriaRecord>> result 
+                = ctx.select(MANAGER.MANAGER_NAME, MANAGER.MANAGER_EVALUATION)
+                        .from(MANAGER)
                         .fetch();
         
         /* type-safe values */
         for(Record2 r : result) {
-            Long r1 = r.get(SALE.EMPLOYEE_NUMBER);
-            Integer r2 = r.get(SALE.SALE_).getFiscalYear();
-            Double r3 = r.get(SALE.SALE_).getAmount();
+            String r1 = r.get(MANAGER.MANAGER_NAME);
+            Integer r2 = r.get(MANAGER.MANAGER_EVALUATION).getCommunicationAbility();
+            Integer r3 = r.get(MANAGER.MANAGER_EVALUATION).getEthics();
+            Integer r4 = r.get(MANAGER.MANAGER_EVALUATION).getPerformance();
+            Integer r5 = r.get(MANAGER.MANAGER_EVALUATION).getEmployeeInput();
             
-            System.out.println("employee_number: " + r1
-            + " fiscal_year: " + r2 + " amount: " + r3);
+            System.out.println("manager_name: " + r1
+            + " communication_ability: " + r2 + " ethics: " 
+                    + r3 + " performance: " +r4 + "employee_input: " + r5);
         }        
     }
     
     public void typesafeUdtTypeIntoTableRecord() {
         
         /* type-safe Result<Record> */
-        Result<SaleRecord> result 
-                = ctx.select(SALE.EMPLOYEE_NUMBER, SALE.SALE_)
-                        .from(SALE)
+        Result<ManagerRecord> result 
+                = ctx.select(MANAGER.MANAGER_NAME, MANAGER.MANAGER_EVALUATION)
+                        .from(MANAGER)
                         .fetch()
-                .into(SALE); // or, into(SaleRecord.class)
+                .into(MANAGER); // or, into(ManagerRecord.class)
         
         /* type-safe values */
-        for(SaleRecord r : result) {
-            Long r1 = r.getEmployeeNumber();
-            Integer r2 = r.getSale().getFiscalYear();
-            Double r3 = r.getSale().getAmount();
+        for(ManagerRecord r : result) {
+            String r1 = r.get(MANAGER.MANAGER_NAME);
+            Integer r2 = r.get(MANAGER.MANAGER_EVALUATION).getCommunicationAbility();
+            Integer r3 = r.get(MANAGER.MANAGER_EVALUATION).getEthics();
+            Integer r4 = r.get(MANAGER.MANAGER_EVALUATION).getPerformance();
+            Integer r5 = r.get(MANAGER.MANAGER_EVALUATION).getEmployeeInput();
             
-            System.out.println("employee_number: " + r1
-            + " fiscal_year: " + r2 + " amount: " + r3);
+            System.out.println("manager_name: " + r1
+            + " communication_ability: " + r2 + " ethics: " 
+                    + r3 + " performance: " +r4 + "employee_input: " + r5);
         }        
     }
 
@@ -391,6 +399,7 @@ public class ClassicModelsRepository {
         
         var typesafe = ...
         */
+        
         Result<Record22<String, String, String, String, String,
                 String, String, String, String, String,
                 String, String, String, String, String,
