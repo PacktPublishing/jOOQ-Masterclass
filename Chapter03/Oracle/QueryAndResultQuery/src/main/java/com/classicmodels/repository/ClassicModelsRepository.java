@@ -25,7 +25,7 @@ public class ClassicModelsRepository {
     @Transactional
     public int jooqQuery() {
 
-        // Query query = ctx.query("DELETE FROM \"PAYMENT\" WHERE \"CUSTOMER_NUMBER\" = 103");
+        // Query query = ctx.query("DELETE FROM PAYMENT WHERE CUSTOMER_NUMBER = 103");
         
         Query query = ctx.deleteFrom(PAYMENT)
                 .where(PAYMENT.CUSTOMER_NUMBER.eq(103L));
@@ -39,7 +39,7 @@ public class ClassicModelsRepository {
 
         /*
         ResultQuery<Record> resultQuery = ctx.resultQuery(
-                "SELECT \"JOB_TITLE\" FROM \"EMPLOYEE\" WHERE \"OFFICE_CODE\" = '4'");        
+                "SELECT JOB_TITLE FROM EMPLOYEE WHERE OFFICE_CODE = '4'");        
         Result<Record> fetched = resultQuery.fetch();
         */
         
