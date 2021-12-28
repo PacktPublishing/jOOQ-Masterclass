@@ -12,6 +12,7 @@ import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.conf.Settings;
 import org.jooq.impl.DSL;
+import org.jooq.CloseableDSLContext;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,13 +51,21 @@ public class ClassicModelsRepository {
 
     public List<Office> findOfficesInTerritory3(String territory) {
 
-        List<Office> result = ctx.configuration()
+        // affects 'ctx'
+        List<Office> result1 = ctx.configuration()
+                .set(new Settings().withRenderSchema(Boolean.FALSE)).dsl()
+                .selectFrom(OFFICE)
+                .where(OFFICE.TERRITORY.eq(territory))
+                .fetchInto(Office.class);
+
+        // doesn't affect 'ctx'
+        List<Office> result2 = ctx.configuration()
                 .derive(new Settings().withRenderSchema(Boolean.FALSE)).dsl()
                 .selectFrom(OFFICE)
                 .where(OFFICE.TERRITORY.eq(territory))
                 .fetchInto(Office.class);
 
-        return result;
+        return result1;
     }
 
     public List<Office> findOfficesInTerritory4(String territory) {
@@ -104,16 +113,18 @@ public class ClassicModelsRepository {
         }
     }    
      */
+    
     // starting with jOOQ 3.14
     public List<Office> findOfficesInTerritory6(String territory) {
 
-        DSLContext ctxLocal = DSL.using(
-                "jdbc:oracle:thin:@localhost:1521:xe", "CLASSICMODELS", "root");
+        try ( CloseableDSLContext cdctx = DSL.using(
+                "jdbc:oracle:thin:@localhost:1521:xe", "CLASSICMODELS", "root")) {
 
-        List<Office> result = ctxLocal.selectFrom(OFFICE)
-                .where(OFFICE.TERRITORY.eq(territory))
-                .fetchInto(Office.class);
+            List<Office> result = cdctx.selectFrom(OFFICE)
+                    .where(OFFICE.TERRITORY.eq(territory))
+                    .fetchInto(Office.class);
 
-        return result;
+            return result;
+        }
     }
 }
