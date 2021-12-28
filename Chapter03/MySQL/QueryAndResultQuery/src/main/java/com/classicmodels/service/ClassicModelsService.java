@@ -22,4 +22,9 @@ public class ClassicModelsService {
         
         return classicModelsRepository.jooqResultQuery();
     }
+    
+    public void iterableResultQuery() {
+        
+        classicModelsRepository.iterableResultQuery();
+    }
 }

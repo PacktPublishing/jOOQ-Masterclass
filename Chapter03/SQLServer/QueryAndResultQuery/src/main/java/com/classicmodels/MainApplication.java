@@ -32,6 +32,9 @@ public class MainApplication {
             System.out.println("Select query:");
             List<String> result = classicModelsService.jooqResultQuery();
             System.out.println(result);
+            
+            System.out.println("Iterable query results:");
+            classicModelsService.iterableResultQuery();
         };
     }
 }
