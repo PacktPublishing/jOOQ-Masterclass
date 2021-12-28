@@ -375,10 +375,15 @@ public class ClassicModelsRepository {
         
         /* type-safe values */
         for(ManagerRecord r : result) {
+            // or, r.getManagerName()
             String r1 = r.get(MANAGER.MANAGER_NAME);
+            // or, r.getManagerEvaluation().getCommunicationAbility()
             Integer r2 = r.get(MANAGER.MANAGER_EVALUATION).getCommunicationAbility();
+            // or, r.getManagerEvaluation().getEthics()
             Integer r3 = r.get(MANAGER.MANAGER_EVALUATION).getEthics();
+            // or, r.getManagerEvaluation().getPerformance()
             Integer r4 = r.get(MANAGER.MANAGER_EVALUATION).getPerformance();
+            // or, r.getManagerEvaluation().getEmployeeInput()
             Integer r5 = r.get(MANAGER.MANAGER_EVALUATION).getEmployeeInput();
             
             System.out.println("manager_name: " + r1
