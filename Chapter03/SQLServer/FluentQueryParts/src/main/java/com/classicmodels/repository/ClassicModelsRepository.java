@@ -34,7 +34,7 @@ public class ClassicModelsRepository {
         
         /* Fluent SQL */
         /* return */
-        ctx.select(ORDERDETAIL.ORDER_LINE_NUMBER, 
+        DSL.select(ORDERDETAIL.ORDER_LINE_NUMBER, 
                 sum(ORDERDETAIL.QUANTITY_ORDERED).as("itemsCount"),
                 sum(ORDERDETAIL.PRICE_EACH.mul(ORDERDETAIL.QUANTITY_ORDERED)).as("total"))
                 .from(ORDERDETAIL)
@@ -45,7 +45,7 @@ public class ClassicModelsRepository {
 
         /* Identify column expression */        
         Field<Integer> tc1 = ORDERDETAIL.ORDER_LINE_NUMBER;  // table column expression 
-        // TableField<OrderdetailRecord,Short> tfc1 = ORDERDETAIL.ORDER_LINE_NUMBER; // or, as a TableField
+        // TableField<OrderdetailRecord,Integer> tfc1 = ORDERDETAIL.ORDER_LINE_NUMBER; // or, as a TableField
         Field<Integer> tc2 = ORDERDETAIL.QUANTITY_ORDERED; // table column expression
         // TableField<OrderdetailRecord,Integer> tfc2 = ORDERDETAIL.QUANTITY_ORDERED; // or, as a TableField
         Field<BigDecimal> tc3 = ORDERDETAIL.PRICE_EACH;    // table column expression
@@ -53,10 +53,10 @@ public class ClassicModelsRepository {
         Field<Integer> uc1 = val(20);                   // Unnamed column expression     
 
         /* return */
-        ctx.select(tc1, sum(tc2).as("itemsCount"),
+        DSL.select(tc1, sum(tc2).as("itemsCount"),
                 sum(tc3.mul(tc2)).as("total"))
                 .from(ORDERDETAIL)
-                .where(tc2.gt(uc1))
+                .where(uc1.lt(tc2))
                 .groupBy(tc1)
                 .orderBy(tc1)
                 .getSQL();
@@ -68,9 +68,9 @@ public class ClassicModelsRepository {
         Field<BigDecimal> a2 = f2.as("total");          // alias expression                
         
         /* return */
-        ctx.select(tc1, a1, a2)
+        DSL.select(tc1, a1, a2)
                 .from(ORDERDETAIL)
-                .where(tc2.gt(uc1))
+                .where(uc1.lt(tc2))
                 .groupBy(tc1)
                 .orderBy(tc1)
                 .getSQL();
@@ -78,25 +78,25 @@ public class ClassicModelsRepository {
         /* Identify tables */
         // Table<?> t1 = ORDERDETAIL;              // non type-safe table expression
         Table<OrderdetailRecord> t1 = ORDERDETAIL; // type-safe table expression       
-        
-        // you could even do this, but there is no more type-safety
-        Collection<? extends SelectField> sf = List.of(tc1, a1, a2);
-        
-        /* return */
-        // ctx.select(sf)
-        ctx.select(tc1, a1, a2)        
+                
+        /* return */        
+        DSL.select(tc1, a1, a2)        
                 .from(t1)
-                .where(tc2.gt(uc1))
+                .where(uc1.lt(tc2))
                 .groupBy(tc1)
                 .orderBy(tc1)
                 .getSQL();
         
+        // you could even do this, but there is no more type-safety
+        Collection<? extends SelectField> sf = List.of(tc1, a1, a2);
+        // return ctx.select(sf) ...
+        
         /* Identify conditions */
         
-        Condition c1 = tc2.gt(uc1); // condition
+        Condition c1 = uc1.lt(tc2); // condition
         
         /* return */
-        ctx.select(tc1, a1, a2)
+        DSL.select(tc1, a1, a2)
                 .from(t1)
                 .where(c1)
                 .groupBy(tc1)
@@ -116,6 +116,9 @@ public class ClassicModelsRepository {
         SelectConditionStep<Record3<Integer, BigDecimal, BigDecimal>> s3ts = s2ts.where(c1);
         SelectHavingStep<Record3<Integer, BigDecimal, BigDecimal>> s4ts = s3ts.groupBy(tc1);
         SelectSeekStep1<Record3<Integer, BigDecimal, BigDecimal>, Integer> s5ts = s4ts.orderBy(tc1);
+        
+        // execute the query
+        ctx.fetch(s5); // s5ts
         
         return s5ts.getSQL(); // s5.getSQL();               
     }
