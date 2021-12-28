@@ -12,7 +12,7 @@ import jooq.generated.udt.records.EvaluationCriteriaRecord;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 import org.jooq.Record;
-import org.jooq.Record14;
+import org.jooq.Record15;
 import org.jooq.Record2;
 import org.jooq.Record22;
 import org.jooq.Record3;
@@ -161,19 +161,20 @@ public class ClassicModelsRepository {
 
         /* type-safe Result<Record> via select() */        
         /*
-        Result<Record14<Long, String, String, String, String, Long, 
-                BigDecimal, Long, String, String, String, String, String, String>> result = ...
+        Result<Record15<Long, String, String, String, String, Long, 
+                BigDecimal, Integer, Long, String, String, String, String, String, String>> result = ...
         
         CAN BE REPLACED WITH JAVA 9
         
         var result = ...
         */
         
-        Result<Record14<Long, String, String, String, String, Long, 
-                BigDecimal, Long, String, String, String, String, String, String>> result
+        Result<Record15<Long, String, String, String, String, Long, 
+                BigDecimal, Integer, Long, String, String, String, String, String, String>> result
                 = ctx.select(CUSTOMER.CUSTOMER_NUMBER, CUSTOMER.CUSTOMER_NAME,
                         CUSTOMER.CONTACT_FIRST_NAME, CUSTOMER.CONTACT_LAST_NAME,
-                        CUSTOMER.PHONE, CUSTOMER.SALES_REP_EMPLOYEE_NUMBER, CUSTOMER.CREDIT_LIMIT,
+                        CUSTOMER.PHONE, CUSTOMER.SALES_REP_EMPLOYEE_NUMBER, 
+                        CUSTOMER.CREDIT_LIMIT, CUSTOMER.FIRST_BUY_DATE,
                         CUSTOMERDETAIL.CUSTOMER_NUMBER, CUSTOMERDETAIL.ADDRESS_LINE_FIRST,
                         CUSTOMERDETAIL.ADDRESS_LINE_SECOND, CUSTOMERDETAIL.CITY,
                         CUSTOMERDETAIL.COUNTRY, CUSTOMERDETAIL.POSTAL_CODE,
@@ -185,8 +186,8 @@ public class ClassicModelsRepository {
         
         /* type-safe Result<Record> via into() */
         /*
-        Result<Record14<Long, String, String, String, String, Long, 
-                BigDecimal, Long, String, String, String, String, String, String>> result = ...
+        Result<Record15<Long, String, String, String, String, Long, 
+                BigDecimal, Integer, Long, String, String, String, String, String, String>> result = ...
         
         CAN BE REPLACED WITH JAVA 9
         
@@ -194,15 +195,16 @@ public class ClassicModelsRepository {
         */
         
         /*
-        Result<Record14<Long, String, String, String, String, Long, 
-                BigDecimal, Long, String, String, String, String, String, String>> result = ctx.select()
+        Result<Record15<Long, String, String, String, String, Long, 
+                BigDecimal, Integer, Long, String, String, String, String, String, String>> result = ctx.select()
                 .from(CUSTOMER)
                 .join(CUSTOMERDETAIL)
                 .on(CUSTOMER.CUSTOMER_NUMBER.eq(CUSTOMERDETAIL.CUSTOMER_NUMBER))
                 .fetch()
                 .into(CUSTOMER.CUSTOMER_NUMBER, CUSTOMER.CUSTOMER_NAME,
                         CUSTOMER.CONTACT_FIRST_NAME, CUSTOMER.CONTACT_LAST_NAME,
-                        CUSTOMER.PHONE, CUSTOMER.SALES_REP_EMPLOYEE_NUMBER, CUSTOMER.CREDIT_LIMIT,
+                        CUSTOMER.PHONE, CUSTOMER.SALES_REP_EMPLOYEE_NUMBER, 
+                        CUSTOMER.CREDIT_LIMIT, CUSTOMER.FIRST_BUY_DATE, 
                         CUSTOMERDETAIL.CUSTOMER_NUMBER, CUSTOMERDETAIL.ADDRESS_LINE_FIRST,
                         CUSTOMERDETAIL.ADDRESS_LINE_SECOND, CUSTOMERDETAIL.CITY,
                         CUSTOMERDETAIL.COUNTRY, CUSTOMERDETAIL.POSTAL_CODE,
