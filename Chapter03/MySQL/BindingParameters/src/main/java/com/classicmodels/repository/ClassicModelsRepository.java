@@ -5,6 +5,7 @@ import javax.sql.DataSource;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Payment.PAYMENT;
+import static jooq.generated.tables.Product.PRODUCT;
 import org.jooq.DSLContext;
 import org.jooq.Param;
 import org.jooq.Result;
@@ -17,6 +18,7 @@ import org.jooq.impl.DSL;
 import static org.jooq.impl.DSL.concat;
 import static org.jooq.impl.DSL.inline;
 import static org.jooq.impl.DSL.param;
+import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -249,9 +251,23 @@ public class ClassicModelsRepository {
                 .from(EMPLOYEE)
                 .where(EMPLOYEE.SALARY.gt(param("employeeSalary", 5000))
                         .and(EMPLOYEE.JOB_TITLE.eq(param("employeeJobTitle", "Sales Rep"))))
-        );              
+        );                                              
 
         System.out.println("SQL (renderNamedParams):\n" + sql);
+        
+        // using withRenderNamedParamPrefix()
+        String sqlPrefix = ctx.configuration().derive(
+                new Settings().withRenderNamedParamPrefix("wp_"))
+                .dsl()
+                .renderNamedParams(select(PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME)
+                        .from(PRODUCT)
+                        .where(PRODUCT.QUANTITY_IN_STOCK.gt(param("stock", 5000))
+                                .and(PRODUCT.CODE.in(
+                                        param("vintageCars", 223113L),
+                                        param("trucksAndBuses", 569331L),
+                                        param("planes", 433823L)))));
+       
+       System.out.println("SQL (withRenderNamedParamPrefix):\n" + sqlPrefix);
     }
 
     public void userInputValuesAsNamedParams(int salary, String job) {
