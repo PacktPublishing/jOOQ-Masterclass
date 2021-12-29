@@ -1,10 +1,14 @@
 package com.classicmodels.repository;
 
+import com.classicmodels.pojo.EmployeeName;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
+import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Product.PRODUCT;
+import jooq.generated.tables.pojos.Employee;
 import org.jooq.DSLContext;
 import org.jooq.Record2;
 import org.jooq.Result;
@@ -57,6 +61,26 @@ public class ClassicModelsRepository {
         result.forEach(System.out::println);
     }
 
+    // coercing ResultQuery
+    public void coerceResultQueryToAnotherResultQuery() {
+        
+        // fill up only the 'first_name' and 'last_name' fields of the generated POJO
+        List<Employee> result1
+                = ctx.resultQuery("SELECT first_name, last_name FROM employee")                        
+                        .fetchInto(Employee.class);        
+        
+        // define a custom POJO having only the 'first_name' and 'last_name' fields
+        List<EmployeeName> result2
+                = ctx.resultQuery("SELECT first_name, last_name FROM employee")                        
+                        .fetchInto(EmployeeName.class);        
+                
+        // without using coerce() this is Result<Record>
+        Result<Record2<String, String>> result3
+                = ctx.resultQuery("SELECT first_name, last_name FROM employee")
+                        .coerce(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
+                        .fetch();        
+    }
+    
     // coercing - // this doesn't work as expected
     public void printProductPriceAndDescCoerce() {
 

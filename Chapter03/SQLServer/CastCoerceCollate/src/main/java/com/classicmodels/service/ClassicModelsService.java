@@ -18,6 +18,8 @@ public class ClassicModelsService {
     public void callAll() {
         classicModelsRepository.printPaymentAndCachingDateCast();
         classicModelsRepository.printPaymentAndCachingDateCoerce();
+        
+        classicModelsRepository.coerceResultQueryToAnotherResultQuery();
 
         classicModelsRepository.printProductPriceAndDescCoerce();
         classicModelsRepository.printProductPriceAndDescCast();
