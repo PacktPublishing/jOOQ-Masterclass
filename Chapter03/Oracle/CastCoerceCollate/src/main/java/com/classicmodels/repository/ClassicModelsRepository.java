@@ -9,9 +9,13 @@ import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Product.PRODUCT;
 import jooq.generated.tables.pojos.Employee;
+import jooq.generated.tables.records.EmployeeRecord;
 import org.jooq.DSLContext;
 import org.jooq.Record2;
 import org.jooq.Result;
+import org.jooq.conf.Settings;
+import static org.jooq.impl.DSL.name;
+import static org.jooq.impl.DSL.sql;
 import org.jooq.impl.SQLDataType;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -80,7 +84,22 @@ public class ClassicModelsRepository {
         Result<Record2<String, String>> result3
                 = ctx.resultQuery("SELECT FIRST_NAME, LAST_NAME FROM EMPLOYEE")
                         .coerce(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
-                        .fetch();        
+                        .fetch();  
+        
+                // jOOQ 3.12+, using ResultQuery.coerce(Table<X> table)
+        List<EmployeeRecord> result4 = ctx.resultQuery("select * from EMPLOYEE")
+                .coerce(EMPLOYEE)
+                .fetch();
+
+        // jOOOQ until 3.12 can use this workaround
+        List<EmployeeRecord> result5 = ctx.configuration().derive(new Settings()
+                .withRenderSchema(Boolean.FALSE))
+                .dsl()
+                .select(EMPLOYEE.fields())
+                .from("({0}) {1}",
+                        sql("select * from EMPLOYEE"),
+                        name(EMPLOYEE.getName()))
+                .fetchInto(EMPLOYEE);
     }
 
     // coercing - // this doesn't work as expected

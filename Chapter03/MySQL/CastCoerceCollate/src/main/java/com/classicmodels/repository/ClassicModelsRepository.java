@@ -9,9 +9,13 @@ import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Product.PRODUCT;
 import jooq.generated.tables.pojos.Employee;
+import jooq.generated.tables.records.EmployeeRecord;
 import org.jooq.DSLContext;
 import org.jooq.Record2;
 import org.jooq.Result;
+import org.jooq.conf.Settings;
+import static org.jooq.impl.DSL.name;
+import static org.jooq.impl.DSL.sql;
 import org.jooq.impl.SQLDataType;
 import org.springframework.stereotype.Repository;
 
@@ -60,25 +64,40 @@ public class ClassicModelsRepository {
 
         result.forEach(System.out::println);
     }
-    
+
     // coercing ResultQuery
     public void coerceResultQueryToAnotherResultQuery() {
-        
+
         // fill up only the 'first_name' and 'last_name' fields of the generated POJO
         List<Employee> result1
-                = ctx.resultQuery("SELECT first_name, last_name FROM employee")                        
-                        .fetchInto(Employee.class);        
-        
+                = ctx.resultQuery("SELECT first_name, last_name FROM employee")
+                        .fetchInto(Employee.class);
+
         // define a custom POJO having only the 'first_name' and 'last_name' fields
         List<EmployeeName> result2
-                = ctx.resultQuery("SELECT first_name, last_name FROM employee")                        
-                        .fetchInto(EmployeeName.class);        
-                
+                = ctx.resultQuery("SELECT first_name, last_name FROM employee")
+                        .fetchInto(EmployeeName.class);
+
         // without using coerce() this is Result<Record>
         Result<Record2<String, String>> result3
                 = ctx.resultQuery("SELECT first_name, last_name FROM employee")
                         .coerce(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
-                        .fetch();        
+                        .fetch();
+
+        // jOOQ 3.12+, using ResultQuery.coerce(Table<X> table)
+        List<EmployeeRecord> result4 = ctx.resultQuery("select * from employee")
+                .coerce(EMPLOYEE)
+                .fetch();
+
+        // jOOOQ until 3.12 can use this workaround
+        List<EmployeeRecord> result5 = ctx.configuration().derive(new Settings()
+                .withRenderSchema(Boolean.FALSE))
+                .dsl()
+                .select(EMPLOYEE.fields())
+                .from("({0}) AS {1}",
+                        sql("select * from employee"),
+                        name(EMPLOYEE.getName()))
+                .fetchInto(EMPLOYEE);
     }
 
     // coercing - // this doesn't work as expected
@@ -116,7 +135,7 @@ public class ClassicModelsRepository {
                 .fetch()
                 .forEach(System.out::println);
     }
-    
+
     // this work as expected
     public void printInvoicesPerDayCast(LocalDate day) {
 
