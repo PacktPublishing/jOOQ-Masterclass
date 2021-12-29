@@ -3,6 +3,7 @@ package com.classicmodels.service;
 import com.classicmodels.repository.ClassicModelsRepository;
 import java.time.LocalDate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ClassicModelsService {
@@ -12,7 +13,8 @@ public class ClassicModelsService {
     public ClassicModelsService(ClassicModelsRepository classicModelsRepository) {
         this.classicModelsRepository = classicModelsRepository;
     }
-    
+
+    @Transactional(readOnly = true)
     public void callAll() {
         classicModelsRepository.printPaymentAndCachingDateCast();
         classicModelsRepository.printPaymentAndCachingDateCoerce();

@@ -10,10 +10,8 @@ import org.jooq.Record2;
 import org.jooq.Result;
 import org.jooq.impl.SQLDataType;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-@Transactional(readOnly = true)
 public class ClassicModelsRepository {
 
     private final DSLContext ctx;
@@ -110,7 +108,7 @@ public class ClassicModelsRepository {
 
         ctx.select(PRODUCT.PRODUCT_NAME)
                 .from(PRODUCT)
-                .orderBy(PRODUCT.PRODUCT_NAME.collate("BINARY_AI"))
+                .orderBy(PRODUCT.PRODUCT_NAME.collate("latin1_spanish_ci"))
                 .fetch()
                 .forEach(System.out::println);
     }
