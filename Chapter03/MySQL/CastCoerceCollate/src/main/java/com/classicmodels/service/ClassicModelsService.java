@@ -18,6 +18,8 @@ public class ClassicModelsService {
     public void callAll() {
         classicModelsRepository.printPaymentAndCachingDateCast();
         classicModelsRepository.printPaymentAndCachingDateCoerce();
+        
+        classicModelsRepository.coerceResultQueryToAnotherResultQuery();
 
         classicModelsRepository.printProductPriceAndDescCoerce();
         classicModelsRepository.printProductPriceAndDescCast();
@@ -25,7 +27,7 @@ public class ClassicModelsService {
         classicModelsRepository.printInvoicesPerDayCoerce(LocalDate.of(2003, 4, 9));
         classicModelsRepository.printInvoicesPerDayCast(LocalDate.of(2003, 4, 9));
 
-        classicModelsRepository.printProductsName();
+        classicModelsRepository.printProductsName();                
     }
 
 }

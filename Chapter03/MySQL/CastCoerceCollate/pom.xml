@@ -177,6 +177,12 @@
                                     (default is 5 seconds) -->
                                     <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>
                                 </database>
+                                
+                                <!-- jOOQ will generate POJOs on our behalf -->
+                                <generate>
+                                    <pojos>true</pojos>                                     
+                                </generate>
+                                
                                 <target>
                                     <!-- The destination package of your generated classes (within the destination directory).
                                     jOOQ may append the schema name to this package if generating multiple schemas,
