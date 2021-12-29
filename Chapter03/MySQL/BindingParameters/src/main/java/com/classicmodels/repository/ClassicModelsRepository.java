@@ -18,7 +18,6 @@ import static org.jooq.impl.DSL.concat;
 import static org.jooq.impl.DSL.inline;
 import static org.jooq.impl.DSL.param;
 import static org.jooq.impl.DSL.val;
-import org.jooq.impl.SQLDataType;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -250,7 +249,7 @@ public class ClassicModelsRepository {
                 .from(EMPLOYEE)
                 .where(EMPLOYEE.SALARY.gt(param("employeeSalary", 5000))
                         .and(EMPLOYEE.JOB_TITLE.eq(param("employeeJobTitle", "Sales Rep"))))
-        );
+        );              
 
         System.out.println("SQL (renderNamedParams):\n" + sql);
     }
