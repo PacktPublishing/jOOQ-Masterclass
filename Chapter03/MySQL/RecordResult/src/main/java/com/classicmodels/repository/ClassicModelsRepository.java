@@ -10,7 +10,6 @@ import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 import org.jooq.Record;
 import org.jooq.Record15;
-import org.jooq.Record2;
 import org.jooq.Record22;
 import org.jooq.Record3;
 import org.jooq.Record5;
@@ -377,4 +376,12 @@ public class ClassicModelsRepository {
                 .from(CUSTOMER)
                 .fetch();
     }    
+    
+    // fetch some records and send them to the controller
+    public Result<Record> fetchCustomers() {
+        
+        return ctx.select()
+                .from(CUSTOMER)
+                .fetch();
+    }
 }

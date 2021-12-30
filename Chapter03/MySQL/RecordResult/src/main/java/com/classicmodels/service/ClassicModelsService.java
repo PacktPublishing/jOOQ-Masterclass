@@ -1,6 +1,8 @@
 package com.classicmodels.service;
 
 import com.classicmodels.repository.ClassicModelsRepository;
+import org.jooq.Result;
+import org.jooq.Record;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,5 +29,12 @@ public class ClassicModelsService {
         classicModelsRepository.typesafeAdHocSelectIntoTableRecord();
         classicModelsRepository.typesafeAdHocSelectJoin();
         classicModelsRepository.beyondDegree22();
+    }        
+    
+    // fetch some records and send them to the controller
+    public Result<Record> fetchCustomers() {
+        
+        return classicModelsRepository.fetchCustomers();
     }
 }
+
