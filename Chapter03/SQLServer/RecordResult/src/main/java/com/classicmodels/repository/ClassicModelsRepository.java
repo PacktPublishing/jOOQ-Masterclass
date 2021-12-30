@@ -10,13 +10,14 @@ import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 import org.jooq.Record;
 import org.jooq.Record15;
-import org.jooq.Record2;
 import org.jooq.Record22;
 import org.jooq.Record3;
 import org.jooq.Record5;
 import org.jooq.Result;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
+@Transactional(readOnly = true)
 public class ClassicModelsRepository {
 
     private final DSLContext ctx;
@@ -37,8 +38,7 @@ public class ClassicModelsRepository {
                 "SELECT customer_name, customer_number, credit_limit FROM customer")
                 .fetch();
          */
-        
-        /* non type-safe values */
+ /* non type-safe values */
         for (Record record : result) {
             Object r1 = record.get(0);
             Object r2 = record.get("customer_number");
@@ -114,7 +114,7 @@ public class ClassicModelsRepository {
                 .fetch();
 
         /* type-safe values */
-        /*
+ /*
         for (Record r : result) {
             String r1 = r.get(CUSTOMER.CUSTOMER_NAME);
             Long r2 = r.get(CUSTOMER.CUSTOMER_NUMBER);
@@ -127,9 +127,8 @@ public class ClassicModelsRepository {
                     + " customer_number: " + r2 + " credit_limit: " + r3
                     + " city: " + r4 + " country: " + r5);
         }
-        */
-        
-        /* extract the two individual strongly typed 
+         */
+ /* extract the two individual strongly typed 
         TableRecord types from the denormalised Record */
         Result<CustomerRecord> rcr = result.into(CUSTOMER);
         Result<CustomerdetailRecord> rcd = result.into(CUSTOMERDETAIL);
@@ -156,21 +155,19 @@ public class ClassicModelsRepository {
 
     public void typesafeSelectJoin() {
 
-        /* type-safe Result<Record> via select() */        
-        /*
+        /* type-safe Result<Record> via select() */
+ /*
         Result<Record15<Long, String, String, String, String, Long, 
                 BigDecimal, Integer, Long, String, String, String, String, String, String>> result = ...
         
         CAN BE REPLACED WITH JAVA 9
         
         var result = ...
-        */
-        
-        Result<Record15<Long, String, String, String, String, Long, 
-                BigDecimal, Integer, Long, String, String, String, String, String, String>> result
+         */
+        Result<Record15<Long, String, String, String, String, Long, BigDecimal, Integer, Long, String, String, String, String, String, String>> result
                 = ctx.select(CUSTOMER.CUSTOMER_NUMBER, CUSTOMER.CUSTOMER_NAME,
                         CUSTOMER.CONTACT_FIRST_NAME, CUSTOMER.CONTACT_LAST_NAME,
-                        CUSTOMER.PHONE, CUSTOMER.SALES_REP_EMPLOYEE_NUMBER, 
+                        CUSTOMER.PHONE, CUSTOMER.SALES_REP_EMPLOYEE_NUMBER,
                         CUSTOMER.CREDIT_LIMIT, CUSTOMER.FIRST_BUY_DATE,
                         CUSTOMERDETAIL.CUSTOMER_NUMBER, CUSTOMERDETAIL.ADDRESS_LINE_FIRST,
                         CUSTOMERDETAIL.ADDRESS_LINE_SECOND, CUSTOMERDETAIL.CITY,
@@ -180,18 +177,17 @@ public class ClassicModelsRepository {
                         .join(CUSTOMERDETAIL)
                         .on(CUSTOMER.CUSTOMER_NUMBER.eq(CUSTOMERDETAIL.CUSTOMER_NUMBER))
                         .fetch();
-        
+
         /* type-safe Result<Record> via into() */
-        /*
+ /*
         Result<Record15<Long, String, String, String, String, Long, 
                 BigDecimal, Integer, Long, String, String, String, String, String, String>> result = ...
         
         CAN BE REPLACED WITH JAVA 9
         
         var result = ...
-        */
-        
-        /*
+         */
+ /*
         Result<Record15<Long, String, String, String, String, Long, 
                 BigDecimal, Integer, Long, String, String, String, String, String, String>> result = ctx.select()
                 .from(CUSTOMER)
@@ -206,10 +202,9 @@ public class ClassicModelsRepository {
                         CUSTOMERDETAIL.ADDRESS_LINE_SECOND, CUSTOMERDETAIL.CITY,
                         CUSTOMERDETAIL.COUNTRY, CUSTOMERDETAIL.POSTAL_CODE,
                         CUSTOMERDETAIL.STATE);
-        */
-        
-        /* type-safe values */
-        /*
+         */
+ /* type-safe values */
+ /*
         for (Record14 r : result) {
             String r1 = r.get(CUSTOMER.CUSTOMER_NAME);
             Long r2 = r.get(CUSTOMER.CUSTOMER_NUMBER);
@@ -222,9 +217,8 @@ public class ClassicModelsRepository {
                     + " customer_number: " + r2 + " credit_limit: " + r3
                     + " city: " + r4 + " country: " + r5);
         }
-        */
- 
-        /* extract the two individual strongly typed 
+         */
+ /* extract the two individual strongly typed 
         TableRecord types from the denormalised Record */
         Result<CustomerRecord> rcr = result.into(CUSTOMER);
         Result<CustomerdetailRecord> rcd = result.into(CUSTOMERDETAIL);
@@ -322,9 +316,9 @@ public class ClassicModelsRepository {
         Result<CustomerRecord> rcr = result.into(CUSTOMER);
         Result<CustomerdetailRecord> rcd = result.into(CUSTOMERDETAIL);
         // ...
-        
+
         /* type-safe values */
-        for (Record5 r : result) {            
+        for (Record5 r : result) {
             Long r1 = r.get(CUSTOMER.CUSTOMER_NUMBER);
             BigDecimal r2 = r.get(CUSTOMER.CREDIT_LIMIT);
 
@@ -337,12 +331,12 @@ public class ClassicModelsRepository {
         }
 
     }
-    
+
     public void beyondDegree22() {
-        
+
         // 22 columns 
         /* type-safe Result<Record> */
-        /*
+ /*
         Result<Record22<String, String, String, String, String,
                 String, String, String, String, String,
                 String, String, String, String, String,
@@ -352,30 +346,33 @@ public class ClassicModelsRepository {
         CAN BE REPLACED WITH JAVA 9
         
         var typesafe = ...
-        */
-        
-        Result<Record22<String, String, String, String, String,
-                String, String, String, String, String,
-                String, String, String, String, String,
-                String, String, String, String, String,
-                String, String>> typesafe = ctx.select(
-                CUSTOMER.PHONE, CUSTOMER.PHONE, CUSTOMER.PHONE, CUSTOMER.PHONE, CUSTOMER.PHONE, 
-                CUSTOMER.PHONE, CUSTOMER.PHONE, CUSTOMER.PHONE, CUSTOMER.PHONE, CUSTOMER.PHONE, 
+         */
+        Result<Record22<String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String>> typesafe = ctx.select(
+                CUSTOMER.PHONE, CUSTOMER.PHONE, CUSTOMER.PHONE, CUSTOMER.PHONE, CUSTOMER.PHONE,
+                CUSTOMER.PHONE, CUSTOMER.PHONE, CUSTOMER.PHONE, CUSTOMER.PHONE, CUSTOMER.PHONE,
                 CUSTOMER.PHONE, CUSTOMER.PHONE, CUSTOMER.PHONE, CUSTOMER.PHONE, CUSTOMER.PHONE,
                 CUSTOMER.PHONE, CUSTOMER.PHONE, CUSTOMER.PHONE, CUSTOMER.PHONE, CUSTOMER.PHONE,
                 CUSTOMER.PHONE, CUSTOMER.PHONE)
                 .from(CUSTOMER)
                 .fetch();
-        
+
         // 23 columns
         /* non-type-safe Result<Record> */
         Result<Record> nonTypesafe = ctx.select(
-                CUSTOMER.PHONE, CUSTOMER.PHONE, CUSTOMER.PHONE, CUSTOMER.PHONE, CUSTOMER.PHONE, 
-                CUSTOMER.PHONE, CUSTOMER.PHONE, CUSTOMER.PHONE, CUSTOMER.PHONE, CUSTOMER.PHONE, 
+                CUSTOMER.PHONE, CUSTOMER.PHONE, CUSTOMER.PHONE, CUSTOMER.PHONE, CUSTOMER.PHONE,
+                CUSTOMER.PHONE, CUSTOMER.PHONE, CUSTOMER.PHONE, CUSTOMER.PHONE, CUSTOMER.PHONE,
                 CUSTOMER.PHONE, CUSTOMER.PHONE, CUSTOMER.PHONE, CUSTOMER.PHONE, CUSTOMER.PHONE,
                 CUSTOMER.PHONE, CUSTOMER.PHONE, CUSTOMER.PHONE, CUSTOMER.PHONE, CUSTOMER.PHONE,
                 CUSTOMER.PHONE, CUSTOMER.PHONE, CUSTOMER.PHONE)
                 .from(CUSTOMER)
                 .fetch();
-    }    
+    }
+
+    // fetch some records and send them to the controller
+    public Result<Record> fetchCustomers() {
+
+        return ctx.select()
+                .from(CUSTOMER)
+                .fetch();
+    }
 }

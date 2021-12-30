@@ -19,8 +19,10 @@ import org.jooq.Record22;
 import org.jooq.Record3;
 import org.jooq.Record5;
 import org.jooq.Result;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
+@Transactional(readOnly = true)
 public class ClassicModelsRepository {
 
     private final DSLContext ctx;
@@ -432,4 +434,12 @@ public class ClassicModelsRepository {
                 .from(CUSTOMER)
                 .fetch();
     }    
+    
+    // fetch some records and send them to the controller
+    public Result<Record> fetchCustomers() {
+        
+        return ctx.select()
+                .from(CUSTOMER)
+                .fetch();
+    }
 }
