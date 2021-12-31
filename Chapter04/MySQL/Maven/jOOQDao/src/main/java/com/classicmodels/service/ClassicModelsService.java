@@ -7,16 +7,16 @@ import jooq.generated.tables.pojos.Sale;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class SalesManagementService {
+public class ClassicModelsService {
 
     private final SaleRepositoryImpl saleRepository;
 
-    public SalesManagementService(SaleRepositoryImpl saleRepository) {
+    public ClassicModelsService(SaleRepositoryImpl saleRepository) {
         this.saleRepository = saleRepository;
     }
 
     /* call jOOQ user-defined DAOs */
-    public List<Sale> fetchSaleAscGtLimit(int limit) {
+    public List<Sale> fetchSaleAscGtLimit(double limit) {
 
         return saleRepository.findSaleAscGtLimit(limit);
     }

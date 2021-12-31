@@ -19,10 +19,10 @@ public class SaleRepositoryImpl extends SaleRepository {
         this.ctx = ctx;
     }
 
-    public List<Sale> findSaleAscGtLimit(int limit) {
+    public List<Sale> findSaleAscGtLimit(double limit) {
 
         return ctx.selectFrom(SALE)
-                .where(SALE.SALE_.coerce(Integer.class).ge(limit))
+                .where(SALE.SALE_.ge(limit))
                 .orderBy(SALE.SALE_)
                 .fetchInto(Sale.class);
     }
