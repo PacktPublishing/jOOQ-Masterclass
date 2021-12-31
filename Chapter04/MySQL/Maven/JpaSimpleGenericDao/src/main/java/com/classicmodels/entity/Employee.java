@@ -167,8 +167,8 @@ public class Employee implements Serializable {
 
     @Override
     public String toString() {
-        return "Employee{" + "lastName=" + lastName
+        return "Employee{" + "lastName=" + lastName 
                 + ", firstName=" + firstName + ", jobTitle=" + jobTitle + '}';
-    }
-
+    }    
+    
 }

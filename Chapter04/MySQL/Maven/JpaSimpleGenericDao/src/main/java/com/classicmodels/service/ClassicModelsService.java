@@ -6,11 +6,11 @@ import com.classicmodels.jpa.repository.SaleRepository;
 import jooq.generated.tables.pojos.Sale;
 
 @Service
-public class SalesManagementService {
+public class ClassicModelsService {
 
     private final SaleRepository saleRepository;
 
-    public SalesManagementService(SaleRepository saleRepository) {
+    public ClassicModelsService(SaleRepository saleRepository) {
         this.saleRepository = saleRepository;
     }
 
@@ -20,7 +20,7 @@ public class SalesManagementService {
         return saleRepository.findSaleByFiscalYear(year);
     }
 
-    public List<Sale> fetchSaleAscGtLimit(int limit) {
+    public List<Sale> fetchSaleAscGtLimit(double limit) {
 
         return saleRepository.findSaleAscGtLimit(limit);
     }
