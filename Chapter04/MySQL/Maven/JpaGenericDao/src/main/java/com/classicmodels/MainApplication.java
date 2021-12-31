@@ -1,20 +1,20 @@
 package com.classicmodels;
 
-import com.classicmodels.service.SalesManagementService;
+import com.classicmodels.service.ClassicModelsService;
 import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 import java.util.List;
-import jooq.generated.tables.pojos.Sale;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.r2dbc.R2dbcAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 
-@SpringBootApplication
+@SpringBootApplication(exclude = {R2dbcAutoConfiguration.class})
 public class MainApplication {
 
-    private final SalesManagementService salesManagementService;
+    private final ClassicModelsService salesManagementService;
 
-    public MainApplication(SalesManagementService salesManagementService) {
+    public MainApplication(ClassicModelsService salesManagementService) {
         this.salesManagementService = salesManagementService;
     }
 
@@ -28,11 +28,11 @@ public class MainApplication {
 
             /* call jOOQ user-defined DAOs */
             System.out.println("Fetching sales from 2003:");
-            List<Sale> result1 = salesManagementService.fetchSaleByFiscalYear(2003);
+            List<jooq.generated.tables.pojos.Sale> result1 = salesManagementService.fetchSaleByFiscalYear(2003);
             System.out.println(result1);
 
             System.out.println("Fetching sales (asc) greater than limit, 5000:");
-            List<Sale> result2 = salesManagementService.fetchSaleAscGtLimit(5000);
+            List<jooq.generated.tables.pojos.Sale> result2 = salesManagementService.fetchSaleAscGtLimit(5000);
             System.out.println(result2);
 
             /* call Spring Data JPA DAOs */
@@ -42,7 +42,7 @@ public class MainApplication {
 
             /* call jOOQ user-defined generic DAOs */
             System.out.println("Fetching all sales:");
-            List<Sale> result4 = salesManagementService.fetchAllSales();
+            List<jooq.generated.tables.pojos.Sale> result4 = salesManagementService.fetchAllSales();
             System.out.println(result4);
         };
     }
