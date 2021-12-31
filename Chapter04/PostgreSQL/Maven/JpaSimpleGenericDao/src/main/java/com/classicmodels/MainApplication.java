@@ -44,6 +44,9 @@ public class MainApplication {
             System.out.println("Fetching all sales:");
             List<jooq.generated.tables.pojos.Sale> result4 = salesManagementService.fetchAllSales();
             System.out.println(result4);
+            
+            System.out.println("Delete sale with id 1:");
+            salesManagementService.deleteSaleById(1);
         };
     }
 

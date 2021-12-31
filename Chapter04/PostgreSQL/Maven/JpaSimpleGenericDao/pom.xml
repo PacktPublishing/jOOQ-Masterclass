@@ -37,7 +37,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>  
+        </dependency>        
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -45,7 +45,7 @@
         <dependency> 
             <groupId>com.fasterxml.jackson.datatype</groupId> 
             <artifactId>jackson-datatype-hibernate5</artifactId> 
-        </dependency>      
+        </dependency>
         <dependency>
             <groupId>org.jooq</groupId>
             <artifactId>jooq</artifactId>   
@@ -56,9 +56,9 @@
             <artifactId>flyway-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>                
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>                    
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>    
@@ -124,7 +124,7 @@
                     <user>${spring.datasource.username}</user>
                     <password>${spring.datasource.password}</password>  
                     <locations>
-                        <location>filesystem:./../../../../db/migration/min/mysql</location>
+                        <location>filesystem:./../../../../db/migration/min/postgresql</location>
                     </locations>
                 </configuration>
             </plugin>
@@ -133,7 +133,7 @@
                 <artifactId>jooq-codegen-maven</artifactId>               
                 <executions>
                     <execution>
-                        <id>generate-for-mysql</id>
+                        <id>generate-for-postgresql</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>generate</goal>
@@ -163,12 +163,12 @@
                                 <database>                            
                                     <!-- The database type. The format here is:
                                     org.jooq.meta.[database].[database]Database -->
-                                    <name>org.jooq.meta.mysql.MySQLDatabase</name>
+                                    <name>org.jooq.meta.postgres.PostgresDatabase</name>
             
                                     <!-- The database schema (or in the absence of schema support, in your RDBMS this
                                     can be the owner, user, database name) to be generated. This cannot be combined with the <schemata/> element.                                     
                                     If <inputSchema/> is missing then all schemas will be considered. -->
-                                    <inputSchema>classicmodels</inputSchema>                 
+                                    <inputSchema>public</inputSchema>                 
             
                                     <!-- All elements that are generated from your schema
                                     (A Java regular expression. Use the pipe to separate several expressions)
@@ -181,13 +181,17 @@
                                     (A Java regular expression. Use the pipe to separate several expressions).
                                     Excludes match before includes, i.e. excludes have a higher priority. -->
                                     <excludes>
-                                        flyway_schema_history | sequences 
-                                        | customer_pgs | refresh_top3_product
-                                        | sale_.* | set_.* | get_.* | .*_master
+                                        flyway_schema_history | akeys | avals | defined | delete.*
+                                        | department_topic_arr | dup | employee_office_arr | exist.*                                   
+                                        | fetchval | get_.* | ghstore.* | gin.* | hs.* | hstore.* 
+                                        | isdefined | isexists | make_array | new_salary | populate_record 
+                                        | sale_price | slice.* | swap | tconvert | update_msrp | postal_code 
+                                        | evaluation_criteria | rate_type | vat_type | .*_master | each 
+                                        | skeys | svals | top_three_sales_per_employee | product_of_product_line
                                     </excludes>
 
                                     <!-- Schema version provider -->            
-                                    <schemaVersionProvider>SELECT MAX(`version`) FROM `flyway_schema_history`</schemaVersionProvider>            
+                                    <schemaVersionProvider>SELECT MAX("version") FROM "flyway_schema_history"</schemaVersionProvider>            
                                     
                                     <!-- Give enough time to jOOQ to trigger the queries needed for generating sources 
                                     (default is 5 seconds) -->

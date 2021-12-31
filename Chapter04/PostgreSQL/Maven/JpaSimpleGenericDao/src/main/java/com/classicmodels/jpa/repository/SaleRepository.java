@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional(readOnly = true)
-public interface SaleRepository extends JpaRepository<Sale, Long>, 
+public interface SaleRepository extends JpaRepository<Sale, Integer>, 
         com.classicmodels.jooq.repository.SaleRepository {
     
     List<Sale> findTop10By();

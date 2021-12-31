@@ -36,4 +36,9 @@ public class ClassicModelsService {
 
         return saleRepository.fetchAll();
     }
+    
+     public void deleteSaleById(Integer id) {
+
+        saleRepository.deleteById(id);
+    }
 }

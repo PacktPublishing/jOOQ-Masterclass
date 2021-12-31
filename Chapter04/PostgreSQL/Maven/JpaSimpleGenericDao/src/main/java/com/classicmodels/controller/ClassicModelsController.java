@@ -44,4 +44,11 @@ public class ClassicModelsController {
 
         return classicModelsService.fetchAllSales();
     }
+    
+    @GetMapping("/deleteSaleById")
+    public void deleteSaleById(
+            @RequestParam(name = "id") Integer id) {
+
+        classicModelsService.deleteSaleById(id);
+    }
 }

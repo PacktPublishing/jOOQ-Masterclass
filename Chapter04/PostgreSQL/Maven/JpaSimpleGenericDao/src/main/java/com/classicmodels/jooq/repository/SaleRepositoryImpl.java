@@ -40,7 +40,7 @@ public class SaleRepositoryImpl implements SaleRepository {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(Integer id) {
 
         ctx.deleteFrom(SALE)
                 .where(SALE.SALE_ID.eq(id))

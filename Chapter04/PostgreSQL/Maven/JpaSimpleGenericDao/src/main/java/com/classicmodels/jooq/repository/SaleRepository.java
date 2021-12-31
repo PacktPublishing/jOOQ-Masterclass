@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional(readOnly = true)
-public interface SaleRepository extends ClassicModelsRepository<Sale, Long> {
+public interface SaleRepository extends ClassicModelsRepository<Sale, Integer> {
 
     public List<Sale> findSaleByFiscalYear(int year);
     public List<Sale> findSaleAscGtLimit(double limit);
