@@ -10,5 +10,5 @@ import org.springframework.transaction.annotation.Transactional;
 public interface SaleRepository {
  
     public List<Sale> findSaleByFiscalYear(int year);
-    public List<Sale> findSaleAscGtLimit(int limit);    
+    public List<Sale> findSaleAscGtLimit(double limit);    
 }
