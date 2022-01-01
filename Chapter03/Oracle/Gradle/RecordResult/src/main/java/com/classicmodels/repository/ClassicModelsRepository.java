@@ -1,7 +1,6 @@
 package com.classicmodels.repository;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.List;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
@@ -165,7 +164,7 @@ public class ClassicModelsRepository {
         /* type-safe Result<Record> via select() */        
         /*
         Result<Record15<Long, String, String, String, String, Long, 
-                BigDecimal, BigInteger, Long, String, String, String, String, String, String>> result = ...
+                BigDecimal, Integer, Long, String, String, String, String, String, String>> result = ...
         
         CAN BE REPLACED WITH JAVA 9
         
@@ -173,7 +172,7 @@ public class ClassicModelsRepository {
         */
         
         Result<Record15<Long, String, String, String, String, Long, 
-                BigDecimal, BigInteger, Long, String, String, String, String, String, String>> result
+                BigDecimal, Integer, Long, String, String, String, String, String, String>> result
                 = ctx.select(CUSTOMER.CUSTOMER_NUMBER, CUSTOMER.CUSTOMER_NAME,
                         CUSTOMER.CONTACT_FIRST_NAME, CUSTOMER.CONTACT_LAST_NAME,
                         CUSTOMER.PHONE, CUSTOMER.SALES_REP_EMPLOYEE_NUMBER, 
@@ -190,7 +189,7 @@ public class ClassicModelsRepository {
         /* type-safe Result<Record> via into() */
         /*
         Result<Record15<Long, String, String, String, String, Long, 
-                BigDecimal, BigInteger, Long, String, String, String, String, String, String>> result = ...
+                BigDecimal, Integer, Long, String, String, String, String, String, String>> result = ...
         
         CAN BE REPLACED WITH JAVA 9
         
@@ -199,7 +198,7 @@ public class ClassicModelsRepository {
         
         /*
         Result<Record15<Long, String, String, String, String, Long, 
-                BigDecimal, BigInteger, Long, String, String, String, String, String, String>> result = ctx.select()
+                BigDecimal, Integer, Long, String, String, String, String, String, String>> result = ctx.select()
                 .from(CUSTOMER)
                 .join(CUSTOMERDETAIL)
                 .on(CUSTOMER.CUSTOMER_NUMBER.eq(CUSTOMERDETAIL.CUSTOMER_NUMBER))
