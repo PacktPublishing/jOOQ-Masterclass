@@ -3,7 +3,6 @@ package com.classicmodels.service;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import com.classicmodels.repository.SaleRepositoryImpl;
-import java.math.BigInteger;
 import jooq.generated.tables.pojos.Sale;
 import org.springframework.transaction.annotation.Transactional;
 
