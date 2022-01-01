@@ -376,7 +376,7 @@ CREATE TABLE office (
   /* [jooq ignore start] */
   location            SDO_GEOMETRY DEFAULT NULL,
   /* [jooq ignore stop] */
-  internal_budget     INT          NOT NULL,
+  internal_budget     NUMBER(7)    NOT NULL,
   CONSTRAINT office_pk PRIMARY KEY (office_code),
   CONSTRAINT office_postal_code_uk UNIQUE (postal_code)
 );
@@ -409,7 +409,7 @@ CREATE TABLE employee (
   email            VARCHAR2(100)        NOT NULL,
   office_code      VARCHAR2(10)         NOT NULL,
   salary           NUMBER(7)            NOT NULL,
-  commission       INT                  DEFAULT NULL,
+  commission       NUMBER(7)            DEFAULT NULL,
   reports_to       NUMBER(10)           DEFAULT NULL,
   job_title        VARCHAR2(50)         NOT NULL,
   /* [jooq ignore start] */
@@ -438,13 +438,13 @@ CREATE SEQUENCE sale_seq START WITH 1000000 INCREMENT BY 1;
 
 CREATE TABLE sale (
   sale_id         NUMBER(20)   DEFAULT sale_seq.nextval NOT NULL, 
-  fiscal_year     INT          NOT NULL, 
+  fiscal_year     NUMBER(5)    NOT NULL, 
   sale            FLOAT        NOT NULL,    
   employee_number NUMBER(10)   DEFAULT NULL,  
   hot             CHAR(1)      DEFAULT '1' CHECK (hot IN('1', '0')), -- or, 'Y'/'N'
   rate            VARCHAR2(10) DEFAULT NULL CHECK (rate IN('SILVER', 'GOLD', 'PLATINUM')),
   vat             VARCHAR2(10) DEFAULT NULL CHECK (vat IN('NONE', 'MIN', 'MAX')),
-  fiscal_month    INT          NOT NULL,
+  fiscal_month    NUMBER(5)    NOT NULL,
   revenue_growth  FLOAT        NOT NULL,
   trend           VARCHAR2(10) DEFAULT NULL,  
   CONSTRAINT sale_pk PRIMARY KEY (sale_id),  
@@ -509,7 +509,7 @@ CREATE TABLE customer (
   phone                     VARCHAR2(50) NOT NULL,
   sales_rep_employee_number NUMBER(10)   DEFAULT NULL,
   credit_limit              NUMBER(10,2) DEFAULT NULL,
-  first_buy_date            INT          DEFAULT NULL,
+  first_buy_date            NUMBER(5)    DEFAULT NULL,
   CONSTRAINT customer_pk PRIMARY KEY (customer_number),
   CONSTRAINT customer_name_uk UNIQUE (customer_name),
   CONSTRAINT customer_employee_fk FOREIGN KEY (sales_rep_employee_number) REFERENCES employee (employee_number)

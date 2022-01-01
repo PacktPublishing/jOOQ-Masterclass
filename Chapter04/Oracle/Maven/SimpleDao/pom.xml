@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.classicmodles</groupId>
-    <artifactId>jOOQDao</artifactId>
+    <artifactId>SimpleDao</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQDao</name>
+    <name>SimpleDao</name>
    
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -195,24 +195,9 @@
                                     <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>
                                 </database>                                
                                 
-                                <!-- Rename the generated POJOs and DAOs classes -->                      
-                                <strategy>
-                                    <matchers>
-                                        <tables>
-                                            <table>                                                
-                                                <daoClass>
-                                                    <expression>$0_Repository</expression>
-                                                    <transform>PASCAL</transform>                                                                                      
-                                                </daoClass>
-                                            </table>
-                                        </tables>
-                                    </matchers>
-                                </strategy>
-                                
-                                <!-- jOOQ will generate POJOs and DAOs in your behalf -->
+                                <!-- jOOQ will generate POJOs on our behalf -->
                                 <generate>
-                                    <daos>true</daos>                                                                       
-                                    <springAnnotations>true</springAnnotations>   
+                                    <pojos>true</pojos>                                     
                                 </generate>
                                 
                                 <target>
