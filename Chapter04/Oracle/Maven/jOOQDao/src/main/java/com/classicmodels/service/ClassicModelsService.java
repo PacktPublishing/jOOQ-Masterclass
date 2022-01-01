@@ -26,6 +26,6 @@ public class ClassicModelsService {
     @Transactional(readOnly = true)
     public List<Sale> fetchSaleByFiscalYear(int year) {
 
-        return saleRepository.fetchByFiscalYear(BigInteger.valueOf(year));
+        return saleRepository.fetchByFiscalYear(year);
     }
 }

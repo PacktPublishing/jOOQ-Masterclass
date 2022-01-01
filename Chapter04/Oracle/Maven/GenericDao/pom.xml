@@ -122,6 +122,7 @@
                     <locations>
                         <location>filesystem:./../../../../db/migration/dev/oracle</location>
                     </locations>
+                    <baselineOnMigrate>true</baselineOnMigrate>
                 </configuration>
             </plugin>
             <plugin>

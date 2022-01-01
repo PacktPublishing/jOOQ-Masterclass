@@ -1,6 +1,5 @@
 package com.classicmodels.repository;
 
-import java.math.BigInteger;
 import java.util.List;
 import static jooq.generated.tables.Sale.SALE;
 import jooq.generated.tables.pojos.Sale;
@@ -24,7 +23,7 @@ public class SaleRepositoryImpl
     public List<Sale> findSaleByFiscalYear(int year) {
 
         return ctx.selectFrom(SALE)
-                .where(SALE.FISCAL_YEAR.eq(BigInteger.valueOf(year)))
+                .where(SALE.FISCAL_YEAR.eq(year))
                 .fetchInto(Sale.class);
     }
 
