@@ -437,7 +437,7 @@ CREATE TABLE employee_status (
 CREATE SEQUENCE sale_seq START WITH 1000000 INCREMENT BY 1;
 
 CREATE TABLE sale (
-  sale_id         NUMBER(20)   DEFAULT sale_seq.nextval NOT NULL, 
+  sale_id         NUMBER(10)   DEFAULT sale_seq.nextval NOT NULL, 
   fiscal_year     NUMBER(5)    NOT NULL, 
   sale            FLOAT        NOT NULL,    
   employee_number NUMBER(10)   DEFAULT NULL,  
