@@ -128,7 +128,7 @@
                     <user>${spring.datasource.username}</user>
                     <password>${spring.datasource.password}</password>  
                     <locations>
-                        <location>filesystem:./../../../../db/migration/dev/oracle</location>
+                        <location>filesystem:./../../../../db/migration/min/oracle</location>
                     </locations>
                     <baselineOnMigrate>true</baselineOnMigrate>
                 </configuration>
