@@ -96,7 +96,7 @@ jooq {
                         // You can create case-insensitive regular expressions using this syntax: (?i:expr).
                         // Whitespace is ignored and comments are possible.
                         includes = '.*'                        
-                                               
+                        
                         // Schema version provider
                         schemaVersionProvider = 'SELECT MAX("version") FROM "flyway_schema_history"'
                                   
