@@ -43,6 +43,7 @@ flyway {
     user = project.properties['username']
     password = project.properties['password']
     locations = ['filesystem:./../../../../db/migration/dev/oracle']
+    baselineOnMigrate = true
 }
 
 jooq {
