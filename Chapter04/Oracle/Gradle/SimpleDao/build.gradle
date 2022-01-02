@@ -22,10 +22,12 @@ repositories {
 }
 
 dependencies {        
-    jooqGenerator 'mysql:mysql-connector-java' 
+    jooqGenerator 'com.oracle.database.jdbc:ojdbc8'
+    jooqGenerator 'com.oracle.database.jdbc:ucp'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'    
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'mysql:mysql-connector-java'
+    implementation 'com.oracle.database.jdbc:ojdbc8'
+    implementation 'com.oracle.database.jdbc:ucp'
     implementation 'org.flywaydb:flyway-core'
 }
 
@@ -40,12 +42,13 @@ flyway {
     url = project.properties['url']
     user = project.properties['username']
     password = project.properties['password']
-    locations = ['filesystem:./../../../../db/migration/dev/mysql']
+    locations = ['filesystem:./../../../../db/migration/dev/oracle']
+    baselineOnMigrate = true
 }
 
 jooq {
     version = project.properties['jooq']
-    edition = nu.studer.gradle.jooq.JooqEdition.OSS
+    edition = nu.studer.gradle.jooq.JooqEdition.TRIAL_JAVA_8
 
     configurations {
         main {
@@ -78,12 +81,12 @@ jooq {
                     database {
                         // The database type. The format here is:
                         // org.jooq.meta.[database].[database]Database
-                        name = 'org.jooq.meta.mysql.MySQLDatabase'                        
+                        name = 'org.jooq.meta.oracle.OracleDatabase'                        
                         
                         // The database schema (or in the absence of schema support, in your RDBMS this
                         // can be the owner, user, database name) to be generated. This cannot be combined with the <schemata/> element.                                     
                         // If <inputSchema/> is missing then all schemas will be considered.
-                        inputSchema = 'classicmodels'
+                        inputSchema = 'CLASSICMODELS'
                         
                         // All elements that are generated from your schema
                         // (A Java regular expression. Use the pipe to separate several expressions)
@@ -96,13 +99,16 @@ jooq {
                         // (A Java regular expression. Use the pipe to separate several expressions).
                         // Excludes match before includes, i.e. excludes have a higher priority.
                         excludes = '''\
-                                    flyway_schema_history | sequences 
-                                  | customer_pgs | refresh_top3_product
-                                  | sale_.* | set_.* | get_.* | .*_master
+                                    flyway_schema_history | DEPARTMENT_PKG | GET_.*
+                                   | CARD_COMMISSION | PRODUCT_OF_PRODUCT_LINE  
+                                   | REFRESH_TOP3_PRODUCT | SALE_PRICE | SECOND_MAX
+                                   | SET_COUNTER | SWAP | TOP_THREE_SALES_PER_EMPLOYEE
+                                   | EVALUATION_CRITERIA | SECOND_MAX_IMPL | TABLE_.*_OBJ
+                                   | .*_MASTER | BGT | .*_ARR | TABLE_POPL | TABLE_RES
                                   ''' 
                         
                         // Schema version provider
-                        schemaVersionProvider = 'SELECT MAX(`version`) FROM `flyway_schema_history`'
+                        schemaVersionProvider = 'SELECT MAX("version") FROM "flyway_schema_history"'
                                   
                         // Give enough time to jOOQ to trigger the queries needed for generating sources 
                         // (default is 5 seconds)
@@ -135,7 +141,7 @@ tasks.named('generateJooq').configure {
     dependsOn tasks.named('flywayMigrate')
 
     // declare Flyway migration scripts as inputs on the jOOQ task
-    inputs.files(fileTree('${rootDir}/../../../../db/migration/dev/mysql'))
+    inputs.files(fileTree('${rootDir}/../../../../db/migration/dev/oracle'))
         .withPropertyName('migrations')
         .withPathSensitivity(PathSensitivity.RELATIVE)
 
