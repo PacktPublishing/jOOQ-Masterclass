@@ -19,7 +19,7 @@ public class SaleRepositoryImpl implements SaleRepository {
     public List<Sale> findSaleByFiscalYear(int year) {
 
         return ctx.selectFrom(SALE)
-                .where(SALE.FISCAL_YEAR.eq(year))
+                .where(SALE.FISCAL_YEAR.coerce(Integer.class).eq(year))
                 .fetchInto(Sale.class);
     }
 
