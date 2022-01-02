@@ -19,7 +19,7 @@ public class SaleRepositoryImpl implements SaleRepository {
     public List<Sale> findSaleByFiscalYear(int year) {
 
         return ctx.selectFrom(SALE)
-                .where(SALE.FISCAL_YEAR.eq(year))
+                .where(SALE.FISCAL_YEAR.coerce(Integer.class).eq(year))
                 .fetchInto(Sale.class);
     }
 
@@ -43,7 +43,7 @@ public class SaleRepositoryImpl implements SaleRepository {
     public void deleteById(Long id) {
 
         ctx.deleteFrom(SALE)
-                .where(SALE.SALE_ID.eq(id))
+                .where(SALE.SALE_ID.coerce(Long.class).eq(id))
                 .execute();
     }
 }

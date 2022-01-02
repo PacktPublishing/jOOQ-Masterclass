@@ -22,12 +22,14 @@ repositories {
 }
 
 dependencies {        
-    jooqGenerator 'mysql:mysql-connector-java' 
+    jooqGenerator 'com.oracle.database.jdbc:ojdbc8'
+    jooqGenerator 'com.oracle.database.jdbc:ucp'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'    
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-hibernate5'
-    implementation 'mysql:mysql-connector-java'
+    implementation 'com.oracle.database.jdbc:ojdbc8'
+    implementation 'com.oracle.database.jdbc:ucp'
     implementation 'org.flywaydb:flyway-core'
 }
 
@@ -42,12 +44,13 @@ flyway {
     url = project.properties['url']
     user = project.properties['username']
     password = project.properties['password']
-    locations = ['filesystem:./../../../../db/migration/min/mysql']
+    locations = ['filesystem:./../../../../db/migration/min/oracle']
+    baselineOnMigrate = true
 }
 
 jooq {
     version = project.properties['jooq']
-    edition = nu.studer.gradle.jooq.JooqEdition.OSS
+    edition = nu.studer.gradle.jooq.JooqEdition.TRIAL_JAVA_8
 
     configurations {
         main {
@@ -80,22 +83,22 @@ jooq {
                     database {
                         // The database type. The format here is:
                         // org.jooq.meta.[database].[database]Database
-                        name = 'org.jooq.meta.mysql.MySQLDatabase'                        
+                        name = 'org.jooq.meta.oracle.OracleDatabase'                        
                         
                         // The database schema (or in the absence of schema support, in your RDBMS this
                         // can be the owner, user, database name) to be generated. This cannot be combined with the <schemata/> element.                                     
                         // If <inputSchema/> is missing then all schemas will be considered.
-                        inputSchema = 'classicmodels'
+                        inputSchema = 'CLASSICMODELS'
                         
                         // All elements that are generated from your schema
                         // (A Java regular expression. Use the pipe to separate several expressions)
                         // Watch out for case-sensitivity. Depending on your database, this might be important! 
                         // You can create case-insensitive regular expressions using this syntax: (?i:expr).
                         // Whitespace is ignored and comments are possible.
-                        includes = '.*'                                                                     
+                        includes = '.*'                        
                         
                         // Schema version provider
-                        schemaVersionProvider = 'SELECT MAX(`version`) FROM `flyway_schema_history`'
+                        schemaVersionProvider = 'SELECT MAX("version") FROM "flyway_schema_history"'
                                   
                         // Give enough time to jOOQ to trigger the queries needed for generating sources 
                         // (default is 5 seconds)
@@ -128,7 +131,7 @@ tasks.named('generateJooq').configure {
     dependsOn tasks.named('flywayMigrate')
 
     // declare Flyway migration scripts as inputs on the jOOQ task
-    inputs.files(fileTree('${rootDir}/../../../../db/migration/min/mysql'))
+    inputs.files(fileTree('${rootDir}/../../../../db/migration/min/oracle'))
         .withPropertyName('migrations')
         .withPathSensitivity(PathSensitivity.RELATIVE)
 
