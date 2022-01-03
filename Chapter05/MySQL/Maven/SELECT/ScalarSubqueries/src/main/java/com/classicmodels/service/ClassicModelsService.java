@@ -17,7 +17,7 @@ public class ClassicModelsService {
         classicModelsRepository.findMinAndRoundMinInvoiceAmount();  // EXAMPLE 2
         classicModelsRepository.findBaseSalary();                   // EXAMPLE 3
         classicModelsRepository.findEmployeeWithSalaryGt();         // EXAMPLE 4
-        classicModelsRepository.insertEmployee();                   // EXAMPLE 5
+        classicModelsRepository.insertProduct();                   // EXAMPLE 5
         classicModelsRepository.deletePaymentsOfAtelierGraphique(); // EXAMPLE 6
         classicModelsRepository.updateEmployeeSalary();             // EXAMPLE 7
     }       

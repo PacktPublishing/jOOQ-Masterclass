@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Payment.PAYMENT;
+import static jooq.generated.tables.Product.PRODUCT;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.avg;
 import static org.jooq.impl.DSL.field;
@@ -44,7 +45,7 @@ public class ClassicModelsRepository {
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
                         .from(EMPLOYEE)
                         .where(EMPLOYEE.SALARY.coerce(BigDecimal.class).ge(
-                                field(select(avg(EMPLOYEE.SALARY).plus(25000)).from(EMPLOYEE))))
+                                select(avg(EMPLOYEE.SALARY).plus(25000)).from(EMPLOYEE)))
                         .fetch()
         );
     }
@@ -130,47 +131,88 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 5
     /*
-    insert into
-      `classicmodels`.`employee` (
-        `employee_number`,`last_name`,`first_name`,`extension`,`email`,
-        `office_code`,`salary`,`reports_to`,`job_title`)
-    values
-     (
-       (
-          select *
-          from  
+    insert into `classicmodels`.`product` (
+      `product_id`, `product_name`, `product_line`, 
+      `code`, `product_scale`, `product_vendor`, 
+      `product_description`, `quantity_in_stock`, 
+      `buy_price`, `msrp`, `specs`, `product_uid`
+    ) 
+    values 
+      (
+        (
+          select 
+            * 
+          from 
             (
-              select
+              select 
                 max(
-                      (`classicmodels`.`employee`.`employee_number` + ?)
-                   )
-              from
-                `classicmodels`.`employee`
+                  (
+                    `classicmodels`.`product`.`product_id` + ?
+                  )
+                ) 
+              from 
+                `classicmodels`.`product`
             ) as `t`
-       ),
-       ?,?,?,?,?,
-       (
-         select *
-         from
-          (
-            select
-              avg(`classicmodels`.`employee`.`salary`)
-            from
-              `classicmodels`.`employee`
-          ) as `t`
-       ),
-       ?,?
-     )
+        ), 
+        ?, ?, 
+        (
+          select 
+            * 
+          from 
+            (
+              select 
+                min(
+                  `classicmodels`.`product`.`code`
+                ) 
+              from 
+                `classicmodels`.`product` 
+              where 
+                `classicmodels`.`product`.`product_line` = ?
+            ) as `t`
+        ), 
+        ?, ?, ?, ?, 
+        (
+          select 
+            * 
+          from 
+            (
+              select 
+                avg(
+                  `classicmodels`.`product`.`buy_price`
+                ) 
+              from 
+                `classicmodels`.`product`
+            ) as `t`
+        ), 
+        (
+          select 
+            * 
+          from 
+            (
+              select 
+                avg(
+                  `classicmodels`.`product`.`msrp`
+                ) 
+              from 
+                `classicmodels`.`product`
+            ) as `t`
+        ), 
+        ?, ?
+      )    
      */
     @Transactional
-    public void insertEmployee() {
+    public void insertProduct() {
 
         System.out.println("EXAMPLE 5 (affected rows): "
-                + +ctx.insertInto(EMPLOYEE)
-                        .values(select(max(EMPLOYEE.EMPLOYEE_NUMBER.plus(1))).from(EMPLOYEE),
-                                "Mark", "Janel", "x4443", "markjanel@classicmodelcars.com", "1",
-                                select(avg(EMPLOYEE.SALARY)).from(EMPLOYEE),
-                                1002L, "VP Of Engineering")
+                + +ctx.insertInto(PRODUCT)
+                        .values(select(max(PRODUCT.PRODUCT_ID.plus(1))).from(PRODUCT),
+                                "1956 Harley Davidson LTD Chopper", "Motorcycles",
+                                select(min(PRODUCT.CODE)).from(PRODUCT)
+                                        .where(PRODUCT.PRODUCT_LINE.eq("Motorcycles")),
+                                "1:10", "Min Lin Diecast", "PENDING", 0,
+                                select(avg(PRODUCT.BUY_PRICE)).from(PRODUCT),
+                                select(avg(PRODUCT.MSRP)).from(PRODUCT),
+                                "PENDING", 10L)
                         .execute()
         );
     }
