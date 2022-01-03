@@ -12,6 +12,7 @@ import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.min;
 import static org.jooq.impl.DSL.round;
 import static org.jooq.impl.DSL.select;
+import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -133,9 +134,9 @@ public class ClassicModelsRepository {
     /*
     insert into `classicmodels`.`product` (
       `product_id`, `product_name`, `product_line`, 
-      `code`, `product_scale`, `product_vendor`, 
-      `product_description`, `quantity_in_stock`, 
-      `buy_price`, `msrp`, `specs`, `product_uid`
+      `code`, `product_scale`, `product_description`, 
+      `product_vendor`, `quantity_in_stock`, 
+      `buy_price`, `msrp`
     ) 
     values 
       (
@@ -196,23 +197,25 @@ public class ClassicModelsRepository {
               from 
                 `classicmodels`.`product`
             ) as `t`
-        ), 
-        ?, ?
+        )
       )    
      */
     @Transactional
     public void insertProduct() {
 
         System.out.println("EXAMPLE 5 (affected rows): "
-                + +ctx.insertInto(PRODUCT)
-                        .values(select(max(PRODUCT.PRODUCT_ID.plus(1))).from(PRODUCT),
-                                "1956 Harley Davidson LTD Chopper", "Motorcycles",
-                                select(min(PRODUCT.CODE)).from(PRODUCT)
-                                        .where(PRODUCT.PRODUCT_LINE.eq("Motorcycles")),
-                                "1:10", "Min Lin Diecast", "PENDING", 0,
-                                select(avg(PRODUCT.BUY_PRICE)).from(PRODUCT),
-                                select(avg(PRODUCT.MSRP)).from(PRODUCT),
-                                "PENDING", 10L)
+                + +ctx.insertInto(PRODUCT, 
+                        PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_LINE,
+                        PRODUCT.CODE, PRODUCT.PRODUCT_SCALE, PRODUCT.PRODUCT_DESCRIPTION,
+                        PRODUCT.PRODUCT_VENDOR, PRODUCT.QUANTITY_IN_STOCK,
+                        PRODUCT.BUY_PRICE, PRODUCT.MSRP)
+                        .values(field(select(max(PRODUCT.PRODUCT_ID.plus(1))).from(PRODUCT)),
+                                val("1956 Harley Davidson LTD Chopper"), val("Motorcycles"),
+                                field(select(min(PRODUCT.CODE)).from(PRODUCT)
+                                        .where(PRODUCT.PRODUCT_LINE.eq("Motorcycles"))),
+                                val("1:10"), val("Min Lin Diecast"), val("PENDING"), val(0),
+                                field(select(avg(PRODUCT.BUY_PRICE)).from(PRODUCT)),
+                                field(select(avg(PRODUCT.MSRP)).from(PRODUCT)))
                         .execute()
         );
     }
