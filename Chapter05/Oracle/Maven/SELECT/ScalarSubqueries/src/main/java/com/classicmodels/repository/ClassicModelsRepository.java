@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Payment.PAYMENT;
+import static jooq.generated.tables.Product.PRODUCT;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.avg;
 import static org.jooq.impl.DSL.field;
@@ -11,6 +12,7 @@ import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.min;
 import static org.jooq.impl.DSL.round;
 import static org.jooq.impl.DSL.select;
+import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,20 +28,22 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 1
     /*
-    select       
-      "SYSTEM"."EMPLOYEE"."LAST_NAME", 
-      "SYSTEM"."EMPLOYEE"."FIRST_NAME"
+    select 
+      "CLASSICMODELS"."EMPLOYEE"."FIRST_NAME", 
+      "CLASSICMODELS"."EMPLOYEE"."LAST_NAME" 
     from 
-      "SYSTEM"."EMPLOYEE" 
+      "CLASSICMODELS"."EMPLOYEE" 
     where 
-      "SYSTEM"."EMPLOYEE"."SALARY" >= (
+      "CLASSICMODELS"."EMPLOYEE"."SALARY" >= (
         select 
           (
-            avg("SYSTEM"."EMPLOYEE"."SALARY") + ?
+            avg(
+              "CLASSICMODELS"."EMPLOYEE"."SALARY"
+            ) + ?
           ) 
         from 
-          "SYSTEM"."EMPLOYEE"
-      )
+          "CLASSICMODELS"."EMPLOYEE"
+      )    
      */
     public void findSalaryGeAvgPlus25000() {
 
@@ -47,32 +51,32 @@ public class ClassicModelsRepository {
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
                         .from(EMPLOYEE)
                         .where(EMPLOYEE.SALARY.coerce(BigDecimal.class)
-                                .ge(field(select(avg(EMPLOYEE.SALARY).plus(25000))))
-                                .fetch()
-                        );
+                                .ge(select(avg(EMPLOYEE.SALARY).plus(25000)).from(EMPLOYEE)))
+                        .fetch()
+        );
     }
 
     // EXAMPLE 2
     /*
     select 
       min(
-        "SYSTEM"."PAYMENT"."INVOICE_AMOUNT"
+        "CLASSICMODELS"."PAYMENT"."INVOICE_AMOUNT"
       ), 
       round(
         (
           select 
             min(
-              "SYSTEM"."PAYMENT"."INVOICE_AMOUNT"
+              "CLASSICMODELS"."PAYMENT"."INVOICE_AMOUNT"
             ) 
           from 
-            "SYSTEM"."PAYMENT"
+            "CLASSICMODELS"."PAYMENT"
         ), 
         ?
       ) "round_min" 
     from 
-      "SYSTEM"."PAYMENT" 
+      "CLASSICMODELS"."PAYMENT" 
     group by 
-      "SYSTEM"."PAYMENT"."INVOICE_AMOUNT"    
+      "CLASSICMODELS"."PAYMENT"."INVOICE_AMOUNT"    
      */
     public void findMinAndRoundMinInvoiceAmount() {
 
@@ -90,15 +94,17 @@ public class ClassicModelsRepository {
     /*
     select 
       (
-        "SYSTEM"."EMPLOYEE"."SALARY" + (
+        "CLASSICMODELS"."EMPLOYEE"."SALARY" + (
           select 
-            avg("SYSTEM"."EMPLOYEE"."SALARY") 
+            avg(
+              "CLASSICMODELS"."EMPLOYEE"."SALARY"
+            ) 
           from 
-            "SYSTEM"."EMPLOYEE"
+            "CLASSICMODELS"."EMPLOYEE"
         )
       ) "baseSalary" 
     from 
-      "SYSTEM"."EMPLOYEE"    
+      "CLASSICMODELS"."EMPLOYEE"    
      */
     public void findBaseSalary() {
 
@@ -113,19 +119,19 @@ public class ClassicModelsRepository {
     // EXAMPLE 4
     /*
     select 
-      "SYSTEM"."EMPLOYEE"."FIRST_NAME", 
-      "SYSTEM"."EMPLOYEE"."LAST_NAME" 
+      "CLASSICMODELS"."EMPLOYEE"."FIRST_NAME", 
+      "CLASSICMODELS"."EMPLOYEE"."LAST_NAME" 
     from 
-      "SYSTEM"."EMPLOYEE" 
+      "CLASSICMODELS"."EMPLOYEE" 
     where 
-      "SYSTEM"."EMPLOYEE"."SALARY" >= (
+      "CLASSICMODELS"."EMPLOYEE"."SALARY" >= (
         select 
-          "SYSTEM"."EMPLOYEE"."SALARY" 
+          "CLASSICMODELS"."EMPLOYEE"."SALARY" 
         from 
-          "SYSTEM"."EMPLOYEE" 
+          "CLASSICMODELS"."EMPLOYEE" 
         where 
-          "SYSTEM"."EMPLOYEE"."EMPLOYEE_NUMBER" = ?
-      )      
+          "CLASSICMODELS"."EMPLOYEE"."EMPLOYEE_NUMBER" = ?
+      )    
      */
     public void findEmployeeWithSalaryGt() {
 
@@ -141,11 +147,11 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 5
     /*
-    insert into "SYSTEM"."EMPLOYEE" (
-      "EMPLOYEE_NUMBER", "LAST_NAME", "FIRST_NAME", 
-      "EXTENSION", "EMAIL", "OFFICE_CODE", 
-      "SALARY", "REPORTS_TO", "JOB_TITLE", 
-      "EMPLOYEE_OF_YEAR", "MONTHLY_BONUS"
+    insert into "CLASSICMODELS"."PRODUCT" (
+      "PRODUCT_ID", "PRODUCT_NAME", "PRODUCT_LINE", 
+      "CODE", "PRODUCT_SCALE", "PRODUCT_DESCRIPTION", 
+      "PRODUCT_VENDOR", "QUANTITY_IN_STOCK", 
+      "BUY_PRICE", "MSRP"
     ) 
     values 
       (
@@ -153,31 +159,58 @@ public class ClassicModelsRepository {
           select 
             max(
               (
-                "SYSTEM"."EMPLOYEE"."EMPLOYEE_NUMBER" + ?
+                "CLASSICMODELS"."PRODUCT"."PRODUCT_ID" + ?
               )
             ) 
           from 
-            "SYSTEM"."EMPLOYEE"
+            "CLASSICMODELS"."PRODUCT"
         ), 
-        ?, ?, ?, ?, ?, 
+        ?, ?, 
         (
           select 
-            avg("SYSTEM"."EMPLOYEE"."SALARY") 
+            min(
+              "CLASSICMODELS"."PRODUCT"."CODE"
+            ) 
           from 
-            "SYSTEM"."EMPLOYEE"
+            "CLASSICMODELS"."PRODUCT" 
+          where 
+            "CLASSICMODELS"."PRODUCT"."PRODUCT_LINE" = ?
         ), 
-        ?, ?, ?, ?
+        ?, ?, ?, ?, 
+        (
+          select 
+            avg(
+              "CLASSICMODELS"."PRODUCT"."BUY_PRICE"
+            ) 
+          from 
+            "CLASSICMODELS"."PRODUCT"
+        ), 
+        (
+          select 
+            avg(
+              "CLASSICMODELS"."PRODUCT"."MSRP"
+            ) 
+          from 
+            "CLASSICMODELS"."PRODUCT"
+        )
       )    
      */
     @Transactional
-    public void insertEmployee() {
+    public void insertProduct() {
 
         System.out.println("EXAMPLE 5 (affected rows): "
-                + +ctx.insertInto(EMPLOYEE)
-                        .values(select(max(EMPLOYEE.EMPLOYEE_NUMBER.plus(1))).from(EMPLOYEE),
-                                "Mark", "Janel", "x4443", "markjanel@classicmodelcars.com", "1",
-                                select(avg(EMPLOYEE.SALARY)).from(EMPLOYEE),
-                                1002L, "VP Of Engineering", null, null)
+                + +ctx.insertInto(PRODUCT,
+                        PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_LINE,
+                        PRODUCT.CODE, PRODUCT.PRODUCT_SCALE, PRODUCT.PRODUCT_DESCRIPTION,
+                        PRODUCT.PRODUCT_VENDOR, PRODUCT.QUANTITY_IN_STOCK,
+                        PRODUCT.BUY_PRICE, PRODUCT.MSRP)
+                        .values(field(select(max(PRODUCT.PRODUCT_ID.plus(1))).from(PRODUCT)),
+                                val("1956 Harley Davidson LTD Chopper"), val("Motorcycles"),
+                                field(select(min(PRODUCT.CODE)).from(PRODUCT)
+                                        .where(PRODUCT.PRODUCT_LINE.eq("Motorcycles"))),
+                                val("1:10"), val("Min Lin Diecast"), val("PENDING"), val(0),
+                                field(select(avg(PRODUCT.BUY_PRICE)).from(PRODUCT)),
+                                field(select(avg(PRODUCT.MSRP)).from(PRODUCT)))
                         .execute()
         );
     }
@@ -185,15 +218,15 @@ public class ClassicModelsRepository {
     // EXAMPLE 6
     /*
     delete from 
-      "SYSTEM"."PAYMENT" 
+      "CLASSICMODELS"."PAYMENT" 
     where 
-      "SYSTEM"."PAYMENT"."CUSTOMER_NUMBER" = (
+      "CLASSICMODELS"."PAYMENT"."CUSTOMER_NUMBER" = (
         select 
-          "SYSTEM"."CUSTOMER"."CUSTOMER_NUMBER" 
+          "CLASSICMODELS"."CUSTOMER"."CUSTOMER_NUMBER" 
         from 
-          "SYSTEM"."CUSTOMER" 
+          "CLASSICMODELS"."CUSTOMER" 
         where 
-          "SYSTEM"."CUSTOMER"."CUSTOMER_NAME" = ?
+          "CLASSICMODELS"."CUSTOMER"."CUSTOMER_NAME" = ?
       )    
      */
     @Transactional
@@ -211,16 +244,18 @@ public class ClassicModelsRepository {
     // EXAMPLE 7
     /*
     update 
-      "SYSTEM"."EMPLOYEE" 
+      "CLASSICMODELS"."EMPLOYEE" 
     set 
-      "SYSTEM"."EMPLOYEE"."SALARY" = (
-        "SYSTEM"."EMPLOYEE"."SALARY" + (
+      "CLASSICMODELS"."EMPLOYEE"."SALARY" = (
+        "CLASSICMODELS"."EMPLOYEE"."SALARY" + (
           select 
-            min("SYSTEM"."EMPLOYEE"."SALARY") 
+            min(
+              "CLASSICMODELS"."EMPLOYEE"."SALARY"
+            ) 
           from 
-            "SYSTEM"."EMPLOYEE" 
+            "CLASSICMODELS"."EMPLOYEE" 
           where 
-            "SYSTEM"."EMPLOYEE"."REPORTS_TO" = ?
+            "CLASSICMODELS"."EMPLOYEE"."REPORTS_TO" = ?
         )
       )    
      */
