@@ -33,17 +33,17 @@ public class ClassicModelsRepository {
     // EXAMPLE 1
     public void selectCommonlyUsedValues1() {
 
-        // select count(*) from dual
+        // select count(*) from DUAL
         System.out.println("EXAMPLE 1.1\n"
                 + ctx.selectCount().fetch()
         );
 
-        // select 0 "zero" from dual
+        // select 0 "zero" from DUAL
         System.out.println("EXAMPLE 1.2\n"
                 + ctx.selectZero().fetch()
         );
 
-        // select 1 "one" from dual
+        // select 1 "one" from DUAL
         System.out.println("EXAMPLE 1.3\n"
                 + ctx.selectOne().fetch()
         );
@@ -52,29 +52,29 @@ public class ClassicModelsRepository {
     // EXAMPLE 2
     public void selectCommonlyUsedValues2() {
 
-        // select count(*) from dual
+        // select count(*) from DUAL
         System.out.println("EXAMPLE 2.1\n"
                 + ctx.select(count()).fetch()
         );
 
-        // select 0 from dual
+        // select 0 from DUAL
         System.out.println("EXAMPLE 2.2\n"
                 + ctx.select(inline(0)).fetch()
         );
 
         // A standard SQL way to do "DUAL" would be       
         System.out.println("EXAMPLE 2.3\n"
-                + ctx.select(val(1).as("one")).fetch() // select 1 "one" from dual
-                + ctx.fetchValue((val(1).as("one"))) // select 1 "one" from dual
-                + ctx.select().from(values(row(1)).as("t", "one")).fetch() // select "t"."one" from (select 1 "one" from dual) "t"
+                + ctx.select(val(1).as("one")).fetch() // select 1 "one" from DUAL
+                + ctx.fetchValue((val(1).as("one"))) // select 1 "one" from DUAL
+                + ctx.select().from(values(row(1)).as("t", "one")).fetch() // select "t"."one" from (select 1 "one" from DUAL) "t"
         );
         
         System.out.println("EXAMPLE 2.4\n"
-                // select 1 "A", 'John' "B", 4333 "C", 0 "D" from dual
+                // select 1 "A", 'John' "B", 4333 "C", 0 "D" from DUAL
                 + ctx.select(val(1).as("A"), val("John").as("B"),
                         val(4333).as("C"), val(false).as("D")).fetch()
                 // select "t"."A", "t"."B", "t"."C", "t"."D" from 
-                // (select 'A' "A", 'John' "B", 4333 "C", 0 "D" from dual) "t"
+                // (select 'A' "A", 'John' "B", 4333 "C", 0 "D" from DUAL) "t"
                 + ctx.select().from(values(row("A", "John", 4333, false))
                         .as("t", "A", "B", "C", "D")).fetch()
         );
@@ -83,22 +83,22 @@ public class ClassicModelsRepository {
     // EXAMPLE 3
     public void selectCommonlyUsedValues3() {
 
-        // select 1 "one" from "SYSTEM"."MANAGER"
+        // select 1 "one" from "CLASSICMODELS"."MANAGER"
         System.out.println("EXAMPLE 3.1\n"
                 + ctx.selectOne().from(MANAGER).fetch()
         );
 
-        // select 1 "one" from "SYSTEM"."CUSTOMER", "SYSTEM"."CUSTOMERDETAIL"
+        // select 1 "one" from "CLASSICMODELS"."CUSTOMER", "CLASSICMODELS"."CUSTOMERDETAIL"
         System.out.println("EXAMPLE 3.2\n"
                 + ctx.selectOne().from(CUSTOMER, CUSTOMERDETAIL).fetch()
         );
 
-        // select 1 "one" from "SYSTEM"."CUSTOMER" "c", "SYSTEM"."CUSTOMERDETAIL" "cd"
+        // select 1 "one" from "CLASSICMODELS"."CUSTOMER" "c", "CLASSICMODELS"."CUSTOMERDETAIL" "cd"
         System.out.println("EXAMPLE 3.3\n"
                 + ctx.selectOne().from(CUSTOMER.as("c"), CUSTOMERDETAIL.as("cd")).fetch()
         );
 
-        // select 1 "one" from dual
+        // select 1 "one" from DUAL
         System.out.println("EXAMPLE 3.4\n"
                 + DSL.using(SQLDialect.ORACLE).selectOne().getSQL()
         );
