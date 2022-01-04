@@ -13,6 +13,7 @@ import static org.jooq.impl.DSL.case_;
 import static org.jooq.impl.DSL.concat;
 import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.field;
+import static org.jooq.impl.DSL.inline;
 import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.min;
 import static org.jooq.impl.DSL.notExists;
@@ -91,25 +92,7 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 3
     /*
-    select
-      concat(
-        `classicmodels`.`employee`.`first_name`,
-        ?,
-        `classicmodels`.`employee`.`last_name`
-      ) as `full_name`,
-      ? as `contactType`
-    from
-      `classicmodels`.`employee`
-    union
-    select
-      concat(
-        `classicmodels`.`customer`.`contact_first_name`,
-        ?,
-        `classicmodels`.`customer`.`contact_last_name`
-      ),
-      ? as `contactType`
-    from
-      `classicmodels`.`customer`
+    
      */
     public void unionEmployeeAndCustomerNamesDifferentiate() {
 
@@ -117,12 +100,12 @@ public class ClassicModelsRepository {
                 + ctx.select(
                         concat(EMPLOYEE.FIRST_NAME, val(" "),
                                 EMPLOYEE.LAST_NAME).as("full_name"),
-                        val("Employee").as("contactType"))
+                        inline("Employee").as("contactType"))
                         .from(EMPLOYEE)
                         .union(select(
                                 concat(CUSTOMER.CONTACT_FIRST_NAME, val(" "),
                                         CUSTOMER.CONTACT_LAST_NAME),
-                                val("Customer").as("contactType"))
+                                inline("Customer").as("contactType"))
                                 .from(CUSTOMER))
                         .fetch()
         );
@@ -380,11 +363,11 @@ public class ClassicModelsRepository {
         ctx.select(PRODUCT.PRODUCT_NAME)
                 .into(table("product_stock"))
                 .from(PRODUCT)
-                .where(PRODUCT.QUANTITY_IN_STOCK.lt(Short.valueOf("500")))
+                .where(PRODUCT.QUANTITY_IN_STOCK.lt(500))
                 .union(
                         select(PRODUCT.PRODUCT_NAME)
                                 .from(PRODUCT)
-                                .where(PRODUCT.QUANTITY_IN_STOCK.ge(Short.valueOf("9500")))
+                                .where(PRODUCT.QUANTITY_IN_STOCK.ge(9500))
                 ).fetch();
 
         System.out.println("EXAMPLE 9\n"
