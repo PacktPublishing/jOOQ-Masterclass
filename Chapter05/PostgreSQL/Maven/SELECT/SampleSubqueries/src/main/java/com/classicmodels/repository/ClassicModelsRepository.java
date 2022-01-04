@@ -1,10 +1,12 @@
 package com.classicmodels.repository;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import static jooq.generated.tables.Customer.CUSTOMER;
+import static jooq.generated.tables.DailyActivity.DAILY_ACTIVITY;
+import static jooq.generated.tables.Department.DEPARTMENT;
 import jooq.generated.tables.Employee;
 import static jooq.generated.tables.Employee.EMPLOYEE;
-import static jooq.generated.tables.Manager.MANAGER;
 import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Payment.PAYMENT;
@@ -17,7 +19,8 @@ import static org.jooq.impl.DSL.primaryKey;
 import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.table;
 import static org.jooq.impl.SQLDataType.BIGINT;
-import static org.jooq.impl.SQLDataType.VARCHAR;
+import static org.jooq.impl.SQLDataType.DATE;
+import static org.jooq.impl.SQLDataType.FLOAT;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -150,13 +153,14 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 3\n"
                 + ctx.select(SALE.SALE_ID, SALE.SALE_)
                         .from(SALE, saleTable)
-                        .where(SALE.EMPLOYEE_NUMBER.eq(saleTable.field("sen").coerce(Long.class))
-                                .and(SALE.SALE_.lt(saleTable.field("avgs").coerce(Double.class))))
+                        .where(SALE.EMPLOYEE_NUMBER.eq(saleTable.field("sen", Long.class))
+                                .and(SALE.SALE_.lt(saleTable.field("avgs", Double.class))))
                         .fetch()
         );
 
-        /* same query with fields extracted as local variables
-        Field<BigDecimal> avgs = avg(SALE.SALE_).as("avgs");
+        // same query with fields extracted as local variables
+        /*
+        Field<Double> avgs = avg(SALE.SALE_).coerce(Double.class).as("avgs");
         Field<Long> sen = SALE.EMPLOYEE_NUMBER.as("sen");
 
         // Table<Record2<BigDecimal, Long>>
@@ -169,13 +173,14 @@ public class ClassicModelsRepository {
                 + ctx.select(SALE.SALE_ID, SALE.SALE_)
                         .from(SALE, saleTable)
                         .where(SALE.EMPLOYEE_NUMBER.eq(sen)
-                                .and(SALE.SALE_.lt(avgs.coerce(Double.class))))
+                                .and(SALE.SALE_.lt(avgs)))
                         .fetch()
         );
          */
         
-        /* same query with fields extracted as local variables and no derived table
-        Field<BigDecimal> avgs = avg(SALE.SALE_).as("avgs");
+        // same query with fields extracted as local variables and no derived table
+        /*
+        Field<Double> avgs = avg(SALE.SALE_).coerce(Double.class).as("avgs");
         Field<Long> sen = SALE.EMPLOYEE_NUMBER.as("sen");
 
         System.out.println("EXAMPLE 3\n"
@@ -184,7 +189,7 @@ public class ClassicModelsRepository {
                                 .from(SALE)
                                 .groupBy(SALE.EMPLOYEE_NUMBER))
                         .where(SALE.EMPLOYEE_NUMBER.eq(sen)
-                                .and(SALE.SALE_.lt(avgs.coerce(Double.class))))
+                                .and(SALE.SALE_.lt(avgs)))
                         .fetch()
         );
          */
@@ -263,7 +268,7 @@ public class ClassicModelsRepository {
                         EMPLOYEE.LAST_NAME, saleTable.field("ss"))
                         .from(saleTable, EMPLOYEE)
                         .where(EMPLOYEE.EMPLOYEE_NUMBER
-                                .eq(saleTable.field("sen").coerce(Long.class)))
+                                .eq(saleTable.field("sen", Long.class)))
                         .fetch()
         );
     }
@@ -284,7 +289,7 @@ public class ClassicModelsRepository {
     order by 
       "saleTable"."ss"
      */
-    public void findSale() {
+    public void orderSales() {
 
         // Table<?>
         var saleTable = select(SALE.EMPLOYEE_NUMBER.as("sen"), SALE.SALE_.as("ss"))
@@ -331,7 +336,7 @@ public class ClassicModelsRepository {
                 + ctx.select(salesTable.field("sen"), salesTable.field("sales"),
                         EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
                         .from(salesTable)
-                        .innerJoin(EMPLOYEE).on(salesTable.field("sen").coerce(Long.class)
+                        .innerJoin(EMPLOYEE).on(salesTable.field("sen", Long.class)
                         .eq(EMPLOYEE.EMPLOYEE_NUMBER))
                         .orderBy(salesTable.field("sales").desc())
                         .fetch()
@@ -384,15 +389,15 @@ public class ClassicModelsRepository {
         // Table<?>
         var saleTable2 = select()
                 .from(saleTable)
-                .where(saleTable.field("avgs").coerce(BigDecimal.class)
+                .where(saleTable.field("avgs", BigDecimal.class)
                         .gt(select(avg(SALE.SALE_)).from(SALE)))
                 .asTable("saleTable2");
 
         System.out.println("EXAMPLE 8\n"
                 + ctx.select(SALE.SALE_ID, SALE.SALE_)
                         .from(SALE, saleTable2)
-                        .where(SALE.EMPLOYEE_NUMBER.eq(saleTable2.field("sen").coerce(Long.class))
-                                .and(SALE.SALE_.lt(saleTable2.field("avgs").coerce(Double.class))))
+                        .where(SALE.EMPLOYEE_NUMBER.eq(saleTable2.field("sen", Long.class))
+                                .and(SALE.SALE_.lt(saleTable2.field("avgs", Double.class))))
                         .fetch()
         );
     }
@@ -441,7 +446,7 @@ public class ClassicModelsRepository {
     insert into "public"."order" (
       "comments", "customer_number", "order_date", 
       "required_date", "shipped_date", 
-      "status"
+      "status", "amount"
     ) 
     select 
       "public"."order"."comments", 
@@ -449,20 +454,19 @@ public class ClassicModelsRepository {
       "public"."order"."order_date", 
       "public"."order"."required_date", 
       "public"."order"."shipped_date", 
-      "public"."order"."status" 
+      "public"."order"."status", 
+      "public"."order"."amount" 
     from 
-      "public"."order" 
-    limit 
-      ?
+      "public"."order" fetch next ? rows only    
      */
     @Transactional
     public void insertIntoOrder() {
 
         System.out.println("EXAMPLE 10 (rows affected):"
-                + ctx.insertInto(ORDER, ORDER.COMMENTS, ORDER.CUSTOMER_NUMBER,
-                        ORDER.ORDER_DATE, ORDER.REQUIRED_DATE, ORDER.SHIPPED_DATE, ORDER.STATUS)
-                        .select(select(ORDER.COMMENTS, ORDER.CUSTOMER_NUMBER,
-                                ORDER.ORDER_DATE, ORDER.REQUIRED_DATE, ORDER.SHIPPED_DATE, ORDER.STATUS)
+                + ctx.insertInto(ORDER, ORDER.COMMENTS, ORDER.CUSTOMER_NUMBER, ORDER.ORDER_DATE, 
+                        ORDER.REQUIRED_DATE, ORDER.SHIPPED_DATE, ORDER.STATUS, ORDER.AMOUNT)
+                        .select(select(ORDER.COMMENTS, ORDER.CUSTOMER_NUMBER, ORDER.ORDER_DATE, 
+                                ORDER.REQUIRED_DATE, ORDER.SHIPPED_DATE, ORDER.STATUS,ORDER.AMOUNT)
                                 .from(ORDER)
                                 .limit(5)
                         ).execute()
@@ -471,34 +475,40 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 11
     /*
-    insert into "public"."manager" ("manager_id", "manager_name") 
+    insert into "public"."daily_activity" (
+      "day_id", "day_date", "sales", "visitors", "conversion"
+    ) 
     select 
       * 
     from 
-      manager_temp on conflict do nothing
+      daily_activity_temp on conflict do nothing    
      */
     @Transactional
-    public void insertAnotherTableInManager() {
+    public void insertAnotherTableInDailyActivity() {
 
-        // create a temporary table identical to MANAGER 
-        ctx.createTemporaryTable("manager_temp")
-                .column("manager_id", BIGINT.nullable(false))
-                .column("manager_name", VARCHAR(50).nullable(false))
+        // create a temporary table identical to DAILY_ACTIVITY 
+        ctx.createTemporaryTable("daily_activity_temp")
+                .column("day_id", BIGINT.nullable(false))
+                .column("day_date", DATE.nullable(false))
+                .column("sales", FLOAT.nullable(false))
+                .column("visitors", FLOAT.nullable(false))
+                .column("conversion", FLOAT.nullable(false))
                 .constraints(
-                        primaryKey("manager_id")
+                        primaryKey("day_id")
                 )
                 .execute();
 
         // insert some data into the temporary table 
-        ctx.insertInto(table("manager_temp"))
-                .values(Math.random() * 1000, "John Malon")
-                .execute();
+        ctx.insertInto(table("daily_activity_temp"))
+                .values(11L, LocalDate.of(2004, 1, 11), 50, 3620, 0.76)
+                .onConflictDoNothing()  // or, .onDuplicateKeyIgnore()
+                .execute(); 
 
-        // insert into MANAGER the data from the temporary table via SELECT 
+        // insert into DAILY_ACTIVITY the data from the temporary table via SELECT 
         System.out.println("EXAMPLE 11 (rows affected):"
-                + ctx.insertInto(MANAGER)
-                        .select(select().from(table("manager_temp")))
-                        .onDuplicateKeyIgnore()
+                + ctx.insertInto(DAILY_ACTIVITY)
+                        .select(select().from(table("daily_activity_temp")))
+                        .onConflictDoNothing() // or, .onDuplicateKeyIgnore()
                         .execute()
         );
     }
@@ -534,24 +544,24 @@ public class ClassicModelsRepository {
     // EXAMPLE 13
     /*
     delete from 
-      "public"."payment" 
+      "public"."department" 
     where 
-      "public"."payment"."invoice_amount" in (
+      "public"."department"."office_code" in (
         select 
-          "public"."payment"."invoice_amount" 
+          "public"."department"."office_code" 
         from 
-          "public"."payment" 
+          "public"."department" 
         where 
-          "public"."payment"."caching_date" is not null
-      )
+          "public"."department"."accrued_liabilities" is not null
+      )    
      */
     @Transactional
-    public void deletePaymentWithCachingDateNotNull() {
+    public void deleteDepartmentWithAccuredLiabilitiesNotNull() {
 
         System.out.println("EXAMPLE 13 (rows affected):"
-                + ctx.deleteFrom(PAYMENT)
-                        .where(PAYMENT.INVOICE_AMOUNT.in(select(PAYMENT.INVOICE_AMOUNT).from(PAYMENT)
-                                .where(PAYMENT.CACHING_DATE.isNotNull())))
+                + ctx.deleteFrom(DEPARTMENT)
+                        .where(DEPARTMENT.OFFICE_CODE.in(select(DEPARTMENT.OFFICE_CODE).from(DEPARTMENT)
+                                .where(DEPARTMENT.ACCRUED_LIABILITIES.isNotNull())))
                         .execute()
         );
     }
