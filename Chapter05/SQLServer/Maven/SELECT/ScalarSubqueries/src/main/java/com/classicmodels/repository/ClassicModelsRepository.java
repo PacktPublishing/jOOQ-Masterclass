@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Payment.PAYMENT;
+import static jooq.generated.tables.Product.PRODUCT;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.avg;
 import static org.jooq.impl.DSL.field;
@@ -11,6 +12,7 @@ import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.min;
 import static org.jooq.impl.DSL.round;
 import static org.jooq.impl.DSL.select;
+import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,8 +51,8 @@ public class ClassicModelsRepository {
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
                         .from(EMPLOYEE)
                         .where(EMPLOYEE.SALARY.coerce(BigDecimal.class)
-                                .ge(field(select(avg(EMPLOYEE.SALARY).plus(25000))
-                                        .from(EMPLOYEE))))
+                                .ge(select(avg(EMPLOYEE.SALARY).plus(25000))
+                                        .from(EMPLOYEE)))
                                 .fetch()
                         );
     }
@@ -143,49 +145,59 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 5
     /*
-    insert into [classicmodels].[dbo].[employee] (
-      [employee_number], [last_name], [first_name], 
-      [extension], [email], [office_code], 
-      [salary], [reports_to], [job_title]
+    insert into [classicmodels].[dbo].[product] (
+      [product_name], [product_line], [code], 
+      [product_scale], [product_description], 
+      [product_vendor], [quantity_in_stock], 
+      [buy_price], [msrp]
     ) 
     values 
       (
+        ?, ?, 
         (
           select 
-            max(
-              (
-                [classicmodels].[dbo].[employee].[employee_number] + ?
-              )
+            min(
+              [classicmodels].[dbo].[product].[code]
             ) 
           from 
-            [classicmodels].[dbo].[employee]
+            [classicmodels].[dbo].[product] 
+          where 
+            [classicmodels].[dbo].[product].[product_line] = ?
         ), 
-        ?, 
-        ?, 
-        ?, 
-        ?, 
-        ?, 
+        ?, ?, ?, ?, 
         (
           select 
             avg(
-              [classicmodels].[dbo].[employee].[salary]
+              [classicmodels].[dbo].[product].[buy_price]
             ) 
           from 
-            [classicmodels].[dbo].[employee]
+            [classicmodels].[dbo].[product]
         ), 
-        ?, 
-        ?
+        (
+          select 
+            avg(
+              [classicmodels].[dbo].[product].[msrp]
+            ) 
+          from 
+            [classicmodels].[dbo].[product]
+        )
       )    
      */
     @Transactional
-    public void insertEmployee() {
+    public void insertProduct() {
 
         System.out.println("EXAMPLE 5 (affected rows): "
-                + +ctx.insertInto(EMPLOYEE)
-                        .values(select(max(EMPLOYEE.EMPLOYEE_NUMBER.plus(1))).from(EMPLOYEE),
-                                "Mark", "Janel", "x4443", "markjanel@classicmodelcars.com", "1",
-                                select(avg(EMPLOYEE.SALARY)).from(EMPLOYEE),
-                                1002L, "VP Of Engineering", null, null)
+                + ctx.insertInto(PRODUCT, 
+                        PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_LINE,
+                        PRODUCT.CODE, PRODUCT.PRODUCT_SCALE, PRODUCT.PRODUCT_DESCRIPTION,
+                        PRODUCT.PRODUCT_VENDOR, PRODUCT.QUANTITY_IN_STOCK,
+                        PRODUCT.BUY_PRICE, PRODUCT.MSRP)
+                        .values(val("1956 Harley Davidson LTD Chopper"), val("Motorcycles"),
+                                field(select(min(PRODUCT.CODE)).from(PRODUCT)
+                                        .where(PRODUCT.PRODUCT_LINE.eq("Motorcycles"))),
+                                val("1:10"), val("Min Lin Diecast"), val("PENDING"), val(0),
+                                field(select(avg(PRODUCT.BUY_PRICE)).from(PRODUCT)),
+                                field(select(avg(PRODUCT.MSRP)).from(PRODUCT)))
                         .execute()
         );
     }
