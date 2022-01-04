@@ -488,6 +488,11 @@ public class ClassicModelsRepository {
     /* Inline parameters */
     ///////////////////////
     public void hardCodedValuesAsInlineParams() {
+        
+        ctx.select(CUSTOMER.CUSTOMER_NUMBER,
+                concat(CUSTOMER.CONTACT_FIRST_NAME, inline(" "), CUSTOMER.CONTACT_LAST_NAME))
+                .from(CUSTOMER)
+                .fetch();
 
         ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
                 .from(EMPLOYEE)

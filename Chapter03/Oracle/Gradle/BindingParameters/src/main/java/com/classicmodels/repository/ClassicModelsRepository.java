@@ -489,6 +489,11 @@ public class ClassicModelsRepository {
     ///////////////////////
     public void hardCodedValuesAsInlineParams() {
 
+        ctx.select(CUSTOMER.CUSTOMER_NUMBER,
+                concat(CUSTOMER.CONTACT_FIRST_NAME, inline(" "), CUSTOMER.CONTACT_LAST_NAME))
+                .from(CUSTOMER)
+                .fetch();
+
         ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
                 .from(EMPLOYEE)
                 .where(EMPLOYEE.SALARY.gt(inline(5000))
