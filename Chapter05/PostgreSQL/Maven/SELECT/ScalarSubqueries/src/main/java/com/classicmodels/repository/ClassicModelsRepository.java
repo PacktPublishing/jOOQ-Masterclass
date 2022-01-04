@@ -181,7 +181,7 @@ public class ClassicModelsRepository {
     public void insertProduct() {
 
         System.out.println("EXAMPLE 5 (affected rows): "
-                + +ctx.insertInto(PRODUCT, 
+                + ctx.insertInto(PRODUCT, 
                         PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_LINE,
                         PRODUCT.CODE, PRODUCT.PRODUCT_SCALE, PRODUCT.PRODUCT_DESCRIPTION,
                         PRODUCT.PRODUCT_VENDOR, PRODUCT.QUANTITY_IN_STOCK,
