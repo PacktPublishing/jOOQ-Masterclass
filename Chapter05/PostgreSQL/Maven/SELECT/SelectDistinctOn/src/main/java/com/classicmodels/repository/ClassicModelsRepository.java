@@ -224,17 +224,19 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 7
     /*
-    select count(distinct "alias_81995864")
+    select
+       count(distinct "t") 
     from
-     (
-       select
-         "public"."customerdetail"."city",
-         "public"."customerdetail"."country"
-       from
-         "public"."customerdetail"
-       where
-         "public"."customerdetail"."address_line_second" is not null
-     ) as "alias_81995864"
+       (
+          select
+             "public"."customerdetail"."city",
+             "public"."customerdetail"."country" 
+          from
+             "public"."customerdetail" 
+          where
+             "public"."customerdetail"."address_line_second" is not null
+       )
+       as "t"    
     */
     public void findDistinctCustomerCityCountryWithNoNullAddress() {
 
@@ -242,7 +244,7 @@ public class ClassicModelsRepository {
         var t = select(CUSTOMERDETAIL.CITY, CUSTOMERDETAIL.COUNTRY)
                 .from(CUSTOMERDETAIL)
                 .where(CUSTOMERDETAIL.ADDRESS_LINE_SECOND.isNotNull())
-                .asTable();
+                .asTable("t");
 
         System.out.println("EXAMPLE 7\n" +
                 ctx.select(
@@ -428,35 +430,33 @@ public class ClassicModelsRepository {
         
         /* SQL alternative based on row_number() */        
         /*
-        select 
-          "alias_87095279"."employee_number", 
-          "alias_87095279"."fiscal_year", 
-          "alias_87095279"."sale" 
-        from 
-          (
-            select 
-              distinct "public"."sale"."employee_number", 
-              "public"."sale"."fiscal_year", 
-              "public"."sale"."sale", 
-              row_number() over (
-                partition by "public"."sale"."fiscal_year" 
-                order by 
-                  "public"."sale"."fiscal_year", 
-                  "public"."sale"."sale" desc
-              ) as "rn" 
-            from 
-              "public"."sale"
-          ) as "alias_87095279" 
-        where 
-          "alias_87095279"."rn" = ? 
-        order by 
-          "alias_87095279"."fiscal_year"        
+        select
+           "t"."employee_number",
+           "t"."fiscal_year",
+           "t"."sale" 
+        from
+           (
+              select distinct
+                 "public"."sale"."employee_number",
+                 "public"."sale"."fiscal_year",
+                 "public"."sale"."sale",
+                 row_number() over (partition by "public"."sale"."fiscal_year" 
+              order by
+                 "public"."sale"."fiscal_year", "public"."sale"."sale" desc) as "rn" 
+              from
+                 "public"."sale"
+           )
+           as "t" 
+        where
+           "t"."rn" = ? 
+        order by
+           "t"."fiscal_year"        
         */
         // Table<?>
         var t = selectDistinct(SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR, SALE.SALE_,
                                 rowNumber().over(partitionBy(SALE.FISCAL_YEAR)
                                         .orderBy(SALE.FISCAL_YEAR, SALE.SALE_.desc())).as("rn"))
-                                        .from(SALE).asTable();
+                                        .from(SALE).asTable("t");
         
         System.out.println("EXAMPLE 12.3\n" + 
                 ctx.select(t.field("employee_number"), t.field("fiscal_year"), t.field("sale"))

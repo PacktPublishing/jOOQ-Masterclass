@@ -1,1 +1,0 @@
-PostgreSQL DISTINCT ON and jOOQ
