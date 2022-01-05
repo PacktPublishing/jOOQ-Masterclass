@@ -21,7 +21,6 @@ import static org.jooq.impl.DSL.notExists;
 import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.selectFrom;
 import static org.jooq.impl.DSL.table;
-import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -36,21 +35,21 @@ public class ClassicModelsRepository {
     // EXAMPLE 1
     /*
     select 
-      "SYSTEM"."EMPLOYEE"."FIRST_NAME", 
-      "SYSTEM"."EMPLOYEE"."LAST_NAME" 
+      "CLASSICMODELS"."EMPLOYEE"."FIRST_NAME", 
+      "CLASSICMODELS"."EMPLOYEE"."LAST_NAME" 
     from 
-      "SYSTEM"."EMPLOYEE" 
+      "CLASSICMODELS"."EMPLOYEE" 
     union 
     select 
-      "SYSTEM"."CUSTOMER"."CONTACT_FIRST_NAME", 
-      "SYSTEM"."CUSTOMER"."CONTACT_LAST_NAME" 
+      "CLASSICMODELS"."CUSTOMER"."CONTACT_FIRST_NAME", 
+      "CLASSICMODELS"."CUSTOMER"."CONTACT_LAST_NAME" 
     from 
-      "SYSTEM"."CUSTOMER"    
-    */
+      "CLASSICMODELS"."CUSTOMER"    
+     */
     public void unionEmployeeAndCustomerNames() {
 
-        System.out.println("EXAMPLE 1\n" +
-                ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
+        System.out.println("EXAMPLE 1\n"
+                + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
                         .from(EMPLOYEE)
                         .union(select(CUSTOMER.CONTACT_FIRST_NAME, CUSTOMER.CONTACT_LAST_NAME)
                                 .from(CUSTOMER))
@@ -62,26 +61,26 @@ public class ClassicModelsRepository {
     /*
     select 
       (
-        "SYSTEM"."EMPLOYEE"."FIRST_NAME" || ? || "SYSTEM"."EMPLOYEE"."LAST_NAME"
+        "CLASSICMODELS"."EMPLOYEE"."FIRST_NAME" || ' ' || "CLASSICMODELS"."EMPLOYEE"."LAST_NAME"
       ) "full_name" 
     from 
-      "SYSTEM"."EMPLOYEE" 
+      "CLASSICMODELS"."EMPLOYEE" 
     union 
     select 
       (
-        "SYSTEM"."CUSTOMER"."CONTACT_FIRST_NAME" || ? || "SYSTEM"."CUSTOMER"."CONTACT_LAST_NAME"
+        "CLASSICMODELS"."CUSTOMER"."CONTACT_FIRST_NAME" || ' ' || "CLASSICMODELS"."CUSTOMER"."CONTACT_LAST_NAME"
       ) 
     from 
-      "SYSTEM"."CUSTOMER"    
-    */
+      "CLASSICMODELS"."CUSTOMER"
+     */
     public void unionEmployeeAndCustomerNamesConcatColumns() {
 
-        System.out.println("EXAMPLE 2\n" +
-                ctx.select(
-                        concat(EMPLOYEE.FIRST_NAME, val(" "), EMPLOYEE.LAST_NAME).as("full_name"))
+        System.out.println("EXAMPLE 2\n"
+                + ctx.select(
+                        concat(EMPLOYEE.FIRST_NAME, inline(" "), EMPLOYEE.LAST_NAME).as("full_name"))
                         .from(EMPLOYEE)
                         .union(select(
-                                concat(CUSTOMER.CONTACT_FIRST_NAME, val(" "), CUSTOMER.CONTACT_LAST_NAME))
+                                concat(CUSTOMER.CONTACT_FIRST_NAME, inline(" "), CUSTOMER.CONTACT_LAST_NAME))
                                 .from(CUSTOMER))
                         .fetch()
         );
@@ -91,32 +90,32 @@ public class ClassicModelsRepository {
     /*
     select 
       (
-        "SYSTEM"."EMPLOYEE"."FIRST_NAME" || ? || "SYSTEM"."EMPLOYEE"."LAST_NAME"
+        "CLASSICMODELS"."EMPLOYEE"."FIRST_NAME" || ' ' || "CLASSICMODELS"."EMPLOYEE"."LAST_NAME"
       ) "full_name", 
-      ? "contactType" 
+      'Employee' "contactType" 
     from 
-      "SYSTEM"."EMPLOYEE" 
+      "CLASSICMODELS"."EMPLOYEE" 
     union 
     select 
       (
-        "SYSTEM"."CUSTOMER"."CONTACT_FIRST_NAME" || ? || "SYSTEM"."CUSTOMER"."CONTACT_LAST_NAME"
+        "CLASSICMODELS"."CUSTOMER"."CONTACT_FIRST_NAME" || ' ' || "CLASSICMODELS"."CUSTOMER"."CONTACT_LAST_NAME"
       ), 
-      ? "contactType" 
+      'Customer' "contactType" 
     from 
-      "SYSTEM"."CUSTOMER"    
-    */
+      "CLASSICMODELS"."CUSTOMER"
+     */
     public void unionEmployeeAndCustomerNamesDifferentiate() {
 
-        System.out.println("EXAMPLE 3\n" +
-                ctx.select(
-                        concat(EMPLOYEE.FIRST_NAME, val(" "),
+        System.out.println("EXAMPLE 3\n"
+                + ctx.select(
+                        concat(EMPLOYEE.FIRST_NAME, inline(" "),
                                 EMPLOYEE.LAST_NAME).as("full_name"),
-                        val("Employee").as("contactType"))
+                        inline("Employee").as("contactType"))
                         .from(EMPLOYEE)
                         .union(select(
-                                concat(CUSTOMER.CONTACT_FIRST_NAME, val(" "),
+                                concat(CUSTOMER.CONTACT_FIRST_NAME, inline(" "),
                                         CUSTOMER.CONTACT_LAST_NAME),
-                                val("Customer").as("contactType"))
+                                inline("Customer").as("contactType"))
                                 .from(CUSTOMER))
                         .fetch()
         );
@@ -126,28 +125,28 @@ public class ClassicModelsRepository {
     /*
     select 
       (
-        "SYSTEM"."EMPLOYEE"."FIRST_NAME" || ? || "SYSTEM"."EMPLOYEE"."LAST_NAME"
+        "CLASSICMODELS"."EMPLOYEE"."FIRST_NAME" || ' ' || "CLASSICMODELS"."EMPLOYEE"."LAST_NAME"
       ) "full_name" 
     from 
-      "SYSTEM"."EMPLOYEE" 
+      "CLASSICMODELS"."EMPLOYEE" 
     union 
     select 
       (
-        "SYSTEM"."CUSTOMER"."CONTACT_FIRST_NAME" || ? || "SYSTEM"."CUSTOMER"."CONTACT_LAST_NAME"
+        "CLASSICMODELS"."CUSTOMER"."CONTACT_FIRST_NAME" || ' ' || "CLASSICMODELS"."CUSTOMER"."CONTACT_LAST_NAME"
       ) 
     from 
-      "SYSTEM"."CUSTOMER" 
+      "CLASSICMODELS"."CUSTOMER" 
     order by 
       "full_name"    
-    */
+     */
     public void unionEmployeeAndCustomerNamesOrderBy() {
 
-        System.out.println("EXAMPLE 4\n" +
-                ctx.select(
-                        concat(EMPLOYEE.FIRST_NAME, val(" "), EMPLOYEE.LAST_NAME).as(name("full_name")))
+        System.out.println("EXAMPLE 4\n"
+                + ctx.select(
+                        concat(EMPLOYEE.FIRST_NAME, inline(" "), EMPLOYEE.LAST_NAME).as(name("full_name")))
                         .from(EMPLOYEE)
                         .union(select(
-                                concat(CUSTOMER.CONTACT_FIRST_NAME, val(" "), CUSTOMER.CONTACT_LAST_NAME))
+                                concat(CUSTOMER.CONTACT_FIRST_NAME, inline(" "), CUSTOMER.CONTACT_LAST_NAME))
                                 .from(CUSTOMER))
                         .orderBy(field(name("full_name")))
                         .fetch()
@@ -158,47 +157,51 @@ public class ClassicModelsRepository {
     /*
     (
       select 
-        "SYSTEM"."EMPLOYEE"."EMPLOYEE_NUMBER", 
-        "SYSTEM"."EMPLOYEE"."LAST_NAME", 
-        "SYSTEM"."EMPLOYEE"."FIRST_NAME", 
-        "SYSTEM"."EMPLOYEE"."EXTENSION", 
-        "SYSTEM"."EMPLOYEE"."EMAIL", 
-        "SYSTEM"."EMPLOYEE"."OFFICE_CODE", 
-        "SYSTEM"."EMPLOYEE"."SALARY", 
-        "SYSTEM"."EMPLOYEE"."REPORTS_TO", 
-        "SYSTEM"."EMPLOYEE"."JOB_TITLE" 
+        "CLASSICMODELS"."EMPLOYEE"."EMPLOYEE_NUMBER", 
+        "CLASSICMODELS"."EMPLOYEE"."LAST_NAME", 
+        "CLASSICMODELS"."EMPLOYEE"."FIRST_NAME", 
+        "CLASSICMODELS"."EMPLOYEE"."EXTENSION", 
+        "CLASSICMODELS"."EMPLOYEE"."EMAIL", 
+        "CLASSICMODELS"."EMPLOYEE"."OFFICE_CODE", 
+        "CLASSICMODELS"."EMPLOYEE"."SALARY", 
+        "CLASSICMODELS"."EMPLOYEE"."COMMISSION", 
+        "CLASSICMODELS"."EMPLOYEE"."REPORTS_TO", 
+        "CLASSICMODELS"."EMPLOYEE"."JOB_TITLE" 
       from 
-        "SYSTEM"."EMPLOYEE" 
+        "CLASSICMODELS"."EMPLOYEE" 
       order by 
-        "SYSTEM"."EMPLOYEE"."SALARY" asc fetch next ? rows only
+        "CLASSICMODELS"."EMPLOYEE"."SALARY" asc fetch next ? rows only
     ) 
     union 
       (
         select 
-          "SYSTEM"."EMPLOYEE"."EMPLOYEE_NUMBER", 
-          "SYSTEM"."EMPLOYEE"."LAST_NAME", 
-          "SYSTEM"."EMPLOYEE"."FIRST_NAME", 
-          "SYSTEM"."EMPLOYEE"."EXTENSION", 
-          "SYSTEM"."EMPLOYEE"."EMAIL", 
-          "SYSTEM"."EMPLOYEE"."OFFICE_CODE", 
-          "SYSTEM"."EMPLOYEE"."SALARY", 
-          "SYSTEM"."EMPLOYEE"."REPORTS_TO", 
-          "SYSTEM"."EMPLOYEE"."JOB_TITLE" 
+          "CLASSICMODELS"."EMPLOYEE"."EMPLOYEE_NUMBER", 
+          "CLASSICMODELS"."EMPLOYEE"."LAST_NAME", 
+          "CLASSICMODELS"."EMPLOYEE"."FIRST_NAME", 
+          "CLASSICMODELS"."EMPLOYEE"."EXTENSION", 
+          "CLASSICMODELS"."EMPLOYEE"."EMAIL", 
+          "CLASSICMODELS"."EMPLOYEE"."OFFICE_CODE", 
+          "CLASSICMODELS"."EMPLOYEE"."SALARY", 
+          "CLASSICMODELS"."EMPLOYEE"."COMMISSION", 
+          "CLASSICMODELS"."EMPLOYEE"."REPORTS_TO", 
+          "CLASSICMODELS"."EMPLOYEE"."JOB_TITLE" 
         from 
-          "SYSTEM"."EMPLOYEE" 
+          "CLASSICMODELS"."EMPLOYEE" 
         order by 
-          "SYSTEM"."EMPLOYEE"."SALARY" desc fetch next ? rows only
+          "CLASSICMODELS"."EMPLOYEE"."SALARY" desc fetch next ? rows only
       ) 
     order by 
       1    
-    */
+     */
     public void unionEmployeeSmallestAndHighestSalary() {
 
-        System.out.println("EXAMPLE 5\n" +
-                ctx.selectFrom(EMPLOYEE)
+        System.out.println("EXAMPLE 5\n"
+                + ctx.select(EMPLOYEE.asterisk().except(EMPLOYEE.EMPLOYEE_OF_YEAR, EMPLOYEE.MONTHLY_BONUS))
+                        .from(EMPLOYEE)
                         .orderBy(EMPLOYEE.SALARY.asc()).limit(1)
                         .union(
-                                selectFrom(EMPLOYEE)
+                                select(EMPLOYEE.asterisk().except(EMPLOYEE.EMPLOYEE_OF_YEAR, EMPLOYEE.MONTHLY_BONUS))
+                                        .from(EMPLOYEE)
                                         .orderBy(EMPLOYEE.SALARY.desc()).limit(1))
                         .orderBy(1)
                         .fetch()
@@ -208,24 +211,24 @@ public class ClassicModelsRepository {
     // EXAMPLE 6
     /*
     select 
-      "SYSTEM"."OFFICE"."CITY", 
-      "SYSTEM"."OFFICE"."COUNTRY" 
+      "CLASSICMODELS"."OFFICE"."CITY", 
+      "CLASSICMODELS"."OFFICE"."COUNTRY" 
     from 
-      "SYSTEM"."OFFICE" 
+      "CLASSICMODELS"."OFFICE" 
     union all 
     select 
-      "SYSTEM"."CUSTOMERDETAIL"."CITY", 
-      "SYSTEM"."CUSTOMERDETAIL"."COUNTRY" 
+      "CLASSICMODELS"."CUSTOMERDETAIL"."CITY", 
+      "CLASSICMODELS"."CUSTOMERDETAIL"."COUNTRY" 
     from 
-      "SYSTEM"."CUSTOMERDETAIL" 
+      "CLASSICMODELS"."CUSTOMERDETAIL" 
     order by 
       "CITY", 
       "COUNTRY"   
-    */    
+     */
     public void unionAllOfficeCustomerCityAndCountry() {
 
-        System.out.println("EXAMPLE 6\n" +
-                ctx.select(OFFICE.CITY, OFFICE.COUNTRY)
+        System.out.println("EXAMPLE 6\n"
+                + ctx.select(OFFICE.CITY, OFFICE.COUNTRY)
                         .from(OFFICE)
                         .unionAll(select(CUSTOMERDETAIL.CITY, CUSTOMERDETAIL.COUNTRY)
                                 .from(CUSTOMERDETAIL))
@@ -244,121 +247,152 @@ public class ClassicModelsRepository {
         case when not (
           exists (
             select 
+              "R2"."ORDERDETAIL_ID", 
               "R2"."ORDER_ID", 
               "R2"."PRODUCT_ID", 
               "R2"."QUANTITY_ORDERED", 
               "R2"."PRICE_EACH", 
               "R2"."ORDER_LINE_NUMBER" 
             from 
-              "SYSTEM"."ORDERDETAIL" "R2" 
+              "CLASSICMODELS"."ORDERDETAIL" "R2" 
             where 
               (
                 "R2"."PRODUCT_ID" = "R1"."PRODUCT_ID" 
                 and "R2"."PRICE_EACH" < "R1"."PRICE_EACH"
               )
           )
-        ) then ? end
+        ) then 1 end
       ) "worst_price", 
       max("R1"."PRICE_EACH") "max_price", 
       count(
         case when not (
           exists (
             select 
+              "R3"."ORDERDETAIL_ID", 
               "R3"."ORDER_ID", 
               "R3"."PRODUCT_ID", 
               "R3"."QUANTITY_ORDERED", 
               "R3"."PRICE_EACH", 
               "R3"."ORDER_LINE_NUMBER" 
             from 
-              "SYSTEM"."ORDERDETAIL" "R3" 
+              "CLASSICMODELS"."ORDERDETAIL" "R3" 
             where 
               (
                 "R3"."PRODUCT_ID" = "R1"."PRODUCT_ID" 
                 and "R3"."PRICE_EACH" > "R1"."PRICE_EACH"
               )
           )
-        ) then ? end
+        ) then 1 end
       ) "best_price" 
     from 
-      "SYSTEM"."ORDERDETAIL" "R1" 
+      "CLASSICMODELS"."ORDERDETAIL" "R1" 
     group by 
       "R1"."PRODUCT_ID", 
       "R1"."ORDER_ID"    
-    */
+     */
     public void findMinMaxWorstBestPrice() {
-        
+
         Orderdetail R1 = ORDERDETAIL.as("R1");
         Orderdetail R2 = ORDERDETAIL.as("R2");
         Orderdetail R3 = ORDERDETAIL.as("R3");
-        
-        System.out.println("EXAMPLE 7\n" +
-                ctx.select(R1.PRODUCT_ID, R1.ORDER_ID, min(R1.PRICE_EACH).as("min_price"),
+
+        System.out.println("EXAMPLE 7.1\n"
+                + ctx.select(R1.PRODUCT_ID, R1.ORDER_ID, min(R1.PRICE_EACH).as("min_price"),
+                        count().filterWhere(notExists(select().from(R2)
+                                .where(R2.PRODUCT_ID.eq(R1.PRODUCT_ID)
+                                        .and(R2.PRICE_EACH.lt(R1.PRICE_EACH)))))
+                                .as("worst_price"), max(R1.PRICE_EACH).as("max_price"),
+                        count().filterWhere(notExists(select().from(R3)
+                                .where(R3.PRODUCT_ID.eq(R1.PRODUCT_ID)
+                                        .and(R3.PRICE_EACH.gt(R1.PRICE_EACH)))))
+                                .as("best_price"))
+                        .from(R1)
+                        .groupBy(R1.PRODUCT_ID, R1.ORDER_ID)
+                        .fetch()
+        );
+
+        System.out.println("EXAMPLE 7.2\n"
+                + ctx.select(R1.PRODUCT_ID, R1.ORDER_ID, min(R1.PRICE_EACH).as("min_price"),
                         count(case_()
                                 .when(notExists(select().from(R2)
                                         .where(R2.PRODUCT_ID.eq(R1.PRODUCT_ID)
-                                                .and(R2.PRICE_EACH.lt(R1.PRICE_EACH)))), 1)                      
+                                                .and(R2.PRICE_EACH.lt(R1.PRICE_EACH)))), 1)
                         ).as("worst_price"), max(R1.PRICE_EACH).as("max_price"),
                         count(case_()
                                 .when(notExists(select().from(R3)
                                         .where(R3.PRODUCT_ID.eq(R1.PRODUCT_ID)
-                                                .and(R3.PRICE_EACH.gt(R1.PRICE_EACH)))), 1)                      
+                                                .and(R3.PRICE_EACH.gt(R1.PRICE_EACH)))), 1)
                         ).as("best_price"))
                         .from(R1)
                         .groupBy(R1.PRODUCT_ID, R1.ORDER_ID)
                         .fetch()
-        );                 
-    }   
-    
+        );
+    }
+
     // EXAMPLE 8
     /*
-    select "alias_79896943"."ORDER_ID",
-           "alias_79896943"."PRICE_EACH",
-           "alias_79896943"."QUANTITY_ORDERED"
-    from (
-            (select "SYSTEM"."ORDERDETAIL"."ORDER_ID",
-                    "SYSTEM"."ORDERDETAIL"."PRICE_EACH",
-                    "SYSTEM"."ORDERDETAIL"."QUANTITY_ORDERED"
-             from "SYSTEM"."ORDERDETAIL"
-             where "SYSTEM"."ORDERDETAIL"."QUANTITY_ORDERED" <= ?
-             order by "SYSTEM"."ORDERDETAIL"."PRICE_EACH" FETCH NEXT ? ROWS ONLY)
-          union
-            (select "SYSTEM"."ORDERDETAIL"."ORDER_ID",
-                    "SYSTEM"."ORDERDETAIL"."PRICE_EACH",
-                    "SYSTEM"."ORDERDETAIL"."QUANTITY_ORDERED"
-             from "SYSTEM"."ORDERDETAIL"
-             where "SYSTEM"."ORDERDETAIL"."QUANTITY_ORDERED" >= ?
-             order by "SYSTEM"."ORDERDETAIL"."PRICE_EACH" FETCH NEXT ? ROWS ONLY)) "alias_79896943"    
-    */
+    select 
+      "t"."ORDER_ID", 
+      "t"."PRICE_EACH", 
+      "t"."QUANTITY_ORDERED" 
+    from 
+      (
+        (
+          select 
+            "CLASSICMODELS"."ORDERDETAIL"."ORDER_ID", 
+            "CLASSICMODELS"."ORDERDETAIL"."PRICE_EACH", 
+            "CLASSICMODELS"."ORDERDETAIL"."QUANTITY_ORDERED" 
+          from 
+            "CLASSICMODELS"."ORDERDETAIL" 
+          where 
+            "CLASSICMODELS"."ORDERDETAIL"."QUANTITY_ORDERED" <= ? 
+          order by 
+            "CLASSICMODELS"."ORDERDETAIL"."PRICE_EACH" fetch next ? rows only
+        ) 
+        union 
+          (
+            select 
+              "CLASSICMODELS"."ORDERDETAIL"."ORDER_ID", 
+              "CLASSICMODELS"."ORDERDETAIL"."PRICE_EACH", 
+              "CLASSICMODELS"."ORDERDETAIL"."QUANTITY_ORDERED" 
+            from 
+              "CLASSICMODELS"."ORDERDETAIL" 
+            where 
+              "CLASSICMODELS"."ORDERDETAIL"."QUANTITY_ORDERED" >= ? 
+            order by 
+              "CLASSICMODELS"."ORDERDETAIL"."PRICE_EACH" fetch next ? rows only
+          )
+      ) "t"    
+     */
     public void findTop5OrdersHavingQuantityOrderedLe20AndGe60OrderedByPrice() {
 
         System.out.println("EXAMPLE 8\n"
                 + ctx.select().from(
                         select(ORDERDETAIL.ORDER_ID, ORDERDETAIL.PRICE_EACH, ORDERDETAIL.QUANTITY_ORDERED)
                                 .from(ORDERDETAIL)
-                                .where(ORDERDETAIL.QUANTITY_ORDERED.le(20L))
+                                .where(ORDERDETAIL.QUANTITY_ORDERED.le(20))
                                 .orderBy(ORDERDETAIL.PRICE_EACH).limit(5)
                                 .union(
                                         select(ORDERDETAIL.ORDER_ID, ORDERDETAIL.PRICE_EACH, ORDERDETAIL.QUANTITY_ORDERED)
                                                 .from(ORDERDETAIL)
-                                                .where(ORDERDETAIL.QUANTITY_ORDERED.ge(60L))
+                                                .where(ORDERDETAIL.QUANTITY_ORDERED.ge(60))
                                                 .orderBy(ORDERDETAIL.PRICE_EACH).limit(5)
-                                )
-                )
+                                ).asTable("t"))
                         .fetch()
         );
     }
-    
+
     // EXAMPLE 9
     /*
     create table "product_stock" AS
-    select "SYSTEM"."PRODUCT"."PRODUCT_NAME"
-    from "SYSTEM"."PRODUCT"
-    where "SYSTEM"."PRODUCT"."QUANTITY_IN_STOCK" < 500
+    select "CLASSICMODELS"."PRODUCT"."PRODUCT_NAME"
+    from "CLASSICMODELS"."PRODUCT"
+    where "CLASSICMODELS"."PRODUCT"."QUANTITY_IN_STOCK" < 500
     union
-    select "SYSTEM"."PRODUCT"."PRODUCT_NAME"
-    from "SYSTEM"."PRODUCT"
-    where "SYSTEM"."PRODUCT"."QUANTITY_IN_STOCK" >= 9500    
-    */
+    select "CLASSICMODELS"."PRODUCT"."PRODUCT_NAME"
+    from "CLASSICMODELS"."PRODUCT"
+    where "CLASSICMODELS"."PRODUCT"."QUANTITY_IN_STOCK" >= 9500    
+     */
     public void findProductStockLt500Gt9500() {
 
         ctx.dropTableIfExists(name("product_stock")).execute();
@@ -377,68 +411,59 @@ public class ClassicModelsRepository {
                 + ctx.selectFrom(table(name("product_stock"))).fetch()
         );
     }
-    
+
     // EXAMPLE 10
     /*
     select 
-      "SYSTEM"."CUSTOMER"."CUSTOMER_NUMBER", 
-      count(*) "silver", 
-      ?, 
-      ? 
+      "t"."ORDER_ID", 
+      "t"."PRICE_EACH", 
+      "t"."QUANTITY_ORDERED" 
     from 
-      "SYSTEM"."CUSTOMER" 
-      join "SYSTEM"."PAYMENT" on "SYSTEM"."CUSTOMER"."CUSTOMER_NUMBER" 
-        = "SYSTEM"."PAYMENT"."CUSTOMER_NUMBER" 
-    group by 
-      "SYSTEM"."CUSTOMER"."CUSTOMER_NUMBER" 
-    having 
-      count(*) < ? 
-    union 
-    select 
-      "SYSTEM"."CUSTOMER"."CUSTOMER_NUMBER", 
-      ?, 
-      count(*) "gold", 
-      ? 
-    from 
-      "SYSTEM"."CUSTOMER" 
-      join "SYSTEM"."PAYMENT" on "SYSTEM"."CUSTOMER"."CUSTOMER_NUMBER" 
-        = "SYSTEM"."PAYMENT"."CUSTOMER_NUMBER" 
-    group by 
-      "SYSTEM"."CUSTOMER"."CUSTOMER_NUMBER" 
-    having 
-      count(*) = ? 
-    union 
-    select 
-      "SYSTEM"."CUSTOMER"."CUSTOMER_NUMBER", 
-      ?, 
-      ?, 
-      count(*) "platinum" 
-    from 
-      "SYSTEM"."CUSTOMER" 
-      join "SYSTEM"."PAYMENT" on "SYSTEM"."CUSTOMER"."CUSTOMER_NUMBER" 
-        = "SYSTEM"."PAYMENT"."CUSTOMER_NUMBER" 
-    group by 
-      "SYSTEM"."CUSTOMER"."CUSTOMER_NUMBER" 
-    having 
-      count(*) > ?    
-    */
+      (
+        (
+          select 
+            "CLASSICMODELS"."ORDERDETAIL"."ORDER_ID", 
+            "CLASSICMODELS"."ORDERDETAIL"."PRICE_EACH", 
+            "CLASSICMODELS"."ORDERDETAIL"."QUANTITY_ORDERED" 
+          from 
+            "CLASSICMODELS"."ORDERDETAIL" 
+          where 
+            "CLASSICMODELS"."ORDERDETAIL"."QUANTITY_ORDERED" <= ? 
+          order by 
+            "CLASSICMODELS"."ORDERDETAIL"."PRICE_EACH" fetch next ? rows only
+        ) 
+        union 
+          (
+            select 
+              "CLASSICMODELS"."ORDERDETAIL"."ORDER_ID", 
+              "CLASSICMODELS"."ORDERDETAIL"."PRICE_EACH", 
+              "CLASSICMODELS"."ORDERDETAIL"."QUANTITY_ORDERED" 
+            from 
+              "CLASSICMODELS"."ORDERDETAIL" 
+            where 
+              "CLASSICMODELS"."ORDERDETAIL"."QUANTITY_ORDERED" >= ? 
+            order by 
+              "CLASSICMODELS"."ORDERDETAIL"."PRICE_EACH" fetch next ? rows only
+          )
+      ) "t"      
+     */
     public void findSilverGoldPlatinumCustomers() {
         System.out.println("EXAMPLE 10\n"
-                + ctx.select(CUSTOMER.CUSTOMER_NUMBER, count().as("silver"), val(0), val(0))
+                + ctx.select(CUSTOMER.CUSTOMER_NUMBER, count().as("silver"), inline(0), inline(0))
                         .from(CUSTOMER)
                         .join(PAYMENT)
                         .on(CUSTOMER.CUSTOMER_NUMBER.eq(PAYMENT.CUSTOMER_NUMBER))
                         .groupBy(CUSTOMER.CUSTOMER_NUMBER)
                         .having(count().lt(2))
                         .union(
-                                select(CUSTOMER.CUSTOMER_NUMBER, val(0), count().as("gold"), val(0))
+                                select(CUSTOMER.CUSTOMER_NUMBER, inline(0), count().as("gold"), inline(0))
                                         .from(CUSTOMER)
                                         .join(PAYMENT)
                                         .on(CUSTOMER.CUSTOMER_NUMBER.eq(PAYMENT.CUSTOMER_NUMBER))
                                         .groupBy(CUSTOMER.CUSTOMER_NUMBER)
                                         .having(count().eq(2))
                         ).union(
-                                select(CUSTOMER.CUSTOMER_NUMBER, val(0), val(0), count().as("platinum"))
+                                select(CUSTOMER.CUSTOMER_NUMBER, inline(0), inline(0), count().as("platinum"))
                                         .from(CUSTOMER)
                                         .join(PAYMENT)
                                         .on(CUSTOMER.CUSTOMER_NUMBER.eq(PAYMENT.CUSTOMER_NUMBER))
