@@ -28,7 +28,7 @@ public class ClassicModelsService {
         classicModelsRepository.findUnprocessedPayments();                             // EXAMPLE 13
         classicModelsRepository.findEmployeeNumberWithMoreSalesIn2005Than2003();       // EXAMPLE 14
         classicModelsRepository.updateCustomerCreditLimit();                           // EXAMPLE 15
-        classicModelsRepository.deletePaymentOfCustomerCreditLimitGt150000();          // EXAMPLE 16
+        classicModelsRepository.deleteSaleOfEmployeeSalaryGt20000();                   // EXAMPLE 16
         classicModelsRepository.insertPaymentInBankTransaction();                      // EXAMPLE 17                
     }
 }

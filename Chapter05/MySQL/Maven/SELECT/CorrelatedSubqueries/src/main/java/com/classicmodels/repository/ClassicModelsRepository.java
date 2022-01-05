@@ -21,6 +21,7 @@ import static org.jooq.impl.DSL.case_;
 import static org.jooq.impl.DSL.concat;
 import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.field;
+import static org.jooq.impl.DSL.inline;
 import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.nvl;
 import static org.jooq.impl.DSL.row;
@@ -88,35 +89,33 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 2
     /*
-    select
-      `classicmodels`.`customerdetail`.`city`,
-      `classicmodels`.`customerdetail`.`country`,
-        (
-          select
-            concat
-            (
-              `classicmodels`.`customer`.`contact_first_name`,
-              ?,
-              `classicmodels`.`customer`.`contact_last_name`
-            )
-          from
-            `classicmodels`.`customer`
-          where
-            `classicmodels`.`customer`.`customer_number` = `classicmodels`.`customerdetail`.`customer_number`
-        ) as `fullName`
-    from
-      `classicmodels`.`customerdetail`
+    select 
+      `classicmodels`.`customerdetail`.`city`, 
+      `classicmodels`.`customerdetail`.`country`, 
+      (
+        select 
+          concat(
+            `classicmodels`.`customer`.`contact_first_name`, 
+            ' ', `classicmodels`.`customer`.`contact_last_name`
+          ) 
+        from 
+          `classicmodels`.`customer` 
+        where 
+          `classicmodels`.`customer`.`customer_number` = `classicmodels`.`customerdetail`.`customer_number`
+      ) as `fullName` 
+    from 
+      `classicmodels`.`customerdetail`    
      */
     public void findCustomerFullNameCityCountry() {                
 
         // using type-safe DSL.Field(Select)                        
-        Field<String> fullName = field(select(concat(CUSTOMER.CONTACT_FIRST_NAME, val(" "), CUSTOMER.CONTACT_LAST_NAME))
+        Field<String> fullName = field(select(concat(CUSTOMER.CONTACT_FIRST_NAME, inline(" "), CUSTOMER.CONTACT_LAST_NAME))
                 .from(CUSTOMER)
                 .where(CUSTOMER.CUSTOMER_NUMBER.eq(CUSTOMERDETAIL.CUSTOMER_NUMBER))).as("fullName");         
         
         // or, using the non type-safe asField()
         /*
-        Field<?> fullName = select(concat(CUSTOMER.CONTACT_FIRST_NAME, val(" "), CUSTOMER.CONTACT_LAST_NAME))
+        Field<?> fullName = select(concat(CUSTOMER.CONTACT_FIRST_NAME, inline(" "), CUSTOMER.CONTACT_LAST_NAME))
                 .from(CUSTOMER)
                 .where(CUSTOMER.CUSTOMER_NUMBER.eq(CUSTOMERDETAIL.CUSTOMER_NUMBER))
                 .asField("fullName");
@@ -134,7 +133,7 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 2\n" +
                 ctx.select(
                         CUSTOMERDETAIL.CITY, CUSTOMERDETAIL.COUNTRY,
-                        field(select(concat(CUSTOMER.CONTACT_FIRST_NAME, val(" "), CUSTOMER.CONTACT_LAST_NAME))
+                        field(select(concat(CUSTOMER.CONTACT_FIRST_NAME, inline(" "), CUSTOMER.CONTACT_LAST_NAME))
                                 .from(CUSTOMER)
                                 .where(CUSTOMER.CUSTOMER_NUMBER.eq(CUSTOMERDETAIL.CUSTOMER_NUMBER)))
                                 .as("fullName"))
@@ -409,8 +408,7 @@ public class ClassicModelsRepository {
                 + ctx.selectFrom(ORDERDETAIL)
                         .whereNotExists(select(PRODUCT.PRODUCT_ID).from(PRODUCT)
                                 .where(PRODUCT.PRODUCT_ID.eq(ORDERDETAIL.PRODUCT_ID)
-                                        .and(PRODUCT.QUANTITY_IN_STOCK.coerce(Integer.class)
-                                                .gt(ORDERDETAIL.QUANTITY_ORDERED))))
+                                        .and(PRODUCT.QUANTITY_IN_STOCK.gt(ORDERDETAIL.QUANTITY_ORDERED))))
                         .groupBy(ORDERDETAIL.PRODUCT_ID)
                         .orderBy(ORDERDETAIL.QUANTITY_ORDERED)
                         .fetch()
@@ -661,30 +659,30 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 16
     /*
-    delete from
-      `classicmodels`.`payment`
-    where
-      `classicmodels`.`payment`.`customer_number` in (
-        select
-          `classicmodels`.`customer`.`customer_number`
-        from
-          `classicmodels`.`customer`
-        where
-         (
-           `classicmodels`.`payment`.`customer_number` = `classicmodels`.`customer`.`customer_number`
-              and `classicmodels`.`customer`.`credit_limit` > ?
-         )
-      )
+    delete from 
+      `classicmodels`.`sale` 
+    where 
+      `classicmodels`.`sale`.`employee_number` in (
+        select 
+          `classicmodels`.`employee`.`employee_number` 
+        from 
+          `classicmodels`.`employee` 
+        where 
+          (
+            `classicmodels`.`sale`.`employee_number` = `classicmodels`.`employee`.`employee_number` 
+            and `classicmodels`.`employee`.`salary` >= ?
+          )
+      )    
      */
     @Transactional
-    public void deletePaymentOfCustomerCreditLimitGt150000() {
+    public void deleteSaleOfEmployeeSalaryGt20000() {
 
         System.out.println("EXAMPLE 16 (affected rows): "
-                + +ctx.deleteFrom(PAYMENT)
-                        .where(PAYMENT.CUSTOMER_NUMBER.in(select(CUSTOMER.CUSTOMER_NUMBER)
-                                .from(CUSTOMER).where(PAYMENT.CUSTOMER_NUMBER
-                                .eq(CUSTOMER.CUSTOMER_NUMBER)
-                                .and(CUSTOMER.CREDIT_LIMIT.gt(BigDecimal.valueOf(150000))))))
+                + +ctx.deleteFrom(SALE)
+                        .where(SALE.EMPLOYEE_NUMBER.in(select(EMPLOYEE.EMPLOYEE_NUMBER)
+                                .from(EMPLOYEE).where(SALE.EMPLOYEE_NUMBER
+                                .eq(EMPLOYEE.EMPLOYEE_NUMBER)
+                                .and(EMPLOYEE.SALARY.ge(20000)))))
                         .execute()
         );
     }
@@ -694,18 +692,20 @@ public class ClassicModelsRepository {
     insert into `classicmodels`.`bank_transaction` (
       `bank_name`, `bank_iban`, `transfer_amount`, 
       `caching_date`, `customer_number`, 
-      `check_number`, `status`
+      `check_number`, `card_type`, `status`
     ) 
     select 
-      distinct ?, 
-      ?, 
+      distinct 'N/A', 
+      'N/A', 
       `classicmodels`.`payment`.`invoice_amount`, 
       ifnull(
         `classicmodels`.`payment`.`caching_date`, 
         `classicmodels`.`payment`.`payment_date`
       ), 
       `classicmodels`.`payment`.`customer_number`, 
-      `classicmodels`.`payment`.`check_number` 
+      `classicmodels`.`payment`.`check_number`, 
+      ?, 
+      ? 
     from 
       `classicmodels`.`payment` 
       left outer join `classicmodels`.`bank_transaction` on (
@@ -719,19 +719,17 @@ public class ClassicModelsRepository {
       (
         `classicmodels`.`bank_transaction`.`customer_number` is null 
         and `classicmodels`.`bank_transaction`.`check_number` is null
-      ) 
-    order by 
-      `classicmodels`.`payment`.`caching_date`    
+      )    
      */
     @Transactional
     public void insertPaymentInBankTransaction() {
         System.out.println("EXAMPLE 17 (affected rows): "
                 + ctx.insertInto(BANK_TRANSACTION, BANK_TRANSACTION.BANK_NAME, BANK_TRANSACTION.BANK_IBAN,
-                        BANK_TRANSACTION.TRANSFER_AMOUNT, BANK_TRANSACTION.CACHING_DATE,
-                        BANK_TRANSACTION.CUSTOMER_NUMBER, BANK_TRANSACTION.CHECK_NUMBER, BANK_TRANSACTION.STATUS)
-                        .select(selectDistinct(val("N/A"), val("N/A"), PAYMENT.INVOICE_AMOUNT, 
+                        BANK_TRANSACTION.TRANSFER_AMOUNT, BANK_TRANSACTION.CACHING_DATE, BANK_TRANSACTION.CUSTOMER_NUMBER, 
+                        BANK_TRANSACTION.CHECK_NUMBER, BANK_TRANSACTION.CARD_TYPE, BANK_TRANSACTION.STATUS)
+                        .select(selectDistinct(inline("N/A"), inline("N/A"), PAYMENT.INVOICE_AMOUNT, 
                                 nvl(PAYMENT.CACHING_DATE, PAYMENT.PAYMENT_DATE), 
-                                PAYMENT.CUSTOMER_NUMBER, PAYMENT.CHECK_NUMBER, val("SUCCESS"))
+                                PAYMENT.CUSTOMER_NUMBER, PAYMENT.CHECK_NUMBER, val("MasterCard"), val("SUCCESS"))
                                 .from(PAYMENT)
                                 .leftOuterJoin(BANK_TRANSACTION)
                                 .on(row(PAYMENT.CUSTOMER_NUMBER, PAYMENT.CHECK_NUMBER)
