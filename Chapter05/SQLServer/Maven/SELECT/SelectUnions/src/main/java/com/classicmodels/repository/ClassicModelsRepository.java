@@ -10,8 +10,8 @@ import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.concat;
 import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.field;
+import static org.jooq.impl.DSL.inline;
 import static org.jooq.impl.DSL.select;
-import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -50,29 +50,28 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 2
     /*
-    (
-      [classicmodels].[dbo].[employee].[first_name] + ? 
-         + [classicmodels].[dbo].[employee].[last_name]
-    ) [full_name] 
-    from 
-      [classicmodels].[dbo].[employee] 
-    union 
     select 
-      (
-        [classicmodels].[dbo].[customer].[contact_first_name] + ? 
-           + [classicmodels].[dbo].[customer].[contact_last_name]
-      ) 
-    from 
-      [classicmodels].[dbo].[customer]    
+     (
+       [classicmodels].[dbo].[employee].[first_name] + ' ' + [classicmodels].[dbo].[employee].[last_name]
+     ) [full_name] 
+   from 
+     [classicmodels].[dbo].[employee] 
+   union 
+   select 
+     (
+       [classicmodels].[dbo].[customer].[contact_first_name] + ' ' + [classicmodels].[dbo].[customer].[contact_last_name]
+     ) 
+   from 
+     [classicmodels].[dbo].[customer]   
      */
     public void unionEmployeeAndCustomerNamesConcatColumns() {
 
         System.out.println("EXAMPLE 2\n"
                 + ctx.select(
-                        concat(EMPLOYEE.FIRST_NAME, val(" "), EMPLOYEE.LAST_NAME).as("full_name"))
+                        concat(EMPLOYEE.FIRST_NAME, inline(" "), EMPLOYEE.LAST_NAME).as("full_name"))
                         .from(EMPLOYEE)
                         .union(select(
-                                concat(CUSTOMER.CONTACT_FIRST_NAME, val(" "), CUSTOMER.CONTACT_LAST_NAME))
+                                concat(CUSTOMER.CONTACT_FIRST_NAME, inline(" "), CUSTOMER.CONTACT_LAST_NAME))
                                 .from(CUSTOMER))
                         .fetch()
         );
@@ -82,19 +81,17 @@ public class ClassicModelsRepository {
     /*
     select 
       (
-        [classicmodels].[dbo].[employee].[first_name] + ? 
-          + [classicmodels].[dbo].[employee].[last_name]
+        [classicmodels].[dbo].[employee].[first_name] + ' ' + [classicmodels].[dbo].[employee].[last_name]
       ) [full_name], 
-      ? [contactType] 
+      'Employee' [contactType] 
     from 
       [classicmodels].[dbo].[employee] 
     union 
     select 
       (
-        [classicmodels].[dbo].[customer].[contact_first_name] + ? 
-          + [classicmodels].[dbo].[customer].[contact_last_name]
+        [classicmodels].[dbo].[customer].[contact_first_name] + ' ' + [classicmodels].[dbo].[customer].[contact_last_name]
       ), 
-      ? [contactType] 
+      'Customer' [contactType] 
     from 
       [classicmodels].[dbo].[customer]    
      */
@@ -102,14 +99,14 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 3\n"
                 + ctx.select(
-                        concat(EMPLOYEE.FIRST_NAME, val(" "),
+                        concat(EMPLOYEE.FIRST_NAME, inline(" "),
                                 EMPLOYEE.LAST_NAME).as("full_name"),
-                        val("Employee").as("contactType"))
+                        inline("Employee").as("contactType"))
                         .from(EMPLOYEE)
                         .union(select(
-                                concat(CUSTOMER.CONTACT_FIRST_NAME, val(" "),
+                                concat(CUSTOMER.CONTACT_FIRST_NAME, inline(" "),
                                         CUSTOMER.CONTACT_LAST_NAME),
-                                val("Customer").as("contactType"))
+                                inline("Customer").as("contactType"))
                                 .from(CUSTOMER))
                         .fetch()
         );
@@ -118,31 +115,29 @@ public class ClassicModelsRepository {
     // EXAMPLE 4
     /*
     select 
-      top 100 percent (
-        [classicmodels].[dbo].[employee].[first_name] + ? 
-          + [classicmodels].[dbo].[employee].[last_name]
+      (
+        [classicmodels].[dbo].[employee].[first_name] + ' ' + [classicmodels].[dbo].[employee].[last_name]
       ) [full_name] 
     from 
       [classicmodels].[dbo].[employee] 
     union 
     select 
       (
-        [classicmodels].[dbo].[customer].[contact_first_name] + ? 
-          + [classicmodels].[dbo].[customer].[contact_last_name]
+        [classicmodels].[dbo].[customer].[contact_first_name] + ' ' + [classicmodels].[dbo].[customer].[contact_last_name]
       ) 
     from 
       [classicmodels].[dbo].[customer] 
     order by 
-      full_name   
+      full_name     
      */
     public void unionEmployeeAndCustomerNamesOrderBy() {
 
         System.out.println("EXAMPLE 4\n"
                 + ctx.select(
-                        concat(EMPLOYEE.FIRST_NAME, val(" "), EMPLOYEE.LAST_NAME).as("full_name"))
+                        concat(EMPLOYEE.FIRST_NAME, inline(" "), EMPLOYEE.LAST_NAME).as("full_name"))
                         .from(EMPLOYEE)
                         .union(select(
-                                concat(CUSTOMER.CONTACT_FIRST_NAME, val(" "), CUSTOMER.CONTACT_LAST_NAME))
+                                concat(CUSTOMER.CONTACT_FIRST_NAME, inline(" "), CUSTOMER.CONTACT_LAST_NAME))
                                 .from(CUSTOMER))
                         .orderBy(field("full_name"))
                         .fetch()
@@ -217,12 +212,11 @@ public class ClassicModelsRepository {
     select 
       [classicmodels].[dbo].[customer].[customer_number], 
       count(*) [silver], 
-      ? [gold], 
-      ? [platinum] 
+      0 [gold], 
+      0 [platinum] 
     from 
       [classicmodels].[dbo].[customer] 
-      join [classicmodels].[dbo].[payment] on [classicmodels].[dbo].[customer].[customer_number] 
-        = [classicmodels].[dbo].[payment].[customer_number] 
+      join [classicmodels].[dbo].[payment] on [classicmodels].[dbo].[customer].[customer_number] = [classicmodels].[dbo].[payment].[customer_number] 
     group by 
       [classicmodels].[dbo].[customer].[customer_number] 
     having 
@@ -230,13 +224,12 @@ public class ClassicModelsRepository {
     union 
     select 
       [classicmodels].[dbo].[customer].[customer_number], 
-      ?, 
+      0, 
       count(*), 
-      ? 
+      0 
     from 
       [classicmodels].[dbo].[customer] 
-      join [classicmodels].[dbo].[payment] on [classicmodels].[dbo].[customer].[customer_number] 
-        = [classicmodels].[dbo].[payment].[customer_number] 
+      join [classicmodels].[dbo].[payment] on [classicmodels].[dbo].[customer].[customer_number] = [classicmodels].[dbo].[payment].[customer_number] 
     group by 
       [classicmodels].[dbo].[customer].[customer_number] 
     having 
@@ -244,35 +237,34 @@ public class ClassicModelsRepository {
     union 
     select 
       [classicmodels].[dbo].[customer].[customer_number], 
-      ?, 
-      ?, 
+      0, 
+      0, 
       count(*) 
     from 
       [classicmodels].[dbo].[customer] 
-      join [classicmodels].[dbo].[payment] on [classicmodels].[dbo].[customer].[customer_number] 
-        = [classicmodels].[dbo].[payment].[customer_number] 
+      join [classicmodels].[dbo].[payment] on [classicmodels].[dbo].[customer].[customer_number] = [classicmodels].[dbo].[payment].[customer_number] 
     group by 
       [classicmodels].[dbo].[customer].[customer_number] 
     having 
-      count(*) > ?    
+      count(*) > ?     
     */
     public void findSilverGoldPlatinumCustomers() {
         System.out.println("EXAMPLE 7\n"
-                + ctx.select(CUSTOMER.CUSTOMER_NUMBER, count().as("silver"), val(0).as("gold"), val(0).as("platinum"))
+                + ctx.select(CUSTOMER.CUSTOMER_NUMBER, count().as("silver"), inline(0).as("gold"), inline(0).as("platinum"))
                         .from(CUSTOMER)
                         .join(PAYMENT)
                         .on(CUSTOMER.CUSTOMER_NUMBER.eq(PAYMENT.CUSTOMER_NUMBER))
                         .groupBy(CUSTOMER.CUSTOMER_NUMBER)
                         .having(count().lt(2))
                         .union(
-                                select(CUSTOMER.CUSTOMER_NUMBER, val(0), count(), val(0))
+                                select(CUSTOMER.CUSTOMER_NUMBER, inline(0), count(), inline(0))
                                         .from(CUSTOMER)
                                         .join(PAYMENT)
                                         .on(CUSTOMER.CUSTOMER_NUMBER.eq(PAYMENT.CUSTOMER_NUMBER))
                                         .groupBy(CUSTOMER.CUSTOMER_NUMBER)
                                         .having(count().eq(2))
                         ).union(
-                                select(CUSTOMER.CUSTOMER_NUMBER, val(0), val(0), count())
+                                select(CUSTOMER.CUSTOMER_NUMBER, inline(0), inline(0), count())
                                         .from(CUSTOMER)
                                         .join(PAYMENT)
                                         .on(CUSTOMER.CUSTOMER_NUMBER.eq(PAYMENT.CUSTOMER_NUMBER))
@@ -281,5 +273,5 @@ public class ClassicModelsRepository {
                         )
                         .fetch()
         );
-    }
+    }            
 }
