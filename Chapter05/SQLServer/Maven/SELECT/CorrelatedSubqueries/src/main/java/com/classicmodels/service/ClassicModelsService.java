@@ -20,14 +20,17 @@ public class ClassicModelsService {
         classicModelsRepository.findEmployeeWithAvgSaleLtSumSales();                   // EXAMPLE 5
         classicModelsRepository.findOfficeAndEmployeeMaxAndAvgSalary();                // EXAMPLE 6
         classicModelsRepository.findCustomerWithMoreThan10Sales();                     // EXAMPLE 7        
-        classicModelsRepository.findProductQuantityOrderedGt70();                      // EXAMPLE 8 
-        classicModelsRepository.findProductWithMsrpGtSellPrice();                      // EXAMPLE 9 
-        classicModelsRepository.findProductWithAvgBuyPriceGtAnyPriceEach();            // EXAMPLE 10
-        classicModelsRepository.findProductWithAvgBuyPriceGtAllPriceEach();            // EXAMPLE 11
-        classicModelsRepository.findUnprocessedPayments();                             // EXAMPLE 12
-        classicModelsRepository.findEmployeeNumberWithMoreSalesIn2005Than2003();       // EXAMPLE 13
-        classicModelsRepository.updateCustomerCreditLimit();                           // EXAMPLE 14
-        classicModelsRepository.deletePaymentOfCustomerCreditLimitGt150000();          // EXAMPLE 15
-        classicModelsRepository.insertPaymentInBankTransaction();                      // EXAMPLE 16                
+        classicModelsRepository.findOrderdetailWithQuantityInStockGtQuantityOrdered(); // EXAMPLE 8
+        classicModelsRepository.findProductQuantityOrderedGt70();                      // EXAMPLE 9 
+        classicModelsRepository.findProductWithMsrpGtSellPrice();                      // EXAMPLE 10 
+        classicModelsRepository.findProductWithAvgBuyPriceGtAnyPriceEach();            // EXAMPLE 11
+        classicModelsRepository.findProductWithAvgBuyPriceGtAllPriceEach();            // EXAMPLE 12
+        classicModelsRepository.findUnprocessedPayments();                             // EXAMPLE 13
+        classicModelsRepository.findEmployeeNumberWithMoreSalesIn2005Than2003();       // EXAMPLE 14
+        classicModelsRepository.updateCustomerCreditLimit();                           // EXAMPLE 15
+        classicModelsRepository.deleteSaleOfEmployeeSalaryGt20000();                   // EXAMPLE 16
+        classicModelsRepository.insertPaymentInBankTransaction();                      // EXAMPLE 17                
+        
+        
     }
 }

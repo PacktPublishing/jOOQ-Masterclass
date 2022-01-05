@@ -21,6 +21,7 @@ import static org.jooq.impl.DSL.case_;
 import static org.jooq.impl.DSL.concat;
 import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.field;
+import static org.jooq.impl.DSL.inline;
 import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.nvl;
 import static org.jooq.impl.DSL.row;
@@ -90,34 +91,27 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 2
     /*
-    select 
-      [classicmodels].[dbo].[customerdetail].[city], 
-      [classicmodels].[dbo].[customerdetail].[country], 
-      (
-        select 
-          (
-            [classicmodels].[dbo].[customer].[contact_first_name] + ? 
-              + [classicmodels].[dbo].[customer].[contact_last_name]
-          ) 
-        from 
-          [classicmodels].[dbo].[customer] 
-        where 
-          [classicmodels].[dbo].[customer].[customer_number] 
-              = [classicmodels].[dbo].[customerdetail].[customer_number]
-      ) [fullName] 
-    from 
-      [classicmodels].[dbo].[customerdetail]    
+    select [classicmodels].[dbo].[customerdetail].[city],
+           [classicmodels].[dbo].[customerdetail].[country],
+           (select ( [classicmodels].[dbo].[customer].[contact_first_name]
+                     + ' '
+                     + [classicmodels].[dbo].[customer].[contact_last_name] )
+            from   [classicmodels].[dbo].[customer]
+            where  [classicmodels].[dbo].[customer].[customer_number] =
+                   [classicmodels].[dbo].[customerdetail].[customer_number])
+           [fullName]
+    from   [classicmodels].[dbo].[customerdetail]     
     */
     public void findCustomerFullNameCityCountry() {
 
         // using type-safe DSL.Field(Select)                        
-        Field<String> fullName = field(select(concat(CUSTOMER.CONTACT_FIRST_NAME, val(" "), CUSTOMER.CONTACT_LAST_NAME))
+        Field<String> fullName = field(select(concat(CUSTOMER.CONTACT_FIRST_NAME, inline(" "), CUSTOMER.CONTACT_LAST_NAME))
                 .from(CUSTOMER)
                 .where(CUSTOMER.CUSTOMER_NUMBER.eq(CUSTOMERDETAIL.CUSTOMER_NUMBER))).as("fullName");         
         
         // or, using the non type-safe asField()
         /*
-        Field<?> fullName = select(concat(CUSTOMER.CONTACT_FIRST_NAME, val(" "), CUSTOMER.CONTACT_LAST_NAME))
+        Field<?> fullName = select(concat(CUSTOMER.CONTACT_FIRST_NAME, inline(" "), CUSTOMER.CONTACT_LAST_NAME))
                 .from(CUSTOMER)
                 .where(CUSTOMER.CUSTOMER_NUMBER.eq(CUSTOMERDETAIL.CUSTOMER_NUMBER))
                 .asField("fullName");
@@ -135,7 +129,7 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 2\n" +
                 ctx.select(
                         CUSTOMERDETAIL.CITY, CUSTOMERDETAIL.COUNTRY,
-                        field(select(concat(CUSTOMER.CONTACT_FIRST_NAME, val(" "), CUSTOMER.CONTACT_LAST_NAME))
+                        field(select(concat(CUSTOMER.CONTACT_FIRST_NAME, inline(" "), CUSTOMER.CONTACT_LAST_NAME))
                                 .from(CUSTOMER)
                                 .where(CUSTOMER.CUSTOMER_NUMBER.eq(CUSTOMERDETAIL.CUSTOMER_NUMBER)))
                                 .as("fullName"))
@@ -390,8 +384,57 @@ public class ClassicModelsRepository {
                         .fetch()
         );
     }
-
+    
     // EXAMPLE 8
+    /*
+    select
+       [classicmodels].[dbo].[orderdetail].[orderdetail_id],
+       [classicmodels].[dbo].[orderdetail].[order_id],
+       [classicmodels].[dbo].[orderdetail].[product_id],
+       [classicmodels].[dbo].[orderdetail].[quantity_ordered],
+       [classicmodels].[dbo].[orderdetail].[price_each],
+       [classicmodels].[dbo].[orderdetail].[order_line_number] 
+    from
+       [classicmodels].[dbo].[orderdetail] 
+    where
+       not (exists 
+       (
+          select
+             [classicmodels].[dbo].[product].[product_id] 
+          from
+             [classicmodels].[dbo].[product] 
+          where
+             (
+                [classicmodels].[dbo].[product].[product_id] = [classicmodels].[dbo].[orderdetail].[product_id] 
+                and [classicmodels].[dbo].[product].[quantity_in_stock] > [classicmodels].[dbo].[orderdetail].[quantity_ordered]
+             )
+       )
+    ) 
+    group by
+       [classicmodels].[dbo].[orderdetail].[product_id],
+       [classicmodels].[dbo].[orderdetail].[orderdetail_id],
+       [classicmodels].[dbo].[orderdetail].[order_id],
+       [classicmodels].[dbo].[orderdetail].[quantity_ordered],
+       [classicmodels].[dbo].[orderdetail].[price_each],
+       [classicmodels].[dbo].[orderdetail].[order_line_number] 
+    order by
+       [classicmodels].[dbo].[orderdetail].[quantity_ordered]    
+    */
+    public void findOrderdetailWithQuantityInStockGtQuantityOrdered() {
+
+        System.out.println("EXAMPLE 8\n"
+                + ctx.selectFrom(ORDERDETAIL)
+                        .whereNotExists(select(PRODUCT.PRODUCT_ID).from(PRODUCT)
+                                .where(PRODUCT.PRODUCT_ID.eq(ORDERDETAIL.PRODUCT_ID)
+                                        .and(PRODUCT.QUANTITY_IN_STOCK.gt(ORDERDETAIL.QUANTITY_ORDERED))))
+                        .groupBy(ORDERDETAIL.PRODUCT_ID, ORDERDETAIL.ORDERDETAIL_ID, ORDERDETAIL.ORDER_ID,
+                                ORDERDETAIL.QUANTITY_ORDERED, ORDERDETAIL.PRICE_EACH, ORDERDETAIL.ORDER_LINE_NUMBER)
+                        .orderBy(ORDERDETAIL.QUANTITY_ORDERED)
+                        .fetch()
+        );
+    }
+
+    // EXAMPLE 9
     /*
     select 
       [classicmodels].[dbo].[product].[product_name], 
@@ -413,7 +456,7 @@ public class ClassicModelsRepository {
     */
     public void findProductQuantityOrderedGt70() {
 
-        System.out.println("EXAMPLE 8\n" +
+        System.out.println("EXAMPLE 9\n" +
                 ctx.select(PRODUCT.PRODUCT_NAME, PRODUCT.BUY_PRICE)
                         .from(PRODUCT)
                         .where(PRODUCT.PRODUCT_ID.eq(any(
@@ -425,7 +468,7 @@ public class ClassicModelsRepository {
         );
     }
 
-    // EXAMPLE 9
+    // EXAMPLE 10
     /*
     select 
       [classicmodels].[dbo].[product].[product_id], 
@@ -444,7 +487,7 @@ public class ClassicModelsRepository {
     */
     public void findProductWithMsrpGtSellPrice() {
 
-        System.out.println("EXAMPLE 9\n" +
+        System.out.println("EXAMPLE 10\n" +
                 ctx.select(PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME)
                         .from(PRODUCT)
                         .where(PRODUCT.MSRP.gt(all(
@@ -454,7 +497,7 @@ public class ClassicModelsRepository {
         );
     }
 
-    // EXAMPLE 10
+    // EXAMPLE 11
     /*
     select 
       [classicmodels].[dbo].[product].[product_id], 
@@ -481,7 +524,7 @@ public class ClassicModelsRepository {
     */
     public void findProductWithAvgBuyPriceGtAnyPriceEach() {
 
-        System.out.println("EXAMPLE 10\n" +
+        System.out.println("EXAMPLE 11\n" +
                 ctx.select(PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME, PRODUCT.BUY_PRICE)
                         .from(PRODUCT)
                         .where(select(avg(PRODUCT.BUY_PRICE)).from(PRODUCT).gt(any(
@@ -491,7 +534,7 @@ public class ClassicModelsRepository {
                 );
     }
 
-    // EXAMPLE 11
+    // EXAMPLE 12
     /*
     select 
       [classicmodels].[dbo].[product].[product_id], 
@@ -518,7 +561,7 @@ public class ClassicModelsRepository {
     */
     public void findProductWithAvgBuyPriceGtAllPriceEach() {
 
-        System.out.println("EXAMPLE 11\n" +
+        System.out.println("EXAMPLE 12\n" +
                 ctx.select(PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME, PRODUCT.BUY_PRICE)
                         .from(PRODUCT)
                         .where(select(avg(PRODUCT.BUY_PRICE)).from(PRODUCT)
@@ -528,7 +571,7 @@ public class ClassicModelsRepository {
         );
     }
 
-    // EXAMPLE 12
+    // EXAMPLE 13
     /*
     select 
       [classicmodels].[dbo].[payment].[invoice_amount], 
@@ -549,7 +592,7 @@ public class ClassicModelsRepository {
     */    
     public void findUnprocessedPayments() {
 
-        System.out.println("EXAMPLE 12\n" +
+        System.out.println("EXAMPLE 13\n" +
                 ctx.select(PAYMENT.INVOICE_AMOUNT, PAYMENT.PAYMENT_DATE, PAYMENT.CACHING_DATE,
                         case_()
                                 .when(PAYMENT.CACHING_DATE.isNull(),
@@ -564,7 +607,7 @@ public class ClassicModelsRepository {
         );
     }       
     
-    // EXAMPLE 13
+    // EXAMPLE 14
     /*
     select 
       [s].[employee_number] 
@@ -595,7 +638,7 @@ public class ClassicModelsRepository {
         
         Sale sale = SALE.as("s");
         
-        System.out.println("EXAMPLE 13\n" +
+        System.out.println("EXAMPLE 14\n" +
         ctx.select(sale.EMPLOYEE_NUMBER)
                 .from(sale)
                 .where(sale.FISCAL_YEAR.eq(2005))
@@ -609,7 +652,7 @@ public class ClassicModelsRepository {
                 );
     }
                  
-    // EXAMPLE 14
+    // EXAMPLE 15
     /*
     update 
       [classicmodels].[dbo].[customer] 
@@ -628,7 +671,7 @@ public class ClassicModelsRepository {
     @Transactional
     public void updateCustomerCreditLimit() {
 
-        System.out.println("EXAMPLE 14 (affected rows): " +
+        System.out.println("EXAMPLE 15 (affected rows): " +
                 + ctx.update(CUSTOMER)
                         .set(CUSTOMER.CREDIT_LIMIT,
                                 select(sum(PAYMENT.INVOICE_AMOUNT)).from(PAYMENT)
@@ -637,75 +680,71 @@ public class ClassicModelsRepository {
         );
     }
 
-    // EXAMPLE 15
+    // EXAMPLE 16
     /*
-    delete from 
-      [classicmodels].[dbo].[payment] 
-    where 
-      [classicmodels].[dbo].[payment].[customer_number] in (
-        select 
-          [classicmodels].[dbo].[customer].[customer_number] 
-        from 
-          [classicmodels].[dbo].[customer] 
-        where 
-          (
-            [classicmodels].[dbo].[payment].[customer_number] = [classicmodels].[dbo].[customer].[customer_number] 
-            and [classicmodels].[dbo].[customer].[credit_limit] > ?
-          )
-      )    
+    delete from
+       [classicmodels].[dbo].[sale] 
+    where
+       [classicmodels].[dbo].[sale].[employee_number] in 
+       (
+          select
+             [classicmodels].[dbo].[employee].[employee_number] 
+          from
+             [classicmodels].[dbo].[employee] 
+          where
+             (
+                [classicmodels].[dbo].[sale].[employee_number] = [classicmodels].[dbo].[employee].[employee_number] 
+                and [classicmodels].[dbo].[employee].[salary] >= ? 
+             )
+       )      
     */
     @Transactional
-    public void deletePaymentOfCustomerCreditLimitGt150000() {
+    public void deleteSaleOfEmployeeSalaryGt20000() {
 
-        System.out.println("EXAMPLE 15 (affected rows): " +
-                + ctx.deleteFrom(PAYMENT)
-                        .where(PAYMENT.CUSTOMER_NUMBER.in(select(CUSTOMER.CUSTOMER_NUMBER)
-                                .from(CUSTOMER).where(PAYMENT.CUSTOMER_NUMBER
-                                .eq(CUSTOMER.CUSTOMER_NUMBER)
-                                .and(CUSTOMER.CREDIT_LIMIT.gt(BigDecimal.valueOf(150000))))))
+        System.out.println("EXAMPLE 16 (affected rows): "
+                + +ctx.deleteFrom(SALE)
+                        .where(SALE.EMPLOYEE_NUMBER.in(select(EMPLOYEE.EMPLOYEE_NUMBER)
+                                .from(EMPLOYEE).where(SALE.EMPLOYEE_NUMBER
+                                .eq(EMPLOYEE.EMPLOYEE_NUMBER)
+                                .and(EMPLOYEE.SALARY.ge(20000)))))
                         .execute()
         );
     }
     
-    // EXAMPLE 16
+    // EXAMPLE 17
     /*
-    insert into [classicmodels].[dbo].[bank_transaction] (
-      [bank_name], [bank_iban], [transfer_amount], 
-      [caching_date], [customer_number], 
-      [check_number], [status]
-    ) 
-    select 
-      distinct ?, 
-      ?, 
-      [classicmodels].[dbo].[payment].[invoice_amount], 
-      case when [classicmodels].[dbo].[payment].[caching_date] is not null 
-        then [classicmodels].[dbo].[payment].[caching_date] 
-          else [classicmodels].[dbo].[payment].[payment_date] end, 
-      [classicmodels].[dbo].[payment].[customer_number], 
-      [classicmodels].[dbo].[payment].[check_number] 
-    from 
-      [classicmodels].[dbo].[payment] 
-      left outer join [classicmodels].[dbo].[bank_transaction] on (
-        [classicmodels].[dbo].[payment].[customer_number] 
-      = [classicmodels].[dbo].[bank_transaction].[customer_number] 
-        and [classicmodels].[dbo].[payment].[check_number] 
-      = [classicmodels].[dbo].[bank_transaction].[check_number]
-      ) 
-    where 
-      (
-        [classicmodels].[dbo].[bank_transaction].[customer_number] is null 
-        and [classicmodels].[dbo].[bank_transaction].[check_number] is null
-      )  
+    insert into
+       [classicmodels].[dbo].[bank_transaction] ([bank_name], [bank_iban], [transfer_amount], [caching_date], [customer_number], [check_number], [card_type], [status]) 
+       select distinct
+          'N/A',
+          'N/A',
+          [classicmodels].[dbo].[payment].[invoice_amount],
+          coalesce([classicmodels].[dbo].[payment].[caching_date], [classicmodels].[dbo].[payment].[payment_date]),
+          [classicmodels].[dbo].[payment].[customer_number],
+          [classicmodels].[dbo].[payment].[check_number],
+          ?,
+          ? 
+       from
+          [classicmodels].[dbo].[payment] 
+          left outer join
+             [classicmodels].[dbo].[bank_transaction] 
+             on ([classicmodels].[dbo].[payment].[customer_number] = [classicmodels].[dbo].[bank_transaction].[customer_number] 
+             and [classicmodels].[dbo].[payment].[check_number] = [classicmodels].[dbo].[bank_transaction].[check_number]) 
+       where
+          (
+             [classicmodels].[dbo].[bank_transaction].[customer_number] is null 
+             and [classicmodels].[dbo].[bank_transaction].[check_number] is null
+          )    
     */
     @Transactional
     public void insertPaymentInBankTransaction() {
-        System.out.println("EXAMPLE 16 (affected rows): "
+        System.out.println("EXAMPLE 17 (affected rows): "
                 + ctx.insertInto(BANK_TRANSACTION, BANK_TRANSACTION.BANK_NAME, BANK_TRANSACTION.BANK_IBAN,
-                        BANK_TRANSACTION.TRANSFER_AMOUNT, BANK_TRANSACTION.CACHING_DATE,
-                        BANK_TRANSACTION.CUSTOMER_NUMBER, BANK_TRANSACTION.CHECK_NUMBER, BANK_TRANSACTION.STATUS)
-                        .select(selectDistinct(val("N/A"), val("N/A"), PAYMENT.INVOICE_AMOUNT, 
+                        BANK_TRANSACTION.TRANSFER_AMOUNT, BANK_TRANSACTION.CACHING_DATE, BANK_TRANSACTION.CUSTOMER_NUMBER, 
+                        BANK_TRANSACTION.CHECK_NUMBER, BANK_TRANSACTION.CARD_TYPE, BANK_TRANSACTION.STATUS)
+                        .select(selectDistinct(inline("N/A"), inline("N/A"), PAYMENT.INVOICE_AMOUNT, 
                                 nvl(PAYMENT.CACHING_DATE, PAYMENT.PAYMENT_DATE), 
-                                PAYMENT.CUSTOMER_NUMBER, PAYMENT.CHECK_NUMBER, val("SUCCESS"))
+                                PAYMENT.CUSTOMER_NUMBER, PAYMENT.CHECK_NUMBER, val("MasterCard"), val("SUCCESS"))
                                 .from(PAYMENT)
                                 .leftOuterJoin(BANK_TRANSACTION)
                                 .on(row(PAYMENT.CUSTOMER_NUMBER, PAYMENT.CHECK_NUMBER)
@@ -713,5 +752,5 @@ public class ClassicModelsRepository {
                                 .where(row(BANK_TRANSACTION.CUSTOMER_NUMBER, BANK_TRANSACTION.CHECK_NUMBER).isNull()))
                         .execute()
         );
-    }
+    }        
 }
