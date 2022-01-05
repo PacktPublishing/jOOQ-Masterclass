@@ -566,7 +566,7 @@ select 321, '7734 Strong St.', NULL, 'San Francisco', 'CA', 'AZ934VB', 'USA' fro
 
 select 323, '162-164 Grafton Road', 'Level 2', 'Auckland ', NULL, NULL, 'New Zealand' from dual union all
 
-select 324, '25 Old Broad Street', 'Level 7', 'London', 'N/A', 'CV555RR', 'UK' from dual union all
+select 324, '25 Old Broad Street', 'Level 7', 'Bristol', 'N/A', 'CV555RR', 'UK' from dual union all
 
 select 328, '7476 Moss Rd.', NULL, 'Newark', 'NJ', '94019', 'USA' from dual union all
 

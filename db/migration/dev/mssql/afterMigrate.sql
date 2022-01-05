@@ -593,7 +593,7 @@ insert into [customerdetail]([customer_number], [address_line_first], [address_l
 
 (323, '162-164 Grafton Road', 'Level 2', 'Auckland ', NULL, NULL, 'New Zealand'), 
 
-(324, '25 Old Broad Street', 'Level 7', 'London', 'N/A', 'CV555RR', 'UK'), 
+(324, '25 Old Broad Street', 'Level 7', 'Bristol', 'N/A', 'CV555RR', 'UK'), 
 
 (328, '7476 Moss Rd.', NULL, 'Newark', 'NJ', '94019', 'USA'), 
 

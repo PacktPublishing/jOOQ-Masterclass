@@ -167,7 +167,7 @@ public class ClassicModelsRepository {
      */
     public void findOfficeAndCustomerOfficePostalCodeDistinctCityCountry() {
 
-        System.out.println("EXAMPLE 4\n"
+        System.out.println("EXAMPLE 4 \n"
                 + ctx.select()
                         .from(OFFICE)
                         .innerJoin(CUSTOMERDETAIL)
@@ -242,21 +242,19 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 7
     /*
-    select 
-      count(
-        distinct `alias_37460252`.`city`, 
-        `alias_37460252`.`country`
-      ) 
-    from 
-      (
-        select 
-          `classicmodels`.`customerdetail`.`city`, 
-          `classicmodels`.`customerdetail`.`country` 
-        from 
-          `classicmodels`.`customerdetail` 
-        where 
-          `classicmodels`.`customerdetail`.`address_line_second` is not null
-      ) as `alias_37460252`
+    select
+       count(distinct `t`.`city`, `t`.`country`) 
+    from
+       (
+          select
+             `classicmodels`.`customerdetail`.`city`,
+             `classicmodels`.`customerdetail`.`country` 
+          from
+             `classicmodels`.`customerdetail` 
+          where
+             `classicmodels`.`customerdetail`.`address_line_second` is not null
+       )
+       as `t`    
      */
     public void findDistinctCustomerCityCountryWithNoNullAddress() {
 
@@ -264,7 +262,7 @@ public class ClassicModelsRepository {
         var t = select(CUSTOMERDETAIL.CITY, CUSTOMERDETAIL.COUNTRY)
                 .from(CUSTOMERDETAIL)
                 .where(CUSTOMERDETAIL.ADDRESS_LINE_SECOND.isNotNull())
-                .asTable();
+                .asTable("t");
 
         System.out.println("EXAMPLE 7\n"
                 + ctx.select(
@@ -469,35 +467,33 @@ public class ClassicModelsRepository {
 
         /* SQL alternative based on row_number() */
         /*
-        select 
-          `alias_41473466`.`employee_number`, 
-          `alias_41473466`.`fiscal_year`, 
-          `alias_41473466`.`sale` 
-        from 
-          (
-            select 
-              distinct `classicmodels`.`sale`.`employee_number`, 
-              `classicmodels`.`sale`.`fiscal_year`, 
-              `classicmodels`.`sale`.`sale`, 
-              row_number() over (
-                partition by `classicmodels`.`sale`.`fiscal_year` 
-                order by 
-                  `classicmodels`.`sale`.`fiscal_year`, 
-                  `classicmodels`.`sale`.`sale` desc
-              ) as `rn` 
-            from 
-              `classicmodels`.`sale`
-          ) as `alias_41473466` 
-        where 
-          `alias_41473466`.`rn` = ? 
-        order by 
-          `alias_41473466`.`fiscal_year`        
+        select
+           `t`.`employee_number`,
+           `t`.`fiscal_year`,
+           `t`.`sale` 
+        from
+           (
+              select distinct
+                 `classicmodels`.`sale`.`employee_number`,
+                 `classicmodels`.`sale`.`fiscal_year`,
+                 `classicmodels`.`sale`.`sale`,
+                 row_number() over (partition by `classicmodels`.`sale`.`fiscal_year` 
+              order by
+                 `classicmodels`.`sale`.`fiscal_year`, `classicmodels`.`sale`.`sale` desc) as `rn` 
+              from
+                 `classicmodels`.`sale`
+           )
+           as `t` 
+        where
+           `t`.`rn` = ? 
+        order by
+           `t`.`fiscal_year`        
          */
         // Table<?>
         var t = selectDistinct(SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR, SALE.SALE_,
                 rowNumber().over(partitionBy(SALE.FISCAL_YEAR)
                         .orderBy(SALE.FISCAL_YEAR, SALE.SALE_.desc())).as("rn"))
-                .from(SALE).asTable();
+                .from(SALE).asTable("t");
 
         System.out.println("EXAMPLE 12.3\n"
                 + ctx.select(t.field("employee_number"), t.field("fiscal_year"), t.field("sale"))
