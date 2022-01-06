@@ -72,16 +72,26 @@ public class ClassicModelsRepository {
     // EXAMPLE 3
     /*
     insert into `classicmodels`.`customer` (
-      `customer_number`,`customer_name`,`contact_last_name`,`contact_first_name`,`phone`,
-      `sales_rep_employee_number`,`credit_limit`)
-    values
-      (default, ?, ?, ?, ?, ?, ?, ?)
-    
+      `customer_number`, `customer_name`, 
+      `contact_last_name`, `contact_first_name`, 
+      `phone`, `sales_rep_employee_number`, 
+      `credit_limit`, `first_buy_date`
+    ) 
+    values 
+      (
+        default, ?, ?, ?, ?, default, default, 
+        default
+      )
+
     insert into `classicmodels`.`customerdetail` (
-      `customer_number`,`address_line_first`,`address_line_second`,`city`,
-      `state`,`postal_code`,`country`)
-    values
-      (?, ?, ?, ?, ?, ?, ?)
+      `customer_number`, `address_line_first`, 
+      `address_line_second`, `city`, `state`, 
+      `postal_code`, `country`
+    ) 
+    values 
+      (
+        ?, ?, default, ?, default, default, ?
+      )
      */
     public void insertReturningOfCustomerInCustomerDetail() {
 
@@ -111,7 +121,7 @@ public class ClassicModelsRepository {
           select 
             concat(
               `classicmodels`.`employee`.`first_name`, 
-              ?, `classicmodels`.`employee`.`last_name`
+              ' ', `classicmodels`.`employee`.`last_name`
             ) 
           from 
             `classicmodels`.`employee` 
@@ -120,7 +130,7 @@ public class ClassicModelsRepository {
         ), 
         default, 
         default
-      )   
+      )    
     */
     public void insertEmployeeInManagerReturningId() {
 

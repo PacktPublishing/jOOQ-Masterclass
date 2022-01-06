@@ -1,6 +1,5 @@
 package com.classicmodels.repository;
 
-import static jooq.generated.Sequences.CUSTOMER_SEQ;
 import static jooq.generated.Sequences.MANAGER_SEQ;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
@@ -12,6 +11,8 @@ import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.concat;
+import static org.jooq.impl.DSL.default_;
+import static org.jooq.impl.DSL.inline;
 import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -75,67 +76,64 @@ public class ClassicModelsRepository {
     // EXAMPLE 3
     /*
     insert into "public"."customer" (
-      "customer_name","contact_first_name","contact_last_name","phone")
-    values
-      (?, ?, ?, ?) 
-    returning "public"."customer"."customer_number"
-    
+      "customer_number", "customer_name", 
+      "contact_last_name", "contact_first_name", 
+      "phone", "sales_rep_employee_number", 
+      "credit_limit", "first_buy_date"
+    ) 
+    values 
+      (
+        default, ?, ?, ?, ?, default, default, default
+      ) returning "public"."customer"."customer_number"
+
     insert into "public"."customerdetail" (
-      "customer_number","address_line_first","address_line_second","city",
-      "state","postal_code","country")
-    values
-      (?, ?, ?, ?, ?, ?, ?)
+      "customer_number", "address_line_first", 
+      "address_line_second", "city", "state", 
+      "postal_code", "country"
+    ) 
+    values 
+      (
+        ?, ?, default, ?, default, default, ?
+      )    
      */
     public void insertReturningOfCustomerInCustomerDetail() {
-
-        ctx.insertInto(CUSTOMER,
-                CUSTOMER.CUSTOMER_NAME, CUSTOMER.CONTACT_FIRST_NAME,
-                CUSTOMER.CONTACT_LAST_NAME, CUSTOMER.PHONE)
-                .values("Ltd. AirRoads", "Kyle", "Doyle", "+ 44 321 321")
-                .execute();
-
-        // passing explicit "null" instead of default_() produces implementation specific behaviour
-        System.out.println("EXAMPLE 3.1 (affected rows): "
-                + ctx.insertInto(CUSTOMERDETAIL)
-                        .values(CUSTOMER_SEQ.currval(),
-                                "No. 14 Avenue", null, "Los Angeles", null, null, "USA")
-                        .execute());
+     
+        // Note: passing explicit "null" instead of default_() produces implementation specific behaviour
         
-        // passing explicit "null" instead of default_() produces implementation specific behaviour
-        System.out.println("EXAMPLE 3.2 (affected rows): "
+        System.out.println("EXAMPLE 3 (affected rows): "
                 + ctx.insertInto(CUSTOMERDETAIL)
-                        .values(ctx.insertInto(CUSTOMER,
-                                CUSTOMER.CUSTOMER_NAME, CUSTOMER.CONTACT_FIRST_NAME,
-                                CUSTOMER.CONTACT_LAST_NAME, CUSTOMER.PHONE)
-                                .values("Ltd. AirRoads", "Kyle", "Doyle", "+ 44 321 321")
+                        .values(ctx.insertInto(CUSTOMER)
+                                .values(default_(), "Ltd. AirRoads - " + Math.random(), 
+                                        "Kyle", "Doyle", "+ 44 321 321", default_(), default_(), default_())
                                 .returningResult(CUSTOMER.CUSTOMER_NUMBER).fetchOne().value1(),
-                                "No. 14 Avenue", null, "Los Angeles", null, null, "USA")
+                                "No. 14 Avenue - " + Math.random(), default_(), "Los Angeles", default_(), default_(), "USA")
                         .execute()
-        );       
+        );
     }
 
     // EXAMPLE 4
     /*
-    insert into "public"."manager" 
-      ("manager_name")
-    values
+    insert into "public"."manager" ("manager_name") 
+    values 
       (
         (
-          select
-           (
-             "public"."employee"."first_name" || ? || "public"."employee"."last_name"
-           )
-          from
-             "public"."employee"
-          where
-             "public"."employee"."employee_number" = ?
+          select 
+            (
+              (
+                "public"."employee"."first_name" || ' '
+              ) || "public"."employee"."last_name"
+            ) 
+          from 
+            "public"."employee" 
+          where 
+            "public"."employee"."employee_number" = ?
         )
-      ) returning "public"."manager"."manager_id"
+      ) returning "public"."manager"."manager_id"    
      */
     public void insertEmployeeInManagerReturningId() {
 
         var inserted = ctx.insertInto(MANAGER, MANAGER.MANAGER_NAME)
-                .values(select(concat(EMPLOYEE.FIRST_NAME, val(" "), EMPLOYEE.LAST_NAME))
+                .values(select(concat(EMPLOYEE.FIRST_NAME, inline(" "), EMPLOYEE.LAST_NAME))
                         .from(EMPLOYEE)
                         .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1165L)).asField())
                 .returningResult(MANAGER.MANAGER_ID)
@@ -185,7 +183,7 @@ public class ClassicModelsRepository {
                 .returningResult(PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.CREATED_ON)
                 .fetch();
 
-        System.out.println("EXAMPLE 6 (inserted ids and employee numbers): \n" + inserted);
+        System.out.println("EXAMPLE 6 (inserted product lines and created on): \n" + inserted);
     }
 
     // EXAMPLE 7
@@ -211,10 +209,10 @@ public class ClassicModelsRepository {
                 .values("Master Vans", "This new line of master vans ...", 983423L)
                 .values("Cool Cars", "This new line of cool cars ...", 193384L)
                 .onDuplicateKeyIgnore()
-                .returning()
+                .returningResult()
                 .fetch();
 
-        System.out.println("EXAMPLE 7 (inserted ids and employee numbers): \n" + inserted);
+        System.out.println("EXAMPLE 7: \n" + inserted);
     }
     
     // EXAMPLE 8
@@ -228,10 +226,11 @@ public class ClassicModelsRepository {
     */
     public void insertReturningAndSerialInDepartment() {
         
-        // Record1<Integer>, DEPARTMENT_DEPARTMENT_ID_SEQ - this is the sequence created automatically 
+        // Record1<Integer>
         var inserted = ctx.insertInto(DEPARTMENT, DEPARTMENT.NAME, 
                 DEPARTMENT.PHONE, DEPARTMENT.CODE, DEPARTMENT.OFFICE_CODE)
                 .values("Marketing", "+2 311 312", 5432, "5")
+                .onDuplicateKeyIgnore()
                 .returningResult(DEPARTMENT.DEPARTMENT_ID)
                 .fetchOne();
         
