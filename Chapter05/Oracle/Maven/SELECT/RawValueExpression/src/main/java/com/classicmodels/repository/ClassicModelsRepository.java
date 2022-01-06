@@ -29,22 +29,22 @@ public class ClassicModelsRepository {
     // EXAMPLE 1 - Comparison predicates 
     /*
     select 
-      "SYSTEM"."PRODUCT"."PRODUCT_ID", 
-      "SYSTEM"."PRODUCT"."PRODUCT_NAME", 
-      "SYSTEM"."PRODUCT"."PRODUCT_LINE", 
-      "SYSTEM"."PRODUCT"."PRODUCT_SCALE", 
-      "SYSTEM"."PRODUCT"."PRODUCT_VENDOR", 
-      "SYSTEM"."PRODUCT"."PRODUCT_DESCRIPTION", 
-      "SYSTEM"."PRODUCT"."QUANTITY_IN_STOCK", 
-      "SYSTEM"."PRODUCT"."BUY_PRICE", 
-      "SYSTEM"."PRODUCT"."MSRP" 
+      "CLASSICMODELS"."PRODUCT"."PRODUCT_ID", 
+      "CLASSICMODELS"."PRODUCT"."PRODUCT_NAME", 
+      "CLASSICMODELS"."PRODUCT"."PRODUCT_LINE", 
+      "CLASSICMODELS"."PRODUCT"."PRODUCT_SCALE", 
+      "CLASSICMODELS"."PRODUCT"."PRODUCT_VENDOR", 
+      "CLASSICMODELS"."PRODUCT"."PRODUCT_DESCRIPTION", 
+      "CLASSICMODELS"."PRODUCT"."QUANTITY_IN_STOCK", 
+      "CLASSICMODELS"."PRODUCT"."BUY_PRICE", 
+      "CLASSICMODELS"."PRODUCT"."MSRP" 
     from 
-      "SYSTEM"."PRODUCT" 
+      "CLASSICMODELS"."PRODUCT" 
     where 
       (
-        "SYSTEM"."PRODUCT"."PRODUCT_VENDOR", 
-        "SYSTEM"."PRODUCT"."PRODUCT_SCALE", 
-        "SYSTEM"."PRODUCT"."PRODUCT_LINE"
+        "CLASSICMODELS"."PRODUCT"."PRODUCT_VENDOR", 
+        "CLASSICMODELS"."PRODUCT"."PRODUCT_SCALE", 
+        "CLASSICMODELS"."PRODUCT"."PRODUCT_LINE"
       ) = (
         (?, ?, ?)
       )    
@@ -76,34 +76,34 @@ public class ClassicModelsRepository {
     // EXAMPLE 2
     /*
     select 
-      "SYSTEM"."PRODUCT"."PRODUCT_ID", 
-      "SYSTEM"."PRODUCT"."PRODUCT_NAME", 
-      "SYSTEM"."PRODUCT"."PRODUCT_LINE", 
-      "SYSTEM"."PRODUCT"."PRODUCT_SCALE", 
-      "SYSTEM"."PRODUCT"."PRODUCT_VENDOR", 
-      "SYSTEM"."PRODUCT"."PRODUCT_DESCRIPTION", 
-      "SYSTEM"."PRODUCT"."QUANTITY_IN_STOCK", 
-      "SYSTEM"."PRODUCT"."BUY_PRICE", 
-      "SYSTEM"."PRODUCT"."MSRP" 
+      "CLASSICMODELS"."PRODUCT"."PRODUCT_ID", 
+      "CLASSICMODELS"."PRODUCT"."PRODUCT_NAME", 
+      "CLASSICMODELS"."PRODUCT"."PRODUCT_LINE", 
+      "CLASSICMODELS"."PRODUCT"."PRODUCT_SCALE", 
+      "CLASSICMODELS"."PRODUCT"."PRODUCT_VENDOR", 
+      "CLASSICMODELS"."PRODUCT"."PRODUCT_DESCRIPTION", 
+      "CLASSICMODELS"."PRODUCT"."QUANTITY_IN_STOCK", 
+      "CLASSICMODELS"."PRODUCT"."BUY_PRICE", 
+      "CLASSICMODELS"."PRODUCT"."MSRP" 
     from 
-      "SYSTEM"."PRODUCT" 
+      "CLASSICMODELS"."PRODUCT" 
     where 
       (
-        "SYSTEM"."PRODUCT"."PRODUCT_ID", 
-        "SYSTEM"."PRODUCT"."PRODUCT_VENDOR", 
-        "SYSTEM"."PRODUCT"."PRODUCT_SCALE", 
-        "SYSTEM"."PRODUCT"."PRODUCT_LINE"
+        "CLASSICMODELS"."PRODUCT"."PRODUCT_ID", 
+        "CLASSICMODELS"."PRODUCT"."PRODUCT_VENDOR", 
+        "CLASSICMODELS"."PRODUCT"."PRODUCT_SCALE", 
+        "CLASSICMODELS"."PRODUCT"."PRODUCT_LINE"
       ) = (
         (
           select 
-            "SYSTEM"."PRODUCT"."PRODUCT_ID", 
+            "CLASSICMODELS"."PRODUCT"."PRODUCT_ID", 
             ?, 
-            "SYSTEM"."PRODUCT"."PRODUCT_SCALE", 
-            "SYSTEM"."PRODUCT"."PRODUCT_LINE" 
+            "CLASSICMODELS"."PRODUCT"."PRODUCT_SCALE", 
+            "CLASSICMODELS"."PRODUCT"."PRODUCT_LINE" 
           from 
-            "SYSTEM"."PRODUCT" 
+            "CLASSICMODELS"."PRODUCT" 
           where 
-            "SYSTEM"."PRODUCT"."PRODUCT_ID" = ?
+            "CLASSICMODELS"."PRODUCT"."PRODUCT_ID" = ?
         )
       )    
     */
@@ -142,22 +142,22 @@ public class ClassicModelsRepository {
     // EXAMPLE 3 - IN predicates
     /*
     select 
-      "SYSTEM"."PRODUCT"."PRODUCT_ID", 
-      "SYSTEM"."PRODUCT"."PRODUCT_NAME", 
-      "SYSTEM"."PRODUCT"."PRODUCT_LINE", 
-      "SYSTEM"."PRODUCT"."PRODUCT_SCALE", 
-      "SYSTEM"."PRODUCT"."PRODUCT_VENDOR", 
-      "SYSTEM"."PRODUCT"."PRODUCT_DESCRIPTION", 
-      "SYSTEM"."PRODUCT"."QUANTITY_IN_STOCK", 
-      "SYSTEM"."PRODUCT"."BUY_PRICE", 
-      "SYSTEM"."PRODUCT"."MSRP" 
+      "CLASSICMODELS"."PRODUCT"."PRODUCT_ID", 
+      "CLASSICMODELS"."PRODUCT"."PRODUCT_NAME", 
+      "CLASSICMODELS"."PRODUCT"."PRODUCT_LINE", 
+      "CLASSICMODELS"."PRODUCT"."PRODUCT_SCALE", 
+      "CLASSICMODELS"."PRODUCT"."PRODUCT_VENDOR", 
+      "CLASSICMODELS"."PRODUCT"."PRODUCT_DESCRIPTION", 
+      "CLASSICMODELS"."PRODUCT"."QUANTITY_IN_STOCK", 
+      "CLASSICMODELS"."PRODUCT"."BUY_PRICE", 
+      "CLASSICMODELS"."PRODUCT"."MSRP" 
     from 
-      "SYSTEM"."PRODUCT" 
+      "CLASSICMODELS"."PRODUCT" 
     where 
       (
-        "SYSTEM"."PRODUCT"."PRODUCT_VENDOR", 
-        "SYSTEM"."PRODUCT"."PRODUCT_SCALE", 
-        "SYSTEM"."PRODUCT"."PRODUCT_LINE"
+        "CLASSICMODELS"."PRODUCT"."PRODUCT_VENDOR", 
+        "CLASSICMODELS"."PRODUCT"."PRODUCT_SCALE", 
+        "CLASSICMODELS"."PRODUCT"."PRODUCT_LINE"
       ) in (
         (?, ?, ?), 
         (?, ?, ?)
@@ -181,22 +181,22 @@ public class ClassicModelsRepository {
     // EXAMPLE 4
     /*
     select 
-      "SYSTEM"."PRODUCT"."PRODUCT_ID", 
-      "SYSTEM"."PRODUCT"."PRODUCT_NAME", 
-      "SYSTEM"."PRODUCT"."PRODUCT_LINE", 
-      "SYSTEM"."PRODUCT"."PRODUCT_SCALE", 
-      "SYSTEM"."PRODUCT"."PRODUCT_VENDOR", 
-      "SYSTEM"."PRODUCT"."PRODUCT_DESCRIPTION", 
-      "SYSTEM"."PRODUCT"."QUANTITY_IN_STOCK", 
-      "SYSTEM"."PRODUCT"."BUY_PRICE", 
-      "SYSTEM"."PRODUCT"."MSRP" 
+      "CLASSICMODELS"."PRODUCT"."PRODUCT_ID", 
+      "CLASSICMODELS"."PRODUCT"."PRODUCT_NAME", 
+      "CLASSICMODELS"."PRODUCT"."PRODUCT_LINE", 
+      "CLASSICMODELS"."PRODUCT"."PRODUCT_SCALE", 
+      "CLASSICMODELS"."PRODUCT"."PRODUCT_VENDOR", 
+      "CLASSICMODELS"."PRODUCT"."PRODUCT_DESCRIPTION", 
+      "CLASSICMODELS"."PRODUCT"."QUANTITY_IN_STOCK", 
+      "CLASSICMODELS"."PRODUCT"."BUY_PRICE", 
+      "CLASSICMODELS"."PRODUCT"."MSRP" 
     from 
-      "SYSTEM"."PRODUCT" 
+      "CLASSICMODELS"."PRODUCT" 
     where 
       (
-        "SYSTEM"."PRODUCT"."PRODUCT_VENDOR", 
-        "SYSTEM"."PRODUCT"."PRODUCT_SCALE", 
-        "SYSTEM"."PRODUCT"."PRODUCT_LINE"
+        "CLASSICMODELS"."PRODUCT"."PRODUCT_VENDOR", 
+        "CLASSICMODELS"."PRODUCT"."PRODUCT_SCALE", 
+        "CLASSICMODELS"."PRODUCT"."PRODUCT_LINE"
       ) in (
         (?, ?, ?), 
         (?, ?, ?)
@@ -220,26 +220,26 @@ public class ClassicModelsRepository {
     // EXAMPLE 5
     /*
     select 
-      "SYSTEM"."CUSTOMERDETAIL"."CUSTOMER_NUMBER", 
-      "SYSTEM"."CUSTOMERDETAIL"."ADDRESS_LINE_FIRST", 
-      "SYSTEM"."CUSTOMERDETAIL"."ADDRESS_LINE_SECOND", 
-      "SYSTEM"."CUSTOMERDETAIL"."CITY", 
-      "SYSTEM"."CUSTOMERDETAIL"."STATE", 
-      "SYSTEM"."CUSTOMERDETAIL"."POSTAL_CODE", 
-      "SYSTEM"."CUSTOMERDETAIL"."COUNTRY" 
+      "CLASSICMODELS"."CUSTOMERDETAIL"."CUSTOMER_NUMBER", 
+      "CLASSICMODELS"."CUSTOMERDETAIL"."ADDRESS_LINE_FIRST", 
+      "CLASSICMODELS"."CUSTOMERDETAIL"."ADDRESS_LINE_SECOND", 
+      "CLASSICMODELS"."CUSTOMERDETAIL"."CITY", 
+      "CLASSICMODELS"."CUSTOMERDETAIL"."STATE", 
+      "CLASSICMODELS"."CUSTOMERDETAIL"."POSTAL_CODE", 
+      "CLASSICMODELS"."CUSTOMERDETAIL"."COUNTRY" 
     from 
-      "SYSTEM"."CUSTOMERDETAIL" 
+      "CLASSICMODELS"."CUSTOMERDETAIL" 
     where 
       (
-        "SYSTEM"."CUSTOMERDETAIL"."CITY", 
-        "SYSTEM"."CUSTOMERDETAIL"."COUNTRY"
+        "CLASSICMODELS"."CUSTOMERDETAIL"."CITY", 
+        "CLASSICMODELS"."CUSTOMERDETAIL"."COUNTRY"
       ) in (
         (
           select 
-            "SYSTEM"."OFFICE"."CITY", 
-            "SYSTEM"."OFFICE"."COUNTRY" 
+            "CLASSICMODELS"."OFFICE"."CITY", 
+            "CLASSICMODELS"."OFFICE"."COUNTRY" 
           from 
-            "SYSTEM"."OFFICE"
+            "CLASSICMODELS"."OFFICE"
         )
       )    
     */
@@ -260,34 +260,34 @@ public class ClassicModelsRepository {
     // EXAMPLE 6: BETWEEN predicates
     /*
     select 
-      "SYSTEM"."ORDER"."ORDER_ID", 
-      "SYSTEM"."ORDER"."ORDER_DATE", 
-      "SYSTEM"."ORDER"."REQUIRED_DATE", 
-      "SYSTEM"."ORDER"."SHIPPED_DATE", 
-      "SYSTEM"."ORDER"."STATUS", 
-      "SYSTEM"."ORDER"."COMMENTS", 
-      "SYSTEM"."ORDER"."CUSTOMER_NUMBER" 
+      "CLASSICMODELS"."ORDER"."ORDER_ID", 
+      "CLASSICMODELS"."ORDER"."ORDER_DATE", 
+      "CLASSICMODELS"."ORDER"."REQUIRED_DATE", 
+      "CLASSICMODELS"."ORDER"."SHIPPED_DATE", 
+      "CLASSICMODELS"."ORDER"."STATUS", 
+      "CLASSICMODELS"."ORDER"."COMMENTS", 
+      "CLASSICMODELS"."ORDER"."CUSTOMER_NUMBER" 
     from 
-      "SYSTEM"."ORDER" 
+      "CLASSICMODELS"."ORDER" 
     where 
       (
         (
-          "SYSTEM"."ORDER"."ORDER_DATE" >= cast(? as date) 
+          "CLASSICMODELS"."ORDER"."ORDER_DATE" >= cast(? as date) 
           and (
-            "SYSTEM"."ORDER"."ORDER_DATE" > cast(? as date) 
+            "CLASSICMODELS"."ORDER"."ORDER_DATE" > cast(? as date) 
             or (
-              "SYSTEM"."ORDER"."ORDER_DATE" = cast(? as date) 
-              and "SYSTEM"."ORDER"."SHIPPED_DATE" >= cast(? as date)
+              "CLASSICMODELS"."ORDER"."ORDER_DATE" = cast(? as date) 
+              and "CLASSICMODELS"."ORDER"."SHIPPED_DATE" >= cast(? as date)
             )
           )
         ) 
         and (
-          "SYSTEM"."ORDER"."ORDER_DATE" <= cast(? as date) 
+          "CLASSICMODELS"."ORDER"."ORDER_DATE" <= cast(? as date) 
           and (
-            "SYSTEM"."ORDER"."ORDER_DATE" < cast(? as date) 
+            "CLASSICMODELS"."ORDER"."ORDER_DATE" < cast(? as date) 
             or (
-              "SYSTEM"."ORDER"."ORDER_DATE" = cast(? as date) 
-              and "SYSTEM"."ORDER"."SHIPPED_DATE" <= cast(? as date)
+              "CLASSICMODELS"."ORDER"."ORDER_DATE" = cast(? as date) 
+              and "CLASSICMODELS"."ORDER"."SHIPPED_DATE" <= cast(? as date)
             )
           )
         )
@@ -311,19 +311,19 @@ public class ClassicModelsRepository {
     // EXAMPLE 7: Dates overlapping
     /*
     select 
-     "SYSTEM"."ORDER"."ORDER_ID", 
-     "SYSTEM"."ORDER"."ORDER_DATE", 
-     "SYSTEM"."ORDER"."REQUIRED_DATE", 
-     "SYSTEM"."ORDER"."SHIPPED_DATE", 
-     "SYSTEM"."ORDER"."STATUS", 
-     "SYSTEM"."ORDER"."COMMENTS", 
-     "SYSTEM"."ORDER"."CUSTOMER_NUMBER" 
+     "CLASSICMODELS"."ORDER"."ORDER_ID", 
+     "CLASSICMODELS"."ORDER"."ORDER_DATE", 
+     "CLASSICMODELS"."ORDER"."REQUIRED_DATE", 
+     "CLASSICMODELS"."ORDER"."SHIPPED_DATE", 
+     "CLASSICMODELS"."ORDER"."STATUS", 
+     "CLASSICMODELS"."ORDER"."COMMENTS", 
+     "CLASSICMODELS"."ORDER"."CUSTOMER_NUMBER" 
    from 
-     "SYSTEM"."ORDER" 
+     "CLASSICMODELS"."ORDER" 
    where 
      (
        (
-         "SYSTEM"."ORDER"."ORDER_DATE", "SYSTEM"."ORDER"."SHIPPED_DATE"
+         "CLASSICMODELS"."ORDER"."ORDER_DATE", "CLASSICMODELS"."ORDER"."SHIPPED_DATE"
        ) overlaps (
          cast(? as date), 
          cast(? as date)
@@ -347,15 +347,15 @@ public class ClassicModelsRepository {
     // EXAMPLE 8
     /*
     select 
-      "SYSTEM"."SALE"."SALE_ID", 
-      "SYSTEM"."SALE"."FISCAL_YEAR", 
-      "SYSTEM"."SALE"."SALE", 
-      "SYSTEM"."SALE"."EMPLOYEE_NUMBER" 
+      "CLASSICMODELS"."SALE"."SALE_ID", 
+      "CLASSICMODELS"."SALE"."FISCAL_YEAR", 
+      "CLASSICMODELS"."SALE"."SALE", 
+      "CLASSICMODELS"."SALE"."EMPLOYEE_NUMBER" 
     from 
-      "SYSTEM"."SALE" 
+      "CLASSICMODELS"."SALE" 
     where 
       (
-        ? <= "SYSTEM"."SALE"."SALE" 
+        ? <= "CLASSICMODELS"."SALE"."SALE" 
         and ? <= ?
       )    
     */
@@ -376,21 +376,21 @@ public class ClassicModelsRepository {
     // EXAMPLE 9 - NULLs and row value expression
     /*
     select 
-      "SYSTEM"."OFFICE"."OFFICE_CODE", 
-      "SYSTEM"."OFFICE"."CITY", 
-      "SYSTEM"."OFFICE"."PHONE", 
-      "SYSTEM"."OFFICE"."ADDRESS_LINE_FIRST", 
-      "SYSTEM"."OFFICE"."ADDRESS_LINE_SECOND", 
-      "SYSTEM"."OFFICE"."STATE", 
-      "SYSTEM"."OFFICE"."COUNTRY", 
-      "SYSTEM"."OFFICE"."POSTAL_CODE", 
-      "SYSTEM"."OFFICE"."TERRITORY" 
+      "CLASSICMODELS"."OFFICE"."OFFICE_CODE", 
+      "CLASSICMODELS"."OFFICE"."CITY", 
+      "CLASSICMODELS"."OFFICE"."PHONE", 
+      "CLASSICMODELS"."OFFICE"."ADDRESS_LINE_FIRST", 
+      "CLASSICMODELS"."OFFICE"."ADDRESS_LINE_SECOND", 
+      "CLASSICMODELS"."OFFICE"."STATE", 
+      "CLASSICMODELS"."OFFICE"."COUNTRY", 
+      "CLASSICMODELS"."OFFICE"."POSTAL_CODE", 
+      "CLASSICMODELS"."OFFICE"."TERRITORY" 
     from 
-      "SYSTEM"."OFFICE" 
+      "CLASSICMODELS"."OFFICE" 
     where 
       (
-        "SYSTEM"."OFFICE"."CITY" is null 
-        and "SYSTEM"."OFFICE"."COUNTRY" is null
+        "CLASSICMODELS"."OFFICE"."CITY" is null 
+        and "CLASSICMODELS"."OFFICE"."COUNTRY" is null
       )    
     */
     public void findOfficeNullCityAndCountry() {
@@ -411,19 +411,19 @@ public class ClassicModelsRepository {
     // EXAMPLE 10
     /*
     update 
-      "SYSTEM"."OFFICE" 
+      "CLASSICMODELS"."OFFICE" 
     set 
       ("POSTAL_CODE", "STATE") = (
         select 
-          "SYSTEM"."CUSTOMERDETAIL"."POSTAL_CODE", 
-          "SYSTEM"."CUSTOMERDETAIL"."STATE" 
+          "CLASSICMODELS"."CUSTOMERDETAIL"."POSTAL_CODE", 
+          "CLASSICMODELS"."CUSTOMERDETAIL"."STATE" 
         from 
-          "SYSTEM"."CUSTOMERDETAIL" 
+          "CLASSICMODELS"."CUSTOMERDETAIL" 
         where 
-          "SYSTEM"."OFFICE"."CITY" = "SYSTEM"."CUSTOMERDETAIL"."CITY" fetch next ? rows only
+          "CLASSICMODELS"."OFFICE"."CITY" = "CLASSICMODELS"."CUSTOMERDETAIL"."CITY" fetch next ? rows only
       ) 
     where 
-      "SYSTEM"."OFFICE"."OFFICE_CODE" = ?    
+      "CLASSICMODELS"."OFFICE"."OFFICE_CODE" = ?    
     */
     @Transactional
     public void updateOfficePostalCodeAndState() {
