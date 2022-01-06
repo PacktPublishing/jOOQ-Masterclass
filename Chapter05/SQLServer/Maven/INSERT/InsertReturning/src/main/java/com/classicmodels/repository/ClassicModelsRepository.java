@@ -77,6 +77,8 @@ public class ClassicModelsRepository {
       @result [r];    
      */
     public void insertReturningOfCustomerInCustomerDetail() {
+        
+        // Note: passing explicit "null" instead of default_() produces implementation specific behaviour
 
         System.out.println("EXAMPLE 3 (affected rows): "
                 + ctx.insertInto(CUSTOMERDETAIL)
@@ -167,9 +169,9 @@ public class ClassicModelsRepository {
         // Result<Record2<String, LocalDate>>
         var inserted = ctx.insertInto(PRODUCTLINE, PRODUCTLINE.PRODUCT_LINE, 
                 PRODUCTLINE.TEXT_DESCRIPTION, PRODUCTLINE.CODE)
-                .values("Electric Vans" + ThreadLocalRandom.current().nextInt(10000, 20000)
+                .values("Electric Vans - " + ThreadLocalRandom.current().nextInt(10000, 20000)
                         , "This new line of electric vans ...", 983423L)
-                .values("Turbo N Cars" + ThreadLocalRandom.current().nextInt(10000, 20000)
+                .values("Turbo N Cars - " + ThreadLocalRandom.current().nextInt(10000, 20000)
                         , "This new line of turbo N cars ...", 193384L)    
                 .returningResult(PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.CREATED_ON)
                 .fetch();
