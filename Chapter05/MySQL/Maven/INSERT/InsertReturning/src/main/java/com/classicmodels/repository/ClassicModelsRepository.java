@@ -11,7 +11,7 @@ import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.concat;
 import static org.jooq.impl.DSL.default_;
-import static org.jooq.impl.DSL.val;
+import static org.jooq.impl.DSL.inline;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,17 +28,23 @@ public class ClassicModelsRepository {
     // EXAMPLE 1
     /*
     insert into `classicmodels`.`sale` (
-      `sale_id`,`fiscal_year`,`sale`,`employee_number`)
-    values
-      (default, ?, ?, ?, default, ?, ?, default)
+      `sale_id`, `fiscal_year`, `sale`, 
+      `employee_number`, `hot`, `rate`, 
+      `vat`, `fiscal_month`, `revenue_growth`, 
+      `trend`
+    ) 
+    values 
+      (
+        default, ?, ?, ?, default, ?, ?, ?, ?, ?
+      )    
      */
     public void returnOneId() {
 
         // Record1<Long>
         var insertedId = ctx.insertInto(SALE)
                 .values(default_(), 2004, 2311.42, 1370L, 
-                        default_(), SaleRate.SILVER, SaleVat.NONE, default_())
-                .returningResult(SALE.SALE_ID) // or, returning() to return whole fields
+                        default_(), SaleRate.SILVER, SaleVat.NONE, 4, 36.40, "CONSTANT")
+                .returningResult(SALE.SALE_ID) // or, returningResult() to return whole fields
                 .fetchOne();
 
         System.out.println("EXAMPLE 1 (inserted id):\n" + insertedId); // as Long, insertedId.value1()
@@ -47,22 +53,26 @@ public class ClassicModelsRepository {
 // EXAMPLE 2
     /*
     insert into `classicmodels`.`sale` (
-      `sale_id`,`fiscal_year`,`sale`,`employee_number`)
-    values
-     (default, ?, ?, ?, default, ?, ?, default), 
-     (default, ?, ?, ?, default, ?, ?, default), 
-     (default, ?, ?, ?, default, ?, ?, default
+      `sale_id`, `fiscal_year`, `sale`, 
+      `employee_number`, `hot`, `rate`, 
+      `vat`, `fiscal_month`, `revenue_growth`, 
+      `trend`
+    ) 
+    values 
+      (default, ?, ?, ?, default, ?, ?, ?, ?, ?), 
+      (default, ?, ?, ?, default, ?, ?, ?, ?, ?), 
+      (default, ?, ?, ?, default, ?, ?, ?, ?, ?)   
      */
     public void returnMultipleIds() {
 
         // Result<Record1<Long>>
         var insertedIds = ctx.insertInto(SALE)
                 .values(default_(), 2004, 2311.42, 1370L,
-                        default_(), SaleRate.PLATINUM, SaleVat.NONE, default_())
+                        default_(), SaleRate.PLATINUM, SaleVat.NONE, 5, 37.40, "UP")
                 .values(default_(), 2003, 900.21, 1504L,
-                        default_(), SaleRate.SILVER, SaleVat.NONE, default_())
+                        default_(), SaleRate.SILVER, SaleVat.NONE, 6, 39.40, "CONSTANT")
                 .values(default_(), 2005, 1232.2, 1166L,
-                        default_(), SaleRate.GOLD, SaleVat.MIN, default_())
+                        default_(), SaleRate.GOLD, SaleVat.MIN, 7, 45.44, "CONSTANT")
                 .returningResult(SALE.SALE_ID)
                 .fetch();
 
@@ -89,9 +99,10 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 3 (affected rows): "
                 + ctx.insertInto(CUSTOMERDETAIL)
                         .values(ctx.insertInto(CUSTOMER)
-                                .values(default_(), "Ltd. AirRoads", "Kyle", "Doyle", "+ 44 321 321", null, null, null)
+                                .values(default_(), "Ltd. AirRoads - " + Math.random(), 
+                                        "Kyle", "Doyle", "+ 44 321 321", null, null, null)
                                 .returningResult(CUSTOMER.CUSTOMER_NUMBER).fetchOne().value1(),
-                                "No. 14 Avenue", null, "Los Angeles", null, null, "USA")
+                                "No. 14 Avenue - " + Math.random(), null, "Los Angeles", null, null, "USA")
                         .execute()
         );
     }
@@ -123,7 +134,7 @@ public class ClassicModelsRepository {
     public void insertEmployeeInManagerReturningId() {
 
         var inserted = ctx.insertInto(MANAGER)
-                .values(default_(), select(concat(EMPLOYEE.FIRST_NAME, val(" "), EMPLOYEE.LAST_NAME))
+                .values(default_(), select(concat(EMPLOYEE.FIRST_NAME, inline(" "), EMPLOYEE.LAST_NAME))
                         .from(EMPLOYEE)
                         .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1165L)),
                         default_(), default_())
