@@ -443,9 +443,9 @@ public class ClassicModelsRepository {
         /* SQL alternative based on row_number() */
         /*
         select 
-          [alias_2194997].[fiscal_year], 
-          [alias_2194997].[employee_number], 
-          [alias_2194997].[sale] 
+          [t].[fiscal_year], 
+          [t].[employee_number], 
+          [t].[sale] 
         from 
           (
             select 
@@ -460,17 +460,17 @@ public class ClassicModelsRepository {
               ) [rn] 
             from 
               [classicmodels].[dbo].[sale]
-          ) [alias_2194997] 
+          ) [t] 
         where 
-          [alias_2194997].[rn] = ? 
+          [t].[rn] = ? 
         order by 
-          [alias_2194997].[fiscal_year]        
+          [t].[fiscal_year]              
          */
         // Table<?>
         var t = selectDistinct(SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR, SALE.SALE_,
                 rowNumber().over(partitionBy(SALE.FISCAL_YEAR)
                         .orderBy(SALE.FISCAL_YEAR, SALE.SALE_.desc())).as("rn"))
-                .from(SALE).asTable();
+                .from(SALE).asTable("t");
 
         System.out.println("EXAMPLE 10.3\n"
                 + ctx.select(t.field("fiscal_year"), t.field("employee_number"), t.field("sale"))
@@ -479,5 +479,5 @@ public class ClassicModelsRepository {
                         .orderBy(t.field("fiscal_year"))
                         .fetch()
         );
-    }            
+    }                 
 }
