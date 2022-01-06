@@ -1,7 +1,5 @@
 package com.classicmodels.repository;
 
-import jooq.generated.enums.SaleRate;
-import jooq.generated.enums.SaleVat;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
 import static jooq.generated.tables.Employee.EMPLOYEE;
@@ -28,55 +26,47 @@ public class ClassicModelsRepository {
     // EXAMPLE 1
     /*
     insert into `classicmodels`.`sale` (
-      `sale_id`, `fiscal_year`, `sale`, 
-      `employee_number`, `hot`, `rate`, 
-      `vat`, `fiscal_month`, `revenue_growth`, 
-      `trend`
+      `fiscal_year`, `sale`, `employee_number`, 
+      `revenue_growth`, `fiscal_month`
     ) 
     values 
-      (
-        default, ?, ?, ?, default, ?, ?, ?, ?, ?
-      )    
+      (?, ?, ?, ?, ?)    
      */
     public void returnOneId() {
 
         // Record1<Long>
-        var insertedId = ctx.insertInto(SALE)
-                .values(default_(), 2004, 2311.42, 1370L, 
-                        default_(), SaleRate.SILVER, SaleVat.NONE, 4, 36.40, "CONSTANT")
+        var insertedId = ctx.insertInto(SALE, 
+                SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.REVENUE_GROWTH, SALE.FISCAL_MONTH)
+                .values(2004, 2311.42, 1370L, 10.12, 1)
                 .returningResult(SALE.SALE_ID) // or, returningResult() to return whole fields
-                .fetchOne();
+                .fetchOne(); 
 
-        System.out.println("EXAMPLE 1 (inserted id):\n" + insertedId); // as Long, insertedId.value1()
+        System.out.println("EXAMPLE 1 (inserted id): \n" + insertedId); // as Long, insertedId.value1()
     }
 
-// EXAMPLE 2
+    // EXAMPLE 2
     /*
     insert into `classicmodels`.`sale` (
-      `sale_id`, `fiscal_year`, `sale`, 
-      `employee_number`, `hot`, `rate`, 
-      `vat`, `fiscal_month`, `revenue_growth`, 
-      `trend`
+      `fiscal_year`, `sale`, `employee_number`, 
+      `revenue_growth`, `fiscal_month`
     ) 
     values 
-      (default, ?, ?, ?, default, ?, ?, ?, ?, ?), 
-      (default, ?, ?, ?, default, ?, ?, ?, ?, ?), 
-      (default, ?, ?, ?, default, ?, ?, ?, ?, ?)   
+      (?, ?, ?, ?, ?), 
+      (?, ?, ?, ?, ?), 
+      (?, ?, ?, ?, ?)    
      */
     public void returnMultipleIds() {
 
         // Result<Record1<Long>>
-        var insertedIds = ctx.insertInto(SALE)
-                .values(default_(), 2004, 2311.42, 1370L,
-                        default_(), SaleRate.PLATINUM, SaleVat.NONE, 5, 37.40, "UP")
-                .values(default_(), 2003, 900.21, 1504L,
-                        default_(), SaleRate.SILVER, SaleVat.NONE, 6, 39.40, "CONSTANT")
-                .values(default_(), 2005, 1232.2, 1166L,
-                        default_(), SaleRate.GOLD, SaleVat.MIN, 7, 45.44, "CONSTANT")
-                .returningResult(SALE.SALE_ID)
+        var insertedIds = ctx.insertInto(SALE, 
+                SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.REVENUE_GROWTH, SALE.FISCAL_MONTH)
+                .values(2004, 2311.42, 1370L, 12.50, 1)
+                .values(2003, 900.21, 1504L, 23.99, 2)
+                .values(2005, 1232.2, 1166L, 14.65, 3)
+                .returningResult(SALE.SALE_ID) // or, returningResult() to return whole fields
                 .fetch();
 
-        System.out.println("EXAMPLE 2 (inserted ids):\n" + insertedIds);
+        System.out.println("EXAMPLE 2 (inserted ids): \n" + insertedIds);
     }
 
     // EXAMPLE 3
@@ -95,14 +85,15 @@ public class ClassicModelsRepository {
      */
     public void insertReturningOfCustomerInCustomerDetail() {
 
-        // passing explicit "null" instead of default_() produces implementation specific behaviour
+        // Note: passing explicit "null" instead of default_() produces implementation specific behaviour
+        
         System.out.println("EXAMPLE 3 (affected rows): "
                 + ctx.insertInto(CUSTOMERDETAIL)
                         .values(ctx.insertInto(CUSTOMER)
                                 .values(default_(), "Ltd. AirRoads - " + Math.random(), 
-                                        "Kyle", "Doyle", "+ 44 321 321", null, null, null)
+                                        "Kyle", "Doyle", "+ 44 321 321", default_(), default_(), default_())
                                 .returningResult(CUSTOMER.CUSTOMER_NUMBER).fetchOne().value1(),
-                                "No. 14 Avenue - " + Math.random(), null, "Los Angeles", null, null, "USA")
+                                "No. 14 Avenue - " + Math.random(), default_(), "Los Angeles", default_(), default_(), "USA")
                         .execute()
         );
     }

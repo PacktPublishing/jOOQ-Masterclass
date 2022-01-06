@@ -28,39 +28,45 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 1
     /*
-    insert into "public"."sale" 
-      ("fiscal_year", "sale", "employee_number")
-    values
-      (?, ?, ?) 
-    returning "public"."sale"."sale_id"
+    insert into "public"."sale" (
+      "fiscal_year", "sale", "employee_number", 
+      "revenue_growth", "fiscal_month"
+    ) 
+    values 
+      (?, ?, ?, ?, ?) returning "public"."sale"."sale_id"    
      */
     public void returnOneId() {
 
         // Record1<Long>
-        var insertedId = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
-                .values(2004, 2311.42, 1370L)
-                .returningResult(SALE.SALE_ID)
-                .fetchOne();
+        var insertedId = ctx.insertInto(SALE, 
+                SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.REVENUE_GROWTH, SALE.FISCAL_MONTH)
+                .values(2004, 2311.42, 1370L, 10.12, 1)
+                .returningResult(SALE.SALE_ID) // or, returningResult() to return whole fields
+                .fetchOne(); 
 
         System.out.println("EXAMPLE 1 (inserted id): \n" + insertedId); // as Long, insertedId.value1()
     }
 
     // EXAMPLE 2
     /*
-    insert into "public"."sale" 
-      ("fiscal_year", "sale", "employee_number")
-    values
-      (?, ?, ?),(?, ?, ?),(?, ?, ?) 
-    returning "public"."sale"."sale_id"
+    insert into "public"."sale" (
+      "fiscal_year", "sale", "employee_number", 
+      "revenue_growth", "fiscal_month"
+    ) 
+    values 
+      (?, ?, ?, ?, ?), 
+      (?, ?, ?, ?, ?), 
+      (?, ?, ?, ?, ?) returning "public"."sale"."sale_id"   
      */
     public void returnMultipleIds() {
 
         // Result<Record1<Long>>
-        var insertedIds = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
-                .values(2004, 2311.42, 1370L)
-                .values(2003, 900.21, 1504L)
-                .values(2005, 1232.2, 1166L)
-                .returningResult(SALE.SALE_ID)
+        var insertedIds = ctx.insertInto(SALE, 
+                SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.REVENUE_GROWTH, SALE.FISCAL_MONTH)
+                .values(2004, 2311.42, 1370L, 12.50, 1)
+                .values(2003, 900.21, 1504L, 23.99, 2)
+                .values(2005, 1232.2, 1166L, 14.65, 3)
+                .returningResult(SALE.SALE_ID) // or, returningResult() to return whole fields
                 .fetch();
 
         System.out.println("EXAMPLE 2 (inserted ids): \n" + insertedIds);
@@ -225,7 +231,7 @@ public class ClassicModelsRepository {
         // Record1<Integer>, DEPARTMENT_DEPARTMENT_ID_SEQ - this is the sequence created automatically 
         var inserted = ctx.insertInto(DEPARTMENT, DEPARTMENT.NAME, 
                 DEPARTMENT.PHONE, DEPARTMENT.CODE, DEPARTMENT.OFFICE_CODE)
-                .values("Marketing", "+2 311 312", Short.valueOf("5432"), "5")
+                .values("Marketing", "+2 311 312", 5432, "5")
                 .returningResult(DEPARTMENT.DEPARTMENT_ID)
                 .fetchOne();
         
