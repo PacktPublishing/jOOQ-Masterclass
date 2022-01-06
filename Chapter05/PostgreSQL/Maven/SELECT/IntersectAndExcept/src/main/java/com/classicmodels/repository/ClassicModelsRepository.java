@@ -89,7 +89,7 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 3
     /* Fetch cities and countries where we have offices and customers */
- /*
+    /*
     select
       "public"."office"."city",
       "public"."office"."country"
@@ -129,7 +129,7 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 4
     /* Fetch cities and countries where we have customers but we don't have offices */
- /*
+    /*
     select
       "public"."customerdetail"."city",
       "public"."customerdetail"."country"
@@ -195,8 +195,8 @@ public class ClassicModelsRepository {
             row("Boston", "USA"), row("Los Angeles", "USA"), row("Sydney", "Australia")};
         
         System.out.println("EXAMPLE 5\n"
-                + ctx.select().from(values(rows
-                ).as("p", OFFICE.CITY.getName(), OFFICE.COUNTRY.getName()))
+                + ctx.select().from(values(rows)
+                .as("p", OFFICE.CITY.getName(), OFFICE.COUNTRY.getName()))
                         .except(select(OFFICE.CITY, OFFICE.COUNTRY).from(OFFICE))
                         .fetch(OFFICE.CITY)
         );
