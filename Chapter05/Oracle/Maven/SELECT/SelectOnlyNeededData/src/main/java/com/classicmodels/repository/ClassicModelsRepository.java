@@ -39,17 +39,17 @@ public class ClassicModelsRepository {
 
         /*
         select 
-          "SYSTEM"."ORDER"."ORDER_ID", 
-          "SYSTEM"."ORDER"."ORDER_DATE", 
-          "SYSTEM"."ORDER"."REQUIRED_DATE", 
-          "SYSTEM"."ORDER"."SHIPPED_DATE", 
-          "SYSTEM"."ORDER"."STATUS", 
-          "SYSTEM"."ORDER"."COMMENTS", 
-          "SYSTEM"."ORDER"."CUSTOMER_NUMBER" 
+          "CLASSICMODELS"."ORDER"."ORDER_ID", 
+          "CLASSICMODELS"."ORDER"."ORDER_DATE", 
+          "CLASSICMODELS"."ORDER"."REQUIRED_DATE", 
+          "CLASSICMODELS"."ORDER"."SHIPPED_DATE", 
+          "CLASSICMODELS"."ORDER"."STATUS", 
+          "CLASSICMODELS"."ORDER"."COMMENTS", 
+          "CLASSICMODELS"."ORDER"."CUSTOMER_NUMBER" 
         from 
-          "SYSTEM"."ORDER" 
+          "CLASSICMODELS"."ORDER" 
         where 
-          "SYSTEM"."ORDER"."ORDER_ID" = ?
+          "CLASSICMODELS"."ORDER"."ORDER_ID" = ?
         */
         System.out.println("EXAMPLE 1.1\n" +
                 ctx.select()
@@ -75,9 +75,9 @@ public class ClassicModelsRepository {
         select 
           * 
         from 
-          "SYSTEM"."ORDER" 
+          "CLASSICMODELS"."ORDER" 
         where 
-          "SYSTEM"."ORDER"."ORDER_ID" = ?        
+          "CLASSICMODELS"."ORDER"."ORDER_ID" = ?        
         */
         System.out.println("EXAMPLE 1.4\n" +
                 ctx.select(asterisk())
@@ -88,19 +88,19 @@ public class ClassicModelsRepository {
         
         /*
         select 
-          "SYSTEM"."ORDER"."ORDER_ID", 
-          "SYSTEM"."ORDER"."ORDER_DATE", 
-          "SYSTEM"."ORDER"."REQUIRED_DATE", 
-          "SYSTEM"."ORDER"."SHIPPED_DATE", 
-          "SYSTEM"."ORDER"."STATUS", 
-          "SYSTEM"."ORDER"."COMMENTS", 
-          "SYSTEM"."ORDER"."CUSTOMER_NUMBER", 
-          "SYSTEM"."ORDERDETAIL"."QUANTITY_ORDERED" 
+          "CLASSICMODELS"."ORDER"."ORDER_ID", 
+          "CLASSICMODELS"."ORDER"."ORDER_DATE", 
+          "CLASSICMODELS"."ORDER"."REQUIRED_DATE", 
+          "CLASSICMODELS"."ORDER"."SHIPPED_DATE", 
+          "CLASSICMODELS"."ORDER"."STATUS", 
+          "CLASSICMODELS"."ORDER"."COMMENTS", 
+          "CLASSICMODELS"."ORDER"."CUSTOMER_NUMBER", 
+          "CLASSICMODELS"."ORDERDETAIL"."QUANTITY_ORDERED" 
         from 
-          "SYSTEM"."ORDER" 
-          join "SYSTEM"."ORDERDETAIL" on "SYSTEM"."ORDER"."ORDER_ID" = "SYSTEM"."ORDERDETAIL"."ORDER_ID" 
+          "CLASSICMODELS"."ORDER" 
+          join "CLASSICMODELS"."ORDERDETAIL" on "CLASSICMODELS"."ORDER"."ORDER_ID" = "CLASSICMODELS"."ORDERDETAIL"."ORDER_ID" 
         where 
-          "SYSTEM"."ORDER"."ORDER_ID" = ?        
+          "CLASSICMODELS"."ORDER"."ORDER_ID" = ?        
         */
         System.out.println("EXAMPLE 1.5\n"
                 + ctx.select(ORDER.fields())
@@ -117,12 +117,12 @@ public class ClassicModelsRepository {
           "alias_3062530".* 
         from 
           (
-            "SYSTEM"."ORDER" 
-            join "SYSTEM"."CUSTOMER" "alias_3062530" 
-             on "SYSTEM"."ORDER"."CUSTOMER_NUMBER" = "alias_3062530"."CUSTOMER_NUMBER"
+            "CLASSICMODELS"."ORDER" 
+            join "CLASSICMODELS"."CUSTOMER" "alias_3062530" 
+             on "CLASSICMODELS"."ORDER"."CUSTOMER_NUMBER" = "alias_3062530"."CUSTOMER_NUMBER"
           ) 
         where 
-          "SYSTEM"."ORDER"."ORDER_ID" = ?        
+          "CLASSICMODELS"."ORDER"."ORDER_ID" = ?        
         */
         System.out.println("EXAMPLE 1.6\n"
                 + ctx.select(ORDER.customer().asterisk())                        
@@ -136,15 +136,15 @@ public class ClassicModelsRepository {
     // list only the columns (fields) that are needed
     /*
     select 
-      "SYSTEM"."ORDER"."ORDER_ID", 
-      "SYSTEM"."ORDER"."ORDER_DATE", 
-      "SYSTEM"."ORDER"."REQUIRED_DATE", 
-      "SYSTEM"."ORDER"."SHIPPED_DATE", 
-      "SYSTEM"."ORDER"."CUSTOMER_NUMBER" 
+      "CLASSICMODELS"."ORDER"."ORDER_ID", 
+      "CLASSICMODELS"."ORDER"."ORDER_DATE", 
+      "CLASSICMODELS"."ORDER"."REQUIRED_DATE", 
+      "CLASSICMODELS"."ORDER"."SHIPPED_DATE", 
+      "CLASSICMODELS"."ORDER"."CUSTOMER_NUMBER" 
     from 
-      "SYSTEM"."ORDER" 
+      "CLASSICMODELS"."ORDER" 
     where 
-      "SYSTEM"."ORDER"."ORDER_ID" = ?    
+      "CLASSICMODELS"."ORDER"."ORDER_ID" = ?    
     */
     public void findOrderExplicitFields() {
 
@@ -161,15 +161,15 @@ public class ClassicModelsRepository {
     // list the columns (fields) that should be skipped
     /*
     select 
-      "SYSTEM"."ORDER"."ORDER_ID", 
-      "SYSTEM"."ORDER"."ORDER_DATE", 
-      "SYSTEM"."ORDER"."REQUIRED_DATE", 
-      "SYSTEM"."ORDER"."SHIPPED_DATE", 
-      "SYSTEM"."ORDER"."CUSTOMER_NUMBER" 
+      "CLASSICMODELS"."ORDER"."ORDER_ID", 
+      "CLASSICMODELS"."ORDER"."ORDER_DATE", 
+      "CLASSICMODELS"."ORDER"."REQUIRED_DATE", 
+      "CLASSICMODELS"."ORDER"."SHIPPED_DATE", 
+      "CLASSICMODELS"."ORDER"."CUSTOMER_NUMBER" 
     from 
-      "SYSTEM"."ORDER" 
+      "CLASSICMODELS"."ORDER" 
     where 
-      "SYSTEM"."ORDER"."ORDER_ID" = ?    
+      "CLASSICMODELS"."ORDER"."ORDER_ID" = ?    
     */
     public void findOrderAsteriskExcept() {
 
@@ -184,12 +184,12 @@ public class ClassicModelsRepository {
     // EXAMPLE 4
     /*
     select 
-      "SYSTEM"."EMPLOYEE"."FIRST_NAME", 
-      "SYSTEM"."EMPLOYEE"."LAST_NAME", 
-      "SYSTEM"."SALE".* 
+      "CLASSICMODELS"."EMPLOYEE"."FIRST_NAME", 
+      "CLASSICMODELS"."EMPLOYEE"."LAST_NAME", 
+      "CLASSICMODELS"."SALE".* 
     from 
-      "SYSTEM"."EMPLOYEE" 
-      join "SYSTEM"."SALE" on "SYSTEM"."EMPLOYEE"."EMPLOYEE_NUMBER" = "SYSTEM"."SALE"."EMPLOYEE_NUMBER"    
+      "CLASSICMODELS"."EMPLOYEE" 
+      join "CLASSICMODELS"."SALE" on "CLASSICMODELS"."EMPLOYEE"."EMPLOYEE_NUMBER" = "CLASSICMODELS"."SALE"."EMPLOYEE_NUMBER"    
     */
     public void findOrderAndSale() {
 
@@ -205,17 +205,17 @@ public class ClassicModelsRepository {
     // EXAMPLE 5
     /*
     select 
-      "SYSTEM"."EMPLOYEE"."LAST_NAME", 
-      "SYSTEM"."EMPLOYEE"."FIRST_NAME", 
-      "SYSTEM"."EMPLOYEE"."EXTENSION", 
-      "SYSTEM"."EMPLOYEE"."EMAIL", 
-      "SYSTEM"."EMPLOYEE"."SALARY", 
-      "SYSTEM"."EMPLOYEE"."REPORTS_TO", 
-      "SYSTEM"."EMPLOYEE"."JOB_TITLE", 
-      "SYSTEM"."SALE".* 
+      "CLASSICMODELS"."EMPLOYEE"."LAST_NAME", 
+      "CLASSICMODELS"."EMPLOYEE"."FIRST_NAME", 
+      "CLASSICMODELS"."EMPLOYEE"."EXTENSION", 
+      "CLASSICMODELS"."EMPLOYEE"."EMAIL", 
+      "CLASSICMODELS"."EMPLOYEE"."SALARY", 
+      "CLASSICMODELS"."EMPLOYEE"."REPORTS_TO", 
+      "CLASSICMODELS"."EMPLOYEE"."JOB_TITLE", 
+      "CLASSICMODELS"."SALE".* 
     from 
-      "SYSTEM"."EMPLOYEE" 
-      join "SYSTEM"."SALE" on "SYSTEM"."EMPLOYEE"."EMPLOYEE_NUMBER" = "SYSTEM"."SALE"."EMPLOYEE_NUMBER"   
+      "CLASSICMODELS"."EMPLOYEE" 
+      join "CLASSICMODELS"."SALE" on "CLASSICMODELS"."EMPLOYEE"."EMPLOYEE_NUMBER" = "CLASSICMODELS"."SALE"."EMPLOYEE_NUMBER"   
     */
     public void findOrderExceptAndSale() {
 
@@ -232,17 +232,17 @@ public class ClassicModelsRepository {
     // EXAMPLE 6
     /*
     select 
-      "SYSTEM"."OFFICE"."CITY" "location", 
-      "SYSTEM"."OFFICE"."OFFICE_CODE", 
-      "SYSTEM"."OFFICE"."PHONE", 
-      "SYSTEM"."OFFICE"."ADDRESS_LINE_FIRST", 
-      "SYSTEM"."OFFICE"."ADDRESS_LINE_SECOND", 
-      "SYSTEM"."OFFICE"."STATE", 
-      "SYSTEM"."OFFICE"."COUNTRY", 
-      "SYSTEM"."OFFICE"."POSTAL_CODE", 
-      "SYSTEM"."OFFICE"."TERRITORY" 
+      "CLASSICMODELS"."OFFICE"."CITY" "location", 
+      "CLASSICMODELS"."OFFICE"."OFFICE_CODE", 
+      "CLASSICMODELS"."OFFICE"."PHONE", 
+      "CLASSICMODELS"."OFFICE"."ADDRESS_LINE_FIRST", 
+      "CLASSICMODELS"."OFFICE"."ADDRESS_LINE_SECOND", 
+      "CLASSICMODELS"."OFFICE"."STATE", 
+      "CLASSICMODELS"."OFFICE"."COUNTRY", 
+      "CLASSICMODELS"."OFFICE"."POSTAL_CODE", 
+      "CLASSICMODELS"."OFFICE"."TERRITORY" 
     from 
-      "SYSTEM"."OFFICE"    
+      "CLASSICMODELS"."OFFICE"    
     */
     public void findOfficeUseAliasForCity() {
 
@@ -257,17 +257,17 @@ public class ClassicModelsRepository {
     // EXAMPLE 7
     /*
     select 
-      nvl("SYSTEM"."OFFICE"."CITY", ?), 
-      "SYSTEM"."OFFICE"."OFFICE_CODE", 
-      "SYSTEM"."OFFICE"."PHONE", 
-      "SYSTEM"."OFFICE"."ADDRESS_LINE_FIRST", 
-      "SYSTEM"."OFFICE"."ADDRESS_LINE_SECOND", 
-      "SYSTEM"."OFFICE"."STATE", 
-      "SYSTEM"."OFFICE"."COUNTRY", 
-      "SYSTEM"."OFFICE"."POSTAL_CODE", 
-      "SYSTEM"."OFFICE"."TERRITORY" 
+      nvl("CLASSICMODELS"."OFFICE"."CITY", ?), 
+      "CLASSICMODELS"."OFFICE"."OFFICE_CODE", 
+      "CLASSICMODELS"."OFFICE"."PHONE", 
+      "CLASSICMODELS"."OFFICE"."ADDRESS_LINE_FIRST", 
+      "CLASSICMODELS"."OFFICE"."ADDRESS_LINE_SECOND", 
+      "CLASSICMODELS"."OFFICE"."STATE", 
+      "CLASSICMODELS"."OFFICE"."COUNTRY", 
+      "CLASSICMODELS"."OFFICE"."POSTAL_CODE", 
+      "CLASSICMODELS"."OFFICE"."TERRITORY" 
     from 
-      "SYSTEM"."OFFICE"        
+      "CLASSICMODELS"."OFFICE"        
     */
     public void findOfficeUseNvlForCity() {
 
@@ -282,13 +282,13 @@ public class ClassicModelsRepository {
     // EXAMPLE 8
     /*
     select 
-      case when "SYSTEM"."SALE"."SALE" > ? then 1 when not ("SYSTEM"."SALE"."SALE" > ?) 
+      case when "CLASSICMODELS"."SALE"."SALE" > ? then 1 when not ("CLASSICMODELS"."SALE"."SALE" > ?) 
          then 0 end "saleGt5000", 
-      "SYSTEM"."SALE"."SALE_ID", 
-      "SYSTEM"."SALE"."FISCAL_YEAR", 
-      "SYSTEM"."SALE"."EMPLOYEE_NUMBER" 
+      "CLASSICMODELS"."SALE"."SALE_ID", 
+      "CLASSICMODELS"."SALE"."FISCAL_YEAR", 
+      "CLASSICMODELS"."SALE"."EMPLOYEE_NUMBER" 
     from 
-      "SYSTEM"."SALE"    
+      "CLASSICMODELS"."SALE"    
     */
     public void findSaleGt5000() {
         
@@ -303,12 +303,12 @@ public class ClassicModelsRepository {
     // EXAMPLE 9
     /*
     select 
-      ("SYSTEM"."SALE"."SALE" * ?) "saleMul025", 
-      "SYSTEM"."SALE"."SALE_ID", 
-      "SYSTEM"."SALE"."FISCAL_YEAR", 
-      "SYSTEM"."SALE"."EMPLOYEE_NUMBER" 
+      ("CLASSICMODELS"."SALE"."SALE" * ?) "saleMul025", 
+      "CLASSICMODELS"."SALE"."SALE_ID", 
+      "CLASSICMODELS"."SALE"."FISCAL_YEAR", 
+      "CLASSICMODELS"."SALE"."EMPLOYEE_NUMBER" 
     from 
-      "SYSTEM"."SALE"    
+      "CLASSICMODELS"."SALE"    
     */
     public void findSaleMul025() {
         
@@ -323,15 +323,15 @@ public class ClassicModelsRepository {
     // EXAMPLE 10
     /*
     select 
-      "SYSTEM"."OFFICE"."CITY", 
-      "SYSTEM"."OFFICE"."COUNTRY", 
-      "SYSTEM"."OFFICE"."OFFICE_CODE" 
+      "CLASSICMODELS"."OFFICE"."CITY", 
+      "CLASSICMODELS"."OFFICE"."COUNTRY", 
+      "CLASSICMODELS"."OFFICE"."OFFICE_CODE" 
     from 
-      "SYSTEM"."OFFICE" 
+      "CLASSICMODELS"."OFFICE" 
     where 
-      "SYSTEM"."OFFICE"."CITY" in (?, ?, ?) 
+      "CLASSICMODELS"."OFFICE"."CITY" in (?, ?, ?) 
     order by 
-      case "SYSTEM"."OFFICE"."CITY" when ? then 0 when ? then 1 when ? then 2 end asc    
+      case "CLASSICMODELS"."OFFICE"."CITY" when ? then 0 when ? then 1 when ? then 2 end asc    
     */
     // Consider reading: https://blog.jooq.org/2014/05/07/how-to-implement-sort-indirection-in-sql/
     public void findOfficeInCityByCertainSort() {
@@ -358,28 +358,28 @@ public class ClassicModelsRepository {
     // EXAMPLE 11
     /*
     select 
-      "SYSTEM"."EMPLOYEE"."EMPLOYEE_NUMBER", 
-      "SYSTEM"."EMPLOYEE"."LAST_NAME", 
-      "SYSTEM"."EMPLOYEE"."FIRST_NAME", 
-      "SYSTEM"."EMPLOYEE"."EXTENSION", 
-      "SYSTEM"."EMPLOYEE"."EMAIL", 
-      "SYSTEM"."EMPLOYEE"."OFFICE_CODE", 
-      "SYSTEM"."EMPLOYEE"."SALARY", 
-      "SYSTEM"."EMPLOYEE"."REPORTS_TO", 
-      "SYSTEM"."EMPLOYEE"."JOB_TITLE" 
+      "CLASSICMODELS"."EMPLOYEE"."EMPLOYEE_NUMBER", 
+      "CLASSICMODELS"."EMPLOYEE"."LAST_NAME", 
+      "CLASSICMODELS"."EMPLOYEE"."FIRST_NAME", 
+      "CLASSICMODELS"."EMPLOYEE"."EXTENSION", 
+      "CLASSICMODELS"."EMPLOYEE"."EMAIL", 
+      "CLASSICMODELS"."EMPLOYEE"."OFFICE_CODE", 
+      "CLASSICMODELS"."EMPLOYEE"."SALARY", 
+      "CLASSICMODELS"."EMPLOYEE"."REPORTS_TO", 
+      "CLASSICMODELS"."EMPLOYEE"."JOB_TITLE" 
     from 
-      "SYSTEM"."EMPLOYEE" 
+      "CLASSICMODELS"."EMPLOYEE" 
     where 
-      "SYSTEM"."EMPLOYEE"."SALARY" in (
+      "CLASSICMODELS"."EMPLOYEE"."SALARY" in (
         select 
-          "SYSTEM"."EMPLOYEE"."SALARY" 
+          "CLASSICMODELS"."EMPLOYEE"."SALARY" 
         from 
-          "SYSTEM"."EMPLOYEE" 
+          "CLASSICMODELS"."EMPLOYEE" 
         where 
-          "SYSTEM"."EMPLOYEE"."SALARY" < ?
+          "CLASSICMODELS"."EMPLOYEE"."SALARY" < ?
       ) 
     order by 
-      "SYSTEM"."EMPLOYEE"."SALARY"    
+      "CLASSICMODELS"."EMPLOYEE"."SALARY"    
      */
     public void findEmployeeSalary60000(boolean isSaleRep) {
 
@@ -387,7 +387,7 @@ public class ClassicModelsRepository {
                 + ctx.select()
                         .from(EMPLOYEE)
                         .where(EMPLOYEE.SALARY.compare(isSaleRep ? Comparator.IN : Comparator.NOT_IN,
-                                select(EMPLOYEE.SALARY).from(EMPLOYEE).where(EMPLOYEE.SALARY.lt(BigInteger.valueOf(60000)))))
+                                select(EMPLOYEE.SALARY).from(EMPLOYEE).where(EMPLOYEE.SALARY.lt(60000))))
                         .orderBy(EMPLOYEE.SALARY)
                         .fetch()
         );
@@ -396,12 +396,12 @@ public class ClassicModelsRepository {
     // EXAMPLE 12
     /*
     select 
-      "SYSTEM"."EMPLOYEE"."FIRST_NAME", 
-      "SYSTEM"."EMPLOYEE"."LAST_NAME", 
-      "SYSTEM"."EMPLOYEE"."SALARY" 
+      "CLASSICMODELS"."EMPLOYEE"."FIRST_NAME", 
+      "CLASSICMODELS"."EMPLOYEE"."LAST_NAME", 
+      "CLASSICMODELS"."EMPLOYEE"."SALARY" 
     from 
-      "SYSTEM"."EMPLOYEE" 
-    order by "SYSTEM"."EMPLOYEE"."SALARY"
+      "CLASSICMODELS"."EMPLOYEE" 
+    order by "CLASSICMODELS"."EMPLOYEE"."SALARY"
     fetch next ? rows only    
     */
     public void findEmployeeLimit() {
@@ -418,12 +418,12 @@ public class ClassicModelsRepository {
     // EXAMPLE 13
     /*
     select 
-      "SYSTEM"."EMPLOYEE"."FIRST_NAME", 
-      "SYSTEM"."EMPLOYEE"."LAST_NAME", 
-      "SYSTEM"."EMPLOYEE"."SALARY" 
+      "CLASSICMODELS"."EMPLOYEE"."FIRST_NAME", 
+      "CLASSICMODELS"."EMPLOYEE"."LAST_NAME", 
+      "CLASSICMODELS"."EMPLOYEE"."SALARY" 
     from 
-      "SYSTEM"."EMPLOYEE" 
-    order by "SYSTEM"."EMPLOYEE"."SALARY"
+      "CLASSICMODELS"."EMPLOYEE" 
+    order by "CLASSICMODELS"."EMPLOYEE"."SALARY"
     offset ? rows fetch next ? rows only    
     */
     public void findEmployeeLimitOffset() {
@@ -441,12 +441,12 @@ public class ClassicModelsRepository {
     // EXAMPLE 14
     /*
     select 
-      "SYSTEM"."EMPLOYEE"."FIRST_NAME", 
-      "SYSTEM"."EMPLOYEE"."LAST_NAME", 
-      "SYSTEM"."EMPLOYEE"."SALARY" 
+      "CLASSICMODELS"."EMPLOYEE"."FIRST_NAME", 
+      "CLASSICMODELS"."EMPLOYEE"."LAST_NAME", 
+      "CLASSICMODELS"."EMPLOYEE"."SALARY" 
     from 
-      "SYSTEM"."EMPLOYEE" 
-    order by "SYSTEM"."EMPLOYEE"."SALARY"
+      "CLASSICMODELS"."EMPLOYEE" 
+    order by "CLASSICMODELS"."EMPLOYEE"."SALARY"
     offset ? rows fetch next ? rows only    
     */
     public void findEmployeeLimitAndOffset() {
@@ -464,22 +464,22 @@ public class ClassicModelsRepository {
 
         /*
         select 
-          "SYSTEM"."PRODUCTLINE"."PRODUCT_LINE", 
-          "SYSTEM"."PRODUCTLINE"."CODE", 
-          "SYSTEM"."PRODUCT"."PRODUCT_NAME", 
-          "SYSTEM"."PRODUCT"."QUANTITY_IN_STOCK", 
-          "SYSTEM"."PRODUCT"."PRODUCT_ID" 
+          "CLASSICMODELS"."PRODUCTLINE"."PRODUCT_LINE", 
+          "CLASSICMODELS"."PRODUCTLINE"."CODE", 
+          "CLASSICMODELS"."PRODUCT"."PRODUCT_NAME", 
+          "CLASSICMODELS"."PRODUCT"."QUANTITY_IN_STOCK", 
+          "CLASSICMODELS"."PRODUCT"."PRODUCT_ID" 
         from 
-          "SYSTEM"."PRODUCTLINE" 
-          join "SYSTEM"."PRODUCT" on "SYSTEM"."PRODUCT"."PRODUCT_ID" = (
+          "CLASSICMODELS"."PRODUCTLINE" 
+          join "CLASSICMODELS"."PRODUCT" on "CLASSICMODELS"."PRODUCT"."PRODUCT_ID" = (
             select 
-              "SYSTEM"."PRODUCT"."PRODUCT_ID" 
+              "CLASSICMODELS"."PRODUCT"."PRODUCT_ID" 
             from 
-              "SYSTEM"."PRODUCT" 
+              "CLASSICMODELS"."PRODUCT" 
             where 
-              "SYSTEM"."PRODUCTLINE"."PRODUCT_LINE" = "SYSTEM"."PRODUCT"."PRODUCT_LINE" 
+              "CLASSICMODELS"."PRODUCTLINE"."PRODUCT_LINE" = "CLASSICMODELS"."PRODUCT"."PRODUCT_LINE" 
             order by 
-              "SYSTEM"."PRODUCT"."PRODUCT_ID" fetch next ? rows only
+              "CLASSICMODELS"."PRODUCT"."PRODUCT_ID" fetch next ? rows only
           )
          */
         System.out.println("EXAMPLE 15\n"
@@ -530,24 +530,24 @@ public class ClassicModelsRepository {
         from 
           (
             select 
-              "SYSTEM"."OFFICE"."CITY" "v0", 
-              "SYSTEM"."OFFICE"."COUNTRY" "v1", 
-              "SYSTEM"."EMPLOYEE"."JOB_TITLE" "v2", 
-              "SYSTEM"."CUSTOMER"."CUSTOMER_NUMBER" "v3", 
-              "SYSTEM"."CUSTOMER"."CUSTOMER_NAME" "v4", 
-              "SYSTEM"."CUSTOMER"."PHONE" "v5", 
-              "SYSTEM"."CUSTOMER"."SALES_REP_EMPLOYEE_NUMBER" "v6", 
-              "SYSTEM"."CUSTOMER"."CREDIT_LIMIT" "v7", 
-              "SYSTEM"."PAYMENT"."CUSTOMER_NUMBER" "v8", 
-              "SYSTEM"."PAYMENT"."CHECK_NUMBER" "v9", 
-              "SYSTEM"."PAYMENT"."PAYMENT_DATE" "v10", 
-              "SYSTEM"."PAYMENT"."INVOICE_AMOUNT" "v11", 
-              "SYSTEM"."PAYMENT"."CACHING_DATE" "v12" 
+              "CLASSICMODELS"."OFFICE"."CITY" "v0", 
+              "CLASSICMODELS"."OFFICE"."COUNTRY" "v1", 
+              "CLASSICMODELS"."EMPLOYEE"."JOB_TITLE" "v2", 
+              "CLASSICMODELS"."CUSTOMER"."CUSTOMER_NUMBER" "v3", 
+              "CLASSICMODELS"."CUSTOMER"."CUSTOMER_NAME" "v4", 
+              "CLASSICMODELS"."CUSTOMER"."PHONE" "v5", 
+              "CLASSICMODELS"."CUSTOMER"."SALES_REP_EMPLOYEE_NUMBER" "v6", 
+              "CLASSICMODELS"."CUSTOMER"."CREDIT_LIMIT" "v7", 
+              "CLASSICMODELS"."PAYMENT"."CUSTOMER_NUMBER" "v8", 
+              "CLASSICMODELS"."PAYMENT"."CHECK_NUMBER" "v9", 
+              "CLASSICMODELS"."PAYMENT"."PAYMENT_DATE" "v10", 
+              "CLASSICMODELS"."PAYMENT"."INVOICE_AMOUNT" "v11", 
+              "CLASSICMODELS"."PAYMENT"."CACHING_DATE" "v12" 
             from 
-              "SYSTEM"."OFFICE", 
-              "SYSTEM"."EMPLOYEE", 
-              "SYSTEM"."CUSTOMER", 
-              "SYSTEM"."PAYMENT"
+              "CLASSICMODELS"."OFFICE", 
+              "CLASSICMODELS"."EMPLOYEE", 
+              "CLASSICMODELS"."CUSTOMER", 
+              "CLASSICMODELS"."PAYMENT"
           ) "x" 
         where 
           rownum <= (0 + ?)
@@ -606,24 +606,24 @@ public class ClassicModelsRepository {
         from 
           (
             select 
-              "SYSTEM"."OFFICE"."CITY" "v0", 
-              "SYSTEM"."OFFICE"."COUNTRY" "v1", 
-              "SYSTEM"."EMPLOYEE"."JOB_TITLE" "v2", 
-              "SYSTEM"."CUSTOMER"."CUSTOMER_NUMBER" "v3", 
-              "SYSTEM"."CUSTOMER"."CUSTOMER_NAME" "v4", 
-              "SYSTEM"."CUSTOMER"."PHONE" "v5", 
-              "SYSTEM"."CUSTOMER"."SALES_REP_EMPLOYEE_NUMBER" "v6", 
-              "SYSTEM"."CUSTOMER"."CREDIT_LIMIT" "v7", 
-              "SYSTEM"."PAYMENT"."CUSTOMER_NUMBER" "v8", 
-              "SYSTEM"."PAYMENT"."CHECK_NUMBER" "v9", 
-              "SYSTEM"."PAYMENT"."PAYMENT_DATE" "v10", 
-              "SYSTEM"."PAYMENT"."INVOICE_AMOUNT" "v11", 
-              "SYSTEM"."PAYMENT"."CACHING_DATE" "v12" 
+              "CLASSICMODELS"."OFFICE"."CITY" "v0", 
+              "CLASSICMODELS"."OFFICE"."COUNTRY" "v1", 
+              "CLASSICMODELS"."EMPLOYEE"."JOB_TITLE" "v2", 
+              "CLASSICMODELS"."CUSTOMER"."CUSTOMER_NUMBER" "v3", 
+              "CLASSICMODELS"."CUSTOMER"."CUSTOMER_NAME" "v4", 
+              "CLASSICMODELS"."CUSTOMER"."PHONE" "v5", 
+              "CLASSICMODELS"."CUSTOMER"."SALES_REP_EMPLOYEE_NUMBER" "v6", 
+              "CLASSICMODELS"."CUSTOMER"."CREDIT_LIMIT" "v7", 
+              "CLASSICMODELS"."PAYMENT"."CUSTOMER_NUMBER" "v8", 
+              "CLASSICMODELS"."PAYMENT"."CHECK_NUMBER" "v9", 
+              "CLASSICMODELS"."PAYMENT"."PAYMENT_DATE" "v10", 
+              "CLASSICMODELS"."PAYMENT"."INVOICE_AMOUNT" "v11", 
+              "CLASSICMODELS"."PAYMENT"."CACHING_DATE" "v12" 
             from 
-              "SYSTEM"."OFFICE", 
-              "SYSTEM"."EMPLOYEE", 
-              "SYSTEM"."CUSTOMER", 
-              "SYSTEM"."PAYMENT"
+              "CLASSICMODELS"."OFFICE", 
+              "CLASSICMODELS"."EMPLOYEE", 
+              "CLASSICMODELS"."CUSTOMER", 
+              "CLASSICMODELS"."PAYMENT"
           ) "x" 
         where 
           rownum <= (0 + ?)
