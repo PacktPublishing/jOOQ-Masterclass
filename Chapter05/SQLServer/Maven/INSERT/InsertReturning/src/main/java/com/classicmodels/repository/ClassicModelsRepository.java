@@ -77,6 +77,8 @@ public class ClassicModelsRepository {
       @result [r];    
      */
     public void insertReturningOfCustomerInCustomerDetail() {
+        
+        // Note: passing explicit "null" instead of default_() produces implementation specific behaviour
 
         System.out.println("EXAMPLE 3 (affected rows): "
                 + ctx.insertInto(CUSTOMERDETAIL)
