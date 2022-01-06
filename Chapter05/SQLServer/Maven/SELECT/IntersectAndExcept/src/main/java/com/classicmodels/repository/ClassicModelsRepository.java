@@ -47,7 +47,7 @@ public class ClassicModelsRepository {
     // EXAMPLE 2
     /*
     select 
-      top 100 percent [classicmodels].[dbo].[product].[buy_price] 
+      [classicmodels].[dbo].[product].[buy_price] 
     from 
       [classicmodels].[dbo].[product] 
     except 
@@ -56,7 +56,7 @@ public class ClassicModelsRepository {
     from 
       [classicmodels].[dbo].[orderdetail] 
     order by 
-      [buy_price]    
+      [buy_price]
     */
     public void exceptBuyPriceFromPriceEach() {
         
@@ -73,7 +73,7 @@ public class ClassicModelsRepository {
     /* Fetch cities and countries where we have offices and customers */    
     /*
     select 
-      top 100 percent [classicmodels].[dbo].[office].[city], 
+      [classicmodels].[dbo].[office].[city], 
       [classicmodels].[dbo].[office].[country] 
     from 
       [classicmodels].[dbo].[office] 
@@ -85,7 +85,7 @@ public class ClassicModelsRepository {
       [classicmodels].[dbo].[customerdetail] 
     order by 
       [city], 
-      [country]   
+      [country]    
     */
     public void intersectOfficeCustomerCityAndCountry() {
 
@@ -103,7 +103,7 @@ public class ClassicModelsRepository {
     /* Fetch cities and countries where we have customers but we don't have offices */
     /*
     select 
-      top 100 percent [classicmodels].[dbo].[office].[city], 
+      [classicmodels].[dbo].[office].[city], 
       [classicmodels].[dbo].[office].[country] 
     from 
       [classicmodels].[dbo].[office] 
