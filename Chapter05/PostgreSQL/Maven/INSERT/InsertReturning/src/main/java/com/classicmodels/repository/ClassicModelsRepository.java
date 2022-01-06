@@ -133,6 +133,7 @@ public class ClassicModelsRepository {
      */
     public void insertEmployeeInManagerReturningId() {
 
+        // Result<Record1<Long>>
         var inserted = ctx.insertInto(MANAGER, MANAGER.MANAGER_NAME)
                 .values(select(concat(EMPLOYEE.FIRST_NAME, inline(" "), EMPLOYEE.LAST_NAME))
                         .from(EMPLOYEE)
@@ -154,6 +155,7 @@ public class ClassicModelsRepository {
      */
     public void insertNewManagerReturningId() {
 
+        // Result<Record1<Long>>
         var inserted = ctx.insertInto(MANAGER, MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME)
                 .values(MANAGER_SEQ.nextval(), val("Karl Frum"))
                 .returningResult(MANAGER.MANAGER_ID)

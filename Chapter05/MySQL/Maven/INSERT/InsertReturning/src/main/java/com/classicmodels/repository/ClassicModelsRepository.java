@@ -134,6 +134,7 @@ public class ClassicModelsRepository {
     */
     public void insertEmployeeInManagerReturningId() {
 
+        // Result<Record1<Long>>
         var inserted = ctx.insertInto(MANAGER)
                 .values(default_(), select(concat(EMPLOYEE.FIRST_NAME, inline(" "), EMPLOYEE.LAST_NAME))
                         .from(EMPLOYEE)

@@ -118,6 +118,7 @@ public class ClassicModelsRepository {
      */
     public void insertEmployeeInManagerReturningId() {
 
+        // Result<Record1<Long>>
         var inserted = ctx.insertInto(MANAGER, MANAGER.MANAGER_NAME)
                 .values(select(concat(EMPLOYEE.FIRST_NAME, inline(" "), EMPLOYEE.LAST_NAME))
                         .from(EMPLOYEE)
@@ -261,7 +262,7 @@ public class ClassicModelsRepository {
      */
     public void insertReturningAndSerialInDepartment() {
 
-        // Record1<Integer>
+        // Record1<Long>
         var inserted = ctx.insertInto(DEPARTMENT, DEPARTMENT.NAME,
                 DEPARTMENT.PHONE, DEPARTMENT.CODE, DEPARTMENT.OFFICE_CODE)
                 .values("Marketing", "+2 311 312", 
