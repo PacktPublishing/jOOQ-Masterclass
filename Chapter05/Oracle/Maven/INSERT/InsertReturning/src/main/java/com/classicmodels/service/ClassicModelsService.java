@@ -19,8 +19,7 @@ public class ClassicModelsService {
         classicModelsRepository.insertReturningOfCustomerInCustomerDetail();     // EXAMPLE 3
         classicModelsRepository.insertEmployeeInManagerReturningId();            // EXAMPLE 4
         classicModelsRepository.insertNewManagerReturningId();                   // EXAMPLE 5
-        classicModelsRepository.insertAndReturnMultipleColsProductline();        // EXAMPLE 6
-        classicModelsRepository.insertAndReturnAllColsProductline();             // EXAMPLE 7
-        classicModelsRepository.insertReturningAndSerialInDepartment();          // EXAMPLE 8
+        classicModelsRepository.insertAndReturnMultipleColsProductline();        // EXAMPLE 6        
+        classicModelsRepository.insertReturningAndSerialInDepartment();          // EXAMPLE 7
     }
 }
