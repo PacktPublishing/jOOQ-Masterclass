@@ -216,13 +216,12 @@ public class ClassicModelsRepository {
     }
     
     // EXAMPLE 8
-    /*
-    insert into "public"."department" 
-      ("name", "phone", "code", "office_code")
-    values
-      (?, ?, ?, ?) 
-    returning 
-      "public"."department"."department_id"
+    /*   
+    insert into "public"."department" (
+      "name", "phone", "code", "office_code"
+    ) 
+    values 
+      (?, ?, ?, ?) on conflict do nothing returning "public"."department"."department_id"    
     */
     public void insertReturningAndSerialInDepartment() {
         

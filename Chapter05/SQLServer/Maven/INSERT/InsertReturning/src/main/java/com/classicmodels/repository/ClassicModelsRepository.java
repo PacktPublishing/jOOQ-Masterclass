@@ -1,5 +1,6 @@
 package com.classicmodels.repository;
 
+import java.util.concurrent.ThreadLocalRandom;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
 import static jooq.generated.tables.Department.DEPARTMENT;
@@ -11,7 +12,7 @@ import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.concat;
 import static org.jooq.impl.DSL.default_;
-import static org.jooq.impl.DSL.val;
+import static org.jooq.impl.DSL.inline;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,55 +28,33 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 1
     /*
-    declare @result table ([sale_id] bigint);
 
-    insert into [classicmodels].[dbo].[sale] (
-      [fiscal_year], [sale], [employee_number]
-    ) output [inserted].[sale_id] into @result 
-    values 
-      (?, ?, ?);
-    
-    select 
-      [r].[sale_id] 
-    from 
-      @result [r];
      */
     public void returnOneId() {
 
         // Record1<Long>
-        var insertedId = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
-                .values(2004, 2311.42, 1370L)
-                .returningResult(SALE.SALE_ID)
-                .fetchOne();
+        var insertedId = ctx.insertInto(SALE, 
+                SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.REVENUE_GROWTH, SALE.FISCAL_MONTH)
+                .values(2004, 2311.42, 1370L, 10.12, 1)
+                .returningResult(SALE.SALE_ID) // or, returningResult() to return whole fields
+                .fetchOne(); 
 
         System.out.println("EXAMPLE 1 (inserted id): \n" + insertedId); // as Long, insertedId.value1()
     }
 
     // EXAMPLE 2
     /*
-    declare @result table ([sale_id] bigint);
     
-    insert into [classicmodels].[dbo].[sale] (
-      [fiscal_year], [sale], [employee_number]
-    ) output [inserted].[sale_id] into @result 
-    values 
-      (?, ?, ?), 
-      (?, ?, ?), 
-      (?, ?, ?);
-    
-    select 
-      [r].[sale_id] 
-    from 
-      @result [r];    
      */
     public void returnMultipleIds() {
 
         // Result<Record1<Long>>
-        var insertedIds = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
-                .values(2004, 2311.42, 1370L)
-                .values(2003, 900.21, 1504L)
-                .values(2005, 1232.2, 1166L)
-                .returningResult(SALE.SALE_ID)
+        var insertedIds = ctx.insertInto(SALE, 
+                SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.REVENUE_GROWTH, SALE.FISCAL_MONTH)
+                .values(2004, 2311.42, 1370L, 12.50, 1)
+                .values(2003, 900.21, 1504L, 23.99, 2)
+                .values(2005, 1232.2, 1166L, 14.65, 3)
+                .returningResult(SALE.SALE_ID) // or, returningResult() to return whole fields
                 .fetch();
 
         System.out.println("EXAMPLE 2 (inserted ids): \n" + insertedIds);
@@ -104,9 +83,9 @@ public class ClassicModelsRepository {
                         .values(ctx.insertInto(CUSTOMER,
                                 CUSTOMER.CUSTOMER_NAME, CUSTOMER.CONTACT_FIRST_NAME,
                                 CUSTOMER.CONTACT_LAST_NAME, CUSTOMER.PHONE)
-                                .values("Ltd. AirRoads", "Kyle", "Doyle", "+ 44 321 321")
+                                .values("Ltd. AirRoads - " + Math.random(), "Kyle", "Doyle", "+ 44 321 321")
                                 .returningResult(CUSTOMER.CUSTOMER_NUMBER).fetchOne().value1(),
-                                "No. 14 Avenue", default_(), "Los Angeles", default_(), default_(), "USA")
+                                "No. 14 Avenue - " + Math.random(), default_(), "Los Angeles", default_(), default_(), "USA")
                         .execute()
         );
     }
@@ -138,7 +117,7 @@ public class ClassicModelsRepository {
     public void insertEmployeeInManagerReturningId() {
 
         var inserted = ctx.insertInto(MANAGER, MANAGER.MANAGER_NAME)
-                .values(select(concat(EMPLOYEE.FIRST_NAME, val(" "), EMPLOYEE.LAST_NAME))
+                .values(select(concat(EMPLOYEE.FIRST_NAME, inline(" "), EMPLOYEE.LAST_NAME))
                         .from(EMPLOYEE)
                         .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1165L)).asField())
                 .returningResult(MANAGER.MANAGER_ID)
@@ -151,43 +130,35 @@ public class ClassicModelsRepository {
     /*
     declare @result table (
       [product_line] varchar(50), 
-      [created_on] date
+      [created_on] date, 
+      [code] bigint
     );
-    
-    merge into [classicmodels].[dbo].[productline] using (
-      (
-        select 
-          ?, 
-          ? 
-        union all 
-        select 
-          ?, 
-          ?
-      )
-    ) [t] (
-      [product_line], [text_description]
-    ) on [classicmodels].[dbo].[productline].[product_line] = [t].[product_line] when not matched then insert (
-      [product_line], [text_description]
-    ) 
+    insert into [classicmodels].[dbo].[productline] (
+      [product_line], [text_description], 
+      [code]
+    ) output [inserted].[product_line], 
+    [inserted].[created_on], 
+    [inserted].[code] into @result 
     values 
-      (
-        [t].[product_line], [t].[text_description]
-      );
-    
+      (?, ?, ?), 
+      (?, ?, ?);
     merge into @result [r] using (
-      (
-        select 
-          * 
-        from 
-          [classicmodels].[dbo].[productline]
-      )
-    ) [s] on [r].[product_line] = [s].[product_line] when matched then 
+      select 
+        [classicmodels].[dbo].[productline].[product_line], 
+        [classicmodels].[dbo].[productline].[created_on] [alias_77609720], 
+        [classicmodels].[dbo].[productline].[code] 
+      from 
+        [classicmodels].[dbo].[productline]
+    ) [s] on (
+      [r].[product_line] = [s].[product_line] 
+      and [r].[code] = [s].[code]
+    ) when matched then 
     update 
     set 
-      [r].[created_on] = [s].[created_on];
+      [created_on] = [s].[alias_77609720];
     select 
-      [r].[product_line], 
-      [r].[created_on] 
+      [product_line], 
+      [created_on] 
     from 
       @result [r];    
      */
@@ -196,103 +167,103 @@ public class ClassicModelsRepository {
         // Result<Record2<String, LocalDate>>
         var inserted = ctx.insertInto(PRODUCTLINE, PRODUCTLINE.PRODUCT_LINE, 
                 PRODUCTLINE.TEXT_DESCRIPTION, PRODUCTLINE.CODE)
-                .values("Electric Vans", "This new line of electric vans ...", 983423L)
-                .values("Turbo N Cars", "This new line of turbo N cars ...", 193384L)
-                .onDuplicateKeyIgnore()
+                .values("Electric Vans" + ThreadLocalRandom.current().nextInt(10000, 20000)
+                        , "This new line of electric vans ...", 983423L)
+                .values("Turbo N Cars" + ThreadLocalRandom.current().nextInt(10000, 20000)
+                        , "This new line of turbo N cars ...", 193384L)    
                 .returningResult(PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.CREATED_ON)
                 .fetch();
 
-        System.out.println("EXAMPLE 5 (inserted ids and employee numbers): \n" + inserted);
+        System.out.println("EXAMPLE 5 (inserted product lines and created on): \n" + inserted);
     }
 
     // EXAMPLE 6
     /*
     declare @result table (
       [product_line] varchar(50), 
+      [code] bigint, 
       [text_description] varchar(4000), 
-      [html_description] varchar(max), 
+      [html_description] xml, 
       [image] varbinary(max), 
       [created_on] date
     );
-    
-    merge into [classicmodels].[dbo].[productline] using (
-      (
-        select 
-          ?, 
-          ? 
-        union all 
-        select 
-          ?, 
-          ?
-      )
-    ) [t] (
-      [product_line], [text_description]
-    ) on [classicmodels].[dbo].[productline].[product_line] = [t].[product_line] when not matched then insert (
-      [product_line], [text_description]
-    ) 
+    insert into [classicmodels].[dbo].[productline] (
+      [product_line], [text_description], 
+      [code]
+    ) output [inserted].[product_line], 
+    [inserted].[code], 
+    [inserted].[text_description], 
+    [inserted].[html_description], 
+    [inserted].[image], 
+    [inserted].[created_on] into @result 
     values 
-      (
-        [t].[product_line], [t].[text_description]
-      );
-    
+      (?, ?, ?), 
+      (?, ?, ?);
     merge into @result [r] using (
-      (
-        select 
-          * 
-        from 
-          [classicmodels].[dbo].[productline]
-      )
-    ) [s] on [r].[product_line] = [s].[product_line] when matched then 
+      select 
+        [classicmodels].[dbo].[productline].[product_line], 
+        [classicmodels].[dbo].[productline].[code], 
+        [classicmodels].[dbo].[productline].[text_description] [alias_46240548], 
+        [classicmodels].[dbo].[productline].[html_description] [alias_117132646], 
+        [classicmodels].[dbo].[productline].[image] [alias_80606203], 
+        [classicmodels].[dbo].[productline].[created_on] [alias_77609720] 
+      from 
+        [classicmodels].[dbo].[productline]
+    ) [s] on (
+      [r].[product_line] = [s].[product_line] 
+      and [r].[code] = [s].[code]
+    ) when matched then 
     update 
     set 
-      [r].[text_description] = [s].[text_description], 
-      [r].[html_description] = [s].[html_description], 
-      [r].[image] = [s].[image], 
-      [r].[created_on] = [s].[created_on];
+      [text_description] = [s].[alias_46240548], 
+      [html_description] = [s].[alias_117132646], 
+      [image] = [s].[alias_80606203], 
+      [created_on] = [s].[alias_77609720];
     select 
-      [r].[product_line], 
-      [r].[text_description], 
-      [r].[html_description], 
-      [r].[image], 
-      [r].[created_on] 
+      [product_line], 
+      [code], 
+      [text_description], 
+      [html_description], 
+      [image], 
+      [created_on] 
     from 
-      @result [r];    
+      @result [r];       
      */
     public void insertAndReturnAllColsProductline() {
 
         // Result<ProductlineRecord>
         var inserted = ctx.insertInto(PRODUCTLINE, PRODUCTLINE.PRODUCT_LINE, 
                 PRODUCTLINE.TEXT_DESCRIPTION, PRODUCTLINE.CODE)
-                .values("Master Vans", "This new line of master vans ...", 983423L)
-                .values("Cool Cars", "This new line of cool cars ...", 193384L)
-                .onDuplicateKeyIgnore()
-                .returning()
+                .values("Master Vans - " + ThreadLocalRandom.current().nextInt(10000, 20000), 
+                        "This new line of master vans ...", 983423L)
+                .values("Cool Cars - " + ThreadLocalRandom.current().nextInt(10000, 20000), 
+                        "This new line of cool cars ...", 193384L)                
+                .returningResult()
                 .fetch();
 
-        System.out.println("EXAMPLE 6 (inserted ids and employee numbers): \n" + inserted);
+        System.out.println("EXAMPLE 6: \n" + inserted);
     }
 
     // EXAMPLE 7
     /*
     declare @result table ([department_id] bigint);
-    
-    insert into [classicmodels].[dbo].[department] (
-      [name], [phone], [code], [office_code]
-    ) output [inserted].[department_id] into @result 
-    values 
-      (?, ?, ?, ?);
-    
-    select 
-      [r].[department_id] 
-    from 
-      @result [r];    
+   insert into [classicmodels].[dbo].[department] (
+     [name], [phone], [code], [office_code]
+   ) output [inserted].[department_id] into @result 
+   values 
+     (?, ?, ?, ?);
+   select 
+     [department_id] 
+   from 
+     @result [r];  
      */
     public void insertReturningAndSerialInDepartment() {
 
         // Record1<Integer>
         var inserted = ctx.insertInto(DEPARTMENT, DEPARTMENT.NAME,
                 DEPARTMENT.PHONE, DEPARTMENT.CODE, DEPARTMENT.OFFICE_CODE)
-                .values("Marketing", "+2 311 312", Short.valueOf("5432"), "5")
+                .values("Marketing", "+2 311 312", 
+                        ThreadLocalRandom.current().nextInt(10000, 20000), "5")               
                 .returningResult(DEPARTMENT.DEPARTMENT_ID)
                 .fetchOne();
 
