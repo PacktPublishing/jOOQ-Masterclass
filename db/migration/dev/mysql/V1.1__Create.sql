@@ -184,7 +184,7 @@ CREATE TABLE `customerdetail` (
 
 CREATE TABLE `manager` (
   `manager_id`         BIGINT       NOT NULL AUTO_INCREMENT, -- in PostgreSQL/Oracle this PK is a sequence
-  `manager_name`       VARCHAR(50)  NOT NULL,
+  `manager_name`       VARCHAR(50)  NOT NULL DEFAULT "anonymous",
   `manager_detail`     JSON         DEFAULT NULL,
   `manager_evaluation` VARCHAR(500) DEFAULT NULL, 
   CONSTRAINT `manager_pk` PRIMARY KEY (`manager_id`)

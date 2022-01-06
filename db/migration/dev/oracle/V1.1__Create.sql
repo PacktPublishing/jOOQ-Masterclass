@@ -604,7 +604,7 @@ CREATE SEQUENCE manager_seq START WITH 1000000 INCREMENT BY 1;
 
 CREATE TABLE manager (
   manager_id         NUMBER(10)          DEFAULT manager_seq.nextval NOT NULL,
-  manager_name       VARCHAR2(50)        NOT NULL,  
+  manager_name       VARCHAR2(50)        NOT NULL DEFAULT "anonymous",  
   manager_detail     VARCHAR2(4000)      DEFAULT NULL, -- for large JSON use blob
   manager_evaluation EVALUATION_CRITERIA DEFAULT NULL, 
   CONSTRAINT manager_pk PRIMARY KEY (manager_id),
