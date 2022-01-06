@@ -25,14 +25,14 @@ public class ClassicModelsRepository {
     // EXAMPLE 1
     /*
     select 
-      "SYSTEM"."PRODUCT"."BUY_PRICE" 
+      "CLASSICMODELS"."PRODUCT"."BUY_PRICE" 
     from 
-      "SYSTEM"."PRODUCT" 
+      "CLASSICMODELS"."PRODUCT" 
     intersect 
     select 
-      "SYSTEM"."ORDERDETAIL"."PRICE_EACH" 
+      "CLASSICMODELS"."ORDERDETAIL"."PRICE_EACH" 
     from 
-      "SYSTEM"."ORDERDETAIL"    
+      "CLASSICMODELS"."ORDERDETAIL"    
     */
     public void intersectBuyPriceWithPriceEach() {
         
@@ -59,13 +59,13 @@ public class ClassicModelsRepository {
     // EXAMPLE 2
     /*
     select 
-      "SYSTEM"."PRODUCT"."BUY_PRICE" 
+      "CLASSICMODELS"."PRODUCT"."BUY_PRICE" 
     from 
-      "SYSTEM"."PRODUCT" minus 
+      "CLASSICMODELS"."PRODUCT" minus 
     select 
-      "SYSTEM"."ORDERDETAIL"."PRICE_EACH" 
+      "CLASSICMODELS"."ORDERDETAIL"."PRICE_EACH" 
     from 
-      "SYSTEM"."ORDERDETAIL" 
+      "CLASSICMODELS"."ORDERDETAIL" 
     order by 
       "BUY_PRICE"    
     */
@@ -97,16 +97,16 @@ public class ClassicModelsRepository {
     /* Fetch cities and countries where we have offices and customers */    
     /*
     select 
-      "SYSTEM"."OFFICE"."CITY", 
-      "SYSTEM"."OFFICE"."COUNTRY" 
+      "CLASSICMODELS"."OFFICE"."CITY", 
+      "CLASSICMODELS"."OFFICE"."COUNTRY" 
     from 
-      "SYSTEM"."OFFICE" 
+      "CLASSICMODELS"."OFFICE" 
     intersect 
     select 
-      "SYSTEM"."CUSTOMERDETAIL"."CITY", 
-      "SYSTEM"."CUSTOMERDETAIL"."COUNTRY" 
+      "CLASSICMODELS"."CUSTOMERDETAIL"."CITY", 
+      "CLASSICMODELS"."CUSTOMERDETAIL"."COUNTRY" 
     from 
-      "SYSTEM"."CUSTOMERDETAIL" 
+      "CLASSICMODELS"."CUSTOMERDETAIL" 
     order by 
       "CITY", 
       "COUNTRY"    
@@ -140,15 +140,15 @@ public class ClassicModelsRepository {
     /* Fetch cities and countries where we have customers but we don't have offices */
     /*
     select 
-      "SYSTEM"."OFFICE"."CITY", 
-      "SYSTEM"."OFFICE"."COUNTRY" 
+      "CLASSICMODELS"."OFFICE"."CITY", 
+      "CLASSICMODELS"."OFFICE"."COUNTRY" 
     from 
-      "SYSTEM"."OFFICE" minus 
+      "CLASSICMODELS"."OFFICE" minus 
     select 
-      "SYSTEM"."CUSTOMERDETAIL"."CITY", 
-      "SYSTEM"."CUSTOMERDETAIL"."COUNTRY" 
+      "CLASSICMODELS"."CUSTOMERDETAIL"."CITY", 
+      "CLASSICMODELS"."CUSTOMERDETAIL"."COUNTRY" 
     from 
-      "SYSTEM"."CUSTOMERDETAIL" 
+      "CLASSICMODELS"."CUSTOMERDETAIL" 
     order by 
       "CITY", 
       "COUNTRY"    
@@ -222,10 +222,10 @@ public class ClassicModelsRepository {
           dual
       ) "p" minus 
     select 
-      "SYSTEM"."OFFICE"."CITY", 
-      "SYSTEM"."OFFICE"."COUNTRY" 
+      "CLASSICMODELS"."OFFICE"."CITY", 
+      "CLASSICMODELS"."OFFICE"."COUNTRY" 
     from 
-      "SYSTEM"."OFFICE"       
+      "CLASSICMODELS"."OFFICE"       
     */
     public void findCitiesWithNoOffices() {
 
@@ -249,20 +249,20 @@ public class ClassicModelsRepository {
         
         /*
         select 
-          distinct "SYSTEM"."OFFICE"."CITY", 
-          "SYSTEM"."OFFICE"."COUNTRY" 
+          distinct "CLASSICMODELS"."OFFICE"."CITY", 
+          "CLASSICMODELS"."OFFICE"."COUNTRY" 
         from 
-          "SYSTEM"."OFFICE" 
+          "CLASSICMODELS"."OFFICE" 
         where 
           (
-            "SYSTEM"."OFFICE"."CITY", "SYSTEM"."OFFICE"."COUNTRY"
+            "CLASSICMODELS"."OFFICE"."CITY", "CLASSICMODELS"."OFFICE"."COUNTRY"
           ) in (
             (
               select 
-                "SYSTEM"."CUSTOMERDETAIL"."CITY", 
-                "SYSTEM"."CUSTOMERDETAIL"."COUNTRY" 
+                "CLASSICMODELS"."CUSTOMERDETAIL"."CITY", 
+                "CLASSICMODELS"."CUSTOMERDETAIL"."COUNTRY" 
               from 
-                "SYSTEM"."CUSTOMERDETAIL"
+                "CLASSICMODELS"."CUSTOMERDETAIL"
             )
           )        
         */
@@ -278,36 +278,36 @@ public class ClassicModelsRepository {
         
         /*
         select 
-          "SYSTEM"."OFFICE"."CITY", 
-          "SYSTEM"."OFFICE"."COUNTRY" 
+          "CLASSICMODELS"."OFFICE"."CITY", 
+          "CLASSICMODELS"."OFFICE"."COUNTRY" 
         from 
-          "SYSTEM"."OFFICE" 
+          "CLASSICMODELS"."OFFICE" 
         where 
           exists (
             select 
-              "SYSTEM"."CUSTOMERDETAIL"."CUSTOMER_NUMBER", 
-              "SYSTEM"."CUSTOMERDETAIL"."ADDRESS_LINE_FIRST", 
-              "SYSTEM"."CUSTOMERDETAIL"."ADDRESS_LINE_SECOND", 
-              "SYSTEM"."CUSTOMERDETAIL"."CITY", 
-              "SYSTEM"."CUSTOMERDETAIL"."STATE", 
-              "SYSTEM"."CUSTOMERDETAIL"."POSTAL_CODE", 
-              "SYSTEM"."CUSTOMERDETAIL"."COUNTRY" 
+              "CLASSICMODELS"."CUSTOMERDETAIL"."CUSTOMER_NUMBER", 
+              "CLASSICMODELS"."CUSTOMERDETAIL"."ADDRESS_LINE_FIRST", 
+              "CLASSICMODELS"."CUSTOMERDETAIL"."ADDRESS_LINE_SECOND", 
+              "CLASSICMODELS"."CUSTOMERDETAIL"."CITY", 
+              "CLASSICMODELS"."CUSTOMERDETAIL"."STATE", 
+              "CLASSICMODELS"."CUSTOMERDETAIL"."POSTAL_CODE", 
+              "CLASSICMODELS"."CUSTOMERDETAIL"."COUNTRY" 
             from 
-              "SYSTEM"."CUSTOMERDETAIL" 
+              "CLASSICMODELS"."CUSTOMERDETAIL" 
             where 
               (
                 (
-                  "SYSTEM"."CUSTOMERDETAIL"."CITY" = "SYSTEM"."OFFICE"."CITY" 
+                  "CLASSICMODELS"."CUSTOMERDETAIL"."CITY" = "CLASSICMODELS"."OFFICE"."CITY" 
                   or (
-                    "SYSTEM"."OFFICE"."CITY" is null 
-                    and "SYSTEM"."CUSTOMERDETAIL"."CITY" is null
+                    "CLASSICMODELS"."OFFICE"."CITY" is null 
+                    and "CLASSICMODELS"."CUSTOMERDETAIL"."CITY" is null
                   )
                 ) 
                 and (
-                  "SYSTEM"."CUSTOMERDETAIL"."COUNTRY" = "SYSTEM"."OFFICE"."COUNTRY" 
+                  "CLASSICMODELS"."CUSTOMERDETAIL"."COUNTRY" = "CLASSICMODELS"."OFFICE"."COUNTRY" 
                   or (
-                    "SYSTEM"."OFFICE"."COUNTRY" is null 
-                    and "SYSTEM"."CUSTOMERDETAIL"."COUNTRY" is null
+                    "CLASSICMODELS"."OFFICE"."COUNTRY" is null 
+                    and "CLASSICMODELS"."CUSTOMERDETAIL"."COUNTRY" is null
                   )
                 )
               )
@@ -332,16 +332,16 @@ public class ClassicModelsRepository {
       
         /*
         select 
-          distinct "SYSTEM"."OFFICE"."CITY", 
-          "SYSTEM"."OFFICE"."COUNTRY" 
+          distinct "CLASSICMODELS"."OFFICE"."CITY", 
+          "CLASSICMODELS"."OFFICE"."COUNTRY" 
         from 
-          "SYSTEM"."OFFICE" 
-          left outer join "SYSTEM"."CUSTOMERDETAIL" on (
-            "SYSTEM"."OFFICE"."CITY" = "SYSTEM"."CUSTOMERDETAIL"."CITY" 
-            and "SYSTEM"."OFFICE"."COUNTRY" = "SYSTEM"."CUSTOMERDETAIL"."COUNTRY"
+          "CLASSICMODELS"."OFFICE" 
+          left outer join "CLASSICMODELS"."CUSTOMERDETAIL" on (
+            "CLASSICMODELS"."OFFICE"."CITY" = "CLASSICMODELS"."CUSTOMERDETAIL"."CITY" 
+            and "CLASSICMODELS"."OFFICE"."COUNTRY" = "CLASSICMODELS"."CUSTOMERDETAIL"."COUNTRY"
           ) 
         where 
-          "SYSTEM"."CUSTOMERDETAIL"."CITY" is null        
+          "CLASSICMODELS"."CUSTOMERDETAIL"."CITY" is null        
         */
         System.out.println("EXAMPLE 7.1\n" + 
                 //ctx.select for duplicates an no NULLs are present
@@ -356,37 +356,37 @@ public class ClassicModelsRepository {
         
         /*
         select 
-          "SYSTEM"."OFFICE"."CITY", 
-          "SYSTEM"."OFFICE"."COUNTRY" 
+          "CLASSICMODELS"."OFFICE"."CITY", 
+          "CLASSICMODELS"."OFFICE"."COUNTRY" 
         from 
-          "SYSTEM"."OFFICE" 
+          "CLASSICMODELS"."OFFICE" 
         where 
           not (
             exists (
               select 
-                "SYSTEM"."CUSTOMERDETAIL"."CUSTOMER_NUMBER", 
-                "SYSTEM"."CUSTOMERDETAIL"."ADDRESS_LINE_FIRST", 
-                "SYSTEM"."CUSTOMERDETAIL"."ADDRESS_LINE_SECOND", 
-                "SYSTEM"."CUSTOMERDETAIL"."CITY", 
-                "SYSTEM"."CUSTOMERDETAIL"."STATE", 
-                "SYSTEM"."CUSTOMERDETAIL"."POSTAL_CODE", 
-                "SYSTEM"."CUSTOMERDETAIL"."COUNTRY" 
+                "CLASSICMODELS"."CUSTOMERDETAIL"."CUSTOMER_NUMBER", 
+                "CLASSICMODELS"."CUSTOMERDETAIL"."ADDRESS_LINE_FIRST", 
+                "CLASSICMODELS"."CUSTOMERDETAIL"."ADDRESS_LINE_SECOND", 
+                "CLASSICMODELS"."CUSTOMERDETAIL"."CITY", 
+                "CLASSICMODELS"."CUSTOMERDETAIL"."STATE", 
+                "CLASSICMODELS"."CUSTOMERDETAIL"."POSTAL_CODE", 
+                "CLASSICMODELS"."CUSTOMERDETAIL"."COUNTRY" 
               from 
-                "SYSTEM"."CUSTOMERDETAIL" 
+                "CLASSICMODELS"."CUSTOMERDETAIL" 
               where 
                 (
                   (
-                    "SYSTEM"."CUSTOMERDETAIL"."CITY" = "SYSTEM"."OFFICE"."CITY" 
+                    "CLASSICMODELS"."CUSTOMERDETAIL"."CITY" = "CLASSICMODELS"."OFFICE"."CITY" 
                     or (
-                      "SYSTEM"."OFFICE"."CITY" is null 
-                      and "SYSTEM"."CUSTOMERDETAIL"."CITY" is null
+                      "CLASSICMODELS"."OFFICE"."CITY" is null 
+                      and "CLASSICMODELS"."CUSTOMERDETAIL"."CITY" is null
                     )
                   ) 
                   and (
-                    "SYSTEM"."CUSTOMERDETAIL"."COUNTRY" = "SYSTEM"."OFFICE"."COUNTRY" 
+                    "CLASSICMODELS"."CUSTOMERDETAIL"."COUNTRY" = "CLASSICMODELS"."OFFICE"."COUNTRY" 
                     or (
-                      "SYSTEM"."OFFICE"."COUNTRY" is null 
-                      and "SYSTEM"."CUSTOMERDETAIL"."COUNTRY" is null
+                      "CLASSICMODELS"."OFFICE"."COUNTRY" is null 
+                      and "CLASSICMODELS"."CUSTOMERDETAIL"."COUNTRY" is null
                     )
                   )
                 )
