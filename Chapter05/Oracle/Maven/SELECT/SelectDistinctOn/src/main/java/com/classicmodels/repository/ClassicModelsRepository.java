@@ -1,6 +1,5 @@
 package com.classicmodels.repository;
 
-import java.math.BigInteger;
 import java.time.LocalDate;
 import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
 import static jooq.generated.tables.Office.OFFICE;
@@ -43,14 +42,14 @@ public class ClassicModelsRepository {
     // EXAMPLE 1
     /*
     select 
-      distinct "SYSTEM"."OFFICE"."CITY", 
-      "SYSTEM"."OFFICE"."COUNTRY" 
+      distinct "CLASSICMODELS"."OFFICE"."CITY", 
+      "CLASSICMODELS"."OFFICE"."COUNTRY" 
     from 
-      "SYSTEM"."OFFICE" 
+      "CLASSICMODELS"."OFFICE" 
     where 
       (
-        "SYSTEM"."OFFICE"."CITY" is not null 
-        and "SYSTEM"."OFFICE"."COUNTRY" is not null
+        "CLASSICMODELS"."OFFICE"."CITY" is not null 
+        and "CLASSICMODELS"."OFFICE"."COUNTRY" is not null
       )    
     */
     public void findDistinctOfficesCityCountry() {
@@ -66,20 +65,20 @@ public class ClassicModelsRepository {
     // EXAMPLE 2
     /*
     select 
-      "SYSTEM"."OFFICE"."OFFICE_CODE", 
-      "SYSTEM"."OFFICE"."CITY", 
-      "SYSTEM"."OFFICE"."PHONE", 
-      "SYSTEM"."OFFICE"."ADDRESS_LINE_FIRST", 
-      "SYSTEM"."OFFICE"."ADDRESS_LINE_SECOND", 
-      "SYSTEM"."OFFICE"."STATE", 
-      "SYSTEM"."OFFICE"."COUNTRY", 
-      "SYSTEM"."OFFICE"."POSTAL_CODE", 
-      "SYSTEM"."OFFICE"."TERRITORY" 
+      "CLASSICMODELS"."OFFICE"."OFFICE_CODE", 
+      "CLASSICMODELS"."OFFICE"."CITY", 
+      "CLASSICMODELS"."OFFICE"."PHONE", 
+      "CLASSICMODELS"."OFFICE"."ADDRESS_LINE_FIRST", 
+      "CLASSICMODELS"."OFFICE"."ADDRESS_LINE_SECOND", 
+      "CLASSICMODELS"."OFFICE"."STATE", 
+      "CLASSICMODELS"."OFFICE"."COUNTRY", 
+      "CLASSICMODELS"."OFFICE"."POSTAL_CODE", 
+      "CLASSICMODELS"."OFFICE"."TERRITORY" 
     from 
-      "SYSTEM"."OFFICE" 
+      "CLASSICMODELS"."OFFICE" 
     where 
       decode(
-        "SYSTEM"."OFFICE"."ADDRESS_LINE_SECOND", 
+        "CLASSICMODELS"."OFFICE"."ADDRESS_LINE_SECOND", 
         ?, 1, 0
       ) = 0    
     */
@@ -95,17 +94,17 @@ public class ClassicModelsRepository {
     // EXAMPLE 3
     /*
     select 
-      "SYSTEM"."PAYMENT"."INVOICE_AMOUNT", 
-      "SYSTEM"."PAYMENT"."PAYMENT_DATE" 
+      "CLASSICMODELS"."PAYMENT"."INVOICE_AMOUNT", 
+      "CLASSICMODELS"."PAYMENT"."PAYMENT_DATE" 
     from 
-      "SYSTEM"."PAYMENT" 
+      "CLASSICMODELS"."PAYMENT" 
     where 
       decode(
         cast(
-          "SYSTEM"."PAYMENT"."PAYMENT_DATE" as date
+          "CLASSICMODELS"."PAYMENT"."PAYMENT_DATE" as date
         ), 
         cast(
-          "SYSTEM"."PAYMENT"."CACHING_DATE" as date
+          "CLASSICMODELS"."PAYMENT"."CACHING_DATE" as date
         ), 
         1, 
         0
@@ -133,38 +132,38 @@ public class ClassicModelsRepository {
     // EXAMPLE 4
     /*
     select 
-      "SYSTEM"."OFFICE"."OFFICE_CODE", 
-      "SYSTEM"."OFFICE"."CITY", 
-      "SYSTEM"."OFFICE"."PHONE", 
-      "SYSTEM"."OFFICE"."ADDRESS_LINE_FIRST", 
-      "SYSTEM"."OFFICE"."ADDRESS_LINE_SECOND", 
-      "SYSTEM"."OFFICE"."STATE", 
-      "SYSTEM"."OFFICE"."COUNTRY", 
-      "SYSTEM"."OFFICE"."POSTAL_CODE", 
-      "SYSTEM"."OFFICE"."TERRITORY", 
-      "SYSTEM"."CUSTOMERDETAIL"."CUSTOMER_NUMBER", 
-      "SYSTEM"."CUSTOMERDETAIL"."ADDRESS_LINE_FIRST", 
-      "SYSTEM"."CUSTOMERDETAIL"."ADDRESS_LINE_SECOND", 
-      "SYSTEM"."CUSTOMERDETAIL"."CITY", 
-      "SYSTEM"."CUSTOMERDETAIL"."STATE", 
-      "SYSTEM"."CUSTOMERDETAIL"."POSTAL_CODE", 
-      "SYSTEM"."CUSTOMERDETAIL"."COUNTRY" 
+      "CLASSICMODELS"."OFFICE"."OFFICE_CODE", 
+      "CLASSICMODELS"."OFFICE"."CITY", 
+      "CLASSICMODELS"."OFFICE"."PHONE", 
+      "CLASSICMODELS"."OFFICE"."ADDRESS_LINE_FIRST", 
+      "CLASSICMODELS"."OFFICE"."ADDRESS_LINE_SECOND", 
+      "CLASSICMODELS"."OFFICE"."STATE", 
+      "CLASSICMODELS"."OFFICE"."COUNTRY", 
+      "CLASSICMODELS"."OFFICE"."POSTAL_CODE", 
+      "CLASSICMODELS"."OFFICE"."TERRITORY", 
+      "CLASSICMODELS"."CUSTOMERDETAIL"."CUSTOMER_NUMBER", 
+      "CLASSICMODELS"."CUSTOMERDETAIL"."ADDRESS_LINE_FIRST", 
+      "CLASSICMODELS"."CUSTOMERDETAIL"."ADDRESS_LINE_SECOND", 
+      "CLASSICMODELS"."CUSTOMERDETAIL"."CITY", 
+      "CLASSICMODELS"."CUSTOMERDETAIL"."STATE", 
+      "CLASSICMODELS"."CUSTOMERDETAIL"."POSTAL_CODE", 
+      "CLASSICMODELS"."CUSTOMERDETAIL"."COUNTRY" 
     from 
-      "SYSTEM"."OFFICE" 
-      join "SYSTEM"."CUSTOMERDETAIL" on "SYSTEM"."OFFICE"."POSTAL_CODE" 
-         = "SYSTEM"."CUSTOMERDETAIL"."POSTAL_CODE" 
+      "CLASSICMODELS"."OFFICE" 
+      join "CLASSICMODELS"."CUSTOMERDETAIL" on "CLASSICMODELS"."OFFICE"."POSTAL_CODE" 
+         = "CLASSICMODELS"."CUSTOMERDETAIL"."POSTAL_CODE" 
     where 
       not (
         exists (
           select 
-            "SYSTEM"."OFFICE"."CITY", 
-            "SYSTEM"."OFFICE"."COUNTRY" 
+            "CLASSICMODELS"."OFFICE"."CITY", 
+            "CLASSICMODELS"."OFFICE"."COUNTRY" 
           from 
             dual 
           intersect 
           select 
-            "SYSTEM"."CUSTOMERDETAIL"."CITY", 
-            "SYSTEM"."CUSTOMERDETAIL"."COUNTRY" 
+            "CLASSICMODELS"."CUSTOMERDETAIL"."CITY", 
+            "CLASSICMODELS"."CUSTOMERDETAIL"."COUNTRY" 
           from 
             dual
         )
@@ -188,13 +187,13 @@ public class ClassicModelsRepository {
     select 
       count(*) "all", 
       count(
-        "SYSTEM"."PAYMENT"."CACHING_DATE"
+        "CLASSICMODELS"."PAYMENT"."CACHING_DATE"
       ) "all_caching_date", 
       count(
-        distinct "SYSTEM"."PAYMENT"."CACHING_DATE"
+        distinct "CLASSICMODELS"."PAYMENT"."CACHING_DATE"
       ) "distinct_cachcing_date" 
     from 
-      "SYSTEM"."PAYMENT"    
+      "CLASSICMODELS"."PAYMENT"    
     */
     public void countPaymentCachingDate() {
 
@@ -211,24 +210,24 @@ public class ClassicModelsRepository {
     // EXAMPLE 6
     /*
     select 
-      "SYSTEM"."PRODUCT"."PRODUCT_LINE", 
+      "CLASSICMODELS"."PRODUCT"."PRODUCT_LINE", 
       count(*) 
     from 
-      "SYSTEM"."PRODUCT" 
+      "CLASSICMODELS"."PRODUCT" 
     group by 
-      "SYSTEM"."PRODUCT"."PRODUCT_LINE" 
+      "CLASSICMODELS"."PRODUCT"."PRODUCT_LINE" 
     having 
       (
         count(*) + ?
       ) > all (
         select 
           count(
-            distinct "SYSTEM"."PRODUCT"."PRODUCT_ID"
+            distinct "CLASSICMODELS"."PRODUCT"."PRODUCT_ID"
           ) 
         from 
-          "SYSTEM"."PRODUCT" 
+          "CLASSICMODELS"."PRODUCT" 
         group by 
-          "SYSTEM"."PRODUCT"."PRODUCT_LINE"
+          "CLASSICMODELS"."PRODUCT"."PRODUCT_LINE"
       )  
     */
     public void findProductLineHavingMaxNrOfProducts() {
@@ -249,31 +248,31 @@ public class ClassicModelsRepository {
     /*
     select 
       avg(
-        "SYSTEM"."ORDERDETAIL"."PRICE_EACH"
+        "CLASSICMODELS"."ORDERDETAIL"."PRICE_EACH"
       ), 
       avg(
-        distinct "SYSTEM"."ORDERDETAIL"."PRICE_EACH"
+        distinct "CLASSICMODELS"."ORDERDETAIL"."PRICE_EACH"
       ), 
       sum(
-        "SYSTEM"."ORDERDETAIL"."PRICE_EACH"
+        "CLASSICMODELS"."ORDERDETAIL"."PRICE_EACH"
       ), 
       sum(
-        distinct "SYSTEM"."ORDERDETAIL"."PRICE_EACH"
+        distinct "CLASSICMODELS"."ORDERDETAIL"."PRICE_EACH"
       ), 
       min(
-        "SYSTEM"."ORDERDETAIL"."PRICE_EACH"
+        "CLASSICMODELS"."ORDERDETAIL"."PRICE_EACH"
       ), 
       min(
-        distinct "SYSTEM"."ORDERDETAIL"."PRICE_EACH"
+        distinct "CLASSICMODELS"."ORDERDETAIL"."PRICE_EACH"
       ), 
       max(
-        "SYSTEM"."ORDERDETAIL"."PRICE_EACH"
+        "CLASSICMODELS"."ORDERDETAIL"."PRICE_EACH"
       ), 
       max(
-        distinct "SYSTEM"."ORDERDETAIL"."PRICE_EACH"
+        distinct "CLASSICMODELS"."ORDERDETAIL"."PRICE_EACH"
       ) 
     from 
-      "SYSTEM"."ORDERDETAIL"    
+      "CLASSICMODELS"."ORDERDETAIL"    
     */
     public void avgSumMinMaxPriceEach() {
 
@@ -297,9 +296,9 @@ public class ClassicModelsRepository {
     select 
       distinct count(*) over () "sales" 
     from 
-      "SYSTEM"."SALE" 
+      "CLASSICMODELS"."SALE" 
     group by 
-      "SYSTEM"."SALE"."EMPLOYEE_NUMBER"    
+      "CLASSICMODELS"."SALE"."EMPLOYEE_NUMBER"    
     */
     public void countDistinctSalesByEmployeeNumber() {
 
@@ -322,17 +321,17 @@ public class ClassicModelsRepository {
     from 
       (
         select 
-          distinct "SYSTEM"."PRODUCT"."PRODUCT_VENDOR", 
-          "SYSTEM"."PRODUCT"."PRODUCT_SCALE", 
+          distinct "CLASSICMODELS"."PRODUCT"."PRODUCT_VENDOR", 
+          "CLASSICMODELS"."PRODUCT"."PRODUCT_SCALE", 
           row_number() over (
-            partition by "SYSTEM"."PRODUCT"."PRODUCT_VENDOR", 
-            "SYSTEM"."PRODUCT"."PRODUCT_SCALE" 
+            partition by "CLASSICMODELS"."PRODUCT"."PRODUCT_VENDOR", 
+            "CLASSICMODELS"."PRODUCT"."PRODUCT_SCALE" 
             order by 
-              "SYSTEM"."PRODUCT"."PRODUCT_VENDOR", 
-              "SYSTEM"."PRODUCT"."PRODUCT_SCALE"
+              "CLASSICMODELS"."PRODUCT"."PRODUCT_VENDOR", 
+              "CLASSICMODELS"."PRODUCT"."PRODUCT_SCALE"
           ) "rn" 
         from 
-          "SYSTEM"."PRODUCT"
+          "CLASSICMODELS"."PRODUCT"
       ) "t" 
     where 
       "rn" = 1 
@@ -374,17 +373,17 @@ public class ClassicModelsRepository {
         from 
           (
             select 
-              "SYSTEM"."SALE"."EMPLOYEE_NUMBER", 
-              "SYSTEM"."SALE"."FISCAL_YEAR", 
-              "SYSTEM"."SALE"."SALE", 
+              "CLASSICMODELS"."SALE"."EMPLOYEE_NUMBER", 
+              "CLASSICMODELS"."SALE"."FISCAL_YEAR", 
+              "CLASSICMODELS"."SALE"."SALE", 
               row_number() over (
-                partition by "SYSTEM"."SALE"."FISCAL_YEAR" 
+                partition by "CLASSICMODELS"."SALE"."FISCAL_YEAR" 
                 order by 
-                  "SYSTEM"."SALE"."FISCAL_YEAR", 
-                  "SYSTEM"."SALE"."SALE" desc
+                  "CLASSICMODELS"."SALE"."FISCAL_YEAR", 
+                  "CLASSICMODELS"."SALE"."SALE" desc
               ) "rn" 
             from 
-              "SYSTEM"."SALE"
+              "CLASSICMODELS"."SALE"
           ) "t" 
         where 
           "rn" = 1 
@@ -404,26 +403,26 @@ public class ClassicModelsRepository {
         /* SQL alternative based on JOIN */
         /*
         select 
-          "SYSTEM"."SALE"."EMPLOYEE_NUMBER", 
-          "SYSTEM"."SALE"."FISCAL_YEAR", 
-          "SYSTEM"."SALE"."SALE" 
+          "CLASSICMODELS"."SALE"."EMPLOYEE_NUMBER", 
+          "CLASSICMODELS"."SALE"."FISCAL_YEAR", 
+          "CLASSICMODELS"."SALE"."SALE" 
         from 
-          "SYSTEM"."SALE" 
+          "CLASSICMODELS"."SALE" 
           join (
             select 
-              "SYSTEM"."SALE"."FISCAL_YEAR" "fy", 
-              max("SYSTEM"."SALE"."SALE") "ms" 
+              "CLASSICMODELS"."SALE"."FISCAL_YEAR" "fy", 
+              max("CLASSICMODELS"."SALE"."SALE") "ms" 
             from 
-              "SYSTEM"."SALE" 
+              "CLASSICMODELS"."SALE" 
             group by 
-              "SYSTEM"."SALE"."FISCAL_YEAR"
+              "CLASSICMODELS"."SALE"."FISCAL_YEAR"
           ) "alias_127759043" on (
-            "SYSTEM"."SALE"."FISCAL_YEAR" = "fy" 
-            and "SYSTEM"."SALE"."SALE" = "ms"
+            "CLASSICMODELS"."SALE"."FISCAL_YEAR" = "fy" 
+            and "CLASSICMODELS"."SALE"."SALE" = "ms"
           ) 
         order by 
-          "SYSTEM"."SALE"."FISCAL_YEAR", 
-          "SYSTEM"."SALE"."SALE" desc        
+          "CLASSICMODELS"."SALE"."FISCAL_YEAR", 
+          "CLASSICMODELS"."SALE"."SALE" desc        
         */  
         System.out.println("EXAMPLE 10.2\n" + 
                 ctx.select(SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR, SALE.SALE_)
@@ -431,7 +430,7 @@ public class ClassicModelsRepository {
                         .innerJoin(select(SALE.FISCAL_YEAR.as(name("fy")), max(SALE.SALE_).as(name("ms")))
                                 .from(SALE)
                                 .groupBy(SALE.FISCAL_YEAR))
-                        .on(SALE.FISCAL_YEAR.eq(field(name("fy"), BigInteger.class))
+                        .on(SALE.FISCAL_YEAR.eq(field(name("fy"), Integer.class))
                                 .and(SALE.SALE_.eq(field(name("ms"), Double.class))))
                         .orderBy(SALE.FISCAL_YEAR, SALE.SALE_.desc())
                         .fetch()
@@ -440,28 +439,28 @@ public class ClassicModelsRepository {
         /* SQL alternative based on row_number() */        
         /*
         select 
-          "alias_10775484"."fiscal_year", 
-          "alias_10775484"."employee_number", 
-          "alias_10775484"."sale" 
+          "t"."employee_number", 
+          "t"."fiscal_year", 
+          "t"."sale" 
         from 
           (
             select 
-              distinct "SYSTEM"."SALE"."FISCAL_YEAR" "fiscal_year", 
-              "SYSTEM"."SALE"."EMPLOYEE_NUMBER" "employee_number", 
-              "SYSTEM"."SALE"."SALE" "sale", 
+              distinct "CLASSICMODELS"."SALE"."FISCAL_YEAR" "fiscal_year", 
+              "CLASSICMODELS"."SALE"."EMPLOYEE_NUMBER" "employee_number", 
+              "CLASSICMODELS"."SALE"."SALE" "sale", 
               row_number() over (
-                partition by "SYSTEM"."SALE"."FISCAL_YEAR" 
+                partition by "CLASSICMODELS"."SALE"."FISCAL_YEAR" 
                 order by 
-                  "SYSTEM"."SALE"."FISCAL_YEAR", 
-                  "SYSTEM"."SALE"."SALE" desc
+                  "CLASSICMODELS"."SALE"."FISCAL_YEAR", 
+                  "CLASSICMODELS"."SALE"."SALE" desc
               ) "rn" 
             from 
-              "SYSTEM"."SALE"
-          ) "alias_10775484" 
+              "CLASSICMODELS"."SALE"
+          ) "t" 
         where 
-          "alias_10775484"."rn" = ? 
+          "t"."rn" = ? 
         order by 
-          "alias_10775484"."fiscal_year"        
+          "t"."fiscal_year"        
         */
         // Table<?>
         var t = selectDistinct(SALE.FISCAL_YEAR.as(name("fiscal_year")), 
@@ -469,7 +468,7 @@ public class ClassicModelsRepository {
                 SALE.SALE_.as(name("sale")),
                                 rowNumber().over(partitionBy(SALE.FISCAL_YEAR)
                                         .orderBy(SALE.FISCAL_YEAR, SALE.SALE_.desc())).as(name("rn")))
-                                        .from(SALE).asTable();
+                                        .from(SALE).asTable("t");
         
         System.out.println("EXAMPLE 10.3\n" + 
                 ctx.select(t.field(name("employee_number")),
