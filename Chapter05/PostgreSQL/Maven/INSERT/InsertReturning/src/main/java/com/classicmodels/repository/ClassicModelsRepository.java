@@ -1,5 +1,6 @@
 package com.classicmodels.repository;
 
+import java.util.concurrent.ThreadLocalRandom;
 import static jooq.generated.Sequences.MANAGER_SEQ;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
@@ -169,17 +170,18 @@ public class ClassicModelsRepository {
     ) 
     values 
       (?, ?, ?), 
-      (?, ?, ?) on conflict do nothing returning "public"."productline"."product_line", 
-      "public"."productline"."created_on"   
+      (?, ?, ?) returning "public"."productline"."product_line", 
+      "public"."productline"."created_on"    
      */
     public void insertAndReturnMultipleColsProductline() {
 
         // Result<Record2<String, LocalDate>>
         var inserted = ctx.insertInto(PRODUCTLINE, 
                 PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.TEXT_DESCRIPTION, PRODUCTLINE.CODE)
-                .values("Electric Vans", "This new line of electric vans ...", 983423L)
-                .values("Turbo N Cars", "This new line of turbo N cars ...", 193384L)
-                .onDuplicateKeyIgnore()
+                .values("Electric Vans" + ThreadLocalRandom.current().nextInt(10000, 20000), 
+                        "This new line of electric vans ...", 983423L)
+                .values("Turbo N Cars" + + ThreadLocalRandom.current().nextInt(10000, 20000), 
+                        "This new line of turbo N cars ...", 193384L)                
                 .returningResult(PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.CREATED_ON)
                 .fetch();
 
@@ -194,7 +196,7 @@ public class ClassicModelsRepository {
     ) 
     values 
       (?, ?, ?), 
-      (?, ?, ?) on conflict do nothing returning "public"."productline"."product_line", 
+      (?, ?, ?) returning "public"."productline"."product_line", 
       "public"."productline"."code", 
       "public"."productline"."text_description", 
       "public"."productline"."html_description", 
@@ -206,9 +208,10 @@ public class ClassicModelsRepository {
         // Result<ProductlineRecord>
         var inserted = ctx.insertInto(PRODUCTLINE, 
                 PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.TEXT_DESCRIPTION, PRODUCTLINE.CODE)
-                .values("Master Vans", "This new line of master vans ...", 983423L)
-                .values("Cool Cars", "This new line of cool cars ...", 193384L)
-                .onDuplicateKeyIgnore()
+                .values("Master Vans" + ThreadLocalRandom.current().nextInt(10000, 20000), 
+                        "This new line of master vans ...", 983423L)
+                .values("Cool Cars" + ThreadLocalRandom.current().nextInt(10000, 20000), 
+                        "This new line of cool cars ...", 193384L)                
                 .returningResult()
                 .fetch();
 
@@ -221,15 +224,15 @@ public class ClassicModelsRepository {
       "name", "phone", "code", "office_code"
     ) 
     values 
-      (?, ?, ?, ?) on conflict do nothing returning "public"."department"."department_id"    
+      (?, ?, ?, ?) returning "public"."department"."department_id"    
     */
     public void insertReturningAndSerialInDepartment() {
         
         // Record1<Integer>
         var inserted = ctx.insertInto(DEPARTMENT, DEPARTMENT.NAME, 
                 DEPARTMENT.PHONE, DEPARTMENT.CODE, DEPARTMENT.OFFICE_CODE)
-                .values("Marketing", "+2 311 312", 5432, "5")
-                .onDuplicateKeyIgnore()
+                .values("Marketing", "+2 311 312", 
+                        ThreadLocalRandom.current().nextInt(10000, 20000), "5")                
                 .returningResult(DEPARTMENT.DEPARTMENT_ID)
                 .fetchOne();
         
