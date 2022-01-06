@@ -36,18 +36,19 @@ public class ClassicModelsRepository {
     public void findOrderAllFields() {
 
         /*
-        select
-          `classicmodels`.`order`.`order_id`,
-          `classicmodels`.`order`.`order_date`,
-          `classicmodels`.`order`.`required_date`,
-          `classicmodels`.`order`.`shipped_date`,
-          `classicmodels`.`order`.`status`,
-          `classicmodels`.`order`.`comments`,
-          `classicmodels`.`order`.`customer_number`
-        from
-          `classicmodels`.`order`
-        where
-          `classicmodels`.`order`.`order_id` = ?
+        select 
+          `classicmodels`.`order`.`order_id`, 
+          `classicmodels`.`order`.`order_date`, 
+          `classicmodels`.`order`.`required_date`, 
+          `classicmodels`.`order`.`shipped_date`, 
+          `classicmodels`.`order`.`status`, 
+          `classicmodels`.`order`.`comments`, 
+          `classicmodels`.`order`.`customer_number`, 
+          `classicmodels`.`order`.`amount` 
+        from 
+          `classicmodels`.`order` 
+        where 
+          `classicmodels`.`order`.`order_id` = ?        
          */
         System.out.println("EXAMPLE 1.1\n"
                 + ctx.select()
@@ -113,15 +114,14 @@ public class ClassicModelsRepository {
 
         /*
         select 
-          `alias_94178018`.* 
+          `alias_96852055`.* 
         from 
           (
             `classicmodels`.`order` 
-            left outer join `classicmodels`.`customer` as `alias_94178018` 
-              on `classicmodels`.`order`.`customer_number` = `alias_94178018`.`customer_number`
+            join `classicmodels`.`customer` as `alias_96852055` on `classicmodels`.`order`.`customer_number` = `alias_96852055`.`customer_number`
           ) 
         where 
-          `classicmodels`.`order`.`order_id` = 10101        
+          `classicmodels`.`order`.`order_id` = ?              
          */
         System.out.println("EXAMPLE 1.6\n"
                 + ctx.select(ORDER.customer().asterisk())
