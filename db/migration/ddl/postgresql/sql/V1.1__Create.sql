@@ -246,7 +246,7 @@ CREATE SEQUENCE "manager_seq" START 1000000;
 
 CREATE TABLE "manager" (
   "manager_id"         BIGINT              NOT NULL DEFAULT NEXTVAL ('"manager_seq"'),
-  "manager_name"       VARCHAR(50)         NOT NULL,
+  "manager_name"       VARCHAR(50)         NOT NULL DEFAULT '"anonymous"',
   "manager_detail"     JSON                DEFAULT NULL,
   /* [jooq ignore start] */
   "manager_evaluation" evaluation_criteria DEFAULT NULL, 

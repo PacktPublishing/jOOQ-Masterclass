@@ -620,7 +620,7 @@ CREATE SEQUENCE manager_seq START WITH 1000000 INCREMENT BY 1;
 
 CREATE TABLE manager (
   manager_id         NUMBER(10)          DEFAULT manager_seq.nextval NOT NULL,
-  manager_name       VARCHAR2(50)        NOT NULL,  
+  manager_name       VARCHAR2(50)        DEFAULT '"anonymous"' NOT NULL,
   manager_detail     VARCHAR2(4000)      DEFAULT NULL, -- for large JSON use blob
   /* [jooq ignore start] */
   manager_evaluation EVALUATION_CRITERIA DEFAULT NULL, 

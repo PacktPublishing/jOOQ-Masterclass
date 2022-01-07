@@ -14,12 +14,12 @@ public class ClassicModelsService {
 
     public void callAll() {
 
-            classicModelsRepository.insertAllDefaultsInProduct();                       // EXAMPLE 1
+            classicModelsRepository.insertAllDefaultsInManager();                       // EXAMPLE 1
             classicModelsRepository.insertSomeDefaultsInProduct();                      // EXAMPLE 2
             classicModelsRepository.insertSomeDefaultsValInProduct();                   // EXAMPLE 3
             classicModelsRepository.insertSomeDefaultsByTypeSomeExplicitInProduct();    // EXAMPLE 4
             classicModelsRepository.insertSomeImplicitDefaultsInProduct();              // EXAMPLE 5
-            classicModelsRepository.insertDefaultsViaNewRecordInProduct();              // EXAMPLE 6
+            classicModelsRepository.insertDefaultsViaNewRecord();                       // EXAMPLE 6
                     
     }
 }
