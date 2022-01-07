@@ -103,7 +103,7 @@ CREATE TABLE "department" (
   CONSTRAINT "department_office_fk" FOREIGN KEY ("office_code") REFERENCES "office" ("office_code")
 );
 
-ALTER SEQUENCE "department_department_id_seq" RESTART WITH 10;
+ALTER SEQUENCE "department_department_id_seq" RESTART WITH 20;
 
 -- TABLE EMPLOYEE
 
