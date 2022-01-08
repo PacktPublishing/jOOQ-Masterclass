@@ -21,10 +21,11 @@ public class ClassicModelsRepository {
     // EXAMPLE 1
     /*
     insert into "public"."sale" (
-      "fiscal_year", "sale", "employee_number"
+      "fiscal_year", "sale", "employee_number", 
+      "fiscal_month", "revenue_growth"
     ) 
     values 
-      (?, ?, ?)
+      (?, ?, ?, ?, ?)    
      */
     public void insertOneSale() {
 
@@ -33,6 +34,8 @@ public class ClassicModelsRepository {
                         .set(SALE.FISCAL_YEAR, 2005)
                         .set(SALE.SALE_, 4523.33)
                         .set(SALE.EMPLOYEE_NUMBER, 1504L)
+                        .set(SALE.FISCAL_MONTH, 3)
+                        .set(SALE.REVENUE_GROWTH, 12.22)
                         .execute()
         );
     }
@@ -40,11 +43,12 @@ public class ClassicModelsRepository {
     // EXAMPLE 2
     /*
     insert into "public"."sale" (
-      "fiscal_year", "sale", "employee_number"
+      "fiscal_year", "sale", "employee_number", 
+      "fiscal_month", "revenue_growth"
     ) 
     values 
-      (?, ?, ?), 
-      (?, ?, ?)
+      (?, ?, ?, ?, ?), 
+      (?, ?, ?, ?, ?)    
      */
     public void insertTwoSale() {
 
@@ -53,10 +57,14 @@ public class ClassicModelsRepository {
                         .set(SALE.FISCAL_YEAR, 2005)
                         .set(SALE.SALE_, 4523.33)
                         .set(SALE.EMPLOYEE_NUMBER, 1504L)
+                        .set(SALE.FISCAL_MONTH, 3)
+                        .set(SALE.REVENUE_GROWTH, 12.22)
                         .newRecord()
                         .set(SALE.FISCAL_YEAR, 2005)
                         .set(SALE.SALE_, 4523.33)
                         .set(SALE.EMPLOYEE_NUMBER, 1504L)
+                        .set(SALE.FISCAL_MONTH, 4)
+                        .set(SALE.REVENUE_GROWTH, 22.12)
                         .execute()
         );
     }
@@ -65,18 +73,19 @@ public class ClassicModelsRepository {
     /*
     insert into "public"."sale" (
       "fiscal_year", "sale", "employee_number", 
-      "hot", "rate", "vat", "trend"
+      "hot", "rate", "vat", "fiscal_month", 
+      "revenue_growth", "trend"
     ) 
     values 
       (
         ?, ?, ?, ?, ? :: "public"."rate_type", 
-        ? :: "public"."vat_type", ?
+        ? :: "public"."vat_type", ?, ?, ?
       )    
      */
     public void insertRecordSale() {
 
-        SaleRecord sr = new SaleRecord(null, 
-                2003, 123.32, 1370L, null, RateType.SILVER, VatType.MAX, null);
+        SaleRecord sr = new SaleRecord(null,
+                2003, 123.32, 1370L, null, RateType.SILVER, VatType.MAX, 3, 12.22, "UP");
         
         sr.reset(SALE.SALE_ID); // reset the id
 
