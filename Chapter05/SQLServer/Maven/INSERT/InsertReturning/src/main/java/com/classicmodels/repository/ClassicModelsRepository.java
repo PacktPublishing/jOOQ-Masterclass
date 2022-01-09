@@ -1,5 +1,6 @@
 package com.classicmodels.repository;
 
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
@@ -28,7 +29,17 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 1
     /*
-
+    declare @result table ([sale_id] bigint);
+    insert into [classicmodels].[dbo].[sale] (
+      [fiscal_year], [sale], [employee_number], 
+      [revenue_growth], [fiscal_month]
+    ) output [inserted].[sale_id] into @result 
+    values 
+      (?, ?, ?, ?, ?);
+    select 
+      [sale_id] 
+    from 
+      @result [r];
      */
     public void returnOneId() {
 
@@ -44,7 +55,19 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 2
     /*
-    
+    declare @result table ([sale_id] bigint);
+    insert into [classicmodels].[dbo].[sale] (
+      [fiscal_year], [sale], [employee_number], 
+      [revenue_growth], [fiscal_month]
+    ) output [inserted].[sale_id] into @result 
+    values 
+      (?, ?, ?, ?, ?), 
+      (?, ?, ?, ?, ?), 
+      (?, ?, ?, ?, ?);
+    select 
+      [sale_id] 
+    from 
+      @result [r];    
      */
     public void returnMultipleIds() {
 
@@ -85,9 +108,11 @@ public class ClassicModelsRepository {
                         .values(ctx.insertInto(CUSTOMER,
                                 CUSTOMER.CUSTOMER_NAME, CUSTOMER.CONTACT_FIRST_NAME,
                                 CUSTOMER.CONTACT_LAST_NAME, CUSTOMER.PHONE)
-                                .values("Ltd. AirRoads - " + Math.random(), "Kyle", "Doyle", "+ 44 321 321")
+                                .values(UUID.randomUUID().toString(), // random customer_name
+                                        "Kyle", "Doyle", "+ 44 321 321")
                                 .returningResult(CUSTOMER.CUSTOMER_NUMBER).fetchOne().value1(),
-                                "No. 14 Avenue - " + Math.random(), default_(), "Los Angeles", default_(), default_(), "USA")
+                                UUID.randomUUID().toString(), // random address_line_first
+                                default_(), "Los Angeles", default_(), default_(), "USA")
                         .execute()
         );
     }
@@ -170,10 +195,10 @@ public class ClassicModelsRepository {
         // Result<Record2<String, LocalDate>>
         var inserted = ctx.insertInto(PRODUCTLINE, PRODUCTLINE.PRODUCT_LINE, 
                 PRODUCTLINE.TEXT_DESCRIPTION, PRODUCTLINE.CODE)
-                .values("Electric Vans - " + ThreadLocalRandom.current().nextInt(10000, 20000)
-                        , "This new line of electric vans ...", 983423L)
-                .values("Turbo N Cars - " + ThreadLocalRandom.current().nextInt(10000, 20000)
-                        , "This new line of turbo N cars ...", 193384L)    
+                .values(UUID.randomUUID().toString(), // random product_line
+                        "This new line of electric vans ...", 983423L)
+                .values(UUID.randomUUID().toString(), // random product_line 
+                        "This new line of turbo N cars ...", 193384L)     
                 .returningResult(PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.CREATED_ON)
                 .fetch();
 
@@ -237,10 +262,10 @@ public class ClassicModelsRepository {
         // Result<ProductlineRecord>
         var inserted = ctx.insertInto(PRODUCTLINE, PRODUCTLINE.PRODUCT_LINE, 
                 PRODUCTLINE.TEXT_DESCRIPTION, PRODUCTLINE.CODE)
-                .values("Master Vans - " + ThreadLocalRandom.current().nextInt(10000, 20000), 
-                        "This new line of master vans ...", 983423L)
-                .values("Cool Cars - " + ThreadLocalRandom.current().nextInt(10000, 20000), 
-                        "This new line of cool cars ...", 193384L)                
+                .values(UUID.randomUUID().toString(), // random product_line
+                        "This new line of electric vans ...", 983423L)
+                .values(UUID.randomUUID().toString(), // random product_line 
+                        "This new line of turbo N cars ...", 193384L)                  
                 .returningResult()
                 .fetch();
 
@@ -266,7 +291,8 @@ public class ClassicModelsRepository {
         var inserted = ctx.insertInto(DEPARTMENT, DEPARTMENT.NAME,
                 DEPARTMENT.PHONE, DEPARTMENT.CODE, DEPARTMENT.OFFICE_CODE)
                 .values("Marketing", "+2 311 312", 
-                        ThreadLocalRandom.current().nextInt(10000, 20000), "5")               
+                        ThreadLocalRandom.current().nextInt(10000, 20000), // random code
+                        "5")               
                 .returningResult(DEPARTMENT.DEPARTMENT_ID)
                 .fetchOne();
 
