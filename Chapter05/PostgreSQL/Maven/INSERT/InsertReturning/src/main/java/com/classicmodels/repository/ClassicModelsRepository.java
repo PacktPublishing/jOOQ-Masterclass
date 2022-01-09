@@ -184,9 +184,9 @@ public class ClassicModelsRepository {
         // Result<Record2<String, LocalDate>>
         var inserted = ctx.insertInto(PRODUCTLINE, 
                 PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.TEXT_DESCRIPTION, PRODUCTLINE.CODE)
-                .values("Electric Vans - " + ThreadLocalRandom.current().nextInt(10000, 20000), 
+                .values(UUID.randomUUID().toString(), // random product_line
                         "This new line of electric vans ...", 983423L)
-                .values("Turbo N Cars - " + ThreadLocalRandom.current().nextInt(10000, 20000), 
+                .values(UUID.randomUUID().toString(), // random product_line 
                         "This new line of turbo N cars ...", 193384L)                
                 .returningResult(PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.CREATED_ON)
                 .fetch();
@@ -214,9 +214,9 @@ public class ClassicModelsRepository {
         // Result<ProductlineRecord>
         var inserted = ctx.insertInto(PRODUCTLINE, 
                 PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.TEXT_DESCRIPTION, PRODUCTLINE.CODE)
-                .values("Master Vans - " + ThreadLocalRandom.current().nextInt(10000, 20000), 
+                .values(UUID.randomUUID().toString(), // random product_line
                         "This new line of master vans ...", 983423L)
-                .values("Cool Cars - " + ThreadLocalRandom.current().nextInt(10000, 20000), 
+                .values(UUID.randomUUID().toString(), // random product_line
                         "This new line of cool cars ...", 193384L)                
                 .returningResult()
                 .fetch();
@@ -238,7 +238,8 @@ public class ClassicModelsRepository {
         var inserted = ctx.insertInto(DEPARTMENT, DEPARTMENT.NAME, 
                 DEPARTMENT.PHONE, DEPARTMENT.CODE, DEPARTMENT.OFFICE_CODE)
                 .values("Marketing", "+2 311 312", 
-                        ThreadLocalRandom.current().nextInt(10000, 20000), "5")                
+                        ThreadLocalRandom.current().nextInt(10000, 20000), // random code
+                        "5")                
                 .returningResult(DEPARTMENT.DEPARTMENT_ID)
                 .fetchOne();
         
