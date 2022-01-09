@@ -20,18 +20,16 @@ public class ClassicModelsRepository {
     // EXAMPLE 1
     /*
     insert into "CLASSICMODELS"."SALE" (
-      "SALE_ID", "FISCAL_YEAR", "SALE", 
-      "EMPLOYEE_NUMBER", "FISCAL_MONTH", 
-      "REVENUE_GROWTH"
+      "FISCAL_YEAR", "SALE", "EMPLOYEE_NUMBER", 
+      "FISCAL_MONTH", "REVENUE_GROWTH"
     ) 
     values 
-      (?, ?, ?, ?, ?, ?)   
+      (?, ?, ?, ?, ?)    
      */
     public void insertOneSale() {
 
         System.out.println("EXAMPLE 1 (affected rows): "
-                + ctx.insertInto(SALE)
-                        .set(SALE.SALE_ID, (long) (Math.random() * 500000))
+                + ctx.insertInto(SALE)                       
                         .set(SALE.FISCAL_YEAR, 2005)
                         .set(SALE.SALE_, 4523.33)
                         .set(SALE.EMPLOYEE_NUMBER, 1504L)
