@@ -1,5 +1,6 @@
 package com.classicmodels.repository;
 
+import java.util.UUID;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
 import static jooq.generated.tables.Employee.EMPLOYEE;
@@ -35,11 +36,11 @@ public class ClassicModelsRepository {
     public void returnOneId() {
 
         // Record1<Long>
-        var insertedId = ctx.insertInto(SALE, 
+        var insertedId = ctx.insertInto(SALE,
                 SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.REVENUE_GROWTH, SALE.FISCAL_MONTH)
                 .values(2004, 2311.42, 1370L, 10.12, 1)
                 .returningResult(SALE.SALE_ID) // or, returningResult() to return whole fields
-                .fetchOne(); 
+                .fetchOne();
 
         System.out.println("EXAMPLE 1 (inserted id): \n" + insertedId); // as Long, insertedId.value1()
     }
@@ -58,7 +59,7 @@ public class ClassicModelsRepository {
     public void returnMultipleIds() {
 
         // Result<Record1<Long>>
-        var insertedIds = ctx.insertInto(SALE, 
+        var insertedIds = ctx.insertInto(SALE,
                 SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.REVENUE_GROWTH, SALE.FISCAL_MONTH)
                 .values(2004, 2311.42, 1370L, 12.50, 1)
                 .values(2003, 900.21, 1504L, 23.99, 2)
@@ -100,10 +101,13 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 3 (affected rows): "
                 + ctx.insertInto(CUSTOMERDETAIL)
                         .values(ctx.insertInto(CUSTOMER)
-                                .values(default_(), "Ltd. AirRoads - " + Math.random(), 
-                                        "Kyle", "Doyle", "+ 44 321 321", default_(), default_(), default_())
+                                .values(default_(),
+                                        UUID.randomUUID().toString(), // random customer_name
+                                        "Kyle", "Doyle", "+ 44 321 321", 
+                                        default_(), default_(), default_())
                                 .returningResult(CUSTOMER.CUSTOMER_NUMBER).fetchOne().value1(),
-                                "No. 14 Avenue - " + Math.random(), default_(), "Los Angeles", default_(), default_(), "USA")
+                                UUID.randomUUID().toString(), // random address_line_first
+                                default_(), "Los Angeles", default_(), default_(), "USA")
                         .execute()
         );
     }
@@ -131,7 +135,7 @@ public class ClassicModelsRepository {
         default, 
         default
       )    
-    */
+     */
     public void insertEmployeeInManagerReturningId() {
 
         // Result<Record1<Long>>
@@ -142,7 +146,7 @@ public class ClassicModelsRepository {
                         default_(), default_())
                 .returningResult(MANAGER.MANAGER_ID)
                 .fetch();
-        
+
         System.out.println("EXAMPLE 4 (inserted ids):\n" + inserted);
     }
 }
