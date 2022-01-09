@@ -54,27 +54,49 @@ public class ClassicModelsRepository {
      */
     public void insertSomeDefaultsInProduct() {
 
-        System.out.println("EXAMPLE 2.1 (affected rows): "
+        System.out.println("EXAMPLE 2.1.1 (affected rows): "
                 + ctx.insertInto(PRODUCT)
                         .values(defaultValue(), "Ultra Jet X1", "Planes", 433823L,
+                                defaultValue(), "Motor City Art Classics",
+                                defaultValue(), defaultValue(), 45.99, 67.99, 
+                                defaultValue(), defaultValue()
+                        )
+                        .execute()
+        );
+        
+        System.out.println("EXAMPLE 2.1.2 (affected rows): "
+                + ctx.insertInto(PRODUCT)
+                        .values(defaultValue(PRODUCT.PRODUCT_ID), "Ultra Jet X1", "Planes", 433823L,
                                 defaultValue(PRODUCT.PRODUCT_SCALE),
                                 "Motor City Art Classics",
                                 defaultValue(PRODUCT.PRODUCT_DESCRIPTION),
                                 defaultValue(PRODUCT.QUANTITY_IN_STOCK),
-                                45.99, 67.99, defaultValue(), defaultValue()
+                                45.99, 67.99, defaultValue(PRODUCT.SPECS), 
+                                defaultValue(PRODUCT.PRODUCT_UID)
                         )
                         .execute()
         );
         
         // or, use default_()
-        System.out.println("EXAMPLE 2.2 (affected rows): "
+        System.out.println("EXAMPLE 2.2.1 (affected rows): "
                 + ctx.insertInto(PRODUCT)
                         .values(default_(), "Ultra Jet X1", "Planes", 433823L,
+                                default_(), "Motor City Art Classics",
+                                default_(), default_(),
+                                45.99, 67.99, default_(), default_()
+                        )
+                        .execute()
+        );
+        
+        System.out.println("EXAMPLE 2.2.2 (affected rows): "
+                + ctx.insertInto(PRODUCT)
+                        .values(default_(PRODUCT.PRODUCT_ID), "Ultra Jet X1", "Planes", 433823L,
                                 default_(PRODUCT.PRODUCT_SCALE),
                                 "Motor City Art Classics",
                                 default_(PRODUCT.PRODUCT_DESCRIPTION),
                                 default_(PRODUCT.QUANTITY_IN_STOCK),
-                                45.99, 67.99, default_(), default_()
+                                45.99, 67.99, default_(PRODUCT.SPECS), 
+                                default_(PRODUCT.PRODUCT_UID)
                         )
                         .execute()
         );
