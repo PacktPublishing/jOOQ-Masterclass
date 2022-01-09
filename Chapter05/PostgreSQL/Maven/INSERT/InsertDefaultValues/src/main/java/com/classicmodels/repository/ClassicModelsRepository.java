@@ -54,27 +54,49 @@ public class ClassicModelsRepository {
      */
     public void insertSomeDefaultsInProduct() {
 
-        System.out.println("EXAMPLE 2.1 (affected rows): "
+        System.out.println("EXAMPLE 2.1.1 (affected rows): "
                 + ctx.insertInto(PRODUCT)
                         .values(defaultValue(), "Ultra Jet X1", "Planes", 433823L,
+                                defaultValue(), "Motor City Art Classics",
+                                defaultValue(), defaultValue(), 45.99, 67.99,
+                                defaultValue(), defaultValue()
+                        )
+                        .execute()
+        );
+
+        System.out.println("EXAMPLE 2.1.2 (affected rows): "
+                + ctx.insertInto(PRODUCT)
+                        .values(defaultValue(PRODUCT.PRODUCT_ID), "Ultra Jet X1", "Planes", 433823L,
                                 defaultValue(PRODUCT.PRODUCT_SCALE),
                                 "Motor City Art Classics",
                                 defaultValue(PRODUCT.PRODUCT_DESCRIPTION),
                                 defaultValue(PRODUCT.QUANTITY_IN_STOCK),
-                                45.99, 67.99, defaultValue(), defaultValue()
+                                45.99, 67.99, defaultValue(PRODUCT.SPECS),
+                                defaultValue(PRODUCT.PRODUCT_UID)
                         )
                         .execute()
         );
-        
+
         // or, use default_()
-        System.out.println("EXAMPLE 2.2 (affected rows): "
+        System.out.println("EXAMPLE 2.2.1 (affected rows): "
                 + ctx.insertInto(PRODUCT)
                         .values(default_(), "Ultra Jet X1", "Planes", 433823L,
+                                default_(), "Motor City Art Classics",
+                                default_(), default_(),
+                                45.99, 67.99, default_(), default_()
+                        )
+                        .execute()
+        );
+
+        System.out.println("EXAMPLE 2.2.2 (affected rows): "
+                + ctx.insertInto(PRODUCT)
+                        .values(default_(PRODUCT.PRODUCT_ID), "Ultra Jet X1", "Planes", 433823L,
                                 default_(PRODUCT.PRODUCT_SCALE),
                                 "Motor City Art Classics",
                                 default_(PRODUCT.PRODUCT_DESCRIPTION),
                                 default_(PRODUCT.QUANTITY_IN_STOCK),
-                                45.99, 67.99, default_(), default_()
+                                45.99, 67.99, default_(PRODUCT.SPECS),
+                                default_(PRODUCT.PRODUCT_UID)
                         )
                         .execute()
         );
@@ -93,7 +115,7 @@ public class ClassicModelsRepository {
         ?, ?, ?, ?, ?, default, default, ?, ?, default, 
         default
       )    
-    */
+     */
     public void insertSomeDefaultsValInProduct() {
         System.out.println("EXAMPLE 3.1 (affected rows): "
                 + ctx.insertInto(PRODUCT)
@@ -102,28 +124,28 @@ public class ClassicModelsRepository {
                                 PRODUCT.PRODUCT_DESCRIPTION, PRODUCT.QUANTITY_IN_STOCK,
                                 PRODUCT.BUY_PRICE, PRODUCT.MSRP, PRODUCT.SPECS, PRODUCT.PRODUCT_UID)
                         .values(val("Ultra Jet X1"), val("Planes"), val(433823L),
-                                val("1:18"), val("Motor City Art Classics"),                                                               
+                                val("1:18"), val("Motor City Art Classics"),
                                 defaultValue(PRODUCT.PRODUCT_DESCRIPTION),
                                 defaultValue(PRODUCT.QUANTITY_IN_STOCK),
                                 val(BigDecimal.valueOf(45.99)), val(BigDecimal.valueOf(67.99)),
-                                defaultValue(PRODUCT.SPECS), defaultValue(PRODUCT.PRODUCT_UID))                        
+                                defaultValue(PRODUCT.SPECS), defaultValue(PRODUCT.PRODUCT_UID))
                         .execute()
         );
-        
+
         System.out.println("EXAMPLE 3.2 (affected rows): "
                 + ctx.insertInto(PRODUCT)
-                        .columns(PRODUCT.PRODUCT_ID, 
+                        .columns(PRODUCT.PRODUCT_ID,
                                 PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_LINE,
                                 PRODUCT.CODE, PRODUCT.PRODUCT_SCALE, PRODUCT.PRODUCT_VENDOR,
                                 PRODUCT.PRODUCT_DESCRIPTION, PRODUCT.QUANTITY_IN_STOCK,
                                 PRODUCT.BUY_PRICE, PRODUCT.MSRP, PRODUCT.SPECS, PRODUCT.PRODUCT_UID)
                         .values(defaultValue(PRODUCT.PRODUCT_ID),
                                 val("Ultra Jet X1"), val("Planes"), val(433823L),
-                                val("1:18"), val("Motor City Art Classics"),                                                               
+                                val("1:18"), val("Motor City Art Classics"),
                                 defaultValue(PRODUCT.PRODUCT_DESCRIPTION),
                                 defaultValue(PRODUCT.QUANTITY_IN_STOCK),
                                 val(BigDecimal.valueOf(45.99)), val(BigDecimal.valueOf(67.99)),
-                                defaultValue(PRODUCT.SPECS), defaultValue(PRODUCT.PRODUCT_UID))                        
+                                defaultValue(PRODUCT.SPECS), defaultValue(PRODUCT.PRODUCT_UID))
                         .execute()
         );
     }
@@ -175,14 +197,14 @@ public class ClassicModelsRepository {
       (?, ?, ?, ?, ?, ?, ?)    
      */
     public void insertSomeImplicitDefaultsInProduct() {
-        
+
         System.out.println("EXAMPLE 5.1 (affected rows): "
                 + ctx.insertInto(PRODUCT)
                         .columns(PRODUCT.CODE)
                         .values(433823L)
                         .execute()
         );
-        
+
         System.out.println("EXAMPLE 5.2 (affected rows): "
                 + ctx.insertInto(PRODUCT)
                         .columns(PRODUCT.PRODUCT_NAME,
@@ -200,7 +222,7 @@ public class ClassicModelsRepository {
     public void insertDefaultsViaNewRecord() {
 
         /* approach 1 */
-        /*
+ /*
         insert into "public"."manager" default 
         values 
           returning "public"."manager"."manager_id"            
@@ -210,7 +232,7 @@ public class ClassicModelsRepository {
         );
 
         /* approach 2 */
-        /*
+ /*
         insert into "public"."manager" (
           "manager_detail", "manager_evaluation"
         ) 
@@ -226,7 +248,7 @@ public class ClassicModelsRepository {
         );
 
         /* approach 3 */
-        /*
+ /*
         insert into "public"."product" (
           "product_name", "product_line", "code", 
           "product_scale", "product_vendor", 
@@ -240,7 +262,7 @@ public class ClassicModelsRepository {
             null, null, 45.99, 67.99, null
           ) returning "public"."product"."product_uid", 
           "public"."product"."product_id"        
-        */
+         */
         ProductRecord pr = new ProductRecord();
         pr.setProductName("Ultra Jet X1");
         pr.setProductLine("Planes");
@@ -253,7 +275,7 @@ public class ClassicModelsRepository {
         );
 
         /* approach 4 */
-        /*
+ /*
         insert into "public"."product" (
           "product_name", "product_line", "code", 
           "product_scale", "product_vendor", 
@@ -263,7 +285,7 @@ public class ClassicModelsRepository {
         values 
           (?, ?, ?, ?, ?, ?, ?, ?) returning "public"."product"."product_uid", 
           "public"."product"."product_id"        
-        */
+         */
         ProductPart pp1 = new ProductPart(433823L);
         pr.from(pp1);
         System.out.println("EXAMPLE 6.4 (affected rows): "
@@ -271,7 +293,7 @@ public class ClassicModelsRepository {
         );
 
         /* approach 5 */
-        /*
+ /*
         insert into "public"."product" (
           "product_name", "product_line", "code", 
           "product_scale", "product_vendor", 
@@ -281,7 +303,7 @@ public class ClassicModelsRepository {
         values 
           (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) returning "public"."product"."product_uid", 
           "public"."product"."product_id"        
-        */
+         */
         ProductPart pp2 = new ProductPart(
                 "Ultra Jet X1", "Planes", 433823L, "Motor City Art Classics",
                 BigDecimal.valueOf(45.99), BigDecimal.valueOf(67.99));

@@ -184,6 +184,10 @@
                                     (default is 5 seconds) -->
                                     <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>
                                 </database>
+                                
+                                <generate>
+                                    <deprecationOnUnknownTypes>false</deprecationOnUnknownTypes>
+                                </generate>
 
                                 <target>
                                     <!-- The destination package of your generated classes (within the destination directory).
