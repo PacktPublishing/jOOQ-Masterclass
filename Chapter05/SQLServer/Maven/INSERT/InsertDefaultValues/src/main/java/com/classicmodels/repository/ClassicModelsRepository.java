@@ -8,6 +8,7 @@ import jooq.generated.tables.records.ManagerRecord;
 import jooq.generated.tables.records.ProductRecord;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.defaultValue;
+import static org.jooq.impl.DSL.default_;
 import static org.jooq.impl.DSL.val;
 import static org.jooq.impl.SQLDataType.BIGINT;
 import static org.jooq.impl.SQLDataType.INTEGER;
@@ -52,7 +53,8 @@ public class ClassicModelsRepository {
       )    
     */
     public void insertSomeDefaultsValInProduct() {
-        System.out.println("EXAMPLE 2 (affected rows): "
+        
+        System.out.println("EXAMPLE 2.1 (affected rows): "
                 + ctx.insertInto(PRODUCT)
                         .columns(PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_LINE,
                                 PRODUCT.CODE, PRODUCT.PRODUCT_SCALE, PRODUCT.PRODUCT_VENDOR,
@@ -64,6 +66,21 @@ public class ClassicModelsRepository {
                                 defaultValue(PRODUCT.QUANTITY_IN_STOCK),
                                 val(BigDecimal.valueOf(45.99)), val(BigDecimal.valueOf(67.99)),
                                 defaultValue(PRODUCT.SPECS), defaultValue(PRODUCT.PRODUCT_UID))                        
+                        .execute()
+        );        
+        
+        System.out.println("EXAMPLE 2.2 (affected rows): "
+                + ctx.insertInto(PRODUCT)
+                        .columns(PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_LINE,
+                                PRODUCT.CODE, PRODUCT.PRODUCT_SCALE, PRODUCT.PRODUCT_VENDOR,
+                                PRODUCT.PRODUCT_DESCRIPTION, PRODUCT.QUANTITY_IN_STOCK,
+                                PRODUCT.BUY_PRICE, PRODUCT.MSRP, PRODUCT.SPECS, PRODUCT.PRODUCT_UID)
+                        .values(val("Ultra Jet X1"), val("Planes"), val(433823L),
+                                val("1:18"), val("Motor City Art Classics"),                                                               
+                                default_(PRODUCT.PRODUCT_DESCRIPTION),
+                                default_(PRODUCT.QUANTITY_IN_STOCK),
+                                val(BigDecimal.valueOf(45.99)), val(BigDecimal.valueOf(67.99)),
+                                default_(PRODUCT.SPECS), default_(PRODUCT.PRODUCT_UID))                        
                         .execute()
         );        
     }
