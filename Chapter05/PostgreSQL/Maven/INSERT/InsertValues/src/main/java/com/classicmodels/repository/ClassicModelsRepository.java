@@ -11,7 +11,6 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Stream;
 import static jooq.generated.Routines.getAvgSale;
 import static jooq.generated.Sequences.ORDER_SEQ;
-import static jooq.generated.Sequences.SALE_SEQ;
 import jooq.generated.enums.RateType;
 import jooq.generated.enums.VatType;
 import static jooq.generated.tables.Department.DEPARTMENT;
@@ -34,6 +33,7 @@ import static org.jooq.impl.DSL.choose;
 import static org.jooq.impl.DSL.coalesce;
 import static org.jooq.impl.DSL.default_;
 import static org.jooq.impl.DSL.inline;
+import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.rand;
 import static org.jooq.impl.DSL.round;
 import static org.jooq.impl.DSL.row;
@@ -49,50 +49,84 @@ public class ClassicModelsRepository {
 
     private final DSLContext ctx;
 
+    private Long Order_Id;
+    private Long Sale_Id;
+    
     public ClassicModelsRepository(DSLContext ctx) {
         this.ctx = ctx;
+        
+        // avoid duplicate keys
+        Order_Id = ctx.select(max(ORDER.ORDER_ID)).from(ORDER).fetchOneInto(Long.class) + 100;
+        Sale_Id = ctx.select(max(SALE.SALE_ID)).from(SALE).fetchOneInto(Long.class) + 100;
     }
 
     // EXAMPLE 1    
-    public void insertOrderAutoGenKey() {
-
-        /*
-        // 1.1
-        insert into "public"."order" (
-          "order_id", "order_date", "required_date", 
-          "shipped_date", "status", "comments", 
-          "customer_number", "amount"
-        ) 
-        values 
-          (
-            nextval('"public"."order_seq"'), 
-            cast(? as date), 
-            cast(? as date), 
-            cast(? as date), 
-            ?, 
-            ?, 
-            ?, 
-            ?
-          ) on conflict do nothing
+    /*
+    // 1.1.1
+    insert into "public"."order" (
+      "order_id", "order_date", "required_date", 
+      "shipped_date", "status", "comments", 
+      "customer_number", "amount"
+    ) 
+    values 
+      (
+        default, 
+        cast(? as date), 
+        cast(? as date), 
+        cast(? as date), 
+        ?, 
+        ?, 
+        ?, 
+        ?
+      ) on conflict do nothing
+    
+    // 1.1.2
+    insert into "public"."order" (
+      "order_id", "order_date", "required_date", 
+      "shipped_date", "status", "comments", 
+      "customer_number", "amount"
+     ) 
+     values 
+      (
+        nextval('"public"."order_seq"'), 
+        cast(? as date), 
+        cast(? as date), 
+        cast(? as date), 
+        ?, 
+        ?, 
+        ?, 
+        ?
+      ) on conflict do nothing
         
-        // 1.2 - 1.4
-        insert into "public"."order" (
-          "comments", "order_date", "required_date", 
-          "shipped_date", "status", "customer_number", 
-          "amount"
-        ) 
-        values 
-          (
-            ?, 
-            cast(? as date), 
-            cast(? as date), 
-            cast(? as date), 
-            ?, 
-            ?, 
-            ?
-          )        
-         */
-        System.out.println("EXAMPLE 1.1 (affected rows): "
+    // 1.2 - 1.4
+    insert into "public"."order" (
+      "comments", "order_date", "required_date", 
+      "shipped_date", "status", "customer_number", 
+      "amount"
+    ) 
+    values 
+      (
+        ?, 
+        cast(? as date), 
+        cast(? as date), 
+        cast(? as date), 
+        ?, 
+        ?, 
+        ?
+      )        
+    */
+    public void insertOrderAutoGenKey() {
+               
+        System.out.println("EXAMPLE 1.1.1 (affected rows): "
+                + ctx.insertInto(ORDER) // InsertSetStep<OrderRecord>
+                        .values(default_(),
+                                LocalDate.of(2003, 2, 12), LocalDate.of(2003, 3, 1),
+                                LocalDate.of(2003, 2, 27), "Shipped",
+                                "New order inserted ...", 363L, 314.44)
+                        .onDuplicateKeyIgnore()
+                        .execute()
+        );
+        System.out.println("EXAMPLE 1.1.2 (affected rows): "
                 + ctx.insertInto(ORDER) // InsertSetStep<OrderRecord>
                         .values(ORDER_SEQ.nextval(), // primary key is auto-generated
                                 LocalDate.of(2003, 2, 12), LocalDate.of(2003, 3, 1),
@@ -160,7 +194,7 @@ public class ClassicModelsRepository {
 
          System.out.println("EXAMPLE 2.1 (affected rows): "
                 + ctx.insertInto(ORDER) // InsertSetStep<OrderRecord>
-                        .values(Math.round(Math.random() * 1000), // random primary key
+                        .values(++Order_Id, // computed primary key
                                 LocalDate.of(2003, 2, 12), LocalDate.of(2003, 3, 1),
                                 LocalDate.of(2003, 2, 27), "Shipped",
                                 "New order inserted ...", 363L, 314.44)
@@ -172,7 +206,7 @@ public class ClassicModelsRepository {
                 + // InsertValuesStep8<OrderRecord, Long, String, LocalDate, LocalDate, LocalDate, String, Long, BigDecimal>
                 ctx.insertInto(ORDER, ORDER.ORDER_ID, ORDER.COMMENTS, ORDER.ORDER_DATE, ORDER.REQUIRED_DATE,
                         ORDER.SHIPPED_DATE, ORDER.STATUS, ORDER.CUSTOMER_NUMBER, ORDER.AMOUNT)
-                        .values(Math.round(Math.random() * 1000), // random primary key
+                        .values(++Order_Id, // computed primary key
                                 "New order inserted ...", LocalDate.of(2003, 2, 12),
                                 LocalDate.of(2003, 3, 1), LocalDate.of(2003, 2, 27),
                                 "Shipped", 363L, BigDecimal.valueOf(314.44))
@@ -184,7 +218,7 @@ public class ClassicModelsRepository {
                 + ctx.insertInto(ORDER) // InsertSetStep<OrderRecord>
                         .columns(ORDER.ORDER_ID, ORDER.COMMENTS, ORDER.ORDER_DATE, ORDER.REQUIRED_DATE,
                                 ORDER.SHIPPED_DATE, ORDER.STATUS, ORDER.CUSTOMER_NUMBER, ORDER.AMOUNT)
-                        .values(Math.round(Math.random() * 1000), // random primary key
+                        .values(++Order_Id, // computed primary key
                                 "New order inserted ...", LocalDate.of(2003, 2, 12),
                                 LocalDate.of(2003, 3, 1), LocalDate.of(2003, 2, 27),
                                 "Shipped", 363L, BigDecimal.valueOf(314.44))
@@ -195,7 +229,36 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 3
     /*
-    // 3.1
+    // 3.1.1
+    insert into "public"."order" (
+      "order_id", "order_date", "required_date", 
+      "shipped_date", "status", "comments", 
+      "customer_number", "amount"
+    ) 
+    values 
+      (
+        default, 
+        cast(? as date), 
+        cast(? as date), 
+        cast(? as date), 
+        ?, ?, ?, ?
+      ), 
+      (
+        default, 
+        cast(? as date), 
+        cast(? as date), 
+        cast(? as date), 
+        ?, ?, ?, ?
+      ), 
+      (
+        default, 
+        cast(? as date), 
+        cast(? as date), 
+        cast(? as date), 
+        ?, ?, ?, ?
+      ) on conflict do nothing
+    
+    // 3.1.2
     insert into "public"."order" (
       "order_id", "order_date", "required_date", 
       "shipped_date", "status", "comments", 
@@ -207,33 +270,24 @@ public class ClassicModelsRepository {
         cast(? as date), 
         cast(? as date), 
         cast(? as date), 
-        ?, 
-        ?, 
-        ?, 
-        ?
+        ?, ?, ?, ?
       ), 
       (
         nextval('"public"."order_seq"'), 
         cast(? as date), 
         cast(? as date), 
         cast(? as date), 
-        ?, 
-        ?, 
-        ?, 
-        ?
+        ?, ?, ?, ?
       ), 
       (
         nextval('"public"."order_seq"'), 
         cast(? as date), 
         cast(? as date), 
         cast(? as date), 
-        ?, 
-        ?, 
-        ?, 
-        ?
-      ) on conflict do nothing    
+        ?, ?, ?, ?
+      ) on conflict do nothing
     
-     // 3.2, 3.3
+    // 3.2, 3.3
     insert into "public"."order" (
       "comments", "order_date", "required_date", 
       "shipped_date", "status", "customer_number", 
@@ -266,11 +320,29 @@ public class ClassicModelsRepository {
         ?, 
         ?, 
         ?
-      ) on conflict do nothing    
+      ) on conflict do nothing        
      */
     public void insertMultipleOrderAutoGenKey() {
 
-        System.out.println("EXAMPLE 3.1 (affected rows): "
+        System.out.println("EXAMPLE 3.1.1 (affected rows): "
+                + ctx.insertInto(ORDER) // InsertSetStep<OrderRecord>
+                        .values(default_(), // primary key is auto-generated
+                                LocalDate.of(2004, 10, 22), LocalDate.of(2004, 10, 23),
+                                LocalDate.of(2004, 10, 23), "Shipped",
+                                "New order inserted ...", 363L, 314.44)
+                        .values(default_(),
+                                LocalDate.of(2003, 12, 2), LocalDate.of(2003, 1, 3),
+                                LocalDate.of(2003, 2, 26), "Resolved",
+                                "Important order ...", 128L, 125.55)
+                        .values(default_(),
+                                LocalDate.of(2005, 12, 12), LocalDate.of(2005, 12, 23),
+                                LocalDate.of(2005, 12, 22), "On Hold",
+                                "Order of client ...", 181L, 245.53)
+                        .onDuplicateKeyIgnore()
+                        .execute()
+        );
+        
+        System.out.println("EXAMPLE 3.1.2 (affected rows): "
                 + ctx.insertInto(ORDER) // InsertSetStep<OrderRecord>
                         .values(ORDER_SEQ.nextval(), // primary key is auto-generated
                                 LocalDate.of(2004, 10, 22), LocalDate.of(2004, 10, 23),
@@ -366,15 +438,15 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 4.1 (affected rows): "
                 + ctx.insertInto(ORDER) // InsertSetStep<OrderRecord>
-                        .values(Math.round(Math.random() * 100),
+                        .values(++Order_Id,
                                 LocalDate.of(2004, 10, 22), LocalDate.of(2004, 10, 23),
                                 LocalDate.of(2004, 10, 23), "Shipped",
                                 "New order inserted ...", 363L, BigDecimal.valueOf(314.44))
-                        .values(Math.round(Math.random() * 1000),
+                        .values(++Order_Id,
                                 LocalDate.of(2003, 12, 2), LocalDate.of(2003, 1, 3),
                                 LocalDate.of(2003, 2, 26), "Resolved",
                                 "Important order ...", 128L, BigDecimal.valueOf(125.55))
-                        .values(Math.round(Math.random() * 10000),
+                        .values(++Order_Id,
                                 LocalDate.of(2005, 12, 12), LocalDate.of(2005, 12, 23),
                                 LocalDate.of(2005, 12, 22), "On Hold",
                                 "Order of client ...", 181L, BigDecimal.valueOf(245.53))
@@ -386,15 +458,15 @@ public class ClassicModelsRepository {
                 + // InsertValuesStep7<OrderRecord, String, LocalDate, LocalDate, LocalDate, String, Long, BigDecimal>
                 ctx.insertInto(ORDER, ORDER.ORDER_ID, ORDER.COMMENTS, ORDER.ORDER_DATE, ORDER.REQUIRED_DATE,
                         ORDER.SHIPPED_DATE, ORDER.STATUS, ORDER.CUSTOMER_NUMBER, ORDER.AMOUNT)
-                        .values(Math.round(Math.random() * 100),
+                        .values(++Order_Id,
                                 "New order inserted ...", LocalDate.of(2004, 10, 22),
                                 LocalDate.of(2004, 10, 23), LocalDate.of(2004, 10, 23), 
                                 "Shipped", 363L, BigDecimal.valueOf(314.44))
-                        .values(Math.round(Math.random() * 1000),
+                        .values(++Order_Id,
                                 "Important order ...", LocalDate.of(2003, 12, 2),
                                 LocalDate.of(2003, 1, 3), LocalDate.of(2003, 2, 26), 
                                 "Resolved", 128L, BigDecimal.valueOf(125.55))
-                        .values(Math.round(Math.random() * 10000),
+                        .values(++Order_Id,
                                 "Order of client ...", LocalDate.of(2005, 12, 12),
                                 LocalDate.of(2005, 12, 23), LocalDate.of(2005, 12, 22), 
                                 "On Hold", 181L, BigDecimal.valueOf(245.53))
@@ -406,15 +478,15 @@ public class ClassicModelsRepository {
                 + ctx.insertInto(ORDER) // InsertSetStep<OrderRecord>
                         .columns(ORDER.ORDER_ID, ORDER.COMMENTS, ORDER.ORDER_DATE, ORDER.REQUIRED_DATE,
                                 ORDER.SHIPPED_DATE, ORDER.STATUS, ORDER.CUSTOMER_NUMBER, ORDER.AMOUNT)
-                        .values(Math.round(Math.random() * 100),
+                        .values(++Order_Id,
                                 "New order inserted ...", LocalDate.of(2004, 10, 22),
                                 LocalDate.of(2004, 10, 23), LocalDate.of(2004, 10, 23), 
                                 "Shipped", 363L, BigDecimal.valueOf(314.44))
-                        .values(Math.round(Math.random() * 1000),
+                        .values(++Order_Id,
                                 "Important order ...", LocalDate.of(2003, 12, 2),
                                 LocalDate.of(2003, 1, 3), LocalDate.of(2003, 2, 26), 
                                 "Resolved", 128L, BigDecimal.valueOf(125.55))
-                        .values(Math.round(Math.random() * 10000),
+                        .values(++Order_Id,
                                 "Order of client ...", LocalDate.of(2005, 12, 12),
                                 LocalDate.of(2005, 12, 23), LocalDate.of(2005, 12, 22), 
                                 "On Hold", 181L, BigDecimal.valueOf(245.53))
@@ -458,11 +530,9 @@ public class ClassicModelsRepository {
         );
     }
 
-    // EXAMPLE 6    
+    // EXAMPLE 6        
+    // 6.1, 6.2, 6.3, 6.7, 6.8
     /*
-    // 6.1        
-    select nextval('"public"."sale_seq"')
-    
     insert into "public"."sale" (
       "sale_id", "fiscal_year", "sale", 
       "employee_number", "hot", "rate", 
@@ -473,15 +543,38 @@ public class ClassicModelsRepository {
       (
         ?, ?, ?, ?, ?, ? :: "public"."rate_type", 
         ? :: "public"."vat_type", ?, ?, ?
-      ) on conflict do nothing           
+      ) on conflict do nothing    
+    
+    // 6.4, 6.5
+    insert into "public"."sale" (
+      "sale_id", "fiscal_year", "sale", 
+      "employee_number", "hot", "rate", 
+      "vat", "fiscal_month", "revenue_growth", 
+      "trend"
+    ) 
+    values 
+      (
+        ?, ?, ?, ?, default, ? :: "public"."rate_type", 
+        ? :: "public"."vat_type", ?, ?, default
+      ) on conflict do nothing
+    
+    // 6.6
+    insert into "public"."sale" (
+      "revenue_growth", "fiscal_month", 
+      "employee_number", "sale", "fiscal_year", 
+      "sale_id"
+    ) 
+    values 
+      (?, ?, ?, ?, ?, ?) on conflict do nothing    
     */
     public void insertOneSaleRecord() {
-        
+                
         System.out.println("EXAMPLE 6.1 (affected rows): "
                 + ctx.insertInto(SALE)
                         .values(
                                 new SaleRecord()
-                                        .value1(ctx.select(SALE_SEQ.nextval()).fetchOneInto(Long.class))
+                                        .value1(++Sale_Id)
+                                        // .value1(ctx.select(SALE_SEQ.nextval()).fetchOneInto(Long.class))
                                         .value2(2005)
                                         .value3(3223.12)
                                         .value4(1504L)
@@ -493,11 +586,12 @@ public class ClassicModelsRepository {
                         .onDuplicateKeyIgnore()
                         .execute()
         );
-        
+                
         System.out.println("EXAMPLE 6.2 (affected rows): "
                 + ctx.insertInto(SALE)
                         .values(new SaleRecord()
-                                .values(ctx.select(SALE_SEQ.nextval()).fetchOneInto(Long.class),
+                                .values(++Sale_Id,
+                                        // ctx.select(SALE_SEQ.nextval()).fetchOneInto(Long.class),
                                         2004, 143.31, 1370L, null, 
                                         RateType.SILVER, VatType.MAX, 3, 14.55, null)
                                 .valuesRow().fields())
@@ -510,7 +604,7 @@ public class ClassicModelsRepository {
         //         null, RateType.SILVER, VatType.MAX, 3, 14.55, null);
         /* or, creare a SaleRecord via constructor and setters */
         SaleRecord sr = new SaleRecord();
-        sr.setSaleId(Math.round(Math.random() * 10000));    // or, sr.set(SALE.SALE_ID, Math.round(Math.random() * 10000));
+        sr.setSaleId(++Sale_Id);                            // or, sr.set(SALE.SALE_ID, ++Sale_Id);
         sr.setFiscalYear(2003);                             // or, sr.set(SALE.FISCAL_YEAR, 2003);
         sr.setSale(3443.22);                                // or, sr.set(SALE.SALE_, 3443.22);        
         sr.setEmployeeNumber(1370L);                        // or, sr.set(SALE.EMPLOYEE_NUMBER, 1370L);                   
@@ -524,7 +618,7 @@ public class ClassicModelsRepository {
                         .execute()
         );
 
-        sr.setSaleId(Math.round(Math.random() * 10000));
+        sr.setSaleId(++Sale_Id);
         System.out.println("EXAMPLE 6.4 (affected rows): "
                 + ctx.insertInto(SALE)
                         .values(sr.getSaleId(), sr.getFiscalYear(), sr.getSale(), sr.getEmployeeNumber(),
@@ -534,7 +628,7 @@ public class ClassicModelsRepository {
                         .execute()
         );
 
-        sr.setSaleId(Math.round(Math.random() * 10000));
+        sr.setSaleId(++Sale_Id);
         System.out.println("EXAMPLE 6.5 (affected rows): "
                 + ctx.insertInto(SALE)
                         .values(sr.value1(), sr.value2(), sr.value3(), sr.value4(),
@@ -544,7 +638,7 @@ public class ClassicModelsRepository {
                         .execute()
         );
 
-        sr.setSaleId(Math.round(Math.random() * 10000));
+        sr.setSaleId(++Sale_Id);
         System.out.println("EXAMPLE 6.6 (affected rows): "
                 + ctx.insertInto(SALE, sr.field9(), sr.field8(), sr.field4(), sr.field3(), sr.field2(), sr.field1())
                         .values(sr.value9(), sr.value8(), sr.value4(), sr.value3(), sr.value2(), sr.value1())
@@ -552,7 +646,7 @@ public class ClassicModelsRepository {
                         .execute()
         );
 
-        sr.setSaleId(Math.round(Math.random() * 10000));
+        sr.setSaleId(++Sale_Id);
         System.out.println("EXAMPLE 6.7 (affected rows): "
                 + ctx.insertInto(SALE, sr.fields())
                         .values(sr.valuesRow().fields())
@@ -560,7 +654,7 @@ public class ClassicModelsRepository {
                         .execute()
         );
 
-        sr.setSaleId(Math.round(Math.random() * 10000));
+        sr.setSaleId(++Sale_Id);
         System.out.println("EXAMPLE 6.8 (affected rows): "
                 + ctx.insertInto(SALE, sr.fieldsRow().fields())
                         .values(sr.valuesRow().fields())
@@ -570,9 +664,7 @@ public class ClassicModelsRepository {
     }
 
     // EXAMPLE 7
-    /*
-    select nextval('"public"."sale_seq"') from generate_series(?, ?) as generate_series
-
+    /*   
     insert into "public"."sale" (
       "sale_id", "fiscal_year", "sale", 
       "employee_number", "hot", "rate", 
@@ -590,13 +682,11 @@ public class ClassicModelsRepository {
       ) on conflict do nothing    
      */
     public void insertTwoSaleRecord() {
-
-        List<Long> nextIds = ctx.fetch(SALE_SEQ.nextvals(2)).into(Long.class);
         
         // Record10<Long, Integer, Double, Long, Boolean, SaleRate, SaleVat, Integer, Double, String>
-        SaleRecord sr1 = new SaleRecord(nextIds.get(0), 2003, 3443.22, 1370L,
+        SaleRecord sr1 = new SaleRecord(++Sale_Id, 2003, 3443.22, 1370L,
                 null, RateType.SILVER, VatType.MAX, 3, 14.55, null);
-        SaleRecord sr2 = new SaleRecord(nextIds.get(1), 2005, 1221.12, 1504L,
+        SaleRecord sr2 = new SaleRecord(++Sale_Id, 2005, 1221.12, 1504L,
                 null, RateType.SILVER, VatType.MAX, 5, 22.11, null);
 
         System.out.println("EXAMPLE 7 (affected rows): "
@@ -610,7 +700,7 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 8  
     /*
-    // 8.1
+    // 8.1, 8.4.3
     insert into "public"."sale" (
       "sale_id", "fiscal_year", "sale", 
       "employee_number", "hot", "rate", 
@@ -629,18 +719,69 @@ public class ClassicModelsRepository {
       (
         ?, ?, ?, ?, ?, ? :: "public"."rate_type", 
         ? :: "public"."vat_type", ?, ?, ?
+      )
+    
+    // 8.2
+    insert into "public"."sale" (
+      "sale_id", "fiscal_year", "sale", 
+      "employee_number", "fiscal_month", 
+      "revenue_growth"
+    ) 
+    values 
+      (?, ?, ?, ?, ?, ?), 
+      (?, ?, ?, ?, ?, ?), 
+      (?, ?, ?, ?, ?, ?) on conflict do nothing
+    
+    // 8.3, 8.4.1
+    insert into "public"."sale" (
+      "sale_id", "fiscal_year", "sale", 
+      "employee_number", "hot", "rate", 
+      "vat", "fiscal_month", "revenue_growth", 
+      "trend"
+    ) 
+    values 
+      (
+        ?, ?, ?, ?, ?, ? :: "public"."rate_type", 
+        ? :: "public"."vat_type", ?, ?, ?
+      ), 
+      (
+        ?, ?, ?, ?, ?, ? :: "public"."rate_type", 
+        ? :: "public"."vat_type", ?, ?, ?
+      ), 
+      (
+        ?, ?, ?, ?, ?, ? :: "public"."rate_type", 
+        ? :: "public"."vat_type", ?, ?, ?
+      ) on conflict do nothing
+    
+    // 8.4.2
+    insert into "public"."sale" (
+      "fiscal_year", "sale", "employee_number", 
+      "rate", "vat", "fiscal_month", "revenue_growth"
+    ) 
+    values 
+      (
+        ?, ?, ?, ? :: "public"."rate_type", ? :: "public"."vat_type", 
+        ?, ?
+      ), 
+      (
+        ?, ?, ?, ? :: "public"."rate_type", ? :: "public"."vat_type", 
+        ?, ?
+      ), 
+      (
+        ?, ?, ?, ? :: "public"."rate_type", ? :: "public"."vat_type", 
+        ?, ?
       )    
      */
     public void insertCollectionOfSaleRecord() {
 
         // consider this collection of SaleRecord
         Collection<SaleRecord> listOfRecord
-                = List.of(new SaleRecord(Math.round(Math.random() * 100000), 2003, 3443.22, 1370L,
-                        null, RateType.SILVER, VatType.MAX, 3, 14.55, null),
-                        new SaleRecord(Math.round(Math.random() * 100000), 2005, 1221.12, 1504L,
-                                null, RateType.SILVER, VatType.MAX, 5, 22.11, "UP"),
-                        new SaleRecord(Math.round(Math.random() * 100000), 2005, 1221.12, 1504L,
-                                null, RateType.SILVER, VatType.MAX, 7, 65.59, null));
+                = List.of(new SaleRecord(++Sale_Id, 
+                                2003, 3443.22, 1370L, null, RateType.SILVER, VatType.MAX, 3, 14.55, null),
+                        new SaleRecord(++Sale_Id, 
+                                2005, 1221.12, 1504L, null, RateType.SILVER, VatType.MAX, 5, 22.11, "UP"),
+                        new SaleRecord(++Sale_Id, 
+                                2005, 1221.12, 1504L, null, RateType.SILVER, VatType.MAX, 7, 65.59, null));
 
         /* First Approach */
         // InsertValuesStepN<SaleRecord>
@@ -717,11 +858,11 @@ public class ClassicModelsRepository {
         // collect POJO in RowN
         List<Sale> sales
                 = List.of(
-                        new Sale(Math.round(Math.random() * 100000), 2003, 3443.22, 1370L,
+                        new Sale(++Sale_Id, 2003, 3443.22, 1370L,
                                 null, RateType.SILVER, VatType.MAX, 3, 14.55, null),
-                        new Sale(Math.round(Math.random() * 100000), 2005, 1221.12, 1504L,
+                        new Sale(++Sale_Id, 2005, 1221.12, 1504L,
                                 null, RateType.SILVER, VatType.MAX, 5, 22.11, "UP"),
-                        new Sale(Math.round(Math.random() * 100000), 2005, 1221.12, 1504L,
+                        new Sale(++Sale_Id, 2005, 1221.12, 1504L,
                                 true, RateType.SILVER, VatType.MAX, 7, 65.59, null));
 
         //List<Row10<Long, Integer, Double, Long, Boolean, SaleRate, SaleVat, Integer, Double, String>>
@@ -751,7 +892,41 @@ public class ClassicModelsRepository {
       "fiscal_month", "revenue_growth"
     ) 
     values 
-      (?, ?, ?, ?, ?) returning "public"."sale"."sale_id"    
+      (?, ?, ?, ?, ?) returning "public"."sale"."sale_id"
+    
+    // 9.2, 9.4, 9.5
+    insert into "public"."sale" (
+      "sale_id", "fiscal_year", "sale", 
+      "employee_number", "hot", "rate", 
+      "vat", "fiscal_month", "revenue_growth", 
+      "trend"
+    ) 
+    values 
+      (
+        ?, ?, ?, ?, ?, ? :: "public"."rate_type", 
+        ? :: "public"."vat_type", ?, ?, ?
+      ) returning "public"."sale"."sale_id"
+    
+    // 9.3, 9.6
+    insert into "public"."sale" (
+      "sale_id", "fiscal_year", "sale", 
+      "employee_number", "hot", "rate", 
+      "vat", "fiscal_month", "revenue_growth", 
+      "trend"
+    ) 
+    values 
+      (
+        ?, ?, ?, ?, ?, ? :: "public"."rate_type", 
+        ? :: "public"."vat_type", ?, ?, ?
+      )
+    
+    // 9.7
+    insert into "public"."sale" (
+      "fiscal_year", "sale", "employee_number", 
+      "fiscal_month", "revenue_growth"
+    ) 
+    values 
+      (?, ?, ?, ?, ?)    
      */
     public void insertNewRecord() {
 
@@ -764,7 +939,7 @@ public class ClassicModelsRepository {
         );
 
         // This is the Sale POJO generated by jOOQ
-        Sale sale = new Sale(Math.round(Math.random() * 100000), 2005, 343.22, 1504L,
+        Sale sale = new Sale(++Sale_Id, 2005, 343.22, 1504L,
                 null, RateType.SILVER, VatType.MAX, 4, 15.55, null);
         System.out.println("EXAMPLE 9.2 (affected rows): "
                 + ctx.newRecord(SALE, sale).insert()
@@ -772,14 +947,14 @@ public class ClassicModelsRepository {
 
         SaleRecord sr = new SaleRecord();
         sr.from(sale);
-        sr.setSaleId(Math.round(Math.random() * 10000)); // set a new id
+        sr.setSaleId(++Sale_Id); // set a new id
         System.out.println("EXAMPLE 9.3 (affected rows): "
                 + ctx.insertInto(SALE)
                         .values(sr.valuesRow().fields())
                         .execute()
         );
         
-        sr.setSaleId(Math.round(Math.random() * 10000)); // set a new id
+        sr.setSaleId(++Sale_Id); // set a new id
         sr.attach(ctx.configuration()); // attach the record to the current configuration
         System.out.println("EXAMPLE 9.4 (affected rows): "
                 +sr.insert()
@@ -789,7 +964,7 @@ public class ClassicModelsRepository {
         SalePart salePart = new SalePart(5644.32, 1370L);
         System.out.println("EXAMPLE 9.5 (affected rows): "
                 + ctx.newRecord(SALE)
-                        .values(Math.round(Math.random() * 100000), 2004,
+                        .values(++Sale_Id, 2004,
                                 salePart.getSale(), salePart.getEmployeeNumber(),
                                 null, RateType.SILVER, VatType.MAX, 4, 12.33, null)
                         .insert()
@@ -800,7 +975,7 @@ public class ClassicModelsRepository {
         srp.setFiscalYear(2004);     // fiscal_year cannot be null and doesn't have a default value
         srp.setFiscalMonth(4);       // fiscal_month cannot be null and doesn't have a default value
         srp.setRevenueGrowth(12.22); // revenue_growth cannot be null and doesn't have a default value
-        srp.setSaleId(Math.round(Math.random() * 10000));
+        srp.setSaleId(++Sale_Id);
         System.out.println("EXAMPLE 9.6 (affected rows): "
                 + ctx.insertInto(SALE)
                         .values(srp.valuesRow().fields())
@@ -826,7 +1001,20 @@ public class ClassicModelsRepository {
       (
         ?, ?, ?, ?, ?, ? :: "public"."rate_type", 
         ? :: "public"."vat_type", ?, ?, ?
-      ) returning "public"."sale"."sale_id"    
+      ) returning "public"."sale"."sale_id"
+    
+    // 10.2
+    insert into "public"."sale" (
+      "sale_id", "fiscal_year", "sale", 
+      "employee_number", "hot", "rate", 
+      "vat", "fiscal_month", "revenue_growth", 
+      "trend"
+    ) 
+    values 
+      (
+        ?, ?, ?, ?, ?, ? :: "public"."rate_type", 
+        ? :: "public"."vat_type", ?, ?, ?
+      )    
      */
     public void insertRecordAfterResettingPK() {
 
@@ -839,7 +1027,8 @@ public class ClassicModelsRepository {
         // resets both changed flag that tracks record changes and value
         // record.reset(SALE.SALE_ID); 
         
-        record.setSaleId(ctx.select(SALE_SEQ.nextval()).fetchOneInto(Long.class));
+        record.setSaleId(++Sale_Id);
+        // record.setSaleId(ctx.select(SALE_SEQ.nextval()).fetchOneInto(Long.class));
         System.out.println("EXAMPLE 10.1 (affected rows): "
                 + record.insert()
         );
@@ -850,7 +1039,8 @@ public class ClassicModelsRepository {
         // resets both changed flag that tracks record changes and value
         sr.reset(SALE.SALE_ID); 
         
-        sr.setSaleId(ctx.select(SALE_SEQ.nextval()).fetchOneInto(Long.class));
+        sr.setSaleId(++Sale_Id);
+        // sr.setSaleId(ctx.select(SALE_SEQ.nextval()).fetchOneInto(Long.class));
         System.out.println("EXAMPLE 10.2 (affected rows): "
                 + ctx.insertInto(SALE)
                         .values(sr.valuesRow().fields())
@@ -859,31 +1049,55 @@ public class ClassicModelsRepository {
     }
 
     // EXAMPLE 11    
+    /*
+    // 11.1
+    insert into "public"."sale" (
+      "sale_id", "fiscal_year", "sale", 
+      "employee_number", "hot", "rate", 
+      "vat", "fiscal_month", "revenue_growth", 
+      "trend"
+    ) 
+    values 
+      (
+        (
+          random() * ?
+        ), 
+        ?, 
+        round(?), 
+        ?, 
+        default, 
+        ? :: "public"."rate_type", 
+        ? :: "public"."vat_type", 
+        ?, 
+        ?, 
+        default
+      ) on conflict do nothing
+    
+    // 11.2
+    insert into "public"."sale" (
+      "sale_id", "fiscal_year", "sale", 
+      "employee_number", "hot", "rate", 
+      "vat", "fiscal_month", "revenue_growth", 
+      "trend"
+    ) 
+    values 
+      (
+        (
+          random() * ?
+        ), 
+        ?, 
+        "public"."get_avg_sale"("len_from" := ?, "len_to" := ?), 
+        ?, 
+        default, 
+        ? :: "public"."rate_type", 
+        ? :: "public"."vat_type", 
+        ?, 
+        ?, 
+        default
+      ) on conflict do nothing    
+    */
     public void usingFunctionsInInsert() {
-
-        /*
-        insert into "public"."sale" (
-          "sale_id", "fiscal_year", "sale", 
-          "employee_number", "hot", "rate", 
-          "vat", "fiscal_month", "revenue_growth", 
-          "trend"
-        ) 
-        values 
-          (
-            (
-              random() * ?
-            ), 
-            ?, 
-            round(?), 
-            ?, 
-            default, 
-            ? :: "public"."rate_type", 
-            ? :: "public"."vat_type", 
-            ?, 
-            ?, 
-            default
-          ) on conflict do nothing        
-         */
+        
         System.out.println("EXAMPLE 11.1 (affected rows): "
                 + ctx.insertInto(SALE)
                         .values(rand().mul(1000), 2004, round(21112.23), 1504L,
@@ -892,30 +1106,7 @@ public class ClassicModelsRepository {
                         .onDuplicateKeyIgnore()
                         .execute()
         );
-
-        /*
-        insert into "public"."sale" (
-          "sale_id", "fiscal_year", "sale", 
-          "employee_number", "hot", "rate", 
-          "vat", "fiscal_month", "revenue_growth", 
-          "trend"
-        ) 
-        values 
-          (
-            (
-              random() * ?
-            ), 
-            ?, 
-            "public"."get_avg_sale"("len_from" := ?, "len_to" := ?), 
-            ?, 
-            default, 
-            ? :: "public"."rate_type", 
-            ? :: "public"."vat_type", 
-            ?, 
-            ?, 
-            default
-          ) on conflict do nothing        
-         */
+    
         System.out.println("EXAMPLE 11.2 (affected rows): "
                 + ctx.insertInto(SALE)
                         .values(rand().mul(1000), 2005, getAvgSale(1000, 5000), 1370,
@@ -924,7 +1115,6 @@ public class ClassicModelsRepository {
                         .onDuplicateKeyIgnore()
                         .execute()
         );
-
     }
 
     // EXAMPLE 12
@@ -948,7 +1138,7 @@ public class ClassicModelsRepository {
         Department department = new Department(); // jOOQ POJO
         department.setName("IT");
         department.setOfficeCode("2");        
-        department.setCode(ThreadLocalRandom.current().nextInt(10000, 20000));
+        department.setCode(ThreadLocalRandom.current().nextInt(10000, 20000)); // random code
 
         department.setPhone("+03 331 443");
 
