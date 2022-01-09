@@ -29,6 +29,7 @@ import static org.jooq.impl.DSL.choose;
 import static org.jooq.impl.DSL.coalesce;
 import static org.jooq.impl.DSL.default_;
 import static org.jooq.impl.DSL.inline;
+import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.rand;
 import static org.jooq.impl.DSL.round;
 import static org.jooq.impl.DSL.row;
@@ -44,8 +45,13 @@ public class ClassicModelsRepository {
 
     private final DSLContext ctx;
 
+    private Long Order_Id;
+    
     public ClassicModelsRepository(DSLContext ctx) {
         this.ctx = ctx;
+        
+        // avoid duplicate keys
+        Order_Id = ctx.select(max(ORDER.ORDER_ID)).from(ORDER).fetchOneInto(Long.class) + 100;
     }
 
     // EXAMPLE 1
@@ -128,7 +134,7 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 2.1 (affected rows): "
                 + ctx.insertInto(ORDER) // InsertSetStep<OrderRecord>
-                        .values(Math.round(Math.random() * 1000), // random primary key
+                        .values(++Order_Id, // computed primary key
                                 LocalDate.of(2003, 2, 12), LocalDate.of(2003, 3, 1),
                                 LocalDate.of(2003, 2, 27), "Shipped",
                                 "New order inserted ...", 363L, 314.44)
@@ -140,7 +146,7 @@ public class ClassicModelsRepository {
                 + // InsertValuesStep8<OrderRecord, Long, String, LocalDate, LocalDate, LocalDate, String, Long, BigDecimal>
                 ctx.insertInto(ORDER, ORDER.ORDER_ID, ORDER.COMMENTS, ORDER.ORDER_DATE, ORDER.REQUIRED_DATE,
                         ORDER.SHIPPED_DATE, ORDER.STATUS, ORDER.CUSTOMER_NUMBER, ORDER.AMOUNT)
-                        .values(Math.round(Math.random() * 1000), // random primary key
+                        .values(++Order_Id, // computed primary key
                                 "New order inserted ...", LocalDate.of(2003, 2, 12),
                                 LocalDate.of(2003, 3, 1), LocalDate.of(2003, 2, 27),
                                 "Shipped", 363L, BigDecimal.valueOf(314.44))
@@ -152,7 +158,7 @@ public class ClassicModelsRepository {
                 + ctx.insertInto(ORDER) // InsertSetStep<OrderRecord>
                         .columns(ORDER.ORDER_ID, ORDER.COMMENTS, ORDER.ORDER_DATE, ORDER.REQUIRED_DATE,
                                 ORDER.SHIPPED_DATE, ORDER.STATUS, ORDER.CUSTOMER_NUMBER, ORDER.AMOUNT)
-                        .values(Math.round(Math.random() * 1000), // random primary key
+                        .values(++Order_Id, // computed primary key
                                 "New order inserted ...", LocalDate.of(2003, 2, 12),
                                 LocalDate.of(2003, 3, 1), LocalDate.of(2003, 2, 27),
                                 "Shipped", 363L, BigDecimal.valueOf(314.44))
@@ -253,15 +259,15 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 4.1 (affected rows): "
                 + ctx.insertInto(ORDER) // InsertSetStep<OrderRecord>
-                        .values(Math.round(Math.random() * 100),
+                        .values(++Order_Id,
                                 LocalDate.of(2004, 10, 22), LocalDate.of(2004, 10, 23),
                                 LocalDate.of(2004, 10, 23), "Shipped",
                                 "New order inserted ...", 363L, BigDecimal.valueOf(314.44))
-                        .values(Math.round(Math.random() * 1000),
+                        .values(++Order_Id,
                                 LocalDate.of(2003, 12, 2), LocalDate.of(2003, 1, 3),
                                 LocalDate.of(2003, 2, 26), "Resolved",
                                 "Important order ...", 128L, BigDecimal.valueOf(125.55))
-                        .values(Math.round(Math.random() * 10000),
+                        .values(++Order_Id,
                                 LocalDate.of(2005, 12, 12), LocalDate.of(2005, 12, 23),
                                 LocalDate.of(2005, 12, 22), "On Hold",
                                 "Order of client ...", 181L, BigDecimal.valueOf(245.53))
@@ -273,15 +279,15 @@ public class ClassicModelsRepository {
                 + // InsertValuesStep7<OrderRecord, String, LocalDate, LocalDate, LocalDate, String, Long, BigDecimal>
                 ctx.insertInto(ORDER, ORDER.ORDER_ID, ORDER.COMMENTS, ORDER.ORDER_DATE, ORDER.REQUIRED_DATE,
                         ORDER.SHIPPED_DATE, ORDER.STATUS, ORDER.CUSTOMER_NUMBER, ORDER.AMOUNT)
-                        .values(Math.round(Math.random() * 100),
+                        .values(++Order_Id,
                                 "New order inserted ...", LocalDate.of(2004, 10, 22),
                                 LocalDate.of(2004, 10, 23), LocalDate.of(2004, 10, 23),
                                 "Shipped", 363L, BigDecimal.valueOf(314.44))
-                        .values(Math.round(Math.random() * 1000),
+                        .values(++Order_Id,
                                 "Important order ...", LocalDate.of(2003, 12, 2),
                                 LocalDate.of(2003, 1, 3), LocalDate.of(2003, 2, 26),
                                 "Resolved", 128L, BigDecimal.valueOf(125.55))
-                        .values(Math.round(Math.random() * 10000),
+                        .values(++Order_Id,
                                 "Order of client ...", LocalDate.of(2005, 12, 12),
                                 LocalDate.of(2005, 12, 23), LocalDate.of(2005, 12, 22),
                                 "On Hold", 181L, BigDecimal.valueOf(245.53))
@@ -293,15 +299,15 @@ public class ClassicModelsRepository {
                 + ctx.insertInto(ORDER) // InsertSetStep<OrderRecord>
                         .columns(ORDER.ORDER_ID, ORDER.COMMENTS, ORDER.ORDER_DATE, ORDER.REQUIRED_DATE,
                                 ORDER.SHIPPED_DATE, ORDER.STATUS, ORDER.CUSTOMER_NUMBER, ORDER.AMOUNT)
-                        .values(Math.round(Math.random() * 100),
+                        .values(++Order_Id,
                                 "New order inserted ...", LocalDate.of(2004, 10, 22),
                                 LocalDate.of(2004, 10, 23), LocalDate.of(2004, 10, 23),
                                 "Shipped", 363L, BigDecimal.valueOf(314.44))
-                        .values(Math.round(Math.random() * 1000),
+                        .values(++Order_Id,
                                 "Important order ...", LocalDate.of(2003, 12, 2),
                                 LocalDate.of(2003, 1, 3), LocalDate.of(2003, 2, 26),
                                 "Resolved", 128L, BigDecimal.valueOf(125.55))
-                        .values(Math.round(Math.random() * 10000),
+                        .values(++Order_Id,
                                 "Order of client ...", LocalDate.of(2005, 12, 12),
                                 LocalDate.of(2005, 12, 23), LocalDate.of(2005, 12, 22),
                                 "On Hold", 181L, BigDecimal.valueOf(245.53))
@@ -353,7 +359,7 @@ public class ClassicModelsRepository {
                 + ctx.insertInto(SALE)
                         .values(
                                 new SaleRecord()
-                                        .value1(null)
+                                        //.value1(null) // skip ID field
                                         .value2(2005)
                                         .value3(3223.12)
                                         .value4(1504L)
@@ -784,7 +790,7 @@ public class ClassicModelsRepository {
         Department department = new Department(); // jOOQ POJO
         department.setName("IT");
         department.setOfficeCode("2");
-        department.setCode(ThreadLocalRandom.current().nextInt(10000, 20000));
+        department.setCode(ThreadLocalRandom.current().nextInt(10000, 20000)); // random code
         
         department.setPhone("+03 331 443");
 
