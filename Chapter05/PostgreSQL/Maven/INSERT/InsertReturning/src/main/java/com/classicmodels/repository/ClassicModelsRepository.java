@@ -1,5 +1,6 @@
 package com.classicmodels.repository;
 
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import static jooq.generated.Sequences.MANAGER_SEQ;
 import static jooq.generated.tables.Customer.CUSTOMER;
@@ -104,10 +105,13 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 3 (affected rows): "
                 + ctx.insertInto(CUSTOMERDETAIL)
                         .values(ctx.insertInto(CUSTOMER)
-                                .values(default_(), "Ltd. AirRoads - " + Math.random(), 
-                                        "Kyle", "Doyle", "+ 44 321 321", default_(), default_(), default_())
+                                .values(default_(),
+                                        UUID.randomUUID().toString(), // random customer_name
+                                        "Kyle", "Doyle", "+ 44 321 321", 
+                                        default_(), default_(), default_())
                                 .returningResult(CUSTOMER.CUSTOMER_NUMBER).fetchOne().value1(),
-                                "No. 14 Avenue - " + Math.random(), default_(), "Los Angeles", default_(), default_(), "USA")
+                                UUID.randomUUID().toString(), // random address_line_first
+                                default_(), "Los Angeles", default_(), default_(), "USA")
                         .execute()
         );
     }
