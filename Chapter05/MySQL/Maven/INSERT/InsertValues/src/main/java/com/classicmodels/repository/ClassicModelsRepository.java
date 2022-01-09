@@ -256,7 +256,7 @@ public class ClassicModelsRepository {
       (?, ?, ?, ?, ?, ?, ?, ?)   
      */
     public void insertMultipleOrderManualKey() {
-
+        
         System.out.println("EXAMPLE 4.1 (affected rows): "
                 + ctx.insertInto(ORDER) // InsertSetStep<OrderRecord>
                         .values(++Order_Id,
