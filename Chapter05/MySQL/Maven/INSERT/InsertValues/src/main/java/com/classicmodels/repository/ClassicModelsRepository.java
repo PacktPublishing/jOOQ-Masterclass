@@ -343,7 +343,7 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 6
     /*
-    // 6.1
+    // 6.1, 6.2, 6.3, 6.7, 6.8
     insert into `classicmodels`.`sale` (
       `sale_id`, `fiscal_year`, `sale`, 
       `employee_number`, `hot`, `rate`, 
@@ -352,6 +352,27 @@ public class ClassicModelsRepository {
     ) 
     values 
       (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)    
+    
+    // 6.4, 6.5
+    insert into `classicmodels`.`sale` (
+      `sale_id`, `fiscal_year`, `sale`, 
+      `employee_number`, `hot`, `rate`, 
+      `vat`, `fiscal_month`, `revenue_growth`, 
+      `trend`
+    ) 
+    values 
+      (
+        ?, ?, ?, ?, default, ?, ?, ?, ?, default
+      )
+    
+    // 6.6
+    insert into `classicmodels`.`sale` (
+      `revenue_growth`, `fiscal_month`, 
+      `employee_number`, `sale`, `fiscal_year`, 
+      `sale_id`
+    ) 
+    values 
+      (?, ?, ?, ?, ?, ?)   
      */
     public void insertOneSaleRecord() {
 
@@ -462,7 +483,7 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 8  
     /*
-    // 8.1
+    // 8.1, 8.3, 8.4.1, 8.4.3
     insert into `classicmodels`.`sale` (
       `sale_id`, `fiscal_year`, `sale`, 
       `employee_number`, `hot`, `rate`, 
@@ -473,6 +494,27 @@ public class ClassicModelsRepository {
       (?, ?, ?, ?, ?, ?, ?, ?, ?, ?), 
       (?, ?, ?, ?, ?, ?, ?, ?, ?, ?), 
       (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)    
+    
+    // 8.2
+    insert into `classicmodels`.`sale` (
+      `sale_id`, `fiscal_year`, `sale`, 
+      `employee_number`, `fiscal_month`, 
+      `revenue_growth`
+    ) 
+    values 
+      (?, ?, ?, ?, ?, ?), 
+      (?, ?, ?, ?, ?, ?), 
+      (?, ?, ?, ?, ?, ?)
+    
+    // 8.4.2
+    insert into `classicmodels`.`sale` (
+      `fiscal_year`, `sale`, `employee_number`, 
+      `rate`, `vat`, `fiscal_month`, `revenue_growth`
+    ) 
+    values 
+      (?, ?, ?, ?, ?, ?, ?), 
+      (?, ?, ?, ?, ?, ?, ?), 
+      (?, ?, ?, ?, ?, ?, ?)    
      */
     public void insertCollectionOfSaleRecord() {
 
@@ -587,13 +629,32 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 9
     /*
-    // 9.1
+    // 9.1, 9.7
     insert into `classicmodels`.`sale` (
       `fiscal_year`, `sale`, `employee_number`, 
       `fiscal_month`, `revenue_growth`
     ) 
     values 
       (?, ?, ?, ?, ?)    
+    
+    // 9.2, 9.4
+    insert into `classicmodels`.`sale` (
+      `fiscal_year`, `sale`, `employee_number`, 
+      `hot`, `rate`, `vat`, `fiscal_month`, 
+      `revenue_growth`, `trend`
+    ) 
+    values 
+      (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    
+    // 9.3, 9.5, 9.6
+    insert into `classicmodels`.`sale` (
+      `sale_id`, `fiscal_year`, `sale`, 
+      `employee_number`, `hot`, `rate`, 
+      `vat`, `fiscal_month`, `revenue_growth`, 
+      `trend`
+    ) 
+    values 
+      (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)            
      */
     public void insertNewRecord() {
 
@@ -659,7 +720,17 @@ public class ClassicModelsRepository {
       `revenue_growth`, `trend`
     ) 
     values 
-      (?, ?, ?, ?, ?, ?, ?, ?, ?)        
+      (?, ?, ?, ?, ?, ?, ?, ?, ?)  
+    
+    // 10.2
+    insert into `classicmodels`.`sale` (
+      `sale_id`, `fiscal_year`, `sale`, 
+      `employee_number`, `hot`, `rate`, 
+      `vat`, `fiscal_month`, `revenue_growth`, 
+      `trend`
+    ) 
+    values 
+      (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)    
      */
     public void insertRecordAfterResettingPK() {
 
@@ -690,31 +761,51 @@ public class ClassicModelsRepository {
     }
 
     // EXAMPLE 11    
+    /*
+    // 11.1
+    insert ignore into `classicmodels`.`sale` (
+      `sale_id`, `fiscal_year`, `sale`, 
+      `employee_number`, `hot`, `rate`, 
+      `vat`, `fiscal_month`, `revenue_growth`, 
+      `trend`
+    ) 
+    values 
+      (
+        (
+          rand() * ?
+        ), 
+        ?, 
+        round(?), 
+        ?, 
+        default, 
+        ?, 
+        ?, 
+        default, 
+        default, 
+        default
+      )    
+    
+    // 11.2
+    insert ignore into `classicmodels`.`customer` (
+      `customer_number`, `customer_name`, 
+      `contact_last_name`, `contact_first_name`, 
+      `phone`, `sales_rep_employee_number`, 
+      `credit_limit`, `first_buy_date`
+    ) 
+    values 
+      (
+        ?, 
+        `classicmodels`.`customer_pgs`(?), 
+        ?, 
+        ?, 
+        ?, 
+        ?, 
+        ?, 
+        default
+      )    
+    */
     public void usingFunctionsInInsert() {
-
-        /*
-        insert ignore into `classicmodels`.`sale` (
-          `sale_id`, `fiscal_year`, `sale`, 
-          `employee_number`, `hot`, `rate`, 
-          `vat`, `fiscal_month`, `revenue_growth`, 
-          `trend`
-        ) 
-        values 
-          (
-            (
-              rand() * ?
-            ), 
-            ?, 
-            round(?), 
-            ?, 
-            default, 
-            ?, 
-            ?, 
-            default, 
-            default, 
-            default
-          )        
-         */
+       
         System.out.println("EXAMPLE 11.1 (affected rows): "
                 + ctx.insertInto(SALE)
                         .values(rand().mul(1000), 2004, round(21112.23), 1504L,
@@ -724,25 +815,6 @@ public class ClassicModelsRepository {
                         .execute()
         );
 
-        /*
-        insert ignore into `classicmodels`.`customer` (
-          `customer_number`, `customer_name`, 
-          `contact_last_name`, `contact_first_name`, 
-          `phone`, `sales_rep_employee_number`, 
-          `credit_limit`, `first_buy_date`
-        ) 
-        values 
-          (
-            ?, 
-            `classicmodels`.`customer_pgs`(?), 
-            ?, 
-            ?, 
-            ?, 
-            ?, 
-            ?, 
-            default
-          )
-         */
         System.out.println("EXAMPLE 11.2 (affected rows): "
                 + ctx.insertInto(CUSTOMER)
                         .values(1L, customerPgs(BigDecimal.valueOf(50000.00)), "Mark", "Farel",
