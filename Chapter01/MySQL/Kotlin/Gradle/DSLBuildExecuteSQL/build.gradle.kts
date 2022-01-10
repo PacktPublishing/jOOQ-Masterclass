@@ -35,16 +35,11 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("mysql:mysql-connector-java")
     implementation("org.flywaydb:flyway-core")        
-	testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
-
-tasks.withType<Test> {
-	useJUnitPlatform()
 }
-
 tasks.withType<KotlinCompile> {
-	kotlinOptions {
-		freeCompilerArgs = listOf("-Xjsr305=strict")
-		jvmTarget = "17"
-	}
+    kotlinOptions {
+        freeCompilerArgs = listOf("-Xjsr305=strict")
+        jvmTarget = "17"
+    }
 }
