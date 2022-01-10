@@ -51,7 +51,7 @@ public class ClassicModelsRepository {
         this.ctx = ctx;
         
         // avoid duplicate keys
-        Order_Id = ctx.select(max(ORDER.ORDER_ID)).from(ORDER).fetchOneInto(Long.class) + 100;
+        Order_Id = ctx.select(max(ORDER.ORDER_ID)).from(ORDER).fetchOneInto(Long.class) + 10000;
     }
 
     // EXAMPLE 1
