@@ -370,7 +370,7 @@ public class ClassicModelsRepository {
         );
 
         System.out.println("EXAMPLE 4.2 (affected rows): "
-                + // InsertValuesStep9<OfficeRecord, String, String, String, String, String, String, String, String, String>
+                + // InsertValuesStep10<OfficeRecord, String, String, String, String, String, String, String, String, String, Integer>
                 ctx.insertInto(OFFICE, OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.PHONE,
                         OFFICE.ADDRESS_LINE_FIRST, OFFICE.ADDRESS_LINE_SECOND, OFFICE.STATE,
                         OFFICE.COUNTRY, OFFICE.POSTAL_CODE, OFFICE.TERRITORY, OFFICE.INTERNAL_BUDGET)
@@ -391,7 +391,7 @@ public class ClassicModelsRepository {
         );
 
         System.out.println("EXAMPLE 4.3 (affected rows): "
-                + // InsertValuesStep9<OfficeRecord, String, String, String, String, String, String, String, String, String>
+                + // InsertValuesStep10<OfficeRecord, String, String, String, String, String, String, String, String, String, Integer>
                 ctx.insertInto(OFFICE)
                         .columns(OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.PHONE, OFFICE.ADDRESS_LINE_FIRST,
                                 OFFICE.ADDRESS_LINE_SECOND, OFFICE.STATE, OFFICE.COUNTRY, OFFICE.POSTAL_CODE,
@@ -681,7 +681,7 @@ public class ClassicModelsRepository {
                         new Sale(Sale_Id+=5, 2005, 1221.12, 1504L,
                                 true, "SILVER", "MAX", 7, 65.59, null));
 
-        //List<Row10<Long, Integer, Double, Long, Byte, SaleRate, SaleVat, Integer, Double, String>>
+        //List<Row10<Long, Integer, Double, Long, Boolean, String, String, Integer, Double, String>>
         var listOfSales
                 = sales.stream().collect(toRowList(
                         i -> val(i.getSaleId()), i -> val(i.getFiscalYear()), i -> val(i.getSale()),

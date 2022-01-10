@@ -455,7 +455,7 @@ public class ClassicModelsRepository {
         );
 
         System.out.println("EXAMPLE 4.2 (affected rows): "
-                + // InsertValuesStep7<OrderRecord, String, LocalDate, LocalDate, LocalDate, String, Long, BigDecimal>
+                + // InsertValuesStep8<OrderRecord, Long, String, LocalDate, LocalDate, LocalDate, String, Long, BigDecimal>
                 ctx.insertInto(ORDER, ORDER.ORDER_ID, ORDER.COMMENTS, ORDER.ORDER_DATE, ORDER.REQUIRED_DATE,
                         ORDER.SHIPPED_DATE, ORDER.STATUS, ORDER.CUSTOMER_NUMBER, ORDER.AMOUNT)
                         .values(++Order_Id,
@@ -794,7 +794,7 @@ public class ClassicModelsRepository {
         );
 
         /* Second Approach */
-        // InsertValuesStep4<SaleRecord, Long, Integer, Double, Long>
+        // InsertValuesStep6<SaleRecord, Long, Integer, Double, Long, Integer, Double>
         var insert2 = ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.SALE_, 
                 SALE.EMPLOYEE_NUMBER, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH);
         for (SaleRecord sr : listOfRecord) {

@@ -276,7 +276,7 @@ public class ClassicModelsRepository {
         );
 
         System.out.println("EXAMPLE 4.2 (affected rows): "
-                + // InsertValuesStep7<OrderRecord, String, LocalDate, LocalDate, LocalDate, String, Long, BigDecimal>
+                + // InsertValuesStep8<OrderRecord, Long, String, LocalDate, LocalDate, LocalDate, String, Long, BigDecimal>
                 ctx.insertInto(ORDER, ORDER.ORDER_ID, ORDER.COMMENTS, ORDER.ORDER_DATE, ORDER.REQUIRED_DATE,
                         ORDER.SHIPPED_DATE, ORDER.STATUS, ORDER.CUSTOMER_NUMBER, ORDER.AMOUNT)
                         .values(++Order_Id,
