@@ -99,6 +99,8 @@ jooq {
                         // Excludes match before includes, i.e. excludes have a higher priority.
                         excludes = '''\
                                     flyway_schema_history | concatenate | .*_master
+                                  | get_.* | refresh_top3_product | sale_price | split_part
+                                  | product_of_product_line | top_three_sales_per_employee
                                    ''' 
                         
                         // Schema version provider

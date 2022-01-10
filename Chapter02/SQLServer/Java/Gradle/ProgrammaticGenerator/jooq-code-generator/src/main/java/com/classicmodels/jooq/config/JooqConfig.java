@@ -30,7 +30,9 @@ public class JooqConfig {
                                 .withInputCatalog("classicmodels")
                                 .withInputSchema("dbo")
                                 .withIncludes(".*")
-                                .withExcludes("flyway_schema_history | concatenate | .*_master")
+                                .withExcludes("flyway_schema_history | concatenate | .*_master"
+                                         + " | get_.* | refresh_top3_product | sale_price | split_part"
+                                         + " | product_of_product_line | top_three_sales_per_employee")
                                 .withSchemaVersionProvider("SELECT MAX([version]) FROM [flyway_schema_history]")
                                 .withLogSlowQueriesAfterSeconds(20)
                         )

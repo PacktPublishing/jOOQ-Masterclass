@@ -33,7 +33,9 @@ public class JooqConfig {
                                         new Property().withKey("unqualifiedSchema").withValue("none"),
                                         new Property().withKey("defaultNameCase").withValue("as_is"))
                                 .withIncludes(".*")
-                                .withExcludes("flyway_schema_history | concatenate | .*_master")
+                                .withExcludes("flyway_schema_history | concatenate | .*_master"
+                                         + " | get_.* | refresh_top3_product | sale_price | split_part"
+                                         + " | product_of_product_line | top_three_sales_per_employee")
                                 .withSchemaVersionProvider("com.classicmodels.jooq.config.MySchemaVersionProvider")
                         )
                         .withGenerate(new Generate()
