@@ -3,6 +3,7 @@ package com.classicmodels.repository;
 import com.classicmodels.pojo.SalePart;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import static jooq.generated.tables.BankTransaction.BANK_TRANSACTION;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
 import static jooq.generated.tables.Office.OFFICE;
@@ -13,11 +14,13 @@ import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Productline.PRODUCTLINE;
 import static jooq.generated.tables.Productlinedetail.PRODUCTLINEDETAIL;
 import static jooq.generated.tables.Sale.SALE;
+import static jooq.generated.tables.Top3product.TOP3PRODUCT;
 import jooq.generated.tables.records.PaymentRecord;
 import org.jooq.DSLContext;
 import org.jooq.DeleteQuery;
 import org.jooq.conf.ExecuteWithoutWhere;
 import org.jooq.conf.Settings;
+import static org.jooq.impl.DSL.coalesce;
 import static org.jooq.impl.DSL.row;
 import static org.jooq.impl.DSL.select;
 import org.springframework.stereotype.Repository;
@@ -34,30 +37,37 @@ public class ClassicModelsRepository {
     }
 
     // EXAMPLE 1
-    /*
-    delete from
-      "public"."sale"
-    where
-     "public"."sale"."fiscal_year" = ?
-     */
-    public void deleteSale() {
+    public void simpleDeletes() {
 
+        // delete from "public"."sale" where "public"."sale"."fiscal_year" = ?
         System.out.println("EXAMPLE 1.1 (affected rows): "
                 + ctx.delete(SALE)
                         .where(SALE.FISCAL_YEAR.eq(2003))
                         .execute()
         );
 
+        // delete from "public"."sale" where "public"."sale"."fiscal_year" = ?
         System.out.println("EXAMPLE 1.2 (affected rows): "
                 + ctx.deleteFrom(SALE)
                         .where(SALE.FISCAL_YEAR.eq(2004))
                         .execute()
         );
 
+        // delete from "public"."sale" where "public"."sale"."fiscal_year" = ?
         DeleteQuery dq = ctx.deleteQuery(SALE);
         dq.addConditions(SALE.FISCAL_YEAR.eq(2005));
         // dq.execute();
         System.out.println("EXAMPLE 1.3 (query): " + dq.getSQL());
+
+        // delete from "public"."bank_transaction"
+        System.out.println("EXAMPLE 1.4 (affected rows): "
+                + ctx.deleteFrom(BANK_TRANSACTION).execute()
+        );
+
+        // delete from "public"."top3product"
+        System.out.println("EXAMPLE 1.5 (affected rows): "
+                + ctx.deleteFrom(TOP3PRODUCT).execute()
+        );
     }
 
     // EXAMPLE 2
@@ -369,6 +379,7 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 11
     /*
+    // 1
     delete from 
       "public"."orderdetail" 
     where 
@@ -378,106 +389,50 @@ public class ClassicModelsRepository {
         from 
           "public"."product" 
         where 
-          "public"."product"."product_line" = ?
+          (
+            "public"."product"."product_line" = ? 
+            or "public"."product"."product_line" = ?
+          )
       ) returning "public"."orderdetail"."product_id"
     
+    // 2
     delete from 
       "public"."product" 
     where 
-      "public"."product"."product_id" in (?, ?, ?, ...) returning "public"."product"."product_line"    
-    
+      "public"."product"."product_id" in (?, ?, ?,..., ?) returning "public"."product"."product_line"
+   
+    // 3
     delete from 
       "public"."productlinedetail" 
     where 
-      "public"."productlinedetail"."product_line" = ? returning "public"."productlinedetail"."product_line"
-
+      "public"."productlinedetail"."product_line" in (
+        ?, ?, ?, ... , ?
+      ) returning "public"."productlinedetail"."product_line"
+    
+    // 4
     delete from 
       "public"."productline" 
     where 
-      "public"."productline"."product_line" = ?
+      "public"."productline"."product_line" in (?, ?)    
      */
-    public void deleteCascadeReturningProductLineMotorcycles() {
+    public void deleteCascadeReturningProductLineMotorcyclesAndTrucksAndBuses() {
 
+        // Of course, even if this is possible, use it carefully!
         System.out.println("EXAMPLE 11 (affected rows): "
                 + ctx.delete(PRODUCTLINE)
-                        .where(PRODUCTLINE.PRODUCT_LINE.eq(
+                        .where(PRODUCTLINE.PRODUCT_LINE.in(
                                 ctx.delete(PRODUCTLINEDETAIL)
-                                        .where(PRODUCTLINEDETAIL.PRODUCT_LINE.eq(
+                                        .where(PRODUCTLINEDETAIL.PRODUCT_LINE.in(
                                                 ctx.delete(PRODUCT)
                                                         .where(PRODUCT.PRODUCT_ID.in(
                                                                 ctx.delete(ORDERDETAIL)
                                                                         .where(ORDERDETAIL.PRODUCT_ID.in(
                                                                                 select(PRODUCT.PRODUCT_ID).from(PRODUCT)
-                                                                                        .where(PRODUCT.PRODUCT_LINE.eq("Motorcycles"))))
+                                                                                        .where(PRODUCT.PRODUCT_LINE.eq("Motorcycles")
+                                                                                                .or(PRODUCT.PRODUCT_LINE.eq("Trucks and Buses")))))
                                                                         .returningResult(ORDERDETAIL.PRODUCT_ID).fetch()))
-                                                        .returningResult(PRODUCT.PRODUCT_LINE).fetch().get(0).value1()))
-                                        .returningResult(PRODUCTLINEDETAIL.PRODUCT_LINE).fetchOne().value1()))
-                        .execute()
-        );
-    }
-
-    // EXAMPLE 12
-    /*
-    delete from
-      "public"."orderdetail"
-    where
-      "public"."orderdetail"."order_id" in 
-      (
-        select
-          "public"."order"."order_id"
-        from
-          "public"."order"
-        where
-          "public"."order"."customer_number" = ?
-      ) 
-        returning 
-          "public"."orderdetail"."order_id"
-    
-    delete from
-      "public"."order"
-    where
-      "public"."order"."order_id" in (?, ?, ?, ... ,?) 
-    returning 
-      "public"."order"."customer_number"
-    
-    delete from
-      "public"."payment"
-    where
-      "public"."payment"."customer_number" = ? 
-    returning 
-      "public"."payment"."customer_number"
-    
-    delete from
-      "public"."customerdetail"
-    where
-      "public"."customerdetail"."customer_number" = ? 
-    returning 
-      "public"."customerdetail"."customer_number"
-    
-    delete from
-      "public"."customer"
-    where
-      "public"."customer"."customer_number" = ?
-     */
-    public void deleteCascadeReturningCustomer112() {
-
-        System.out.println("EXAMPLE 12 (affected rows): "
-                + ctx.delete(CUSTOMER)
-                        .where(CUSTOMER.CUSTOMER_NUMBER.eq(
-                                ctx.delete(CUSTOMERDETAIL)
-                                        .where(CUSTOMERDETAIL.CUSTOMER_NUMBER.eq(
-                                                ctx.delete(PAYMENT)
-                                                        .where(PAYMENT.CUSTOMER_NUMBER.eq(
-                                                                ctx.delete(ORDER)
-                                                                        .where(ORDER.ORDER_ID.in(
-                                                                                ctx.delete(ORDERDETAIL)
-                                                                                        .where(ORDERDETAIL.ORDER_ID.in(
-                                                                                                select(ORDER.ORDER_ID).from(ORDER)
-                                                                                                        .where(ORDER.CUSTOMER_NUMBER.eq(112L))))
-                                                                                        .returningResult(ORDERDETAIL.ORDER_ID).fetch()))
-                                                                        .returningResult(ORDER.CUSTOMER_NUMBER).fetch().get(0).value1()))
-                                                        .returningResult(PAYMENT.CUSTOMER_NUMBER).fetch().get(0).value1()))
-                                        .returningResult(CUSTOMERDETAIL.CUSTOMER_NUMBER).fetchOne().value1()))
+                                                        .returningResult(PRODUCT.PRODUCT_LINE).fetch()))
+                                        .returningResult(PRODUCTLINEDETAIL.PRODUCT_LINE).fetch()))
                         .execute()
         );
     }
