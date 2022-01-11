@@ -3,6 +3,7 @@ package com.classicmodels.repository;
 import com.classicmodels.pojo.SalePart;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import static jooq.generated.tables.BankTransaction.BANK_TRANSACTION;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
 import static jooq.generated.tables.Office.OFFICE;
@@ -10,6 +11,7 @@ import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Sale.SALE;
+import static jooq.generated.tables.Top3product.TOP3PRODUCT;
 import jooq.generated.tables.records.PaymentRecord;
 import org.jooq.DSLContext;
 import org.jooq.DeleteQuery;
@@ -30,31 +32,38 @@ public class ClassicModelsRepository {
         this.ctx = ctx;
     }
 
-    // EXAMPLE 1
-    /*
-    delete from
-      `classicmodels`.`sale`
-    where
-      `classicmodels`.`sale`.`fiscal_year` = ?
-     */
+    // EXAMPLE 1   
     public void deleteSale() {
 
+        // delete from `classicmodels`.`sale` where `classicmodels`.`sale`.`fiscal_year` = ?
         System.out.println("EXAMPLE 1.1 (affected rows): "
                 + ctx.delete(SALE)
                         .where(SALE.FISCAL_YEAR.eq(2003))
                         .execute()
         );
 
+        // delete from `classicmodels`.`sale` where `classicmodels`.`sale`.`fiscal_year` = ?
         System.out.println("EXAMPLE 1.2 (affected rows): "
                 + ctx.deleteFrom(SALE)
                         .where(SALE.FISCAL_YEAR.eq(2004))
                         .execute()
         );
 
+        // delete from `classicmodels`.`sale` where `classicmodels`.`sale`.`fiscal_year` = ?
         DeleteQuery dq = ctx.deleteQuery(SALE);
         dq.addConditions(SALE.FISCAL_YEAR.eq(2005));
         // dq.execute();
         System.out.println("EXAMPLE 1.3 (query): " + dq.getSQL());
+        
+        // delete from `classicmodels`.`bank_transaction`
+        System.out.println("EXAMPLE 1.4 (affected rows): "
+                + ctx.deleteFrom(BANK_TRANSACTION).execute()
+        );
+
+        // delete from `classicmodels`.`top3product`
+        System.out.println("EXAMPLE 1.5 (affected rows): "
+                + ctx.deleteFrom(TOP3PRODUCT).execute()
+        );
     }
 
     // EXAMPLE 2
