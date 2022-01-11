@@ -4,6 +4,7 @@ import com.classicmodels.pojo.SalePart;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
+import static jooq.generated.tables.BankTransaction.BANK_TRANSACTION;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
 import static jooq.generated.tables.Office.OFFICE;
@@ -14,6 +15,7 @@ import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Productline.PRODUCTLINE;
 import static jooq.generated.tables.Productlinedetail.PRODUCTLINEDETAIL;
 import static jooq.generated.tables.Sale.SALE;
+import static jooq.generated.tables.Top3product.TOP3PRODUCT;
 import jooq.generated.tables.records.PaymentRecord;
 import org.jooq.DSLContext;
 import org.jooq.DeleteQuery;
@@ -34,41 +36,48 @@ public class ClassicModelsRepository {
         this.ctx = ctx;
     }
 
-    // EXAMPLE 1
-    /*
-    delete from 
-      "SYSTEM"."SALE" 
-    where 
-      "SYSTEM"."SALE"."FISCAL_YEAR" = ?    
-     */
-    public void deleteSale() {
+    // EXAMPLE 1    
+    public void simpleDeletes() {
 
+        // delete from "CLASSICMODELS"."SALE" where "CLASSICMODELS"."SALE"."FISCAL_YEAR" = ?
         System.out.println("EXAMPLE 1.1 (affected rows): "
                 + ctx.delete(SALE)
-                        .where(SALE.FISCAL_YEAR.eq(BigInteger.valueOf(2003)))
+                        .where(SALE.FISCAL_YEAR.eq(2003))
                         .execute()
         );
 
+        // delete from "CLASSICMODELS"."SALE" where "CLASSICMODELS"."SALE"."FISCAL_YEAR" = ?
         System.out.println("EXAMPLE 1.2 (affected rows): "
                 + ctx.deleteFrom(SALE)
-                        .where(SALE.FISCAL_YEAR.eq(BigInteger.valueOf(2004)))
+                        .where(SALE.FISCAL_YEAR.eq(2004))
                         .execute()
         );
 
+        // delete from "CLASSICMODELS"."SALE" where "CLASSICMODELS"."SALE"."FISCAL_YEAR" = ?
         DeleteQuery dq = ctx.deleteQuery(SALE);
-        dq.addConditions(SALE.FISCAL_YEAR.eq(BigInteger.valueOf(2005)));
+        dq.addConditions(SALE.FISCAL_YEAR.eq(2005));
         // dq.execute();
         System.out.println("EXAMPLE 1.3 (query): " + dq.getSQL());
+                
+        // delete from "CLASSICMODELS"."BANK_TRANSACTION"
+        System.out.println("EXAMPLE 1.4 (affected rows): "
+                + ctx.deleteFrom(BANK_TRANSACTION).execute()
+        );
+
+        // delete from "CLASSICMODELS"."TOP3PRODUCT"
+        System.out.println("EXAMPLE 1.5 (affected rows): "
+                + ctx.deleteFrom(TOP3PRODUCT).execute()
+        );
     }
 
     // EXAMPLE 2
     /*
     delete from 
-      "SYSTEM"."PAYMENT" 
+      "CLASSICMODELS"."PAYMENT" 
     where 
       (
-        "SYSTEM"."PAYMENT"."CUSTOMER_NUMBER", 
-        "SYSTEM"."PAYMENT"."CHECK_NUMBER"
+        "CLASSICMODELS"."PAYMENT"."CUSTOMER_NUMBER", 
+        "CLASSICMODELS"."PAYMENT"."CHECK_NUMBER"
       ) = (
         (?, ?)
       )    
@@ -88,20 +97,20 @@ public class ClassicModelsRepository {
 
         /*
         delete from 
-          "SYSTEM"."CUSTOMERDETAIL" 
+          "CLASSICMODELS"."CUSTOMERDETAIL" 
         where 
           (
-            "SYSTEM"."CUSTOMERDETAIL"."POSTAL_CODE", 
-            "SYSTEM"."CUSTOMERDETAIL"."STATE"
+            "CLASSICMODELS"."CUSTOMERDETAIL"."POSTAL_CODE", 
+            "CLASSICMODELS"."CUSTOMERDETAIL"."STATE"
           ) in (
             (
               select 
-                "SYSTEM"."OFFICE"."POSTAL_CODE", 
-                "SYSTEM"."OFFICE"."STATE" 
+                "CLASSICMODELS"."OFFICE"."POSTAL_CODE", 
+                "CLASSICMODELS"."OFFICE"."STATE" 
               from 
-                "SYSTEM"."OFFICE" 
+                "CLASSICMODELS"."OFFICE" 
               where 
-                "SYSTEM"."OFFICE"."COUNTRY" = ?
+                "CLASSICMODELS"."OFFICE"."COUNTRY" = ?
             )
           )     
          */
@@ -115,11 +124,11 @@ public class ClassicModelsRepository {
 
         /*
         delete from 
-          "SYSTEM"."CUSTOMERDETAIL" 
+          "CLASSICMODELS"."CUSTOMERDETAIL" 
         where 
           (
-            "SYSTEM"."CUSTOMERDETAIL"."CITY", 
-            "SYSTEM"."CUSTOMERDETAIL"."COUNTRY"
+            "CLASSICMODELS"."CUSTOMERDETAIL"."CITY", 
+            "CLASSICMODELS"."CUSTOMERDETAIL"."COUNTRY"
           ) not in (
             (?, ?), 
             (?, ?)
@@ -137,22 +146,22 @@ public class ClassicModelsRepository {
     // EXAMPLE 4
     /*
     delete from 
-      "SYSTEM"."PAYMENT" 
+      "CLASSICMODELS"."PAYMENT" 
     where 
       (
-        "SYSTEM"."PAYMENT"."CUSTOMER_NUMBER", 
-        "SYSTEM"."PAYMENT"."CHECK_NUMBER"
+        "CLASSICMODELS"."PAYMENT"."CUSTOMER_NUMBER", 
+        "CLASSICMODELS"."PAYMENT"."CHECK_NUMBER"
       ) in (
         (
           select 
-            "SYSTEM"."PAYMENT"."CUSTOMER_NUMBER", 
-            "SYSTEM"."PAYMENT"."CHECK_NUMBER" 
+            "CLASSICMODELS"."PAYMENT"."CUSTOMER_NUMBER", 
+            "CLASSICMODELS"."PAYMENT"."CHECK_NUMBER" 
           from 
-            "SYSTEM"."PAYMENT" 
+            "CLASSICMODELS"."PAYMENT" 
           where 
-            "SYSTEM"."PAYMENT"."CUSTOMER_NUMBER" = ? 
+            "CLASSICMODELS"."PAYMENT"."CUSTOMER_NUMBER" = ? 
           order by 
-            "SYSTEM"."PAYMENT"."INVOICE_AMOUNT" desc fetch next ? rows only
+            "CLASSICMODELS"."PAYMENT"."INVOICE_AMOUNT" desc fetch next ? rows only
         )
       )    
      */
@@ -172,15 +181,15 @@ public class ClassicModelsRepository {
 
         /*
         delete from 
-          "SYSTEM"."ORDERDETAIL" 
+          "CLASSICMODELS"."ORDERDETAIL" 
         where 
-          "SYSTEM"."ORDERDETAIL"."ORDER_ID" in (
+          "CLASSICMODELS"."ORDERDETAIL"."ORDER_ID" in (
             select 
-              "SYSTEM"."ORDER"."ORDER_ID" 
+              "CLASSICMODELS"."ORDER"."ORDER_ID" 
             from 
-              "SYSTEM"."ORDER" 
+              "CLASSICMODELS"."ORDER" 
             where 
-              "SYSTEM"."ORDER"."CUSTOMER_NUMBER" = ?
+              "CLASSICMODELS"."ORDER"."CUSTOMER_NUMBER" = ?
           )        
          */
         int e1 = ctx.deleteFrom(ORDERDETAIL)
@@ -191,9 +200,9 @@ public class ClassicModelsRepository {
 
         /*
         delete from 
-          "SYSTEM"."ORDER" 
+          "CLASSICMODELS"."ORDER" 
         where 
-          "SYSTEM"."ORDER"."CUSTOMER_NUMBER" = ?        
+          "CLASSICMODELS"."ORDER"."CUSTOMER_NUMBER" = ?        
          */
         int e2 = ctx.deleteFrom(ORDER)
                 .where(ORDER.CUSTOMER_NUMBER.eq(103L))
@@ -201,9 +210,9 @@ public class ClassicModelsRepository {
 
         /*
         delete from 
-          "SYSTEM"."CUSTOMERDETAIL" 
+          "CLASSICMODELS"."CUSTOMERDETAIL" 
         where 
-          "SYSTEM"."CUSTOMERDETAIL"."CUSTOMER_NUMBER" = ?       
+          "CLASSICMODELS"."CUSTOMERDETAIL"."CUSTOMER_NUMBER" = ?       
          */
         int e3 = ctx.deleteFrom(CUSTOMERDETAIL)
                 .where(CUSTOMERDETAIL.CUSTOMER_NUMBER.eq(103L))
@@ -211,9 +220,9 @@ public class ClassicModelsRepository {
 
         /*
         delete from 
-          "SYSTEM"."PAYMENT" 
+          "CLASSICMODELS"."PAYMENT" 
         where 
-          "SYSTEM"."PAYMENT"."CUSTOMER_NUMBER" = ?        
+          "CLASSICMODELS"."PAYMENT"."CUSTOMER_NUMBER" = ?        
          */
         int e4 = ctx.deleteFrom(PAYMENT)
                 .where(PAYMENT.CUSTOMER_NUMBER.eq(103L))
@@ -221,9 +230,9 @@ public class ClassicModelsRepository {
 
         /*
         delete from 
-          "SYSTEM"."CUSTOMER" 
+          "CLASSICMODELS"."CUSTOMER" 
         where 
-          "SYSTEM"."CUSTOMER"."CUSTOMER_NUMBER" = ?       
+          "CLASSICMODELS"."CUSTOMER"."CUSTOMER_NUMBER" = ?       
          */
         int e5 = ctx.deleteFrom(CUSTOMER)
                 .where(CUSTOMER.CUSTOMER_NUMBER.eq(103L))
@@ -249,11 +258,11 @@ public class ClassicModelsRepository {
         
         /*
         delete from 
-          "SYSTEM"."PAYMENT" 
+          "CLASSICMODELS"."PAYMENT" 
         where 
           (
-            "SYSTEM"."PAYMENT"."CUSTOMER_NUMBER" = ? 
-            and "SYSTEM"."PAYMENT"."CHECK_NUMBER" = ?
+            "CLASSICMODELS"."PAYMENT"."CUSTOMER_NUMBER" = ? 
+            and "CLASSICMODELS"."PAYMENT"."CHECK_NUMBER" = ?
           )        
          */
         System.out.println("EXAMPLE 6.1 (affected rows): "
@@ -262,9 +271,9 @@ public class ClassicModelsRepository {
         
         /*
         delete from 
-          "SYSTEM"."PAYMENT" 
+          "CLASSICMODELS"."PAYMENT" 
         where 
-          "SYSTEM"."PAYMENT"."INVOICE_AMOUNT" = ?       
+          "CLASSICMODELS"."PAYMENT"."INVOICE_AMOUNT" = ?       
          */
         System.out.println("EXAMPLE 6.2 (affected rows): "
                 + ctx.executeDelete(pr, PAYMENT.INVOICE_AMOUNT.eq(BigDecimal.ZERO))
@@ -273,9 +282,9 @@ public class ClassicModelsRepository {
         // user-defined POJO
         /*
         delete from 
-          "SYSTEM"."SALE" 
+          "CLASSICMODELS"."SALE" 
         where 
-          "SYSTEM"."SALE"."SALE_ID" = ?       
+          "CLASSICMODELS"."SALE"."SALE_ID" = ?       
          */
         SalePart sp = new SalePart(14L, BigDecimal.valueOf(1607.76));
         System.out.println("EXAMPLE 6.3 (affected rows): "
@@ -286,11 +295,11 @@ public class ClassicModelsRepository {
     // EXAMPLE 7   
     /*
     delete from 
-      "SYSTEM"."PAYMENT" 
+      "CLASSICMODELS"."PAYMENT" 
     where 
       (
-        "SYSTEM"."PAYMENT"."CUSTOMER_NUMBER" = ? 
-        and "SYSTEM"."PAYMENT"."CHECK_NUMBER" = ?
+        "CLASSICMODELS"."PAYMENT"."CUSTOMER_NUMBER" = ? 
+        and "CLASSICMODELS"."PAYMENT"."CHECK_NUMBER" = ?
       )    
      */
     public void moreDeleteRecordExamples() {
@@ -337,9 +346,9 @@ public class ClassicModelsRepository {
     c0 sys_refcursor;
     begin 
     delete from 
-      "SYSTEM"."SALE" 
+      "CLASSICMODELS"."SALE" 
     where 
-      "SYSTEM"."SALE"."SALE_ID" = ? returning "SYSTEM"."SALE"."SALE" bulk collect into o0;
+      "CLASSICMODELS"."SALE"."SALE_ID" = ? returning "CLASSICMODELS"."SALE"."SALE" bulk collect into o0;
     ? := sql % rowcount;
     open c0 for 
     select 
@@ -353,7 +362,7 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 9 (deleted sale): \n"
                 + ctx.delete(SALE)
-                        .where(SALE.SALE_ID.eq(BigInteger.valueOf(15)))
+                        .where(SALE.SALE_ID.eq(15L))
                         .returningResult(SALE.SALE_)
                         .fetchOne()
         );
@@ -373,13 +382,13 @@ public class ClassicModelsRepository {
     c4 sys_refcursor;
     begin 
     delete from 
-      "SYSTEM"."PAYMENT" 
+      "CLASSICMODELS"."PAYMENT" 
     where 
-      "SYSTEM"."PAYMENT"."INVOICE_AMOUNT" > ? returning "SYSTEM"."PAYMENT"."CUSTOMER_NUMBER", 
-      "SYSTEM"."PAYMENT"."CHECK_NUMBER", 
-      "SYSTEM"."PAYMENT"."PAYMENT_DATE", 
-      "SYSTEM"."PAYMENT"."INVOICE_AMOUNT", 
-      "SYSTEM"."PAYMENT"."CACHING_DATE" bulk collect into o0, 
+      "CLASSICMODELS"."PAYMENT"."INVOICE_AMOUNT" > ? returning "CLASSICMODELS"."PAYMENT"."CUSTOMER_NUMBER", 
+      "CLASSICMODELS"."PAYMENT"."CHECK_NUMBER", 
+      "CLASSICMODELS"."PAYMENT"."PAYMENT_DATE", 
+      "CLASSICMODELS"."PAYMENT"."INVOICE_AMOUNT", 
+      "CLASSICMODELS"."PAYMENT"."CACHING_DATE" bulk collect into o0, 
       o1, 
       o2, 
       o3, 
@@ -422,44 +431,31 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 10 (deleted payment): \n"
                 + ctx.delete(PAYMENT)
                         .where(PAYMENT.INVOICE_AMOUNT.gt(BigDecimal.valueOf(100000)))
-                        .returning()
+                        .returningResult()
                         .fetch() // Result<PaymentRecord>
         );
     }
 
     // EXAMPLE 11
     /*
-    declare o0 dbms_sql.number_table;
+    // 1
+    declare o0 DBMS_SQL.NUMBER_TABLE;
     c0 sys_refcursor;
     begin 
     delete from 
-      "SYSTEM"."ORDERDETAIL" 
+      "CLASSICMODELS"."ORDERDETAIL" 
     where 
-      "SYSTEM"."ORDERDETAIL"."PRODUCT_ID" in (
+      "CLASSICMODELS"."ORDERDETAIL"."PRODUCT_ID" in (
         select 
-          "SYSTEM"."PRODUCT"."PRODUCT_ID" 
+          "CLASSICMODELS"."PRODUCT"."PRODUCT_ID" 
         from 
-          "SYSTEM"."PRODUCT" 
+          "CLASSICMODELS"."PRODUCT" 
         where 
-          "SYSTEM"."PRODUCT"."PRODUCT_LINE" = ?
-      ) returning "SYSTEM"."ORDERDETAIL"."PRODUCT_ID" bulk collect into o0;
-    ? := sql % rowcount;
-    open c0 for 
-    select 
-      * 
-    from 
-      table(o0);
-    ? := c0;
-    end;    
-    
-    declare o0 dbms_sql.varchar2_table;
-    c0 sys_refcursor;
-    begin 
-    delete from 
-      "SYSTEM"."PRODUCT" 
-    where 
-      "SYSTEM"."PRODUCT"."PRODUCT_ID" in (?, ?, ?, ...) 
-    returning "SYSTEM"."PRODUCT"."PRODUCT_LINE" bulk collect into o0;
+          (
+            "CLASSICMODELS"."PRODUCT"."PRODUCT_LINE" = ? 
+            or "CLASSICMODELS"."PRODUCT"."PRODUCT_LINE" = ?
+          )
+      ) returning "CLASSICMODELS"."ORDERDETAIL"."PRODUCT_ID" bulk collect into o0;
     ? := sql % rowcount;
     open c0 for 
     select 
@@ -469,14 +465,14 @@ public class ClassicModelsRepository {
     ? := c0;
     end;
     
-    declare o0 dbms_sql.varchar2_table;
+    // 2
+    declare o0 DBMS_SQL.VARCHAR2_TABLE;
     c0 sys_refcursor;
     begin 
     delete from 
-      "SYSTEM"."PRODUCTLINEDETAIL" 
+      "CLASSICMODELS"."PRODUCT" 
     where 
-      "SYSTEM"."PRODUCTLINEDETAIL"."PRODUCT_LINE" = ? 
-    returning "SYSTEM"."PRODUCTLINEDETAIL"."PRODUCT_LINE" bulk collect into o0;
+      "CLASSICMODELS"."PRODUCT"."PRODUCT_ID" in (?, ?, ?,..., ?) returning "CLASSICMODELS"."PRODUCT"."PRODUCT_LINE" bulk collect into o0;
     ? := sql % rowcount;
     open c0 for 
     select 
@@ -486,130 +482,47 @@ public class ClassicModelsRepository {
     ? := c0;
     end;
     
+    // 3
+    declare o0 DBMS_SQL.VARCHAR2_TABLE;
+    c0 sys_refcursor;
+    begin 
     delete from 
-      "SYSTEM"."PRODUCTLINE" 
+      "CLASSICMODELS"."PRODUCTLINEDETAIL" 
     where 
-      "SYSTEM"."PRODUCTLINE"."PRODUCT_LINE" = ?    
-     */
-    public void deleteCascadeReturningProductLineMotorcycles() {
+      "CLASSICMODELS"."PRODUCTLINEDETAIL"."PRODUCT_LINE" in (?, ?, ?,..., ?) returning "CLASSICMODELS"."PRODUCTLINEDETAIL"."PRODUCT_LINE" bulk collect into o0;
+    ? := sql % rowcount;
+    open c0 for 
+    select 
+      * 
+    from 
+      table(o0);
+    ? := c0;
+    end;
+    
+    // 4
+    delete from 
+      "CLASSICMODELS"."PRODUCTLINE" 
+    where 
+      "CLASSICMODELS"."PRODUCTLINE"."PRODUCT_LINE" in (?, ?)        
+    */
+     public void deleteCascadeReturningProductLineMotorcyclesAndTrucksAndBuses() {
 
-         System.out.println("EXAMPLE 11 (affected rows): "
+        // Of course, even if this is possible, use it carefully!
+        System.out.println("EXAMPLE 11 (affected rows): "
                 + ctx.delete(PRODUCTLINE)
-                        .where(PRODUCTLINE.PRODUCT_LINE.eq(
+                        .where(PRODUCTLINE.PRODUCT_LINE.in(
                                 ctx.delete(PRODUCTLINEDETAIL)
-                                        .where(PRODUCTLINEDETAIL.PRODUCT_LINE.eq(
+                                        .where(PRODUCTLINEDETAIL.PRODUCT_LINE.in(
                                                 ctx.delete(PRODUCT)
                                                         .where(PRODUCT.PRODUCT_ID.in(
                                                                 ctx.delete(ORDERDETAIL)
                                                                         .where(ORDERDETAIL.PRODUCT_ID.in(
                                                                                 select(PRODUCT.PRODUCT_ID).from(PRODUCT)
-                                                                                        .where(PRODUCT.PRODUCT_LINE.eq("Motorcycles"))))
+                                                                                        .where(PRODUCT.PRODUCT_LINE.eq("Motorcycles")
+                                                                                                .or(PRODUCT.PRODUCT_LINE.eq("Trucks and Buses")))))
                                                                         .returningResult(ORDERDETAIL.PRODUCT_ID).fetch()))
-                                                        .returningResult(PRODUCT.PRODUCT_LINE).fetch().get(0).value1()))
-                                        .returningResult(PRODUCTLINEDETAIL.PRODUCT_LINE).fetchOne().value1()))
-                        .execute()
-        );
-    }
-
-    // EXAMPLE 12
-    /*
-    declare o0 dbms_sql.number_table;
-    c0 sys_refcursor;
-    begin 
-    delete from 
-      "SYSTEM"."ORDERDETAIL" 
-    where 
-      "SYSTEM"."ORDERDETAIL"."ORDER_ID" in (
-        select 
-          "SYSTEM"."ORDER"."ORDER_ID" 
-        from 
-          "SYSTEM"."ORDER" 
-        where 
-          "SYSTEM"."ORDER"."CUSTOMER_NUMBER" = ?
-      ) returning "SYSTEM"."ORDERDETAIL"."ORDER_ID" bulk collect into o0;
-    ? := sql % rowcount;
-    open c0 for 
-    select 
-      * 
-    from 
-      table(o0);
-    ? := c0;
-    end;
-    
-    declare o0 dbms_sql.number_table;
-    c0 sys_refcursor;
-    begin 
-    delete from 
-      "SYSTEM"."ORDER" 
-    where 
-      "SYSTEM"."ORDER"."ORDER_ID" in (?, ?, ?, ... ,?) 
-    returning "SYSTEM"."ORDER"."CUSTOMER_NUMBER" bulk collect into o0;
-    ? := sql % rowcount;
-    open c0 for 
-    select 
-      * 
-    from 
-      table(o0);
-    ? := c0;
-    end;
-    
-    declare o0 dbms_sql.number_table;
-    c0 sys_refcursor;
-    begin 
-    delete from 
-      "SYSTEM"."PAYMENT" 
-    where 
-      "SYSTEM"."PAYMENT"."CUSTOMER_NUMBER" = ? 
-    returning "SYSTEM"."PAYMENT"."CUSTOMER_NUMBER" bulk collect into o0;
-    ? := sql % rowcount;
-    open c0 for 
-    select 
-      * 
-    from 
-      table(o0);
-    ? := c0;
-    end;
-
-    declare o0 dbms_sql.number_table;
-    c0 sys_refcursor;
-    begin 
-    delete from 
-      "SYSTEM"."CUSTOMERDETAIL" 
-    where 
-      "SYSTEM"."CUSTOMERDETAIL"."CUSTOMER_NUMBER" = ? returning "SYSTEM"."CUSTOMERDETAIL"."CUSTOMER_NUMBER" bulk collect into o0;
-    ? := sql % rowcount;
-    open c0 for 
-    select 
-      * 
-    from 
-      table(o0);
-    ? := c0;
-    end;
-
-    delete from 
-      "SYSTEM"."CUSTOMER" 
-    where 
-      "SYSTEM"."CUSTOMER"."CUSTOMER_NUMBER" = ?
-     */
-    public void deleteCascadeReturningCustomer112() {
-
-        System.out.println("EXAMPLE 12 (affected rows): "
-                + ctx.delete(CUSTOMER)
-                        .where(CUSTOMER.CUSTOMER_NUMBER.eq(
-                                ctx.delete(CUSTOMERDETAIL)
-                                        .where(CUSTOMERDETAIL.CUSTOMER_NUMBER.eq(
-                                                ctx.delete(PAYMENT)
-                                                        .where(PAYMENT.CUSTOMER_NUMBER.eq(
-                                                                ctx.delete(ORDER)
-                                                                        .where(ORDER.ORDER_ID.in(
-                                                                                ctx.delete(ORDERDETAIL)
-                                                                                        .where(ORDERDETAIL.ORDER_ID.in(
-                                                                                                select(ORDER.ORDER_ID).from(ORDER)
-                                                                                                        .where(ORDER.CUSTOMER_NUMBER.eq(112L))))
-                                                                                        .returningResult(ORDERDETAIL.ORDER_ID).fetch()))
-                                                                        .returningResult(ORDER.CUSTOMER_NUMBER).fetch().get(0).value1()))
-                                                        .returningResult(PAYMENT.CUSTOMER_NUMBER).fetch().get(0).value1()))
-                                        .returningResult(CUSTOMERDETAIL.CUSTOMER_NUMBER).fetchOne().value1()))
+                                                        .returningResult(PRODUCT.PRODUCT_LINE).fetch()))
+                                        .returningResult(PRODUCTLINEDETAIL.PRODUCT_LINE).fetch()))
                         .execute()
         );
     }
