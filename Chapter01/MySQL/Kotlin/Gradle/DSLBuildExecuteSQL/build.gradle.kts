@@ -24,7 +24,7 @@ repositories {
 }
 
 jooq {
-  version.set("3.16.0")  // if omitted, then the default is used
+  version.set("3.15.5")  // if omitted, then the default is used
   edition.set(nu.studer.gradle.jooq.JooqEdition.OSS)  // jOOQ Open-Source is the default (can be omitted)
 }
 
