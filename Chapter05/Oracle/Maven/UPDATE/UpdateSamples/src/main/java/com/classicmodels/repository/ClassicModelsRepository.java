@@ -19,6 +19,7 @@ import static org.jooq.impl.DSL.row;
 import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.val;
 import static org.jooq.impl.DSL.avg;
+import static org.jooq.impl.DSL.field;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,12 +36,12 @@ public class ClassicModelsRepository {
     // EXAMPLE 1
     /*
     update 
-      "SYSTEM"."OFFICE" 
+      "CLASSICMODELS"."OFFICE" 
     set 
-      "SYSTEM"."OFFICE"."CITY" = ?, 
-      "SYSTEM"."OFFICE"."COUNTRY" = ? 
+      "CLASSICMODELS"."OFFICE"."CITY" = ?, 
+      "CLASSICMODELS"."OFFICE"."COUNTRY" = ? 
     where 
-      "SYSTEM"."OFFICE"."OFFICE_CODE" = ?    
+      "CLASSICMODELS"."OFFICE"."OFFICE_CODE" = ?    
      */
     public void updateOffice() {
 
@@ -65,7 +66,7 @@ public class ClassicModelsRepository {
 
         /*
         update 
-          "SYSTEM"."OFFICE" 
+          "CLASSICMODELS"."OFFICE" 
         set 
           ("CITY", "COUNTRY") = (
             select 
@@ -75,7 +76,7 @@ public class ClassicModelsRepository {
               dual
           ) 
         where 
-          "SYSTEM"."OFFICE"."OFFICE_CODE" = ?   
+          "CLASSICMODELS"."OFFICE"."OFFICE_CODE" = ?   
         */
         System.out.println("EXAMPLE 2.1 (affected rows): "
                 + ctx.update(OFFICE)
@@ -87,7 +88,7 @@ public class ClassicModelsRepository {
         
         /*
         update 
-          "SYSTEM"."OFFICE" 
+          "CLASSICMODELS"."OFFICE" 
         set 
           ("CITY", "COUNTRY") = (
             select 
@@ -98,8 +99,8 @@ public class ClassicModelsRepository {
           ) 
         where 
           (
-            "SYSTEM"."OFFICE"."CITY" is null 
-            and "SYSTEM"."OFFICE"."COUNTRY" is null
+            "CLASSICMODELS"."OFFICE"."CITY" is null 
+            and "CLASSICMODELS"."OFFICE"."COUNTRY" is null
           )        
         */
         Row2<String, String> r1 = row(OFFICE.CITY, OFFICE.COUNTRY);
@@ -116,20 +117,20 @@ public class ClassicModelsRepository {
     // EXAMPLE 3
     /*
     update 
-      "SYSTEM"."CUSTOMER" 
+      "CLASSICMODELS"."CUSTOMER" 
     set 
-      "SYSTEM"."CUSTOMER"."CREDIT_LIMIT" = (
+      "CLASSICMODELS"."CUSTOMER"."CREDIT_LIMIT" = (
         select 
           max(
-            "SYSTEM"."PAYMENT"."INVOICE_AMOUNT"
+            "CLASSICMODELS"."PAYMENT"."INVOICE_AMOUNT"
           ) 
         from 
-          "SYSTEM"."PAYMENT" 
+          "CLASSICMODELS"."PAYMENT" 
         where 
-          "SYSTEM"."CUSTOMER"."CUSTOMER_NUMBER" = "SYSTEM"."PAYMENT"."CUSTOMER_NUMBER"
+          "CLASSICMODELS"."CUSTOMER"."CUSTOMER_NUMBER" = "CLASSICMODELS"."PAYMENT"."CUSTOMER_NUMBER"
       ) 
     where 
-      "SYSTEM"."CUSTOMER"."CREDIT_LIMIT" > ?   
+      "CLASSICMODELS"."CUSTOMER"."CREDIT_LIMIT" > ?   
      */
     public void updateCustomerCreditLimitAsMaxPaymentInvoice() {
 
@@ -146,18 +147,18 @@ public class ClassicModelsRepository {
     // EXAMPLE 4
     /*
     update 
-      "SYSTEM"."EMPLOYEE" 
+      "CLASSICMODELS"."EMPLOYEE" 
     set 
-      "SYSTEM"."EMPLOYEE"."SALARY" = (
-        "SYSTEM"."EMPLOYEE"."SALARY" + (
+      "CLASSICMODELS"."EMPLOYEE"."SALARY" = (
+        "CLASSICMODELS"."EMPLOYEE"."SALARY" + (
           select 
             (
-              count("SYSTEM"."SALE"."SALE") * ?
+              count("CLASSICMODELS"."SALE"."SALE") * ?
             ) 
           from 
-            "SYSTEM"."SALE" 
+            "CLASSICMODELS"."SALE" 
           where 
-            "SYSTEM"."EMPLOYEE"."EMPLOYEE_NUMBER" = "SYSTEM"."SALE"."EMPLOYEE_NUMBER"
+            "CLASSICMODELS"."EMPLOYEE"."EMPLOYEE_NUMBER" = "CLASSICMODELS"."SALE"."EMPLOYEE_NUMBER"
         )
       )    
      */
@@ -166,8 +167,8 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 4 (affected rows): "
                 + ctx.update(EMPLOYEE)
                         .set(EMPLOYEE.SALARY, EMPLOYEE.SALARY.plus(
-                                select(count(SALE.SALE_).multiply(5.75)).from(SALE)
-                                        .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(SALE.EMPLOYEE_NUMBER)).asField()))
+                                field(select(count(SALE.SALE_).multiply(5.75)).from(SALE)
+                                        .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(SALE.EMPLOYEE_NUMBER)))))
                         .execute()
         );
     }
@@ -182,12 +183,12 @@ public class ClassicModelsRepository {
 
         /*
         update 
-          "SYSTEM"."OFFICE" 
+          "CLASSICMODELS"."OFFICE" 
         set 
-          "SYSTEM"."OFFICE"."CITY" = ?, 
-          "SYSTEM"."OFFICE"."COUNTRY" = ? 
+          "CLASSICMODELS"."OFFICE"."CITY" = ?, 
+          "CLASSICMODELS"."OFFICE"."COUNTRY" = ? 
         where 
-          "SYSTEM"."OFFICE"."OFFICE_CODE" = ?       
+          "CLASSICMODELS"."OFFICE"."OFFICE_CODE" = ?       
          */
         System.out.println("EXAMPLE 5.1 (affected rows): "
                 + ctx.update(OFFICE)
@@ -204,13 +205,13 @@ public class ClassicModelsRepository {
         /* approach 3 */
         /*
         update 
-          "SYSTEM"."OFFICE" 
+          "CLASSICMODELS"."OFFICE" 
         set 
-          "SYSTEM"."OFFICE"."OFFICE_CODE" = ?, 
-          "SYSTEM"."OFFICE"."CITY" = ?, 
-          "SYSTEM"."OFFICE"."COUNTRY" = ? 
+          "CLASSICMODELS"."OFFICE"."OFFICE_CODE" = ?, 
+          "CLASSICMODELS"."OFFICE"."CITY" = ?, 
+          "CLASSICMODELS"."OFFICE"."COUNTRY" = ? 
         where 
-          "SYSTEM"."OFFICE"."OFFICE_CODE" = ?        
+          "CLASSICMODELS"."OFFICE"."OFFICE_CODE" = ?        
          */
         System.out.println("EXAMPLE 5.3 (affected rows): "
                 + ctx.newRecord(OFFICE)
@@ -228,12 +229,12 @@ public class ClassicModelsRepository {
 
         /*
         update 
-          "SYSTEM"."OFFICE" 
+          "CLASSICMODELS"."OFFICE" 
         set 
-          "SYSTEM"."OFFICE"."CITY" = ?, 
-          "SYSTEM"."OFFICE"."COUNTRY" = ? 
+          "CLASSICMODELS"."OFFICE"."CITY" = ?, 
+          "CLASSICMODELS"."OFFICE"."COUNTRY" = ? 
         where 
-          "SYSTEM"."OFFICE"."OFFICE_CODE" = ?        
+          "CLASSICMODELS"."OFFICE"."OFFICE_CODE" = ?        
          */
         System.out.println("EXAMPLE 5.4 (affected rows): "
                 + ctx.update(OFFICE)
@@ -253,20 +254,20 @@ public class ClassicModelsRepository {
     // EXAMPLE 6
     /*
     update 
-      "SYSTEM"."OFFICE" 
+      "CLASSICMODELS"."OFFICE" 
     set 
       (
         "ADDRESS_LINE_FIRST", "ADDRESS_LINE_SECOND", 
         "PHONE"
       ) = (
         select 
-          "SYSTEM"."EMPLOYEE"."FIRST_NAME", 
-          "SYSTEM"."EMPLOYEE"."LAST_NAME", 
+          "CLASSICMODELS"."EMPLOYEE"."FIRST_NAME", 
+          "CLASSICMODELS"."EMPLOYEE"."LAST_NAME", 
           ? 
         from 
-          "SYSTEM"."EMPLOYEE" 
+          "CLASSICMODELS"."EMPLOYEE" 
         where 
-          "SYSTEM"."EMPLOYEE"."JOB_TITLE" = ?
+          "CLASSICMODELS"."EMPLOYEE"."JOB_TITLE" = ?
       )    
      */
     public void updateOfficeAddressAsPresidentName() {
@@ -289,13 +290,13 @@ public class ClassicModelsRepository {
     c1 sys_refcursor;
     begin 
     update 
-      "SYSTEM"."OFFICE" 
+      "CLASSICMODELS"."OFFICE" 
     set 
-      "SYSTEM"."OFFICE"."CITY" = ?, 
-      "SYSTEM"."OFFICE"."COUNTRY" = ? 
+      "CLASSICMODELS"."OFFICE"."CITY" = ?, 
+      "CLASSICMODELS"."OFFICE"."COUNTRY" = ? 
     where 
-      "SYSTEM"."OFFICE"."OFFICE_CODE" = ? returning "SYSTEM"."OFFICE"."CITY", 
-      "SYSTEM"."OFFICE"."COUNTRY" bulk collect into o0, 
+      "CLASSICMODELS"."OFFICE"."OFFICE_CODE" = ? returning "CLASSICMODELS"."OFFICE"."CITY", 
+      "CLASSICMODELS"."OFFICE"."COUNTRY" bulk collect into o0, 
       o1;
     ? := sql % rowcount;
     open c0 for 
@@ -330,20 +331,20 @@ public class ClassicModelsRepository {
     c0 sys_refcursor;
     begin 
     update 
-      "SYSTEM"."EMPLOYEE" 
+      "CLASSICMODELS"."EMPLOYEE" 
     set 
-      "SYSTEM"."EMPLOYEE"."SALARY" = (
-        "SYSTEM"."EMPLOYEE"."SALARY" + (
+      "CLASSICMODELS"."EMPLOYEE"."SALARY" = (
+        "CLASSICMODELS"."EMPLOYEE"."SALARY" + (
           select 
-            avg("SYSTEM"."SALE"."SALE") 
+            avg("CLASSICMODELS"."SALE"."SALE") 
           from 
-            "SYSTEM"."SALE" 
+            "CLASSICMODELS"."SALE" 
           where 
-            "SYSTEM"."SALE"."EMPLOYEE_NUMBER" = "SYSTEM"."EMPLOYEE"."EMPLOYEE_NUMBER"
+            "CLASSICMODELS"."SALE"."EMPLOYEE_NUMBER" = "CLASSICMODELS"."EMPLOYEE"."EMPLOYEE_NUMBER"
         )
       ) 
     where 
-      "SYSTEM"."EMPLOYEE"."EMPLOYEE_NUMBER" = ? returning "SYSTEM"."EMPLOYEE"."SALARY" bulk collect into o0;
+      "CLASSICMODELS"."EMPLOYEE"."EMPLOYEE_NUMBER" = ? returning "CLASSICMODELS"."EMPLOYEE"."SALARY" bulk collect into o0;
     ? := sql % rowcount;
     open c0 for 
     select 
@@ -354,13 +355,13 @@ public class ClassicModelsRepository {
     end;
     
     update 
-      "SYSTEM"."CUSTOMER" 
+      "CLASSICMODELS"."CUSTOMER" 
     set 
-      "SYSTEM"."CUSTOMER"."CREDIT_LIMIT" = (
-        "SYSTEM"."CUSTOMER"."CREDIT_LIMIT" + ?
+      "CLASSICMODELS"."CUSTOMER"."CREDIT_LIMIT" = (
+        "CLASSICMODELS"."CUSTOMER"."CREDIT_LIMIT" + ?
       ) 
     where 
-      "SYSTEM"."CUSTOMER"."SALES_REP_EMPLOYEE_NUMBER" = ?   
+      "CLASSICMODELS"."CUSTOMER"."SALES_REP_EMPLOYEE_NUMBER" = ?   
      */
     public void updateEmployeeSalaryAsAvgSaleAndCustomersCreditAsDoubleSalary() {
 
@@ -369,9 +370,9 @@ public class ClassicModelsRepository {
                         .set(CUSTOMER.CREDIT_LIMIT, CUSTOMER.CREDIT_LIMIT.plus(
                                 ctx.update(EMPLOYEE)
                                         .set(EMPLOYEE.SALARY, EMPLOYEE.SALARY.plus(
-                                                select(avg(SALE.SALE_)).from(SALE)
+                                                field(select(avg(SALE.SALE_)).from(SALE)
                                                         .where(SALE.EMPLOYEE_NUMBER
-                                                                .eq(EMPLOYEE.EMPLOYEE_NUMBER)).asField()))
+                                                                .eq(EMPLOYEE.EMPLOYEE_NUMBER)))))
                                         .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1504L))
                                         .returningResult(EMPLOYEE.SALARY.coerce(BigDecimal.class))
                                         .fetchOne().value1().multiply(BigDecimal.valueOf(2))))
