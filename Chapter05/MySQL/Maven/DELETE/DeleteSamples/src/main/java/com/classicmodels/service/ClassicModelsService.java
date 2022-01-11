@@ -14,7 +14,7 @@ public class ClassicModelsService {
 
     public void callAll() {
 
-        classicModelsRepository.deleteSale();                                // EXAMPLE 1
+        classicModelsRepository.simpleDeletes();                             // EXAMPLE 1
         classicModelsRepository.deletePayment();                             // EXAMPLE 2
         classicModelsRepository.deleteCustomerDetailViaNotIn();              // EXAMPLE 3
         classicModelsRepository.deleteOrderByAndLimit();                     // EXAMPLE 4

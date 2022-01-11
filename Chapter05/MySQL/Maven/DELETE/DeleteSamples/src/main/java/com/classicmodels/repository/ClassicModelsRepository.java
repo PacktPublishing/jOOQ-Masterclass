@@ -33,7 +33,7 @@ public class ClassicModelsRepository {
     }
 
     // EXAMPLE 1   
-    public void deleteSale() {
+    public void simpleDeletes() {
 
         // delete from `classicmodels`.`sale` where `classicmodels`.`sale`.`fiscal_year` = ?
         System.out.println("EXAMPLE 1.1 (affected rows): "

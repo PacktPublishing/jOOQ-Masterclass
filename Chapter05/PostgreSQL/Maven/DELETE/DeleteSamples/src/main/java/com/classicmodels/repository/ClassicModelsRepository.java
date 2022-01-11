@@ -372,7 +372,7 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 10 (deleted payment): \n"
                 + ctx.delete(PAYMENT)
                         .where(PAYMENT.INVOICE_AMOUNT.gt(BigDecimal.valueOf(100000)))
-                        .returning()
+                        .returningResult()
                         .fetch() // Result<PaymentRecord>
         );
     }
