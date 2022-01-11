@@ -3,6 +3,7 @@ package com.classicmodels.repository;
 import com.classicmodels.pojo.SalePart;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import static jooq.generated.tables.BankTransaction.BANK_TRANSACTION;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
 import static jooq.generated.tables.Office.OFFICE;
@@ -13,6 +14,7 @@ import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Productline.PRODUCTLINE;
 import static jooq.generated.tables.Productlinedetail.PRODUCTLINEDETAIL;
 import static jooq.generated.tables.Sale.SALE;
+import static jooq.generated.tables.Top3product.TOP3PRODUCT;
 import jooq.generated.tables.records.PaymentRecord;
 import org.jooq.DSLContext;
 import org.jooq.DeleteQuery;
@@ -33,31 +35,38 @@ public class ClassicModelsRepository {
         this.ctx = ctx;
     }
 
-    // EXAMPLE 1
-    /*
-    delete from 
-      [classicmodels].[dbo].[sale] 
-    where 
-      [classicmodels].[dbo].[sale].[fiscal_year] = ?    
-     */
-    public void deleteSale() {
+    // EXAMPLE 1    
+    public void simpleDeletes() {
 
+        // delete from [classicmodels].[dbo].[sale] where [classicmodels].[dbo].[sale].[fiscal_year] = ?
         System.out.println("EXAMPLE 1.1 (affected rows): "
                 + ctx.delete(SALE)
                         .where(SALE.FISCAL_YEAR.eq(2003))
                         .execute()
         );
 
+        // delete from [classicmodels].[dbo].[sale] where [classicmodels].[dbo].[sale].[fiscal_year] = ?
         System.out.println("EXAMPLE 1.2 (affected rows): "
                 + ctx.deleteFrom(SALE)
                         .where(SALE.FISCAL_YEAR.eq(2004))
                         .execute()
         );
 
+        // delete from [classicmodels].[dbo].[sale] where [classicmodels].[dbo].[sale].[fiscal_year] = ?
         DeleteQuery dq = ctx.deleteQuery(SALE);
         dq.addConditions(SALE.FISCAL_YEAR.eq(2005));
         // dq.execute();
         System.out.println("EXAMPLE 1.3 (query): " + dq.getSQL());
+
+        // delete from [classicmodels].[dbo].[bank_transaction]
+        System.out.println("EXAMPLE 1.4 (affected rows): "
+                + ctx.deleteFrom(BANK_TRANSACTION).execute()
+        );
+
+        // delete from [classicmodels].[dbo].[top3product]
+        System.out.println("EXAMPLE 1.5 (affected rows): "
+                + ctx.deleteFrom(TOP3PRODUCT).execute()
+        );
     }
 
     // EXAMPLE 2
@@ -257,10 +266,9 @@ public class ClassicModelsRepository {
         pr.setInvoiceAmount(BigDecimal.valueOf(45864.03)); // doesn't occur in the generated WHERE clause
 
         // or
-        // PaymentRecord pr = new PaymentRecord(
+        // PaymentRecord pri = new PaymentRecord(
         //        114L, "GG31455", LocalDateTime.of(2003,5,20,8,10,45),
-        //        BigDecimal.valueOf(45864.03), LocalDateTime.of(2003,5,20,8,30,9));
-        
+        //        BigDecimal.valueOf(45864.03), LocalDateTime.of(2003,5,20,8,30,9), 0, LocalDateTime.now());
         /*
         delete from 
           [classicmodels].[dbo].[payment] 
@@ -273,13 +281,13 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 6.1 (affected rows): "
                 + ctx.executeDelete(pr)
         );
-        
+
         /*
         delete from 
           [classicmodels].[dbo].[payment] 
         where 
           [classicmodels].[dbo].[payment].[invoice_amount] = ?        
-        */
+         */
         System.out.println("EXAMPLE 6.2 (affected rows): "
                 + ctx.executeDelete(pr, PAYMENT.INVOICE_AMOUNT.eq(BigDecimal.ZERO))
         );
@@ -402,16 +410,16 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 10 (deleted payment): \n"
                 + ctx.delete(PAYMENT)
                         .where(PAYMENT.INVOICE_AMOUNT.gt(BigDecimal.valueOf(100000)))
-                        .returning()
+                        .returningResult()
                         .fetch() // Result<PaymentRecord>
         );
     }
 
     // EXAMPLE 11
     /*
-    declare @result table ([product_id] bigint);
+    // 1
     delete from 
-      [classicmodels].[dbo].[orderdetail] output [deleted].[product_id] into @result 
+      [classicmodels].[dbo].[orderdetail] output [deleted].[product_id] 
     where 
       [classicmodels].[dbo].[orderdetail].[product_id] in (
         select 
@@ -419,135 +427,48 @@ public class ClassicModelsRepository {
         from 
           [classicmodels].[dbo].[product] 
         where 
-          [classicmodels].[dbo].[product].[product_line] = ?
-      );
-    select 
-      [r].[product_id] 
-    from 
-      @result [r];
+          (
+            [classicmodels].[dbo].[product].[product_line] = ? 
+            or [classicmodels].[dbo].[product].[product_line] = ?
+          )
+      )
     
-    declare @result table (
-      [product_line] varchar(50)
-    );
+    // 2
     delete from 
-      [classicmodels].[dbo].[product] output [deleted].[product_line] into @result 
+      [classicmodels].[dbo].[product] output [deleted].[product_line] 
     where 
-      [classicmodels].[dbo].[product].[product_id] in (?, ?, ?, ...);
-    select 
-      [r].[product_line] 
-    from 
-      @result [r];
+      [classicmodels].[dbo].[product].[product_id] in (?, ?, ?,..., ?)
     
-    declare @result table (
-      [product_line] varchar(50)
-    );
+    // 3
     delete from 
-      [classicmodels].[dbo].[productlinedetail] output [deleted].[product_line] into @result 
+      [classicmodels].[dbo].[productlinedetail] output [deleted].[product_line] 
     where 
-      [classicmodels].[dbo].[productlinedetail].[product_line] = ?;
-    select 
-      [r].[product_line] 
-    from 
-      @result [r];
+      [classicmodels].[dbo].[productlinedetail].[product_line] in (?, ?, ?,..., ?)
     
+    // 4
     delete from 
       [classicmodels].[dbo].[productline] 
     where 
-      [classicmodels].[dbo].[productline].[product_line] = ?    
+      [classicmodels].[dbo].[productline].[product_line] in (?, ?)       
      */
-    public void deleteCascadeReturningProductLineMotorcycles() {
+    public void deleteCascadeReturningProductLineMotorcyclesAndTrucksAndBuses() {
 
+        // Of course, even if this is possible, use it carefully!
         System.out.println("EXAMPLE 11 (affected rows): "
                 + ctx.delete(PRODUCTLINE)
-                        .where(PRODUCTLINE.PRODUCT_LINE.eq(
+                        .where(PRODUCTLINE.PRODUCT_LINE.in(
                                 ctx.delete(PRODUCTLINEDETAIL)
-                                        .where(PRODUCTLINEDETAIL.PRODUCT_LINE.eq(
+                                        .where(PRODUCTLINEDETAIL.PRODUCT_LINE.in(
                                                 ctx.delete(PRODUCT)
                                                         .where(PRODUCT.PRODUCT_ID.in(
                                                                 ctx.delete(ORDERDETAIL)
                                                                         .where(ORDERDETAIL.PRODUCT_ID.in(
                                                                                 select(PRODUCT.PRODUCT_ID).from(PRODUCT)
-                                                                                        .where(PRODUCT.PRODUCT_LINE.eq("Motorcycles"))))
+                                                                                        .where(PRODUCT.PRODUCT_LINE.eq("Motorcycles")
+                                                                                                .or(PRODUCT.PRODUCT_LINE.eq("Trucks and Buses")))))
                                                                         .returningResult(ORDERDETAIL.PRODUCT_ID).fetch()))
-                                                        .returningResult(PRODUCT.PRODUCT_LINE).fetch().get(0).value1()))
-                                        .returningResult(PRODUCTLINEDETAIL.PRODUCT_LINE).fetchOne().value1()))
-                        .execute()
-        );
-    }
-
-    // EXAMPLE 12
-    /*
-    declare @result table ([order_id] bigint);
-    delete from 
-      [classicmodels].[dbo].[orderdetail] output [deleted].[order_id] into @result 
-    where 
-      [classicmodels].[dbo].[orderdetail].[order_id] in (
-        select 
-          [classicmodels].[dbo].[order].[order_id] 
-        from 
-          [classicmodels].[dbo].[order] 
-        where 
-          [classicmodels].[dbo].[order].[customer_number] = ?
-      );
-    select 
-      [r].[order_id] 
-    from 
-      @result [r];
-   
-    declare @result table ([customer_number] bigint);
-    delete from 
-      [classicmodels].[dbo].[order] output [deleted].[customer_number] into @result 
-    where 
-      [classicmodels].[dbo].[order].[order_id] in (?, ?, ?, ..., ?);
-    select 
-      [r].[customer_number] 
-    from 
-      @result [r];
-    
-    declare @result table ([customer_number] bigint);
-    delete from 
-      [classicmodels].[dbo].[payment] output [deleted].[customer_number] into @result 
-    where 
-      [classicmodels].[dbo].[payment].[customer_number] = ?;
-    select 
-      [r].[customer_number] 
-    from 
-      @result [r];    
-    
-    declare @result table ([customer_number] bigint);
-    delete from 
-      [classicmodels].[dbo].[customerdetail] output [deleted].[customer_number] into @result 
-    where 
-      [classicmodels].[dbo].[customerdetail].[customer_number] = ?;
-    select 
-      [r].[customer_number] 
-    from 
-      @result [r];
-
-    delete from 
-      [classicmodels].[dbo].[customer] 
-    where 
-      [classicmodels].[dbo].[customer].[customer_number] = ?
-     */
-    public void deleteCascadeReturningCustomer112() {
-
-        System.out.println("EXAMPLE 12 (affected rows): "
-                + ctx.delete(CUSTOMER)
-                        .where(CUSTOMER.CUSTOMER_NUMBER.eq(
-                                ctx.delete(CUSTOMERDETAIL)
-                                        .where(CUSTOMERDETAIL.CUSTOMER_NUMBER.eq(
-                                                ctx.delete(PAYMENT)
-                                                        .where(PAYMENT.CUSTOMER_NUMBER.eq(
-                                                                ctx.delete(ORDER)
-                                                                        .where(ORDER.ORDER_ID.in(
-                                                                                ctx.delete(ORDERDETAIL)
-                                                                                        .where(ORDERDETAIL.ORDER_ID.in(
-                                                                                                select(ORDER.ORDER_ID).from(ORDER)
-                                                                                                        .where(ORDER.CUSTOMER_NUMBER.eq(112L))))
-                                                                                        .returningResult(ORDERDETAIL.ORDER_ID).fetch()))
-                                                                        .returningResult(ORDER.CUSTOMER_NUMBER).fetch().get(0).value1()))
-                                                        .returningResult(PAYMENT.CUSTOMER_NUMBER).fetch().get(0).value1()))
-                                        .returningResult(CUSTOMERDETAIL.CUSTOMER_NUMBER).fetchOne().value1()))
+                                                        .returningResult(PRODUCT.PRODUCT_LINE).fetch()))
+                                        .returningResult(PRODUCTLINEDETAIL.PRODUCT_LINE).fetch()))
                         .execute()
         );
     }
