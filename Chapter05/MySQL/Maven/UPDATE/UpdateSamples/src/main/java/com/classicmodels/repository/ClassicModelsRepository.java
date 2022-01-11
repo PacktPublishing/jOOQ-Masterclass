@@ -150,8 +150,8 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 4 (affected rows): "
                 + ctx.update(EMPLOYEE)
                         .set(EMPLOYEE.SALARY, EMPLOYEE.SALARY.plus(
-                                select(count(SALE.SALE_).multiply(5.75)).from(SALE)
-                                        .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(SALE.EMPLOYEE_NUMBER)).asField()))
+                                field(select(count(SALE.SALE_).multiply(5.75)).from(SALE)
+                                        .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(SALE.EMPLOYEE_NUMBER)))))
                         .execute()
         );
     }
