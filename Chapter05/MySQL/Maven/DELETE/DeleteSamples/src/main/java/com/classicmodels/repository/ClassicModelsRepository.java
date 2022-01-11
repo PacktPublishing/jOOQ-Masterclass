@@ -225,8 +225,8 @@ public class ClassicModelsRepository {
 
         // or
         // PaymentRecord pr = new PaymentRecord(
-        //        114L, "GG31455", LocalDateTime.of(2003,5,20,8,10,45),
-        //        BigDecimal.valueOf(45864.03), LocalDateTime.of(2003,5,20,8,30,9));
+        //       114L, "GG31455", LocalDateTime.of(2003,5,20,8,10,45),
+        //       BigDecimal.valueOf(45864.03), LocalDateTime.of(2003,5,20,8,30,9), 0, LocalDateTime.now());
         /*
         delete from
           `classicmodels`.`payment`
