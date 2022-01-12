@@ -39,7 +39,7 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>        
         <dependency>
-            <groupId>org.jooq</groupId>
+            <groupId>org.jooq.trial-java-8</groupId>
             <artifactId>jooq</artifactId>    
             <version>${jooq.version}</version>     
         </dependency>              
@@ -116,8 +116,9 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.jooq</groupId>
+                <groupId>org.jooq.trial-java-8</groupId>
                 <artifactId>jooq-codegen-maven</artifactId>               
+                <version>${jooq.version}</version>
                 <executions>
                     <execution>
                         <id>generate-for-postgresql</id>

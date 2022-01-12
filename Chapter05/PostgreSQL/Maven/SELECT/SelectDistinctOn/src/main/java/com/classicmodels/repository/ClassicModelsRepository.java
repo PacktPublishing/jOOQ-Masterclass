@@ -20,6 +20,7 @@ import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.maxDistinct;
 import static org.jooq.impl.DSL.min;
 import static org.jooq.impl.DSL.minDistinct;
+import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.partitionBy;
 import static org.jooq.impl.DSL.row;
 import static org.jooq.impl.DSL.rowNumber;
@@ -52,7 +53,7 @@ public class ClassicModelsRepository {
           "public"."office"."city",
           "public"."office"."country"
        ) is not null
-    */
+     */
     public void findDistinctOfficesCityCountry() {
 
         System.out.println("EXAMPLE 1\n"
@@ -79,7 +80,7 @@ public class ClassicModelsRepository {
       "public"."office"
     where
       "public"."office"."address_line_second" is distinct from ?
-    */
+     */
     public void findOfficeDistinctFromAddress() {
 
         System.out.println("EXAMPLE 2\n"
@@ -100,26 +101,26 @@ public class ClassicModelsRepository {
        cast("public"."payment"."payment_date" as date) 
        is (not) distinct from
        cast("public"."payment"."caching_date" as date)
-    */
+     */
     public void findDistinctAndNotDistinctPaymentDates() {
 
-        System.out.println("EXAMPLE 3.1\n" +
-                ctx.select(PAYMENT.INVOICE_AMOUNT, PAYMENT.PAYMENT_DATE)
+        System.out.println("EXAMPLE 3.1\n"
+                + ctx.select(PAYMENT.INVOICE_AMOUNT, PAYMENT.PAYMENT_DATE)
                         .from(PAYMENT)
                         .where(PAYMENT.PAYMENT_DATE.cast(LocalDate.class).isDistinctFrom(
                                 PAYMENT.CACHING_DATE.cast(LocalDate.class)))
                         .fetch()
         );
-        
-        System.out.println("EXAMPLE 3.2\n" +
-                ctx.select(PAYMENT.INVOICE_AMOUNT, PAYMENT.PAYMENT_DATE)
+
+        System.out.println("EXAMPLE 3.2\n"
+                + ctx.select(PAYMENT.INVOICE_AMOUNT, PAYMENT.PAYMENT_DATE)
                         .from(PAYMENT)
                         .where(PAYMENT.PAYMENT_DATE.cast(LocalDate.class).isNotDistinctFrom(
                                 PAYMENT.CACHING_DATE.cast(LocalDate.class)))
                         .fetch()
         );
     }
-    
+
     // EXAMPLE 4
     /*
     select
@@ -153,11 +154,11 @@ public class ClassicModelsRepository {
         "public"."customerdetail"."city",
         "public"."customerdetail"."country"
       )
-    */
+     */
     public void findOfficeAndCustomerOfficePostalCodeDistinctCityCountry() {
 
-        System.out.println("EXAMPLE 4\n" +
-                ctx.select()
+        System.out.println("EXAMPLE 4\n"
+                + ctx.select()
                         .from(OFFICE)
                         .innerJoin(CUSTOMERDETAIL)
                         .on(OFFICE.POSTAL_CODE.eq(CUSTOMERDETAIL.POSTAL_CODE))
@@ -175,11 +176,11 @@ public class ClassicModelsRepository {
       count(distinct "public"."payment"."caching_date") as "distinct_cachcing_date"
     from
       "public"."payment"
-    */
+     */
     public void countPaymentCachingDate() {
 
-        System.out.println("EXAMPLE 5\n" +
-                ctx.select(
+        System.out.println("EXAMPLE 5\n"
+                + ctx.select(
                         count().as("all"),
                         count(PAYMENT.CACHING_DATE).as("all_caching_date"),
                         countDistinct(PAYMENT.CACHING_DATE).as("distinct_cachcing_date"))
@@ -207,11 +208,11 @@ public class ClassicModelsRepository {
           group by
             "public"."product"."product_line"
         )
-    */
+     */
     public void findProductLineHavingMaxNrOfProducts() {
 
-        System.out.println("EXAMPLE 6\n" +
-                ctx.select(PRODUCT.PRODUCT_LINE, count())
+        System.out.println("EXAMPLE 6\n"
+                + ctx.select(PRODUCT.PRODUCT_LINE, count())
                         .from(PRODUCT)
                         .groupBy(PRODUCT.PRODUCT_LINE)
                         .having(count().plus(1)
@@ -237,7 +238,7 @@ public class ClassicModelsRepository {
              "public"."customerdetail"."address_line_second" is not null
        )
        as "t"    
-    */
+     */
     public void findDistinctCustomerCityCountryWithNoNullAddress() {
 
         // Table<?>
@@ -246,8 +247,8 @@ public class ClassicModelsRepository {
                 .where(CUSTOMERDETAIL.ADDRESS_LINE_SECOND.isNotNull())
                 .asTable("t");
 
-        System.out.println("EXAMPLE 7\n" +
-                ctx.select(
+        System.out.println("EXAMPLE 7\n"
+                + ctx.select(
                         (countDistinct(t)))
                         .from(t)
                         .fetch()
@@ -267,11 +268,11 @@ public class ClassicModelsRepository {
       max(distinct "public"."orderdetail"."price_each")
     from
       "public"."orderdetail"
-    */
+     */
     public void avgSumMinMaxPriceEach() {
 
-        System.out.println("EXAMPLE 8\n" +
-                ctx.select(
+        System.out.println("EXAMPLE 8\n"
+                + ctx.select(
                         avg(ORDERDETAIL.PRICE_EACH),
                         avgDistinct(ORDERDETAIL.PRICE_EACH),
                         sum(ORDERDETAIL.PRICE_EACH),
@@ -291,19 +292,19 @@ public class ClassicModelsRepository {
       string_agg("public"."office"."country", ','),
       string_agg(distinct "public"."office"."country", ',')
     from
-      "public"."office"
-    */
+      "public"."office"           
+     */
     public void groupConcatOfficeCountries() {
 
-        System.out.println("EXAMPLE 9\n" +
-                ctx.select(
+        System.out.println("EXAMPLE 9\n"
+                + ctx.select(
                         groupConcat(OFFICE.COUNTRY),
                         groupConcatDistinct(OFFICE.COUNTRY)
                 ).from(OFFICE)
                         .fetch()
         );
     }
-    
+
     // EXAMPLE 10
     /*
     select 
@@ -312,7 +313,7 @@ public class ClassicModelsRepository {
       "public"."sale" 
     group by 
       "public"."sale"."employee_number"    
-    */
+     */
     public void countDistinctSalesByEmployeeNumber() {
 
         System.out.println("EXAMPLE 10 (count result): "
@@ -326,7 +327,7 @@ public class ClassicModelsRepository {
     /* PostgreSQL DISTINCT ON */
     // EXAMPLE 11
     /* The following statement sorts the result set by the product's vendor and scale, 
-       and then for each group of duplicates, it keeps the first row in the returned result set */    
+       and then for each group of duplicates, it keeps the first row in the returned result set */
     /*
     select distinct on (
       "public"."product"."product_vendor",
@@ -345,11 +346,11 @@ public class ClassicModelsRepository {
     order by
       "public"."product"."product_vendor",
       "public"."product"."product_scale"
-    */
+     */
     public void findProductsByVendorScale() {
 
-        System.out.println("EXAMPLE 11\n" +
-                ctx.selectDistinct()
+        System.out.println("EXAMPLE 11\n"
+                + ctx.selectDistinct()
                         .on(PRODUCT.PRODUCT_VENDOR, PRODUCT.PRODUCT_SCALE)
                         .from(PRODUCT)
                         .orderBy(PRODUCT.PRODUCT_VENDOR, PRODUCT.PRODUCT_SCALE)
@@ -365,11 +366,11 @@ public class ClassicModelsRepository {
                         .orderBy(PRODUCT.PRODUCT_VENDOR, PRODUCT.PRODUCT_SCALE)
                         .fetch()
         );
-        */
+         */
     }
-    
+
     // EXAMPLE 12
-    /* What is the employee numbers of the max sales per fiscal years */        
+    /* What is the employee numbers of the max sales per fiscal years */
     public void findEmployeeNumberOfMaxSalePerFiscalYear() {
 
         /*
@@ -382,9 +383,9 @@ public class ClassicModelsRepository {
         order by 
           "public"."sale"."fiscal_year", 
           "public"."sale"."sale" desc        
-        */
-        System.out.println("EXAMPLE 12.1\n" +
-                ctx.select(
+         */
+        System.out.println("EXAMPLE 12.1\n"
+                + ctx.select(
                         SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR, SALE.SALE_)
                         .distinctOn(SALE.FISCAL_YEAR)
                         .from(SALE)
@@ -415,9 +416,9 @@ public class ClassicModelsRepository {
         order by 
           "public"."sale"."fiscal_year", 
           "public"."sale"."sale" desc        
-        */  
-        System.out.println("EXAMPLE 12.2\n" + 
-                ctx.select(SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR, SALE.SALE_)
+         */
+        System.out.println("EXAMPLE 12.2\n"
+                + ctx.select(SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR, SALE.SALE_)
                         .from(SALE)
                         .innerJoin(select(SALE.FISCAL_YEAR.as("fy"), max(SALE.SALE_).as("ms"))
                                 .from(SALE)
@@ -426,10 +427,10 @@ public class ClassicModelsRepository {
                                 .and(SALE.SALE_.eq(field("ms", Double.class))))
                         .orderBy(SALE.FISCAL_YEAR, SALE.SALE_.desc())
                         .fetch()
-        );        
-        
-        /* SQL alternative based on row_number() */        
-        /*
+        );
+
+        /* SQL alternative based on row_number() */
+        /*      
         select
            "t"."employee_number",
            "t"."fiscal_year",
@@ -451,19 +452,115 @@ public class ClassicModelsRepository {
            "t"."rn" = ? 
         order by
            "t"."fiscal_year"        
-        */
+         */
         // Table<?>
         var t = selectDistinct(SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR, SALE.SALE_,
-                                rowNumber().over(partitionBy(SALE.FISCAL_YEAR)
-                                        .orderBy(SALE.FISCAL_YEAR, SALE.SALE_.desc())).as("rn"))
-                                        .from(SALE).asTable("t");
-        
-        System.out.println("EXAMPLE 12.3\n" + 
-                ctx.select(t.field("employee_number"), t.field("fiscal_year"), t.field("sale"))
+                rowNumber().over(partitionBy(SALE.FISCAL_YEAR)
+                        .orderBy(SALE.FISCAL_YEAR, SALE.SALE_.desc())).as("rn"))
+                .from(SALE).asTable("t");
+
+        System.out.println("EXAMPLE 12.3\n"
+                + ctx.select(t.field("employee_number"), t.field("fiscal_year"), t.field("sale"))
                         .from(t)
                         .where(t.field("rn", Integer.class).eq(1))
                         .orderBy(t.field("fiscal_year"))
-                        .fetch()                                                                
+                        .fetch()
         );
-    }        
+
+        /* SQL alternative based on row_number() and QUALIFY */
+        /*
+        select 
+          distinct "t"."employee_number", 
+          "t"."fiscal_year", 
+          "t"."sale" 
+        from 
+          (
+            select 
+              *, 
+              (
+                row_number() over (
+                  partition by "public"."sale"."fiscal_year" 
+                  order by 
+                    "public"."sale"."fiscal_year", 
+                    "public"."sale"."sale" desc
+                ) = ?
+              ) as "w0" 
+            from 
+              "public"."sale"
+          ) as "t" 
+        where 
+          "w0" 
+        order by 
+          "t"."fiscal_year"        
+         */
+        System.out.println("EXAMPLE 12.4\n"
+                + ctx.selectDistinct(SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR, SALE.SALE_)
+                        .from(SALE)
+                        .qualify(rowNumber().over(partitionBy(SALE.FISCAL_YEAR)
+                                .orderBy(SALE.FISCAL_YEAR, SALE.SALE_.desc())).eq(1))
+                        .orderBy(SALE.FISCAL_YEAR)
+                        .fetch()
+        );
+    }
+
+    // EXAMPLE 13
+    /* What is the distinct employee numbers ordered by min sales */
+    public void findDistinctEmployeeNumberOrderByMinSale() {
+
+        // using DISTINCT ON
+        /*
+        select 
+          "t"."employee_number" 
+        from 
+          (
+            select 
+              distinct on (
+                "public"."sale"."employee_number"
+              ) "public"."sale"."employee_number", 
+              "public"."sale"."sale" 
+            from 
+              "public"."sale" 
+            order by 
+              "public"."sale"."employee_number", 
+              "public"."sale"."sale"
+          ) as "t" 
+        order by 
+          "t"."sale"        
+        */
+        System.out.println("EXAMPLE 13.1\n"
+                + ctx.select(field(name("t", "employee_number")))
+                        .from(select(SALE.EMPLOYEE_NUMBER, SALE.SALE_)
+                                .distinctOn(SALE.EMPLOYEE_NUMBER)
+                                .from(SALE)
+                                .orderBy(SALE.EMPLOYEE_NUMBER, SALE.SALE_).asTable("t"))
+                        .orderBy(field(name("t", "sale")))
+                        .fetch()
+        );
+
+        // alternative
+        /*
+        select 
+          "t"."employee_number" 
+        from 
+          (
+            select 
+              "public"."sale"."employee_number", 
+              min("public"."sale"."sale") as "sale" 
+            from 
+              "public"."sale" 
+            group by 
+              "public"."sale"."employee_number"
+          ) as "t" 
+        order by 
+          "t"."sale"        
+        */
+        System.out.println("EXAMPLE 13.2\n"
+                + ctx.select(field(name("t", "employee_number")))
+                        .from(select(SALE.EMPLOYEE_NUMBER, min(SALE.SALE_).as("sale"))
+                                .from(SALE)
+                                .groupBy(SALE.EMPLOYEE_NUMBER).asTable("t"))
+                        .orderBy(field(name("t", "sale")))
+                        .fetch()
+        );
+    }
 }

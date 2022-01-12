@@ -25,6 +25,7 @@ public class ClassicModelsService {
         classicModelsRepository.groupConcatOfficeCountries();                                // EXAMPLE 9
         classicModelsRepository.countDistinctSalesByEmployeeNumber();                        // EXAMPLE 10
         classicModelsRepository.findProductsByVendorScale();                                 // EXAMPLE 11
-        classicModelsRepository.findEmployeeNumberOfMaxSalePerFiscalYear();                  // EXAMPLE 12        
+        classicModelsRepository.findEmployeeNumberOfMaxSalePerFiscalYear();                  // EXAMPLE 12                
+        classicModelsRepository.findDistinctEmployeeNumberOrderByMinSale();                  // EXAMPLE 13
     }
 }
