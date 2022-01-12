@@ -20,6 +20,7 @@ import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.maxDistinct;
 import static org.jooq.impl.DSL.min;
 import static org.jooq.impl.DSL.minDistinct;
+import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.partitionBy;
 import static org.jooq.impl.DSL.row;
 import static org.jooq.impl.DSL.rowNumber;
@@ -502,5 +503,70 @@ public class ClassicModelsRepository {
                         .orderBy(t.field("fiscal_year"))
                         .fetch()
         );    
-    }          
+        
+        /* SQL alternative based on row_number() and QUALIFY */
+        /*
+        select 
+          distinct `t`.`employee_number`, 
+          `t`.`fiscal_year`, 
+          `t`.`sale` 
+        from 
+          (
+            select 
+              *, 
+              (
+                row_number() over (
+                  partition by `classicmodels`.`sale`.`fiscal_year` 
+                  order by 
+                    `classicmodels`.`sale`.`fiscal_year`, 
+                    `classicmodels`.`sale`.`sale` desc
+                ) = ?
+              ) as `w0` 
+            from 
+              `classicmodels`.`sale`
+          ) as `t` 
+        where 
+          `w0` 
+        order by 
+          `t`.`fiscal_year`        
+        */
+        System.out.println("EXAMPLE 12.4\n"
+                + ctx.selectDistinct(SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR, SALE.SALE_)
+                        .from(SALE)
+                        .qualify(rowNumber().over(partitionBy(SALE.FISCAL_YEAR)
+                                .orderBy(SALE.FISCAL_YEAR, SALE.SALE_.desc())).eq(1))
+                        .orderBy(SALE.FISCAL_YEAR)
+                        .fetch()
+        );
+    }     
+    
+    // EXAMPLE 13
+    /* What is the distinct employee numbers ordered by min sales */
+    /*
+    select 
+      `t`.`employee_number` 
+    from 
+      (
+        select 
+          `classicmodels`.`sale`.`employee_number`, 
+          min(`classicmodels`.`sale`.`sale`) as `sale` 
+        from 
+          `classicmodels`.`sale` 
+        group by 
+          `classicmodels`.`sale`.`employee_number`
+      ) as `t` 
+    order by 
+      `t`.`sale`    
+    */
+    public void findDistinctEmployeeNumberOrderByMinSale() {
+        
+        System.out.println("EXAMPLE 13\n"
+                + ctx.select(field(name("t", "employee_number")))
+                        .from(select(SALE.EMPLOYEE_NUMBER, min(SALE.SALE_).as("sale"))
+                                .from(SALE)
+                                .groupBy(SALE.EMPLOYEE_NUMBER).asTable("t"))
+                        .orderBy(field(name("t", "sale")))
+                        .fetch()
+        );
+    }
 }
