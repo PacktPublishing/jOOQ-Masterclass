@@ -479,5 +479,84 @@ public class ClassicModelsRepository {
                         .orderBy(t.field(name("fiscal_year")))
                         .fetch()                                                                
         );
+        
+        /* SQL alternative based on row_number() and QUALIFY */
+        /*
+        select 
+          distinct "t"."EMPLOYEE_NUMBER", 
+          "t"."FISCAL_YEAR", 
+          "t"."SALE" 
+        from 
+          (
+            select 
+              "CLASSICMODELS"."SALE"."SALE_ID", 
+              "CLASSICMODELS"."SALE"."FISCAL_YEAR", 
+              "CLASSICMODELS"."SALE"."SALE", 
+              "CLASSICMODELS"."SALE"."EMPLOYEE_NUMBER", 
+              "CLASSICMODELS"."SALE"."HOT", 
+              "CLASSICMODELS"."SALE"."RATE", 
+              "CLASSICMODELS"."SALE"."VAT", 
+              "CLASSICMODELS"."SALE"."FISCAL_MONTH", 
+              "CLASSICMODELS"."SALE"."REVENUE_GROWTH", 
+              "CLASSICMODELS"."SALE"."TREND", 
+              case when row_number() over (
+                partition by "CLASSICMODELS"."SALE"."FISCAL_YEAR" 
+                order by 
+                  "CLASSICMODELS"."SALE"."FISCAL_YEAR", 
+                  "CLASSICMODELS"."SALE"."SALE" desc
+              ) = ? then 1 when not (
+                row_number() over (
+                  partition by "CLASSICMODELS"."SALE"."FISCAL_YEAR" 
+                  order by 
+                    "CLASSICMODELS"."SALE"."FISCAL_YEAR", 
+                    "CLASSICMODELS"."SALE"."SALE" desc
+                ) = ?
+              ) then 0 end "w0" 
+            from 
+              "CLASSICMODELS"."SALE"
+          ) "t" 
+        where 
+          "w0" = 1 
+        order by 
+          "t"."FISCAL_YEAR"        
+        */
+        System.out.println("EXAMPLE 10.4\n"
+                + ctx.selectDistinct(SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR, SALE.SALE_)
+                        .from(SALE)
+                        .qualify(rowNumber().over(partitionBy(SALE.FISCAL_YEAR)
+                                .orderBy(SALE.FISCAL_YEAR, SALE.SALE_.desc())).eq(1))
+                        .orderBy(SALE.FISCAL_YEAR)
+                        .fetch()
+        );
     }        
+    
+     // EXAMPLE 11    
+    /* What is the distinct employee numbers ordered by min sales */
+    /*
+    select 
+      "T"."EMPLOYEE_NUMBER" 
+    from 
+      (
+        select 
+          "CLASSICMODELS"."SALE"."EMPLOYEE_NUMBER", 
+          min("CLASSICMODELS"."SALE"."SALE") "SALE" 
+        from 
+          "CLASSICMODELS"."SALE" 
+        group by 
+          "CLASSICMODELS"."SALE"."EMPLOYEE_NUMBER"
+      ) "T" 
+    order by 
+      "T"."SALE"    
+    */
+    public void findDistinctEmployeeNumberOrderByMinSale() {
+        
+        System.out.println("EXAMPLE 11\n"
+                + ctx.select(field(name("T", "EMPLOYEE_NUMBER")))
+                        .from(select(SALE.EMPLOYEE_NUMBER, min(SALE.SALE_).as("SALE"))
+                                .from(SALE)
+                                .groupBy(SALE.EMPLOYEE_NUMBER).asTable("T"))
+                        .orderBy(field(name("T", "SALE")))
+                        .fetch()
+        );
+    }
 }
