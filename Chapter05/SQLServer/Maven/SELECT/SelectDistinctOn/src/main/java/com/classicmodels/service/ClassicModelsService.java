@@ -24,5 +24,6 @@ public class ClassicModelsService {
         classicModelsRepository.countDistinctSalesByEmployeeNumber();                        // EXAMPLE 8
         classicModelsRepository.findProductsByVendorScale();                                 // EXAMPLE 9    
         classicModelsRepository.findEmployeeNumberOfMaxSalePerFiscalYear();                  // EXAMPLE 10                                        
+        classicModelsRepository.findDistinctEmployeeNumberOrderByMinSale();                  // EXAMPLE 11
     }
 }
