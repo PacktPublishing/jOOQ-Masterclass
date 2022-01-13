@@ -1,6 +1,7 @@
 package com.classicmodels.repository;
 
 import java.math.BigDecimal;
+import static jooq.generated.tables.BankTransaction.BANK_TRANSACTION;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Payment.PAYMENT;
@@ -8,7 +9,6 @@ import static jooq.generated.tables.Product.PRODUCT;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.avg;
 import static org.jooq.impl.DSL.field;
-import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.min;
 import static org.jooq.impl.DSL.round;
 import static org.jooq.impl.DSL.select;
@@ -192,10 +192,10 @@ public class ClassicModelsRepository {
                         PRODUCT.CODE, PRODUCT.PRODUCT_SCALE, PRODUCT.PRODUCT_DESCRIPTION,
                         PRODUCT.PRODUCT_VENDOR, PRODUCT.QUANTITY_IN_STOCK,
                         PRODUCT.BUY_PRICE, PRODUCT.MSRP)
-                        .values(val("1956 Harley Davidson LTD Chopper"), val("Motorcycles"),
+                        .values(val("1985s Green Bree Helicopter"), val("Planes"),
                                 field(select(min(PRODUCT.CODE)).from(PRODUCT)
-                                        .where(PRODUCT.PRODUCT_LINE.eq("Motorcycles"))),
-                                val("1:10"), val("Min Lin Diecast"), val("PENDING"), val(0),
+                                        .where(PRODUCT.PRODUCT_LINE.eq("Planes"))),
+                                val("1:10"), val("Red Start Diecast"), val("PENDING"), val(0),
                                 field(select(avg(PRODUCT.BUY_PRICE)).from(PRODUCT)),
                                 field(select(avg(PRODUCT.MSRP)).from(PRODUCT)))
                         .execute()
@@ -205,9 +205,9 @@ public class ClassicModelsRepository {
     // EXAMPLE 6
     /*
     delete from 
-      [classicmodels].[dbo].[payment] 
+      [classicmodels].[dbo].[bank_transaction] 
     where 
-      [classicmodels].[dbo].[payment].[customer_number] = (
+      [classicmodels].[dbo].[bank_transaction].[customer_number] = (
         select 
           [classicmodels].[dbo].[customer].[customer_number] 
         from 
@@ -217,11 +217,11 @@ public class ClassicModelsRepository {
       )    
      */
     @Transactional
-    public void deletePaymentsOfAtelierGraphique() {
+    public void deleteBankTransactionsOfAtelierGraphique() {
 
         System.out.println("EXAMPLE 6 (affected rows): "
-                + +ctx.deleteFrom(PAYMENT)
-                        .where(PAYMENT.CUSTOMER_NUMBER.eq(
+                + +ctx.deleteFrom(BANK_TRANSACTION)
+                        .where(BANK_TRANSACTION.CUSTOMER_NUMBER.eq(
                                 select(CUSTOMER.CUSTOMER_NUMBER).from(CUSTOMER)
                                         .where(CUSTOMER.CUSTOMER_NAME.eq("Atelier graphique"))
                         )).execute()

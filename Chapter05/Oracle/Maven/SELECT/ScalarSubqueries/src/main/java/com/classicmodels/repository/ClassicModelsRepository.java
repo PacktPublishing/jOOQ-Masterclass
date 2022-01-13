@@ -1,6 +1,7 @@
 package com.classicmodels.repository;
 
 import java.math.BigDecimal;
+import static jooq.generated.tables.BankTransaction.BANK_TRANSACTION;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Payment.PAYMENT;
@@ -205,10 +206,10 @@ public class ClassicModelsRepository {
                         PRODUCT.PRODUCT_VENDOR, PRODUCT.QUANTITY_IN_STOCK,
                         PRODUCT.BUY_PRICE, PRODUCT.MSRP)
                         .values(field(select(max(PRODUCT.PRODUCT_ID.plus(1))).from(PRODUCT)),
-                                val("1956 Harley Davidson LTD Chopper"), val("Motorcycles"),
+                                val("1985s Green Bree Helicopter"), val("Planes"),
                                 field(select(min(PRODUCT.CODE)).from(PRODUCT)
-                                        .where(PRODUCT.PRODUCT_LINE.eq("Motorcycles"))),
-                                val("1:10"), val("Min Lin Diecast"), val("PENDING"), val(0),
+                                        .where(PRODUCT.PRODUCT_LINE.eq("Planes"))),
+                                val("1:10"), val("Red Start Diecast"), val("PENDING"), val(0),
                                 field(select(avg(PRODUCT.BUY_PRICE)).from(PRODUCT)),
                                 field(select(avg(PRODUCT.MSRP)).from(PRODUCT)))
                         .execute()
@@ -218,9 +219,9 @@ public class ClassicModelsRepository {
     // EXAMPLE 6
     /*
     delete from 
-      "CLASSICMODELS"."PAYMENT" 
+      "CLASSICMODELS"."BANK_TRANSACTION" 
     where 
-      "CLASSICMODELS"."PAYMENT"."CUSTOMER_NUMBER" = (
+      "CLASSICMODELS"."BANK_TRANSACTION"."CUSTOMER_NUMBER" = (
         select 
           "CLASSICMODELS"."CUSTOMER"."CUSTOMER_NUMBER" 
         from 
@@ -230,11 +231,11 @@ public class ClassicModelsRepository {
       )    
      */
     @Transactional
-    public void deletePaymentsOfAtelierGraphique() {
+    public void deleteBankTransactionsOfAtelierGraphique() {
 
         System.out.println("EXAMPLE 6 (affected rows): "
-                + +ctx.deleteFrom(PAYMENT)
-                        .where(PAYMENT.CUSTOMER_NUMBER.eq(
+                + +ctx.deleteFrom(BANK_TRANSACTION)
+                        .where(BANK_TRANSACTION.CUSTOMER_NUMBER.eq(
                                 select(CUSTOMER.CUSTOMER_NUMBER).from(CUSTOMER)
                                         .where(CUSTOMER.CUSTOMER_NAME.eq("Atelier graphique"))
                         )).execute()
