@@ -7,9 +7,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 import jooq.generated.Keys;
 import static jooq.generated.tables.Customer.CUSTOMER;
-import static jooq.generated.tables.Department.DEPARTMENT;
 import static jooq.generated.tables.Employee.EMPLOYEE;
-import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Product.PRODUCT;
@@ -104,7 +102,7 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 1 (affected rows): "
                 + ctx.insertInto(PAYMENT)
-                        .values(103L, "HQ336336",
+                        .values(129L, "ID449593",
                                 LocalDateTime.of(2005, 11, 9, 12, 10, 11), 123.32,
                                 LocalDateTime.of(2005, 11, 11, 14, 25, 21),
                                 BigInteger.ZERO, LocalDateTime.now())
@@ -182,7 +180,7 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 2 (affected rows): "
                 + ctx.insertInto(PAYMENT)
-                        .values(103L, "HQ336336",
+                        .values(129L, "ID449593",
                                 LocalDateTime.of(2005, 11, 9, 12, 10, 11), 123.32,
                                 LocalDateTime.of(2005, 11, 11, 14, 25, 21),
                                 BigInteger.ZERO, LocalDateTime.now())
@@ -299,7 +297,7 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 4 (affected rows): "
                 + ctx.insertInto(PAYMENT)
-                        .values(103L, "HQ336336",
+                        .values(129L, "ID449593",
                                 LocalDateTime.of(2005, 11, 9, 12, 10, 11), 123.32,
                                 LocalDateTime.of(2005, 11, 11, 14, 25, 21),
                                 BigInteger.ZERO, LocalDateTime.now())
@@ -439,7 +437,7 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 5.1 (affected rows): "
                 + ctx.insertInto(PAYMENT)
-                        .values(103L, "HQ336336",
+                        .values(129L, "ID449593",
                                 LocalDateTime.of(2005, 11, 9, 12, 10, 11), 123.32,
                                 LocalDateTime.of(2005, 11, 11, 14, 25, 21),
                                 BigInteger.ZERO, LocalDateTime.now())
@@ -530,7 +528,7 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 6 (affected rows): "
                 + ctx.insertInto(PAYMENT)
-                        .values(103L, "HQ336336",
+                        .values(129L, "ID449593",
                                 LocalDateTime.of(2005, 11, 9, 12, 10, 11), 123.32,
                                 LocalDateTime.of(2005, 11, 11, 14, 25, 21),
                                 BigInteger.ZERO, LocalDateTime.now())
@@ -618,7 +616,7 @@ public class ClassicModelsRepository {
      */
     public void insertPaymentRecordOnDuplicateKeyUpdateIt() {
 
-        PaymentRecord pr = new PaymentRecord(103L, "HQ336336",
+        PaymentRecord pr = new PaymentRecord(129L, "ID449593",
                 LocalDateTime.of(2005, 11, 9, 12, 10, 11), BigDecimal.valueOf(123.32),
                 LocalDateTime.of(2005, 11, 11, 14, 25, 21), BigInteger.ZERO, LocalDateTime.now());
 
@@ -681,7 +679,7 @@ public class ClassicModelsRepository {
       )    
      */
     public void insertPaymentRecordOnConflictUpdateIt() {
-        PaymentRecord pr = new PaymentRecord(103L, "HQ336336",
+        PaymentRecord pr = new PaymentRecord(129L, "ID449593",
                 LocalDateTime.of(2005, 11, 9, 12, 10, 11), BigDecimal.valueOf(123.32),
                 LocalDateTime.of(2005, 11, 11, 14, 25, 21), BigInteger.ZERO, LocalDateTime.now());
 
@@ -696,13 +694,10 @@ public class ClassicModelsRepository {
         );
     }
 
-    /**
-     * ********************
-     */
+    /***********************/
     /* MERGE INTO EXAMPLES */
-    /**
-     * ********************
-     */
+    /***********************/
+        
     // EXAMPLE 9
     /*    
     merge into "CLASSICMODELS"."PRODUCT" using (
@@ -746,7 +741,7 @@ public class ClassicModelsRepository {
                 + ctx.mergeInto(PRODUCT)
                         .usingDual() // or, (ctx.selectOne())
                         .on(select(PRODUCT.PRODUCT_NAME).asField()
-                                .eq("1952 Alpine Renault 1300xxx"))
+                                .eq("1952 Alpine Renault 1300"))
                         .whenMatchedThenUpdate()
                         .set(PRODUCT.PRODUCT_NAME, "1952 Alpine Renault 1600")
                         .whenNotMatchedThenInsert(PRODUCT.PRODUCT_NAME, PRODUCT.CODE)

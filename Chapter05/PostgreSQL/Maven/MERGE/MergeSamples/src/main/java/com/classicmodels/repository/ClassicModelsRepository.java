@@ -53,7 +53,7 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 1 (affected rows): "
                 + ctx.insertInto(PAYMENT)
-                        .values(103L, "HQ336336",
+                        .values(129L, "ID449593",
                                 LocalDateTime.of(2005, 11, 9, 12, 10, 11), 123.32,
                                 LocalDateTime.of(2005, 11, 11, 14, 25, 21), 0, 
                                 LocalDateTime.now())
@@ -90,7 +90,7 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 2 (affected rows): "
                 + ctx.insertInto(PAYMENT)
-                        .values(103L, "HQ336336",
+                        .values(129L, "ID449593",
                                 LocalDateTime.of(2005, 11, 9, 12, 10, 11), 123.32,
                                 LocalDateTime.of(2005, 11, 11, 14, 25, 21), 0, 
                                 LocalDateTime.now())
@@ -194,7 +194,7 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 3.1 (affected rows): "
                 + ctx.insertInto(PAYMENT)
-                        .values(103L, "HQ336336",
+                        .values(129L, "ID449593",
                                 LocalDateTime.of(2005, 11, 9, 12, 10, 11), 123.32,
                                 LocalDateTime.of(2005, 11, 11, 14, 25, 21), 0, LocalDateTime.now())
                         .onConflict()
@@ -207,7 +207,7 @@ public class ClassicModelsRepository {
         
         System.out.println("EXAMPLE 3.2 (affected rows): "
                 + ctx.insertInto(PAYMENT)
-                        .values(103L, "HQ336336",
+                        .values(129L, "ID449593",
                                 LocalDateTime.of(2005, 11, 9, 12, 10, 11), 123.32,
                                 LocalDateTime.of(2005, 11, 11, 14, 25, 21), 0, LocalDateTime.now())
                         .onConflictOnConstraint(Keys.PAYMENT_PK)
@@ -219,7 +219,7 @@ public class ClassicModelsRepository {
         
         System.out.println("EXAMPLE 3.3 (affected rows): "
                 + ctx.insertInto(PAYMENT)
-                        .values(103L, "HQ336336",
+                        .values(129L, "ID449593",
                                 LocalDateTime.of(2005, 11, 9, 12, 10, 11), 123.32,
                                 LocalDateTime.of(2005, 11, 11, 14, 25, 21), 0, LocalDateTime.now())
                         .onConflictOnConstraint(Keys.CHECK_NUMBER_UK)
@@ -359,7 +359,7 @@ public class ClassicModelsRepository {
       )    
     */
     public void insertPaymentRecordOnConflictUpdateIt() {
-        PaymentRecord pr = new PaymentRecord(103L, "HQ336336",
+        PaymentRecord pr = new PaymentRecord(129L, "ID449593",
                 LocalDateTime.of(2005, 11, 9, 12, 10, 11), BigDecimal.valueOf(123.32),
                 LocalDateTime.of(2005, 11, 11, 14, 25, 21), 0, LocalDateTime.now());
         
