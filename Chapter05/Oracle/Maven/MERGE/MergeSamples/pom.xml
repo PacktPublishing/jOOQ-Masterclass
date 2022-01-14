@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.classicmodels</groupId>
-    <artifactId>MergeSample</artifactId>
+    <artifactId>MergeSamples</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>MergeSample</name>
+    <name>MergeSamples</name>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
