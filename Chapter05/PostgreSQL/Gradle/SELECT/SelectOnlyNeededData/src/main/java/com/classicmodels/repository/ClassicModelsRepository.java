@@ -393,13 +393,13 @@ public class ClassicModelsRepository {
     // EXAMPLE 12
     /*
     select
-      "public"."employee"."first_name",
-      "public"."employee"."last_name",
-      "public"."employee"."salary"
+        "public"."employee"."first_name",
+        "public"."employee"."last_name",
+        "public"."employee"."salary" 
     from
-      "public"."employee"
-    order by "public"."employee"."salary"
-    limit ?
+        "public"."employee" 
+    order by
+        "public"."employee"."salary" fetch next ? rows only
      */
     public void findEmployeeLimit() {
 
@@ -415,14 +415,13 @@ public class ClassicModelsRepository {
     // EXAMPLE 13
     /*
     select
-      "public"."employee"."first_name",
-      "public"."employee"."last_name",
-      "public"."employee"."salary"
+        "public"."employee"."first_name",
+        "public"."employee"."last_name",
+        "public"."employee"."salary" 
     from
-      "public"."employee"
-    order by "public"."employee"."salary"
-    limit
-      ? offset ?
+        "public"."employee" 
+    order by
+        "public"."employee"."salary" offset ? rows fetch next ? rows only
      */
     public void findEmployeeLimitOffset() {
 
@@ -439,14 +438,13 @@ public class ClassicModelsRepository {
     // EXAMPLE 14
     /*
     select
-      "public"."employee"."first_name",
-      "public"."employee"."last_name",
-      "public"."employee"."salary"
+        "public"."employee"."first_name",
+        "public"."employee"."last_name",
+        "public"."employee"."salary" 
     from
-      "public"."employee"
-    order by "public"."employee"."salary"
-    limit
-      ? offset ?
+        "public"."employee" 
+    order by
+        "public"."employee"."salary" offset ? rows fetch next ? rows only
      */
     public void findEmployeeLimitAndOffset() {
 
@@ -462,26 +460,26 @@ public class ClassicModelsRepository {
     public void limit1InJoinedTable() {
 
         /*
-        select 
-          "public"."productline"."product_line", 
-          "public"."productline"."code", 
-          "public"."product"."product_name", 
-          "public"."product"."quantity_in_stock", 
-          "public"."product"."product_id" 
-        from 
-          "public"."productline" 
-          join "public"."product" on "public"."product"."product_id" = (
-            select 
-              "public"."product"."product_id" 
-            from 
-              "public"."product" 
-            where 
-              "public"."productline"."product_line" = "public"."product"."product_line" 
-            order by 
-              "public"."product"."product_id" 
-            limit 
-              ?
-          )
+    select
+        "public"."productline"."product_line",
+        "public"."productline"."code",
+        "public"."product"."product_name",
+        "public"."product"."quantity_in_stock",
+        "public"."product"."product_id" 
+    from
+        "public"."productline" 
+    join
+        "public"."product" 
+            on "public"."product"."product_id" = (
+                select
+                    "public"."product"."product_id" 
+            from
+                "public"."product" 
+            where
+                "public"."productline"."product_line" = "public"."product"."product_line" 
+            order by
+                "public"."product"."product_id" fetch next ? rows only
+        )        
          */
         System.out.println("EXAMPLE 15\n"
                 + ctx.select(PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.CODE,
@@ -498,25 +496,27 @@ public class ClassicModelsRepository {
     // EXAMPLE 16
     /*
     select
-      "public"."office"."city",
-      "public"."office"."country",
-      "public"."employee"."job_title",
-      "public"."customer"."customer_number",
-      "public"."customer"."customer_name",
-      "public"."customer"."phone",
-      "public"."customer"."sales_rep_employee_number",
-      "public"."customer"."credit_limit",
-      "public"."payment"."customer_number",
-      "public"."payment"."check_number",
-      "public"."payment"."payment_date",
-      "public"."payment"."invoice_amount",
-      "public"."payment"."caching_date"
+        "public"."office"."city",
+        "public"."office"."country",
+        "public"."employee"."job_title",
+        "public"."customer"."customer_number",
+        "public"."customer"."customer_name",
+        "public"."customer"."phone",
+        "public"."customer"."sales_rep_employee_number",
+        "public"."customer"."credit_limit",
+        "public"."customer"."first_buy_date",
+        "public"."payment"."customer_number",
+        "public"."payment"."check_number",
+        "public"."payment"."payment_date",
+        "public"."payment"."invoice_amount",
+        "public"."payment"."caching_date",
+        "public"."payment"."version",
+        "public"."payment"."modified" 
     from
-      "public"."office",
-      "public"."employee",
-      "public"."customer",
-      "public"."payment"
-    limit ?
+        "public"."office",
+        "public"."employee",
+        "public"."customer",
+        "public"."payment" fetch next ? rows only    
      */
     public void decomposeSelect() {
 
@@ -536,25 +536,27 @@ public class ClassicModelsRepository {
     // EXAMPLE 17
     /*    
     select
-      "public"."office"."city",
-      "public"."office"."country",
-      "public"."employee"."job_title",
-      "public"."customer"."customer_number",
-      "public"."customer"."customer_name",
-      "public"."customer"."phone",
-      "public"."customer"."sales_rep_employee_number",
-      "public"."customer"."credit_limit",
-      "public"."payment"."customer_number",
-      "public"."payment"."check_number",
-      "public"."payment"."payment_date",
-      "public"."payment"."invoice_amount",
-      "public"."payment"."caching_date"
+        "public"."office"."city",
+        "public"."office"."country",
+        "public"."employee"."job_title",
+        "public"."customer"."customer_number",
+        "public"."customer"."customer_name",
+        "public"."customer"."phone",
+        "public"."customer"."sales_rep_employee_number",
+        "public"."customer"."credit_limit",
+        "public"."customer"."first_buy_date",
+        "public"."payment"."customer_number",
+        "public"."payment"."check_number",
+        "public"."payment"."payment_date",
+        "public"."payment"."invoice_amount",
+        "public"."payment"."caching_date",
+        "public"."payment"."version",
+        "public"."payment"."modified" 
     from
-      "public"."office",
-      "public"."employee",
-      "public"."customer",
-      "public"."payment"
-    limit ?
+        "public"."office",
+        "public"."employee",
+        "public"."customer",
+        "public"."payment" fetch next ? rows only    
      */
     public void decomposeSelectAndFrom() {
 
