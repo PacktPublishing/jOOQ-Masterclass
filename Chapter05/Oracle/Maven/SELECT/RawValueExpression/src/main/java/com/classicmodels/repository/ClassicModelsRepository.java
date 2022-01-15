@@ -250,9 +250,17 @@ public class ClassicModelsRepository {
                 .in(select(OFFICE.CITY, OFFICE.COUNTRY).from(OFFICE));
 
         // SQL query using the above row value expression
-        System.out.println("EXAMPLE 5\n" +
+        System.out.println("EXAMPLE 5.1\n" +
                 ctx.selectFrom(CUSTOMERDETAIL)
                         .where(condition)
+                        .fetch()
+        );
+
+        // or, fluent and compact
+        System.out.println("EXAMPLE 5.2\n" +
+                ctx.selectFrom(CUSTOMERDETAIL)
+                        .where(row(CUSTOMERDETAIL.CITY, CUSTOMERDETAIL.COUNTRY)
+                                .in(select(OFFICE.CITY, OFFICE.COUNTRY).from(OFFICE)))
                         .fetch()
         );
     }
