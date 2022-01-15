@@ -601,7 +601,7 @@ public class ClassicModelsRepository {
         /* create a SaleRecord via constructor */
         // SaleRecord sr = new SaleRecord(null, 2003, 3443.22, 1370L,
         //         null, RateType.SILVER, VatType.MAX, 3, 14.55, null);
-        /* or, creare a SaleRecord via constructor and setters */
+        /* or, create a SaleRecord via constructor and setters */
         SaleRecord sr = new SaleRecord();
         sr.setSaleId(++Sale_Id);                            // or, sr.set(SALE.SALE_ID, ++Sale_Id);
         sr.setFiscalYear(2003);                             // or, sr.set(SALE.FISCAL_YEAR, 2003);
