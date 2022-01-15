@@ -4,7 +4,6 @@ import com.classicmodels.pojo.SalePart;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
@@ -888,7 +887,7 @@ public class ClassicModelsRepository {
     public void insertCollectionOfSaleRecord() {
 
         // consider this collection of SaleRecord
-        Collection<SaleRecord> listOfRecord
+        List<SaleRecord> listOfRecord
                 = List.of(new SaleRecord(++Sale_Id, 2003, 3443.22, 1370L,
                         "1", null, null, 7, 78.89, "UP"),
                         new SaleRecord(++Sale_Id, 2005, 1221.12, 1504L,
@@ -940,7 +939,7 @@ public class ClassicModelsRepository {
                         .execute()
         );
 
-        // Collection<Row7<Integer, Double, Long, String, String, Integer, Double>>
+        // List<Row7<Integer, Double, Long, String, String, Integer, Double>>
         var listOfRows
                 = List.of(row(2003, 3443.22, 1370L,
                         "SILVER", "MAX", 3, 14.55),

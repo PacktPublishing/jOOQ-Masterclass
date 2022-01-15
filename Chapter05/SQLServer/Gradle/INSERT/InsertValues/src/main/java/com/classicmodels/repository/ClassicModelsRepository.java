@@ -5,7 +5,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -599,7 +598,7 @@ public class ClassicModelsRepository {
     public void insertCollectionOfSaleRecord() {
 
         // consider this collection of SaleRecord
-        Collection<SaleRecord> listOfRecord
+        List<SaleRecord> listOfRecord
                 = List.of(new SaleRecord(++Sale_Id, 2003, 3443.22, 1370L,
                         false, null, null, 3, 14.55, "UP"),
                         new SaleRecord(++Sale_Id, 2005, 1221.12, 1504L,
@@ -646,7 +645,7 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 8.3.1 (affected rows): "
                 + Arrays.toString(ctx.batch(q1, q2, q3).execute()));
 
-        // Collection<Row7<Integer, Double, Long, String, String, Integer, Double>>
+        // List<Row7<Integer, Double, Long, String, String, Integer, Double>>
         var listOfRows
                 = List.of(row(2003, 3443.22, 1370L, "SILVER", "NONE", 3, 14.55),
                         row(2005, 1221.12, 1504L, "GOLD", "MAX", 5, 22.11),

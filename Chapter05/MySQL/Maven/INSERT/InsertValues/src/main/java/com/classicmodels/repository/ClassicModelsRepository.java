@@ -569,7 +569,7 @@ public class ClassicModelsRepository {
                         .execute()
         );
 
-        // Collection<Row7<Integer, Double, Long, SaleRate, SaleVat, Integer, Double>>
+        // List<Row7<Integer, Double, Long, SaleRate, SaleVat, Integer, Double>>
         var listOfRows
                 = List.of(row(2003, 3443.22, 1370L,
                         SaleRate.SILVER, SaleVat.MAX, 3, 14.55),

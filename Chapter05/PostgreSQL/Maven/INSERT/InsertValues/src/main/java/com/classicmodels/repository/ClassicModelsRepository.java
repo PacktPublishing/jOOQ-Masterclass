@@ -4,7 +4,6 @@ import com.classicmodels.pojo.SalePart;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
@@ -683,7 +682,7 @@ public class ClassicModelsRepository {
      */
     public void insertTwoSaleRecord() {
         
-        // Record10<Long, Integer, Double, Long, Boolean, SaleRate, SaleVat, Integer, Double, String>
+        // Record10<Long, Integer, Double, Long, Boolean, RateType, VatType, Integer, Double, String>
         SaleRecord sr1 = new SaleRecord(++Sale_Id, 2003, 3443.22, 1370L,
                 null, RateType.SILVER, VatType.MAX, 3, 14.55, null);
         SaleRecord sr2 = new SaleRecord(++Sale_Id, 2005, 1221.12, 1504L,
@@ -775,7 +774,7 @@ public class ClassicModelsRepository {
     public void insertCollectionOfSaleRecord() {
 
         // consider this collection of SaleRecord
-        Collection<SaleRecord> listOfRecord
+        List<SaleRecord> listOfRecord
                 = List.of(new SaleRecord(++Sale_Id, 
                                 2003, 3443.22, 1370L, null, RateType.SILVER, VatType.MAX, 3, 14.55, null),
                         new SaleRecord(++Sale_Id, 
@@ -827,7 +826,7 @@ public class ClassicModelsRepository {
                         .execute()
         );
 
-        // Collection<Row7<Integer, Double, Long, SaleRate, SaleVat, Integer, Double>>
+        // List<Row7<Integer, Double, Long, RateType, VatType, Integer, Double>>
         var listOfRows
                 = List.of(row(2003, 3443.22, 1370L,
                         RateType.SILVER, VatType.MAX, 3, 14.55),
@@ -865,7 +864,7 @@ public class ClassicModelsRepository {
                         new Sale(++Sale_Id, 2005, 1221.12, 1504L,
                                 true, RateType.SILVER, VatType.MAX, 7, 65.59, null));
 
-        //List<Row10<Long, Integer, Double, Long, Boolean, SaleRate, SaleVat, Integer, Double, String>>
+        //List<Row10<Long, Integer, Double, Long, Boolean, RateType, VatType, Integer, Double, String>>
         var listOfSales
                 = sales.stream().collect(toRowList(
                         i -> val(i.getSaleId()), i -> val(i.getFiscalYear()), i -> val(i.getSale()),
