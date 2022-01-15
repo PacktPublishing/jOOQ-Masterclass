@@ -20,7 +20,6 @@ import static org.jooq.impl.DSL.notExists;
 import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.selectFrom;
 import static org.jooq.impl.DSL.table;
-import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -82,7 +81,7 @@ public class ClassicModelsRepository {
                         concat(EMPLOYEE.FIRST_NAME, inline(" "), EMPLOYEE.LAST_NAME).as("full_name"))
                         .from(EMPLOYEE)
                         .union(select(
-                                concat(CUSTOMER.CONTACT_FIRST_NAME, val(" "), CUSTOMER.CONTACT_LAST_NAME))
+                                concat(CUSTOMER.CONTACT_FIRST_NAME, inline(" "), CUSTOMER.CONTACT_LAST_NAME))
                                 .from(CUSTOMER))
                         .fetch()
         );
@@ -117,7 +116,7 @@ public class ClassicModelsRepository {
                         inline("Employee").as("contactType"))
                         .from(EMPLOYEE)
                         .union(select(
-                                concat(CUSTOMER.CONTACT_FIRST_NAME, val(" "),
+                                concat(CUSTOMER.CONTACT_FIRST_NAME, inline(" "),
                                         CUSTOMER.CONTACT_LAST_NAME),
                                 inline("Customer").as("contactType"))
                                 .from(CUSTOMER))
