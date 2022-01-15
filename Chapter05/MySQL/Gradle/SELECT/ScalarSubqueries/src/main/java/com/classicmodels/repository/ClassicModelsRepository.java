@@ -239,7 +239,7 @@ public class ClassicModelsRepository {
     public void deleteBankTransactionsOfAtelierGraphique() {
 
         System.out.println("EXAMPLE 6 (affected rows): "
-                + +ctx.deleteFrom(BANK_TRANSACTION)
+                + ctx.deleteFrom(BANK_TRANSACTION)
                         .where(BANK_TRANSACTION.CUSTOMER_NUMBER.eq(
                                 select(CUSTOMER.CUSTOMER_NUMBER).from(CUSTOMER)
                                         .where(CUSTOMER.CUSTOMER_NAME.eq("Atelier graphique"))
@@ -270,12 +270,11 @@ public class ClassicModelsRepository {
     @Transactional
     public void updateEmployeeSalary() {
         System.out.println("EXAMPLE 7 (affected rows): "
-                + +ctx.update(EMPLOYEE)
+                + ctx.update(EMPLOYEE)
                         .set(EMPLOYEE.SALARY,
                                 EMPLOYEE.SALARY.plus(field(select(min(EMPLOYEE.SALARY)).from(EMPLOYEE)
                                         .where(EMPLOYEE.REPORTS_TO.eq(1002L)))))
                         .execute()
-        );
-
+        );               
     }
 }
