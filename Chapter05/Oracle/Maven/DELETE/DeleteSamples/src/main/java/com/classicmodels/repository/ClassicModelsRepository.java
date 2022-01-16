@@ -2,7 +2,6 @@ package com.classicmodels.repository;
 
 import com.classicmodels.pojo.SalePart;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.time.LocalDateTime;
 import static jooq.generated.tables.BankTransaction.BANK_TRANSACTION;
 import static jooq.generated.tables.Customer.CUSTOMER;
@@ -15,7 +14,6 @@ import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Productline.PRODUCTLINE;
 import static jooq.generated.tables.Productlinedetail.PRODUCTLINEDETAIL;
 import static jooq.generated.tables.Sale.SALE;
-import static jooq.generated.tables.Top3product.TOP3PRODUCT;
 import jooq.generated.tables.records.PaymentRecord;
 import org.jooq.DSLContext;
 import org.jooq.DeleteQuery;
@@ -62,12 +60,7 @@ public class ClassicModelsRepository {
         // delete from "CLASSICMODELS"."BANK_TRANSACTION"
         System.out.println("EXAMPLE 1.4 (affected rows): "
                 + ctx.deleteFrom(BANK_TRANSACTION).execute()
-        );
-
-        // delete from "CLASSICMODELS"."TOP3PRODUCT"
-        System.out.println("EXAMPLE 1.5 (affected rows): "
-                + ctx.deleteFrom(TOP3PRODUCT).execute()
-        );
+        );        
     }
 
     // EXAMPLE 2

@@ -286,8 +286,7 @@ CREATE TABLE `orderdetail` (
 CREATE TABLE `top3product` (  
   `product_id`   BIGINT      NOT NULL,
   `product_name` VARCHAR(70) DEFAULT NULL,  
-  CONSTRAINT `top3product_pk` PRIMARY KEY (`product_id`),
-  CONSTRAINT `top3product_product_fk` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`)
+  CONSTRAINT `top3product_pk` PRIMARY KEY (`product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- TABLE PAYMENT

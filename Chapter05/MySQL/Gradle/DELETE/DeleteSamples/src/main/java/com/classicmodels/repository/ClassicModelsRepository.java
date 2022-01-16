@@ -11,7 +11,6 @@ import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Sale.SALE;
-import static jooq.generated.tables.Top3product.TOP3PRODUCT;
 import jooq.generated.tables.records.PaymentRecord;
 import org.jooq.DSLContext;
 import org.jooq.DeleteQuery;
@@ -58,12 +57,7 @@ public class ClassicModelsRepository {
         // delete from `classicmodels`.`bank_transaction`
         System.out.println("EXAMPLE 1.4 (affected rows): "
                 + ctx.deleteFrom(BANK_TRANSACTION).execute()
-        );
-
-        // delete from `classicmodels`.`top3product`
-        System.out.println("EXAMPLE 1.5 (affected rows): "
-                + ctx.deleteFrom(TOP3PRODUCT).execute()
-        );
+        );        
     }
 
     // EXAMPLE 2

@@ -748,8 +748,7 @@ CREATE TABLE orderdetail (
 CREATE TABLE top3product (  
   product_id   NUMBER(10)   NOT NULL,
   product_name VARCHAR2(70) DEFAULT NULL,  
-  CONSTRAINT top3product_pk PRIMARY KEY (product_id),  
-  CONSTRAINT top3product_product_fk FOREIGN KEY (product_id) REFERENCES product (product_id)
+  CONSTRAINT top3product_pk PRIMARY KEY (product_id)
 );
 
 -- TABLE PAYMENT
