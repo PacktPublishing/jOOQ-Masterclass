@@ -25,7 +25,6 @@ public class ClassicModelsService {
         classicModelsRepository.fetchOfficeCustomerdetailFullOuterJoinExclusiveViaUnion();    // EXAMPLE 9                                
         classicModelsRepository.fetchEmployeeSaleByYear();                                    // EXAMPLE 10
         classicModelsRepository.crossJoinFirst2EmployeeFirst2Office();                        // EXAMPLE 11
-        classicModelsRepository.innerJoinFirst5EmployeeFirst5Office();                        // EXAMPLE 12
-        classicModelsRepository.insertOfficesInEachCountryOfCustomer();                       // EXAMPLE 13     
+        classicModelsRepository.innerJoinFirst5EmployeeFirst5Office();                        // EXAMPLE 12        
     }
 }
