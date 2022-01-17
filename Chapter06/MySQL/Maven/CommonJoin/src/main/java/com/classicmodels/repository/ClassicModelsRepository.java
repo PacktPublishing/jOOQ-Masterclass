@@ -181,7 +181,7 @@ public class ClassicModelsRepository {
                         .from(
                                 select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME).from(EMPLOYEE)
                                         .limit(2)
-                                        .asTable("t").crossJoin(select().from(OFFICE).limit(2))
+                                        .asTable("t1").crossJoin(select().from(OFFICE).limit(2).asTable("t2"))
                         )
                         .fetch()
         );
