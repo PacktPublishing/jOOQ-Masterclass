@@ -58,6 +58,8 @@
     </tables>
 
     <columns>
+        <!-- Table `order` -->
+        <!-- order_id bigint not null auto_increment -->
         <column>
             <table_schema>classicmodels</table_schema>
             <table_name>order</table_name>
@@ -66,12 +68,14 @@
             <is_nullable>false</is_nullable> 
             <identity_generation>auto_increment</identity_generation>
         </column>
+        <!-- comments longtext -->
         <column>
             <table_schema>classicmodels</table_schema>
             <table_name>order</table_name>
             <column_name>comments</column_name>
             <data_type>longtext</data_type>
         </column>
+        <!-- order_date date not null -->
         <column> 
             <table_schema>classicmodels</table_schema>
             <table_name>order</table_name>
@@ -79,6 +83,7 @@
             <data_type>date</data_type>            
             <is_nullable>false</is_nullable> 
         </column>
+        <!-- required_date date not null -->
         <column>
             <table_schema>classicmodels</table_schema>
             <table_name>order</table_name>
@@ -86,12 +91,14 @@
             <data_type>date</data_type>            
             <is_nullable>false</is_nullable> 
         </column>
+        <!-- shipped_date date -->
         <column>
             <table_schema>classicmodels</table_schema>
             <table_name>order</table_name>
             <column_name>shipped_date</column_name>
             <data_type>date</data_type>
         </column>
+        <!-- status varchar(50) not null -->
         <column>
             <table_schema>classicmodels</table_schema>
             <table_name>order</table_name>
@@ -100,12 +107,161 @@
             <character_maximum_length>50</character_maximum_length>
             <is_nullable>false</is_nullable> 
         </column>
+        <!-- customer_number bigint -->
         <column>
             <table_schema>classicmodels</table_schema>
             <table_name>order</table_name>
             <column_name>customer_number</column_name>
             <data_type>bigint</data_type>
         </column>
+
+        <!-- Table `customer` -->
+        <!-- customer_number bigint not null -->
+        <column>  
+            <table_schema>classicmodels</table_schema>
+            <table_name>customer</table_name>
+            <column_name>customer_number</column_name>
+            <data_type>bigint</data_type>            
+            <is_nullable>false</is_nullable> 
+        </column>
+        <!-- contact_first_name varchar(50) not null -->
+        <column>  
+            <table_schema>classicmodels</table_schema>
+            <table_name>customer</table_name>
+            <column_name>contact_first_name</column_name>
+            <data_type>varchar</data_type>            
+            <character_maximum_length>50</character_maximum_length>
+            <is_nullable>false</is_nullable> 
+        </column>
+        <!-- contact_last_name varchar(50) not null --> 
+        <column>
+            <table_schema>classicmodels</table_schema>
+            <table_name>customer</table_name>
+            <column_name>contact_last_name</column_name>
+            <data_type>varchar</data_type>            
+            <character_maximum_length>50</character_maximum_length>
+            <is_nullable>false</is_nullable> 
+        </column>
+        <!-- credit_limit float -->
+        <column>
+            <table_schema>classicmodels</table_schema>
+            <table_name>customer</table_name>
+            <column_name>credit_limit</column_name>
+            <data_type>float</data_type>
+        </column>
+        <!-- customer_name varchar(50) not null -->
+        <column>
+            <table_schema>classicmodels</table_schema>
+            <table_name>customer</table_name>
+            <column_name>customer_name</column_name>
+            <data_type>varchar</data_type>            
+            <character_maximum_length>50</character_maximum_length>
+            <is_nullable>false</is_nullable> 
+        </column>
+        <!-- phone varchar(50) not null -->
+        <column>
+            <table_schema>classicmodels</table_schema>
+            <table_name>customer</table_name>
+            <column_name>phone</column_name>
+            <data_type>varchar</data_type>            
+            <character_maximum_length>50</character_maximum_length>
+            <is_nullable>false</is_nullable> 
+        </column>
+        <!-- sales_rep_employee_number bigint -->
+        <column>
+            <table_schema>classicmodels</table_schema>
+            <table_name>customer</table_name>
+            <column_name>sales_rep_employee_number</column_name>
+            <data_type>bigint</data_type>                        
+        </column>
+
+        <!-- Table `customerdetail` -->
+        <!-- customer_number bigint not null -->
+        <column>  
+            <table_schema>classicmodels</table_schema>
+            <table_name>customerdetail</table_name>
+            <column_name>customer_number</column_name>
+            <data_type>bigint</data_type>            
+            <is_nullable>false</is_nullable> 
+        </column>
+        <!-- address_line_first varchar(50) not null -->
+        <column>  
+            <table_schema>classicmodels</table_schema>
+            <table_name>customerdetail</table_name>
+            <column_name>address_line_first</column_name>
+            <data_type>varchar</data_type>            
+            <character_maximum_length>50</character_maximum_length>
+            <is_nullable>false</is_nullable> 
+        </column>
+        <!-- address_line_second varchar(50) -->
+        <column>  
+            <table_schema>classicmodels</table_schema>
+            <table_name>customerdetail</table_name>
+            <column_name>address_line_second</column_name>
+            <data_type>varchar</data_type>            
+            <character_maximum_length>50</character_maximum_length>
+        </column>
+        <!-- city varchar(50) not null -->
+        <column>  
+            <table_schema>classicmodels</table_schema>
+            <table_name>customerdetail</table_name>
+            <column_name>city</column_name>
+            <data_type>varchar</data_type>            
+            <character_maximum_length>50</character_maximum_length>
+            <is_nullable>false</is_nullable> 
+        </column>
+        <!-- country varchar(50) not null -->
+        <column>  
+            <table_schema>classicmodels</table_schema>
+            <table_name>customerdetail</table_name>
+            <column_name>country</column_name>
+            <data_type>varchar</data_type>            
+            <character_maximum_length>50</character_maximum_length>
+            <is_nullable>false</is_nullable> 
+        </column>
+        <!-- postal_code varchar(15) -->
+        <column>  
+            <table_schema>classicmodels</table_schema>
+            <table_name>customerdetail</table_name>
+            <column_name>postal_code</column_name>
+            <data_type>varchar</data_type>            
+            <character_maximum_length>15</character_maximum_length>
+        </column>
+        <!-- state varchar(50) -->
+        <column>  
+            <table_schema>classicmodels</table_schema>
+            <table_name>customerdetail</table_name>
+            <column_name>state</column_name>
+            <data_type>varchar</data_type>            
+            <character_maximum_length>50</character_maximum_length>
+        </column>
+
+        <!-- Table `employee` -->
+        <!-- employee_number bigint not null -->
+        <column>  
+            <table_schema>classicmodels</table_schema>
+            <table_name>employee</table_name>
+            <column_name>employee_number</column_name>
+            <data_type>bigint</data_type>            
+            <is_nullable>false</is_nullable> 
+        </column>
+        <!-- email varchar(100) not null -->
+        <column>  
+            <table_schema>classicmodels</table_schema>
+            <table_name>employee</table_name>
+            <column_name>email</column_name>
+            <data_type>varchar</data_type>            
+            <character_maximum_length>100</character_maximum_length>
+            <is_nullable>false</is_nullable> 
+        </column>
+		<!-- -->
+		<!-- -->
+		<!-- -->
+		<!-- -->
+		<!-- -->
+		<!-- -->
+		<!-- -->
+		<!-- -->
     </columns>
 
     <table_constraints>
@@ -116,5 +272,46 @@
             <table_schema>classicmodels</table_schema>
             <table_name>order</table_name>
         </table_constraint>
+        <table_constraint>
+            <constraint_schema>classicmodels</constraint_schema>
+            <constraint_name>customer_pk</constraint_name>
+            <constraint_type>PRIMARY KEY</constraint_type>
+            <table_schema>classicmodels</table_schema>
+            <table_name>customer</table_name>
+        </table_constraint>
+        <table_constraint>
+            <constraint_schema>classicmodels</constraint_schema>
+            <constraint_name>customerdetail_pk</constraint_name>
+            <constraint_type>PRIMARY KEY</constraint_type>
+            <table_schema>classicmodels</table_schema>
+            <table_name>customerdetail</table_name>
+        </table_constraint>
     </table_constraints>
+
+    <key_column_usages>
+        <key_column_usage>
+            <constraint_schema>classicmodels</constraint_schema>
+            <constraint_name>order_pk</constraint_name>
+            <table_schema>classicmodels</table_schema>
+            <table_name>order</table_name>
+            <column_name>order_id</column_name>
+            <ordinal_position>1</ordinal_position>
+        </key_column_usage>
+        <key_column_usage>
+            <constraint_schema>classicmodels</constraint_schema>
+            <constraint_name>customer_pk</constraint_name>
+            <table_schema>classicmodels</table_schema>
+            <table_name>customer</table_name>
+            <column_name>customer_number</column_name>
+            <ordinal_position>1</ordinal_position>
+        </key_column_usage>
+        <key_column_usage>
+            <constraint_schema>classicmodels</constraint_schema>
+            <constraint_name>customerdetail_pk</constraint_name>
+            <table_schema>classicmodels</table_schema>
+            <table_name>customerdetail</table_name>
+            <column_name>customer_number</column_name>
+            <ordinal_position>1</ordinal_position>
+        </key_column_usage>
+    </key_column_usages>
 </information_schema>
