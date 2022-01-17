@@ -17,9 +17,8 @@ public class ClassicModelsService {
         classicModelsRepository.joinPaymentBankTransactionViaOn();                    // EXAMPLE 1
         classicModelsRepository.joinPaymentBankTransactionViaOnRow();                 // EXAMPLE 2
         classicModelsRepository.joinPaymentBankTransactionViaOnKey();                 // EXAMPLE 3
-        classicModelsRepository.joinProductlineProductlinedetailViaOnKeyTF();         // EXAMPLE 4
+        classicModelsRepository.joinProductlineProductlinedetailViaOnKeyTF1();        // EXAMPLE 4
         classicModelsRepository.joinProductlineProductlinedetailViaOnKeyFK();         // EXAMPLE 5                
-        classicModelsRepository.joinProductlineProductlinedetailViaOnKeyTF1();        // EXAMPLE 6
-        classicModelsRepository.joinProductlineProductlinedetailViaOnKey();           // EXAMPLE 7
+        classicModelsRepository.joinProductlineProductlinedetailViaOnKeyTF2();        // EXAMPLE 6        
     }
 }
