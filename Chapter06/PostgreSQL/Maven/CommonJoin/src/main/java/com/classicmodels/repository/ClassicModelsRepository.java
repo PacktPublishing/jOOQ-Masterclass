@@ -9,6 +9,7 @@ import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.any;
 import static org.jooq.impl.DSL.field;
+import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.selectDistinct;
 import static org.jooq.impl.DSL.val;
@@ -206,7 +207,7 @@ public class ClassicModelsRepository {
                         .from(
                                 select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME).from(EMPLOYEE)
                                         .limit(2)
-                                        .asTable().crossJoin(select().from(OFFICE).limit(2))
+                                        .asTable("t1").crossJoin(select().from(OFFICE).limit(2).asTable("t2"))
                         )
                         .fetch()
         );
@@ -227,7 +228,7 @@ public class ClassicModelsRepository {
                                                 OFFICE.CITY, OFFICE.COUNTRY).from(OFFICE)
                                                 .orderBy(OFFICE.COUNTRY)
                                                 .limit(5).asTable("bt"))
-                                        .on(field("a").eq(field("b")))
+                                        .on(field(name("at", "a")).eq(field(name("bt", "b"))))
                         )
                         .fetch()
         );
@@ -238,12 +239,14 @@ public class ClassicModelsRepository {
     public void insertOfficesInEachCountryOfCustomer() {
 
         System.out.println("EXAMPLE 13\n"
-                + ctx.insertInto(OFFICE)
+                + ctx.insertInto(OFFICE, OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.PHONE,
+                        OFFICE.ADDRESS_LINE_FIRST, OFFICE.ADDRESS_LINE_SECOND, OFFICE.STATE, 
+                        OFFICE.COUNTRY, OFFICE.POSTAL_CODE, OFFICE.TERRITORY, OFFICE.INTERNAL_BUDGET)
                         .select(selectDistinct(CUSTOMERDETAIL.CUSTOMER_NUMBER.coerce(String.class),
                                 CUSTOMERDETAIL.CITY, val("N/A"),
                                 CUSTOMERDETAIL.ADDRESS_LINE_FIRST, CUSTOMERDETAIL.ADDRESS_LINE_SECOND,
                                 CUSTOMERDETAIL.STATE, CUSTOMERDETAIL.COUNTRY,
-                                val("N/A"), val("N/A")).from(CUSTOMERDETAIL)
+                                val("NN000NN"), val("N/A"), val(0)).from(CUSTOMERDETAIL)
                                 .leftOuterJoin(OFFICE)
                                 .on(CUSTOMERDETAIL.COUNTRY.eq(OFFICE.COUNTRY))
                                 .where(OFFICE.COUNTRY.isNull()))
