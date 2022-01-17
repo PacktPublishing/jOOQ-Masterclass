@@ -11,9 +11,8 @@ import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.field;
+import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.select;
-import static org.jooq.impl.DSL.selectDistinct;
-import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -206,7 +205,7 @@ public class ClassicModelsRepository {
                         .from(
                                 select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME).from(EMPLOYEE)
                                         .limit(2)
-                                        .asTable().crossJoin(select().from(OFFICE).limit(2))
+                                        .asTable("t1").crossJoin(select().from(OFFICE).limit(2).asTable("t2"))
                         )
                         .fetch()
         );
@@ -227,28 +226,9 @@ public class ClassicModelsRepository {
                                                 OFFICE.CITY, OFFICE.COUNTRY).from(OFFICE)
                                                 .orderBy(OFFICE.COUNTRY)
                                                 .limit(5).asTable("bt"))
-                                        .on(field("a").eq(field("b")))
+                                        .on(field(name("at", "a")).eq(field(name("bt", "b"))))
                         )
                         .fetch()
         );
     }
-
-    // EXAMPLE 12
-    @Transactional
-    public void insertOfficesInEachCountryOfCustomer() {
-        
-        System.out.println("EXAMPLE 12\n"
-                + ctx.insertInto(OFFICE)
-                        .select(selectDistinct(CUSTOMERDETAIL.CUSTOMER_NUMBER.coerce(String.class),
-                                CUSTOMERDETAIL.CITY, val("N/A"),
-                                CUSTOMERDETAIL.ADDRESS_LINE_FIRST, CUSTOMERDETAIL.ADDRESS_LINE_SECOND,
-                                CUSTOMERDETAIL.STATE, CUSTOMERDETAIL.COUNTRY,
-                                val("N/A"), val("N/A")).from(CUSTOMERDETAIL)
-                                .leftOuterJoin(OFFICE)
-                                .on(CUSTOMERDETAIL.COUNTRY.eq(OFFICE.COUNTRY))
-                                .where(OFFICE.COUNTRY.isNull()))
-                        .onDuplicateKeyIgnore()
-                        .execute()
-        );
-    }    
 }
