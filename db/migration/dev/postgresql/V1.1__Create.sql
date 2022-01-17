@@ -264,7 +264,7 @@ CREATE TABLE "productlinedetail" (
   "line_type"     INT         DEFAULT 0,
   CONSTRAINT "productlinedetail_pk" PRIMARY KEY ("product_line","code"),  
   CONSTRAINT "productlinedetail_uk" UNIQUE("product_line"),
-  CONSTRAINT "productlinedetail_fk" FOREIGN KEY ("product_line","code") REFERENCES "productline" ("product_line","code")
+  CONSTRAINT "productlinedetail_productline_fk" FOREIGN KEY ("product_line","code") REFERENCES "productline" ("product_line","code")
 );
 
 -- TABLE PRODUCT
