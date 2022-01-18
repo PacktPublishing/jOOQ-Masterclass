@@ -13,11 +13,13 @@ import static jooq.generated.tables.Product.PRODUCT;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.concat;
 import static org.jooq.impl.DSL.field;
+import static org.jooq.impl.DSL.inline;
+import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.nvl;
 import static org.jooq.impl.DSL.row;
 import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.sum;
-import static org.jooq.impl.DSL.val;
+import static org.jooq.impl.DSL.trueCondition;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -60,7 +62,9 @@ public class ClassicModelsRepository {
                 + ctx.select()
                         .from(OFFICE)
                         .innerJoin(DEPARTMENT)
-                        .on(val(1).eq(val(1)))
+                        .on(trueCondition())
+                        // .on(one().eq(one()))
+                        // .on(val(1).eq(val(1)))
                         .fetch()
         );
     }
@@ -93,8 +97,8 @@ public class ClassicModelsRepository {
     public void joinOfficeDepartmentConcatCertainColsViaCrossJoin() {
 
         System.out.println("EXAMPLE 6\n"
-                + ctx.select(concat(OFFICE.CITY, val(", "), OFFICE.COUNTRY,
-                        val(": "), DEPARTMENT.NAME).as("offices"))
+                + ctx.select(concat(OFFICE.CITY, inline(", "), OFFICE.COUNTRY,
+                        inline(": "), DEPARTMENT.NAME).as("offices"))
                         .from(OFFICE)
                         .crossJoin(DEPARTMENT)
                         .where(row(OFFICE.CITY, OFFICE.COUNTRY).isNotNull())
@@ -104,39 +108,45 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 7
     /*
-    select 
-      `c`.`customer_number`, 
-      `p`.`product_id`, 
-      ifnull(sales, ?) 
-    from 
-      `classicmodels`.`customer` as `c` cross 
-      join `classicmodels`.`product` as `p` 
-      left outer join (
-        select 
-          `c`.`customer_number` as `cn`, 
-          `p`.`product_id` as `pi`, 
-          sum(
-            (
-              `i`.`quantity_ordered` * `i`.`price_each`
-            )
-          ) as `sales` 
-        from 
-          `classicmodels`.`order` as `o` 
-          join `classicmodels`.`orderdetail` as `i` on `i`.`order_id` = `o`.`order_id` 
-          join `classicmodels`.`customer` as `c` on `c`.`customer_number` = `o`.`customer_number` 
-          join `classicmodels`.`product` as `p` on `p`.`product_id` = `i`.`product_id` 
-        group by 
-          `c`.`customer_number`, 
-          `p`.`product_id`
-      ) as `alias_84432753` on (
-        cn = `c`.`customer_number` 
-        and pi = `p`.`product_id`
-      ) 
-    where 
-      sales is null 
-    order by 
-      `p`.`product_id`, 
-      `c`.`customer_number`    
+    select
+        `c`.`customer_number`,
+        `p`.`product_id`,
+        ifnull(sales,
+        ?) 
+    from
+        `classicmodels`.`customer` as `c` cross 
+    join
+        `classicmodels`.`product` as `p` 
+    left outer join
+        (
+            select
+                `c`.`customer_number` as `cn`,
+                `p`.`product_id` as `pi`,
+                sum((`i`.`quantity_ordered` * `i`.`price_each`)) as `sales` 
+            from
+                `classicmodels`.`
+            order` as `o` join
+                `classicmodels`.`orderdetail` as `i` 
+                    on `i`.`order_id` = `o`.`order_id` 
+            join
+                `classicmodels`.`customer` as `c` 
+                    on `c`.`customer_number` = `o`.`customer_number` 
+            join
+                `classicmodels`.`product` as `p` 
+                    on `p`.`product_id` = `i`.`product_id` 
+            group by
+                `c`.`customer_number`,
+                `p`.`product_id`
+        ) as `alias_84432753` 
+            on (
+                `cn` = `c`.`customer_number` 
+                and `pi` = `p`.`product_id`
+            ) 
+    where
+        `sales` is null 
+    order by
+        `p`.`product_id`,
+        `c`.`customer_number`    
     */
     public void findProductsNoSalesAcrossCustomers() {
 
@@ -156,9 +166,9 @@ public class ClassicModelsRepository {
                                 .innerJoin(c).on(c.CUSTOMER_NUMBER.eq(o.CUSTOMER_NUMBER))
                                 .innerJoin(p).on(p.PRODUCT_ID.eq(i.PRODUCT_ID))
                                 .groupBy(c.CUSTOMER_NUMBER, p.PRODUCT_ID))
-                        .on(field("cn").eq(c.CUSTOMER_NUMBER)
-                                .and(field("pi").eq(p.PRODUCT_ID)))
-                        .where(field("sales").isNull())
+                        .on(field(name("cn")).eq(c.CUSTOMER_NUMBER)
+                                .and(field(name("pi")).eq(p.PRODUCT_ID)))
+                        .where(field(name("sales")).isNull())
                         .orderBy(p.PRODUCT_ID, c.CUSTOMER_NUMBER)
                         .fetch()
         );
