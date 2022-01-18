@@ -12,7 +12,6 @@ import static org.jooq.impl.DSL.selectCount;
 import static org.jooq.impl.DSL.selectDistinct;
 import static org.jooq.impl.DSL.selectOne;
 import static org.jooq.impl.DSL.trueCondition;
-import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,10 +51,10 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 2\n"
                 + ctx.select().from(
-                        selectDistinct(ORDERDETAIL.ORDER_ID.as(name("OID"))).from(ORDERDETAIL).asTable("T1")
+                        selectDistinct(ORDERDETAIL.ORDER_ID.as("OID")).from(ORDERDETAIL).asTable("T1")
                                 .whereNotExists(selectOne().from(TOP3PRODUCT)
                                         .whereNotExists(selectOne().from(ORDERDETAIL)
-                                                .where(field(name("OID")).eq(ORDERDETAIL.ORDER_ID)
+                                                .where(field(name("T1", "OID")).eq(ORDERDETAIL.ORDER_ID)
                                                         .and(TOP3PRODUCT.PRODUCT_ID.eq(ORDERDETAIL.PRODUCT_ID))))))
                         .fetch()
         );
@@ -66,12 +65,12 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 3\n"
                 + ctx.select().from(
-                        ctx.selectDistinct(ORDERDETAIL.ORDER_ID.as(name("OID"))).from(ORDERDETAIL).asTable("T1")
+                        ctx.selectDistinct(ORDERDETAIL.ORDER_ID.as("OID")).from(ORDERDETAIL).asTable("T1")
                                 .leftAntiJoin(TOP3PRODUCT
                                         .leftAntiJoin(ORDERDETAIL)
-                                        .on(field(name("OID")).eq(ORDERDETAIL.ORDER_ID)
+                                        .on(field(name("T1", "OID")).eq(ORDERDETAIL.ORDER_ID)
                                                 .and(TOP3PRODUCT.PRODUCT_ID.eq(ORDERDETAIL.PRODUCT_ID))))
-                                .on(trueCondition())) // or, val(1).eq(val(1))
+                                .on(trueCondition())) // or, val(1).eq(val(1)), one().eq(one())
                         .fetch()
         );
     }
@@ -97,14 +96,14 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 5\n"
                 + ctx.select(field(name("OID")))
                         .from(
-                                select(PRODUCT.PRODUCT_ID.as(name("P1"))).from(PRODUCT).asTable("T1")
-                                        .innerJoin(select(ORDERDETAIL.ORDER_ID.as(name("OID")),
-                                                ORDERDETAIL.PRODUCT_ID.as(name("P2"))).from(ORDERDETAIL).asTable("T2"))
-                                        .on(field(name("P1")).eq(field(name("P2"))))
-                                        .innerJoin(select(ORDERDETAIL.PRODUCT_ID.as(name("P3")))
-                                                .from(ORDERDETAIL).where(ORDERDETAIL.ORDER_ID.eq(GIVEN_ORDER_ID)))
-                                        .on(field(name("P1")).eq(field(name("P3")))))
-                        .groupBy(field(name("OID")))
+                                select(PRODUCT.PRODUCT_ID.as("P1")).from(PRODUCT).asTable("T1")
+                                        .innerJoin(select(ORDERDETAIL.ORDER_ID.as("OID"),
+                                                ORDERDETAIL.PRODUCT_ID.as("P2")).from(ORDERDETAIL).asTable("T2"))
+                                        .on(field(name("T1", "P1")).eq(field(name("T2", "P2"))))
+                                        .innerJoin(select(ORDERDETAIL.PRODUCT_ID.as("P3"))
+                                                .from(ORDERDETAIL).where(ORDERDETAIL.ORDER_ID.eq(GIVEN_ORDER_ID)).asTable("T3"))
+                                        .on(field(name("T1", "P1")).eq(field(name("T3", "P3")))))
+                        .groupBy(field(name("T2", "OID")))
                         .having(count().eq(selectCount()
                                 .from(ORDERDETAIL).where(ORDERDETAIL.ORDER_ID.eq(GIVEN_ORDER_ID))))
                         .fetch()
@@ -116,12 +115,12 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 6\n"
                 + ctx.select().from(
-                        selectDistinct(ORDERDETAIL.ORDER_ID.as(name("OID"))).from(ORDERDETAIL).asTable("T1")
-                                .whereNotExists(selectOne().from(select(ORDERDETAIL.PRODUCT_ID.as(name("P")))
-                                        .from(ORDERDETAIL).where(ORDERDETAIL.ORDER_ID.eq(GIVEN_ORDER_ID)))
+                        selectDistinct(ORDERDETAIL.ORDER_ID.as("OID")).from(ORDERDETAIL).asTable("T1")
+                                .whereNotExists(selectOne().from(select(ORDERDETAIL.PRODUCT_ID.as("P"))
+                                        .from(ORDERDETAIL).where(ORDERDETAIL.ORDER_ID.eq(GIVEN_ORDER_ID)).asTable("T2"))
                                         .whereNotExists(selectOne().from(ORDERDETAIL)
-                                                .where(field(name("OID")).eq(ORDERDETAIL.ORDER_ID)
-                                                        .and(field(name("P")).eq(ORDERDETAIL.PRODUCT_ID))))))
+                                                .where(field(name("T1", "OID")).eq(ORDERDETAIL.ORDER_ID)
+                                                        .and(field(name("T2", "P")).eq(ORDERDETAIL.PRODUCT_ID))))))
                         .fetch()
         );
     }
@@ -131,13 +130,13 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 7\n"
                 + ctx.select().from(
-                        ctx.selectDistinct(ORDERDETAIL.ORDER_ID.as(name("OID"))).from(ORDERDETAIL).asTable("T1")
-                                .leftAntiJoin(select(ORDERDETAIL.PRODUCT_ID.as(name("P")))
+                        ctx.selectDistinct(ORDERDETAIL.ORDER_ID.as("OID")).from(ORDERDETAIL).asTable("T1")
+                                .leftAntiJoin(select(ORDERDETAIL.PRODUCT_ID.as("P"))
                                         .from(ORDERDETAIL).where(ORDERDETAIL.ORDER_ID.eq(GIVEN_ORDER_ID)).asTable("T2")
                                         .leftAntiJoin(ORDERDETAIL)
-                                        .on(field(name("OID")).eq(ORDERDETAIL.ORDER_ID)
-                                                .and(field(name("P")).eq(ORDERDETAIL.PRODUCT_ID))))
-                                .on(trueCondition())) // or, val(1).eq(val(1))
+                                        .on(field(name("T1", "OID")).eq(ORDERDETAIL.ORDER_ID)
+                                                .and(field(name("T2", "P")).eq(ORDERDETAIL.PRODUCT_ID))))
+                                .on(trueCondition())) // or, val(1).eq(val(1)), one().eq(one())
                         .fetch()
         );
     }
@@ -148,10 +147,10 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 8\n"
                 + ctx.select().from(
                         ORDERDETAIL
-                                .divideBy(select(ORDERDETAIL.PRODUCT_ID.as(name("P")))
+                                .divideBy(select(ORDERDETAIL.PRODUCT_ID.as("P"))
                                         .from(ORDERDETAIL).where(ORDERDETAIL.ORDER_ID
                                         .eq(GIVEN_ORDER_ID)).asTable("T"))
-                                .on(field(name("P")).eq(ORDERDETAIL.PRODUCT_ID))
+                                .on(field(name("T", "P")).eq(ORDERDETAIL.PRODUCT_ID))
                                 .returning(ORDERDETAIL.ORDER_ID))
                         .fetch()
         );
