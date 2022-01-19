@@ -14,6 +14,7 @@ import org.jooq.DSLContext;
 import org.jooq.Table;
 import static org.jooq.impl.DSL.avg;
 import static org.jooq.impl.DSL.field;
+import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.unnest;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,10 +57,10 @@ public class ClassicModelsRepository {
     public void crossApplyEmployeeAvgSales() {
 
         System.out.println("EXAMPLE 3\n"
-                + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, field("avg_sale"))
+                + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, field(name("t", "avg_sale")))
                         .from(EMPLOYEE.crossApply(select(
                                 avg(SALE.SALE_).as("avg_sale")).from(SALE)
-                                .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(SALE.EMPLOYEE_NUMBER))))
+                                .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(SALE.EMPLOYEE_NUMBER)).asTable("t")))
                         .fetch()
         // or, fetch only avg: fetch("avg_sale", float.class)
         );
@@ -95,11 +96,11 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 6\n"
                 + ctx.select(EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.FIRST_NAME,
-                        EMPLOYEE.LAST_NAME, field("sales"))
+                        EMPLOYEE.LAST_NAME, field(name("t", "sales")))
                         .from(EMPLOYEE.crossApply(select(SALE.SALE_.as("sales")).from(SALE)
                                 .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(SALE.EMPLOYEE_NUMBER))
                                 .orderBy(SALE.SALE_.desc())
-                                .limit(3))
+                                .limit(3).asTable("t"))
                         )
                         .orderBy(EMPLOYEE.EMPLOYEE_NUMBER)
                         .fetch()
@@ -110,7 +111,7 @@ public class ClassicModelsRepository {
     public void findTop3OrderedProductsIn2003() {
 
         System.out.println("EXAMPLE 7\n"
-                + ctx.select(PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME, field("od"), field("qo"))
+                + ctx.select(PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME, field(name("t", "od")), field(name("t", "qo")))
                         .from(PRODUCT.crossApply(select(ORDER.ORDER_DATE.as("od"), ORDERDETAIL.QUANTITY_ORDERED.as("qo"))
                                 .from(ORDER)
                                 .innerJoin(ORDERDETAIL)
@@ -118,7 +119,7 @@ public class ClassicModelsRepository {
                                         .and(ORDER.ORDER_DATE.between(LocalDate.of(2003, 1, 1), LocalDate.of(2003, 12, 31))))
                                 .where(PRODUCT.PRODUCT_ID.eq(ORDERDETAIL.PRODUCT_ID))
                                 .orderBy(ORDERDETAIL.QUANTITY_ORDERED.desc())
-                                .limit(3))
+                                .limit(3).asTable("t"))
                         )
                         .orderBy(PRODUCT.PRODUCT_ID)
                         .fetch()
@@ -130,7 +131,7 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 8\n"
                 + ctx.select(EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.FIRST_NAME,
-                        EMPLOYEE.LAST_NAME, field("sales"))
+                        EMPLOYEE.LAST_NAME, field(name("sales")))
                         .from(EMPLOYEE.crossApply(TOP_THREE_SALES_PER_EMPLOYEE.call(EMPLOYEE.EMPLOYEE_NUMBER)))
                         .orderBy(EMPLOYEE.EMPLOYEE_NUMBER)
                         .fetch()
