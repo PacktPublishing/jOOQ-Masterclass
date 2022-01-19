@@ -1,16 +1,14 @@
 package com.classicmodels.repository;
 
 import static jooq.generated.tables.BankTransaction.BANK_TRANSACTION;
-import static jooq.generated.tables.Customer.CUSTOMER;
-import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
+import org.jooq.conf.Settings;
 import static org.jooq.impl.DSL.asterisk;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.name;
-import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.table;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,18 +27,12 @@ public class ClassicModelsRepository {
     public void naturalJoinEmployeeSale() {
 
         System.out.println("EXAMPLE 1.1\n"
-                + ctx.select(asterisk())
-                        .from(EMPLOYEE).naturalJoin(SALE)
-                        .fetch()
-        );
-
-        System.out.println("EXAMPLE 1.2\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, SALE.SALE_)
                         .from(EMPLOYEE).naturalJoin(SALE)
                         .fetch()
         );
 
-        System.out.println("EXAMPLE 1.3\n"
+        System.out.println("EXAMPLE 1.2\n"
                 + ctx.select(field(EMPLOYEE.EMPLOYEE_NUMBER.getUnqualifiedName()).as("en"),
                         field(SALE.EMPLOYEE_NUMBER.getUnqualifiedName()).as("sn"),
                         EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, SALE.SALE_)
@@ -48,27 +40,27 @@ public class ClassicModelsRepository {
                         .fetch()
         );
 
-        System.out.println("EXAMPLE 1.4\n"
+        System.out.println("EXAMPLE 1.3\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, SALE.SALE_)
                         .from(EMPLOYEE).naturalJoin(SALE)
                         .where(field(EMPLOYEE.EMPLOYEE_NUMBER.getUnqualifiedName()).gt(1370L)) // points to EMPLOYEE.EMPLOYEE_NUMBER
                         .fetch()
         );
 
-        System.out.println("EXAMPLE 1.5\n"
+        System.out.println("EXAMPLE 1.4\n"
                 + ctx.select()
                         .from(table("EMPLOYEE")).naturalJoin(table("SALE"))
                         .fetch()
         );
 
-        System.out.println("EXAMPLE 1.6\n"
+        System.out.println("EXAMPLE 1.5\n"
                 + ctx.select()
                         .from(table("EMPLOYEE")).naturalJoin(table("SALE"))
                         .where(field("EMPLOYEE_NUMBER").gt(1370L)) // points to EMPLOYEE.EMPLOYEE_NUMBER
                         .fetch()
         );
 
-        System.out.println("EXAMPLE 1.7 (uncomment to try) \n"
+        System.out.println("EXAMPLE 1.6 (uncomment to try) \n"
         // results in ORA-25155, uncomment to try
         /*
                 + ctx.select()
@@ -82,18 +74,12 @@ public class ClassicModelsRepository {
     public void naturalLeftOuterJoinEmployeeSale() {
 
         System.out.println("EXAMPLE 2.1\n"
-                + ctx.select(asterisk())
-                        .from(EMPLOYEE).naturalLeftOuterJoin(SALE)
-                        .fetch()
-        );
-
-        System.out.println("EXAMPLE 2.2\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, SALE.SALE_)
                         .from(EMPLOYEE).naturalLeftOuterJoin(SALE)
                         .fetch()
         );
 
-        System.out.println("EXAMPLE 2.3\n"
+        System.out.println("EXAMPLE 2.2\n"
                 + ctx.select(field(EMPLOYEE.EMPLOYEE_NUMBER.getUnqualifiedName()).as("en"),
                         field(SALE.EMPLOYEE_NUMBER.getUnqualifiedName()).as("sn"),
                         EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, SALE.SALE_)
@@ -101,27 +87,27 @@ public class ClassicModelsRepository {
                         .fetch()
         );
 
-        System.out.println("EXAMPLE 2.4\n"
+        System.out.println("EXAMPLE 2.3\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, SALE.SALE_)
                         .from(EMPLOYEE).naturalLeftOuterJoin(SALE)
                         .where(field(EMPLOYEE.EMPLOYEE_NUMBER.getUnqualifiedName()).gt(1370L)) // points to EMPLOYEE.EMPLOYEE_NUMBER
                         .fetch()
         );
 
-        System.out.println("EXAMPLE 2.5\n"
+        System.out.println("EXAMPLE 2.4\n"
                 + ctx.select()
                         .from(table("EMPLOYEE")).naturalLeftOuterJoin(table("SALE"))
                         .fetch()
         );
 
-        System.out.println("EXAMPLE 2.6\n"
+        System.out.println("EXAMPLE 2.5\n"
                 + ctx.select()
                         .from(table("EMPLOYEE")).naturalLeftOuterJoin(table("SALE"))
                         .where(field("EMPLOYEE_NUMBER").gt(1370L)) // points to EMPLOYEE.EMPLOYEE_NUMBER
                         .fetch()
         );
 
-        System.out.println("EXAMPLE 2.7 (uncomment to try) \n"
+        System.out.println("EXAMPLE 2.6 (uncomment to try) \n"
         // results in ORA-25155, uncomment to try
         /*
                 + ctx.select()
@@ -135,18 +121,12 @@ public class ClassicModelsRepository {
     public void naturalRightOuterJoinEmployeeSale() {
 
         System.out.println("EXAMPLE 3.1\n"
-                + ctx.select(asterisk())
-                        .from(EMPLOYEE).naturalRightOuterJoin(SALE)
-                        .fetch()
-        );
-
-        System.out.println("EXAMPLE 3.2\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, SALE.SALE_)
                         .from(EMPLOYEE).naturalRightOuterJoin(SALE)
                         .fetch()
         );
         
-        System.out.println("EXAMPLE 3.3\n"
+        System.out.println("EXAMPLE 3.2\n"
                 + ctx.select(field(EMPLOYEE.EMPLOYEE_NUMBER.getUnqualifiedName()).as("en"),
                         field(SALE.EMPLOYEE_NUMBER.getUnqualifiedName()).as("sn"),
                         EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, SALE.SALE_)
@@ -154,27 +134,27 @@ public class ClassicModelsRepository {
                         .fetch()
         );
 
-        System.out.println("EXAMPLE 3.4\n"
+        System.out.println("EXAMPLE 3.3\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, SALE.SALE_)
                         .from(EMPLOYEE).naturalRightOuterJoin(SALE)
                         .where(field(EMPLOYEE.EMPLOYEE_NUMBER.getUnqualifiedName()).gt(1370L)) // points to SALE.EMPLOYEE_NUMBER
                         .fetch()
         );
 
-        System.out.println("EXAMPLE 3.5\n"
+        System.out.println("EXAMPLE 3.4\n"
                 + ctx.select()
                         .from(table("EMPLOYEE")).naturalRightOuterJoin(table("SALE"))
                         .fetch()
         );
 
-        System.out.println("EXAMPLE 3.6\n"
+        System.out.println("EXAMPLE 3.5\n"
                 + ctx.select()
                         .from(table("EMPLOYEE")).naturalRightOuterJoin(table("SALE"))
                         .where(field("EMPLOYEE_NUMBER").gt(1370L)) // points to SALE.EMPLOYEE_NUMBER
                         .fetch()
         );
 
-        System.out.println("EXAMPLE 3.7 (uncomment to try) \n"
+        System.out.println("EXAMPLE 3.6 (uncomment to try) \n"
         // results in ORA-25155, uncomment to try
         /*
                 + ctx.select()
@@ -188,31 +168,18 @@ public class ClassicModelsRepository {
     public void naturalFullOuterJoinEmployeeSale() {
 
         System.out.println("EXAMPLE 4.1\n"
-                + ctx.select(asterisk())
-                        .from(EMPLOYEE).naturalFullOuterJoin(SALE)
-                        .fetch()
-        );
-
-        System.out.println("EXAMPLE 4.2\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, SALE.SALE_)
                         .from(EMPLOYEE).naturalFullOuterJoin(SALE)
                         .fetch()
         );
 
-        System.out.println("EXAMPLE 4.3\n"
+        System.out.println("EXAMPLE 4.2\n"
                 + ctx.select()
                         .from(table("EMPLOYEE")).naturalFullOuterJoin(table("SALE"))
                         .fetch()
-        );
-        
-        // https://www.reddit.com/r/PostgreSQL/comments/lotcxf/is_there_such_a_thing_that_can_join_two/
-        System.out.println("EXAMPLE 4.4:\n"
-                + ctx.select().from(select().from(CUSTOMER).asTable("t1")
-                        .naturalFullOuterJoin(select().from(CUSTOMERDETAIL).asTable("t2")))
-                        .fetch()
-        );
+        );                
 
-        System.out.println("EXAMPLE 4.5 (uncomment to try) \n"
+        System.out.println("EXAMPLE 4.3 (uncomment to try) \n"
         // results in ORA-25155, uncomment to try
         /*
                 + ctx.select()
