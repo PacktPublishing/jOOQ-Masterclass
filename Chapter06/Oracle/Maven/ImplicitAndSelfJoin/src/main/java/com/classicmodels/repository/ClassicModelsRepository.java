@@ -1,19 +1,16 @@
 package com.classicmodels.repository;
 
-import java.math.BigInteger;
 import jooq.generated.tables.Employee;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import static jooq.generated.tables.Payment.PAYMENT;
-import static jooq.generated.tables.Productlinedetail.PRODUCTLINEDETAIL;
 import jooq.generated.tables.Sale;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.concat;
-import static org.jooq.impl.DSL.field;
+import static org.jooq.impl.DSL.inline;
 import static org.jooq.impl.DSL.sum;
-import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -84,36 +81,18 @@ public class ClassicModelsRepository {
                         .orderBy(ORDERDETAIL.order().customer().CUSTOMER_NAME)
                         .fetch()
         );
-    }
-
-    // EXAMPLE 5
-    public void implicitJoinProductlinedetailProdcutLineViaFK() {
-
-        System.out.println("EXAMPLE 5.1 \n"
-                + ctx.select(PRODUCTLINEDETAIL.productlinedetailIbfk_1().CREATED_ON,
-                        PRODUCTLINEDETAIL.LINE_CAPACITY)
-                        .from(PRODUCTLINEDETAIL)
-                        .fetch()
-        );
-
-        System.out.println("EXAMPLE 5.2 \n"
-                + ctx.select(PRODUCTLINEDETAIL.productlinedetailIbfk_2().CREATED_ON,
-                        PRODUCTLINEDETAIL.LINE_CAPACITY)
-                        .from(PRODUCTLINEDETAIL)
-                        .fetch()
-        );
-    }
+    }    
 
     /* Self JOIN */
-    // EXAMPLE 6
+    // EXAMPLE 5
     public void selfJoinEmployee() {
 
         Employee a = EMPLOYEE.as("a");
         Employee b = EMPLOYEE.as("b");
 
-        System.out.println("EXAMPLE 6\n"
-                + ctx.select(concat(a.FIRST_NAME, val(" "), a.LAST_NAME).as("employee"),
-                        concat(b.FIRST_NAME, val(" "), b.LAST_NAME).as("reports_to"))
+        System.out.println("EXAMPLE 5\n"
+                + ctx.select(concat(a.FIRST_NAME, inline(" "), a.LAST_NAME).as("employee"),
+                        concat(b.FIRST_NAME, inline(" "), b.LAST_NAME).as("reports_to"))
                         .from(a)
                         .leftJoin(b)
                         .on(b.EMPLOYEE_NUMBER.eq(a.REPORTS_TO))
@@ -121,42 +100,42 @@ public class ClassicModelsRepository {
         );
     }
 
-    // EXAMPLE 7
+    // EXAMPLE 6
     public void selfJoinEmployeeViaNavigationMethod() {
 
-        System.out.println("EXAMPLE 7\n"
-                + ctx.select(concat(EMPLOYEE.FIRST_NAME, val(" "), EMPLOYEE.LAST_NAME).as("employee"),
-                        concat(EMPLOYEE.employee().FIRST_NAME, val(" "), EMPLOYEE.employee().LAST_NAME).as("reports_to"))
+        System.out.println("EXAMPLE 6\n"
+                + ctx.select(concat(EMPLOYEE.FIRST_NAME, inline(" "), EMPLOYEE.LAST_NAME).as("employee"),
+                        concat(EMPLOYEE.employee().FIRST_NAME, inline(" "), EMPLOYEE.employee().LAST_NAME).as("reports_to"))
                         .from(EMPLOYEE)
                         .fetch()
         );
     }
 
-    // EXAMPLE 8
+    // EXAMPLE 7
     public void selfJoinComparingEmployeeViaNavigationMethod() {
 
-        System.out.println("EXAMPLE 8\n"
-                + ctx.select(concat(EMPLOYEE.FIRST_NAME, val(" "), EMPLOYEE.LAST_NAME).as("employee"),
-                        concat(EMPLOYEE.employee().FIRST_NAME, val(" "), EMPLOYEE.employee().LAST_NAME).as("reports_to"))
+        System.out.println("EXAMPLE 7\n"
+                + ctx.select(concat(EMPLOYEE.FIRST_NAME, inline(" "), EMPLOYEE.LAST_NAME).as("employee"),
+                        concat(EMPLOYEE.employee().FIRST_NAME, inline(" "), EMPLOYEE.employee().LAST_NAME).as("reports_to"))
                         .from(EMPLOYEE)
                         .where(EMPLOYEE.JOB_TITLE.eq(EMPLOYEE.employee().JOB_TITLE))
                         .fetch()
         );
     }
 
-    // EXAMPLE 9
+    // EXAMPLE 8
     public void selfJoinThreeTimes() {
 
         Sale s1 = SALE.as("s1");
         Sale s2 = SALE.as("s2");
 
-        System.out.println("EXAMPLE 9\n"
+        System.out.println("EXAMPLE 8\n"
                 + ctx.selectDistinct(SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR.as("2003"),
                         s1.FISCAL_YEAR.as("2004"), s2.FISCAL_YEAR.as("2005"))
                         .from(SALE)
                         .innerJoin(s1)
                         .on(SALE.EMPLOYEE_NUMBER.eq(s1.EMPLOYEE_NUMBER)
-                                .and(SALE.FISCAL_YEAR.eq(BigInteger.valueOf(2003))
+                                .and(SALE.FISCAL_YEAR.eq(2003)
                                         .and(s1.FISCAL_YEAR.eq(SALE.FISCAL_YEAR.plus(1)))))
                         .innerJoin(s2)
                         .on(s2.EMPLOYEE_NUMBER.eq(s1.EMPLOYEE_NUMBER)
