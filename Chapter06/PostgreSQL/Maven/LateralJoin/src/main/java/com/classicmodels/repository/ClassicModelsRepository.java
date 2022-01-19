@@ -14,10 +14,11 @@ import org.jooq.Table;
 import static org.jooq.impl.DSL.avg;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.lateral;
+import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.rowNumber;
 import static org.jooq.impl.DSL.select;
+import static org.jooq.impl.DSL.trueCondition;
 import static org.jooq.impl.DSL.unnest;
-import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,7 +57,7 @@ public class ClassicModelsRepository {
                         .from(OFFICE)
                         .innerJoin(lateral(select().from(DEPARTMENT)
                                 .where(OFFICE.OFFICE_CODE.eq(DEPARTMENT.OFFICE_CODE))).as("t")
-                        ).on(val(1).eq(val(1))) // Dummy predicate for INNER JOIN
+                        ).on(trueCondition()) // Dummy predicate for INNER JOIN as val(1).eq(val(1))
                         .fetch()
         );
         */ 
@@ -70,7 +71,7 @@ public class ClassicModelsRepository {
                         .from(OFFICE)
                         .leftOuterJoin(lateral(select().from(DEPARTMENT)
                                 .where(OFFICE.OFFICE_CODE.eq(DEPARTMENT.OFFICE_CODE))).as("t")
-                        ).on(val(1).eq(val(1))) // Dummy predicate for LEFT JOIN
+                        ).on(trueCondition()) // Dummy predicate for LEFT JOIN as val(1).eq(val(1))
                         .fetch()
         );
     }
@@ -79,10 +80,10 @@ public class ClassicModelsRepository {
     public void lateralEmployeeAvgSales() {
 
         System.out.println("EXAMPLE 3\n"
-                + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, field("avg_sale"))
+                + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, field(name("t", "avg_sale")))
                         .from(EMPLOYEE, lateral(select(
                                 avg(SALE.SALE_).as("avg_sale")).from(SALE)
-                                .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(SALE.EMPLOYEE_NUMBER))))
+                                .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(SALE.EMPLOYEE_NUMBER))).asTable("t"))
                         .fetch()
         // or, fetch only avg: fetch("avg_sale", float.class)
         );
@@ -106,9 +107,9 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 5\n"
                 + ctx.select()
-                        .from(DEPARTMENT, lateral(select(field("topic"))
+                        .from(DEPARTMENT, lateral(select(field(name("t", "topic")))
                                 .from(unnest(DEPARTMENT.TOPIC).as("t", "topic"))
-                                .where(field("topic").in("commerce", "business"))
+                                .where(field(name("t", "topic")).in("commerce", "business"))
                         ).as("r"))
                         .fetch()
         );
@@ -119,10 +120,9 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 6\n"
                 + ctx.select()
-                        .from(DEPARTMENT, lateral(select(field("topic"),
-                                rowNumber().over().orderBy(field("null"))) // orderBy(field("null") render ORDER BY NULL
+                        .from(DEPARTMENT, lateral(select(field(name("t", "topic")), rowNumber().over())
                                 .from(unnest(DEPARTMENT.TOPIC).as("t", "topic"))
-                                .where(field("topic").in("commerce", "business"))
+                                .where(field(name("t", "topic")).in("commerce", "business"))
                         ).as("r"))
                         .fetch()
         );
@@ -133,11 +133,11 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 7\n"
                 + ctx.select(EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.FIRST_NAME,
-                        EMPLOYEE.LAST_NAME, field("sales"))
+                        EMPLOYEE.LAST_NAME, field(name("t", "sales")))
                         .from(EMPLOYEE, lateral(select(SALE.SALE_.as("sales")).from(SALE)
                                 .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(SALE.EMPLOYEE_NUMBER))
                                 .orderBy(SALE.SALE_.desc())
-                                .limit(3))
+                                .limit(3).asTable("t"))
                         )
                         .orderBy(EMPLOYEE.EMPLOYEE_NUMBER)
                         .fetch()
@@ -148,7 +148,7 @@ public class ClassicModelsRepository {
     public void findTop3OrderedProductsIn2003() {
 
         System.out.println("EXAMPLE 8\n"
-                + ctx.select(PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME, field("od"), field("qo"))
+                + ctx.select(PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME, field(name("t", "od")), field(name("t", "qo")))
                         .from(PRODUCT, lateral(select(ORDER.ORDER_DATE.as("od"), ORDERDETAIL.QUANTITY_ORDERED.as("qo"))
                                 .from(ORDER)
                                 .innerJoin(ORDERDETAIL)
@@ -156,7 +156,7 @@ public class ClassicModelsRepository {
                                         .and(ORDER.ORDER_DATE.between(LocalDate.of(2003, 1, 1), LocalDate.of(2003, 12, 31))))
                                 .where(PRODUCT.PRODUCT_ID.eq(ORDERDETAIL.PRODUCT_ID))
                                 .orderBy(ORDERDETAIL.QUANTITY_ORDERED.desc())
-                                .limit(3))
+                                .limit(3).asTable("t"))
                         )
                         .orderBy(PRODUCT.PRODUCT_ID)
                         .fetch()
@@ -168,7 +168,7 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 9\n"
                 + ctx.select(EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.FIRST_NAME,
-                        EMPLOYEE.LAST_NAME, field("sales"))
+                        EMPLOYEE.LAST_NAME, field(name("sales")))
                         .from(EMPLOYEE, lateral(TOP_THREE_SALES_PER_EMPLOYEE.call(EMPLOYEE.EMPLOYEE_NUMBER)))
                         .orderBy(EMPLOYEE.EMPLOYEE_NUMBER)
                         .fetch()
@@ -192,7 +192,7 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 11\n"
                 + ctx.select(EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.FIRST_NAME,
-                        EMPLOYEE.LAST_NAME, field("sales"))
+                        EMPLOYEE.LAST_NAME, field(name("sales")))
                         .from(EMPLOYEE.crossApply(TOP_THREE_SALES_PER_EMPLOYEE.call(EMPLOYEE.EMPLOYEE_NUMBER)))
                         .orderBy(EMPLOYEE.EMPLOYEE_NUMBER)
                         .fetch()
