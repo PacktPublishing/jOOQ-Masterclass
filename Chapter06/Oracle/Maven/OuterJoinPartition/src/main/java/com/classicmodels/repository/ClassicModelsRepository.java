@@ -25,17 +25,20 @@ public class ClassicModelsRepository {
     /* Oracle's partitioned OUTER JOIN */
     // EXAMPLE 1 - identify gaps in the series of dates
     /*
-    select 
-      "PAYMENT"."PAYMENT_DATE", 
-      "CUSTOMER"."CUSTOMER_NAME", 
-      sum("PAYMENT"."INVOICE_AMOUNT") 
-    from 
-      "CUSTOMER" 
-      join "PAYMENT" on "CUSTOMER"."CUSTOMER_NUMBER" = "PAYMENT"."CUSTOMER_NUMBER" 
-    group by 
-      "PAYMENT"."PAYMENT_DATE", 
-      "CUSTOMER"."CUSTOMER_NAME" 
-    order by 1, 2
+    select
+        "CLASSICMODELS"."PAYMENT"."PAYMENT_DATE",
+        "CLASSICMODELS"."CUSTOMER"."CUSTOMER_NAME",
+        sum("CLASSICMODELS"."PAYMENT"."INVOICE_AMOUNT") 
+    from
+        "CLASSICMODELS"."CUSTOMER" 
+    join
+        "CLASSICMODELS"."PAYMENT" 
+            on "CLASSICMODELS"."CUSTOMER"."CUSTOMER_NUMBER" = "CLASSICMODELS"."PAYMENT"."CUSTOMER_NUMBER" 
+    group by
+        "CLASSICMODELS"."PAYMENT"."PAYMENT_DATE",
+        "CLASSICMODELS"."CUSTOMER"."CUSTOMER_NAME" 
+    order by
+        1, 2   
      */
     public void joinCustomerPaymentIdentifyDataGaps() {
 
@@ -52,37 +55,42 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 2 - produce a summary showing total invoices of each customer per day
     /*
-    select 
-      "pdate", 
-      "CUSTOMER"."CUSTOMER_NAME", 
-      sum(nvl("PAYMENT"."INVOICE_AMOUNT", ?)) 
-    from 
-      "CUSTOMER" 
-    cross join (
-        select 
-          distinct "PAYMENT"."PAYMENT_DATE" "pdate" 
-        from 
-          "PAYMENT"
-      ) "alias_120640537" 
-      left outer join "PAYMENT" on (
-        "CUSTOMER"."CUSTOMER_NUMBER" = "PAYMENT"."CUSTOMER_NUMBER" 
-        and "pdate" = "PAYMENT"."PAYMENT_DATE"
-      ) 
-    group by 
-      "pdate", 
-      "CUSTOMER"."CUSTOMER_NAME" 
-    order by 1, 2    
+    select
+        "T"."P_DATE",
+        "CLASSICMODELS"."CUSTOMER"."CUSTOMER_NAME",
+        sum(nvl("CLASSICMODELS"."PAYMENT"."INVOICE_AMOUNT",
+        ?)) 
+    from
+        "CLASSICMODELS"."CUSTOMER" cross 
+    join
+        (
+            select
+                distinct "CLASSICMODELS"."PAYMENT"."PAYMENT_DATE" "P_DATE" 
+            from
+                "CLASSICMODELS"."PAYMENT"
+        ) "T" 
+    left outer join
+        "CLASSICMODELS"."PAYMENT" 
+            on (
+                "CLASSICMODELS"."CUSTOMER"."CUSTOMER_NUMBER" = "CLASSICMODELS"."PAYMENT"."CUSTOMER_NUMBER" 
+                and "T"."P_DATE" = "CLASSICMODELS"."PAYMENT"."PAYMENT_DATE"
+            ) 
+    group by
+        "T"."P_DATE",
+        "CLASSICMODELS"."CUSTOMER"."CUSTOMER_NAME" 
+    order by
+        1, 2  
      */
     public void joinCustomerPaymentFillGaps() {
 
         System.out.println("EXAMPLE 2\n"
-                + ctx.select(field(name("pdate")), CUSTOMER.CUSTOMER_NAME, sum(nvl(PAYMENT.INVOICE_AMOUNT, BigDecimal.ZERO)))
+                + ctx.select(field(name("T", "P_DATE")), CUSTOMER.CUSTOMER_NAME, sum(nvl(PAYMENT.INVOICE_AMOUNT, BigDecimal.ZERO)))
                         .from(CUSTOMER)
-                        .crossJoin(selectDistinct(PAYMENT.PAYMENT_DATE.as(name("pdate"))).from(PAYMENT))
+                        .crossJoin(selectDistinct(PAYMENT.PAYMENT_DATE.as("P_DATE")).from(PAYMENT).asTable("T"))
                         .leftJoin(PAYMENT)
                         .on(CUSTOMER.CUSTOMER_NUMBER.eq(PAYMENT.CUSTOMER_NUMBER)
-                                .and(field(name("pdate")).eq(PAYMENT.PAYMENT_DATE)))
-                        .groupBy(field(name("pdate")), CUSTOMER.CUSTOMER_NAME)
+                                .and(field(name("T","P_DATE")).eq(PAYMENT.PAYMENT_DATE)))
+                        .groupBy(field(name("T", "P_DATE")), CUSTOMER.CUSTOMER_NAME)
                         .orderBy(1, 2)
                         .fetch()
         );
@@ -90,18 +98,23 @@ public class ClassicModelsRepository {
 
     // EXAMPLE 3 - produce a summary showing total invoices of each customer per day in Oracle style
     /*
-    select 
-      "PAYMENT"."PAYMENT_DATE", 
-      "CUSTOMER"."CUSTOMER_NAME", 
-      sum(nvl("PAYMENT"."INVOICE_AMOUNT", ?)) 
-    from 
-      "CUSTOMER" 
-      left outer join "PAYMENT" partition by ("PAYMENT"."PAYMENT_DATE") 
-        on "CUSTOMER"."CUSTOMER_NUMBER" = "PAYMENT"."CUSTOMER_NUMBER" 
-    group by 
-      "PAYMENT"."PAYMENT_DATE", 
-      "CUSTOMER"."CUSTOMER_NAME" 
-    order by 1, 2    
+    select
+        "CLASSICMODELS"."PAYMENT"."PAYMENT_DATE",
+        "CLASSICMODELS"."CUSTOMER"."CUSTOMER_NAME",
+        sum(nvl("CLASSICMODELS"."PAYMENT"."INVOICE_AMOUNT",
+        ?)) 
+    from
+        "CLASSICMODELS"."CUSTOMER" 
+    left outer join
+        "CLASSICMODELS"."PAYMENT" partition 
+    by
+        ("CLASSICMODELS"."PAYMENT"."PAYMENT_DATE") 
+            on "CLASSICMODELS"."CUSTOMER"."CUSTOMER_NUMBER" = "CLASSICMODELS"."PAYMENT"."CUSTOMER_NUMBER" 
+    group by
+        "CLASSICMODELS"."PAYMENT"."PAYMENT_DATE",
+        "CLASSICMODELS"."CUSTOMER"."CUSTOMER_NAME" 
+    order by
+        1, 2    
     */
     public void joinCustomerPaymentFillGapsOracleStyle() {
 
