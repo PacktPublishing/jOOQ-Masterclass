@@ -7,6 +7,7 @@ import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.field;
+import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.nvl;
 import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.selectOne;
@@ -66,18 +67,18 @@ public class ClassicModelsRepository {
     // EXAMPLE 4
     /*
     select 
-      "SYSTEM"."EMPLOYEE"."FIRST_NAME", 
-      "SYSTEM"."EMPLOYEE"."LAST_NAME" 
+      "CLASSICMODELS"."EMPLOYEE"."FIRST_NAME", 
+      "CLASSICMODELS"."EMPLOYEE"."LAST_NAME" 
     from 
-      "SYSTEM"."EMPLOYEE" 
+      "CLASSICMODELS"."EMPLOYEE" 
     where 
       exists (
         select 
           1 "one" 
         from 
-          "SYSTEM"."CUSTOMER" 
+          "CLASSICMODELS"."CUSTOMER" 
         where 
-          "SYSTEM"."EMPLOYEE"."EMPLOYEE_NUMBER" = "SYSTEM"."CUSTOMER"."SALES_REP_EMPLOYEE_NUMBER"
+          "CLASSICMODELS"."EMPLOYEE"."EMPLOYEE_NUMBER" = "CLASSICMODELS"."CUSTOMER"."SALES_REP_EMPLOYEE_NUMBER"
       )    
      */
     public void joinEmployeeCustomerViaLeftSemiJoin() {
@@ -94,27 +95,27 @@ public class ClassicModelsRepository {
     // EXAMPLE 5
     /*
     select 
-      "SYSTEM"."EMPLOYEE"."FIRST_NAME", 
-      "SYSTEM"."EMPLOYEE"."LAST_NAME" 
+      "CLASSICMODELS"."EMPLOYEE"."FIRST_NAME", 
+      "CLASSICMODELS"."EMPLOYEE"."LAST_NAME" 
     from 
-      "SYSTEM"."EMPLOYEE" 
+      "CLASSICMODELS"."EMPLOYEE" 
     where 
       (
         exists (
           select 
             1 "one" 
           from 
-            "SYSTEM"."CUSTOMER" 
+            "CLASSICMODELS"."CUSTOMER" 
           where 
-            "SYSTEM"."EMPLOYEE"."EMPLOYEE_NUMBER" = "SYSTEM"."CUSTOMER"."SALES_REP_EMPLOYEE_NUMBER"
+            "CLASSICMODELS"."EMPLOYEE"."EMPLOYEE_NUMBER" = "CLASSICMODELS"."CUSTOMER"."SALES_REP_EMPLOYEE_NUMBER"
         ) 
         and exists (
           select 
             1 "one" 
           from 
-            "SYSTEM"."SALE" 
+            "CLASSICMODELS"."SALE" 
           where 
-            "SYSTEM"."EMPLOYEE"."EMPLOYEE_NUMBER" = "SYSTEM"."SALE"."EMPLOYEE_NUMBER"
+            "CLASSICMODELS"."EMPLOYEE"."EMPLOYEE_NUMBER" = "CLASSICMODELS"."SALE"."EMPLOYEE_NUMBER"
         )
       )   
     */
@@ -132,46 +133,43 @@ public class ClassicModelsRepository {
     }
 
     /*
-    select 
-      "SYSTEM"."EMPLOYEE"."FIRST_NAME", 
-      "SYSTEM"."EMPLOYEE"."LAST_NAME", 
-      "SYSTEM"."EMPLOYEE"."SALARY" 
-    from 
-      "SYSTEM"."EMPLOYEE" 
-    where 
-      exists (
-        select 
-          1 "one" 
-        from 
-          (
-            select 
-              "SYSTEM"."CUSTOMER"."CUSTOMER_NUMBER", 
-              "SYSTEM"."CUSTOMER"."SALES_REP_EMPLOYEE_NUMBER" "A" 
-            from 
-              "SYSTEM"."CUSTOMER" 
-            where 
-              (
-                exists (
-                  select 
-                    1 "one" 
-                  from 
+    select
+        "CLASSICMODELS"."EMPLOYEE"."FIRST_NAME",
+        "CLASSICMODELS"."EMPLOYEE"."LAST_NAME",
+        "CLASSICMODELS"."EMPLOYEE"."SALARY" 
+    from
+        "CLASSICMODELS"."EMPLOYEE" 
+    where
+        exists (
+            select
+                1 "one" 
+            from
+                (select
+                    "CLASSICMODELS"."CUSTOMER"."CUSTOMER_NUMBER",
+                    "CLASSICMODELS"."CUSTOMER"."SALES_REP_EMPLOYEE_NUMBER" "A" 
+                from
+                    "CLASSICMODELS"."CUSTOMER" 
+                where
                     (
-                      select 
-                        "SYSTEM"."PAYMENT"."CUSTOMER_NUMBER" "B" 
-                      from 
-                        "SYSTEM"."PAYMENT" 
-                      where 
-                        "SYSTEM"."PAYMENT"."INVOICE_AMOUNT" > ?
-                    ) "alias_130796209" 
-                  where 
-                    B = "SYSTEM"."CUSTOMER"."CUSTOMER_NUMBER"
-                ) 
-                and "SYSTEM"."CUSTOMER"."CREDIT_LIMIT" > ?
-              )
-          ) "alias_80623592" 
-        where 
-          A = "SYSTEM"."EMPLOYEE"."EMPLOYEE_NUMBER"
-      )    
+                        exists (
+                            select
+                                1 "one" 
+                            from
+                                (select
+                                    "CLASSICMODELS"."PAYMENT"."CUSTOMER_NUMBER" "B" 
+                                from
+                                    "CLASSICMODELS"."PAYMENT" 
+                                where
+                                    "CLASSICMODELS"."PAYMENT"."INVOICE_AMOUNT" > ?) "T1" 
+                            where
+                                "T1"."B" = "CLASSICMODELS"."CUSTOMER"."CUSTOMER_NUMBER"
+                            ) 
+                            and "CLASSICMODELS"."CUSTOMER"."CREDIT_LIMIT" > ?
+                    )
+                ) "T2" 
+            where
+                "T2"."A" = "CLASSICMODELS"."EMPLOYEE"."EMPLOYEE_NUMBER"
+            )    
     */
     // EXAMPLE 6
     public void joinEmployeeCustomerPaymentViaLeftSemiJoin() {
@@ -184,10 +182,10 @@ public class ClassicModelsRepository {
                                 .from(CUSTOMER)
                                 .leftSemiJoin(select(PAYMENT.CUSTOMER_NUMBER.as("B"))
                                         .from(PAYMENT)
-                                        .where(PAYMENT.INVOICE_AMOUNT.gt(BigDecimal.valueOf(100000))))
-                                .on(field("B").eq(CUSTOMER.CUSTOMER_NUMBER))
-                                .where(CUSTOMER.CREDIT_LIMIT.gt(BigDecimal.ZERO))
-                        ).on(field("A").eq(EMPLOYEE.EMPLOYEE_NUMBER))
+                                        .where(PAYMENT.INVOICE_AMOUNT.gt(BigDecimal.valueOf(100000))).asTable("T1"))
+                                .on(field(name("T1", "B")).eq(CUSTOMER.CUSTOMER_NUMBER))
+                                .where(CUSTOMER.CREDIT_LIMIT.gt(BigDecimal.ZERO)).asTable("T2")
+                        ).on(field(name("T2", "A")).eq(EMPLOYEE.EMPLOYEE_NUMBER))
                         .fetch()
         );
     }
@@ -234,19 +232,19 @@ public class ClassicModelsRepository {
     // EXAMPLE 10
     /*
     select 
-      "SYSTEM"."EMPLOYEE"."FIRST_NAME", 
-      "SYSTEM"."EMPLOYEE"."LAST_NAME" 
+      "CLASSICMODELS"."EMPLOYEE"."FIRST_NAME", 
+      "CLASSICMODELS"."EMPLOYEE"."LAST_NAME" 
     from 
-      "SYSTEM"."EMPLOYEE" 
+      "CLASSICMODELS"."EMPLOYEE" 
     where 
       not (
         exists (
           select 
             1 "one" 
           from 
-            "SYSTEM"."CUSTOMER" 
+            "CLASSICMODELS"."CUSTOMER" 
           where 
-            "SYSTEM"."EMPLOYEE"."EMPLOYEE_NUMBER" = "SYSTEM"."CUSTOMER"."SALES_REP_EMPLOYEE_NUMBER"
+            "CLASSICMODELS"."EMPLOYEE"."EMPLOYEE_NUMBER" = "CLASSICMODELS"."CUSTOMER"."SALES_REP_EMPLOYEE_NUMBER"
         )
       )    
      */
@@ -264,10 +262,10 @@ public class ClassicModelsRepository {
     // EXAMPLE 11
     /*
     select 
-      "SYSTEM"."EMPLOYEE"."FIRST_NAME", 
-      "SYSTEM"."EMPLOYEE"."LAST_NAME" 
+      "CLASSICMODELS"."EMPLOYEE"."FIRST_NAME", 
+      "CLASSICMODELS"."EMPLOYEE"."LAST_NAME" 
     from 
-      "SYSTEM"."EMPLOYEE" 
+      "CLASSICMODELS"."EMPLOYEE" 
     where 
       (
         not (
@@ -275,9 +273,9 @@ public class ClassicModelsRepository {
             select 
               1 "one" 
             from 
-              "SYSTEM"."CUSTOMER" 
+              "CLASSICMODELS"."CUSTOMER" 
             where 
-              "SYSTEM"."EMPLOYEE"."EMPLOYEE_NUMBER" = "SYSTEM"."CUSTOMER"."SALES_REP_EMPLOYEE_NUMBER"
+              "CLASSICMODELS"."EMPLOYEE"."EMPLOYEE_NUMBER" = "CLASSICMODELS"."CUSTOMER"."SALES_REP_EMPLOYEE_NUMBER"
           )
         ) 
         and not (
@@ -285,9 +283,9 @@ public class ClassicModelsRepository {
             select 
               1 "one" 
             from 
-              "SYSTEM"."SALE" 
+              "CLASSICMODELS"."SALE" 
             where 
-              "SYSTEM"."EMPLOYEE"."EMPLOYEE_NUMBER" = "SYSTEM"."SALE"."EMPLOYEE_NUMBER"
+              "CLASSICMODELS"."EMPLOYEE"."EMPLOYEE_NUMBER" = "CLASSICMODELS"."SALE"."EMPLOYEE_NUMBER"
           )
         )
       )    
