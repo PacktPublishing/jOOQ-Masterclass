@@ -9,8 +9,7 @@
     <packaging>jar</packaging>
 
     <name>CommonJoin</name>
-    <description>Using jOOQ to build the typesafe SQL and to execute it</description>    
-
+    
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -187,9 +186,6 @@
                                     <!-- Give enough time to jOOQ to trigger the queries needed for generating sources 
                                     (default is 5 seconds) -->
                                     <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>
-                                    
-                                    <!-- allow the usage of routine as TVF -->
-                                    <tableValuedFunctions>true</tableValuedFunctions>
                                 </database>    
                                 
                                 <target>
