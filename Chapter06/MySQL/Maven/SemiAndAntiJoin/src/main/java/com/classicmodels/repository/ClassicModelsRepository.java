@@ -7,6 +7,7 @@ import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.field;
+import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.nvl;
 import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.selectOne;
@@ -134,46 +135,7 @@ public class ClassicModelsRepository {
     }
 
     /*
-    select 
-      `classicmodels`.`employee`.`first_name`, 
-      `classicmodels`.`employee`.`last_name`, 
-      `classicmodels`.`employee`.`salary` 
-    from 
-      `classicmodels`.`employee` 
-    where 
-      exists (
-        select 
-          1 as `one` 
-        from 
-          (
-            select 
-              `classicmodels`.`customer`.`customer_number`, 
-              `classicmodels`.`customer`.`sales_rep_employee_number` as `a` 
-            from 
-              `classicmodels`.`customer` 
-            where 
-              (
-                exists (
-                  select 
-                    1 as `one` 
-                  from 
-                    (
-                      select 
-                        `classicmodels`.`payment`.`customer_number` as `b` 
-                      from 
-                        `classicmodels`.`payment` 
-                      where 
-                        `classicmodels`.`payment`.`invoice_amount` > ?
-                    ) as `alias_98331170` 
-                  where 
-                    b = `classicmodels`.`customer`.`customer_number`
-                ) 
-                and `classicmodels`.`customer`.`credit_limit` > ?
-              )
-          ) as `alias_120312265` 
-        where 
-          a = `classicmodels`.`employee`.`employee_number`
-      )    
+      
     */
     // EXAMPLE 6
     public void joinEmployeeCustomerPaymentViaLeftSemiJoin() {
@@ -186,10 +148,10 @@ public class ClassicModelsRepository {
                                 .from(CUSTOMER)
                                 .leftSemiJoin(select(PAYMENT.CUSTOMER_NUMBER.as("b"))
                                         .from(PAYMENT)
-                                        .where(PAYMENT.INVOICE_AMOUNT.gt(BigDecimal.valueOf(100000))))
-                                .on(field("b").eq(CUSTOMER.CUSTOMER_NUMBER))
-                                .where(CUSTOMER.CREDIT_LIMIT.gt(BigDecimal.ZERO))
-                        ).on(field("a").eq(EMPLOYEE.EMPLOYEE_NUMBER))
+                                        .where(PAYMENT.INVOICE_AMOUNT.gt(BigDecimal.valueOf(100000))).asTable("t1"))
+                                .on(field(name("t1", "b")).eq(CUSTOMER.CUSTOMER_NUMBER))
+                                .where(CUSTOMER.CREDIT_LIMIT.gt(BigDecimal.ZERO)).asTable("t2")
+                        ).on(field(name("t2", "a")).eq(EMPLOYEE.EMPLOYEE_NUMBER))
                         .fetch()
         );
     }
