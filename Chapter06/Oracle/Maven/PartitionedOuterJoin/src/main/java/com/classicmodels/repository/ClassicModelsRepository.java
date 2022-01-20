@@ -6,6 +6,7 @@ import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.field;
+import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.nvl;
 import static org.jooq.impl.DSL.row;
 import static org.jooq.impl.DSL.select;
@@ -35,7 +36,7 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 1:\n"
                 + ctx.select(ORDERDETAIL.ORDER_LINE_NUMBER, PRODUCT.PRODUCT_NAME,
-                        sum(nvl(ORDERDETAIL.QUANTITY_ORDERED, 0L)))
+                        sum(nvl(ORDERDETAIL.QUANTITY_ORDERED, 0)))
                         .from(PRODUCT)
                         .leftOuterJoin(ORDERDETAIL)
                         .partitionBy(ORDERDETAIL.ORDER_LINE_NUMBER)
@@ -59,21 +60,21 @@ public class ClassicModelsRepository {
 
         // Example 2 alternative without partitioned (you can easily adapt for examples 1 and 3)
         System.out.println("EXAMPLE 2.2:\n"
-                + ctx.select(field("FY"), EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME,
+                + ctx.select(field(name("T", "FY")), EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME,
                         sum(nvl(SALE.SALE_, 0.0d)).as("SALES"))
                         .from(EMPLOYEE)
-                        .crossJoin(selectDistinct(SALE.FISCAL_YEAR.as("FY")).from(SALE))
+                        .crossJoin(selectDistinct(SALE.FISCAL_YEAR.as("FY")).from(SALE).asTable("T"))
                         .leftOuterJoin(SALE)
                         .on(EMPLOYEE.EMPLOYEE_NUMBER.eq(SALE.EMPLOYEE_NUMBER)
-                                .and(field("fy").eq(SALE.FISCAL_YEAR)))
+                                .and(field(name("T", "FY")).eq(SALE.FISCAL_YEAR)))
                         .where(EMPLOYEE.JOB_TITLE.eq("Sales Rep"))
-                        .groupBy(field("FY"), EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
+                        .groupBy(field(name("T", "FY")), EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
                         .orderBy(1, 2)
                         .fetch()
         );
     
         System.out.println("EXAMPLE 3:\n"
-                + ctx.select(field("TB.YEAR"), EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME,
+                + ctx.select(field(name("TB", "YEAR")), EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME,
                         sum(nvl(SALE.SALE_, 0.0d)))
                         .from(select().from(values(row(2000), row(2001),
                                 row(2002), row(2003), row(2004), row(2005), row(2006), row(2007))
@@ -83,7 +84,7 @@ public class ClassicModelsRepository {
                         .leftOuterJoin(EMPLOYEE)
                         .on(EMPLOYEE.EMPLOYEE_NUMBER.eq(SALE.EMPLOYEE_NUMBER))
                         .where(EMPLOYEE.JOB_TITLE.eq("Sales Rep"))
-                        .groupBy(field("TB.YEAR"), EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
+                        .groupBy(field(name("TB", "YEAR")), EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
                         .orderBy(1, 2)
                         .fetch()
         );
