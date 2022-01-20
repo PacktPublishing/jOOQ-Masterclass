@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.classicmodels</groupId>
-    <artifactId>CommonJoin</artifactId>
+    <artifactId>ImplicitAndSelfJoin</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>CommonJoin</name>
+    <name>ImplicitAndSelfJoin</name>
    
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -185,10 +185,7 @@
                                                
                                     <!-- Give enough time to jOOQ to trigger the queries needed for generating sources 
                                     (default is 5 seconds) -->
-                                    <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>
-                                    
-                                    <!-- allow the usage of routine as TVF -->
-                                    <tableValuedFunctions>true</tableValuedFunctions>
+                                    <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>                                    
                                 </database>    
                                 
                                 <target>

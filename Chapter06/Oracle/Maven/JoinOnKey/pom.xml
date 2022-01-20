@@ -9,8 +9,7 @@
     <packaging>jar</packaging>
 
     <name>JoinOnKey</name>
-    <description>Using jOOQ to build the typesafe SQL and to execute it</description>    
-
+    
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
