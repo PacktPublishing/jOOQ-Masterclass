@@ -18,9 +18,11 @@ public class ClassicModelsService {
         classicModelsRepository.implicitJoinOfficeEmployeeViaNavigationMethod();        // EXAMPLE 2
         classicModelsRepository.implicitJoinPaymentCustomerViaNavigationMethod();       // EXAMPLE 3
         classicModelsRepository.implicitJoinOrderCustomerEmployeeViaNavigationMethod(); // EXAMPLE 4
-        classicModelsRepository.selfJoinEmployee();                                     // EXAMPLE 5
-        classicModelsRepository.selfJoinEmployeeViaNavigationMethod();                  // EXAMPLE 6
-        classicModelsRepository.selfJoinComparingEmployeeViaNavigationMethod();         // EXAMPLE 7
-        classicModelsRepository.selfJoinThreeTimes();                                   // EXAMPLE 8
+        classicModelsRepository.implicitJoinManagerOfficeFromRelationshipTable();       // EXAMPLE 5
+        classicModelsRepository.outerCorrelatedSaleSameImplicitJoinPath();              // EXAMPLE 6
+        classicModelsRepository.selfJoinEmployee();                                     // EXAMPLE 7
+        classicModelsRepository.selfJoinEmployeeViaNavigationMethod();                  // EXAMPLE 8
+        classicModelsRepository.selfJoinComparingEmployeeViaNavigationMethod();         // EXAMPLE 9
+        classicModelsRepository.selfJoinThreeTimes();                                   // EXAMPLE 10
     }
 }

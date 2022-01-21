@@ -3,13 +3,16 @@ package com.classicmodels.repository;
 import jooq.generated.tables.Employee;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Office.OFFICE;
+import static jooq.generated.tables.OfficeHasManager.OFFICE_HAS_MANAGER;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import static jooq.generated.tables.Payment.PAYMENT;
 import jooq.generated.tables.Sale;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.concat;
+import static org.jooq.impl.DSL.exists;
 import static org.jooq.impl.DSL.inline;
+import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.sum;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -74,15 +77,42 @@ public class ClassicModelsRepository {
                         .fetch()
         );
     }    
+    
+    // EXAMPLE 5
+    // If we think to an m:n relationship from the relationship table then we see two to-one relationships   
+    public void implicitJoinManagerOfficeFromRelationshipTable() {
+
+        System.out.println("EXAMPLE 5 \n"
+                + ctx.select(OFFICE_HAS_MANAGER.manager().fields())
+                        .from(OFFICE_HAS_MANAGER)
+                        .where(OFFICE_HAS_MANAGER.office().OFFICE_CODE.eq("6"))
+                        .fetch()
+        );
+    }
+    
+    // EXAMPLE 6
+    // outer and correlated subquery share implicit join path
+    public void outerCorrelatedSaleSameImplicitJoinPath() {  
+        
+        var s = SALE.as("S");
+        System.out.println("EXAMPLE 6 \n"
+                + ctx.selectDistinct(s.employee().FIRST_NAME)
+                        .from(s)
+                        .where(exists(
+                                select(s.employee().FIRST_NAME)
+                                        .from(s)))
+                        .fetch()
+        );
+    }
 
     /* Self JOIN */
-    // EXAMPLE 5
+    // EXAMPLE 7
     public void selfJoinEmployee() {
 
         Employee a = EMPLOYEE.as("a");
         Employee b = EMPLOYEE.as("b");
 
-        System.out.println("EXAMPLE 5\n"
+        System.out.println("EXAMPLE 7\n"
                 + ctx.select(concat(a.FIRST_NAME, inline(" "), a.LAST_NAME).as("employee"),
                         concat(b.FIRST_NAME, inline(" "), b.LAST_NAME).as("reports_to"))
                         .from(a)
@@ -92,10 +122,10 @@ public class ClassicModelsRepository {
         );
     }
 
-    // EXAMPLE 6
+    // EXAMPLE 8
     public void selfJoinEmployeeViaNavigationMethod() {
 
-        System.out.println("EXAMPLE 6\n"
+        System.out.println("EXAMPLE 8\n"
                 + ctx.select(concat(EMPLOYEE.FIRST_NAME, inline(" "), EMPLOYEE.LAST_NAME).as("employee"),
                         concat(EMPLOYEE.employee().FIRST_NAME, inline(" "), EMPLOYEE.employee().LAST_NAME).as("reports_to"))
                         .from(EMPLOYEE)
@@ -103,10 +133,10 @@ public class ClassicModelsRepository {
         );
     }
     
-    // EXAMPLE 7
+    // EXAMPLE 9
     public void selfJoinComparingEmployeeViaNavigationMethod() {
 
-        System.out.println("EXAMPLE 7\n"
+        System.out.println("EXAMPLE 9\n"
                 + ctx.select(concat(EMPLOYEE.FIRST_NAME, inline(" "), EMPLOYEE.LAST_NAME).as("employee"),
                         concat(EMPLOYEE.employee().FIRST_NAME, inline(" "), EMPLOYEE.employee().LAST_NAME).as("reports_to"))
                         .from(EMPLOYEE)
@@ -115,13 +145,13 @@ public class ClassicModelsRepository {
         );
     }
     
-    // EXAMPLE 8
+    // EXAMPLE 10
     public void selfJoinThreeTimes() {
 
         Sale s1 = SALE.as("s1");
         Sale s2 = SALE.as("s2");
 
-        System.out.println("EXAMPLE 8\n"
+        System.out.println("EXAMPLE 10\n"
                 + ctx.selectDistinct(SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR.as("2003"),
                         s1.FISCAL_YEAR.as("2004"), s2.FISCAL_YEAR.as("2005"))
                         .from(SALE)
