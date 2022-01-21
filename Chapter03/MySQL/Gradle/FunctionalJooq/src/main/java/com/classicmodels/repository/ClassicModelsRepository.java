@@ -8,11 +8,15 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.mapping;
 import static java.util.stream.Collectors.summingDouble;
 import static java.util.stream.Collectors.toList;
+import java.util.stream.Stream;
 import static jooq.generated.tables.Sale.SALE;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import jooq.generated.tables.records.SaleRecord;
 import org.jooq.DSLContext;
+import org.jooq.Record1;
 import org.jooq.RecordMapper;
+import org.jooq.conf.FetchIntermediateResult;
+import org.jooq.conf.Settings;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -123,21 +127,81 @@ public class ClassicModelsRepository {
     }
 
     public SaleStats findSalesAndTotalSale() {
+       
+        SaleStats result11 = ctx.fetch("SELECT sale FROM sale")  // jOOQ fluent API ends here (ResultSet is closed)                                                                  
+                .stream() // Stream fluent API starts here (java.​util.​Collection.stream())                
+                .collect( // java.​util.​stream.​Stream.collect()
+                        Collectors.teeing(summingDouble(rs -> rs.getValue("sale", Double.class)), 
+                        mapping(rs -> rs.getValue("sale", Double.class), toList()), SaleStats::new)
+                );        
         
-        SaleStats result1 = ctx.fetch("SELECT sale FROM sale")  // jOOQ fluent API ends here                                                
-                .stream() // Stream fluent API starts here                   
-                .collect(Collectors.teeing(summingDouble(rs -> rs.getValue("sale", Double.class)),
-                        mapping(rs -> rs.getValue("sale", Double.class), toList()),
-                        SaleStats::new));        
-                
-        SaleStats result2 = ctx.select(SALE.SALE_)
+        SaleStats result12 = ctx.fetch("SELECT sale FROM sale") // (ResultSet is closed)                                                                                                  
+                .collect( // org.​jooq.​Result.collect() which is the same as java.​util.​stream.​Stream.collect()
+                        Collectors.teeing(summingDouble(rs -> rs.getValue("sale", Double.class)),
+                        mapping(rs -> rs.getValue("sale", Double.class), toList()), SaleStats::new)
+                );   
+                     
+        SaleStats result21 = ctx.select(SALE.SALE_)
                 .from(SALE)
-                .fetch() // jOOQ fluent API ends here                  
-                .stream() // Stream fluent API starts here                   
-                .collect(Collectors.teeing(summingDouble(rs -> rs.getValue(SALE.SALE_)),
-                        mapping(rs -> rs.getValue(SALE.SALE_), toList()),
-                        SaleStats::new));
+                .fetch() // jOOQ fluent API ends here (ResultSet is closed)                  
+                .stream() // Stream fluent API starts here (java.​util.​Collection.stream())                                      
+                .collect(
+                        Collectors.teeing(summingDouble(rs -> rs.getValue(SALE.SALE_)),
+                        mapping(rs -> rs.getValue(SALE.SALE_), toList()), SaleStats::new)
+                );
         
-        return result2;
+        SaleStats result22 = ctx.select(SALE.SALE_)
+                .from(SALE)
+                .fetch() // ResultSet is closed
+                .collect( // org.​jooq.​Result.collect() which is the same as java.​util.​stream.​Stream.collect()
+                        Collectors.teeing(summingDouble(rs -> rs.getValue(SALE.SALE_)),
+                        mapping(rs -> rs.getValue(SALE.SALE_), toList()),
+                        SaleStats::new)
+                );
+        
+        // try-with-resources is needed, here we stream the ResultSet which remains open
+        try (Stream<Record1<Double>> stream = ctx.select(SALE.SALE_).from(SALE).stream()) {
+            SaleStats result31 = stream
+                    .collect( // Stream fluent API starts here 
+                        Collectors.teeing(summingDouble(rs -> rs.getValue(SALE.SALE_)), 
+                        mapping(rs -> rs.getValue(SALE.SALE_), toList()),
+                        SaleStats::new)
+                );
+        }
+               
+        // no need for managing resources, which are handled inside of the collect() method
+        SaleStats result32 = ctx.select(SALE.SALE_)
+                .from(SALE)                               
+                .collect( // org.​jooq.​ResultQuery.collect()
+                        Collectors.teeing(summingDouble(rs -> rs.getValue(SALE.SALE_)), 
+                        mapping(rs -> rs.getValue(SALE.SALE_), toList()),
+                        SaleStats::new)
+                );
+                
+        // explicitly require an intermediate Result (useful when you have a  ExecuteListener around)
+        DSLContext dtx = ctx.configuration()
+                .derive(new Settings().withFetchIntermediateResult(
+                        FetchIntermediateResult.ALWAYS)).dsl();
+        
+        // try-with-resources is needed, here we stream the ResultSet which remains open
+        try (Stream<Record1<Double>> stream = dtx.select(SALE.SALE_).from(SALE).stream()) {
+            SaleStats result41 = stream
+                    .collect( // Stream fluent API starts here 
+                        Collectors.teeing(summingDouble(rs -> rs.getValue(SALE.SALE_)), 
+                        mapping(rs -> rs.getValue(SALE.SALE_), toList()),
+                        SaleStats::new)
+                );
+        }
+        
+        // no need for managing resources, which are handled inside of the collect() method
+        SaleStats result42 = dtx.select(SALE.SALE_)
+                .from(SALE)                               
+                .collect( // org.​jooq.​ResultQuery.collect()
+                        Collectors.teeing(summingDouble(rs -> rs.getValue(SALE.SALE_)), 
+                        mapping(rs -> rs.getValue(SALE.SALE_), toList()),
+                        SaleStats::new)
+                );
+        
+        return result11;
     }
 }
