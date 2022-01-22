@@ -10,6 +10,5 @@
 | JoinUsing               | Samples of JOIN USING                                 |
 | LateralJoin             | CROSS APPLY, OUTER APPLY, and LATERAL                 |
 | NaturalJoin             | NATURAL (LEFT, RIGHT) JOIN                            |
-| OuterJoinPartition      | Oracle's partitioned outer joins                      |
 | PartitionedOuterJoin    | Oracle's partitioned outer joins                      |
 | SemiAndAntiJoin         | jOOQ leftAntiJoin() and leftSemiJoin()                |

@@ -114,7 +114,7 @@ public class ClassicModelsRepository {
                         .from(EMPLOYEE)
                         .leftOuterJoin(SALE)
                         .on(EMPLOYEE.EMPLOYEE_NUMBER.eq(SALE.EMPLOYEE_NUMBER))
-                        .where(SALE.EMPLOYEE_NUMBER.isNull())
+                        .where(EMPLOYEE.JOB_TITLE.eq("Sales Rep"))
                         .fetch()
         );
 
@@ -123,7 +123,7 @@ public class ClassicModelsRepository {
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, SALE.SALE_)
                         .from(EMPLOYEE, SALE)
                         .where(SALE.EMPLOYEE_NUMBER.plus().eq(EMPLOYEE.EMPLOYEE_NUMBER)
-                                .and(SALE.EMPLOYEE_NUMBER.isNull()))
+                                .and(EMPLOYEE.JOB_TITLE.eq("Sales Rep")))
                         .fetch()
         );
     }
@@ -148,7 +148,7 @@ public class ClassicModelsRepository {
                         .from(EMPLOYEE)
                         .rightOuterJoin(SALE)
                         .on(EMPLOYEE.EMPLOYEE_NUMBER.eq(SALE.EMPLOYEE_NUMBER))
-                        .where(EMPLOYEE.EMPLOYEE_NUMBER.isNull())
+                        .where(EMPLOYEE.JOB_TITLE.eq("Sales Rep"))
                         .fetch()
         );
     }

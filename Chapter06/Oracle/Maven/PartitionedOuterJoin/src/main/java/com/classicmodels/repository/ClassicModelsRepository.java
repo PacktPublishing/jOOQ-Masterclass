@@ -1,7 +1,10 @@
 package com.classicmodels.repository;
 
+import java.math.BigDecimal;
+import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
+import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
@@ -29,12 +32,46 @@ public class ClassicModelsRepository {
     /*
     Partitioned outer joins is specific to Oracle and it allow us to do the same 
     "densifying" of data using a convenient syntax and an efficient execution plan.
-    */
-    
-    // Fill Gaps in Sparse Data
+    */       
     public void partitionedOuterJoinExamples() {
+        
+        // identify gaps in the series of dates
+        System.out.println("EXAMPLE 1.1\n"
+                + ctx.select(PAYMENT.PAYMENT_DATE, CUSTOMER.CUSTOMER_NAME, sum(PAYMENT.INVOICE_AMOUNT))
+                        .from(CUSTOMER)
+                        .innerJoin(PAYMENT)
+                        .on(CUSTOMER.CUSTOMER_NUMBER.eq(PAYMENT.CUSTOMER_NUMBER))
+                        .groupBy(PAYMENT.PAYMENT_DATE, CUSTOMER.CUSTOMER_NAME)
+                        .orderBy(1, 2)
+                        .fetch()
+        );
 
-        System.out.println("EXAMPLE 1:\n"
+        // fill gaps in sparse data        
+         System.out.println("EXAMPLE 1.2\n"
+                + ctx.select(field(name("T", "P_DATE")), CUSTOMER.CUSTOMER_NAME, sum(nvl(PAYMENT.INVOICE_AMOUNT, BigDecimal.ZERO)))
+                        .from(CUSTOMER)
+                        .crossJoin(selectDistinct(PAYMENT.PAYMENT_DATE.as("P_DATE")).from(PAYMENT).asTable("T"))
+                        .leftJoin(PAYMENT)
+                        .on(CUSTOMER.CUSTOMER_NUMBER.eq(PAYMENT.CUSTOMER_NUMBER)
+                                .and(field(name("T","P_DATE")).eq(PAYMENT.PAYMENT_DATE)))
+                        .groupBy(field(name("T", "P_DATE")), CUSTOMER.CUSTOMER_NAME)
+                        .orderBy(1, 2)
+                        .fetch()
+        );
+         
+        System.out.println("EXAMPLE 1.3:\n"
+                + ctx.select(PAYMENT.PAYMENT_DATE, CUSTOMER.CUSTOMER_NAME, sum(nvl(PAYMENT.INVOICE_AMOUNT, BigDecimal.ZERO)))
+                        .from(CUSTOMER)
+                        .leftOuterJoin(PAYMENT)
+                        .partitionBy(PAYMENT.PAYMENT_DATE)
+                        .on(CUSTOMER.CUSTOMER_NUMBER.eq(PAYMENT.CUSTOMER_NUMBER))
+                        .groupBy(PAYMENT.PAYMENT_DATE, CUSTOMER.CUSTOMER_NAME)
+                        .orderBy(1, 2)
+                        .fetch()
+        );
+        
+        // another example
+        System.out.println("EXAMPLE 1.4:\n"
                 + ctx.select(ORDERDETAIL.ORDER_LINE_NUMBER, PRODUCT.PRODUCT_NAME,
                         sum(nvl(ORDERDETAIL.QUANTITY_ORDERED, 0)))
                         .from(PRODUCT)
@@ -46,7 +83,21 @@ public class ClassicModelsRepository {
                         .fetch()
         );
 
-        System.out.println("EXAMPLE 2.1:\n"
+        // produce a summary showing total invoices of each customer per day
+        System.out.println("EXAMPLE 2.1\n"
+                + ctx.select(PAYMENT.PAYMENT_DATE, CUSTOMER.CUSTOMER_NAME,
+                        sum(nvl(PAYMENT.INVOICE_AMOUNT, BigDecimal.ZERO)))
+                        .from(CUSTOMER)
+                        .leftOuterJoin(PAYMENT)
+                        .partitionBy(PAYMENT.PAYMENT_DATE)
+                        .on(CUSTOMER.CUSTOMER_NUMBER.eq(PAYMENT.CUSTOMER_NUMBER))
+                        .groupBy(PAYMENT.PAYMENT_DATE, CUSTOMER.CUSTOMER_NAME)
+                        .orderBy(1, 2)
+                        .fetch()
+        );
+                
+        // query returning sales for every employee for every year (some employees had no sales in some years)
+        System.out.println("EXAMPLE 2.2:\n"
                 + ctx.select(SALE.FISCAL_YEAR, EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME,
                         sum(nvl(SALE.SALE_, 0.0d)).as("SALES"))
                         .from(EMPLOYEE)
@@ -58,8 +109,8 @@ public class ClassicModelsRepository {
                         .fetch()
         );
 
-        // Example 2 alternative without partitioned (you can easily adapt for examples 1 and 3)
-        System.out.println("EXAMPLE 2.2:\n"
+        // Example 2.2 alternative without partitioned (you can easily adapt for examples 1 and 3)
+        System.out.println("EXAMPLE 2.3:\n"
                 + ctx.select(field(name("T", "FY")), EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME,
                         sum(nvl(SALE.SALE_, 0.0d)).as("SALES"))
                         .from(EMPLOYEE)
