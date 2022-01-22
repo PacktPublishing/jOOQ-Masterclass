@@ -1,6 +1,6 @@
 package com.classicmodels.repository;
 
-import jooq.generated.Keys;
+import static jooq.generated.Keys.PRODUCTLINEDETAIL_PRODUCTLINE_FK;
 import static jooq.generated.tables.BankTransaction.BANK_TRANSACTION;
 import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Productline.PRODUCTLINE;
@@ -82,7 +82,7 @@ public class ClassicModelsRepository {
                         PRODUCTLINEDETAIL.LINE_CAPACITY, PRODUCTLINEDETAIL.LINE_TYPE)
                         .from(PRODUCTLINE)
                         .innerJoin(PRODUCTLINEDETAIL)
-                        .onKey(Keys.PRODUCTLINEDETAIL_PRODUCTLINE_FK)
+                        .onKey(PRODUCTLINEDETAIL_PRODUCTLINE_FK)
                         .fetch()
         );
     }
