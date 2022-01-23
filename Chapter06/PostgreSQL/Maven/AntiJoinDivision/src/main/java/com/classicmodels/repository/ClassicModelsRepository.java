@@ -65,7 +65,7 @@ public class ClassicModelsRepository {
 
         System.out.println("EXAMPLE 3\n"
                 + ctx.select().from(
-                        ctx.selectDistinct(ORDERDETAIL.ORDER_ID.as("OID")).from(ORDERDETAIL).asTable("T1")
+                        selectDistinct(ORDERDETAIL.ORDER_ID.as("OID")).from(ORDERDETAIL).asTable("T1")
                                 .leftAntiJoin(TOP3PRODUCT
                                         .leftAntiJoin(ORDERDETAIL)
                                         .on(field(name("T1", "OID")).eq(ORDERDETAIL.ORDER_ID)
