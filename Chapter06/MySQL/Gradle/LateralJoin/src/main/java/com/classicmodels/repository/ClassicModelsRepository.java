@@ -68,8 +68,8 @@ public class ClassicModelsRepository {
                 + ctx.select()
                         .from(OFFICE)
                         .leftOuterJoin(lateral(select().from(DEPARTMENT)
-                                .where(OFFICE.OFFICE_CODE.eq(DEPARTMENT.OFFICE_CODE))
-                        )).on(trueCondition()) // Dummy predicate for LEFT JOIN as val(1).eq(val(1))
+                                .where(OFFICE.OFFICE_CODE.eq(DEPARTMENT.OFFICE_CODE))).as("t")
+                        ).on(trueCondition()) // Dummy predicate for LEFT JOIN as val(1).eq(val(1))
                         .fetch()
         );
     }
