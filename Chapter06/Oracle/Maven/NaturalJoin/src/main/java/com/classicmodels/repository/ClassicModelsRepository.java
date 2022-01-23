@@ -3,9 +3,10 @@ package com.classicmodels.repository;
 import static jooq.generated.tables.BankTransaction.BANK_TRANSACTION;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Payment.PAYMENT;
+import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Sale.SALE;
+import static jooq.generated.tables.Top3product.TOP3PRODUCT;
 import org.jooq.DSLContext;
-import org.jooq.conf.Settings;
 import static org.jooq.impl.DSL.asterisk;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.name;
@@ -68,6 +69,12 @@ public class ClassicModelsRepository {
                         .fetch()
          */
         );
+
+        // use asterisk() to render "*"
+        System.out.println("EXAMPLE 1.7\n"
+                + ctx.select(asterisk())
+                        .from(PRODUCT).naturalJoin(TOP3PRODUCT)
+                        .fetch());
     }
 
     // EXAMPLE 2
@@ -115,6 +122,12 @@ public class ClassicModelsRepository {
                         .fetch()
          */
         );
+        
+        // use asterisk() to render "*"
+        System.out.println("EXAMPLE 2.7\n"
+                + ctx.select(asterisk())
+                        .from(PRODUCT).naturalLeftOuterJoin(TOP3PRODUCT)
+                        .fetch());
     }
 
     // EXAMPLE 3
@@ -125,7 +138,7 @@ public class ClassicModelsRepository {
                         .from(EMPLOYEE).naturalRightOuterJoin(SALE)
                         .fetch()
         );
-        
+
         System.out.println("EXAMPLE 3.2\n"
                 + ctx.select(field(EMPLOYEE.EMPLOYEE_NUMBER.getUnqualifiedName()).as("en"),
                         field(SALE.EMPLOYEE_NUMBER.getUnqualifiedName()).as("sn"),
@@ -162,6 +175,12 @@ public class ClassicModelsRepository {
                         .fetch()
          */
         );
+        
+        // use asterisk() to render "*"
+        System.out.println("EXAMPLE 3.7\n"
+                + ctx.select(asterisk())
+                        .from(PRODUCT).naturalRightOuterJoin(TOP3PRODUCT)
+                        .fetch());
     }
 
     // EXAMPLE 4
@@ -177,7 +196,7 @@ public class ClassicModelsRepository {
                 + ctx.select()
                         .from(table("EMPLOYEE")).naturalFullOuterJoin(table("SALE"))
                         .fetch()
-        );                
+        );
 
         System.out.println("EXAMPLE 4.3 (uncomment to try) \n"
         // results in ORA-25155, uncomment to try
@@ -187,6 +206,12 @@ public class ClassicModelsRepository {
                         .fetch()
          */
         );
+        
+        // use asterisk() to render "*"
+        System.out.println("EXAMPLE 4.4\n"
+                + ctx.select(asterisk())
+                        .from(PRODUCT).naturalFullOuterJoin(TOP3PRODUCT)
+                        .fetch());
     }
 
     // EXAMPLE 5
