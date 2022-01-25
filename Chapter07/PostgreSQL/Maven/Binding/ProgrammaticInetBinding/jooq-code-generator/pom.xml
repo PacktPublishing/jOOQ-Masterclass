@@ -24,6 +24,7 @@
         <maven.compiler.target>17</maven.compiler.target>                        
         
         <jooq.version>3.16.2</jooq.version>
+        <jakarta.xml.bind.version>3.0.1</jakarta.xml.bind.version>
     </properties>
     
     <dependencies>              
@@ -40,7 +41,7 @@
         <dependency>
             <groupId>jakarta.xml.bind</groupId>
             <artifactId>jakarta.xml.bind-api</artifactId>
-            <version>3.0.1</version>
+            <version>${jakarta.xml.bind.version}</version>
         </dependency>           
     </dependencies>      
 </project>
