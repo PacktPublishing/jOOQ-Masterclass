@@ -22,7 +22,7 @@ public class ClassicModelsRepository {
     @Transactional
     public void insertCustomer() {
 
-        // converter is not used (we insert the Integer '24249' directly)
+        // converter is not used (we insert the Integer '202010' directly)
         ctx.insertInto(CUSTOMER)
                 .values(null, 
                         "Atelier-" + UUID.randomUUID().toString(), // random customer_name 

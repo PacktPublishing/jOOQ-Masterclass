@@ -23,7 +23,7 @@ public class ClassicModelsRepository {
     public void insertCustomer() {
 
         // non-type-safe,
-        // converter is not used (we insert '24249' directly)
+        // converter is not used (we insert '202010' directly)
         ctx.insertInto(CUSTOMER)
                 .values(null, "Atelier One", "Markus", "Alop", "0892 339 423",
                         1370L, 50000, 24249)
