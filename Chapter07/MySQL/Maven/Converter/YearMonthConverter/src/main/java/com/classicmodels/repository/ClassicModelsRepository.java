@@ -35,10 +35,11 @@ public class ClassicModelsRepository {
     public void insertCustomer() {
 
         // non-type-safe,
-        // converter is not used (we insert '202010' directly)
+        // converter is not used (we insert '24249' directly)
         ctx.insertInto(CUSTOMER)
                 .values(null, "Atelier One", "Markus", "Alop", "0892 339 423",
                         1370L, 50000, 24249)
+                .onDuplicateKeyIgnore()
                 .execute();
 
         // non-type-safe,
@@ -46,6 +47,7 @@ public class ClassicModelsRepository {
         ctx.insertInto(CUSTOMER)
                 .values(null, "Atelier One", "Markus", "Alop", "0892 339 423",
                         1370L, 50000, INTEGER_YEARMONTH_CONVERTER.to(YearMonth.of(2020, 10)))
+                .onDuplicateKeyIgnore()
                 .execute();
 
         // non-type-safe,
@@ -53,6 +55,7 @@ public class ClassicModelsRepository {
         ctx.insertInto(CUSTOMER)
                 .values(null, "Atelier One", "Markus", "Alop", "0892 339 423",
                         1370L, 50000, val(YearMonth.of(2020, 10), YEARMONTH))
+                .onDuplicateKeyIgnore()
                 .execute();
 
         // type-safe,
@@ -63,6 +66,7 @@ public class ClassicModelsRepository {
                 .values("Atelier One", "Markus", "Alop", "0892 339 423",
                         1370L, BigDecimal.valueOf(50000),
                         INTEGER_YEARMONTH_CONVERTER.to(YearMonth.of(2020, 10)))
+                .onDuplicateKeyIgnore()
                 .execute();
 
         // type-safe,
@@ -73,6 +77,7 @@ public class ClassicModelsRepository {
                 .values("Atelier One", "Markus", "Alop", "0892 339 423",
                         1370L, BigDecimal.valueOf(50000),
                         INTEGER_YEARMONTH_CONVERTER.to(YEARMONTH_DATE_CONVERTER.to(new Date())))
+                .onDuplicateKeyIgnore()
                 .execute();
 
         // type-safe,
@@ -83,6 +88,7 @@ public class ClassicModelsRepository {
                 .values("Atelier One", "Markus", "Alop", "0892 339 423",
                         1370L, BigDecimal.valueOf(50000),
                         INTEGER_YEARMONTH_CONVERTER.to(DATE_YEARMONTH_CONVERTER.inverse().to(new Date())))
+                .onDuplicateKeyIgnore()
                 .execute();
 
         /* CONVERTER WHICH CANCELS ITSELF OUT (CIRCULAR CONVERTER) */
@@ -101,6 +107,7 @@ public class ClassicModelsRepository {
         ctx.insertInto(CUSTOMER)
                 .values(null, "Atelier One", "Markus", "Alop", "0892 339 423",
                         1370L, 50000, converter.to(YearMonth.of(2020, 10)))
+                .onDuplicateKeyIgnore()
                 .execute();
 
         /* DECLARE CUSTOM DATA TYPE LOCALLY */
@@ -120,6 +127,7 @@ public class ClassicModelsRepository {
         ctx.insertInto(CUSTOMER)
                 .values(null, "Atelier One", "Markus", "Alop", "0892 339 423",
                         1370L, 50000, val(YearMonth.of(2020, 10), yearmonth))
+                .onDuplicateKeyIgnore()
                 .execute();
     }
 
