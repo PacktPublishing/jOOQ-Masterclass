@@ -20,6 +20,7 @@ public class JooqConfig {
                         .withUser("postgres")
                         .withPassword("root"))
                 .withGenerator(new Generator()
+                        .withName("org.jooq.codegen.JavaGenerator")
                         .withDatabase(new Database()
                                 .withForcedTypes(
                                         new ForcedType()
@@ -28,18 +29,26 @@ public class JooqConfig {
                                                 .withIncludeExpression(".*\\.dep_net_ipv4")
                                                 .withExcludeTypes(".*\\."))
                                 .withName("org.jooq.meta.postgres.PostgresDatabase")
-                                .withSchemaVersionProvider("SELECT MAX(version) FROM flyway_schema_history")
-                                .withIncludes(".*")
-                                .withExcludes("flyway_schema_history")
                                 .withInputSchema("public")
-                        )
+                                .withIncludes(".*")
+                                .withExcludes("flyway_schema_history | akeys | avals | defined | delete.*"
+                                        + " | department_topic_arr | dup | employee_office_arr | exist.*"
+                                        + " | fetchval | get_.* | ghstore.* | gin.* | hs.* | hstore.*"
+                                        + " | isdefined | isexists | make_array | new_salary | populate_record"
+                                        + " | sale_price | slice.* | swap | tconvert | update_msrp | postal_code"
+                                        + " | evaluation_criteria | rate_type | vat_type | .*_master | each"
+                                        + " | skeys | svals | top_three_sales_per_employee | product_of_product_line")
+                                .withSchemaVersionProvider("SELECT MAX(\"version\") FROM \"flyway_schema_history\"")
+                                .withLogSlowQueriesAfterSeconds(20)
+                        )            
                         .withGenerate(new Generate()
-                                .withPojos(true)
-                                .withValidationAnnotations(Boolean.TRUE)
+                                .withPojos(true)                                
                         )
                         .withTarget(new Target()
                                 .withPackageName("jooq.generated")
-                                .withDirectory(args[0])));
+                                .withDirectory(System.getProperty("user.dir").endsWith("webapp")
+                                        ? "target/generated-sources"
+                                        : "webapp/target/generated-sources")));
 
         GenerationTool.generate(configuration);
     }

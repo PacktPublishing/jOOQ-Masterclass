@@ -6,11 +6,11 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.3.RELEASE</version>
-        <relativePath/> <!-- lookup parent from repository -->
-        
+        <version>2.5.7</version>
+        <relativePath/> <!-- lookup parent from repository -->        
     </parent>
-    <groupId>jooq.code.gen</groupId>
+    
+    <groupId>classicmodels.jooq.code.gen</groupId>
     <artifactId>webapp</artifactId>
     <version>1.0</version>
     <name>webapp</name>	
@@ -19,19 +19,18 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         
-        <java.version>14</java.version>                
-        <maven.compiler.source>14</maven.compiler.source>
-        <maven.compiler.target>14</maven.compiler.target>
+        <java.version>17</java.version>                
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
 
-        <jooq.version>3.14.4</jooq.version>        
-        <mysql.connector.java.version>8.0.20</mysql.connector.java.version>                
-        <codehaus.mojo.version>1.0.0</codehaus.mojo.version>      
-        <maven.compiler.plugin.version>3.3</maven.compiler.plugin.version>     
+        <jooq.version>3.16.2</jooq.version>        
+        <codehaus.mojo.version>1.0.0</codehaus.mojo.version>              
+        <exec.maven.plugin>3.0.0</exec.maven.plugin>
     </properties>       
         
     <dependencies>               
         <dependency>
-            <groupId>jooq.code.gen</groupId>
+            <groupId>classicmodels.jooq.code.gen</groupId>
             <artifactId>jooq-code-generator</artifactId>
             <version>1.0</version>
         </dependency>       
@@ -55,21 +54,22 @@
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
-        </dependency>
+        </dependency>              
         <dependency>
-            <groupId>javax.validation</groupId>
-            <artifactId>validation-api</artifactId>
-        </dependency>                        
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+            <version>3.0.1</version>
+        </dependency>   
     </dependencies>    
     <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>                
+                <artifactId>spring-boot-maven-plugin</artifactId>                               
             </plugin>            
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
+                <artifactId>build-helper-maven-plugin</artifactId>                
                 <executions>
                     <execution>
                         <phase>generate-sources</phase>
@@ -86,8 +86,7 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven.compiler.plugin.version}</version>
+                <artifactId>maven-compiler-plugin</artifactId>                
                 <configuration>
                     <compilerArgs>
                         <arg>--enable-preview</arg>
@@ -105,8 +104,8 @@
                         <goals>
                             <goal>read-project-properties</goal>
                         </goals>
-                        <configuration>
-                            <files>                                
+                        <configuration>                           
+                            <files>                                                                
                                 <file>src/main/resources/application.properties</file>
                             </files>
                         </configuration>
@@ -125,35 +124,32 @@
                     </execution>
                 </executions>                
                 <configuration>
+                    <driver>${spring.datasource.driverClassName}</driver>
                     <url>${spring.datasource.url}</url>
                     <user>${spring.datasource.username}</user>
                     <password>${spring.datasource.password}</password>  
                     <locations>
-                        <location>filesystem:src/main/resources/db/migration</location>
+                        <location>filesystem:./../../../../../../db/migration/dev/postgresql</location>
                     </locations>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <executions>  
-                    <execution>  
+                <artifactId>exec-maven-plugin</artifactId>                  
+                <version>${exec.maven.plugin}</version>                
+                <executions>                      
+                    <execution>                                           
+                        <id>run-jOOQ-code-generator</id>
                         <phase>generate-sources</phase>  
                         <goals>  
-                            <goal>java</goal>  
-                        </goals>  
+                            <goal>java</goal>                                                                                      
+                        </goals>                                                                           
                         <configuration>                                
-                            <mainClass>com.classicmodels.jooq.config.JooqConfig</mainClass>
-                            <!-- If you want, you can pass here as arguments the properties
-                                 imported from application.properties as well. This can be
-                                 useful if you have multiple profiles with dedicated application.properties. -->
-                            <arguments>
-                                <argument>${project.build.directory}/generated-sources/jooq</argument>                                
-                            </arguments>
-                            <cleanupDaemonThreads>false</cleanupDaemonThreads> 
-                        </configuration>  
+                            <mainClass>com.classicmodels.jooq.config.JooqConfig</mainClass>                                                        
+                            <cleanupDaemonThreads>true</cleanupDaemonThreads> 
+                        </configuration>          
                     </execution>  
-                </executions>                 
+                </executions>              
             </plugin>
         </plugins>
     </build>  
