@@ -23,10 +23,11 @@ public class ClassicModelsRepository {
     public void insertCustomer() {
 
         // non-type-safe,
-        // converter is not used (we insert '202010' directly)
+        // converter is not used (we insert '24249' directly)
         ctx.insertInto(CUSTOMER)
                 .values(null, "Atelier One", "Markus", "Alop", "0892 339 423",
                         1370L, 50000, 24249)
+                .onDuplicateKeyIgnore()
                 .execute();
 
         // non-type-safe,
@@ -35,6 +36,7 @@ public class ClassicModelsRepository {
         ctx.insertInto(CUSTOMER)
                 .values(null, "Atelier One", "Markus", "Alop", "0892 339 423",
                         1370L, 50000, YearMonth.of(2020, 10))
+                .onDuplicateKeyIgnore()
                 .execute();
 
         // type-safe,
@@ -45,6 +47,7 @@ public class ClassicModelsRepository {
                 CUSTOMER.CREDIT_LIMIT, CUSTOMER.FIRST_BUY_DATE)
                 .values("Atelier One", "Markus", "Alop", "0892 339 423",
                         1370L, BigDecimal.valueOf(50000), YearMonth.of(2020, 10))
+                .onDuplicateKeyIgnore()
                 .execute();
     }
 
