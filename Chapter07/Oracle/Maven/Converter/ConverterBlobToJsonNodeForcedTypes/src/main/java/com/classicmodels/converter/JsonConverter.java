@@ -4,12 +4,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jooq.Converter;
-import org.jooq.JSONB;
+import org.jooq.JSON;
 
-public class JsonConverter implements Converter<JSONB, JsonNode> {
+public class JsonConverter implements Converter<JSON, JsonNode> {
 
     @Override
-    public JsonNode from(JSONB t) {
+    public JsonNode from(JSON t) {
 
         if (t != null) {
 
@@ -25,19 +25,19 @@ public class JsonConverter implements Converter<JSONB, JsonNode> {
     }
 
     @Override
-    public JSONB to(JsonNode u) {
+    public JSON to(JsonNode u) {
 
         if (u != null) {
 
-            return JSONB.valueOf(u.toString());
+            return JSON.valueOf(u.toString());
         }
 
         return null;
     }
 
     @Override
-    public Class<JSONB> fromType() {
-        return JSONB.class;
+    public Class<JSON> fromType() {
+        return JSON.class;
     }
 
     @Override
