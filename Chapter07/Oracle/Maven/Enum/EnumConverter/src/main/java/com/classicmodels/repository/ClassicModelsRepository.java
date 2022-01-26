@@ -6,8 +6,8 @@ import static com.classicmodels.converter.SaleStrTrendConverter.SALE_STR_TREND_C
 import static com.classicmodels.converter.SaleStrTrendConverter.SALE_STR_TREND_TYPE;
 import com.classicmodels.enums.StarType;
 import com.classicmodels.enums.TrendType;
-import java.math.BigInteger;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.val;
@@ -28,30 +28,35 @@ public class ClassicModelsRepository {
     public void insertSale() {
 
         // no explicit converter
-        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.RATE)
-                .values(BigInteger.valueOf(2005), 56444.32, 1370L, "PLATINUM")
+        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH,
+                SALE.EMPLOYEE_NUMBER, SALE.RATE)
+                .values(2005, 56444.32, 1, 0.0, 1370L, "PLATINUM")
                 .execute();
 
         // use SALE_RATE_STAR_CONVERTER
-        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.RATE)
-                .values(BigInteger.valueOf(2005), 56444.32, 1370L, SALE_RATE_STAR_CONVERTER.to(StarType.FIVE_STARS))
+        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH,
+                SALE.EMPLOYEE_NUMBER, SALE.RATE)
+                .values(2005, 56444.32, 1, 0.0, 1370L, SALE_RATE_STAR_CONVERTER.to(StarType.FIVE_STARS))
                 .execute();
 
         // use SALE_VAT_INT_CONVERTER
-        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.VAT)
-                .values(BigInteger.valueOf(2005), 56444.32, 1370L, SALE_VAT_INT_CONVERTER.to(19))
+        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH,
+                SALE.EMPLOYEE_NUMBER, SALE.VAT)
+                .values(2005, 56444.32, 1, 0.0, 1370L, SALE_VAT_INT_CONVERTER.to(19))
                 .execute();
         
         // use SALE_STR_TREND_CONVERTER
-        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.TREND)
-                .values(BigInteger.valueOf(2005), 56444.32, 1370L, SALE_STR_TREND_CONVERTER.to(TrendType.UP))
+        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH,
+                SALE.EMPLOYEE_NUMBER, SALE.TREND)
+                .values(2005, 56444.32, 1, 0.0, 1370L, SALE_STR_TREND_CONVERTER.to(TrendType.UP))
                 .execute();      
         
         // use SALE_STR_TREND_TYPE
         ctx.insertInto(SALE)
-                .values(null, BigInteger.valueOf(2005), 56444.32, 1370L, 0, 
+                .values(ThreadLocalRandom.current().nextInt(10000, 20000), // random PK
+                        2005, 56444.32, 1370L, 0, 
                         SALE_RATE_STAR_CONVERTER.to(StarType.FIVE_STARS),
-                        SALE_VAT_INT_CONVERTER.to(19),
+                        SALE_VAT_INT_CONVERTER.to(19), 1, 0.0,
                         val(TrendType.UP, SALE_STR_TREND_TYPE))
                 .execute();
     }
