@@ -27,13 +27,15 @@ public class ClassicModelsRepository {
     public void insertSale() {
 
         // store RateType as String
-        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.RATE)
-                .values(2005, 56444.32, 1370L, RateType.PLATINUM.name())
+        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH,
+                SALE.EMPLOYEE_NUMBER, SALE.RATE)
+                .values(2005, 56444.32, 1, 0.0, 1370L, RateType.PLATINUM.name())
                 .execute();
 
         // rely VatConverter
-        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.VAT)
-                .values(2005, 56444.32, 1370L, VAT_CONVERTER.to(VatType.MAX))
+        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH,
+                SALE.EMPLOYEE_NUMBER, SALE.VAT)
+                .values(2005, 56444.32, 1 ,0.0, 1370L, VAT_CONVERTER.to(VatType.MAX))
                 .execute();
     }
 
