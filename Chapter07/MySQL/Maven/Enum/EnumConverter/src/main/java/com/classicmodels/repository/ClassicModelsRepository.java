@@ -28,30 +28,34 @@ public class ClassicModelsRepository {
     public void insertSale() {
 
         // no explicit converter
-        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.RATE)
-                .values(2005, 56444.32, 1370L, RateType.PLATINUM)
+        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH,
+                SALE.EMPLOYEE_NUMBER, SALE.RATE)
+                .values(2005, 56444.32, 1, 0.0, 1370L, RateType.PLATINUM)
                 .execute();                
 
         // use SALE_RATE_STAR_CONVERTER
-        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.RATE)
-                .values(2005, 56444.32, 1370L, SALE_RATE_STAR_CONVERTER.to(StarType.FIVE_STARS))
+        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH,
+                SALE.EMPLOYEE_NUMBER, SALE.RATE)
+                .values(2005, 56444.32, 1, 0.0, 1370L, SALE_RATE_STAR_CONVERTER.to(StarType.FIVE_STARS))
                 .execute();
 
         // use SALE_VAT_INT_CONVERTER
-        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.VAT)
-                .values(2005, 56444.32, 1370L, SALE_VAT_INT_CONVERTER.to(19))
+        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH,
+                SALE.EMPLOYEE_NUMBER, SALE.VAT)
+                .values(2005, 56444.32, 1, 0.0, 1370L, SALE_VAT_INT_CONVERTER.to(19))
                 .execute();
         
         // use SALE_STR_TREND_CONVERTER
-        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.TREND)
-                .values(2005, 56444.32, 1370L, SALE_STR_TREND_CONVERTER.to(TrendType.UP))
+        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH,
+                SALE.EMPLOYEE_NUMBER, SALE.TREND)
+                .values(2005, 56444.32, 1, 0.0, 1370L, SALE_STR_TREND_CONVERTER.to(TrendType.UP))
                 .execute();
 
         // use SALE_STR_TREND_TYPE
         ctx.insertInto(SALE)
                 .values(null, 2005, 56444.32, 1370L, 0, 
                         SALE_RATE_STAR_CONVERTER.to(StarType.FIVE_STARS),
-                        SALE_VAT_INT_CONVERTER.to(19),
+                        SALE_VAT_INT_CONVERTER.to(19), 1, 0.0,
                         val(TrendType.UP, SALE_STR_TREND_TYPE))
                 .execute();
     }
