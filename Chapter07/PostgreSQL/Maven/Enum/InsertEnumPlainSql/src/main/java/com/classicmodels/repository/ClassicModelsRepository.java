@@ -23,8 +23,9 @@ public class ClassicModelsRepository {
 
         ctx.insertInto(table("sale"))
                 .columns(field("fiscal_year"), field("sale"),
+                        field("fiscal_month"), field("revenue_growth"),
                         field("employee_number"), field("rate"))
-                .values(2005, 56444.32, 1370L, RateType.PLATINUM)
+                .values(2005, 56444.32, 1, 0.0, 1370L, RateType.PLATINUM)
                 .execute();
     }
 
