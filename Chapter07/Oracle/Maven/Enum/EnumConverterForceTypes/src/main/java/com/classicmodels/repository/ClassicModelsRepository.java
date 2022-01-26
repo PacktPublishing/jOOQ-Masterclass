@@ -2,8 +2,8 @@ package com.classicmodels.repository;
 
 import com.classicmodels.enums.StarType;
 import com.classicmodels.enums.TrendType;
-import java.math.BigInteger;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
@@ -23,24 +23,28 @@ public class ClassicModelsRepository {
     public void insertSale() {
         
         // use SaleRateStarConverter
-        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.RATE)
-                .values(BigInteger.valueOf(2005), 56444.32, 1370L, StarType.FIVE_STARS)
+        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH,
+                SALE.EMPLOYEE_NUMBER, SALE.RATE)
+                .values(2005, 56444.32, 1, 0.0, 1370L, StarType.FIVE_STARS)
                 .execute();
 
         // use SaleVatIntConverter
-        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.VAT)
-                .values(BigInteger.valueOf(2005), 56444.32, 1370L, 19)
+        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH,
+                SALE.EMPLOYEE_NUMBER, SALE.VAT)
+                .values(2005, 56444.32, 1, 0.0, 1370L, 19)
                 .execute();
         
         // use SaleStrTrendConverter
-        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.TREND)
-                .values(BigInteger.valueOf(2005), 56444.32, 1370L, TrendType.UP)
+        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH,
+                SALE.EMPLOYEE_NUMBER, SALE.TREND)
+                .values(2005, 56444.32, 1, 0.0, 1370L, TrendType.UP)
                 .execute();   
         
         // use all three converters
         ctx.insertInto(SALE)
-                .values(null, 2005, 56444.32, 1370L, 0, 
-                        StarType.FIVE_STARS, 19, TrendType.UP)
+                .values(ThreadLocalRandom.current().nextInt(10000, 20000), // random PK
+                        2005, 56444.32, 1370L, 0, 
+                        StarType.FIVE_STARS, 19, 1, 0.0, TrendType.UP)
                 .execute();
     }
 
