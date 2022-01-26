@@ -25,8 +25,7 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
                 
-        <jooq.version>3.16.2</jooq.version>  
-        <codehaus.mojo.version>1.0.0</codehaus.mojo.version>              
+        <jooq.version>3.16.2</jooq.version>          
     </properties>
 
     <dependencies>        
