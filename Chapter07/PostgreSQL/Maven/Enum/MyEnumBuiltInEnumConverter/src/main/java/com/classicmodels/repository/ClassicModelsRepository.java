@@ -28,24 +28,26 @@ public class ClassicModelsRepository {
     public void insertSale() {
 
         // store RateType
-        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.RATE)
-                .values(2005, 56444.32, 1370L,
+        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH,
+                SALE.EMPLOYEE_NUMBER, SALE.RATE)
+                .values(2005, 56444.32, 0, 1.1, 1370L,
                         field("?::\"public\".\"rate_type\"", RateType.PLATINUM.name()))
                 .execute();
 
         // rely on VatConverter
-        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.VAT)
-                .values(val(2005), val(56444.32), val(1370L),
+        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH,
+                SALE.EMPLOYEE_NUMBER, SALE.VAT)
+                .values(val(2005), val(56444.32), val(1), val(0.0), val(1370L),
                         field("?", jooq.generated.enums.VatType.class, VAT_CONVERTER.to(VatType.MAX)))
                 .execute();
     }
 
     public void fetchSale() {
 
-        List<RateType> rates = ctx.select(SALE.RATE.coerce(String.class))
+        List<RateType> rates = ctx.select(SALE.RATE)
                 .from(SALE)
                 .where(SALE.RATE.isNotNull())
-                .fetch(SALE.RATE, RateType.class);
+                .fetch(SALE.RATE.coerce(String.class), RateType.class);
 
         System.out.println("Rates: " + rates);
 
