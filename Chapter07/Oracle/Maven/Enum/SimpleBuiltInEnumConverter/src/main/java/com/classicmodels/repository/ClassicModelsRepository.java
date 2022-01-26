@@ -3,7 +3,6 @@ package com.classicmodels.repository;
 import com.classicmodels.enums.RateType;
 import com.classicmodels.enums.TrendType;
 import com.classicmodels.enums.VatType;
-import java.math.BigInteger;
 import java.util.List;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
@@ -24,18 +23,21 @@ public class ClassicModelsRepository {
     public void insertSale() {
 
         // rely on <forcedType/> and <enumConverter/>
-        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.RATE)
-                .values(BigInteger.valueOf(2005), 56444.32, 1370L, RateType.PLATINUM)
+        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH,
+                SALE.EMPLOYEE_NUMBER, SALE.RATE)
+                .values(2005, 56444.32, 1, 0.0, 1370L, RateType.PLATINUM)
                 .execute();
 
         // rely on <forcedType/> and <enumConverter/>
-        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.VAT)
-                .values(BigInteger.valueOf(2005), 56444.32, 1370L, VatType.MAX)
+        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH,
+                SALE.EMPLOYEE_NUMBER, SALE.VAT)
+                .values(2005, 56444.32, 1, 0.0, 1370L, VatType.MAX)
                 .execute();
 
         // rely on <forcedType/> and <enumConverter/>
-        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.TREND)
-                .values(BigInteger.valueOf(2005), 56444.32, 1370L, TrendType.UP)
+        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH,
+                SALE.EMPLOYEE_NUMBER, SALE.TREND)
+                .values(2005, 56444.32, 1, 0.0, 1370L, TrendType.UP)
                 .execute();
     }
 
