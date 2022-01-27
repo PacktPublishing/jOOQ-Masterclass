@@ -52,9 +52,9 @@ public class ClassicModelsRepository {
                 .execute();
         
         ctx.insertInto(OFFICE, OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.PHONE,
-                OFFICE.ADDRESS_LINE_FIRST, OFFICE.COUNTRY, OFFICE.POSTAL_CODE, OFFICE.TERRITORY)
+                OFFICE.ADDRESS_LINE_FIRST, OFFICE.COUNTRY, OFFICE.POSTAL_CODE, OFFICE.TERRITORY, OFFICE.INTERNAL_BUDGET)
                 .values("100", "Paris", "+51 12 090 4530", "143 Rue Le", 
-                        "France", new PostalCodeRecord("OP909DD"), "N/A")
+                        "France", new PostalCodeRecord("OP909DD"), "N/A", 0)
                 .execute();
     }
 }
