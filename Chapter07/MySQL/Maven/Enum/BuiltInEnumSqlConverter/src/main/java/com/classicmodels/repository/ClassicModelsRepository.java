@@ -3,10 +3,10 @@ package com.classicmodels.repository;
 import static com.classicmodels.converter.SaleRateStarConverter.SALE_RATE_STAR_CONVERTER;
 import static com.classicmodels.converter.SaleStrTrendConverter.SALE_STR_TREND_CONVERTER;
 import static com.classicmodels.converter.SaleVatIntConverter.SALE_VAT_INT_CONVERTER;
+import com.classicmodels.enums.RateType;
 import com.classicmodels.enums.StarType;
 import com.classicmodels.enums.TrendType;
 import java.util.List;
-import jooq.generated.enums.RateType;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
@@ -25,16 +25,16 @@ public class ClassicModelsRepository {
     @Transactional
     public void insertSale() {
 
-        // rely on jOOQ generated RateType
-        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH, 
-                SALE.EMPLOYEE_NUMBER, SALE.RATE)
-                .values(2005, 56444.32, 1, 0.0, 1370L, RateType.PLATINUM)
+        // rely on <forcedType/> 
+        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH, 
+                SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.RATE)
+                .values(2005, 1, 0.0, 56444.32, 1370L, RateType.PLATINUM)
                 .execute();
         
         // rely on SALE_RATE_STAR_CONVERTER to convert from StarType to RateType
-         ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH, 
-                 SALE.EMPLOYEE_NUMBER, SALE.RATE)
-                .values(2005, 56444.32, 1, 0.0, 1370L, SALE_RATE_STAR_CONVERTER.to(StarType.FIVE_STARS))
+        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH, 
+                SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.RATE)
+                .values(2005, 1, 0.0, 56444.32, 1370L, SALE_RATE_STAR_CONVERTER.to(StarType.FIVE_STARS))
                 .execute();
 
         // rely SALE_VAT_INT_CONVERTER
@@ -50,8 +50,8 @@ public class ClassicModelsRepository {
                 .execute();        
     }
 
-    public void fetchSale() {
-
+    public void fetchSale() {        
+        
         List<RateType> rates = ctx.select(SALE.RATE)
                 .from(SALE)
                 .where(SALE.RATE.isNotNull())
