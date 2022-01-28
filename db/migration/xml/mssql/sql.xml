@@ -1,0 +1,872 @@
+<?xml version="1.0"?>
+<information_schema xmlns="http://www.jooq.org/xsd/jooq-meta-3.16.0.xsd">
+    <schemata>
+        <schema>
+            <schema_name>public</schema_name>
+        </schema>
+    </schemata>
+
+    <tables>
+        <table>
+            <table_schema>public</table_schema>
+            <table_name>order</table_name>
+        </table>
+        <table>
+            <table_schema>public</table_schema>
+            <table_name>customer</table_name>
+        </table>
+        <table>
+            <table_schema>public</table_schema>
+            <table_name>customerdetail</table_name>
+        </table>
+        <table>
+            <table_schema>public</table_schema>
+            <table_name>employee</table_name>
+        </table>
+        <table>
+            <table_schema>public</table_schema>
+            <table_name>manager</table_name>
+        </table>
+        <table>
+            <table_schema>public</table_schema>
+            <table_name>office</table_name>
+        </table>
+        <table>
+            <table_schema>public</table_schema>
+            <table_name>office_has_manager</table_name>
+        </table>
+        <table>
+            <table_schema>public</table_schema>
+            <table_name>orderdetail</table_name>
+        </table>
+        <table>
+            <table_schema>public</table_schema>
+            <table_name>payment</table_name>
+        </table>
+        <table>
+            <table_schema>public</table_schema>
+            <table_name>product</table_name>
+        </table>
+        <table>
+            <table_schema>public</table_schema>
+            <table_name>productline</table_name>
+        </table>
+        <table>
+            <table_schema>public</table_schema>
+            <table_name>sale</table_name>
+        </table>
+    </tables>
+
+    <columns>
+        <!-- Table `order` -->
+        <!-- order_id serial not null -->
+        <column>
+            <table_schema>public</table_schema>
+            <table_name>order</table_name>
+            <column_name>order_id</column_name>
+            <data_type>serial</data_type>            
+            <is_nullable>false</is_nullable> 
+        </column>
+        <!-- comments text -->
+        <column>
+            <table_schema>public</table_schema>
+            <table_name>order</table_name>
+            <column_name>comments</column_name>
+            <data_type>text</data_type>
+        </column>
+        <!-- order_date date not null -->
+        <column> 
+            <table_schema>public</table_schema>
+            <table_name>order</table_name>
+            <column_name>order_date</column_name>
+            <data_type>date</data_type>            
+            <is_nullable>false</is_nullable> 
+        </column>
+        <!-- required_date date not null -->
+        <column>
+            <table_schema>public</table_schema>
+            <table_name>order</table_name>
+            <column_name>required_date</column_name>
+            <data_type>date</data_type>            
+            <is_nullable>false</is_nullable> 
+        </column>
+        <!-- shipped_date date -->
+        <column>
+            <table_schema>public</table_schema>
+            <table_name>order</table_name>
+            <column_name>shipped_date</column_name>
+            <data_type>date</data_type>
+        </column>
+        <!-- status varchar(50) not null -->
+        <column>
+            <table_schema>public</table_schema>
+            <table_name>order</table_name>
+            <column_name>status</column_name>
+            <data_type>varchar</data_type>     
+            <character_maximum_length>50</character_maximum_length>
+            <is_nullable>false</is_nullable> 
+        </column>
+        <!-- customer_number bigint -->
+        <column>
+            <table_schema>public</table_schema>
+            <table_name>order</table_name>
+            <column_name>customer_number</column_name>
+            <data_type>bigint</data_type>
+        </column>
+
+        <!-- Table `customer` -->
+        <!-- customer_number bigint not null -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>customer</table_name>
+            <column_name>customer_number</column_name>
+            <data_type>bigint</data_type>            
+            <is_nullable>false</is_nullable> 
+        </column>
+        <!-- contact_first_name varchar(50) not null -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>customer</table_name>
+            <column_name>contact_first_name</column_name>
+            <data_type>varchar</data_type>            
+            <character_maximum_length>50</character_maximum_length>
+            <is_nullable>false</is_nullable> 
+        </column>
+        <!-- contact_last_name varchar(50) not null --> 
+        <column>
+            <table_schema>public</table_schema>
+            <table_name>customer</table_name>
+            <column_name>contact_last_name</column_name>
+            <data_type>varchar</data_type>            
+            <character_maximum_length>50</character_maximum_length>
+            <is_nullable>false</is_nullable> 
+        </column>
+        <!-- credit_limit float -->
+        <column>
+            <table_schema>public</table_schema>
+            <table_name>customer</table_name>
+            <column_name>credit_limit</column_name>
+            <data_type>float</data_type>
+        </column>
+        <!-- customer_name varchar(50) not null -->
+        <column>
+            <table_schema>public</table_schema>
+            <table_name>customer</table_name>
+            <column_name>customer_name</column_name>
+            <data_type>varchar</data_type>            
+            <character_maximum_length>50</character_maximum_length>
+            <is_nullable>false</is_nullable> 
+        </column>
+        <!-- phone varchar(50) not null -->
+        <column>
+            <table_schema>public</table_schema>
+            <table_name>customer</table_name>
+            <column_name>phone</column_name>
+            <data_type>varchar</data_type>            
+            <character_maximum_length>50</character_maximum_length>
+            <is_nullable>false</is_nullable> 
+        </column>
+        <!-- sales_rep_employee_number bigint -->
+        <column>
+            <table_schema>public</table_schema>
+            <table_name>customer</table_name>
+            <column_name>sales_rep_employee_number</column_name>
+            <data_type>bigint</data_type>                        
+        </column>
+
+        <!-- Table `customerdetail` -->
+        <!-- customer_number bigint not null -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>customerdetail</table_name>
+            <column_name>customer_number</column_name>
+            <data_type>bigint</data_type>            
+            <is_nullable>false</is_nullable> 
+        </column>
+        <!-- address_line_first varchar(50) not null -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>customerdetail</table_name>
+            <column_name>address_line_first</column_name>
+            <data_type>varchar</data_type>            
+            <character_maximum_length>50</character_maximum_length>
+            <is_nullable>false</is_nullable> 
+        </column>
+        <!-- address_line_second varchar(50) -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>customerdetail</table_name>
+            <column_name>address_line_second</column_name>
+            <data_type>varchar</data_type>            
+            <character_maximum_length>50</character_maximum_length>
+        </column>
+        <!-- city varchar(50) not null -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>customerdetail</table_name>
+            <column_name>city</column_name>
+            <data_type>varchar</data_type>            
+            <character_maximum_length>50</character_maximum_length>
+            <is_nullable>false</is_nullable> 
+        </column>
+        <!-- country varchar(50) not null -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>customerdetail</table_name>
+            <column_name>country</column_name>
+            <data_type>varchar</data_type>            
+            <character_maximum_length>50</character_maximum_length>
+            <is_nullable>false</is_nullable> 
+        </column>
+        <!-- postal_code varchar(15) -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>customerdetail</table_name>
+            <column_name>postal_code</column_name>
+            <data_type>varchar</data_type>            
+            <character_maximum_length>15</character_maximum_length>
+        </column>
+        <!-- state varchar(50) -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>customerdetail</table_name>
+            <column_name>state</column_name>
+            <data_type>varchar</data_type>            
+            <character_maximum_length>50</character_maximum_length>
+        </column>
+
+        <!-- Table `employee` -->
+        <!-- employee_number bigint not null -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>employee</table_name>
+            <column_name>employee_number</column_name>
+            <data_type>bigint</data_type>            
+            <is_nullable>false</is_nullable> 
+        </column>
+        <!-- email varchar(100) not null -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>employee</table_name>
+            <column_name>email</column_name>
+            <data_type>varchar</data_type>            
+            <character_maximum_length>100</character_maximum_length>
+            <is_nullable>false</is_nullable> 
+        </column>
+        <!--  extension varchar(10) not null -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>employee</table_name>
+            <column_name>extension</column_name>
+            <data_type>varchar</data_type>            
+            <character_maximum_length>10</character_maximum_length>
+            <is_nullable>false</is_nullable>
+        </column>
+        <!-- first_name varchar(50) not null -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>employee</table_name>
+            <column_name>first_name</column_name>
+            <data_type>varchar</data_type>            
+            <character_maximum_length>50</character_maximum_length>
+            <is_nullable>false</is_nullable>
+        </column>
+        <!-- job_title varchar(50) not null -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>employee</table_name>
+            <column_name>job_title</column_name>
+            <data_type>varchar</data_type>            
+            <character_maximum_length>50</character_maximum_length>
+            <is_nullable>false</is_nullable>
+        </column>
+        <!-- last_name varchar(50) not null -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>employee</table_name>
+            <column_name>last_name</column_name>
+            <data_type>varchar</data_type>            
+            <character_maximum_length>50</character_maximum_length>
+            <is_nullable>false</is_nullable>
+        </column>
+        <!-- salary integer not null -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>employee</table_name>
+            <column_name>salary</column_name>
+            <data_type>integer</data_type>            
+            <is_nullable>false</is_nullable>
+        </column>
+        <!-- office_code varchar(10) -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>employee</table_name>
+            <column_name>office_code</column_name>
+            <data_type>varchar</data_type>            
+            <character_maximum_length>10</character_maximum_length>
+        </column>
+        <!-- reports_to bigint -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>employee</table_name>
+            <column_name>reports_to</column_name>
+            <data_type>bigint</data_type>
+        </column>
+
+        <!-- Table `manager` -->
+        <!-- manager_id serial not null -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>manager</table_name>
+            <column_name>manager_id</column_name>
+            <data_type>serial</data_type>            
+            <is_nullable>false</is_nullable> 
+        </column>
+        <!-- manager_name varchar(50) not null -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>manager</table_name>
+            <column_name>manager_name</column_name>
+            <data_type>varchar</data_type>            
+            <character_maximum_length>50</character_maximum_length>
+            <is_nullable>false</is_nullable>
+        </column>
+
+        <!-- Table `office` -->
+        <!-- office_code varchar(10) not null -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>office</table_name>
+            <column_name>office_code</column_name>
+            <data_type>varchar</data_type>            
+            <character_maximum_length>10</character_maximum_length>
+            <is_nullable>false</is_nullable>
+        </column>
+        <!-- address_line_first varchar(50) not null -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>office</table_name>
+            <column_name>address_line_first</column_name>
+            <data_type>varchar</data_type>            
+            <character_maximum_length>50</character_maximum_length>
+            <is_nullable>false</is_nullable>
+        </column>
+        <!-- address_line_second varchar(50) -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>office</table_name>
+            <column_name>address_line_second</column_name>
+            <data_type>varchar</data_type>            
+            <character_maximum_length>50</character_maximum_length>
+        </column>
+        <!-- city varchar(50) not null -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>office</table_name>
+            <column_name>city</column_name>
+            <data_type>varchar</data_type>            
+            <character_maximum_length>50</character_maximum_length>
+            <is_nullable>false</is_nullable>
+        </column>
+        <!-- country varchar(50) not null -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>office</table_name>
+            <column_name>country</column_name>
+            <data_type>varchar</data_type>            
+            <character_maximum_length>50</character_maximum_length>
+            <is_nullable>false</is_nullable>
+        </column>
+        <!-- phone varchar(50) not null -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>office</table_name>
+            <column_name>phone</column_name>
+            <data_type>varchar</data_type>            
+            <character_maximum_length>50</character_maximum_length>
+            <is_nullable>false</is_nullable>
+        </column>
+        <!-- postal_code varchar(15) not null -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>office</table_name>
+            <column_name>postal_code</column_name>
+            <data_type>varchar</data_type>            
+            <character_maximum_length>15</character_maximum_length>
+            <is_nullable>false</is_nullable>
+        </column>
+        <!-- state varchar(50) -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>office</table_name>
+            <column_name>state</column_name>
+            <data_type>varchar</data_type>            
+            <character_maximum_length>50</character_maximum_length>
+        </column>
+        <!-- territory varchar(10) not null -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>office</table_name>
+            <column_name>territory</column_name>
+            <data_type>varchar</data_type>            
+            <character_maximum_length>10</character_maximum_length>
+            <is_nullable>false</is_nullable>
+        </column>
+
+        <!-- Table `office_has_manager` -->
+        <!-- offices_office_code varchar(10) not null -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>office_has_manager</table_name>
+            <column_name>offices_office_code</column_name>
+            <data_type>varchar</data_type>            
+            <character_maximum_length>10</character_maximum_length>
+            <is_nullable>false</is_nullable>
+        </column>
+        <!-- managers_manager_id bigint not null -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>office_has_manager</table_name>
+            <column_name>managers_manager_id</column_name>
+            <data_type>bigint</data_type>
+            <is_nullable>false</is_nullable>
+        </column>
+
+        <!-- Table `orderdetail` -->
+        <!-- order_id bigint not null -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>orderdetail</table_name>
+            <column_name>order_id</column_name>
+            <data_type>bigint</data_type>
+            <is_nullable>false</is_nullable>
+        </column>
+        <!-- product_id bigint not null -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>orderdetail</table_name>
+            <column_name>product_id</column_name>
+            <data_type>bigint</data_type>
+            <is_nullable>false</is_nullable>
+        </column>
+        <!-- order_line_number smallint not null -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>orderdetail</table_name>
+            <column_name>order_line_number</column_name>
+            <data_type>smallint</data_type>
+            <is_nullable>false</is_nullable>
+        </column>
+        <!-- price_each float not null -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>orderdetail</table_name>
+            <column_name>price_each</column_name>
+            <data_type>float</data_type>
+            <is_nullable>false</is_nullable>
+        </column>
+        <!-- quantity_ordered integer not null -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>orderdetail</table_name>
+            <column_name>quantity_ordered</column_name>
+            <data_type>integer</data_type>
+            <is_nullable>false</is_nullable>
+        </column>
+
+        <!-- Table `payment` -->
+        <!-- check_number varchar(50) not null -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>payment</table_name>
+            <column_name>check_number</column_name>
+            <data_type>varchar</data_type>            
+            <character_maximum_length>50</character_maximum_length>
+            <is_nullable>false</is_nullable>
+        </column>
+        <!-- customer_number bigint not null -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>payment</table_name>
+            <column_name>customer_number</column_name>
+            <data_type>bigint</data_type>
+            <is_nullable>false</is_nullable>
+        </column>
+        <!-- caching_date date -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>payment</table_name>
+            <column_name>caching_date</column_name>
+            <data_type>date</data_type>
+        </column>
+        <!-- invoice_amount float not null -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>payment</table_name>
+            <column_name>invoice_amount</column_name>
+            <data_type>float</data_type>
+            <is_nullable>false</is_nullable>
+        </column>
+        <!-- payment_date date not null -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>payment</table_name>
+            <column_name>payment_date</column_name>
+            <data_type>date</data_type>
+            <is_nullable>false</is_nullable>
+        </column>
+
+        <!-- Table `product` -->
+        <!-- product_id serial not null -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>product</table_name>
+            <column_name>product_id</column_name>
+            <data_type>serial</data_type>
+            <is_nullable>false</is_nullable>
+        </column>
+        <!-- buy_price float not null -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>product</table_name>
+            <column_name>buy_price</column_name>
+            <data_type>float</data_type>
+            <is_nullable>false</is_nullable>
+        </column>
+        <!-- msrp float not null -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>product</table_name>
+            <column_name>msrp</column_name>
+            <data_type>float</data_type>
+            <is_nullable>false</is_nullable>
+        </column>
+        <!-- product_description text not null -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>product</table_name>
+            <column_name>product_description</column_name>
+            <data_type>text</data_type>
+            <is_nullable>false</is_nullable>
+        </column>
+        <!-- product_name varchar(70) not null -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>payment</table_name>
+            <column_name>product_name</column_name>
+            <data_type>varchar</data_type>            
+            <character_maximum_length>70</character_maximum_length>
+            <is_nullable>false</is_nullable>
+        </column>
+        <!-- product_scale varchar(10) not null -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>payment</table_name>
+            <column_name>product_scale</column_name>
+            <data_type>varchar</data_type>            
+            <character_maximum_length>10</character_maximum_length>
+            <is_nullable>false</is_nullable>
+        </column>
+        <!-- product_vendor varchar(50) not null -->
+        <column>
+            <table_schema>public</table_schema>
+            <table_name>payment</table_name>
+            <column_name>product_vendor</column_name>
+            <data_type>varchar</data_type>            
+            <character_maximum_length>50</character_maximum_length>
+            <is_nullable>false</is_nullable>
+        </column>
+        <!-- quantity_in_stock smallint not null -->
+        <column>
+            <table_schema>public</table_schema>
+            <table_name>payment</table_name>
+            <column_name>quantity_in_stock</column_name>
+            <data_type>smallint</data_type>            
+            <is_nullable>false</is_nullable>
+        </column>
+        <!-- product_line varchar(50) -->
+        <column>
+            <table_schema>public</table_schema>
+            <table_name>payment</table_name>
+            <column_name>product_line</column_name>
+            <data_type>varchar</data_type>            
+            <character_maximum_length>50</character_maximum_length>
+        </column>
+
+        <!-- Table `productline` -->
+        <!-- product_line varchar(50) not null -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>productline</table_name>
+            <column_name>product_line</column_name>
+            <data_type>varchar</data_type>            
+            <character_maximum_length>50</character_maximum_length>
+            <is_nullable>false</is_nullable>
+        </column>
+        <!-- html_description text -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>productline</table_name>
+            <column_name>html_description</column_name>
+            <data_type>text</data_type>
+        </column>
+        <!-- image bytea -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>productline</table_name>
+            <column_name>image</column_name>
+            <data_type>bytea</data_type>
+        </column>
+        <!-- text_description varchar(4000) -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>productline</table_name>
+            <column_name>text_description</column_name>
+            <data_type>varchar</data_type>            
+            <character_maximum_length>4000</character_maximum_length>
+        </column>
+
+        <!-- Table `sale` -->
+        <!-- sale_id serial not null -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>sale</table_name>
+            <column_name>sale_id</column_name>
+            <data_type>serial</data_type>
+            <is_nullable>false</is_nullable>
+        </column>
+        <!-- fiscal_year integer not null -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>sale</table_name>
+            <column_name>fiscal_year</column_name>
+            <data_type>integer</data_type>
+            <is_nullable>false</is_nullable>
+        </column>
+        <!-- sale float not null -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>sale</table_name>
+            <column_name>sale</column_name>
+            <data_type>float</data_type>
+            <is_nullable>false</is_nullable>
+        </column>
+        <!-- employee_number bigint -->
+        <column>  
+            <table_schema>public</table_schema>
+            <table_name>sale</table_name>
+            <column_name>employee_number</column_name>
+            <data_type>bigint</data_type>
+        </column>
+    </columns>
+
+    <table_constraints>
+        <table_constraint>
+            <constraint_schema>public</constraint_schema>
+            <constraint_name>order_pk</constraint_name>
+            <constraint_type>PRIMARY KEY</constraint_type>
+            <table_schema>public</table_schema>
+            <table_name>order</table_name>
+        </table_constraint>
+        <table_constraint>
+            <constraint_schema>public</constraint_schema>
+            <constraint_name>customer_pk</constraint_name>
+            <constraint_type>PRIMARY KEY</constraint_type>
+            <table_schema>public</table_schema>
+            <table_name>customer</table_name>
+        </table_constraint>
+        <table_constraint>
+            <constraint_schema>public</constraint_schema>
+            <constraint_name>customerdetail_pk</constraint_name>
+            <constraint_type>PRIMARY KEY</constraint_type>
+            <table_schema>public</table_schema>
+            <table_name>customerdetail</table_name>
+        </table_constraint>
+        <table_constraint>
+            <constraint_schema>public</constraint_schema>
+            <constraint_name>employee_pk</constraint_name>
+            <constraint_type>PRIMARY KEY</constraint_type>
+            <table_schema>public</table_schema>
+            <table_name>employee</table_name>
+        </table_constraint>
+        <table_constraint>
+            <constraint_schema>public</constraint_schema>
+            <constraint_name>manager_pk</constraint_name>
+            <constraint_type>PRIMARY KEY</constraint_type>
+            <table_schema>public</table_schema>
+            <table_name>manager</table_name>
+        </table_constraint>
+        <table_constraint>
+            <constraint_schema>public</constraint_schema>
+            <constraint_name>office_pk</constraint_name>
+            <constraint_type>PRIMARY KEY</constraint_type>
+            <table_schema>public</table_schema>
+            <table_name>office</table_name>
+        </table_constraint>
+        <table_constraint>
+            <constraint_schema>public</constraint_schema>
+            <constraint_name>office_manager_pk</constraint_name>
+            <constraint_type>PRIMARY KEY</constraint_type>
+            <table_schema>public</table_schema>
+            <table_name>office_has_manager</table_name>
+        </table_constraint>
+        <table_constraint>
+            <constraint_schema>public</constraint_schema>
+            <constraint_name>orderdetail_pk</constraint_name>
+            <constraint_type>PRIMARY KEY</constraint_type>
+            <table_schema>public</table_schema>
+            <table_name>orderdetail</table_name>
+        </table_constraint>
+        <table_constraint>
+            <constraint_schema>public</constraint_schema>
+            <constraint_name>payment_pk</constraint_name>
+            <constraint_type>PRIMARY KEY</constraint_type>
+            <table_schema>public</table_schema>
+            <table_name>payment</table_name>
+        </table_constraint>
+        <table_constraint>
+            <constraint_schema>public</constraint_schema>
+            <constraint_name>product_pk</constraint_name>
+            <constraint_type>PRIMARY KEY</constraint_type>
+            <table_schema>public</table_schema>
+            <table_name>product</table_name>
+        </table_constraint>
+        <table_constraint>
+            <constraint_schema>public</constraint_schema>
+            <constraint_name>productline_pk</constraint_name>
+            <constraint_type>PRIMARY KEY</constraint_type>
+            <table_schema>public</table_schema>
+            <table_name>productline</table_name>
+        </table_constraint>
+        <table_constraint>
+            <constraint_schema>public</constraint_schema>
+            <constraint_name>sale_pk</constraint_name>
+            <constraint_type>PRIMARY KEY</constraint_type>
+            <table_schema>public</table_schema>
+            <table_name>sale_id</table_name>
+        </table_constraint>
+    </table_constraints>
+
+    <key_column_usages>
+        <key_column_usage>
+            <constraint_schema>public</constraint_schema>
+            <constraint_name>order_pk</constraint_name>
+            <table_schema>public</table_schema>
+            <table_name>order</table_name>
+            <column_name>order_id</column_name>
+            <ordinal_position>1</ordinal_position>
+        </key_column_usage>
+        <key_column_usage>
+            <constraint_schema>public</constraint_schema>
+            <constraint_name>customer_pk</constraint_name>
+            <table_schema>public</table_schema>
+            <table_name>customer</table_name>
+            <column_name>customer_number</column_name>
+            <ordinal_position>1</ordinal_position>
+        </key_column_usage>
+        <key_column_usage>
+            <constraint_schema>public</constraint_schema>
+            <constraint_name>customerdetail_pk</constraint_name>
+            <table_schema>public</table_schema>
+            <table_name>customerdetail</table_name>
+            <column_name>customer_number</column_name>
+            <ordinal_position>1</ordinal_position>
+        </key_column_usage>
+        <key_column_usage>
+            <constraint_schema>public</constraint_schema>
+            <constraint_name>employee_pk</constraint_name>
+            <table_schema>public</table_schema>
+            <table_name>employee</table_name>
+            <column_name>employee_number</column_name>
+            <ordinal_position>1</ordinal_position>
+        </key_column_usage>
+        <key_column_usage>
+            <constraint_schema>public</constraint_schema>
+            <constraint_name>manager_pk</constraint_name>
+            <table_schema>public</table_schema>
+            <table_name>manager</table_name>
+            <column_name>manager_id</column_name>
+            <ordinal_position>1</ordinal_position>
+        </key_column_usage>
+        <key_column_usage>
+            <constraint_schema>public</constraint_schema>
+            <constraint_name>office_pk</constraint_name>
+            <table_schema>public</table_schema>
+            <table_name>office</table_name>
+            <column_name>office_code</column_name>
+            <ordinal_position>1</ordinal_position>
+        </key_column_usage>
+        <key_column_usage>
+            <constraint_schema>public</constraint_schema>
+            <constraint_name>office_manager_pk</constraint_name>
+            <table_schema>public</table_schema>
+            <table_name>office_has_manager</table_name>
+            <column_name>offices_office_code</column_name>
+            <ordinal_position>1</ordinal_position>
+        </key_column_usage>
+        <key_column_usage>
+            <constraint_schema>public</constraint_schema>
+            <constraint_name>office_manager_pk</constraint_name>
+            <table_schema>public</table_schema>
+            <table_name>office_has_manager</table_name>
+            <column_name>managers_manager_id</column_name>
+            <ordinal_position>2</ordinal_position>
+        </key_column_usage>
+        <key_column_usage>
+            <constraint_schema>public</constraint_schema>
+            <constraint_name>orderdetail_pk</constraint_name>
+            <table_schema>public</table_schema>
+            <table_name>orderdetail</table_name>
+            <column_name>order_id</column_name>
+            <ordinal_position>1</ordinal_position>
+        </key_column_usage>
+        <key_column_usage>
+            <constraint_schema>public</constraint_schema>
+            <constraint_name>orderdetail_pk</constraint_name>
+            <table_schema>public</table_schema>
+            <table_name>orderdetail</table_name>
+            <column_name>product_id</column_name>
+            <ordinal_position>2</ordinal_position>
+        </key_column_usage>
+        <key_column_usage>
+            <constraint_schema>public</constraint_schema>
+            <constraint_name>payment_pk</constraint_name>
+            <table_schema>public</table_schema>
+            <table_name>payment</table_name>
+            <column_name>check_number</column_name>
+            <ordinal_position>1</ordinal_position>
+        </key_column_usage>
+        <key_column_usage>
+            <constraint_schema>public</constraint_schema>
+            <constraint_name>payment_pk</constraint_name>
+            <table_schema>public</table_schema>
+            <table_name>payment</table_name>
+            <column_name>customer_number</column_name>
+            <ordinal_position>2</ordinal_position>
+        </key_column_usage>
+        <key_column_usage>
+            <constraint_schema>public</constraint_schema>
+            <constraint_name>product_pk</constraint_name>
+            <table_schema>public</table_schema>
+            <table_name>product</table_name>
+            <column_name>product_id</column_name>
+            <ordinal_position>1</ordinal_position>
+        </key_column_usage>
+        <key_column_usage>
+            <constraint_schema>public</constraint_schema>
+            <constraint_name>productline_pk</constraint_name>
+            <table_schema>public</table_schema>
+            <table_name>productline</table_name>
+            <column_name>product_line</column_name>
+            <ordinal_position>1</ordinal_position>
+        </key_column_usage>
+        <key_column_usage>
+            <constraint_schema>public</constraint_schema>
+            <constraint_name>sale_pk</constraint_name>
+            <table_schema>public</table_schema>
+            <table_name>sale</table_name>
+            <column_name>sale_id</column_name>
+            <ordinal_position>1</ordinal_position>
+        </key_column_usage>
+    </key_column_usages>
+</information_schema>

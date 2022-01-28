@@ -9,8 +9,7 @@
     <packaging>jar</packaging>
 
     <name>DeclarativeXMLDatabase</name>
-    <description>jOOQ artifacts via Flyway and DDLDatabase</description>    
-
+  
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -44,15 +43,19 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>        
         <dependency>
-            <groupId>org.jooq</groupId>
+            <groupId>org.jooq.trial-java-8</groupId>
             <artifactId>jooq</artifactId>       
             <version>${jooq.version}</version>  
-        </dependency>              
+        </dependency>                
         <dependency>  
-            <groupId>org.jooq</groupId>
+            <groupId>org.jooq.trial-java-8</groupId>
             <artifactId>jooq-meta-extensions</artifactId>
             <version>${jooq.version}</version>
-        </dependency>       
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>            
+        </dependency>
         <dependency>
             <groupId>jakarta.validation</groupId>
             <artifactId>jakarta.validation-api</artifactId>
@@ -63,9 +66,9 @@
             <artifactId>flyway-core</artifactId>
         </dependency>             
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>        
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>           
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -93,7 +96,7 @@
                 <artifactId>jooq-codegen-maven</artifactId>                   
                 <executions>
                     <execution>
-                        <id>generate-for-mysql</id>
+                        <id>generate-for-sqlserver</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>generate</goal>
@@ -115,18 +118,21 @@
                                 <database>
                                     <!-- Rely on jOOQ XML Database API -->
                                     <name>org.jooq.meta.xml.XMLDatabase</name>
-                                                                                                                                                
+                                    
+                                    <inputCatalog>classicmodels</inputCatalog>
+                                    <inputSchema>dbo</inputSchema>
+                                                                                                            
                                     <properties>                                                    
                                         <!-- Use any of the SQLDialect values here -->
                                         <property>
                                             <key>dialect</key>
-                                            <value>MYSQL</value>
+                                            <value>SQLSERVER</value>
                                         </property>
             
                                         <!-- Specify the location of your database file -->
                                         <property>
                                             <key>xmlFile</key>
-                                            <value>./../../../../../db/migration/xml/mysql/sql.xml</value>
+                                            <value>./../../../../../db/migration/xml/sqlserver/sql.xml</value>
                                         </property>
                                     </properties>                                                
                                                  
@@ -140,31 +146,6 @@
                                     <!-- Schema version provider -->            
                                     <schemaVersionProvider>${schema.version}</schemaVersionProvider>                                    
                                 </database>
-                                
-                                <!-- Rename the generated POJOs and DAOs classes -->                      
-                                <strategy>
-                                    <matchers>
-                                        <tables>
-                                            <table>
-                                                <pojoClass>                                                         
-                                                    <expression>JOOQ_$0</expression>
-                                                    <transform>PASCAL</transform>                                                                                      
-                                                </pojoClass>
-                                                <daoClass>
-                                                    <expression>$0_Repository</expression>
-                                                    <transform>PASCAL</transform>                                                                                      
-                                                </daoClass>
-                                            </table>
-                                        </tables>
-                                    </matchers>
-                                </strategy>
-                                
-                                <!-- jOOQ will generate POJOs and DAOs on our behalf -->
-                                <generate>
-                                    <daos>true</daos>                                   
-                                    <validationAnnotations>true</validationAnnotations>                            
-                                    <springAnnotations>true</springAnnotations>   
-                                </generate>
                                 
                                 <target>
                                     <!-- The destination package of your generated classes (within the destination directory).
