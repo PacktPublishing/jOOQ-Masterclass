@@ -47,12 +47,7 @@
             <groupId>org.jooq</groupId>
             <artifactId>jooq</artifactId>       
             <version>${jooq.version}</version>  
-        </dependency>              
-        <dependency>  
-            <groupId>org.jooq</groupId>
-            <artifactId>jooq-meta-extensions</artifactId>
-            <version>${jooq.version}</version>
-        </dependency>       
+        </dependency>                          
         <dependency>
             <groupId>jakarta.validation</groupId>
             <artifactId>jakarta.validation-api</artifactId>
