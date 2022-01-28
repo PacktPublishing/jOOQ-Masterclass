@@ -46,16 +46,7 @@
             <groupId>org.jooq</groupId>
             <artifactId>jooq</artifactId>       
             <version>${jooq.version}</version>  
-        </dependency>              
-        <dependency>  
-            <groupId>org.jooq</groupId>
-            <artifactId>jooq-meta-extensions</artifactId>
-            <version>${jooq.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate.validator</groupId>
-            <artifactId>hibernate-validator</artifactId>            
-        </dependency>
+        </dependency>                          
         <dependency>
             <groupId>jakarta.validation</groupId>
             <artifactId>jakarta.validation-api</artifactId>
@@ -118,8 +109,6 @@
                                 <database>
                                     <!-- Rely on jOOQ XML Database API -->
                                     <name>org.jooq.meta.xml.XMLDatabase</name>
-                                    
-                                    <inputSchema>public</inputSchema>
                                                                                                             
                                     <properties>                                                    
                                         <!-- Use any of the SQLDialect values here -->
