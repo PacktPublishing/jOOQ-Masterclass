@@ -1,0 +1,4 @@
+rootProject.name = 'ProgrammaticLambdaYearMonthConverter'
+
+include 'jooq-code-generator'
+include 'webapp'
