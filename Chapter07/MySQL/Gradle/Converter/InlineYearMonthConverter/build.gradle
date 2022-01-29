@@ -27,7 +27,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'    
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'jakarta.xml.bind:jakarta.xml.bind-api:3.0.1'
-    implementation 'com.vividsolutions:jts:1.13'
     implementation 'mysql:mysql-connector-java'
     implementation 'org.flywaydb:flyway-core'
 }
@@ -81,28 +80,35 @@ jooq {
                     database {
                         forcedTypes {
                             forcedType {
+
                             // Specify the Java type of your custom type. This corresponds to the Binding's <U> type.
-                            userType = 'java.awt.geom.Point2D'
+                            userType = 'java.time.YearMonth'
                             
-                            // Associate that custom type with your binding.
-                            binding = 'com.classicmodels.binding.PointBinding'
+                            // Associate that custom type with your inline converter.
+                            converter = '''\
+                                                org.jooq.Converter.ofNullable(
+                                                   Integer.class, YearMonth.class, 
+                                                   (Integer t) -> { return YearMonth.of(1970, 1).with(java.time.temporal.ChronoField.PROLEPTIC_MONTH, t); },
+                                                   (YearMonth u) -> { return (int) u.getLong(java.time.temporal.ChronoField.PROLEPTIC_MONTH); }
+                                                )
+                                        '''
 
                             // A Java regex matching fully-qualified columns, attributes, parameters. Use the pipe to separate several expressions.
                             // If provided, both "includeExpressions" and "includeTypes" must match. 
-                            includeExpression = 'classicmodels\\.office\\.location'
+                            includeExpression = 'classicmodels\\.customer\\.first_buy_date'
 
-                            // All 'location' fields in any 'office' table, no matter the schema.
-                            // includeExpression = '.*\\.office\\.location'
-
-                            // All 'location' fields, no matter the schema and the table.
-                            // includeExpression = '.*\\.location'
-
-                            // All fields containing 'locat'.
-                            // includeExpression = '.*\\.locat.*'
-
+                            // All 'first_buy_date' fields in any 'customer' table, no matter the schema.
+                            // includeExpression = '.*\\.customer\\.first_buy_date'
+                                            
+                            // All 'first_buy_date' fields, no matter the schema and the table.
+                            // includeExpression = '.*\\.first_buy_date'
+                                            
+                            // All fields containing 'first_buy_'.
+                            includeExpression = '.*\\.first_buy_.*'
+                                            
                             // Case-insensitive expressions.
-                            // includeExpression = '(?i:.*\\.office\\.location)'
-                            // includeExpression = '(?i:classicmodels\\.office\\.location)'
+                            // includeExpression = '(?i:.*\\.customer\\.first_buy_date)'
+                            // includeExpression = '?i:classicmodels\\.customer\\.first_buy_date)'
 
                             // This exclude predicate is a regular expression which is matched 
                             // against the definition's name; any definition's name matching 
@@ -121,7 +127,7 @@ jooq {
                             includeTypes = '.*'
 
                             // The type:
-                            // includeTypes = 'point'
+                            // includeTypes = 'int'
 
                             // This exclude predicate is a regular expression which is matched 
                             // against the name of the definition's type (provided that it has one);
