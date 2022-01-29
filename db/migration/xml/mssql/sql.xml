@@ -1,58 +1,75 @@
 <?xml version="1.0"?>
 <information_schema xmlns="http://www.jooq.org/xsd/jooq-meta-3.16.0.xsd">
+    <catalogs>
+        <catalog>
+            <catalog_name>classicmodels</catalog_name>
+        </catalog>
+    </catalogs>
     <schemata>
         <schema>
-            <schema_name>public</schema_name>
+            <schema_name>dbo</schema_name>
         </schema>
     </schemata>
 
     <tables>
         <table>
-            <table_schema>public</table_schema>
+            <table_catalog>classicmodels</table_catalog>
+            <table_schema>dbo</table_schema>
             <table_name>order</table_name>
         </table>
         <table>
-            <table_schema>public</table_schema>
+            <table_catalog>classicmodels</table_catalog>
+            <table_schema>dbo</table_schema>
             <table_name>customer</table_name>
         </table>
         <table>
-            <table_schema>public</table_schema>
+            <table_catalog>classicmodels</table_catalog>
+            <table_schema>dbo</table_schema>
             <table_name>customerdetail</table_name>
         </table>
         <table>
-            <table_schema>public</table_schema>
+            <table_catalog>classicmodels</table_catalog>
+            <table_schema>dbo</table_schema>
             <table_name>employee</table_name>
         </table>
         <table>
-            <table_schema>public</table_schema>
+            <table_catalog>classicmodels</table_catalog>
+            <table_schema>dbo</table_schema>
             <table_name>manager</table_name>
         </table>
         <table>
-            <table_schema>public</table_schema>
+            <table_catalog>classicmodels</table_catalog>
+            <table_schema>dbo</table_schema>
             <table_name>office</table_name>
         </table>
         <table>
-            <table_schema>public</table_schema>
+            <table_catalog>classicmodels</table_catalog>
+            <table_schema>dbo</table_schema>
             <table_name>office_has_manager</table_name>
         </table>
         <table>
-            <table_schema>public</table_schema>
+            <table_catalog>classicmodels</table_catalog>
+            <table_schema>dbo</table_schema>
             <table_name>orderdetail</table_name>
         </table>
         <table>
-            <table_schema>public</table_schema>
+            <table_catalog>classicmodels</table_catalog>
+            <table_schema>dbo</table_schema>
             <table_name>payment</table_name>
         </table>
         <table>
-            <table_schema>public</table_schema>
+            <table_catalog>classicmodels</table_catalog>
+            <table_schema>dbo</table_schema>
             <table_name>product</table_name>
         </table>
         <table>
-            <table_schema>public</table_schema>
+            <table_catalog>classicmodels</table_catalog>
+            <table_schema>dbo</table_schema>
             <table_name>productline</table_name>
         </table>
         <table>
-            <table_schema>public</table_schema>
+            <table_catalog>classicmodels</table_catalog>
+            <table_schema>dbo</table_schema>
             <table_name>sale</table_name>
         </table>
     </tables>
