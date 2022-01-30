@@ -82,10 +82,10 @@ jooq {
                             forcedType {
 
                             // Specify the Java type of your custom type. This corresponds to the Converter's <U> type.
-                            userType = 'com.classicmodels.enums.RateType'
+                            userType = 'com.classicmodels.enums.StarType'
                             
-                            // Apply the built in org.jooq.impl.EnumConverter.
-                            enumConverter = 'true'
+                            // Associate that custom type with your converter.
+                            converter = 'com.classicmodels.converter.SaleRateStarConverter'
 
                             // A Java regex matching fully-qualified columns, attributes, parameters. Use the pipe to separate several expressions.
                             // If provided, both "includeExpressions" and "includeTypes" must match. 
@@ -145,11 +145,18 @@ jooq {
                             nullability = 'ALL'
                             }
 
-                            // For the next mapping we've reduced the code to the minimum.
+                            // For the next two mappings we've reduced the code to the minimum.
                             forcedType {
-                                userType = 'com.classicmodels.enums.VatType'
-                                enumConverter = 'true'
+                                userType = 'java.lang.Integer'
+                                converter = 'com.classicmodels.converter.SaleVatIntConverter'
                                 includeExpression = 'dbo\\.sale\\.vat'
+                                includeTypes = 'varchar\\(10\\)'
+                            }
+
+                            forcedType {
+                                userType = 'com.classicmodels.enums.TrendType'
+                                converter = 'com.classicmodels.converter.SaleStrTrendConverter'
+                                includeExpression = 'dbo\\.sale\\.trend'
                                 includeTypes = 'varchar\\(10\\)'
                             }
                         }
