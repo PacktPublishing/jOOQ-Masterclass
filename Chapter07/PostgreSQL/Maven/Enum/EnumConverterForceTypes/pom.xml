@@ -227,7 +227,7 @@
                                             <userType>com.classicmodels.enums.TrendType</userType>                                            
                                             <converter>com.classicmodels.converter.SaleStrTrendConverter</converter>                                                                                
                                             <includeExpression>public\.sale\.trend</includeExpression>
-                                            <includeTypes>varchar\(10\)</includeTypes>
+                                            <includeTypes>.*</includeTypes>
                                         </forcedType>
                                     </forcedTypes>    
                                                         
@@ -256,8 +256,8 @@
                                         | fetchval | get_.* | ghstore.* | gin.* | hs.* | hstore.* 
                                         | isdefined | isexists | make_array | new_salary | populate_record 
                                         | sale_price | slice.* | swap | tconvert | update_msrp | postal_code
-                                        | evaluation_criteria | rate_type | vat_type | .*_master | each 
-                                        | skeys | svals | top_three_sales_per_employee | product_of_product_line
+                                        | evaluation_criteria | .*_master | each | skeys | svals 
+                                        | top_three_sales_per_employee | product_of_product_line
                                     </excludes>
 
                                     <!-- Schema version provider -->            

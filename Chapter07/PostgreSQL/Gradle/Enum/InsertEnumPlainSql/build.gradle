@@ -1,0 +1,41 @@
+plugins {
+    id 'application'
+    id 'org.springframework.boot' version '2.5.7'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'    
+    id 'nu.studer.jooq' version '6.0.1'
+    id 'org.flywaydb.flyway' version '8.2.0'            
+    id 'java'
+}
+
+group = 'com.classicmodels'
+version = '1.0'
+sourceCompatibility = '17'
+targetCompatibility = '17'
+
+application {
+    mainClass = 'com.classicmodels.MainApplication' 
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-jooq' 
+    implementation 'org.springframework.boot:spring-boot-starter-web'       
+    implementation 'org.postgresql:postgresql'
+    implementation 'org.flywaydb:flyway-core'          
+}
+
+processResources {
+    filesMatching("**/application.properties") {
+        expand( project.properties )
+    }
+}
+
+jooq {
+    version = project.properties['jooq']
+    edition = nu.studer.gradle.jooq.JooqEdition.OSS
+}
