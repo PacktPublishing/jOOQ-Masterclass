@@ -167,16 +167,16 @@
                                             <!-- single field expressed as schema\table\field -->
                                             <includeExpression>CLASSICMODELS\.MANAGER\.MANAGER_EVALUATION</includeExpression>
                                             
-                                            <!-- all 'manager_evaluation' fields in any 'manager' table, no matter the schema -->
+                                            <!-- All 'manager_evaluation' fields in any 'manager' table, no matter the schema -->
                                             <!-- <includeExpression>.*\.MANAGER\.MANAGER_EVALUATION</includeExpression> -->
                                             
-                                            <!-- all 'manager_evaluation' fields, no matter the schema and the table -->
+                                            <!-- All 'manager_evaluation' fields, no matter the schema and the table -->
                                             <!-- <includeExpression>.*\.MANAGER_EVALUATION</includeExpression> -->
                                             
-                                            <!-- all fields containing 'MANAGER_' -->
+                                            <!-- All fields containing 'manager_' -->
                                             <!-- <includeExpression>.*\.MANAGER_.*</includeExpression> -->
                                             
-                                            <!-- case-insensitive expressions -->
+                                            <!-- Case-insensitive expressions -->
                                             <!-- <includeExpression>(?i:.*\.manager\.manager_evaluation)</includeExpression> -->
                                             <!-- <includeExpression>(?i:classicmodels\.manager\.manager_evaluation)</includeExpression> -->
                                             
@@ -191,7 +191,12 @@
                                             It is thus recommended to use defensive regexes for types.
                              
                                             If provided, both "includeExpression" and "includeTypes" must match. -->                                            
+
+                                            <!-- Any type -->
                                             <includeTypes>.*</includeTypes>
+
+                                            <!-- The type -->
+                                            <!-- <includeTypes>evaluation_criteria</includeTypes> -->
                                                                                         
                                             <!-- Force a type depending on data type nullability. Default is ALL.
                                       

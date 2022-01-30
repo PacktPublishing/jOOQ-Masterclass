@@ -178,7 +178,7 @@
                                             <!-- All 'manager_detail' fields, no matter the schema and the table -->
                                             <!-- <includeExpression>.*\.MANAGER_DETAIL</includeExpression> -->
                                             
-                                            <!-- All fields containing 'MANAGER_' -->
+                                            <!-- All fields containing 'manager_' -->
                                             <!-- <includeExpression>.*\.MANAGER_.*</includeExpression> -->
                                             
                                             <!-- Case-insensitive expressions -->
