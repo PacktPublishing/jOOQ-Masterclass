@@ -81,7 +81,7 @@ jooq {
                         forcedTypes {
                             forcedType {
 
-                            // Specify the Java type of your custom type. This corresponds to the Binding's <U> type.
+                            // Specify the Java type of your custom type. This corresponds to the Converter's <U> type.
                             userType = 'com.fasterxml.jackson.databind.JsonNode'
                             
                             // Associate that custom type with your converter.
@@ -109,6 +109,7 @@ jooq {
                             nullability = 'ALL'
                             }
                         }
+
                         // The database type. The format here is:
                         // org.jooq.meta.[database].[database]Database
                         name = 'org.jooq.meta.mysql.MySQLDatabase'                        

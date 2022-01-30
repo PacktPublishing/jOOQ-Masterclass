@@ -78,73 +78,7 @@ jooq {
                     name = 'org.jooq.codegen.JavaGenerator'                    
                     
                     database {
-                        forcedTypes {
-                            forcedType {
-                            // Specify the Java type of your custom type. This corresponds to the Converter's <U> type.
-                            userType = 'com.fasterxml.jackson.databind.JsonNode'
-                            
-                            // Associate that custom type with your converter.
-                            converter = 'com.classicmodels.converter.JsonConverter'
-
-                            // A Java regex matching fully-qualified columns, attributes, parameters. Use the pipe to separate several expressions.
-                            // If provided, both "includeExpressions" and "includeTypes" must match. 
-                            includeExpression = 'classicmodels\\.manager\\.manager_detail'
-
-                            // All 'manager_detail' fields in any 'manager' table, no matter the schema.
-                            // includeExpression = '.*\\.manager\\.manager_detail'
-                                            
-                            // All 'manager_detail' fields, no matter the schema and the table.
-                            // includeExpression = '.*\\.manager_detail'
-                                            
-                            // All fields containing 'manager_'
-                            // includeExpression = '.*\\.manager_.*'
-                                            
-                            // Case-insensitive expressions
-                            // includeExpression = '(?i:.*\\.manager\\.manager_detail)'
-                            // includeExpression = '(?i:classicmodels\\.manager\\.manager_detail)'
-
-                            // This exclude predicate is a regular expression which is matched 
-                            // against the definition's name; any definition's name matching 
-                            // the regular expression will be considered not matching this forced type.
-                            // excludeExpression = ''
-
-                            // A Java regex matching data types to be forced to have this type.
-                            // Data types may be reported by your database as:
-                            //    - NUMBER regexp suggestion: NUMBER
-                            //    - NUMBER(5) regexp suggestion: NUMBER\\(5\\)
-                            //    - NUMBER(5, 2) regexp suggestion: NUMBER\\(5,\\s*2\\)
-                            //    - any other form
-                            // It is thus recommended to use defensive regexes for types.
-                            // If provided, both "includeExpressions" and "includeTypes" must match. 
-                            // Any type:
-                            includeTypes = '.*'
-
-                            // The type:
-                            // includeTypes = 'json'
-
-                            // This exclude predicate is a regular expression which is matched 
-                            // against the name of the definition's type (provided that it has one);
-                            // any definition's type name matching the regular expression will be 
-                            // considered not matching this forced type.
-                            // excludeTypes = ''
-
-                            // An SQL query returning all (qualified or unqualified) object 
-                            // names which should be considered to match this forced type.
-                            // sql = '''\ '''
-
-                            // Force a type on ALL or specific object types. Default is ALL.
-                            //  Must be one of ATTRIBUTE, COLUMN, ELEMENT, PARAMETER, SEQUENCE, 
-                            // or ALL and specifies what type of database objects 
-                            // this forced type is applicable to.
-                            objectType = 'ALL'
-
-                            //  Force a type depending on data type nullability. Default is ALL.
-                            // Must be one of NULL, NOT_NULL, or ALL and specifies if this forced 
-                            // type is applicable to NULL, NOT NULL, or all definitions.
-                            nullability = 'ALL'
-                            }
-                        }
-
+                       
                         // The database type. The format here is:
                         // org.jooq.meta.[database].[database]Database
                         name = 'org.jooq.meta.mysql.MySQLDatabase'                        
@@ -180,7 +114,7 @@ jooq {
                     
                     generate {                        
                     }
-                    
+
                     target {
                         packageName = 'jooq.generated'
                         directory = 'build/generated-sources'
