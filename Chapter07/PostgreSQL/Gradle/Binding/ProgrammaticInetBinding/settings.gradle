@@ -1,0 +1,4 @@
+rootProject.name = 'ProgrammaticInetBinding'
+
+include 'jooq-code-generator'
+include 'webapp'
