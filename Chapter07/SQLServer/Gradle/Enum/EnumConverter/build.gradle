@@ -2,7 +2,7 @@ plugins {
     id 'application'
     id 'org.springframework.boot' version '2.5.7'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-    id 'org.flywaydb.flyway' version '8.2.0'
+    id 'org.flywaydb.flyway' version '7.7.3'
     id 'nu.studer.jooq' version '6.0.1'
     id 'java'
 }
@@ -22,11 +22,11 @@ repositories {
 }
 
 dependencies {        
-    jooqGenerator 'org.postgresql:postgresql' 
+    jooqGenerator 'com.microsoft.sqlserver:mssql-jdbc' 
     jooqGenerator 'jakarta.xml.bind:jakarta.xml.bind-api:3.0.1'
-    implementation 'org.springframework.boot:spring-boot-starter-jdbc'    
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.postgresql:postgresql'
+    implementation 'com.microsoft.sqlserver:mssql-jdbc'
     implementation 'jakarta.xml.bind:jakarta.xml.bind-api:3.0.1'
     implementation 'org.flywaydb:flyway-core'
 }
@@ -37,12 +37,13 @@ processResources {
     }
 }
 
-flyway{
+flywayMigrate {
     driver = project.properties['driverClassName']
     url = project.properties['url']
     user = project.properties['username']
     password = project.properties['password']
-    locations = ['filesystem:./../../../../../db/migration/dev/postgresql']
+    locations = ['filesystem:./../../../../../db/migration/dev/mssql']
+    mixed = true
 }
 
 jooq {
@@ -74,18 +75,19 @@ jooq {
                     //  - org.jooq.codegen.KotlinGenerator
                            
                     // Defaults to org.jooq.codegen.JavaGenerator
-                    name = 'org.jooq.codegen.JavaGenerator' 
+                    name = 'org.jooq.codegen.JavaGenerator'                    
                     
-                    database {                       
+                    database {                        
 
                         // The database type. The format here is:
                         // org.jooq.meta.[database].[database]Database
-                        name = 'org.jooq.meta.postgres.PostgresDatabase'                        
+                        name = 'org.jooq.meta.sqlserver.SQLServerDatabase'                                                
                         
                         // The database schema (or in the absence of schema support, in your RDBMS this
                         // can be the owner, user, database name) to be generated. This cannot be combined with the <schemata/> element.                                     
                         // If <inputSchema/> is missing then all schemas will be considered.
-                        inputSchema = 'public'
+                        inputCatalog = 'classicmodels'
+                        inputSchema = 'dbo'
                         
                         // All elements that are generated from your schema
                         // (A Java regular expression. Use the pipe to separate several expressions)
@@ -98,18 +100,14 @@ jooq {
                         // (A Java regular expression. Use the pipe to separate several expressions).
                         // Excludes match before includes, i.e. excludes have a higher priority.
                         excludes = '''\
-                                  flyway_schema_history | akeys | avals | defined | delete.*
-                                | department_topic_arr | dup | employee_office_arr | exist.*                                   
-                                | fetchval | get_.* | ghstore.* | gin.* | hs.* | hstore.* 
-                                | isdefined | isexists | make_array | new_salary | populate_record 
-                                | sale_price | slice.* | swap | tconvert | update_msrp | postal_code
-                                | evaluation_criteria | rate_type | .*_master | each | skeys | svals 
-                                | top_three_sales_per_employee | product_of_product_line
-                                  ''' 
+                                    flyway_schema_history | concatenate | .*_master
+                                  | get_.* | refresh_top3_product | sale_price | split_part
+                                  | product_of_product_line | top_three_sales_per_employee
+                                   ''' 
                                   
                         // Schema version provider
-                        schemaVersionProvider = 'SELECT MAX("version") FROM "flyway_schema_history"'
-
+                        schemaVersionProvider = 'SELECT MAX([version]) FROM [flyway_schema_history]'
+                        
                         // Give enough time to jOOQ to trigger the queries needed for generating sources 
                         // (default is 5 seconds)
                         logSlowQueriesAfterSeconds = 20
@@ -122,7 +120,6 @@ jooq {
                         packageName = 'jooq.generated'
                         directory = 'build/generated-sources'
                     }
-                    strategy.name = "org.jooq.codegen.DefaultGeneratorStrategy"
                 }
             }
         }
@@ -141,7 +138,7 @@ tasks.named('generateJooq').configure {
     dependsOn tasks.named('flywayMigrate')
 
     // declare Flyway migration scripts as inputs on the jOOQ task
-    inputs.files(fileTree('${rootDir}/../../../../../db/migration/dev/postgresql'))
+    inputs.files(fileTree('${rootDir}/../../../../../db/migration/dev/mssql'))
         .withPropertyName('migrations')
         .withPathSensitivity(PathSensitivity.RELATIVE)
 

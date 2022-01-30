@@ -42,7 +42,7 @@ flyway{
     url = project.properties['url']
     user = project.properties['username']
     password = project.properties['password']
-    locations = ['filesystem:./../../../../db/migration/dev/postgresql']
+    locations = ['filesystem:./../../../../../db/migration/dev/postgresql']
 }
 
 jooq {
@@ -144,7 +144,7 @@ tasks.named('generateJooq').configure {
     dependsOn tasks.named('flywayMigrate')
 
     // declare Flyway migration scripts as inputs on the jOOQ task
-    inputs.files(fileTree('${rootDir}/../../../../db/migration/dev/postgresql'))
+    inputs.files(fileTree('${rootDir}/../../../../../db/migration/dev/postgresql'))
         .withPropertyName('migrations')
         .withPathSensitivity(PathSensitivity.RELATIVE)
 
