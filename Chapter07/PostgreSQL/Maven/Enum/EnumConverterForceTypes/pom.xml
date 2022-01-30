@@ -189,11 +189,12 @@
                                             - any other form
                                             It is thus recommended to use defensive regexes for types.
                                             If provided, both "includeExpressions" and "includeTypes" must match. -->
-                                            <!-- Any type -->
-                                            <includeTypes>rate_type</includeTypes>
+                                           
+                                            <!-- any type -->
+                                            <includeTypes>.*</includeTypes>
                                             
-                                            <!--  The type -->
-                                            <!-- <includeTypes>enum</includeTypes> -->
+                                            <!--  the type -->
+                                            <!-- <includeTypes>rate_type</includeTypes> -->
                                     
                                             <!-- This exclude predicate is a regular expression which is matched 
                                             against the name of the definition's type (provided that it has one);
@@ -226,7 +227,7 @@
                                             <userType>com.classicmodels.enums.TrendType</userType>                                            
                                             <converter>com.classicmodels.converter.SaleStrTrendConverter</converter>                                                                                
                                             <includeExpression>public\.sale\.trend</includeExpression>
-                                            <includeTypes>.*</includeTypes>
+                                            <includeTypes>varchar\(10\)</includeTypes>
                                         </forcedType>
                                     </forcedTypes>    
                                                         
@@ -255,8 +256,8 @@
                                         | fetchval | get_.* | ghstore.* | gin.* | hs.* | hstore.* 
                                         | isdefined | isexists | make_array | new_salary | populate_record 
                                         | sale_price | slice.* | swap | tconvert | update_msrp | postal_code
-                                        | evaluation_criteria | .*_master | each | skeys | svals 
-                                        | top_three_sales_per_employee | product_of_product_line
+                                        | evaluation_criteria | rate_type | vat_type | .*_master | each 
+                                        | skeys | svals | top_three_sales_per_employee | product_of_product_line
                                     </excludes>
 
                                     <!-- Schema version provider -->            
