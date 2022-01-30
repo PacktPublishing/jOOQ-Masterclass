@@ -145,6 +145,7 @@ jooq {
                             nullability = 'ALL'
                             }
                         }
+
                         // The database type. The format here is:
                         // org.jooq.meta.[database].[database]Database
                         name = 'org.jooq.meta.mysql.MySQLDatabase'                        
