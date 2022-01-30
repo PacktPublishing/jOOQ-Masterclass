@@ -164,16 +164,16 @@
                                             If provided, both "includeExpressions" and "includeTypes" must match. -->
                                             <includeExpression>classicmodels\.office\.location</includeExpression>
                                             
-                                            <!-- all 'location' fields in any 'office' table, no matter the schema -->
+                                            <!-- All 'location' fields in any 'office' table, no matter the schema -->
                                             <!-- <includeExpression>.*\.office\.location</includeExpression> -->
                                             
-                                            <!-- all 'location' fields, no matter the schema and the table -->
+                                            <!-- All 'location' fields, no matter the schema and the table -->
                                             <!-- <includeExpression>.*\.location</includeExpression> -->
                                             
-                                            <!-- all fields containing 'locat' -->
+                                            <!-- All fields containing 'locat' -->
                                             <!-- <includeExpression>.*\.locat.*</includeExpression> -->
                                             
-                                            <!-- case-insensitive expressions -->
+                                            <!-- Case-insensitive expressions -->
                                             <!-- <includeExpression>(?i:.*\.office\.location)</includeExpression> -->
                                             <!-- <includeExpression>(?i:classicmodels\.office\.location)</includeExpression> -->   
                                     
@@ -191,10 +191,10 @@
                                             - any other form
                                             It is thus recommended to use defensive regexes for types.
                                             If provided, both "includeExpressions" and "includeTypes" must match. -->
-                                            <!-- any type -->
+                                            <!-- Any type -->
                                             <includeTypes>.*</includeTypes>
                                             
-                                            <!--  the type -->
+                                            <!--  The type -->
                                             <!-- <includeTypes>point</includeTypes> -->
                                     
                                             <!-- This exclude predicate is a regular expression which is matched 
