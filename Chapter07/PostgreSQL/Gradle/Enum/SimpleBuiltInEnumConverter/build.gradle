@@ -47,7 +47,7 @@ flyway{
 
 jooq {
     version = project.properties['jooq']
-    edition = nu.studer.gradle.jooq.JooqEdition.OSS
+    edition = nu.studer.gradle.jooq.JooqEdition.TRIAL_JAVA_8
 
     configurations {
         main {
@@ -76,15 +76,15 @@ jooq {
                     // Defaults to org.jooq.codegen.JavaGenerator
                     name = 'org.jooq.codegen.JavaGenerator' 
                     
-                    database {
+                    database {  
                         forcedTypes {
                             forcedType {
 
                             // Specify the Java type of your custom type. This corresponds to the Converter's <U> type.
-                            userType = 'com.classicmodels.enums.StarType'
+                            userType = 'com.classicmodels.enums.RateType'
                             
-                            // Associate that custom type with your converter.
-                            converter = 'com.classicmodels.converter.SaleRateStarConverter'
+                            // Apply the built in org.jooq.impl.EnumConverter.
+                            enumConverter = 'true'
 
                             // A Java regex matching fully-qualified columns, attributes, parameters. Use the pipe to separate several expressions.
                             // If provided, both "includeExpressions" and "includeTypes" must match. 
@@ -144,19 +144,12 @@ jooq {
                             nullability = 'ALL'
                             }
 
-                            // For the next two mappings we've reduced the code to the minimum.
-                            forcedType {
-                                userType = 'java.lang.Integer'
-                                converter = 'com.classicmodels.converter.SaleVatIntConverter'
-                                includeExpression = 'public\\.sale\\.vat'
-                                includeTypes = 'vat_type'
-                            }
-
+                            // For the next mapping we've reduced the code to the minimum.
                             forcedType {
                                 userType = 'com.classicmodels.enums.TrendType'
-                                converter = 'com.classicmodels.converter.SaleStrTrendConverter'
+                                enumConverter = 'true'
                                 includeExpression = 'public\\.sale\\.trend'
-                                includeTypes = '.*'
+                                includeTypes = 'varchar'
                             }
                         }
 
