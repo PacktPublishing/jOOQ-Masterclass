@@ -160,16 +160,16 @@
                                             <!-- single field expressed as schema\table\field -->
                                             <includeExpression>classicmodels\.sale\.rate</includeExpression>
                                             
-                                            <!-- all 'rate' fields in any 'sale' table, no matter the schema -->
+                                            <!-- All 'rate' fields in any 'sale' table, no matter the schema -->
                                             <!-- <includeExpression>.*\.sale\.rate</includeExpression> -->
                                             
-                                            <!-- all 'rate' fields, no matter the schema and the table -->
+                                            <!-- All 'rate' fields, no matter the schema and the table -->
                                             <!-- <includeExpression>.*\.rate</includeExpression> -->
                                             
-                                            <!-- all fields containing 'ra' -->
+                                            <!-- All fields containing 'ra' -->
                                             <!-- <includeExpression>.*\.ra.*</includeExpression> -->
                                             
-                                            <!-- case-insensitive expressions -->
+                                            <!-- Case-insensitive expressions -->
                                             <!-- <includeExpression>(?i:.*\.sale\.rate)</includeExpression> -->
                                             <!-- <includeExpression>(?i:classicmodels\.sale\.rate)</includeExpression> -->                                    
                                     
@@ -187,10 +187,10 @@
                                             - any other form
                                             It is thus recommended to use defensive regexes for types.
                                             If provided, both "includeExpressions" and "includeTypes" must match. -->
-                                            <!-- any type -->
+                                            <!-- Any type -->
                                             <includeTypes>.*</includeTypes>
                                             
-                                            <!--  the type -->
+                                            <!--  The type -->
                                             <!-- <includeTypes>enum</includeTypes> -->
                                     
                                             <!-- This exclude predicate is a regular expression which is matched 

@@ -169,16 +169,16 @@
                                             <!-- single field expressed as schema\table\field -->
                                             <includeExpression>classicmodels\.customer\.first_buy_date</includeExpression>
                                             
-                                            <!-- all 'first_buy_date' fields in any 'customer' table, no matter the schema -->
+                                            <!-- All 'first_buy_date' fields in any 'customer' table, no matter the schema -->
                                             <!-- <includeExpression>.*\.customer\.first_buy_date</includeExpression> -->
                                             
-                                            <!-- all 'first_buy_date' fields, no matter the schema and the table -->
+                                            <!-- All 'first_buy_date' fields, no matter the schema and the table -->
                                             <!-- <includeExpression>.*\.first_buy_date</includeExpression> -->
                                             
-                                            <!-- all fields containing 'first_buy_' -->
+                                            <!-- All fields containing 'first_buy_' -->
                                             <!-- <includeExpression>.*\.first_buy_.*</includeExpression> -->
                                             
-                                            <!-- case-insensitive expressions -->
+                                            <!-- Case-insensitive expressions -->
                                             <!-- <includeExpression>(?i:.*\.customer\.first_buy_date)</includeExpression> -->
                                             <!-- <includeExpression>(?i:classicmodels\.customer\.first_buy_date)</includeExpression> -->
                                             
@@ -193,10 +193,10 @@
                                             It is thus recommended to use defensive regexes for types.
                              
                                             If provided, both "includeExpression" and "includeTypes" must match. -->
-                                            <!-- any type -->
+                                            <!-- Any type -->
                                             <includeTypes>.*</includeTypes>
                                             
-                                            <!--  the type -->
+                                            <!--  The type -->
                                             <!-- <includeTypes>int</includeTypes> -->
                                             
                                             <!-- Force a type depending on data type nullability. Default is ALL.
