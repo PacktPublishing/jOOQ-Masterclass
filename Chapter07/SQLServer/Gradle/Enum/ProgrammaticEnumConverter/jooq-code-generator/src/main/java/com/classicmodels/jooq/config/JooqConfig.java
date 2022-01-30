@@ -39,17 +39,16 @@ public class JooqConfig {
                                 .withInputSchema("dbo")
                                 .withIncludes(".*")
                                 .withExcludes("flyway_schema_history | concatenate | .*_master"
-                                        + " | get_.* | refresh_top3_product | sale_price | split_part"
-                                        + " | product_of_product_line | top_three_sales_per_employee")
+                                         + " | get_.* | refresh_top3_product | sale_price | split_part"
+                                         + " | product_of_product_line | top_three_sales_per_employee")
                                 .withSchemaVersionProvider("SELECT MAX([version]) FROM [flyway_schema_history]")
                                 .withLogSlowQueriesAfterSeconds(20)
-                        )
+                        )                        
                         .withTarget(new Target()
                                 .withPackageName("jooq.generated")
-                                .withDirectory(System.getProperty("user.dir").endsWith("webapp")
-                                        ? "target/generated-sources"
-                                        : "webapp/target/generated-sources")));
+                                .withDirectory(System.getProperty("user.dir") 
+                                     + "/../webapp/build/generated-sources")));
 
-        GenerationTool.generate(configuration);
+        GenerationTool.generate(configuration);		
     }
 }

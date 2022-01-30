@@ -1,0 +1,4 @@
+rootProject.name = 'ProgrammaticEnumConverter'
+
+include 'jooq-code-generator'
+include 'webapp'
