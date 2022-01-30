@@ -87,20 +87,20 @@ jooq {
 
                             // A Java regex matching fully-qualified columns, attributes, parameters. Use the pipe to separate several expressions.
                             // If provided, both "includeExpressions" and "includeTypes" must match. 
-                            includeExpression = 'public\\.manager\\.manager_evaluation'
+                            includeExpression = 'public\\.manager\\.manager_detail'
 
-                            // All 'manager_evaluation' fields in any 'manager' table, no matter the schema.
-                            // includeExpression = '.*\\.manager\\.manager_evaluation'
+                            // All 'manager_detail' fields in any 'manager' table, no matter the schema.
+                            // includeExpression = '.*\\.manager\\.manager_detail'
 
-                            // All 'manager_evaluation' fields, no matter the schema and the table.
-                            // includeExpression = '.*\\.manager_evaluation'
+                            // All 'manager_detail' fields, no matter the schema and the table.
+                            // includeExpression = '.*\\.manager_detail'
 
                             // All fields containing 'manager_'.
                             // includeExpression = '.*\\.manager_.*'
 
                             // Case-insensitive expressions.
-                            // includeExpression = '(?i:.*\\.manager\\.manager_evaluation)'
-                            // includeExpression = '(?i:system\\.manager\\.manager_evaluation)'
+                            // includeExpression = '(?i:.*\\.manager\\.manager_detail)'
+                            // includeExpression = '(?i:public\\.manager\\.manager_detail)'
 
                             // This exclude predicate is a regular expression which is matched 
                             // against the definition's name; any definition's name matching 
@@ -119,7 +119,7 @@ jooq {
                             includeTypes = '.*'
 
                             // The type:
-                            // includeTypes = 'evaluation_criteria'
+                            // includeTypes = 'json'
 
                             // This exclude predicate is a regular expression which is matched 
                             // against the name of the definition's type (provided that it has one);
@@ -169,8 +169,8 @@ jooq {
                                 | fetchval | get_.* | ghstore.* | gin.* | hs.* | hstore.* 
                                 | isdefined | isexists | make_array | new_salary | populate_record 
                                 | sale_price | slice.* | swap | tconvert | update_msrp | postal_code
-                                | rate_type | vat_type | .*_master | each | skeys | svals 
-                                | top_three_sales_per_employee | product_of_product_line
+                                | evaluation_criteria | rate_type | vat_type | .*_master | each 
+                                | skeys | svals | top_three_sales_per_employee | product_of_product_line
                                   ''' 
                                   
                         // Schema version provider
