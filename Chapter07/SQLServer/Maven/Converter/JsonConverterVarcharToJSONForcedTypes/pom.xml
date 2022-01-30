@@ -163,16 +163,16 @@
                                             <!-- single field expressed as schema\table\field -->
                                             <includeExpression>dbo\.manager\.manager_detail</includeExpression>
                                             
-                                            <!-- all 'manager_detail' fields in any 'manager' table, no matter the schema -->
+                                            <!-- All 'manager_detail' fields in any 'manager' table, no matter the schema -->
                                             <!-- <includeExpression>.*\.manager\.manager_detail</includeExpression> -->
                                             
-                                            <!-- all 'manager_detail' fields, no matter the schema and the table -->
+                                            <!-- All 'manager_detail' fields, no matter the schema and the table -->
                                             <!-- <includeExpression>.*\.manager_detail</includeExpression> -->
                                             
-                                            <!-- all fields containing 'manager_' -->
+                                            <!-- All fields containing 'manager_' -->
                                             <!-- <includeExpression>.*\.manager_.*</includeExpression> -->
                                             
-                                            <!-- case-insensitive expressions -->
+                                            <!-- Case-insensitive expressions -->
                                             <!-- <includeExpression>(?i:.*\.manager\.manager_detail)</includeExpression> -->
                                             <!-- <includeExpression>(?i:dbo\.manager\.manager_detail)</includeExpression> -->
                                             
@@ -187,10 +187,10 @@
                                             It is thus recommended to use defensive regexes for types.
                              
                                             If provided, both "includeExpression" and "includeTypes" must match. -->
-                                            <!-- any type -->
+                                            <!-- Any type -->
                                             <includeTypes>.*</includeTypes>
                                             
-                                            <!--  the type -->
+                                            <!-- The type -->
                                             <!-- <includeTypes>nvarchar\(4000\)</includeTypes> -->
                                             
                                             <!-- Force a type depending on data type nullability. Default is ALL.
