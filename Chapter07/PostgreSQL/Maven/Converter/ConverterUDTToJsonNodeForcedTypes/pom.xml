@@ -168,7 +168,7 @@
                                             <!-- <includeExpression>.*\.manager\.manager_evaluation</includeExpression> -->
                                             
                                             <!-- All 'manager_evaluation' fields, no matter the schema and the table -->
-                                            <!-- <includeExpression>.*\.manaer_evaluation</includeExpression> -->
+                                            <!-- <includeExpression>.*\.manager_evaluation</includeExpression> -->
                                             
                                             <!-- All fields containing 'manager_' -->
                                             <!-- <includeExpression>.*\.manager_.*</includeExpression> -->
