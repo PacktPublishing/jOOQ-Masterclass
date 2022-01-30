@@ -241,7 +241,7 @@
                                 </database>
                                 <target>
                                     <!-- The destination package of your generated classes (within the destination directory).
-                                 jOOQ may append the schema name to this package if generating multiple schemas,
+                                    jOOQ may append the schema name to this package if generating multiple schemas,
                                     e.g. org.jooq.your.packagename.schema1
                                     org.jooq.your.packagename.schema2 -->                                    
                                     <packageName>jooq.generated</packageName>
