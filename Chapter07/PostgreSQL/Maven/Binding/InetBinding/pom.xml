@@ -161,16 +161,16 @@
                                             <!-- single field expressed as schema\table\field -->
                                             <includeExpression>public\.department\.dep_net_ipv4</includeExpression>
                                             
-                                            <!-- all 'dep_net_ipv4' fields in any 'department' table, no matter the schema -->
+                                            <!-- All 'dep_net_ipv4' fields in any 'department' table, no matter the schema -->
                                             <!-- <includeExpression>.*\.department\.dep_net_ipv4</includeExpression> -->
                                             
-                                            <!-- all 'dep_net_ipv4' fields, no matter the schema and the table -->
+                                            <!-- All 'dep_net_ipv4' fields, no matter the schema and the table -->
                                             <!-- <includeExpression>.*\.dep_net_ipv4</includeExpression> -->
                                             
-                                            <!-- all fields containing 'dep_net_' -->
+                                            <!-- All fields containing 'dep_net_' -->
                                             <!-- <includeExpression>.*\.dep_net_.*</includeExpression> -->
                                             
-                                            <!-- case-insensitive expressions -->
+                                            <!-- Case-insensitive expressions -->
                                             <!-- <includeExpression>(?i:.*\.department\.dep_net_ipv4)</includeExpression> -->
                                             <!-- <includeExpression>(?i:public\.department\.dep_net_ipv4)</includeExpression> -->                                    
                                     
@@ -188,10 +188,10 @@
                                             - any other form
                                             It is thus recommended to use defensive regexes for types.
                                             If provided, both "includeExpressions" and "includeTypes" must match. -->
-                                            <!-- any type -->
+                                            <!-- Any type -->
                                             <includeTypes>.*</includeTypes>
                                             
-                                            <!--  the type -->
+                                            <!--  The type -->
                                             <!-- <includeTypes>inet</includeTypes> -->
                                     
                                             <!-- This exclude predicate is a regular expression which is matched 
