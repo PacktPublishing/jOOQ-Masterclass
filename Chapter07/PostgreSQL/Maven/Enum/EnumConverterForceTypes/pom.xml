@@ -148,7 +148,7 @@
                                 <name>org.jooq.codegen.JavaGenerator</name>
         
                                 <database>
-                                    
+                                   
                                     <forcedTypes>
                                         <forcedType>
                                             <!-- Specify the Java type of your custom type. This corresponds to the Converter's <U> type. -->
