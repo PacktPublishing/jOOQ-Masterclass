@@ -161,16 +161,16 @@
                                             <!-- single field expressed as schema\table\field -->
                                             <includeExpression>public\.manager\.manager_detail</includeExpression>
                                             
-                                            <!-- all 'manager_detail' fields in any 'manager' table, no matter the schema -->
+                                            <!-- All 'manager_detail' fields in any 'manager' table, no matter the schema -->
                                             <!-- <includeExpression>.*\.manager\.manager_detail</includeExpression> -->
                                             
-                                            <!-- all 'manager_detail' fields, no matter the schema and the table -->
+                                            <!-- All 'manager_detail' fields, no matter the schema and the table -->
                                             <!-- <includeExpression>.*\.manager_detail</includeExpression> -->
                                             
-                                            <!-- all fields containing 'manager_' -->
+                                            <!-- All fields containing 'manager_' -->
                                             <!-- <includeExpression>.*\.manager_.*</includeExpression> -->
                                             
-                                            <!-- case-insensitive expressions -->
+                                            <!-- Case-insensitive expressions -->
                                             <!-- <includeExpression>(?i:.*\.manager\.manager_detail)</includeExpression> -->
                                             <!-- <includeExpression>(?i:public\.manager\.manager_detail)</includeExpression> -->                                    
                                     
@@ -188,10 +188,10 @@
                                             - any other form
                                             It is thus recommended to use defensive regexes for types.
                                             If provided, both "includeExpressions" and "includeTypes" must match. -->
-                                            <!-- any type -->
+                                            <!-- Any type -->
                                             <includeTypes>.*</includeTypes>
                                             
-                                            <!--  the type -->
+                                            <!--  The type -->
                                             <!-- <includeTypes>json</includeTypes> -->
                                     
                                             <!-- This exclude predicate is a regular expression which is matched 
