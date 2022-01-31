@@ -9,9 +9,9 @@ import org.jooq.meta.jaxb.Jdbc;
 import org.jooq.meta.jaxb.Target;
 
 public class JooqConfig {
-
+    
     public static void main(String[] args) throws Exception {
-
+        
         Configuration configuration = new Configuration()
                 .withJdbc(new Jdbc()
                         .withDriver("com.microsoft.sqlserver.jdbc.SQLServerDriver")
@@ -25,15 +25,18 @@ public class JooqConfig {
                                         new ForcedType()
                                                 .withUserType("com.classicmodels.enums.StarType")
                                                 .withConverter("com.classicmodels.converter.SaleRateStarConverter")
-                                                .withIncludeExpression(".*\\.rate"),
+                                                .withIncludeExpression(".*\\.rate")
+                                                .withIncludeTypes("VARCHAR\\(10\\)"),
                                         new ForcedType()
                                                 .withUserType("java.lang.Integer")
                                                 .withConverter("com.classicmodels.converter.SaleVatIntConverter")
-                                                .withIncludeExpression(".*\\.vat"),
+                                                .withIncludeExpression(".*\\.vat")
+                                                .withIncludeTypes("VARCHAR\\(10\\)"),
                                         new ForcedType()
                                                 .withUserType("com.classicmodels.enums.TrendType")
                                                 .withConverter("com.classicmodels.converter.SaleStrTrendConverter")
-                                                .withIncludeExpression(".*\\.trend"))
+                                                .withIncludeExpression(".*\\.trend")
+                                                .withIncludeTypes("VARCHAR\\(10\\)"))
                                 .withName("org.jooq.meta.sqlserver.SQLServerDatabase")
                                 .withInputCatalog("classicmodels")
                                 .withInputSchema("dbo")
@@ -49,7 +52,7 @@ public class JooqConfig {
                                 .withDirectory(System.getProperty("user.dir").endsWith("webapp")
                                         ? "target/generated-sources"
                                         : "webapp/target/generated-sources")));
-
+        
         GenerationTool.generate(configuration);
     }
 }

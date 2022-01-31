@@ -117,11 +117,12 @@ jooq {
                             //    - any other form
                             // It is thus recommended to use defensive regexes for types.
                             // If provided, both "includeExpressions" and "includeTypes" must match. 
+
                             // Any type:
-                            includeTypes = '.*'
+                            // includeTypes = '.*'
 
                             // The type:
-                            //includeTypes = 'varchar\\(10\\)'
+                            includeTypes = 'VARCHAR\\(10\\)'
 
                             // This exclude predicate is a regular expression which is matched 
                             // against the name of the definition's type (provided that it has one);
@@ -150,14 +151,14 @@ jooq {
                                 userType = 'java.lang.Integer'
                                 converter = 'com.classicmodels.converter.SaleVatIntConverter'
                                 includeExpression = 'dbo\\.sale\\.vat'
-                                includeTypes = 'varchar\\(10\\)'
+                                includeTypes = 'VARCHAR\\(10\\)'
                             }
 
                             forcedType {
                                 userType = 'com.classicmodels.enums.TrendType'
                                 converter = 'com.classicmodels.converter.SaleStrTrendConverter'
                                 includeExpression = 'dbo\\.sale\\.trend'
-                                includeTypes = 'varchar\\(10\\)'
+                                includeTypes = 'VARCHAR\\(10\\)'
                             }
                         }
 

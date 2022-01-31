@@ -25,15 +25,18 @@ public class JooqConfig {
                                         new ForcedType()
                                                 .withUserType("com.classicmodels.enums.StarType")
                                                 .withConverter("com.classicmodels.converter.SaleRateStarConverter")
-                                                .withIncludeExpression(".*\\.rate"),
+                                                .withIncludeExpression(".*\\.rate")
+                                                .withIncludeTypes("VARCHAR\\(10\\)"),
                                         new ForcedType()
                                                 .withUserType("java.lang.Integer")
                                                 .withConverter("com.classicmodels.converter.SaleVatIntConverter")
-                                                .withIncludeExpression(".*\\.vat"),
+                                                .withIncludeExpression(".*\\.vat")
+                                                .withIncludeTypes("VARCHAR\\(10\\)"),
                                         new ForcedType()
                                                 .withUserType("com.classicmodels.enums.TrendType")
                                                 .withConverter("com.classicmodels.converter.SaleStrTrendConverter")
-                                                .withIncludeExpression(".*\\.trend"))
+                                                .withIncludeExpression(".*\\.trend")
+                                                .withIncludeTypes("VARCHAR\\(10\\)"))
                                 .withName("org.jooq.meta.sqlserver.SQLServerDatabase")
                                 .withInputCatalog("classicmodels")
                                 .withInputSchema("dbo")

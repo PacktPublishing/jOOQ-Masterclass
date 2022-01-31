@@ -189,10 +189,10 @@
                                             If provided, both "includeExpressions" and "includeTypes" must match. -->                                            
 
                                             <!-- Any type -->
-                                            <includeTypes>.*</includeTypes>   
+                                            <!-- <includeTypes>.*</includeTypes> -->
 
                                             <!-- The` type -->
-                                            <!-- <includeTypes>varchar\(10\)</includeTypes> -->
+                                            <includeTypes>VARCHAR\(10\)</includeTypes>
                                     
                                             <!-- This exclude predicate is a regular expression which is matched 
                                             against the name of the definition's type (provided that it has one);
@@ -219,13 +219,13 @@
                                             <userType>com.classicmodels.enums.VatType</userType>                                                                                                                                                                               
                                             <enumConverter>true</enumConverter>
                                             <includeExpression>dbo\.sale\.vat</includeExpression>
-                                            <includeTypes>varchar\(10\)</includeTypes>
+                                            <includeTypes>VARCHAR\(10\)</includeTypes>
                                         </forcedType>  
                                         <forcedType>                                                                                                                        
                                             <userType>com.classicmodels.enums.TrendType</userType>                                                                                                                                                                               
                                             <enumConverter>true</enumConverter>
                                             <includeExpression>dbo\.sale\.trend</includeExpression>
-                                            <includeTypes>varchar\(10\)</includeTypes>
+                                            <includeTypes>VARCHAR\(10\)</includeTypes>
                                         </forcedType>
                                     </forcedTypes>
                                                                 
