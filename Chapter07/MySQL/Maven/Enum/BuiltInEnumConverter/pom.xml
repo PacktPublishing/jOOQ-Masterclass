@@ -145,8 +145,6 @@
                                 <name>org.jooq.codegen.JavaGenerator</name>
         
                                 <database>
-                                    
-                                    <!-- The first matching forcedType will be applied to the data type definition. -->
                                     <forcedTypes>
                                         <forcedType>
 
@@ -188,11 +186,12 @@
                                             - any other form
                                             It is thus recommended to use defensive regexes for types.
                                             If provided, both "includeExpressions" and "includeTypes" must match. -->
+                                            
                                             <!-- Any type -->
-                                            <includeTypes>.*</includeTypes>
+                                            <!-- <includeTypes>.*</includeTypes> -->
                                             
                                             <!--  The type -->
-                                            <!-- <includeTypes>enum</includeTypes> -->
+                                            <includeTypes>ENUM</includeTypes>
                                     
                                             <!-- This exclude predicate is a regular expression which is matched 
                                             against the name of the definition's type (provided that it has one);
@@ -237,7 +236,7 @@
                                     <excludes>
                                         flyway_schema_history | sequences 
                                         | customer_pgs | refresh_top3_product
-                                        | set_.* | get_.* | .*_master
+                                        | sale_rate | sale_price | set_.* | get_.* | .*_master
                                     </excludes>
 
                                     <!-- Schema version provider -->            

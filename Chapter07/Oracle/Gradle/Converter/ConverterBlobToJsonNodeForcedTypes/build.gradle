@@ -93,13 +93,13 @@ jooq {
                             // If provided, both "includeExpressions" and "includeTypes" must match. 
                             includeExpression = 'CLASSICMODELS\\.MANAGER\\.MANAGER_DETAIL'
 
-                            // All 'manager_detail' fields in any 'manager' table, no matter the schema.
+                            // All 'MANAGER_DETAIL' fields in any 'MANAGER' table, no matter the schema.
                             // includeExpression = '.*\\.MANAGER\\.MANAGER_DETAIL'
 
-                            // All 'manager_detail' fields, no matter the schema and the table.
+                            // All 'MANAGER_DETAIL' fields, no matter the schema and the table.
                             // includeExpression = '.*\\.MANAGER_DETAIL'
 
-                            // All fields containing 'manager_'.
+                            // All fields containing 'MANAGER_'.
                             // includeExpression = '.*\\.MANAGER_.*'
 
                             // Case-insensitive expressions.
@@ -121,10 +121,10 @@ jooq {
                             // If provided, both "includeExpressions" and "includeTypes" must match. 
 
                             // Any type:
-                            includeTypes = '.*'
+                            // includeTypes = '.*'
 
                             // The type:
-                            // includeTypes = 'json'
+                            includeTypes = 'JSON'
 
                             // This exclude predicate is a regular expression which is matched 
                             // against the name of the definition's type (provided that it has one);

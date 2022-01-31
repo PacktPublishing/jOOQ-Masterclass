@@ -156,8 +156,6 @@
                                 <name>org.jooq.codegen.JavaGenerator</name>
         
                                 <database>  
-                                    
-                                    <!-- The first matching forcedType will be applied to the data type definition. -->
                                     <forcedTypes>
                                         <forcedType>
 
@@ -172,13 +170,13 @@
                                             <!-- single field expressed as schema\table\field -->
                                             <includeExpression>CLASSICMODELS\.MANAGER\.MANAGER_DETAIL</includeExpression>
                                             
-                                            <!-- All 'manager_detail' fields in any 'manager' table, no matter the schema -->
+                                            <!-- All 'MANAGER_DETAIL' fields in any 'MANAGER' table, no matter the schema -->
                                             <!-- <includeExpression>.*\.MANAGER\.MANAGER_DETAIL</includeExpression> -->
                                             
-                                            <!-- All 'manager_detail' fields, no matter the schema and the table -->
+                                            <!-- All 'MANAGER_DETAIL' fields, no matter the schema and the table -->
                                             <!-- <includeExpression>.*\.MANAGER_DETAIL</includeExpression> -->
                                             
-                                            <!-- All fields containing 'manager_' -->
+                                            <!-- All fields containing 'MANAGER_' -->
                                             <!-- <includeExpression>.*\.MANAGER_.*</includeExpression> -->
                                             
                                             <!-- Case-insensitive expressions -->
@@ -198,10 +196,20 @@
                                             If provided, both "includeExpression" and "includeTypes" must match. -->                                            
 
                                             <!-- Any type -->
-                                            <includeTypes>.*</includeTypes>
+                                            <!-- <includeTypes>.*</includeTypes> -->
 
                                             <!-- The type -->
-                                            <!-- <includeTypes>json</includeTypes> -->
+                                            <includeTypes>JSON</includeTypes>
+
+                                            <!-- This exclude predicate is a regular expression which is matched 
+                                            against the name of the definition's type (provided that it has one);
+                                            any definition's type name matching the regular expression will be 
+                                            considered not matching this forced type -->
+                                            <excludeTypes></excludeTypes>
+                                    
+                                            <!-- An SQL query returning all (qualified or unqualified) object 
+                                            names which should be considered to match this forced type -->
+                                            <sql></sql>
                                                                                         
                                             <!-- Force a type depending on data type nullability. Default is ALL.
                                       

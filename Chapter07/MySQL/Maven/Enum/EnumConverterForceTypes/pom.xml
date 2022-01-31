@@ -148,7 +148,7 @@
                                                                         
                                     <forcedTypes>
                                         <forcedType>
-                                            <!-- Specify the Java type of your custom type. This corresponds to the Binding's <U> type. -->
+                                            <!-- Specify the Java type of your custom type. This corresponds to the Converter's <U> type. -->
                                             <userType>com.classicmodels.enums.StarType</userType>
                                     
                                             <!-- Associate that custom type with your converter. -->
@@ -186,11 +186,12 @@
                                             - any other form
                                             It is thus recommended to use defensive regexes for types.
                                             If provided, both "includeExpressions" and "includeTypes" must match. -->
+                                            
                                             <!-- Any type -->
-                                            <includeTypes>.*</includeTypes>
+                                            <!-- <includeTypes>.*</includeTypes> -->
                                             
                                             <!--  The type -->
-                                            <!-- <includeTypes>enum</includeTypes> -->
+                                            <includeTypes>ENUM</includeTypes>
                                     
                                             <!-- This exclude predicate is a regular expression which is matched 
                                             against the name of the definition's type (provided that it has one);
@@ -217,13 +218,13 @@
                                             <userType>java.lang.Integer</userType>                                                                                        
                                             <converter>com.classicmodels.converter.SaleVatIntConverter</converter>                                                                                
                                             <includeExpression>classicmodels\.sale\.vat</includeExpression>
-                                            <includeTypes>enum</includeTypes>
+                                            <includeTypes>ENUM</includeTypes>
                                         </forcedType>
                                         <forcedType>                                                                        
                                             <userType>com.classicmodels.enums.TrendType</userType>                                            
                                             <converter>com.classicmodels.converter.SaleStrTrendConverter</converter>                                                                                
                                             <includeExpression>classicmodels\.sale\.trend</includeExpression>
-                                            <includeTypes>varchar\(10\)</includeTypes>
+                                            <includeTypes>VARCHAR\(10\)</includeTypes>
                                         </forcedType>
                                     </forcedTypes>                               
                                                                 

@@ -90,23 +90,12 @@ jooq {
                             // An SQL query returning all (qualified or unqualified) object 
                             // names which should be considered to match this forced type.
                              sql = '''\
-                                   SELECT concat('classicmodels.',TABLE_NAME,".",COLUMN_NAME)
+                                   SELECT concat('classicmodels.',TABLE_NAME,'.',COLUMN_NAME)
                                    FROM INFORMATION_SCHEMA.COLUMNS
                                    WHERE TABLE_SCHEMA = 'classicmodels'    
                                          AND TABLE_NAME != 'flyway_schema_history'
                                          AND COLUMN_TYPE in ("enum('SILVER','GOLD','PLATINUM')");
                                    '''
-
-                            // Force a type on ALL or specific object types. Default is ALL.
-                            //  Must be one of ATTRIBUTE, COLUMN, ELEMENT, PARAMETER, SEQUENCE, 
-                            // or ALL and specifies what type of database objects 
-                            // this forced type is applicable to.
-                            objectType = 'ALL'
-
-                            //  Force a type depending on data type nullability. Default is ALL.
-                            // Must be one of NULL, NOT_NULL, or ALL and specifies if this forced 
-                            // type is applicable to NULL, NOT NULL, or all definitions.
-                            nullability = 'ALL'
                             }
                         }
 
@@ -132,7 +121,7 @@ jooq {
                         excludes = '''\
                                     flyway_schema_history | sequences 
                                   | customer_pgs | refresh_top3_product
-                                  | set_.* | get_.* | .*_master
+                                  | sale_rate | sale_price | set_.* | get_.* | .*_master
                                   ''' 
                         
                         // Schema version provider
