@@ -191,11 +191,12 @@
                                             - any other form
                                             It is thus recommended to use defensive regexes for types.
                                             If provided, both "includeExpressions" and "includeTypes" must match. -->
+                                            
                                             <!-- Any type -->
-                                            <includeTypes>.*</includeTypes>
+                                            <!-- <includeTypes>.*</includeTypes>  -->
                                             
                                             <!--  The type -->
-                                            <!-- <includeTypes>rate_type</includeTypes> -->
+                                            <includeTypes>rate_type</includeTypes>
                                     
                                             <!-- This exclude predicate is a regular expression which is matched 
                                             against the name of the definition's type (provided that it has one);
@@ -222,7 +223,7 @@
                                             <userType>com.classicmodels.enums.TrendType</userType>                                                                                                                                                                               
                                             <enumConverter>true</enumConverter>
                                             <includeExpression>public\.sale\.trend</includeExpression>
-                                            <includeTypes>varchar</includeTypes>                                           
+                                            <includeTypes>.*</includeTypes>                                           
                                         </forcedType>                                        
                                     </forcedTypes>                                 
                                                              
