@@ -159,7 +159,7 @@
                                             <catalog/>
                                             
                                             <!-- The optional schema of the embeddable type (the schema of the first matched table if left empty) -->
-                                            <schema>classicmodels</schema>
+                                            <schema>CLASSICMODELS</schema>
                                             
                                             <!-- The name of the embeddable type -->
                                             <name>OFFICE_FULL_ADDRESS</name>
@@ -175,7 +175,7 @@
                                             
                                             <!-- A regular expression matching qualified or unqualified table names to which to apply this embeddable specification
                                             If left blank, this will apply to all tables -->
-                                            <tables>.*\.office</tables>
+                                            <tables>.*\.OFFICE</tables>
                                             
                                             <!-- A list of fields to match to an embeddable's attributes. 
                                             Each field must match exactly one column in each matched table.
