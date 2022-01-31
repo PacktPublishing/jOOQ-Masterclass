@@ -154,7 +154,7 @@
                                     
                                     <forcedTypes>
                                         <forcedType>
-                                            <!-- Specify the Java type of your custom type. This corresponds to the Binding's <U> type. -->
+                                            <!-- Specify the Java type of your custom type. This corresponds to the Converter's <U> type. -->
                                             <userType>com.classicmodels.enums.RateType</userType>
                                     
                                             <!-- Apply the built in org.jooq.impl.EnumConverter. -->
