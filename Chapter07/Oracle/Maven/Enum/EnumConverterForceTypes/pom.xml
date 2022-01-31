@@ -153,7 +153,7 @@
                                 <database>                                       
                                     <forcedTypes>
                                         <forcedType>
-                                            <!-- Specify the Java type of your custom type. This corresponds to the Binding's <U> type. -->
+                                            <!-- Specify the Java type of your custom type. This corresponds to the Converter's <U> type. -->
                                             <userType>com.classicmodels.enums.StarType</userType>
                                     
                                             <!-- Associate that custom type with your converter. -->
@@ -164,16 +164,16 @@
                                             <!-- single field expressed as schema\table\field -->
                                             <includeExpression>CLASSICMODELS\.SALE\.RATE</includeExpression>
                                             
-                                            <!-- all 'rate' fields in any 'sale' table, no matter the schema -->
+                                            <!-- All 'rate' fields in any 'sale' table, no matter the schema -->
                                             <!-- <includeExpression>.*\.SALE\.RATE</includeExpression> -->
                                             
-                                            <!-- all 'rate' fields, no matter the schema and the table -->
+                                            <!-- All 'rate' fields, no matter the schema and the table -->
                                             <!-- <includeExpression>.*\.RATE</includeExpression> -->
                                             
-                                            <!-- all fields containing 'RA' -->
+                                            <!-- All fields containing 'ra' -->
                                             <!-- <includeExpression>.*\.RA.*</includeExpression> -->
                                             
-                                            <!-- case-insensitive expressions -->
+                                            <!-- Case-insensitive expressions -->
                                             <!-- <includeExpression>(?i:.*\.sale\.rate)</includeExpression> -->
                                             <!-- <includeExpression>(?i:classicmodels\.sale\.rate)</includeExpression> -->                                    
                                     
@@ -190,8 +190,13 @@
                                             - NUMBER(5, 2) regexp suggestion: NUMBER\(5,\s*2\)
                                             - any other form
                                             It is thus recommended to use defensive regexes for types.
-                                            If provided, both "includeExpressions" and "includeTypes" must match. -->                                            
+                                            If provided, both "includeExpressions" and "includeTypes" must match. -->
+
+                                            <!-- Any type -->                                            
                                             <includeTypes>.*</includeTypes>                                            
+
+                                            <!-- The type -->
+                                            <!-- <includeTypes>varchar2\(10\)</includeTypes> -->
                                     
                                             <!-- This exclude predicate is a regular expression which is matched 
                                             against the name of the definition's type (provided that it has one);
@@ -218,13 +223,13 @@
                                             <userType>java.lang.Integer</userType>                                                                                                                                                                               
                                             <converter>com.classicmodels.converter.SaleVatIntConverter</converter>
                                             <includeExpression>CLASSICMODELS\.SALE\.VAT</includeExpression>
-                                            <includeTypes>.*</includeTypes>
+                                            <includeTypes>varchar2\(10\)</includeTypes>
                                         </forcedType>
                                         <forcedType>                                                                                                                        
                                             <userType>com.classicmodels.enums.TrendType</userType>                                                                                                                                                                               
                                             <converter>com.classicmodels.converter.SaleStrTrendConverter</converter>
                                             <includeExpression>CLASSICMODELS\.SALE\.TREND</includeExpression>
-                                            <includeTypes>.*</includeTypes>
+                                            <includeTypes>varchar2\(10\)</includeTypes>
                                         </forcedType>
                                     </forcedTypes>
                                                             
