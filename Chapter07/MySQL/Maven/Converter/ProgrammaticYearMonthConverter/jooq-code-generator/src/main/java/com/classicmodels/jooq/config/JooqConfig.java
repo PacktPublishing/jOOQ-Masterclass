@@ -26,7 +26,7 @@ public class JooqConfig {
                                                 .withUserType("java.time.YearMonth")
                                                 .withConverter("com.classicmodels.converter.YearMonthConverter")
                                                 .withIncludeExpression("classicmodels\\.customer\\.first_buy_date")
-                                                .withExcludeTypes(".*\\."))
+                                                .withIncludeTypes("INT"))
                                 .withName("org.jooq.meta.mysql.MySQLDatabase")
                                 .withInputSchema("classicmodels")
                                 .withIncludes(".*")

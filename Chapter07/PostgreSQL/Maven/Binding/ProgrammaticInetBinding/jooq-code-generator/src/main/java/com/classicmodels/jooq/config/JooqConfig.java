@@ -27,7 +27,7 @@ public class JooqConfig {
                                                 .withUserType("java.net.InetAddress")
                                                 .withBinding("com.classicmodels.binding.InetBinding")
                                                 .withIncludeExpression(".*\\.dep_net_ipv4")
-                                                .withExcludeTypes(".*\\."))
+                                                .withIncludeTypes("INET"))
                                 .withName("org.jooq.meta.postgres.PostgresDatabase")
                                 .withInputSchema("public")
                                 .withIncludes(".*")

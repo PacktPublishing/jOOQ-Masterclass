@@ -117,11 +117,12 @@ jooq {
                             //    - any other form
                             // It is thus recommended to use defensive regexes for types.
                             // If provided, both "includeExpressions" and "includeTypes" must match. 
+
                             // Any type:
-                            includeTypes = '.*'
+                            // includeTypes = '.*'
 
                             // The type:
-                            // includeTypes = 'point'
+                            includeTypes = 'POINT'
 
                             // This exclude predicate is a regular expression which is matched 
                             // against the name of the definition's type (provided that it has one);

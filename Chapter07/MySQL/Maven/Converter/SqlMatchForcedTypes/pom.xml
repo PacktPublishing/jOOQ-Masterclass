@@ -145,8 +145,6 @@
                                 <name>org.jooq.codegen.JavaGenerator</name>
         
                                 <database>
-                                    
-                                    <!-- The first matching forcedType will be applied to the data type definition. -->
                                     <forcedTypes>
                                         <forcedType>
 
@@ -160,11 +158,11 @@
                                             object names which should be considered to match 
                                             this forced type. -->
                                             <sql>
-                                                SELECT concat('classicmodels.', TABLE_NAME, ".", COLUMN_NAME)
+                                                SELECT concat('classicmodels.', TABLE_NAME, '.', COLUMN_NAME)
                                                 FROM INFORMATION_SCHEMA.COLUMNS
                                                 WHERE TABLE_SCHEMA = 'classicmodels'
-                                                AND TABLE_NAME != 'flyway_schema_history'
-                                                AND DATA_TYPE = 'timestamp'
+                                                   AND TABLE_NAME != 'flyway_schema_history'
+                                                   AND DATA_TYPE = 'timestamp'
                                             </sql>
                                             
                                             <!-- Force a type depending on data type nullability. Default is ALL.

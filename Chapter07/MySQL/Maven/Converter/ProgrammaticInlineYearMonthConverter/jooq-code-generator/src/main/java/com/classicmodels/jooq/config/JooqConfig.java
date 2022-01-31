@@ -28,7 +28,7 @@ public class JooqConfig {
                                                         + "(Integer t) -> { return YearMonth.of(1970, 1).with(java.time.temporal.ChronoField.PROLEPTIC_MONTH, t); }, "
                                                         + "(YearMonth u) -> { return (int) u.getLong(java.time.temporal.ChronoField.PROLEPTIC_MONTH); })")
                                                 .withIncludeExpression("classicmodels\\.customer\\.first_buy_date")
-                                                .withExcludeTypes(".*\\."))
+                                                .withIncludeTypes("INT"))
                                 .withName("org.jooq.meta.mysql.MySQLDatabase")
                                 .withInputSchema("classicmodels")
                                 .withIncludes(".*")

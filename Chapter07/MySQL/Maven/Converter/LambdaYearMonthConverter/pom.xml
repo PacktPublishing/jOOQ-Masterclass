@@ -145,8 +145,6 @@
                                 <name>org.jooq.codegen.JavaGenerator</name>
         
                                 <database>  
-                                    
-                                    <!-- The first matching forcedType will be applied to the data type definition. -->
                                     <forcedTypes>
                                         <forcedType>
 
@@ -188,11 +186,12 @@
                                             It is thus recommended to use defensive regexes for types.
                              
                                             If provided, both "includeExpression" and "includeTypes" must match. -->
+                                            
                                             <!-- Any type -->
-                                            <includeTypes>.*</includeTypes>
+                                            <!-- <includeTypes>.*</includeTypes> -->
                                             
                                             <!--  The type -->
-                                            <!-- <includeTypes>int</includeTypes> -->
+                                            <includeTypes>INT</includeTypes>
                                             
                                             <!-- Force a type depending on data type nullability. Default is ALL.
                                       
