@@ -92,13 +92,13 @@ jooq {
                             // If provided, both "includeExpressions" and "includeTypes" must match. 
                             includeExpression = 'CLASSICMODELS\\.SALE\\.HOT'
 
-                            // All 'hot' fields in any 'sale' table, no matter the schema.
+                            // All 'HOT' fields in any 'SALE' table, no matter the schema.
                             // includeExpression = '.*\\.SALE\\.HOT'
 
-                            // All 'hot' fields, no matter the schema and the table.
+                            // All 'HOT' fields, no matter the schema and the table.
                             // includeExpression = '.*\\.HOT'
 
-                            // All fields containing 'ho'.
+                            // All fields containing 'HO'.
                             // includeExpression = '.*\\.HO.*'
 
                             // Case-insensitive expressions.
@@ -120,10 +120,10 @@ jooq {
                             // If provided, both "includeExpressions" and "includeTypes" must match. 
 
                             // Any type:
-                            includeTypes = '.*'
+                            // includeTypes = '.*'
 
                             // The type:
-                            // includeTypes = 'char\\(1\\)'
+                            includeTypes = 'char\\(1\\)'
 
                             // This exclude predicate is a regular expression which is matched 
                             // against the name of the definition's type (provided that it has one);

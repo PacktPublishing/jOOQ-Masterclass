@@ -163,13 +163,13 @@
                                             <!-- single field expressed as schema\table\field -->
                                             <includeExpression>CLASSICMODELS\.SALE\.HOT</includeExpression>
                                             
-                                            <!-- All 'hot' fields in any 'sale' table, no matter the schema. -->
+                                            <!-- All 'HOT' fields in any 'SALE' table, no matter the schema. -->
                                             <!-- <expression>.*\.SALE\.HOT</expression> -->
                                             
-                                            <!-- All 'hot' fields, no matter the schema and the table -->
+                                            <!-- All 'HOT' fields, no matter the schema and the table -->
                                             <!-- <expression>.*\.HOT</expression> -->
                                             
-                                            <!-- All fields containing 'ho' -->
+                                            <!-- All fields containing 'HO' -->
                                             <!-- <expression>.*\.HO.*</expression> -->
                                             
                                             <!-- Case-insensitive expressions -->
@@ -186,10 +186,10 @@
                                             If provided, both "includeExpression" and "includeTypes" must match. -->
 
                                             <!-- Any type -->
-                                            <includeTypes>.*</includeTypes> 
+                                            <!-- <includeTypes>.*</includeTypes> -->
 
                                             <!-- The type -->
-                                            <!-- <includeTypes>CHAR\(1\)</includeTypes> -->
+                                            <includeTypes>CHAR\(1\)</includeTypes>
                                         </forcedType>
                                     </forcedTypes>  
                                                            
