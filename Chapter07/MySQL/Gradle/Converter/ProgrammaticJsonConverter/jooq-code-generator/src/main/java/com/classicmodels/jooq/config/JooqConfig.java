@@ -26,7 +26,7 @@ public class JooqConfig {
                                                 .withUserType("com.fasterxml.jackson.databind.JsonNode")
                                                 .withConverter("com.classicmodels.converter.JsonConverter")
                                                 .withIncludeExpression("classicmodels\\.manager\\.manager_detail")
-                                                .withExcludeTypes(".*\\."))
+                                                .withIncludeTypes("JSON"))
                                 .withName("org.jooq.meta.mysql.MySQLDatabase")
                                 .withInputSchema("classicmodels")
                                 .withIncludes(".*")

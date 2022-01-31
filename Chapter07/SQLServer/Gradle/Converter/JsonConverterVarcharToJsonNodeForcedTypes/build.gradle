@@ -42,7 +42,7 @@ flywayMigrate {
     url = project.properties['url']
     user = project.properties['username']
     password = project.properties['password']
-    locations = ['filesystem:./../../../../db/migration/dev/mssql']
+    locations = ['filesystem:./../../../../../db/migration/dev/mssql']
     mixed = true
 }
 
@@ -116,11 +116,12 @@ jooq {
                             //    - any other form
                             // It is thus recommended to use defensive regexes for types.
                             // If provided, both "includeExpressions" and "includeTypes" must match. 
+
                             // Any type:
-                            includeTypes = '.*'
+                            // includeTypes = '.*'
 
                             // The type:
-                            // includeTypes = 'nvarchar\\(4000\\)'
+                            includeTypes = 'nvarchar\\(4000\\)'
 
                             // This exclude predicate is a regular expression which is matched 
                             // against the name of the definition's type (provided that it has one);
@@ -204,7 +205,7 @@ tasks.named('generateJooq').configure {
     dependsOn tasks.named('flywayMigrate')
 
     // declare Flyway migration scripts as inputs on the jOOQ task
-    inputs.files(fileTree('${rootDir}/../../../../db/migration/dev/mssql'))
+    inputs.files(fileTree('${rootDir}/../../../../../db/migration/dev/mssql'))
         .withPropertyName('migrations')
         .withPathSensitivity(PathSensitivity.RELATIVE)
 

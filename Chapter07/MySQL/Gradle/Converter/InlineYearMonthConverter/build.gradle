@@ -86,11 +86,11 @@ jooq {
                             
                             // Associate that custom type with your inline converter.
                             converter = '''\
-                                                org.jooq.Converter.ofNullable(
-                                                   Integer.class, YearMonth.class, 
-                                                   (Integer t) -> { return YearMonth.of(1970, 1).with(java.time.temporal.ChronoField.PROLEPTIC_MONTH, t); },
-                                                   (YearMonth u) -> { return (int) u.getLong(java.time.temporal.ChronoField.PROLEPTIC_MONTH); }
-                                                )
+                                        org.jooq.Converter.ofNullable(
+                                           Integer.class, YearMonth.class, 
+                                           (Integer t) -> { return YearMonth.of(1970, 1).with(java.time.temporal.ChronoField.PROLEPTIC_MONTH, t); },
+                                           (YearMonth u) -> { return (int) u.getLong(java.time.temporal.ChronoField.PROLEPTIC_MONTH); }
+                                        )
                                         '''
 
                             // A Java regex matching fully-qualified columns, attributes, parameters. Use the pipe to separate several expressions.
@@ -108,7 +108,7 @@ jooq {
                                             
                             // Case-insensitive expressions.
                             // includeExpression = '(?i:.*\\.customer\\.first_buy_date)'
-                            // includeExpression = '?i:classicmodels\\.customer\\.first_buy_date)'
+                            // includeExpression = '(?i:classicmodels\\.customer\\.first_buy_date)'
 
                             // This exclude predicate is a regular expression which is matched 
                             // against the definition's name; any definition's name matching 
@@ -123,11 +123,12 @@ jooq {
                             //    - any other form
                             // It is thus recommended to use defensive regexes for types.
                             // If provided, both "includeExpressions" and "includeTypes" must match. 
+
                             // Any type:
-                            includeTypes = '.*'
+                            // includeTypes = '.*'
 
                             // The type:
-                            // includeTypes = 'int'
+                            includeTypes = 'INT'
 
                             // This exclude predicate is a regular expression which is matched 
                             // against the name of the definition's type (provided that it has one);

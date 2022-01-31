@@ -90,11 +90,11 @@ jooq {
                             // An SQL query returning all (qualified or unqualified) object 
                             // names which should be considered to match this forced type.
                             sql = '''\
-                                   SELECT concat('classicmodels.', TABLE_NAME, ".", COLUMN_NAME)
-                                   FROM INFORMATION_SCHEMA.COLUMNS
-                                   WHERE TABLE_SCHEMA = 'classicmodels'
-                                      AND TABLE_NAME != 'flyway_schema_history'
-                                      AND DATA_TYPE = 'timestamp'
+                                  SELECT concat('classicmodels.', TABLE_NAME, '.', COLUMN_NAME)
+                                  FROM INFORMATION_SCHEMA.COLUMNS
+                                  WHERE TABLE_SCHEMA = 'classicmodels'
+                                     AND TABLE_NAME != 'flyway_schema_history'
+                                     AND DATA_TYPE = 'timestamp'
                                   '''
 
                             // Force a type on ALL or specific object types. Default is ALL.

@@ -146,9 +146,7 @@
                                 Defaults to org.jooq.codegen.JavaGenerator -->
                                 <name>org.jooq.codegen.JavaGenerator</name>
         
-                                <database>   
-                                    
-                                    <!-- The first matching forcedType will be applied to the data type definition. -->
+                                <database> 
                                     <forcedTypes>
                                         <forcedType>
 
@@ -187,11 +185,12 @@
                                             It is thus recommended to use defensive regexes for types.
                              
                                             If provided, both "includeExpression" and "includeTypes" must match. -->
+
                                             <!-- Any type -->
-                                            <includeTypes>.*</includeTypes>
+                                            <!-- <includeTypes>.*</includeTypes> -->
                                             
                                             <!-- The type -->
-                                            <!-- <includeTypes>nvarchar\(4000\)</includeTypes> -->
+                                            <includeTypes>NVARCHAR\(4000\)</includeTypes>
                                             
                                             <!-- Force a type depending on data type nullability. Default is ALL.
                                       
