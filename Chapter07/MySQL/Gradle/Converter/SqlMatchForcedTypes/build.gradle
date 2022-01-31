@@ -96,17 +96,6 @@ jooq {
                                      AND TABLE_NAME != 'flyway_schema_history'
                                      AND DATA_TYPE = 'timestamp'
                                   '''
-
-                            // Force a type on ALL or specific object types. Default is ALL.
-                            //  Must be one of ATTRIBUTE, COLUMN, ELEMENT, PARAMETER, SEQUENCE, 
-                            // or ALL and specifies what type of database objects 
-                            // this forced type is applicable to.
-                            objectType = 'ALL'
-
-                            //  Force a type depending on data type nullability. Default is ALL.
-                            // Must be one of NULL, NOT_NULL, or ALL and specifies if this forced 
-                            // type is applicable to NULL, NOT NULL, or all definitions.
-                            nullability = 'ALL'
                             }
                         }
 

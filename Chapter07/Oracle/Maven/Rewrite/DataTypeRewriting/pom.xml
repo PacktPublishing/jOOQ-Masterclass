@@ -190,6 +190,25 @@
 
                                             <!-- The type -->
                                             <includeTypes>CHAR\(1\)</includeTypes>
+
+                                            <!-- This exclude predicate is a regular expression which is matched 
+                                            against the name of the definition's type (provided that it has one);
+                                            any definition's type name matching the regular expression will be 
+                                            considered not matching this forced type -->
+                                            <excludeTypes></excludeTypes>
+                                    
+                                            <!-- An SQL query returning all (qualified or unqualified) object 
+                                            names which should be considered to match this forced type -->
+                                            <sql></sql>
+                                    
+                                            <!--  Must be one of ATTRIBUTE, COLUMN, ELEMENT, PARAMETER, SEQUENCE, 
+                                            or ALL and specifies what type of database objects 
+                                            this forced type is applicable to -->
+                                            <objectType>ALL</objectType>
+                                    
+                                            <!-- Must be one of NULL, NOT_NULL, or ALL and specifies if this forced 
+                                            type is applicable to NULL, NOT NULL, or all definitions -->
+                                            <nullability>ALL</nullability>
                                         </forcedType>
                                     </forcedTypes>  
                                                            

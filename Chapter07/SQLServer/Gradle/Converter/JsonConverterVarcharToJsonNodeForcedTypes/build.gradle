@@ -121,7 +121,7 @@ jooq {
                             // includeTypes = '.*'
 
                             // The type:
-                            includeTypes = 'nvarchar\\(4000\\)'
+                            includeTypes = 'NVARCHAR\\(4000\\)'
 
                             // This exclude predicate is a regular expression which is matched 
                             // against the name of the definition's type (provided that it has one);

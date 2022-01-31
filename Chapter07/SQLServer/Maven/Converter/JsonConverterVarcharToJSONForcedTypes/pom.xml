@@ -191,6 +191,16 @@
                                             
                                             <!-- The type -->
                                             <includeTypes>NVARCHAR\(4000\)</includeTypes>
+
+                                            <!-- This exclude predicate is a regular expression which is matched 
+                                            against the name of the definition's type (provided that it has one);
+                                            any definition's type name matching the regular expression will be 
+                                            considered not matching this forced type -->
+                                            <excludeTypes></excludeTypes>
+                                    
+                                            <!-- An SQL query returning all (qualified or unqualified) object 
+                                            names which should be considered to match this forced type -->
+                                            <sql></sql>
                                             
                                             <!-- Force a type depending on data type nullability. Default is ALL.
                                       

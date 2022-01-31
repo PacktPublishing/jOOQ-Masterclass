@@ -164,17 +164,6 @@
                                                    AND TABLE_NAME != 'flyway_schema_history'
                                                    AND DATA_TYPE = 'timestamp'
                                             </sql>
-                                            
-                                            <!-- Force a type depending on data type nullability. Default is ALL.
-                                      
-                                            - ALL - Force a type regardless of whether data type is nullable or not (default)
-                                            - NULL - Force a type only when data type is nullable
-                                            - NOT_NULL - Force a type only when data type is not null -->
-                                            <nullability>ALL</nullability>
-          
-                                            <!-- Force a type on ALL or specific object types, including 
-                                            ATTRIBUTE, COLUMN, ELEMENT, PARAMETER, SEQUENCE -->
-                                            <objectType>ALL</objectType>
                                         </forcedType>
                                     </forcedTypes> 
                                                                 

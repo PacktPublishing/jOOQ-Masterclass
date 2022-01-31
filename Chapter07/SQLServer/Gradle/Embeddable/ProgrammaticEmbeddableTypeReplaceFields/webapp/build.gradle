@@ -26,7 +26,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'    
     implementation 'org.springframework.boot:spring-boot-starter-web'    
     implementation 'org.flywaydb:flyway-core'
-    implementation 'org.jooq:jooq'
+    implementation 'org.jooq.trial-java-8:jooq'
     implementation project(':jooq-code-generator')
 }
 

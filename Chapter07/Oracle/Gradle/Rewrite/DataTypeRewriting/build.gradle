@@ -123,7 +123,7 @@ jooq {
                             // includeTypes = '.*'
 
                             // The type:
-                            includeTypes = 'char\\(1\\)'
+                            includeTypes = 'CHAR\\(1\\)'
 
                             // This exclude predicate is a regular expression which is matched 
                             // against the name of the definition's type (provided that it has one);
