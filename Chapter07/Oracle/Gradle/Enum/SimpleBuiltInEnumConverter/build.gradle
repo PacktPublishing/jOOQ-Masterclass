@@ -93,13 +93,13 @@ jooq {
                             // If provided, both "includeExpressions" and "includeTypes" must match. 
                             includeExpression = 'CLASSICMODELS\\.SALE\\.RATE'
 
-                            // All 'rate' fields in any 'sale' table, no matter the schema.
+                            // All 'RATE' fields in any 'SALE' table, no matter the schema.
                             // includeExpression = '.*\\.SALE\\.RATE'
 
-                            // All 'rate' fields, no matter the schema and the table.
+                            // All 'RATE' fields, no matter the schema and the table.
                             // includeExpression = '.*\\.RATE'
 
-                            // All fields containing 'ra'.
+                            // All fields containing 'RA'.
                             // includeExpression = '.*\\.RA.*'
 
                             // Case-insensitive expressions.
@@ -121,10 +121,10 @@ jooq {
                             // If provided, both "includeExpressions" and "includeTypes" must match. 
 
                             // Any type:
-                            includeTypes = '.*'
+                            // includeTypes = '.*'
 
                             // The type:
-                            // includeTypes = 'varchar2\\(10\\)'
+                            includeTypes = 'VARCHAR2\\(10\\)'
 
                             // This exclude predicate is a regular expression which is matched 
                             // against the name of the definition's type (provided that it has one);
@@ -153,14 +153,14 @@ jooq {
                                 userType = 'com.classicmodels.enums.VatType'
                                 enumConverter = 'true'
                                 includeExpression = 'CLASSICMODELS\\.SALE\\.VAT'
-                                includeTypes = 'varchar2\\(10\\)'
+                                includeTypes = 'VARCHAR2\\(10\\)'
                             }
 
                             forcedType {
                                 userType = 'com.classicmodels.enums.TrendType'
                                 enumConverter = 'true'
                                 includeExpression = 'CLASSICMODELS\\.SALE\\.TREND'
-                                includeTypes = 'varchar2\\(10\\)'
+                                includeTypes = 'VARCHAR2\\(10\\)'
                             }
                         }
 

@@ -26,12 +26,12 @@ public class JooqConfig {
                                                 .withUserType("com.classicmodels.enums.RateType")
                                                 .withEnumConverter(true)
                                                 .withIncludeExpression(".*\\.rate")
-                                                .withIncludeTypes("varchar2\\(10\\)"),
+                                                .withIncludeTypes("VARCHAR2\\(10\\)"),
                                         new ForcedType()
                                                 .withUserType("com.classicmodels.enums.VatType")
                                                 .withEnumConverter(true)
                                                 .withIncludeExpression(".*\\.vat")
-                                                .withIncludeTypes("varchar2\\(10\\)"))
+                                                .withIncludeTypes("VARCHAR2\\(10\\)"))
                                 .withName("org.jooq.meta.oracle.OracleDatabase")                                
                                 .withInputSchema("CLASSICMODELS")
                                 .withIncludes(".*")

@@ -176,18 +176,9 @@
                                                    and tab.owner in ('CLASSICMODELS')
                                                    and search_condition_vc = q'[rate IN('SILVER', 'GOLD', 'PLATINUM')]'
                                             </sql>
-                                                                       
-                                            <!--  Must be one of ATTRIBUTE, COLUMN, ELEMENT, PARAMETER, SEQUENCE, 
-                                            or ALL and specifies what type of database objects 
-                                            this forced type is applicable to -->
-                                            <objectType>ALL</objectType>
-                                    
-                                            <!-- Must be one of NULL, NOT_NULL, or ALL and specifies if this forced 
-                                            type is applicable to NULL, NOT NULL, or all definitions -->
-                                            <nullability>ALL</nullability>                                
                                         </forcedType>
                                         
-                                        <!--  for the next mapping we've reduced the code to the minimum -->
+                                        <!--  For the next mapping we've reduced the code to the minimum -->
                                         <forcedType>                                                                                                                        
                                             <userType>com.classicmodels.enums.VatType</userType>                                                                                                                                   
                                             <enumConverter>true</enumConverter>
