@@ -148,8 +148,6 @@
                                 <name>org.jooq.codegen.JavaGenerator</name>
         
                                 <database>    
-                                    
-                                    <!-- The first matching forcedType will be applied to the data type definition. -->
                                     <forcedTypes>
                                         <forcedType>
 
@@ -186,9 +184,13 @@
                                             - any other form.
                              
                                             It is thus recommended to use defensive regexes for types.
-                             
                                             If provided, both "includeExpression" and "includeTypes" must match. -->                                            
-                                            <includeTypes>.*</includeTypes>
+
+                                            <!-- Any type -->
+                                            <!-- <includeTypes>.*</includeTypes> -->
+
+                                            <!-- The type -->
+                                            <includeTypes>EVALUATION_CRITERIA</includeTypes>
 
                                             <!-- This exclude predicate is a regular expression which is matched 
                                             against the name of the definition's type (provided that it has one);
