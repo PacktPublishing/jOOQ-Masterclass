@@ -39,7 +39,7 @@ public class ClassicModelsRepository {
         // converter is not used (we insert '202010' directly)
         ctx.insertInto(CUSTOMER)
                 .values(CUSTOMER_SEQ.nextval(), "Atelier One", "Markus", "Alop", "0892 339 423",
-                        1370L, 50000, 24249)
+                        1370, 50000, 24249)
                 .onDuplicateKeyIgnore()
                 .execute();
 
@@ -47,7 +47,7 @@ public class ClassicModelsRepository {
         // use converter explicitly by passing to it a valid YearMonth value
         ctx.insertInto(CUSTOMER)
                 .values(CUSTOMER_SEQ.nextval(), "Atelier One", "Markus", "Alop", "0892 339 423",
-                        1370L, 50000, INTEGER_YEARMONTH_CONVERTER.to(YearMonth.of(2020, 10)))
+                        1370, 50000, INTEGER_YEARMONTH_CONVERTER.to(YearMonth.of(2020, 10)))
                 .onDuplicateKeyIgnore()
                 .execute();
 
@@ -55,7 +55,7 @@ public class ClassicModelsRepository {
         // convert via data type       
         ctx.insertInto(CUSTOMER)
                 .values(CUSTOMER_SEQ.nextval(), "Atelier One", "Markus", "Alop", "0892 339 423",
-                        1370L, 50000, val(YearMonth.of(2020, 10), YEARMONTH))
+                        1370, 50000, val(YearMonth.of(2020, 10), YEARMONTH))
                 .onDuplicateKeyIgnore()
                 .execute();
 
@@ -107,7 +107,7 @@ public class ClassicModelsRepository {
         // use the above local converter, 'converter'
         ctx.insertInto(CUSTOMER)
                 .values(CUSTOMER_SEQ.nextval(), "Atelier One", "Markus", "Alop", "0892 339 423",
-                        1370L, 50000, converter.to(YearMonth.of(2020, 10)))
+                        1370, 50000, converter.to(YearMonth.of(2020, 10)))
                 .onDuplicateKeyIgnore()
                 .execute();
 
@@ -127,7 +127,7 @@ public class ClassicModelsRepository {
         // convert via the above local data type 'yearmonth'      
         ctx.insertInto(CUSTOMER)
                 .values(CUSTOMER_SEQ.nextval(), "Atelier One", "Markus", "Alop", "0892 339 423",
-                        1370L, 50000, val(YearMonth.of(2020, 10), yearmonth))
+                        1370, 50000, val(YearMonth.of(2020, 10), yearmonth))
                 .onDuplicateKeyIgnore()
                 .execute();
     }

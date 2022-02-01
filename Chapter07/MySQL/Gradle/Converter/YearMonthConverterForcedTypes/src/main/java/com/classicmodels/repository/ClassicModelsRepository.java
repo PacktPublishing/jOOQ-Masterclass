@@ -26,7 +26,7 @@ public class ClassicModelsRepository {
         // converter is not used (we insert '202010' directly)
         ctx.insertInto(CUSTOMER)
                 .values(null, "Atelier One", "Markus", "Alop", "0892 339 423",
-                        1370L, 50000, 24249)
+                        1370, 50000, 24249)
                 .onDuplicateKeyIgnore()
                 .execute();
 
@@ -35,7 +35,7 @@ public class ClassicModelsRepository {
         // convert from 'YearMonth' to 'int'
         ctx.insertInto(CUSTOMER)
                 .values(null, "Atelier One", "Markus", "Alop", "0892 339 423",
-                        1370L, 50000, YearMonth.of(2020, 10))
+                        1370, 50000, YearMonth.of(2020, 10))
                 .onDuplicateKeyIgnore()
                 .execute();
 

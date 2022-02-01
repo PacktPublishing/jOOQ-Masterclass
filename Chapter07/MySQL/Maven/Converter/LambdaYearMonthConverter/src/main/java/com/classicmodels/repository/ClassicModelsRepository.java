@@ -27,7 +27,7 @@ public class ClassicModelsRepository {
                 .values(null, 
                         "Atelier-" +  UUID.randomUUID().toString(), // random customer_name 
                         "Markus", "Alop", "0892 339 423",
-                        1370L, 50000, 24249)
+                        1370, 50000, 24249)
                 .execute();
 
         // non type-safe,
@@ -36,7 +36,7 @@ public class ClassicModelsRepository {
                 .values(null, 
                         "Atelier-" +  UUID.randomUUID().toString(), // random customer_name 
                         "Markus", "Alop", "0892 339 423",
-                        1370L, 50000, YearMonth.of(2020, 10))
+                        1370, 50000, YearMonth.of(2020, 10))
                 .execute();
         
         // type-safe,
