@@ -35,6 +35,17 @@ public class ClassicModelsRepository {
                 CUSTOMER.CONTACT_LAST_NAME, CUSTOMER.PHONE, 
                 CUSTOMER.SALES_REP_EMPLOYEE_NUMBER, CUSTOMER.CREDIT_LIMIT,
                 CUSTOMER.FIRST_BUY_DATE.convert(YearMonth.class,
+                        t -> INTEGER_YEARMONTH_CONVERTER.from(t), // useless part of the converter
+                        u -> INTEGER_YEARMONTH_CONVERTER.to(u)))
+                .values("Atelier One", "Markus", "Alop", "0892 339 423",
+                        1370L, BigDecimal.valueOf(50000), YearMonth.of(2020, 10))
+                .onDuplicateKeyIgnore()
+                .execute();
+        
+        ctx.insertInto(CUSTOMER, CUSTOMER.CUSTOMER_NAME, CUSTOMER.CONTACT_FIRST_NAME,
+                CUSTOMER.CONTACT_LAST_NAME, CUSTOMER.PHONE, 
+                CUSTOMER.SALES_REP_EMPLOYEE_NUMBER, CUSTOMER.CREDIT_LIMIT,
+                CUSTOMER.FIRST_BUY_DATE.convert(YearMonth.class,
                         t -> YearMonth.of(1970, 1).with(ChronoField.PROLEPTIC_MONTH, t), // useless part of the converter
                         u -> (int) u.getLong(ChronoField.PROLEPTIC_MONTH)))
                 .values("Atelier One", "Markus", "Alop", "0892 339 423",
@@ -42,6 +53,14 @@ public class ClassicModelsRepository {
                 .onDuplicateKeyIgnore()
                 .execute();
 
+        ctx.insertInto(CUSTOMER, CUSTOMER.CUSTOMER_NAME, CUSTOMER.CONTACT_FIRST_NAME,
+                CUSTOMER.CONTACT_LAST_NAME, CUSTOMER.PHONE, CUSTOMER.SALES_REP_EMPLOYEE_NUMBER, CUSTOMER.CREDIT_LIMIT,
+                CUSTOMER.FIRST_BUY_DATE.convertTo(YearMonth.class, u -> INTEGER_YEARMONTH_CONVERTER.to(u)))
+                .values("Atelier One", "Markus", "Alop", "0892 339 423",
+                        1370L, BigDecimal.valueOf(50000), YearMonth.of(2020, 10))
+                .onDuplicateKeyIgnore()
+                .execute();
+        
         ctx.insertInto(CUSTOMER, CUSTOMER.CUSTOMER_NAME, CUSTOMER.CONTACT_FIRST_NAME,
                 CUSTOMER.CONTACT_LAST_NAME, CUSTOMER.PHONE, CUSTOMER.SALES_REP_EMPLOYEE_NUMBER, CUSTOMER.CREDIT_LIMIT,
                 CUSTOMER.FIRST_BUY_DATE.convertTo(YearMonth.class, u -> (int) u.getLong(ChronoField.PROLEPTIC_MONTH)))
@@ -69,5 +88,14 @@ public class ClassicModelsRepository {
                 .fetchInto(YearMonth.class);
 
         System.out.println("Result 2: " + resultListYM2);
+        
+        List<YearMonth> resultListYM3 = ctx.select(
+                CUSTOMER.FIRST_BUY_DATE.convertFrom(
+                        t -> INTEGER_YEARMONTH_CONVERTER.from(t)))
+                .from(CUSTOMER)
+                .where(CUSTOMER.CUSTOMER_NAME.eq("Atelier One"))
+                .fetchInto(YearMonth.class);
+
+        System.out.println("Result 3: " + resultListYM3);
     }
 }
