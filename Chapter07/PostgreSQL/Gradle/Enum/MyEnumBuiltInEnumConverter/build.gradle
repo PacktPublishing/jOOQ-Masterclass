@@ -115,7 +115,8 @@ jooq {
                         logSlowQueriesAfterSeconds = 20
                     }
                     
-                    generate {                        
+                    generate {
+                        deprecationOnUnknownTypes = 'false'
                     }
                     
                     target {
