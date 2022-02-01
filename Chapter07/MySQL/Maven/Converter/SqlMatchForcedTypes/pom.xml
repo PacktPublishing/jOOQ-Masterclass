@@ -164,6 +164,12 @@
                                                    AND TABLE_NAME != 'flyway_schema_history'
                                                    AND DATA_TYPE = 'timestamp'
                                             </sql>
+                                            
+                                            <!-- Exclude 'payment.modified' and 'token.updated_on' -->
+                                            <excludeExpression>
+                                                classicmodels\.payment\.modified
+                                              | classicmodels\.token\.updated_on
+                                            </excludeExpression>
                                         </forcedType>
                                     </forcedTypes> 
                                                                 
