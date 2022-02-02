@@ -387,6 +387,7 @@
         <!-- Table `office` -->
         <!-- office_code varchar(10) not null -->
         <column>  
+            <table_catalog>classicmodels</table_catalog>
             <table_schema>dbo</table_schema>
             <table_name>office</table_name>
             <column_name>office_code</column_name>
@@ -396,6 +397,7 @@
         </column>
         <!-- address_line_first varchar(50) not null -->
         <column>  
+            <table_catalog>classicmodels</table_catalog>
             <table_schema>dbo</table_schema>
             <table_name>office</table_name>
             <column_name>address_line_first</column_name>
@@ -405,6 +407,7 @@
         </column>
         <!-- address_line_second varchar(50) -->
         <column>  
+            <table_catalog>classicmodels</table_catalog>
             <table_schema>dbo</table_schema>
             <table_name>office</table_name>
             <column_name>address_line_second</column_name>
@@ -413,6 +416,7 @@
         </column>
         <!-- city varchar(50) not null -->
         <column>  
+            <table_catalog>classicmodels</table_catalog>
             <table_schema>dbo</table_schema>
             <table_name>office</table_name>
             <column_name>city</column_name>
@@ -422,6 +426,7 @@
         </column>
         <!-- country varchar(50) not null -->
         <column>  
+            <table_catalog>classicmodels</table_catalog>
             <table_schema>dbo</table_schema>
             <table_name>office</table_name>
             <column_name>country</column_name>
@@ -431,6 +436,7 @@
         </column>
         <!-- phone varchar(50) not null -->
         <column>  
+            <table_catalog>classicmodels</table_catalog>
             <table_schema>dbo</table_schema>
             <table_name>office</table_name>
             <column_name>phone</column_name>
@@ -440,6 +446,7 @@
         </column>
         <!-- postal_code varchar(15) not null -->
         <column>  
+            <table_catalog>classicmodels</table_catalog>
             <table_schema>dbo</table_schema>
             <table_name>office</table_name>
             <column_name>postal_code</column_name>
@@ -449,6 +456,7 @@
         </column>
         <!-- state varchar(50) -->
         <column>  
+            <table_catalog>classicmodels</table_catalog>
             <table_schema>dbo</table_schema>
             <table_name>office</table_name>
             <column_name>state</column_name>
@@ -457,6 +465,7 @@
         </column>
         <!-- territory varchar(10) not null -->
         <column>  
+            <table_catalog>classicmodels</table_catalog>
             <table_schema>dbo</table_schema>
             <table_name>office</table_name>
             <column_name>territory</column_name>
@@ -467,7 +476,8 @@
 
         <!-- Table `office_has_manager` -->
         <!-- offices_office_code varchar(10) not null -->
-        <column>  
+        <column> 
+            <table_catalog>classicmodels</table_catalog>
             <table_schema>dbo</table_schema>
             <table_name>office_has_manager</table_name>
             <column_name>offices_office_code</column_name>
@@ -477,6 +487,7 @@
         </column>
         <!-- managers_manager_id bigint not null -->
         <column>  
+            <table_catalog>classicmodels</table_catalog>
             <table_schema>dbo</table_schema>
             <table_name>office_has_manager</table_name>
             <column_name>managers_manager_id</column_name>
@@ -487,6 +498,7 @@
         <!-- Table `orderdetail` -->
         <!-- order_id bigint not null -->
         <column>  
+            <table_catalog>classicmodels</table_catalog>
             <table_schema>dbo</table_schema>
             <table_name>orderdetail</table_name>
             <column_name>order_id</column_name>
@@ -495,6 +507,7 @@
         </column>
         <!-- product_id bigint not null -->
         <column>  
+            <table_catalog>classicmodels</table_catalog>
             <table_schema>dbo</table_schema>
             <table_name>orderdetail</table_name>
             <column_name>product_id</column_name>
@@ -503,6 +516,7 @@
         </column>
         <!-- order_line_number smallint not null -->
         <column>  
+            <table_catalog>classicmodels</table_catalog>
             <table_schema>dbo</table_schema>
             <table_name>orderdetail</table_name>
             <column_name>order_line_number</column_name>
@@ -511,6 +525,7 @@
         </column>
         <!-- price_each float not null -->
         <column>  
+            <table_catalog>classicmodels</table_catalog>
             <table_schema>dbo</table_schema>
             <table_name>orderdetail</table_name>
             <column_name>price_each</column_name>
@@ -519,6 +534,7 @@
         </column>
         <!-- quantity_ordered integer not null -->
         <column>  
+            <table_catalog>classicmodels</table_catalog>
             <table_schema>dbo</table_schema>
             <table_name>orderdetail</table_name>
             <column_name>quantity_ordered</column_name>
@@ -529,6 +545,7 @@
         <!-- Table `payment` -->
         <!-- check_number varchar(50) not null -->
         <column>  
+            <table_catalog>classicmodels</table_catalog>
             <table_schema>dbo</table_schema>
             <table_name>payment</table_name>
             <column_name>check_number</column_name>
@@ -538,6 +555,7 @@
         </column>
         <!-- customer_number bigint not null -->
         <column>  
+            <table_catalog>classicmodels</table_catalog>
             <table_schema>dbo</table_schema>
             <table_name>payment</table_name>
             <column_name>customer_number</column_name>
@@ -546,6 +564,7 @@
         </column>
         <!-- caching_date date -->
         <column>  
+            <table_catalog>classicmodels</table_catalog>
             <table_schema>dbo</table_schema>
             <table_name>payment</table_name>
             <column_name>caching_date</column_name>
@@ -553,6 +572,7 @@
         </column>
         <!-- invoice_amount float not null -->
         <column>  
+            <table_catalog>classicmodels</table_catalog>
             <table_schema>dbo</table_schema>
             <table_name>payment</table_name>
             <column_name>invoice_amount</column_name>
@@ -561,6 +581,7 @@
         </column>
         <!-- payment_date date not null -->
         <column>  
+            <table_catalog>classicmodels</table_catalog>
             <table_schema>dbo</table_schema>
             <table_name>payment</table_name>
             <column_name>payment_date</column_name>
@@ -569,16 +590,19 @@
         </column>
 
         <!-- Table `product` -->
-        <!-- product_id serial not null -->
+        <!-- product_id bigint not null identity -->
         <column>  
+            <table_catalog>classicmodels</table_catalog>
             <table_schema>dbo</table_schema>
             <table_name>product</table_name>
             <column_name>product_id</column_name>
-            <data_type>serial</data_type>
+            <data_type>bigint</data_type>
             <is_nullable>false</is_nullable>
+            <identity_generation>identity</identity_generation>
         </column>
         <!-- buy_price float not null -->
         <column>  
+            <table_catalog>classicmodels</table_catalog>
             <table_schema>dbo</table_schema>
             <table_name>product</table_name>
             <column_name>buy_price</column_name>
@@ -587,6 +611,7 @@
         </column>
         <!-- msrp float not null -->
         <column>  
+            <table_catalog>classicmodels</table_catalog>
             <table_schema>dbo</table_schema>
             <table_name>product</table_name>
             <column_name>msrp</column_name>
@@ -595,6 +620,7 @@
         </column>
         <!-- product_description text not null -->
         <column>  
+            <table_catalog>classicmodels</table_catalog>
             <table_schema>dbo</table_schema>
             <table_name>product</table_name>
             <column_name>product_description</column_name>
@@ -603,6 +629,7 @@
         </column>
         <!-- product_name varchar(70) not null -->
         <column>  
+            <table_catalog>classicmodels</table_catalog>
             <table_schema>dbo</table_schema>
             <table_name>payment</table_name>
             <column_name>product_name</column_name>
@@ -612,6 +639,7 @@
         </column>
         <!-- product_scale varchar(10) not null -->
         <column>  
+            <table_catalog>classicmodels</table_catalog>
             <table_schema>dbo</table_schema>
             <table_name>payment</table_name>
             <column_name>product_scale</column_name>
@@ -621,6 +649,7 @@
         </column>
         <!-- product_vendor varchar(50) not null -->
         <column>
+            <table_catalog>classicmodels</table_catalog>
             <table_schema>dbo</table_schema>
             <table_name>payment</table_name>
             <column_name>product_vendor</column_name>
@@ -630,6 +659,7 @@
         </column>
         <!-- quantity_in_stock smallint not null -->
         <column>
+            <table_catalog>classicmodels</table_catalog>
             <table_schema>dbo</table_schema>
             <table_name>payment</table_name>
             <column_name>quantity_in_stock</column_name>
@@ -638,6 +668,7 @@
         </column>
         <!-- product_line varchar(50) -->
         <column>
+            <table_catalog>classicmodels</table_catalog>
             <table_schema>dbo</table_schema>
             <table_name>payment</table_name>
             <column_name>product_line</column_name>
@@ -648,6 +679,7 @@
         <!-- Table `productline` -->
         <!-- product_line varchar(50) not null -->
         <column>  
+            <table_catalog>classicmodels</table_catalog>
             <table_schema>dbo</table_schema>
             <table_name>productline</table_name>
             <column_name>product_line</column_name>
@@ -657,20 +689,24 @@
         </column>
         <!-- html_description text -->
         <column>  
+            <table_catalog>classicmodels</table_catalog>
             <table_schema>dbo</table_schema>
             <table_name>productline</table_name>
             <column_name>html_description</column_name>
             <data_type>text</data_type>
         </column>
-        <!-- image bytea -->
+        <!-- image varbinary(max) -->
         <column>  
+            <table_catalog>classicmodels</table_catalog>
             <table_schema>dbo</table_schema>
             <table_name>productline</table_name>
             <column_name>image</column_name>
-            <data_type>bytea</data_type>
+            <data_type>varbinary</data_type>
+            <character_maximum_length>max</character_maximum_length>
         </column>
         <!-- text_description varchar(4000) -->
         <column>  
+            <table_catalog>classicmodels</table_catalog>
             <table_schema>dbo</table_schema>
             <table_name>productline</table_name>
             <column_name>text_description</column_name>
@@ -679,16 +715,19 @@
         </column>
 
         <!-- Table `sale` -->
-        <!-- sale_id serial not null -->
+        <!-- sale_id bigint not null identity -->
         <column>  
+            <table_catalog>classicmodels</table_catalog>
             <table_schema>dbo</table_schema>
             <table_name>sale</table_name>
             <column_name>sale_id</column_name>
-            <data_type>serial</data_type>
+            <data_type>bigint</data_type>
             <is_nullable>false</is_nullable>
+            <identity_generation>identity</identity_generation>
         </column>
         <!-- fiscal_year integer not null -->
         <column>  
+            <table_catalog>classicmodels</table_catalog>
             <table_schema>dbo</table_schema>
             <table_name>sale</table_name>
             <column_name>fiscal_year</column_name>
@@ -697,6 +736,7 @@
         </column>
         <!-- sale float not null -->
         <column>  
+            <table_catalog>classicmodels</table_catalog>
             <table_schema>dbo</table_schema>
             <table_name>sale</table_name>
             <column_name>sale</column_name>
@@ -705,6 +745,7 @@
         </column>
         <!-- employee_number bigint -->
         <column>  
+            <table_catalog>classicmodels</table_catalog>
             <table_schema>dbo</table_schema>
             <table_name>sale</table_name>
             <column_name>employee_number</column_name>
