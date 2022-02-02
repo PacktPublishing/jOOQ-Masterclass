@@ -128,7 +128,8 @@ jooq {
                                 field {
                                     expression = 'TERRITORY'
                                 }
-                            }    
+                            }
+                            replacesFields = 'true'   
                             }
                         }
 
