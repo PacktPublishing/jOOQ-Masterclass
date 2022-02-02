@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.List;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import org.jooq.DSLContext;
+import org.jooq.Record2;
+import org.jooq.Result;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,7 +57,6 @@ public class ClassicModelsRepository {
 
         // in the next three examples, converter is used thanks to <forcedTypes/>
         // convert from 'int' to 'YearMonth'
-        
         YearMonth ym = ctx.select(CUSTOMER.FIRST_BUY_DATE)
                 .from(CUSTOMER)
                 .where(CUSTOMER.CUSTOMER_NAME.eq("Atelier One"))
@@ -73,5 +74,13 @@ public class ClassicModelsRepository {
                 .where(CUSTOMER.CUSTOMER_NAME.eq("Atelier One"))
                 .fetch(CUSTOMER.FIRST_BUY_DATE);
         System.out.println("ymList: " + ymList);
+
+        // If during coercing, jOOQ find any Converter or Binding configurations that it will apply them.
+        Result<Record2<String, YearMonth>> result = ctx.resultQuery(
+                "SELECT customer_name, first_buy_date FROM customer")
+                .coerce(CUSTOMER.CUSTOMER_NAME, CUSTOMER.FIRST_BUY_DATE)
+                .fetch();
+        
+        System.out.println("Result:\n" + result);
     }
 }
