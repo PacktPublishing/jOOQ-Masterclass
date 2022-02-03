@@ -1,8 +1,8 @@
 package com.classicmodels.pojo;
 
 import com.classicmodels.udt.pojo.JpaEvaluationCriteria;
+import jakarta.persistence.Column;
 import java.io.Serializable;
-import javax.persistence.Column;
 
 public class JpaManager implements Serializable {
 

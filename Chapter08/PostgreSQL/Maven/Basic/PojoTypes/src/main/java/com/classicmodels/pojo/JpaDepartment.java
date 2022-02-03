@@ -1,7 +1,7 @@
 package com.classicmodels.pojo;
 
+import jakarta.persistence.Column;
 import java.io.Serializable;
-import javax.persistence.Column;
 
 public class JpaDepartment implements Serializable {
 

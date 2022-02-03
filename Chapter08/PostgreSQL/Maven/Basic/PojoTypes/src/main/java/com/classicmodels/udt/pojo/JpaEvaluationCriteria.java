@@ -1,7 +1,7 @@
 package com.classicmodels.udt.pojo;
 
+import jakarta.persistence.Column;
 import java.io.Serializable;
-import javax.persistence.Column;
 
 public final class JpaEvaluationCriteria implements Serializable {
 

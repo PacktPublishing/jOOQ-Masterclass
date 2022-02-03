@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.classicmodels</groupId>
+    <artifactId>PojoTypes</artifactId>
+    <version>1.0</version>
+    <packaging>jar</packaging>
+
+    <name>PojoTypes</name>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.5.7</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        
+        <java.version>17</java.version>                
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        
+        <jooq.version>3.16.2</jooq.version>  
+        <codehaus.mojo.version>1.0.0</codehaus.mojo.version>     
+        <jakarta.persistence.version>3.0.0</jakarta.persistence.version>         
+    </properties>
+
+    <dependencies>        
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>        
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>        
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq</artifactId>    
+            <version>${jooq.version}</version>     
+        </dependency>              
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>  
+        <dependency>
+            <groupId>jakarta.persistence</groupId>
+            <artifactId>jakarta.persistence-api</artifactId>
+            <version>${jakarta.persistence.version}</version>
+        </dependency>      
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>                
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>                
+                <configuration>
+                    <compilerArgs>
+                        <arg>--enable-preview</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>properties-maven-plugin</artifactId>
+                <version>${codehaus.mojo.version}</version>
+                <executions>
+                    <execution>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>read-project-properties</goal>
+                        </goals>
+                        <configuration>
+                            <files>                                
+                                <file>src/main/resources/application.properties</file>
+                            </files>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin> 
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>                
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>migrate</goal>
+                        </goals>
+                    </execution>
+                </executions>                
+                <configuration>
+                    <driver>${spring.datasource.driverClassName}</driver>
+                    <url>${spring.datasource.url}</url>
+                    <user>${spring.datasource.username}</user>
+                    <password>${spring.datasource.password}</password>  
+                    <locations>
+                        <location>filesystem:./../../../../../db/migration/dev/postgresql</location>
+                    </locations>
+                    <schemas>
+                        <schema>public</schema>
+                    </schemas>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jooq</groupId>
+                <artifactId>jooq-codegen-maven</artifactId>               
+                <executions>
+                    <execution>
+                        <id>generate-for-postgresql</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>                                  
+                        <configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.16.0.xsd">
+
+                            <!-- Configure the database connection here -->
+                            <jdbc>
+                                <driver>${spring.datasource.driverClassName}</driver>
+                                <url>${spring.datasource.url}</url>
+                                <user>${spring.datasource.username}</user>
+                                <password>${spring.datasource.password}</password>                        
+                            </jdbc>                                        
+
+                            <generator>
+                                <!-- The default code generator. 
+                                     You can override this one, to generate your own code style.
+                                     
+                                Supported generators:                                
+                                - org.jooq.codegen.JavaGenerator
+                                - org.jooq.codegen.ScalaGenerator
+                                - org.jooq.codegen.KotlinGenerator
+                                
+                                Defaults to org.jooq.codegen.JavaGenerator -->
+                                <name>org.jooq.codegen.JavaGenerator</name>
+        
+                                <database>                            
+                                    <!-- For each type, one embeddable entry is required -->
+                                    <embeddables>
+                                        <embeddable>
+                                            <!-- The optional catalog of the embeddable type (the catalog of the first matched table if left empty) -->
+                                            <catalog/>
+                                            
+                                            <!-- The optional schema of the embeddable type (the schema of the first matched table if left empty) -->
+                                            <schema>classicmodels</schema>
+                                            
+                                            <!-- The name of the embeddable type -->
+                                            <name>OFFICE_FULL_ADDRESS</name>
+                                            
+                                            <!-- An optional, defining comment of an embeddable -->
+                                            <comment>The full address an office</comment>
+                                            
+                                            <!-- The name of the reference to the embeddable type. Defaults to <name/> if left blank -->
+                                            <referencingName/>
+                                            
+                                            <!-- An optional, referencing comment of an embeddable. Defaults to <comment/> if left blank -->
+                                            <referencingComment/>
+                                            
+                                            <!-- A regular expression matching qualified or unqualified table names to which to apply this embeddable specification
+                                            If left blank, this will apply to all tables -->
+                                            <tables>.*\.office</tables>
+                                            
+                                            <!-- A list of fields to match to an embeddable's attributes. 
+                                            Each field must match exactly one column in each matched table.
+                                            A mandatory regular expression matches field names, whereas an optional name can be provided to define the embeddable
+                                            attribute name. If no name is provided, then the first matched field's name will be taken -->
+                                            <fields>
+                                                <field>
+                                                    <expression>CITY</expression>
+                                                </field>                                              
+                                                <field>
+                                                    <!-- <name>ADDRESS</name> - optional name -->
+                                                    <expression>ADDRESS_LINE_FIRST</expression>
+                                                </field>
+                                                <field>                                                    
+                                                    <expression>STATE</expression>
+                                                </field>
+                                                <field>                                                    
+                                                    <expression>COUNTRY</expression>
+                                                </field>                                                
+                                                <field>                                                    
+                                                    <expression>TERRITORY</expression>
+                                                </field>
+                                            </fields>
+                                        </embeddable>                                        
+                                        <embeddable>
+                                            <schema>classicmodels</schema>
+                                            <name>MANAGER_STATUS</name>
+                                            <tables>.*\.manager</tables>
+                                            <fields>
+                                                <field>
+                                                    <expression>MANAGER_NAME</expression>
+                                                </field>                                              
+                                                <field>                                            
+                                                    <expression>MANAGER_EVALUATION</expression>
+                                                </field>                                        
+                                            </fields>
+                                        </embeddable>
+                                        <embeddable>
+                                            <schema>classicmodels</schema>
+                                            <name>DEPARTMENT_DETAIL</name>
+                                            <tables>.*\.department</tables>
+                                            <fields>
+                                                <field>
+                                                    <expression>NAME</expression>
+                                                </field>                                              
+                                                <field>                                            
+                                                    <expression>PHONE</expression>
+                                                </field>                                        
+                                                <field>                                            
+                                                    <expression>TOPIC</expression>
+                                                </field>
+                                            </fields>
+                                        </embeddable>
+                                    </embeddables>  
+                            
+                                    <!-- The database type. The format here is:
+                                    org.jooq.meta.[database].[database]Database -->
+                                    <name>org.jooq.meta.postgres.PostgresDatabase</name>
+            
+                                    <!-- The database schema (or in the absence of schema support, in your RDBMS this
+                                    can be the owner, user, database name) to be generated. This cannot be combined with the <schemata/> element.                                     
+                                    If <inputSchema/> is missing then all schemas will be considered. -->
+                                    <inputSchema>public</inputSchema>                 
+            
+                                    <!-- All elements that are generated from your schema
+                                    (A Java regular expression. Use the pipe to separate several expressions)
+                                    Watch out for case-sensitivity. Depending on your database, this might be important! 
+                                    You can create case-insensitive regular expressions using this syntax: (?i:expr).
+                                    Whitespace is ignored and comments are possible. -->       
+                                    <includes>.*</includes>
+            
+                                    <!-- All elements that are excluded from your schema
+                                    (A Java regular expression. Use the pipe to separate several expressions).
+                                    Excludes match before includes, i.e. excludes have a higher priority. -->
+                                    <excludes>
+                                        flyway_schema_history | akeys | avals | defined | delete.*
+                                        | department_topic_arr | dup | employee_office_arr | exist.*                                   
+                                        | fetchval | get_.* | ghstore.* | gin.* | hs.* | hstore.* 
+                                        | isdefined | isexists | make_array | new_salary | populate_record 
+                                        | sale_price | slice.* | swap | tconvert | update_msrp | postal_code
+                                        | rate_type | vat_type | .*_master | each | skeys | svals 
+                                        | top_three_sales_per_employee | product_of_product_line
+                                    </excludes>
+
+                                    <!-- Schema version provider -->            
+                                    <schemaVersionProvider>SELECT MAX("version") FROM "flyway_schema_history"</schemaVersionProvider>
+                                    
+                                    <!-- Give enough time to jOOQ to trigger the queries needed for generating sources 
+                                    (default is 5 seconds) -->
+                                    <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>
+                                </database>
+                                
+                                <!-- jOOQ will generate POJOs on our behalf -->
+                                <generate>                            
+                                    <pojos>true</pojos>                                                                
+                                                                                   
+                                    <!-- adds equals() and hashCode() to POJOs -->
+                                    <!-- <pojosEqualsAndHashCode>true</pojosEqualsAndHashCode> -->
+                            
+                                    <!-- by default, jOOQ generates toString() to POJOs -->
+                                    <!-- <pojosToString>false</pojosToString> -->
+                            
+                                    <!-- be default, the generated POJOs are serializable -->
+                                    <!-- <serializablePojos>false</serializablePojos> -->
+                            
+                                    <!-- adds @ConstructorProperties to POJOs -->                                             
+                                    <!-- <constructorPropertiesAnnotationOnPojos>true</constructorPropertiesAnnotationOnPojos> -->
+                                                                          
+                                    <!-- generating interfaces for POJOs (if interfaces are generated, POJOs will implement them) -->
+                                    <!-- <interfaces>true</interfaces> -->
+                                                                                                                                                      
+                                    <!-- generating immutable POJOs -->
+                                    <!-- <immutablePojos>true</immutablePojos> -->
+                             
+                                    <!-- generating immutable interfaces for POJOs -->
+                                    <!-- <immutableInterfaces>true</immutableInterfaces> -->
+                            
+                                    <!-- generating JDK 14 Records -->                                    
+                                    <!-- <pojosAsJavaRecordClasses>true</pojosAsJavaRecordClasses> -->
+                                                        
+                                    <!-- adds JPA specific annotations to the generated POJOs -->
+                                    <!-- <jpaAnnotations>true</jpaAnnotations> -->
+                                    <!-- <jpaVersion>2.2</jpaVersion> -->
+                            
+                                    <!-- fluent style setters -->
+                                    <!-- <fluentSetters>true</fluentSetters> -->
+                            
+                                    <!-- generating POJOs for Kotlin -->
+                                    <!-- <pojosAsKotlinDataClasses>true</pojosAsKotlinDataClasses> -->
+                            
+                                    <!-- generating POJOs for Scala -->
+                                    <!-- <pojosAsScalaCaseClasses>true</pojosAsScalaCaseClasses> -->                                                             
+                                </generate>
+
+                                <target>
+                                    <!-- The destination package of your generated classes (within the destination directory).
+                                 jOOQ may append the schema name to this package if generating multiple schemas,
+                                    e.g. org.jooq.your.packagename.schema1
+                                    org.jooq.your.packagename.schema2 -->
+                                    <packageName>jooq.generated</packageName>
+            
+                                    <!-- The destination directory of your generated classes. Using Maven directory layout here. -->
+                                    <directory>target/generated-sources</directory>
+                                </target>
+                            </generator>    
+                                                                                              
+                            <!-- A boolean property (or constant) can be specified here to tell the plugin not to do anything -->
+                            <skip>false</skip>
+
+                            <!--Additional Maven-specific flags -->
+                            <!-- ============================== -->
+                            <!-- Instead of providing an inline configuration here, you can specify an external XML configuration file here -->
+                            <!-- <configurationFile>${externalfile}</configurationFile> -->
+    
+                            <!-- Alternatively, you can provide several external configuration files. These will be merged by using
+                            Maven's combine.children="append" policy. -->
+                            <!--
+                            <configurationFiles>
+                                <configurationFile>${file1}</configurationFile>
+                                <configurationFile>${file2}</configurationFile>
+                                <configurationFile>...</configurationFile>
+                            </configurationFiles>                                        
+                            -->
+                        </configuration>
+                    </execution>
+                </executions> 
+            </plugin>
+        </plugins>
+    </build>
+</project>

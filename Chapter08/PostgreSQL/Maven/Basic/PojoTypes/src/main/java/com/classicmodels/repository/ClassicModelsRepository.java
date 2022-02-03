@@ -19,7 +19,6 @@ import static jooq.generated.tables.Manager.MANAGER;
 import static jooq.generated.tables.Office.OFFICE;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.concat;
-import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import com.classicmodels.pojo.ICustomer;
@@ -41,6 +40,7 @@ import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
 import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Productline.PRODUCTLINE;
+import static org.jooq.impl.DSL.inline;
 
 @Repository
 @Transactional(readOnly = true)
@@ -77,7 +77,7 @@ public class ClassicModelsRepository {
         System.out.println("Example 1.3\n" + result3);
 
         List<SimpleEmployee> result4 = ctx.select(EMPLOYEE.FIRST_NAME.as("fn"), EMPLOYEE.LAST_NAME.as("ln"),
-                concat(EMPLOYEE.employee().FIRST_NAME, val(" "), EMPLOYEE.employee().LAST_NAME).as("boss"))
+                concat(EMPLOYEE.employee().FIRST_NAME, inline(" "), EMPLOYEE.employee().LAST_NAME).as("boss"))
                 .from(EMPLOYEE)
                 .fetchInto(SimpleEmployee.class);
         System.out.println("Example 1.4\n" + result4);

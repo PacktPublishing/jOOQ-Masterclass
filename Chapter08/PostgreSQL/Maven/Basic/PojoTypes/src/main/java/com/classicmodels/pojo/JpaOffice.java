@@ -1,7 +1,7 @@
 package com.classicmodels.pojo;
 
+import jakarta.persistence.Column;
 import java.io.Serializable;
-import javax.persistence.Column;
 import jooq.generated.embeddables.pojos.OfficeFullAddress;
 
 public class JpaOffice implements Serializable {

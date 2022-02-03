@@ -1,8 +1,8 @@
 package com.classicmodels.pojo;
 
+import jakarta.persistence.Column;
 import java.io.Serializable;
 import java.time.YearMonth;
-import javax.persistence.Column;
 
 public class JpaCustomer implements Serializable {
 
