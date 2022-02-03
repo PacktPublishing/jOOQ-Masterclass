@@ -100,6 +100,7 @@ public class ClassicModelsRepository {
 
         var result9 = ctx.select(CUSTOMER.FIRST_BUY_DATE.coerce(YEARMONTH), CUSTOMER.CUSTOMER_NUMBER)
                 .from(CUSTOMER)
+                .where(CUSTOMER.FIRST_BUY_DATE.isNotNull())
                 .fetchGroups(CUSTOMER.FIRST_BUY_DATE);
         System.out.println("Example 9\n" + prettyPrint(result9));
 
