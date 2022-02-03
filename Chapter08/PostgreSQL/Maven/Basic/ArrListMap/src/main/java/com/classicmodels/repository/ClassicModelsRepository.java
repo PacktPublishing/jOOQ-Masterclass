@@ -372,16 +372,16 @@ public class ClassicModelsRepository {
         System.out.println("Example 4.17\n" + result17);
 
         // fetch array
-        Map<String, String[]> result18 = ctx.select(DEPARTMENT.NAME, DEPARTMENT.TOPIC)
+        Map<Integer, String[]> result18 = ctx.select(DEPARTMENT.DEPARTMENT_ID, DEPARTMENT.TOPIC)                
                 .from(DEPARTMENT)
-                .fetchMap(DEPARTMENT.NAME, DEPARTMENT.TOPIC);
+                .fetchMap(DEPARTMENT.DEPARTMENT_ID, DEPARTMENT.TOPIC);
         System.out.println("Example 4.18\n" + prettyPrint(result18));
 
         // fetch UDT
-        Map<String, EvaluationCriteriaRecord> result19
-                = ctx.select(MANAGER.MANAGER_NAME, MANAGER.MANAGER_EVALUATION)
+        Map<Long, EvaluationCriteriaRecord> result19
+                = ctx.select(MANAGER.MANAGER_ID, MANAGER.MANAGER_EVALUATION)                        
                         .from(MANAGER)
-                        .fetchMap(MANAGER.MANAGER_NAME, MANAGER.MANAGER_EVALUATION);
+                        .fetchMap(MANAGER.MANAGER_ID, MANAGER.MANAGER_EVALUATION);
         System.out.println("Example 4.19\n" + prettyPrint(result19));
 
         // fetch embeddable type 
