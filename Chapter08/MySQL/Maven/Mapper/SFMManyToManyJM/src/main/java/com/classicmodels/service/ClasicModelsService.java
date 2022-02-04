@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 public class ClasicModelsService {
 
     private final ClassicModelsRepository classicModelsRepository;
@@ -15,17 +16,14 @@ public class ClasicModelsService {
     public ClasicModelsService(ClassicModelsRepository classicModelsRepository) {
         this.classicModelsRepository = classicModelsRepository;
     }
-
-    @Transactional(readOnly = true)
+    
     public List<SimpleManager> fetchManagerAndOffice() {
 
         return classicModelsRepository.findManagerAndOffice();
     }
 
-    @Transactional(readOnly = true)
     public List<SimpleOffice> fetchOfficeAndManager() {
 
         return classicModelsRepository.findOfficeAndManager();
     }
 }
-
