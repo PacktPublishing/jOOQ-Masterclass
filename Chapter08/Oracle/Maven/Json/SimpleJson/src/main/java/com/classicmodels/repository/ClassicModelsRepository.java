@@ -1,5 +1,6 @@
 package com.classicmodels.repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Manager.MANAGER;
@@ -101,8 +102,9 @@ public class ClassicModelsRepository {
         // simple example of using jsonArrayAgg()
         String result31 = ctx.select(jsonArrayAgg(jsonObject(
                 jsonEntry("customerName", CUSTOMER.CUSTOMER_NAME),
-                jsonEntry("creditLimit", CUSTOMER.CREDIT_LIMIT))).as("json_result"))
+                jsonEntry("customerNumber", CUSTOMER.CUSTOMER_NUMBER))).as("json_result"))
                 .from(CUSTOMER)
+                .where(CUSTOMER.CREDIT_LIMIT.eq(BigDecimal.ZERO))
                 .fetchSingleInto(String.class);
         System.out.println("Example 1.3.1:\n" + result31);
 
