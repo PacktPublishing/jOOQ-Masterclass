@@ -1,8 +1,8 @@
 package com.classicmodels.repository;
 
 import java.util.List;
-import jooq.generated.tables.pojos.Office;
 import jooq.generated.tables.pojos.Employee;
+import jooq.generated.tables.pojos.Sale;
 import org.jooq.DSLContext;
 import org.jooq.Results;
 import static org.jooq.impl.DSL.val;
@@ -19,9 +19,9 @@ public class ClassicModelsRepository {
     }
 
     @Transactional(readOnly=true)
-    public void fetchEmployeesAndOffices() {
+    public void fetchEmployeesAndSales() {
 
-        Results results = ctx.resultQuery("SELECT TOP 10 * FROM employee; SELECT TOP 5 * FROM office")
+        Results results = ctx.resultQuery("SELECT TOP 10 * FROM employee; SELECT TOP 5 * FROM sale")
                 .fetchMany();
 
         System.out.println("Results: " + results);
@@ -29,10 +29,10 @@ public class ClassicModelsRepository {
 
         // map each result set to its POJO
         List<Employee> employees = results.get(0).into(Employee.class);
-        List<Office> offices = results.get(1).into(Office.class);
+        List<Sale> sales = results.get(1).into(Sale.class);
 
         System.out.println("Employees: " + employees);
-        System.out.println("Offices: " + offices);
+        System.out.println("Sales: " + sales);
     }
 
     @Transactional

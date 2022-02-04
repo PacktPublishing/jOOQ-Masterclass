@@ -19,7 +19,7 @@ public class ClassicModelsRepository {
     }
 
     @Transactional(readOnly=true)
-    public void fetchEmployeesAndOffices() {
+    public void fetchEmployeesAndSales() {
 
         Results results = ctx.resultQuery("SELECT * FROM employee LIMIT 10; SELECT * FROM sale LIMIT 5")
                 .fetchMany();                
