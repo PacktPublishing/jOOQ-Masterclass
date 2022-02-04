@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 public class ClassicModelsService {
 
     private final ClassicModelsRepository classicModelsRepository;
@@ -14,8 +15,7 @@ public class ClassicModelsService {
     public ClassicModelsService(ClassicModelsRepository classicModelsRepository) {
         this.classicModelsRepository = classicModelsRepository;
     }
-
-    @Transactional(readOnly = true)
+    
     public List<SimpleProductLine> fetchProductLineWithProducts() {
 
         return classicModelsRepository.findProductLineWithProducts();
