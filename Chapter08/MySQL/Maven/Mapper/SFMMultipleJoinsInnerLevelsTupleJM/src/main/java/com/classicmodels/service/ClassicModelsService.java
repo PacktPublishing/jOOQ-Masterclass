@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 public class ClassicModelsService {
 
     private final ClassicModelsRepository classicModelsRepository;
@@ -19,8 +20,7 @@ public class ClassicModelsService {
     public ClassicModelsService(ClassicModelsRepository classicModelsRepository) {
         this.classicModelsRepository = classicModelsRepository;
     }
-
-    @Transactional(readOnly = true)
+    
     public List<Tuple2<EmployeeRecord, List<Tuple2<CustomerRecord, 
             List<Tuple2<OrderRecord, List<Tuple2<OrderdetailRecord, ProductRecord>>>>>>>> 
         fetchEmployeeWithCustomersOrdersByOfficeCode(String officeCode) {
