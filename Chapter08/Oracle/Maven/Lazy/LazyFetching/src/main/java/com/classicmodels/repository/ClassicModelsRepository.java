@@ -77,19 +77,19 @@ public class ClassicModelsRepository {
         // By default, Oracle JDBC retrieves a result set of 10 rows at a time from the database cursor. 
         // Next, jOOQ scans the fetched ResultSet record by record via fetchNext() and apply a RecordMapper
         System.out.println("\nExample 4:\n");
-        try ( Cursor<Record2<BigDecimal, Long>> cursor
+        try ( Cursor<Record2<BigDecimal, Integer>> cursor
                 = ctx.select(ORDERDETAIL.PRICE_EACH, ORDERDETAIL.QUANTITY_ORDERED)
                         .from(ORDERDETAIL).fetchLazy()) {
 
                     while (cursor.hasNext()) {
 
                         double result = cursor.fetchNext(
-                                new RecordMapper<Record2<BigDecimal, Long>, Double>() {
+                                new RecordMapper<Record2<BigDecimal, Integer>, Double>() {
 
                             final List<Integer> tax = List.of(1, 2, 3, 4, 5);
 
                             @Override
-                            public Double map(Record2<BigDecimal, Long> record) {
+                            public Double map(Record2<BigDecimal, Integer> record) {
 
                                 double total = record.get(ORDERDETAIL.PRICE_EACH).doubleValue()
                                         * record.get(ORDERDETAIL.QUANTITY_ORDERED);
