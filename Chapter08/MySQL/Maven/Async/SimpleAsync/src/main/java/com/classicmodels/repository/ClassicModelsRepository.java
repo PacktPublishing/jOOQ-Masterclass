@@ -1,5 +1,6 @@
 package com.classicmodels.repository;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -52,7 +53,7 @@ public class ClassicModelsRepository {
                     .values(null,
                             LocalDate.of(2003, 2, 12), LocalDate.of(2003, 3, 1),
                             LocalDate.of(2003, 2, 27), "Shipped",
-                            "New order inserted ...", 363L)
+                            "New order inserted ...", 363L, BigDecimal.ZERO)
                     .returning()
                     .fetchOne();
         }).thenApply(order -> {
