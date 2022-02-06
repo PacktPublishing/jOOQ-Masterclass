@@ -4,6 +4,7 @@ import static com.classicmodels.converter.YearMonthConverter.INTEGER_YEARMONTH_C
 import com.classicmodels.pojo.NamePhone;
 import com.classicmodels.pojo.PhoneCreditLimit;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.time.YearMonth;
 import java.util.List;
 import java.util.Set;
@@ -11,6 +12,7 @@ import static jooq.generated.tables.Customer.CUSTOMER;
 import org.jooq.DSLContext;
 import org.jooq.ResultQuery;
 import org.jooq.Record;
+import static org.jooq.impl.DSL.currentTimestamp;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -60,8 +62,11 @@ public class ClassicModelsRepository {
    
     public void fetchFewFields() {
 
+        Timestamp ts = ctx.fetchValue(currentTimestamp());
+        System.out.println("Example 2.1.1\n" + ts);
+        
         // Prefer
-        System.out.println("Example 2.1\n"
+        System.out.println("Example 2.1.2\n"
                 + ctx.select(CUSTOMER.CUSTOMER_NAME)
                         .from(CUSTOMER).fetch(CUSTOMER.CUSTOMER_NAME) // List<String>
                 
