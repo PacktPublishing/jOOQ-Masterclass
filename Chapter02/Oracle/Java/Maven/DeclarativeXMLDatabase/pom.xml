@@ -9,7 +9,7 @@
     <packaging>jar</packaging>
 
     <name>DeclarativeXMLDatabase</name>
-
+  
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -26,8 +26,8 @@
         <maven.compiler.target>17</maven.compiler.target>
         
         <jooq.version>3.16.2</jooq.version>       
-        <codehaus.mojo.version>1.0.0</codehaus.mojo.version>              
-        <jakarta.validation>3.0.1</jakarta.validation>
+        <codehaus.mojo.version>1.0.0</codehaus.mojo.version> 
+        <jakarta.validation>3.0.1</jakarta.validation>                    
         
         <!-- property used as a schema version provider -->
         <schema.version>1</schema.version>
@@ -43,23 +43,27 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>        
         <dependency>
-            <groupId>org.jooq</groupId>
+            <groupId>org.jooq.trial-java-8</groupId>
             <artifactId>jooq</artifactId>       
             <version>${jooq.version}</version>  
-        </dependency>                          
+        </dependency>      
         <dependency>
             <groupId>jakarta.validation</groupId>
             <artifactId>jakarta.validation-api</artifactId>
             <version>${jakarta.validation}</version>
-        </dependency>
+        </dependency>                            
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
         </dependency>             
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>        
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ojdbc8</artifactId>            
+        </dependency>
+        <dependency>
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ucp</artifactId>            
+        </dependency>                
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -83,11 +87,12 @@
                 </configuration>
             </plugin>            
             <plugin>
-                <groupId>org.jooq</groupId>
-                <artifactId>jooq-codegen-maven</artifactId>                   
+                <groupId>org.jooq.trial-java-8</groupId>
+                <artifactId>jooq-codegen-maven</artifactId> 
+                <version>${jooq.version}</version>                    
                 <executions>
                     <execution>
-                        <id>generate-for-mysql</id>
+                        <id>generate-for-oracle</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>generate</goal>
@@ -109,18 +114,18 @@
                                 <database>
                                     <!-- Rely on jOOQ XML Database API -->
                                     <name>org.jooq.meta.xml.XMLDatabase</name>
-                                                                                                                                                
+                                                                                                            
                                     <properties>                                                    
                                         <!-- Use any of the SQLDialect values here -->
                                         <property>
                                             <key>dialect</key>
-                                            <value>MYSQL</value>
+                                            <value>ORACLE</value>
                                         </property>
             
                                         <!-- Specify the location of your database file -->
                                         <property>
                                             <key>xmlFile</key>
-                                            <value>./../../../../../db/migration/xml/mysql/sql.xml</value>
+                                            <value>./../../../../../db/migration/xml/oracle/sql.xml</value>
                                         </property>
                                     </properties>                                                
                                                  
@@ -158,7 +163,7 @@
                                     <daos>true</daos>                                   
                                     <validationAnnotations>true</validationAnnotations>                            
                                     <springAnnotations>true</springAnnotations>   
-                                </generate>
+                                </generate>                                                               
                                 
                                 <target>
                                     <!-- The destination package of your generated classes (within the destination directory).

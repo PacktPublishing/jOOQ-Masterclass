@@ -83,11 +83,12 @@
                 </configuration>
             </plugin>            
             <plugin>
-                <groupId>org.jooq</groupId>
-                <artifactId>jooq-codegen-maven</artifactId>                   
+                <groupId>org.jooq.trial-java-8</groupId>
+                <artifactId>jooq-codegen-maven</artifactId>   
+                <version>${jooq.version}</version>                  
                 <executions>
                     <execution>
-                        <id>generate-for-postgresql</id>
+                        <id>generate-for-sqlserver</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>generate</goal>
