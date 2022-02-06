@@ -9,11 +9,11 @@ public class SimpleBProduct implements Serializable {
     
     private String productName;
     private String productVendor;
-    private Short quantityInStock;
+    private Integer quantityInStock;
     
     private SimpleBProductLine productLine;
 
-    public SimpleBProduct(String productName, String productVendor, Short quantityInStock) {
+    public SimpleBProduct(String productName, String productVendor, Integer quantityInStock) {
         this.productName = productName;
         this.productVendor = productVendor;
         this.quantityInStock = quantityInStock;
@@ -35,11 +35,11 @@ public class SimpleBProduct implements Serializable {
         this.productVendor = productVendor;
     }
 
-    public Short getQuantityInStock() {
+    public Integer getQuantityInStock() {
         return quantityInStock;
     }
 
-    public void setQuantityInStock(Short quantityInStock) {
+    public void setQuantityInStock(Integer quantityInStock) {
         this.quantityInStock = quantityInStock;
     }
 
