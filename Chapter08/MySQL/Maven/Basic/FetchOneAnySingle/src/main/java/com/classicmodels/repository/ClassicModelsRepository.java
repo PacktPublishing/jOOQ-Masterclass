@@ -76,69 +76,79 @@ public class ClassicModelsRepository {
                 .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1370L)) // one or none (null)                
                 .fetchOneInto(String.class);
         System.out.println("Example 1.6\n" + result6);
+                
+        Optional<EmployeeRecord> result71 = ctx.selectFrom(EMPLOYEE)
+                .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1370L)) // one or none (null)
+                .fetchOptional();
+        System.out.println("Example 1.7.1\n" + result71);
 
-        String result7 = Objects.requireNonNullElseGet(
+        Optional<Employee> result72 = ctx.selectFrom(EMPLOYEE)
+                .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1370L)) // one or none (null)
+                .fetchOptionalInto(Employee.class);
+        System.out.println("Example 1.7.2\n" + result72);
+
+        String result73 = Objects.requireNonNullElseGet(
                 ctx.select(EMPLOYEE.EMAIL)
                         .from(EMPLOYEE)
                         .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(13700L)) // one or none (null)                
                         .fetchOneInto(String.class), () -> "-");
-        System.out.println("Example 1.7\n" + result7);
+        System.out.println("Example 1.7.3\n" + result73);
 
-        Optional<String> result8 = Optional.ofNullable(
+        Optional<String> result74 = Optional.ofNullable(
                 ctx.select(EMPLOYEE.EMAIL)
                         .from(EMPLOYEE)
                         .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1370L)) // one or none (null)                
                         .fetchOneInto(String.class));
-        System.out.println("Example 1.8\n" + result8);
+        System.out.println("Example 1.7.4\n" + result74);
 
-        YearMonth result9 = ctx.select(CUSTOMER.FIRST_BUY_DATE)
+        YearMonth result8 = ctx.select(CUSTOMER.FIRST_BUY_DATE)
                 .from(CUSTOMER)
                 .where(CUSTOMER.CUSTOMER_NUMBER.eq(112L)) // one or none (null)
                 .fetchOne(CUSTOMER.FIRST_BUY_DATE, INTEGER_YEARMONTH_CONVERTER);
-        System.out.println("Example 1.9\n" + result9);
+        System.out.println("Example 1.8\n" + result8);
 
-        EmployeeRecord result10 = ctx.fetchOne(EMPLOYEE, EMPLOYEE.EMPLOYEE_NUMBER.eq(1370L));
-        System.out.println("Example 1.10 \n" + result10);
+        EmployeeRecord result9 = ctx.fetchOne(EMPLOYEE, EMPLOYEE.EMPLOYEE_NUMBER.eq(1370L));
+        System.out.println("Example 1.9 \n" + result9);
 
-        Employee result11 = ctx.selectFrom(EMPLOYEE)
+        Employee result10 = ctx.selectFrom(EMPLOYEE)
+                .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1370L)) // one or none (null)
+                .fetchOneInto(Employee.class);
+        System.out.println("Example 1.10\n" + result10);
+
+        Employee result11 = ctx.select(EMPLOYEE.EMAIL, EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
+                .from(EMPLOYEE)
                 .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1370L)) // one or none (null)
                 .fetchOneInto(Employee.class);
         System.out.println("Example 1.11\n" + result11);
 
-        Employee result12 = ctx.select(EMPLOYEE.EMAIL, EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
-                .from(EMPLOYEE)
-                .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1370L)) // one or none (null)
-                .fetchOneInto(Employee.class);
-        System.out.println("Example 1.12\n" + result12);
-
-        EmployeeRecord result13 = ctx.selectFrom(EMPLOYEE)
+        EmployeeRecord result12 = ctx.selectFrom(EMPLOYEE)
                 .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1370L)) // one or none (null)
                 .fetchOneInto(EmployeeRecord.class); // like ...fetchOne();
+        System.out.println("Example 1.12\n" + result12);
+
+        EmployeeRecord result13 = ctx.select(EMPLOYEE.EMAIL, EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
+                .from(EMPLOYEE)
+                .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1370L)) // one or none (null)
+                .fetchOneInto(EMPLOYEE);
         System.out.println("Example 1.13\n" + result13);
 
-        EmployeeRecord result14 = ctx.select(EMPLOYEE.EMAIL, EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME)
-                .from(EMPLOYEE)
+        EmployeeRecord result14 = ctx.selectFrom(EMPLOYEE)
                 .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1370L)) // one or none (null)
                 .fetchOneInto(EMPLOYEE);
         System.out.println("Example 1.14\n" + result14);
 
-        EmployeeRecord result15 = ctx.selectFrom(EMPLOYEE)
-                .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1370L)) // one or none (null)
-                .fetchOneInto(EMPLOYEE);
-        System.out.println("Example 1.15\n" + result15);
-
         // Avoid fetching more data than needed
-        String result16 = ctx.selectFrom(EMPLOYEE)
+        String result15 = ctx.selectFrom(EMPLOYEE)
                 .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1370L)) // one or none (null)
                 .fetchOne(EMPLOYEE.EMAIL);
-        System.out.println("Example 1.16 (avoid) \n" + result16);
+        System.out.println("Example 1.15 (avoid) \n" + result15);
 
         // Avoid fetching more data than needed
-        String result17 = ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.JOB_TITLE, EMPLOYEE.EMAIL)
+        String result16 = ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.JOB_TITLE, EMPLOYEE.EMAIL)
                 .from(EMPLOYEE)
                 .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1370L)) // one or none (null)
                 .fetchOne(EMPLOYEE.EMAIL);
-        System.out.println("Example 1.17 (avoid) \n" + result17);
+        System.out.println("Example 1.16 (avoid) \n" + result16);
     }
 
     public void fetchSingleEmployee() {
