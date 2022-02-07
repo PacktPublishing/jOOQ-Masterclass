@@ -334,12 +334,12 @@ public class ClassicModelsRepository {
                         key("managerId").value(MANAGER.MANAGER_ID),
                         key("managerName").value(MANAGER.MANAGER_NAME),
                         key("mobilePhone").value(jsonValue(MANAGER.MANAGER_DETAIL, "$.phoneNumber[*].number[1]")),
-                        key("offices").value(field(select(jsonArrayAgg(jsonObject(
+                        key("offices").value(select(jsonArrayAgg(jsonObject(
                                 OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.COUNTRY)))
                                 .from(OFFICE)
                                 .join(OFFICE_HAS_MANAGER)
                                 .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))
-                                .where(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID.eq(MANAGER.MANAGER_ID))))))
+                                .where(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID.eq(MANAGER.MANAGER_ID)))))
                 .from(MANAGER)
                 .fetch();
 
@@ -352,12 +352,12 @@ public class ClassicModelsRepository {
                                 key("managerId").value(MANAGER.MANAGER_ID),
                                 key("managerName").value(MANAGER.MANAGER_NAME),
                                 key("mobilePhone").value(jsonValue(MANAGER.MANAGER_DETAIL, "$.phoneNumber[*].number[1]")),
-                                key("offices").value(field(select(jsonArrayAgg(jsonObject(
+                                key("offices").value(select(jsonArrayAgg(jsonObject(
                                         OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.COUNTRY)))
                                         .from(OFFICE)
                                         .join(OFFICE_HAS_MANAGER)
                                         .on(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))
-                                        .where(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID.eq(MANAGER.MANAGER_ID)))))))
+                                        .where(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID.eq(MANAGER.MANAGER_ID))))))
                 .from(MANAGER)
                 .fetchSingleInto(String.class);
 
@@ -394,13 +394,13 @@ public class ClassicModelsRepository {
                         key("officeCode").value(OFFICE.OFFICE_CODE),
                         key("state").value(OFFICE.STATE),
                         key("city").value(OFFICE.CITY),
-                        key("managers").value(field(select(jsonArrayAgg(jsonObject(
+                        key("managers").value(select(jsonArrayAgg(jsonObject(
                                 MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME,
                                 jsonValue(MANAGER.MANAGER_DETAIL, "$.phoneNumber[*].number[1]"))))
                                 .from(MANAGER)
                                 .join(OFFICE_HAS_MANAGER)
                                 .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID))
-                                .where(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))))))
+                                .where(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE)))))
                 .from(OFFICE)
                 .fetch();
 

@@ -21,7 +21,6 @@ import org.jooq.DSLContext;
 import org.jooq.JSON;
 import org.jooq.Record1;
 import org.jooq.Result;
-import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.jsonObject;
 import static org.jooq.impl.DSL.jsonArrayAgg;
 import static org.jooq.impl.DSL.jsonEntry;
@@ -72,21 +71,21 @@ public class ClassicModelsRepository {
                 jsonObject(
                         jsonEntry("productLine", PRODUCTLINE.PRODUCT_LINE),
                         jsonEntry("textDescription", PRODUCTLINE.TEXT_DESCRIPTION),
-                        jsonEntry("products", field(select(jsonArrayAgg(
+                        jsonEntry("products", select(jsonArrayAgg(
                                 jsonObject(jsonEntry("productName", PRODUCT.PRODUCT_NAME),
                                         jsonEntry("productVendor", PRODUCT.PRODUCT_VENDOR),
                                         jsonEntry("quantityInStock", PRODUCT.QUANTITY_IN_STOCK),
                                         jsonEntry("orderdetail",
-                                                field(select(jsonArrayAgg(
+                                                select(jsonArrayAgg(
                                                         jsonObject(
                                                                 jsonEntry("quantityOrdered", ORDERDETAIL.QUANTITY_ORDERED),
                                                                 jsonEntry("priceEach", ORDERDETAIL.PRICE_EACH)))
                                                         .orderBy(ORDERDETAIL.QUANTITY_ORDERED))
                                                         .from(ORDERDETAIL)
-                                                        .where(ORDERDETAIL.PRODUCT_ID.eq(PRODUCT.PRODUCT_ID))))))
+                                                        .where(ORDERDETAIL.PRODUCT_ID.eq(PRODUCT.PRODUCT_ID)))))
                                 .orderBy(PRODUCT.QUANTITY_IN_STOCK))
                                 .from(PRODUCT)
-                                .where(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE))))))
+                                .where(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE)))))
                 .from(PRODUCTLINE)
                 .orderBy(PRODUCTLINE.PRODUCT_LINE)
                 .fetchInto(SimpleProductLine.class);
@@ -100,27 +99,27 @@ public class ClassicModelsRepository {
                 jsonObject(
                         jsonEntry("customerName", CUSTOMER.CUSTOMER_NAME),
                         jsonEntry("creditLimit", CUSTOMER.CREDIT_LIMIT),
-                        jsonEntry("payments", field(select(jsonArrayAgg(
+                        jsonEntry("payments", select(jsonArrayAgg(
                                 jsonObject(jsonEntry("customerNumber", PAYMENT.CUSTOMER_NUMBER),
                                         jsonEntry("invoiceAmount", PAYMENT.INVOICE_AMOUNT),
                                         jsonEntry("cachingDate", PAYMENT.CACHING_DATE),
-                                        jsonEntry("transactions", field(select(jsonArrayAgg(
+                                        jsonEntry("transactions", select(jsonArrayAgg(
                                                 jsonObject(
                                                         jsonEntry("bankName", BANK_TRANSACTION.BANK_NAME),
                                                         jsonEntry("transferAmount", BANK_TRANSACTION.TRANSFER_AMOUNT)))
                                                 .orderBy(BANK_TRANSACTION.TRANSFER_AMOUNT))
                                                 .from(BANK_TRANSACTION)
                                                 .where(BANK_TRANSACTION.CUSTOMER_NUMBER.eq(PAYMENT.CUSTOMER_NUMBER)
-                                                        .and(BANK_TRANSACTION.CHECK_NUMBER.eq(PAYMENT.CHECK_NUMBER)))))))
+                                                        .and(BANK_TRANSACTION.CHECK_NUMBER.eq(PAYMENT.CHECK_NUMBER))))))
                                 .orderBy(PAYMENT.CACHING_DATE))
                                 .from(PAYMENT)
-                                .where(PAYMENT.CUSTOMER_NUMBER.eq(CUSTOMER.CUSTOMER_NUMBER)))),
-                        jsonEntry("details", field(select(
+                                .where(PAYMENT.CUSTOMER_NUMBER.eq(CUSTOMER.CUSTOMER_NUMBER))),
+                        jsonEntry("details", select(
                                 jsonObject(jsonEntry("city", CUSTOMERDETAIL.CITY),
                                         jsonEntry("addressLineFirst", CUSTOMERDETAIL.ADDRESS_LINE_FIRST),
                                         jsonEntry("state", CUSTOMERDETAIL.STATE)))
                                 .from(CUSTOMERDETAIL)
-                                .where(CUSTOMERDETAIL.CUSTOMER_NUMBER.eq(CUSTOMER.CUSTOMER_NUMBER))))))
+                                .where(CUSTOMERDETAIL.CUSTOMER_NUMBER.eq(CUSTOMER.CUSTOMER_NUMBER)))))
                 .from(CUSTOMER)
                 .orderBy(CUSTOMER.CREDIT_LIMIT)
                 .fetch();
@@ -168,31 +167,31 @@ public class ClassicModelsRepository {
                         jsonEntry("officeCode", OFFICE.OFFICE_CODE),
                         jsonEntry("officeCity", OFFICE.CITY),
                         jsonEntry("officeCountry", OFFICE.COUNTRY),
-                        jsonEntry("departments", field(select(jsonArrayAgg(
+                        jsonEntry("departments", select(jsonArrayAgg(
                                 jsonObject(jsonEntry("departmentName", DEPARTMENT.NAME),
                                         jsonEntry("departmentPhone", DEPARTMENT.PHONE))))
                                 .from(DEPARTMENT)
-                                .where(DEPARTMENT.OFFICE_CODE.eq(OFFICE.OFFICE_CODE)))),
-                        jsonEntry("employees", field(select(jsonArrayAgg(
+                                .where(DEPARTMENT.OFFICE_CODE.eq(OFFICE.OFFICE_CODE))),
+                        jsonEntry("employees", select(jsonArrayAgg(
                                 jsonObject(jsonEntry("employeeFirstName", EMPLOYEE.FIRST_NAME),
                                         jsonEntry("employeeLastName", EMPLOYEE.LAST_NAME),
                                         jsonEntry("employeeSalary", EMPLOYEE.SALARY),
-                                        jsonEntry("sales", field(select(jsonArrayAgg(
+                                        jsonEntry("sales", select(jsonArrayAgg(
                                                 jsonObject(jsonEntry("fiscalYear", SALE.FISCAL_YEAR),
                                                         jsonEntry("sale", SALE.SALE_)))
                                                 .orderBy(SALE.FISCAL_YEAR))
                                                 .from(SALE)
-                                                .where(SALE.EMPLOYEE_NUMBER.eq(EMPLOYEE.EMPLOYEE_NUMBER)))))))
+                                                .where(SALE.EMPLOYEE_NUMBER.eq(EMPLOYEE.EMPLOYEE_NUMBER))))))
                                 .from(EMPLOYEE)
-                                .where(EMPLOYEE.OFFICE_CODE.eq(OFFICE.OFFICE_CODE)))),
-                        jsonEntry("managers", field(select(jsonArrayAgg(jsonObject(
+                                .where(EMPLOYEE.OFFICE_CODE.eq(OFFICE.OFFICE_CODE))),
+                        jsonEntry("managers", select(jsonArrayAgg(jsonObject(
                                 jsonEntry("managerId", MANAGER.MANAGER_ID),
                                 jsonEntry("managerName", MANAGER.MANAGER_NAME)))
                                 .orderBy(MANAGER.MANAGER_ID))
                                 .from(MANAGER)
                                 .join(OFFICE_HAS_MANAGER)
                                 .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID))
-                                .where(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))))))
+                                .where(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE)))))
                 .from(OFFICE)
                 .orderBy(OFFICE.OFFICE_CODE)
                 .fetch();
@@ -222,14 +221,14 @@ public class ClassicModelsRepository {
                                                 .where(SALE.EMPLOYEE_NUMBER.eq(EMPLOYEE.EMPLOYEE_NUMBER))))))
                                 .from(EMPLOYEE)
                                 .where(EMPLOYEE.OFFICE_CODE.eq(OFFICE.OFFICE_CODE))),
-                        key("managers").value(field(select(jsonArrayAgg(jsonObject(
+                        key("managers").value(select(jsonArrayAgg(jsonObject(
                                 key("managerId").value(MANAGER.MANAGER_ID),
                                 key("managerName").value(MANAGER.MANAGER_NAME)))
                                 .orderBy(MANAGER.MANAGER_ID))
                                 .from(MANAGER)
                                 .join(OFFICE_HAS_MANAGER)
                                 .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID))
-                                .where(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))))))
+                                .where(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE)))))
                 .from(OFFICE)
                 .orderBy(OFFICE.OFFICE_CODE)
                 .fetchInto(SimpleOffice.class);

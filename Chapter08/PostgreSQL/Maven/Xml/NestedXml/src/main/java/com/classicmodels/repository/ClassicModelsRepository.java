@@ -18,7 +18,6 @@ import org.jooq.Record1;
 import org.jooq.Result;
 import org.jooq.XML;
 import static org.jooq.impl.DSL.field;
-import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.xmlagg;
 import static org.jooq.impl.DSL.xmlforest;

@@ -19,10 +19,8 @@ import static jooq.generated.tables.Productline.PRODUCTLINE;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import org.jooq.JSON;
-import org.jooq.JSONFormat;
 import org.jooq.Record1;
 import org.jooq.Result;
-import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.jsonObject;
 import static org.jooq.impl.DSL.jsonArrayAgg;
 import static org.jooq.impl.DSL.jsonEntry;
@@ -75,21 +73,21 @@ public class ClassicModelsRepository {
                 jsonObject(
                         jsonEntry("productLine", PRODUCTLINE.PRODUCT_LINE),
                         jsonEntry("textDescription", PRODUCTLINE.TEXT_DESCRIPTION),
-                        jsonEntry("products", field(select(jsonArrayAgg(
+                        jsonEntry("products", select(jsonArrayAgg(
                                 jsonObject(jsonEntry("productName", PRODUCT.PRODUCT_NAME),
                                         jsonEntry("productVendor", PRODUCT.PRODUCT_VENDOR),
                                         jsonEntry("quantityInStock", PRODUCT.QUANTITY_IN_STOCK),
                                         jsonEntry("orderdetail",
-                                                field(select(jsonArrayAgg(
+                                                select(jsonArrayAgg(
                                                         jsonObject(
                                                                 jsonEntry("quantityOrdered", ORDERDETAIL.QUANTITY_ORDERED),
                                                                 jsonEntry("priceEach", ORDERDETAIL.PRICE_EACH)))
                                                         .orderBy(ORDERDETAIL.QUANTITY_ORDERED))
                                                         .from(ORDERDETAIL)
-                                                        .where(ORDERDETAIL.PRODUCT_ID.eq(PRODUCT.PRODUCT_ID))))))
+                                                        .where(ORDERDETAIL.PRODUCT_ID.eq(PRODUCT.PRODUCT_ID)))))
                                 .orderBy(PRODUCT.QUANTITY_IN_STOCK))
                                 .from(PRODUCT)
-                                .where(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE))))))
+                                .where(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE)))))
                 .from(PRODUCTLINE)
                 .orderBy(PRODUCTLINE.PRODUCT_LINE)
                 .fetchInto(SimpleProductLine.class);
@@ -351,13 +349,13 @@ public class ClassicModelsRepository {
                                                 .where(SALE.EMPLOYEE_NUMBER.eq(EMPLOYEE.EMPLOYEE_NUMBER))))))
                                 .from(EMPLOYEE)
                                 .where(EMPLOYEE.OFFICE_CODE.eq(OFFICE.OFFICE_CODE))),
-                        key("managers").value(field(select(jsonArrayAgg(jsonObject(
+                        key("managers").value(select(jsonArrayAgg(jsonObject(
                                 MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME))
                                 .orderBy(MANAGER.MANAGER_ID))
                                 .from(MANAGER)
                                 .join(OFFICE_HAS_MANAGER)
                                 .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID))
-                                .where(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))))))
+                                .where(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE)))))
                 .from(OFFICE)
                 .orderBy(OFFICE.OFFICE_CODE)
                 .fetch();
@@ -387,14 +385,14 @@ public class ClassicModelsRepository {
                                                 .where(SALE.EMPLOYEE_NUMBER.eq(EMPLOYEE.EMPLOYEE_NUMBER))))))
                                 .from(EMPLOYEE)
                                 .where(EMPLOYEE.OFFICE_CODE.eq(OFFICE.OFFICE_CODE))),
-                        key("managers").value(field(select(jsonArrayAgg(jsonObject(
+                        key("managers").value(select(jsonArrayAgg(jsonObject(
                                 key("managerId").value(MANAGER.MANAGER_ID),
                                 key("managerName").value(MANAGER.MANAGER_NAME)))
                                 .orderBy(MANAGER.MANAGER_ID))
                                 .from(MANAGER)
                                 .join(OFFICE_HAS_MANAGER)
                                 .on(MANAGER.MANAGER_ID.eq(OFFICE_HAS_MANAGER.MANAGERS_MANAGER_ID))
-                                .where(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE))))))
+                                .where(OFFICE.OFFICE_CODE.eq(OFFICE_HAS_MANAGER.OFFICES_OFFICE_CODE)))))
                 .from(OFFICE)
                 .orderBy(OFFICE.OFFICE_CODE)
                 .fetchInto(SimpleOffice.class);
