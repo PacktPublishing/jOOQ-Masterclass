@@ -26,12 +26,20 @@ public class ClassicModelsRepository {
 
         // By default, SQLServer JDBC relies on adaptive buffering to avoid OOM. 
         // Next, jOOQ scans the fetched ResultSet record by record via fetchNext()
-        System.out.println("Example 1:\n");
+        System.out.println("Example 1.1:\n");
         try ( Cursor<CustomerRecord> cursor = ctx.selectFrom(CUSTOMER).fetchLazy()) {
 
             while (cursor.hasNext()) {
                 CustomerRecord customer = cursor.fetchNext();
 
+                System.out.println("Customer:\n" + customer);
+            }
+        }
+        
+        System.out.println("Example 1.2:\n");
+        try ( Cursor<CustomerRecord> cursor = ctx.selectFrom(CUSTOMER).fetchLazy()) {
+
+            for (CustomerRecord customer : cursor) {
                 System.out.println("Customer:\n" + customer);
             }
         }
