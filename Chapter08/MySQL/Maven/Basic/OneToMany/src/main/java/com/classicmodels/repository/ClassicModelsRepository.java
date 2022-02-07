@@ -39,7 +39,7 @@ public class ClassicModelsRepository {
                         PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.TEXT_DESCRIPTION,
                         PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_VENDOR, PRODUCT.QUANTITY_IN_STOCK)
                         .from(PRODUCTLINE)
-                        .join(PRODUCT)
+                        .join(PRODUCT) // with collect() you can use LEFT JOIN as well
                         .on(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE))
                         .orderBy(PRODUCTLINE.PRODUCT_LINE)
                         .limit(3)
@@ -70,7 +70,7 @@ public class ClassicModelsRepository {
                 PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.TEXT_DESCRIPTION,
                 PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_VENDOR, PRODUCT.QUANTITY_IN_STOCK)
                 .from(PRODUCTLINE)
-                .join(PRODUCT)
+                .join(PRODUCT) // for using LEFT JOIN please check this https://github.com/jOOQ/jOOQ/issues/11888
                 .on(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE))
                 .orderBy(PRODUCTLINE.PRODUCT_LINE)
                 .limit(3)

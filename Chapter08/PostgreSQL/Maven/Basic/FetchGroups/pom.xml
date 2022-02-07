@@ -187,7 +187,8 @@
                                 
                                 <!-- jOOQ will generate POJOs on our behalf -->
                                 <generate>
-                                    <pojos>true</pojos>                             
+                                    <pojos>true</pojos> 
+                                    <pojosEqualsAndHashCode>true</pojosEqualsAndHashCode>                                                                               
                                 </generate>
 
                                 <target>

@@ -19,6 +19,8 @@ import jooq.generated.tables.pojos.Product;
 import jooq.generated.tables.pojos.Productline;
 import jooq.generated.tables.records.SaleRecord;
 import org.jooq.DSLContext;
+import org.jooq.Record;
+import org.jooq.Record1;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,23 +42,11 @@ public class ClassicModelsRepository {
                 .filter(rs -> rs.getValue(SALE.SALE_) > 5000)
                 .forEach(System.out::println);
 
-        // eager-fetching with streams (don't forget, this is a resourceful stream!)
-        try ( Stream<SaleRecord> stream = ctx.selectFrom(SALE).fetch().stream()) {
-            stream.filter(rs -> rs.getValue(SALE.SALE_) > 5000)
-                    .forEach(System.out::println);
-        }
-
-        // lazy streaming (pay attention to not accidentally forget the fetch() method)
-        ctx.selectFrom(SALE)
-                .stream() // stream over the result set (the database connection remains open)
-                .filter(rs -> rs.getValue(SALE.SALE_) > 5000)
-                .forEach(System.out::println);
-
-        // lazy streaming (don't forget, this is a resourceful stream!)
+        // lazy streaming (don't forget, this is a resourceful stream since the result set (connection) remains open!)
         try ( Stream<SaleRecord> stream = ctx.selectFrom(SALE).stream()) {
             stream.filter(rs -> rs.getValue(SALE.SALE_) > 5000)
                     .forEach(System.out::println);
-        }                                
+        }
     }
 
     @Transactional(readOnly = true) // open the database connection
@@ -65,52 +55,56 @@ public class ClassicModelsRepository {
         // eager-fetching with streams
         ctx.selectFrom(SALE)
                 .fetch() // jOOQ fetches the whole result set into memory via the database connection opened by @Transactional
-                .stream() // stream over the in-memory result set (database connection is active)
+                .stream() // stream over the in-memory result set (database connection is active but not used)
                 .filter(rs -> rs.getValue(SALE.SALE_) > 5000)
                 .forEach(System.out::println);
 
-        // lazy-fetching with streams
-        ctx.selectFrom(SALE)
-                .stream() // stream over the result set (the database connection remains open)
-                .filter(rs -> rs.getValue(SALE.SALE_) > 5000)
-                .forEach(System.out::println);
+        // lazy streaming (// stream over the result set (the database connection remains open and is used)
+        try ( Stream<SaleRecord> stream = ctx.selectFrom(SALE).stream()) {
+            stream.filter(rs -> rs.getValue(SALE.SALE_) > 5000)
+                    .forEach(System.out::println);
+        }
     }
 
     // lazy fetching with streams (fetchStream())    
     public void lazyFetchingViaFetchStream() {
 
-        ctx.fetchStream("SELECT sale FROM sale")
-                .filter(rs -> rs.getValue("sale", Double.class) > 5000)
-                .forEach(System.out::println);
+        try ( Stream<Record> stream = ctx.fetchStream("SELECT sale FROM sale")) {
+            stream.filter(rs -> rs.getValue("sale", Double.class) > 5000)
+                    .forEach(System.out::println);
+        }
 
-        ctx.selectFrom(SALE).fetchStream()
-                .filter(rs -> rs.getValue(SALE.SALE_) > 5000)
-                .forEach(System.out::println);
-        
-        List<Sale> result = ctx.selectFrom(SALE).fetchStreamInto(Sale.class).collect(toList());
-        System.out.println("Result:\n" + result);
+        try ( Stream<SaleRecord> stream = ctx.selectFrom(SALE).fetchStream()) {
+            stream.filter(rs -> rs.getValue(SALE.SALE_) > 5000)
+                    .forEach(System.out::println);
+        }
+
+        try ( Stream<Sale> stream = ctx.selectFrom(SALE).fetchStreamInto(Sale.class)) {
+            List<Sale> result = stream.collect(toList());
+            System.out.println("Result:\n" + result);
+        }
     }
 
     // lazy fetching (collecting) with collect()    
     public void lazyCollectingAndFetchStream() {
 
-        SimpleSale result1 = ctx.fetchStream("SELECT sale FROM sale") // jOOQ fluent API ends here                
-                .filter(rs -> rs.getValue("sale", Double.class) > 5000) // Stream API starts here (this is java.​util.​stream.​Stream.filter())                                          
-                .collect(Collectors.teeing( // Stream API starts here (this is java.​util.​stream.​Stream.collect())                          
-                        summingDouble(rs -> rs.getValue("sale", Double.class)),
-                        mapping(rs -> rs.getValue("sale", Double.class), toList()),
-                        SimpleSale::new));
-        System.out.println("Result=" + result1);
+        try ( Stream<Record> stream = ctx.fetchStream("SELECT sale FROM sale")) { // jOOQ fluent API ends here                
+            SimpleSale result1 = stream.filter(rs -> rs.getValue("sale", Double.class) > 5000) // Stream API starts here (this is java.​util.​stream.​Stream.filter())                                          
+                    .collect(Collectors.teeing( // Stream API starts here (this is java.​util.​stream.​Stream.collect())                          
+                            summingDouble(rs -> rs.getValue("sale", Double.class)),
+                            mapping(rs -> rs.getValue("sale", Double.class), toList()),
+                            SimpleSale::new));
+            System.out.println("Result=" + result1);
+        }
 
-        SimpleSale result2 = ctx.select(SALE.SALE_)
-                .from(SALE)
-                .fetchStream() // jOOQ fluent API ends here                                                                
-                .filter(rs -> rs.getValue(SALE.SALE_) > 5000) // Stream API starts here (this is java.​util.​stream.​Stream.filter())                                          
-                .collect(Collectors.teeing( // this is java.​util.​stream.​Stream.collect()
-                        summingDouble(rs -> rs.getValue(SALE.SALE_)),
-                        mapping(rs -> rs.getValue(SALE.SALE_), toList()),
-                        SimpleSale::new));
-        System.out.println("Result=" + result2);
+        try ( Stream<Record1<Double>> stream = ctx.select(SALE.SALE_).from(SALE).fetchStream()) { // jOOQ fluent API ends here                
+            SimpleSale result2 = stream.filter(rs -> rs.getValue(SALE.SALE_) > 5000) // Stream API starts here (this is java.​util.​stream.​Stream.filter())                                          
+                    .collect(Collectors.teeing( // this is java.​util.​stream.​Stream.collect()
+                            summingDouble(rs -> rs.getValue(SALE.SALE_)),
+                            mapping(rs -> rs.getValue(SALE.SALE_), toList()),
+                            SimpleSale::new));
+            System.out.println("Result=" + result2);
+        }
 
         // if you don't need the stream pipeline then simply don't use fetchStream()
         SimpleSale result3 = ctx.select(SALE.SALE_).from(SALE)
@@ -120,7 +114,7 @@ public class ClassicModelsRepository {
                         SimpleSale::new));
         System.out.println("Result=" + result3);
     }
-
+    
     // lazy fetching groups via collect()   
     public void lazyFetchingGroupsViaCollect() {
 
@@ -131,7 +125,8 @@ public class ClassicModelsRepository {
                 .resultSetType(ResultSet.TYPE_FORWARD_ONLY)
                 .resultSetConcurrency(ResultSet.CONCUR_READ_ONLY)
                 .fetchSize(5) // optionally, set the fetch size
-                // .fetchStream() // add this only if  you want to add additional operations to the stream pipeline                 
+                // .fetchStream() // - add this only if  you want to add additional operations to the stream pipeline                 
+                                  // - if you add fetchStream() don't forget to use try-with-resources     
                 .collect(Collectors.groupingBy(rs -> rs.into(Productline.class),
                         Collectors.mapping(rs -> rs.into(Product.class), toList())));
 

@@ -8,6 +8,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import static java.util.stream.Collectors.filtering;
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.mapping;
+import static java.util.stream.Collectors.toList;
 import static jooq.generated.tables.BankTransaction.BANK_TRANSACTION;
 import static jooq.generated.tables.Customer.CUSTOMER;
 import jooq.generated.tables.pojos.Department;
@@ -111,44 +115,80 @@ public class ClassicModelsRepository {
         System.out.println("Example 10\n" + prettyPrint(result10));
 
         // mapping one-to-many
-        Map<Record, Result<Record>> result11 = ctx.select(
+        Map<Record, Result<Record>> result11_1 = ctx.select(
                 PRODUCTLINE.PRODUCT_LINE, PRODUCT.PRODUCT_NAME, PRODUCT.BUY_PRICE)
                 .from(PRODUCTLINE)
-                .leftOuterJoin(PRODUCT)
+                .innerJoin(PRODUCT)
                 .on(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE))
                 .fetchGroups(new Field[]{PRODUCTLINE.PRODUCT_LINE},
                 new Field[]{PRODUCT.PRODUCT_NAME, PRODUCT.BUY_PRICE});
-        System.out.println("Example 11\n" + prettyPrint(result11));
+        System.out.println("Example 11.1\n" + prettyPrint(result11_1));
+
+        // for left-join, use ResultQuery.collect(), at least until you see
+        // this (https://github.com/jOOQ/jOOQ/issues/11888) resolved
+        Map<ProductlineRecord, List<ProductRecord>> result11_2 = ctx.select()
+                .from(PRODUCTLINE)
+                .leftOuterJoin(PRODUCT)
+                .on(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE))
+                .collect(groupingBy(
+                        r -> r.into(PRODUCTLINE),
+                        filtering(
+                                r -> r.get(PRODUCT.PRODUCT_ID) != null,
+                                mapping(
+                                        r -> r.into(PRODUCT),
+                                        toList()
+                                )
+                        )
+                ));
+        System.out.println("Example 11.2\n" + prettyPrint(result11_2));
 
         Map<String, Result<Record3<String, String, BigDecimal>>> result12 = ctx.select(
                 PRODUCTLINE.PRODUCT_LINE, PRODUCT.PRODUCT_NAME, PRODUCT.BUY_PRICE)
                 .from(PRODUCTLINE)
-                .leftOuterJoin(PRODUCT)
+                .innerJoin(PRODUCT)
                 .on(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE))
                 .fetchGroups(PRODUCTLINE.PRODUCT_LINE);
         System.out.println("Example 12\n" + prettyPrint(result12));
 
         Map<ProductlineRecord, Result<ProductRecord>> result13 = ctx.select()
                 .from(PRODUCTLINE)
-                .leftOuterJoin(PRODUCT)
+                .innerJoin(PRODUCT)
                 .on(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE))
                 .fetchGroups(PRODUCTLINE, PRODUCT);
         System.out.println("Example 13\n" + prettyPrint(result13));
 
         // take advantage of generated equals()/hashCode(), 
         //<pojosEqualsAndHashCode>true</pojosEqualsAndHashCode>                                                   
-        Map<Productline, List<Product>> result14 = ctx.select()
+        Map<Productline, List<Product>> result14_1 = ctx.select()
+                .from(PRODUCTLINE)
+                .innerJoin(PRODUCT)
+                .on(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE))
+                .fetchGroups(Productline.class, Product.class);
+        System.out.println("Example 14.1\n" + prettyPrint(result14_1));
+        
+        // for left-join, use ResultQuery.collect(), at least until you see
+        // this (https://github.com/jOOQ/jOOQ/issues/11888) resolved
+        Map<Productline, List<Product>> result14_2 = ctx.select()
                 .from(PRODUCTLINE)
                 .leftOuterJoin(PRODUCT)
                 .on(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE))
-                .fetchGroups(Productline.class, Product.class);
-        System.out.println("Example 14\n" + prettyPrint(result14));
-        
+                .collect(groupingBy(
+                        r -> r.into(Productline.class),
+                        filtering(
+                                r -> r.get(PRODUCT.PRODUCT_ID) != null,
+                                mapping(
+                                        r -> r.into(Product.class),
+                                        toList()
+                                )
+                        )
+                ));
+        System.out.println("Example 14.2\n" + prettyPrint(result14_2));
+
         Map<SimpleProductline, List<SimpleProduct>> result15 = ctx.select(
                 PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.CODE,
                 PRODUCT.PRODUCT_ID, PRODUCT.BUY_PRICE)
                 .from(PRODUCTLINE)
-                .leftOuterJoin(PRODUCT)
+                .innerJoin(PRODUCT)
                 .on(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE))
                 .fetchGroups(SimpleProductline.class, SimpleProduct.class);
         System.out.println("Example 15\n" + prettyPrint(result15));
@@ -156,7 +196,7 @@ public class ClassicModelsRepository {
         // denormalising (flattening)
         Map<ProductlineRecord, Result<Record>> result16 = ctx.select()
                 .from(PRODUCTLINE)
-                .leftOuterJoin(PRODUCT)
+                .innerJoin(PRODUCT)
                 .on(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE))
                 .fetchGroups(PRODUCTLINE);
         System.out.println("Example 16\n" + prettyPrint(result16));
