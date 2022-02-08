@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.classicmodels</groupId>
-    <artifactId>XmlRelationships</artifactId>
+    <artifactId>MultisetRelationshipsInto</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>XmlRelationships</name>
+    <name>MultisetRelationshipsInto</name>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -173,8 +173,8 @@
                                         | fetchval | get_.* | ghstore.* | gin.* | hs.* | hstore.* 
                                         | isdefined | isexists | make_array | new_salary | populate_record 
                                         | sale_price | slice.* | swap | tconvert | update_msrp | postal_code
-                                        | rate_type | vat_type | .*_master | each | skeys | svals 
-                                        | top_three_sales_per_employee | product_of_product_line
+                                        | evaluation_criteria | rate_type | vat_type | .*_master | each 
+                                        | skeys | svals | top_three_sales_per_employee | product_of_product_line
                                     </excludes>
 
                                     <!-- Schema version provider -->            
@@ -183,7 +183,7 @@
                                     <!-- Give enough time to jOOQ to trigger the queries needed for generating sources 
                                     (default is 5 seconds) -->
                                     <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>
-                                </database>                                
+                                </database>
 
                                 <target>
                                     <!-- The destination package of your generated classes (within the destination directory).

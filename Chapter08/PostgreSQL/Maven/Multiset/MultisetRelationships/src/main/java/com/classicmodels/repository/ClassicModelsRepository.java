@@ -2,14 +2,19 @@ package com.classicmodels.repository;
 
 import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Customerdetail.CUSTOMERDETAIL;
+import static jooq.generated.tables.Department.DEPARTMENT;
 import static jooq.generated.tables.Manager.MANAGER;
 import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.OfficeHasManager.OFFICE_HAS_MANAGER;
 import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Productline.PRODUCTLINE;
 import org.jooq.DSLContext;
+import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.multiset;
+import static org.jooq.impl.DSL.name;
+import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.selectDistinct;
+import static org.jooq.impl.DSL.unnest;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,7 +34,7 @@ public class ClassicModelsRepository {
         var result = ctx.select(
                 CUSTOMER.CUSTOMER_NAME, CUSTOMER.PHONE, CUSTOMER.CREDIT_LIMIT,
                 multiset(
-                        selectDistinct(
+                        select(
                                 CUSTOMERDETAIL.ADDRESS_LINE_FIRST,
                                 CUSTOMERDETAIL.STATE, CUSTOMERDETAIL.CITY)
                                 .from(CUSTOMERDETAIL)
@@ -103,5 +108,17 @@ public class ClassicModelsRepository {
         System.out.println("Many-to-many:\n" + result2);
         System.out.println("Many-to-many (JSON): " + result2.formatJSON());
         System.out.println("Many-to-many (XML): " + result2.formatXML());
+    }
+
+    public void multisetArray() {
+
+        // Result<Record2<Integer, Result<Record1<String>>>>
+        var result = ctx.select(DEPARTMENT.DEPARTMENT_ID,
+                multiset(select(field(name("t", "topic"), String.class))
+                        .from(unnest(DEPARTMENT.TOPIC).as("t", "topic"))).as("topic"))
+                .from(DEPARTMENT)
+                .fetch();
+
+        System.out.println("Multiset Array:\n" + result);
     }
 }

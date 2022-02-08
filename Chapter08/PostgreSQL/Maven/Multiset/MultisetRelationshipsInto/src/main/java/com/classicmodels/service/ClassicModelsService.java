@@ -14,10 +14,7 @@ public class ClassicModelsService {
 
     public void callAll() {
 
-        classicModelsRepository.oneToOne();        
         classicModelsRepository.oneToMany();
         classicModelsRepository.manyToMany();
-        
-        classicModelsRepository.multisetArray();                
     }
 }
