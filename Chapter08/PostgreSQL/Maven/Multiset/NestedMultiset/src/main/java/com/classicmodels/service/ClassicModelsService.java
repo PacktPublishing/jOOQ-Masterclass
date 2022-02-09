@@ -14,12 +14,12 @@ public class ClassicModelsService {
 
     public void callAll() {
 
-        classicModelsRepository.multisetProductlineProductOrderdetail();                         
+        classicModelsRepository.multisetProductlineProductOrderdetail();
         classicModelsRepository.multisetProductlineProductOrderdetailMapping();
-        
+
         classicModelsRepository.multisetCustomerPaymentBankTransactionCustomerdetail();
         classicModelsRepository.multisetCustomerPaymentBankTransactionCustomerdetailMapping();
-        
+
         classicModelsRepository.multisetOfficeManagerDepartmentEmployeeSale();
         classicModelsRepository.multisetOfficeManagerDepartmentEmployeeSaleMapping();
     }
