@@ -7,10 +7,10 @@ public class SimpleDepartment implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String depName;
-    private Short depCode;
+    private Integer depCode;
     private String[] depTopic;
 
-    public SimpleDepartment(String depName, Short depCode, String[] depTopic) {
+    public SimpleDepartment(String depName, Integer depCode, String[] depTopic) {
         this.depName = depName;
         this.depCode = depCode;
         this.depTopic = depTopic;
@@ -24,11 +24,11 @@ public class SimpleDepartment implements Serializable {
         this.depName = depName;
     }
 
-    public Short getDepCode() {
+    public Integer getDepCode() {
         return depCode;
     }
 
-    public void setDepCode(Short depCode) {
+    public void setDepCode(Integer depCode) {
         this.depCode = depCode;
     }
 

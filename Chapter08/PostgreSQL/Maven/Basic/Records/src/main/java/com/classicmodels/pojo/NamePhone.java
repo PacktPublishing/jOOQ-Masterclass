@@ -9,8 +9,6 @@ public class NamePhone implements Serializable {
     String customerName;
     String phone;  
 
-    public NamePhone() {};
-            
     public NamePhone(String customerName, String phone) {
         this.customerName = customerName;
         this.phone = phone;

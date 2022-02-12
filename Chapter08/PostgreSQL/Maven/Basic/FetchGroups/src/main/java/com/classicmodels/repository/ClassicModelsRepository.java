@@ -38,8 +38,11 @@ import org.jooq.DSLContext;
 import org.jooq.Field;
 import org.jooq.Result;
 import org.jooq.Record;
+import org.jooq.Record2;
 import org.jooq.Record3;
 import org.jooq.Record4;
+import static org.jooq.Records.intoGroups;
+import static org.jooq.Records.intoResultGroups;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.row;
@@ -63,13 +66,47 @@ public class ClassicModelsRepository {
                 .fetchGroups(ORDER.CUSTOMER_NUMBER);
         System.out.println("Example 1\n" + prettyPrint(result1));
 
-        Map<Long, List<BigDecimal>> result2 = ctx.select(
+        Map<Long, Result<Record2<Long, BigDecimal>>> result2_1 = ctx.select(
+                BANK_TRANSACTION.CUSTOMER_NUMBER, BANK_TRANSACTION.TRANSFER_AMOUNT)
+                .from(BANK_TRANSACTION)
+                .fetchGroups(BANK_TRANSACTION.CUSTOMER_NUMBER);
+        System.out.println("Example 2.1\n" + prettyPrint(result2_1));
+        
+        Map<Long, List<BigDecimal>> result2_2 = ctx.select(
                 BANK_TRANSACTION.CUSTOMER_NUMBER, BANK_TRANSACTION.TRANSFER_AMOUNT)
                 .from(BANK_TRANSACTION)
                 .fetchGroups(BANK_TRANSACTION.CUSTOMER_NUMBER, BANK_TRANSACTION.TRANSFER_AMOUNT);
-        System.out.println("Example 2\n" + prettyPrint(result2));
+        System.out.println("Example 2.2\n" + prettyPrint(result2_2));
 
-        // Example 1.3 and 1.4 produces the same result
+        // using Records utility
+        Map<Long, List<Record2<Long, BigDecimal>>> result2_3_1 = ctx.select(
+                BANK_TRANSACTION.CUSTOMER_NUMBER, BANK_TRANSACTION.TRANSFER_AMOUNT)
+                .from(BANK_TRANSACTION)
+                .collect(intoGroups(r -> r.get(BANK_TRANSACTION.CUSTOMER_NUMBER)));
+        System.out.println("Example 2.3.1\n" + prettyPrint(result2_3_1));
+        
+        Map<Long, Result<Record2<Long, BigDecimal>>> result2_3_2 = ctx.select(
+                BANK_TRANSACTION.CUSTOMER_NUMBER, BANK_TRANSACTION.TRANSFER_AMOUNT)
+                .from(BANK_TRANSACTION)
+                .collect(intoResultGroups(r -> r.get(BANK_TRANSACTION.CUSTOMER_NUMBER)));
+        System.out.println("Example 2.3.2\n" + prettyPrint(result2_3_2));
+        
+        // using Records utility
+        Map<Long, List<BigDecimal>> result2_4 = ctx.select(
+                BANK_TRANSACTION.CUSTOMER_NUMBER, BANK_TRANSACTION.TRANSFER_AMOUNT)
+                .from(BANK_TRANSACTION)
+                .collect(intoGroups(r -> r.get(BANK_TRANSACTION.CUSTOMER_NUMBER),
+                        r -> r.get(BANK_TRANSACTION.TRANSFER_AMOUNT)));
+        System.out.println("Example 2.4\n" + prettyPrint(result2_4));
+        
+        // using Records utility
+        Map<Long, List<BigDecimal>> result2_5 = ctx.select(
+                BANK_TRANSACTION.CUSTOMER_NUMBER, BANK_TRANSACTION.TRANSFER_AMOUNT)
+                .from(BANK_TRANSACTION)
+                .collect(intoGroups());
+        System.out.println("Example 2.5\n" + prettyPrint(result2_5));
+
+        // Example 3 and 4 produces the same result
         Map<Record, Result<BankTransactionRecord>> result3 = ctx.selectFrom(BANK_TRANSACTION)
                 .fetchGroups(row(BANK_TRANSACTION.CUSTOMER_NUMBER, BANK_TRANSACTION.CHECK_NUMBER).fields());
         System.out.println("Example 3\n" + prettyPrint(result3));
@@ -107,7 +144,7 @@ public class ClassicModelsRepository {
                 .where(CUSTOMER.FIRST_BUY_DATE.isNotNull())
                 .fetchGroups(CUSTOMER.FIRST_BUY_DATE);
         System.out.println("Example 9\n" + prettyPrint(result9));
-
+        
         Map<String, List<Office>> result10 = ctx.select(OFFICE.CITY.as("office_city"),
                 OFFICE.asterisk().except(OFFICE.CITY))
                 .from(OFFICE)
@@ -165,7 +202,7 @@ public class ClassicModelsRepository {
                 .on(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE))
                 .fetchGroups(Productline.class, Product.class);
         System.out.println("Example 14.1\n" + prettyPrint(result14_1));
-        
+
         // for left-join, use ResultQuery.collect(), at least until you see
         // this (https://github.com/jOOQ/jOOQ/issues/11888) resolved
         Map<Productline, List<Product>> result14_2 = ctx.select()

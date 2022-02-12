@@ -36,11 +36,15 @@ import org.jooq.Record;
 import org.jooq.Record1;
 import org.jooq.Record2;
 import org.jooq.Record3;
+import static org.jooq.Records.intoArray;
+import static org.jooq.Records.intoList;
+import static org.jooq.Records.intoMap;
+import static org.jooq.Records.intoSet;
 import static org.jooq.impl.DSL.concat;
 import static org.jooq.impl.DSL.field;
+import static org.jooq.impl.DSL.inline;
 import static org.jooq.impl.DSL.rowNumber;
 import static org.jooq.impl.DSL.sum;
-import static org.jooq.impl.DSL.val;
 
 @Repository
 @Transactional(readOnly = true)
@@ -59,15 +63,21 @@ public class ClassicModelsRepository {
                 .fetchArray();
         System.out.println("Example 1.1\n" + Arrays.toString(result1));
 
-        String[] result2 = ctx.select(DEPARTMENT.NAME)
+        String[] result21 = ctx.select(DEPARTMENT.NAME)
                 .from(DEPARTMENT)
                 .fetchArray(DEPARTMENT.NAME);
-        System.out.println("Example 1.2\n" + Arrays.toString(result2));
+        System.out.println("Example 1.2.1\n" + Arrays.toString(result21));
 
-        Integer[] result3 = ctx.select(DEPARTMENT.OFFICE_CODE)
+        // using Records utility        
+        String[] result22 = ctx.select(DEPARTMENT.NAME)
+                .from(DEPARTMENT)
+                .collect(intoArray(new String[0]));
+        System.out.println("Example 1.2.2\n" + Arrays.toString(result22));
+
+        Integer[] result31 = ctx.select(DEPARTMENT.OFFICE_CODE)
                 .from(DEPARTMENT)
                 .fetchArray(DEPARTMENT.OFFICE_CODE, Integer.class);
-        System.out.println("Example 1.3\n" + Arrays.toString(result3));
+        System.out.println("Example 1.3.1\n" + Arrays.toString(result31));        
         
         Record3<Integer, String, String>[] result4 = ctx.select(
                 DEPARTMENT.DEPARTMENT_ID, DEPARTMENT.OFFICE_CODE, DEPARTMENT.NAME)
@@ -126,11 +136,18 @@ public class ClassicModelsRepository {
         System.out.println("Example 1.13\n" + Arrays.deepToString(result13));
 
         // fetch an UDT type
-        EvaluationCriteriaRecord[] result14
+        EvaluationCriteriaRecord[] result141
                 = ctx.select(MANAGER.MANAGER_EVALUATION)
                         .from(MANAGER)
                         .fetchArray(MANAGER.MANAGER_EVALUATION);
-        System.out.println("Example 1.14\n" + Arrays.toString(result14));
+        System.out.println("Example 1.14.1\n" + Arrays.toString(result141));
+        
+        // using Records utility
+        EvaluationCriteriaRecord[] result142
+                = ctx.select(MANAGER.MANAGER_EVALUATION)
+                        .from(MANAGER)
+                        .collect(intoArray(new EvaluationCriteriaRecord[0]));
+        System.out.println("Example 1.14.2\n" + Arrays.toString(result142));        
 
         // fetch an UDT type and another type
         Record2<String, EvaluationCriteriaRecord>[] result15
@@ -140,10 +157,16 @@ public class ClassicModelsRepository {
         System.out.println("Example 1.15\n" + Arrays.toString(result15));
 
         // fetch embeddable type 
-        OfficeFullAddressRecord[] result16 = ctx.select(OFFICE.OFFICE_FULL_ADDRESS)
+        OfficeFullAddressRecord[] result161 = ctx.select(OFFICE.OFFICE_FULL_ADDRESS)
                 .from(OFFICE)
                 .fetchArray(OFFICE.OFFICE_FULL_ADDRESS);
-        System.out.println("Example 1.16\n" + Arrays.toString(result16));
+        System.out.println("Example 1.16.1\n" + Arrays.toString(result161));
+        
+        // using Records utility
+        OfficeFullAddressRecord[] result162 = ctx.select(OFFICE.OFFICE_FULL_ADDRESS)
+                .from(OFFICE)
+                .collect(intoArray(new OfficeFullAddressRecord[0]));
+        System.out.println("Example 1.16.2\n" + Arrays.toString(result162));
 
         // fetch embeddable type and another type
         Record2<String, OfficeFullAddressRecord>[] result17
@@ -160,10 +183,16 @@ public class ClassicModelsRepository {
                 .fetch();
         System.out.println("Example 2.1\n" + result1);
 
-        List<String> result2 = ctx.select(DEPARTMENT.NAME)
+        List<String> result21 = ctx.select(DEPARTMENT.NAME)
                 .from(DEPARTMENT)
                 .fetch(DEPARTMENT.NAME); // or .fetch().getValues(DEPARTMENT.NAME)
-        System.out.println("Example 2.2\n" + result2);
+        System.out.println("Example 2.2.1\n" + result21);
+        
+        // using Records utility
+        List<String> result22 = ctx.select(DEPARTMENT.NAME)
+                .from(DEPARTMENT)
+                .collect(intoList());
+        System.out.println("Example 2.2.2\n" + result22);
 
         List<Integer> result3 = ctx.select(DEPARTMENT.OFFICE_CODE)
                 .from(DEPARTMENT)
@@ -184,7 +213,7 @@ public class ClassicModelsRepository {
         List<Department> result6 = ctx.selectFrom(DEPARTMENT)
                 .fetchInto(Department.class); // or, .fetch().into(Department.class)                        
         System.out.println("Example 2.6\n" + result6);
-
+              
         List<Department> result7 = ctx.select(
                 DEPARTMENT.DEPARTMENT_ID, DEPARTMENT.OFFICE_CODE, DEPARTMENT.NAME)
                 .from(DEPARTMENT)
@@ -231,10 +260,15 @@ public class ClassicModelsRepository {
 
     public void fetchSetExamples() {
 
-        Set<String> result1 = ctx.select(EMPLOYEE.JOB_TITLE)
+        Set<String> result11 = ctx.select(EMPLOYEE.JOB_TITLE)
                 .from(EMPLOYEE)
                 .fetchSet(EMPLOYEE.JOB_TITLE);
-        System.out.println("Example 3.1\n" + result1);
+        System.out.println("Example 3.1.1\n" + result11);
+        
+        Set<String> result12 = ctx.select(EMPLOYEE.JOB_TITLE)
+                .from(EMPLOYEE)
+                .collect(intoSet());
+        System.out.println("Example 3.1.2\n" + result12);
 
         Set<String> result2 = ctx.select(EMPLOYEE.SALARY)
                 .from(EMPLOYEE)
@@ -269,12 +303,16 @@ public class ClassicModelsRepository {
 
     public void fetchMapExamples() {
 
-        Map<Integer, DepartmentRecord> result1 = ctx.selectFrom(DEPARTMENT)
+        Map<Integer, DepartmentRecord> result411 = ctx.selectFrom(DEPARTMENT)
                 .fetchMap(DEPARTMENT.DEPARTMENT_ID);
-        System.out.println("Example 4.1\n" + prettyPrint(result1));                
+        System.out.println("Example 4.1.1\n" + prettyPrint(result411));                
+        
+        Map<Integer, DepartmentRecord> result412 = ctx.selectFrom(DEPARTMENT)
+                .collect(intoMap(r -> r.get(DEPARTMENT.DEPARTMENT_ID)));
+        System.out.println("Example 4.1.2\n" + prettyPrint(result412));                
 
         Map<String, Record2<String, BigDecimal>> result2 = ctx.select(
-                concat(CUSTOMER.CONTACT_FIRST_NAME, val(" "),
+                concat(CUSTOMER.CONTACT_FIRST_NAME, inline(" "),
                         CUSTOMER.CONTACT_LAST_NAME).as("customer_name"), CUSTOMER.CREDIT_LIMIT)
                 .from(CUSTOMER)
                 .limit(10)
@@ -293,10 +331,22 @@ public class ClassicModelsRepository {
                 .fetchMap(new Field[]{DEPARTMENT.DEPARTMENT_ID, DEPARTMENT.OFFICE_CODE, DEPARTMENT.NAME});
         System.out.println("Example 4.5\n" + prettyPrint(result5));
 
-        Map<Integer, String> result6 = ctx.select(DEPARTMENT.DEPARTMENT_ID, DEPARTMENT.NAME)
+        Map<Integer, String> result61 = ctx.select(DEPARTMENT.DEPARTMENT_ID, DEPARTMENT.NAME)
                 .from(DEPARTMENT)
                 .fetchMap(DEPARTMENT.DEPARTMENT_ID, DEPARTMENT.NAME);
-        System.out.println("Example 4.6\n" + prettyPrint(result6));
+        System.out.println("Example 4.6.1\n" + prettyPrint(result61));
+        
+        // using Records utility
+        Map<Integer, String> result62 = ctx.select(DEPARTMENT.DEPARTMENT_ID, DEPARTMENT.NAME)
+                .from(DEPARTMENT)
+                .collect(intoMap());
+        System.out.println("Example 4.6.2\n" + prettyPrint(result62));
+        
+        // using Records utility
+        Map<Integer, String> result63 = ctx.select(DEPARTMENT.NAME, DEPARTMENT.DEPARTMENT_ID)
+                .from(DEPARTMENT)
+                .collect(intoMap(r -> r.get(DEPARTMENT.DEPARTMENT_ID), r -> r.get(DEPARTMENT.NAME)));
+        System.out.println("Example 4.6.3\n" + prettyPrint(result63));
 
         // mapping one-to-one
         Map<Record, Record> result7 = ctx.select(CUSTOMER.CONTACT_FIRST_NAME,
@@ -331,7 +381,7 @@ public class ClassicModelsRepository {
         System.out.println("Example 4.10\n" + prettyPrint(result10));
 
         // mapping one-to-many
-        Map<Record, Record> result11 = ctx.select(concat(CUSTOMER.CONTACT_FIRST_NAME, val(" "),
+        Map<Record, Record> result11 = ctx.select(concat(CUSTOMER.CONTACT_FIRST_NAME, inline(" "),
                 CUSTOMER.CONTACT_LAST_NAME).as("customer_name"), PAYMENT.INVOICE_AMOUNT, PAYMENT.CACHING_DATE)
                 .from(CUSTOMER)
                 .join(PAYMENT)

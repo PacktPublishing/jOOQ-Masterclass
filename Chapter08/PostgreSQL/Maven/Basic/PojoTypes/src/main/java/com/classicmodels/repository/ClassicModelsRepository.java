@@ -41,6 +41,7 @@ import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Productline.PRODUCTLINE;
 import org.jooq.Records;
+import static org.jooq.Records.mapping;
 import static org.jooq.impl.DSL.inline;
 
 @Repository
@@ -71,11 +72,18 @@ public class ClassicModelsRepository {
 
         // having a proper constructor, we can omit aliases
         // jOOQ generated POJOs almost like SimpleDepartment via <pojos>true</pojos> 
-        List<SimpleDepartment> result3 = ctx.select(
+        List<SimpleDepartment> result31 = ctx.select(
                 DEPARTMENT.NAME, DEPARTMENT.CODE, DEPARTMENT.TOPIC)
                 .from(DEPARTMENT)
                 .fetchInto(SimpleDepartment.class);
-        System.out.println("Example 1.3\n" + result3);
+        System.out.println("Example 1.3.1\n" + result31);
+        
+        // using Records utility
+        List<SimpleDepartment> result32 = ctx.select(
+                DEPARTMENT.NAME, DEPARTMENT.CODE, DEPARTMENT.TOPIC)
+                .from(DEPARTMENT)
+                .fetch(mapping(SimpleDepartment::new));
+        System.out.println("Example 1.3.2\n" + result32);        
 
         List<SimpleEmployee> result4 = ctx.select(EMPLOYEE.FIRST_NAME.as("fn"), EMPLOYEE.LAST_NAME.as("ln"),
                 concat(EMPLOYEE.employee().FIRST_NAME, inline(" "), EMPLOYEE.employee().LAST_NAME).as("boss"))
@@ -96,7 +104,7 @@ public class ClassicModelsRepository {
                 .from(MANAGER)
                 .fetchInto(SimpleManager.class);
         System.out.println("Example 1.6\n" + result6);
-
+               
         // fetch embeddable
         List<SimpleOffice> result7 = ctx.select(OFFICE.OFFICE_CODE, OFFICE.OFFICE_FULL_ADDRESS)
                 .from(OFFICE)

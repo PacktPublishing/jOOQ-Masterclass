@@ -9,6 +9,13 @@ public class PhoneCreditLimit implements Serializable {
     
     public String phone;
     public BigDecimal creditLimit;
+    
+    public PhoneCreditLimit() {};
+
+    public PhoneCreditLimit(String phone, BigDecimal creditLimit) {
+        this.phone = phone;
+        this.creditLimit = creditLimit;
+    }        
 
     @Override
     public String toString() {
