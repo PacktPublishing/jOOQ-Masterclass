@@ -1,0 +1,272 @@
+plugins {
+    id 'application'
+    id 'org.springframework.boot' version '2.5.7'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'org.flywaydb.flyway' version '8.2.0'
+    id 'nu.studer.jooq' version '6.0.1'
+    id 'java'
+}
+
+group = 'com.classicmodels'
+version = '1.0'
+sourceCompatibility = '17'
+targetCompatibility = '17'
+
+application {
+    mainClass = 'com.classicmodels.MainApplication' 
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {        
+    jooqGenerator 'org.postgresql:postgresql' 
+    jooqGenerator 'jakarta.xml.bind:jakarta.xml.bind-api:3.0.1'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'    
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.postgresql:postgresql'
+    implementation 'jakarta.xml.bind:jakarta.xml.bind-api:3.0.1'
+    implementation 'jakarta.persistence:jakarta.persistence-api:3.0.0'
+    implementation 'org.flywaydb:flyway-core'
+}
+
+processResources {
+    filesMatching("**/application.properties") {
+        expand( project.properties )
+    }
+}
+
+flyway{
+    driver = project.properties['driverClassName']
+    url = project.properties['url']
+    user = project.properties['username']
+    password = project.properties['password']
+    locations = ['filesystem:./../../../../../db/migration/dev/postgresql']
+}
+
+jooq {
+    version = project.properties['jooq']
+    edition = nu.studer.gradle.jooq.JooqEdition.OSS
+
+    configurations {
+        main {
+            generateSchemaSourceOnCompilation = true  // default (can be omitted)
+            
+            generationTool {
+                logging = org.jooq.meta.jaxb.Logging.WARN
+                
+                // Configure the database connection here
+                jdbc {
+                    driver = project.properties['driverClassName']
+                    url = project.properties['url']
+                    user = project.properties['username']
+                    password = project.properties['password']                    
+                }
+                
+                generator {
+                    // The default code generator. 
+                    // You can override this one, to generate your own code style.
+                                     
+                    // Supported generators:                                
+                    //  - org.jooq.codegen.JavaGenerator
+                    //  - org.jooq.codegen.ScalaGenerator
+                    //  - org.jooq.codegen.KotlinGenerator
+                           
+                    // Defaults to org.jooq.codegen.JavaGenerator
+                    name = 'org.jooq.codegen.JavaGenerator' 
+                    
+                    database {
+
+                        // For each type, one embeddable entry is required
+                        embeddables {
+                            embeddable {
+                                // The optional catalog of the embeddable type (the catalog of the first matched table if left empty)
+                                catalog = ''
+                                            
+                                // The optional schema of the embeddable type (the schema of the first matched table if left empty)
+                                schema = 'classicmodels'
+                                            
+                                // The name of the embeddable type
+                                name = 'OFFICE_FULL_ADDRESS'
+                                            
+                                // An optional, defining comment of an embeddable
+                                comment = 'The full address an office'
+                                            
+                                // The name of the reference to the embeddable type. Defaults to <name/> if left blank
+                                referencingName = ''
+                                            
+                                // An optional, referencing comment of an embeddable. Defaults to <comment/> if left blank
+                                referencingComment = ''
+                                            
+                                // A regular expression matching qualified or unqualified table names to which to apply this embeddable specification
+                                // If left blank, this will apply to all tables
+                                tables = '.*\\.office'
+                                            
+                                // A list of fields to match to an embeddable's attributes. 
+                                // Each field must match exactly one column in each matched table.
+                                // A mandatory regular expression matches field names, whereas an optional name can be provided to define the embeddable
+                                // attribute name. If no name is provided, then the first matched field's name will be taken
+                                fields {
+                                    field {
+                                        expression = 'CITY'
+                                    }
+                                    field {
+                                        // name = 'ADDRESS' - optional name
+                                        expression = 'ADDRESS_LINE_FIRST'
+                                    }
+                                    field {
+                                        expression = 'STATE'
+                                    }
+                                    field {
+                                        expression = 'COUNTRY'
+                                    }                                                
+                                    field {
+                                        expression = 'TERRITORY'
+                                    }
+                                }
+                            }
+
+                            embeddable {
+                                schema = 'classicmodels'
+                                name = 'MANAGER_STATUS'
+                                tables = '.*\\.manager'
+                                fields {
+                                    field {
+                                        expression = 'MANAGER_NAME'
+                                    }
+                                    field {
+                                        expression = 'MANAGER_EVALUATION'
+                                    }
+                                }
+                            }
+                            
+                            embeddable {
+                                schema = 'classicmodels'
+                                name = 'DEPARTMENT_DETAIL'
+                                tables = '.*\\.department'
+                                fields {
+                                    field {
+                                        expression = 'NAME'
+                                    }
+                                    field {
+                                        expression = 'PHONE'
+                                    } 
+                                    field {
+                                        expression = 'TOPIC'
+                                    }
+                                }
+                            }
+                        }
+
+                        // The database type. The format here is:
+                        // org.jooq.meta.[database].[database]Database
+                        name = 'org.jooq.meta.postgres.PostgresDatabase'                        
+                        
+                        // The database schema (or in the absence of schema support, in your RDBMS this
+                        // can be the owner, user, database name) to be generated. This cannot be combined with the <schemata/> element.                                     
+                        // If <inputSchema/> is missing then all schemas will be considered.
+                        inputSchema = 'public'
+                        
+                        // All elements that are generated from your schema
+                        // (A Java regular expression. Use the pipe to separate several expressions)
+                        // Watch out for case-sensitivity. Depending on your database, this might be important! 
+                        // You can create case-insensitive regular expressions using this syntax: (?i:expr).
+                        // Whitespace is ignored and comments are possible.
+                        includes = '.*'
+                        
+                        // All elements that are excluded from your schema
+                        // (A Java regular expression. Use the pipe to separate several expressions).
+                        // Excludes match before includes, i.e. excludes have a higher priority.
+                        excludes = '''\
+                                  flyway_schema_history | akeys | avals | defined | delete.*
+                                | department_topic_arr | dup | employee_office_arr | exist.*                                   
+                                | fetchval | get_.* | ghstore.* | gin.* | hs.* | hstore.* 
+                                | isdefined | isexists | make_array | new_salary | populate_record 
+                                | sale_price | slice.* | swap | tconvert | update_msrp | postal_code
+                                | rate_type | vat_type | .*_master | each | skeys | svals 
+                                | top_three_sales_per_employee | product_of_product_line
+                                  ''' 
+                                  
+                        // Schema version provider
+                        schemaVersionProvider = 'SELECT MAX("version") FROM "flyway_schema_history"'
+
+                        // Give enough time to jOOQ to trigger the queries needed for generating sources 
+                        // (default is 5 seconds)
+                        logSlowQueriesAfterSeconds = 20
+                    }
+
+                    // jOOQ will generate POJOs on our behalf
+                    generate {
+                        pojos = 'true'
+                                                                                   
+                        // adds equals() and hashCode() to POJOs
+                        pojosEqualsAndHashCode = 'true'
+                            
+                        // by default, jOOQ generates toString() to POJOs
+                        // pojosToString = 'false'
+                            
+                        // be default, the generated POJOs are serializable 
+                        // serializablePojos = 'false'
+                            
+                        // adds @ConstructorProperties to POJOs
+                        // constructorPropertiesAnnotationOnPojos = 'true'
+                                                                          
+                        // generating interfaces for POJOs (if interfaces are generated, POJOs will implement them)
+                        // interfaces = 'true'
+                                                                                                                                                      
+                        // generating immutable POJOs
+                        // immutablePojos = 'true'
+                             
+                        // generating immutable interfaces for POJOs
+                        // immutableInterfaces = 'true'
+                            
+                        // generating JDK 14 Records
+                        // pojosAsJavaRecordClasses = 'true'
+                                                        
+                        // adds JPA specific annotations to the generated POJOs
+                        // jpaAnnotations = 'true'
+                        // jpaVersion = '2.2'
+                            
+                        // fluent style setters
+                        // fluentSetters = 'true'
+                            
+                        // generating POJOs for Kotlin
+                        // pojosAsKotlinDataClasses = 'true'
+                            
+                        // generating POJOs for Scala
+                        // pojosAsScalaCaseClasses = 'true'
+                    }
+                    
+                    target {
+                        packageName = 'jooq.generated'
+                        directory = 'build/generated-sources'
+                    }
+                    strategy.name = "org.jooq.codegen.DefaultGeneratorStrategy"
+                }
+            }
+        }
+    }
+}
+
+// Configure jOOQ task such that it only executes when something has changed 
+// that potentially affects the generated JOOQ sources:
+// - the jOOQ configuration has changed (Jdbc, Generator, Strategy, etc.)
+// - the classpath used to execute the jOOQ generation tool has changed 
+//   (jOOQ library, database driver, strategy classes, etc.)
+// - the schema files from which the schema is generated and which is 
+//   used by jOOQ to generate the sources have changed (scripts added, modified, etc.)
+tasks.named('generateJooq').configure {
+    // ensure database schema has been prepared by Flyway before generating the jOOQ sources
+    dependsOn tasks.named('flywayMigrate')
+
+    // declare Flyway migration scripts as inputs on the jOOQ task
+    inputs.files(fileTree('${rootDir}/../../../../../db/migration/dev/postgresql'))
+        .withPropertyName('migrations')
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+
+    // make jOOQ task participate in incremental builds and build caching
+    allInputsDeclared = true
+    outputs.cacheIf { true }
+}
