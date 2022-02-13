@@ -1,0 +1,36 @@
+package com.classicmodels.pojo;
+
+import java.io.Serializable;
+import java.util.List;
+
+public class SimpleSale implements Serializable {
+
+    private double totalSale;
+    private List<Double> sales;
+
+    public SimpleSale(double totalSale, List<Double> sales) {
+        this.totalSale = totalSale;
+        this.sales = sales;
+    }        
+
+    public double getTotalSale() {
+        return totalSale;
+    }
+
+    public void setTotalSale(double totalSale) {
+        this.totalSale = totalSale;
+    }
+
+    public List<Double> getSales() {
+        return sales;
+    }
+
+    public void setSales(List<Double> sales) {
+        this.sales = sales;
+    }
+
+    @Override
+    public String toString() {
+        return "SimpleSale{" + "totalSale=" + totalSale + ", sales=" + sales + '}';
+    }
+}
