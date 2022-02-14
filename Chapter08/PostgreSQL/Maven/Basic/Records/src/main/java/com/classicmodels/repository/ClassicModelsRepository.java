@@ -111,7 +111,7 @@ public class ClassicModelsRepository {
         System.out.println("Example 2.6\n" + result6);
 
         // Mapping (Java 16 Record)
-        var result7 = ctx.select(CUSTOMER.PHONE, CUSTOMER.CREDIT_LIMIT)
+        List<PhoneCreditLimit> result7 = ctx.select(CUSTOMER.PHONE, CUSTOMER.CREDIT_LIMIT)
                 .from(CUSTOMER)
                 .fetch(mapping(PhoneCreditLimit::new));
         System.out.println("Example 2.7\n" + result7);
