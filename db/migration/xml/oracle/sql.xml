@@ -184,238 +184,248 @@
         </column>
 
         <!-- Table `customerdetail` -->
-        <!-- customer_number bigint not null -->
+        <!-- customer_number number(19,0) not null -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>customerdetail</table_name>
+            <table_name>CUSTOMERDETAIL</table_name>
             <column_name>customer_number</column_name>
-            <data_type>bigint</data_type>            
+            <data_type>number</data_type>
+            <numeric_precision>19</numeric_precision>
+            <numeric_scale>0</numeric_scale>           
             <is_nullable>false</is_nullable> 
         </column>
-        <!-- address_line_first varchar(50) not null -->
+        <!-- address_line_first varchar2(50) not null -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>customerdetail</table_name>
+            <table_name>CUSTOMERDETAIL</table_name>
             <column_name>address_line_first</column_name>
-            <data_type>varchar</data_type>            
+            <data_type>varchar2</data_type>            
             <character_maximum_length>50</character_maximum_length>
             <is_nullable>false</is_nullable> 
         </column>
-        <!-- address_line_second varchar(50) -->
+        <!-- address_line_second varchar2(50) -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>customerdetail</table_name>
+            <table_name>CUSTOMERDETAIL</table_name>
             <column_name>address_line_second</column_name>
-            <data_type>varchar</data_type>            
+            <data_type>varchar2</data_type>            
             <character_maximum_length>50</character_maximum_length>
         </column>
-        <!-- city varchar(50) not null -->
+        <!-- city varchar2(50) not null -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>customerdetail</table_name>
+            <table_name>CUSTOMERDETAIL</table_name>
             <column_name>city</column_name>
-            <data_type>varchar</data_type>            
+            <data_type>varchar2</data_type>            
             <character_maximum_length>50</character_maximum_length>
             <is_nullable>false</is_nullable> 
         </column>
-        <!-- country varchar(50) not null -->
+        <!-- country varchar2(50) not null -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>customerdetail</table_name>
+            <table_name>CUSTOMERDETAIL</table_name>
             <column_name>country</column_name>
-            <data_type>varchar</data_type>            
+            <data_type>varchar2</data_type>            
             <character_maximum_length>50</character_maximum_length>
             <is_nullable>false</is_nullable> 
         </column>
-        <!-- postal_code varchar(15) -->
+        <!-- postal_code varchar2(15) -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>customerdetail</table_name>
+            <table_name>CUSTOMERDETAIL</table_name>
             <column_name>postal_code</column_name>
-            <data_type>varchar</data_type>            
+            <data_type>varchar2</data_type>            
             <character_maximum_length>15</character_maximum_length>
         </column>
-        <!-- state varchar(50) -->
+        <!-- state varchar2(50) -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>customerdetail</table_name>
+            <table_name>CUSTOMERDETAIL</table_name>
             <column_name>state</column_name>
-            <data_type>varchar</data_type>            
+            <data_type>varchar2</data_type>            
             <character_maximum_length>50</character_maximum_length>
         </column>
 
         <!-- Table `employee` -->
-        <!-- employee_number bigint not null -->
+        <!-- employee_number number(19,0) not null -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>employee</table_name>
+            <table_name>EMPLOYEE</table_name>
             <column_name>employee_number</column_name>
-            <data_type>bigint</data_type>            
+            <data_type>number</data_type>
+            <numeric_precision>19</numeric_precision>
+            <numeric_scale>0</numeric_scale>      
             <is_nullable>false</is_nullable> 
         </column>
-        <!-- email varchar(100) not null -->
+        <!-- email varchar2(100) not null -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>employee</table_name>
+            <table_name>EMPLOYEE</table_name>
             <column_name>email</column_name>
-            <data_type>varchar</data_type>            
+            <data_type>varchar2</data_type>            
             <character_maximum_length>100</character_maximum_length>
             <is_nullable>false</is_nullable> 
         </column>
-        <!--  extension varchar(10) not null -->
+        <!--  extension varchar2(10) not null -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>employee</table_name>
+            <table_name>EMPLOYEE</table_name>
             <column_name>extension</column_name>
-            <data_type>varchar</data_type>            
+            <data_type>varchar2</data_type>            
             <character_maximum_length>10</character_maximum_length>
             <is_nullable>false</is_nullable>
         </column>
-        <!-- first_name varchar(50) not null -->
+        <!-- first_name varchar2(50) not null -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>employee</table_name>
+            <table_name>EMPLOYEE</table_name>
             <column_name>first_name</column_name>
-            <data_type>varchar</data_type>            
+            <data_type>varchar2</data_type>            
             <character_maximum_length>50</character_maximum_length>
             <is_nullable>false</is_nullable>
         </column>
-        <!-- job_title varchar(50) not null -->
+        <!-- job_title varchar2(50) not null -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>employee</table_name>
+            <table_name>EMPLOYEE</table_name>
             <column_name>job_title</column_name>
-            <data_type>varchar</data_type>            
+            <data_type>varchar2</data_type>            
             <character_maximum_length>50</character_maximum_length>
             <is_nullable>false</is_nullable>
         </column>
-        <!-- last_name varchar(50) not null -->
+        <!-- last_name varchar2(50) not null -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>employee</table_name>
+            <table_name>EMPLOYEE</table_name>
             <column_name>last_name</column_name>
-            <data_type>varchar</data_type>            
+            <data_type>varchar2</data_type>            
             <character_maximum_length>50</character_maximum_length>
             <is_nullable>false</is_nullable>
         </column>
-        <!-- salary integer not null -->
+        <!-- salary number(10,0) not null -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>employee</table_name>
+            <table_name>EMPLOYEE</table_name>
             <column_name>salary</column_name>
-            <data_type>integer</data_type>            
+            <data_type>number</data_type>
+            <numeric_precision>10</numeric_precision>
+            <numeric_scale>0</numeric_scale>      
             <is_nullable>false</is_nullable>
         </column>
-        <!-- office_code varchar(10) -->
+        <!-- office_code varchar2(10) -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>employee</table_name>
+            <table_name>EMPLOYEE</table_name>
             <column_name>office_code</column_name>
-            <data_type>varchar</data_type>            
+            <data_type>varchar2</data_type>            
             <character_maximum_length>10</character_maximum_length>
         </column>
-        <!-- reports_to bigint -->
+        <!-- reports_to number(19,0) -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>employee</table_name>
+            <table_name>EMPLOYEE</table_name>
             <column_name>reports_to</column_name>
-            <data_type>bigint</data_type>
+            <data_type>number</data_type>
+            <numeric_precision>19</numeric_precision>
+            <numeric_scale>0</numeric_scale>  
         </column>
 
         <!-- Table `manager` -->
-        <!-- manager_id serial not null -->
+        <!-- manager_id number(19,0) generated by default on null as identity -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>manager</table_name>
+            <table_name>MANAGER</table_name>
             <column_name>manager_id</column_name>
-            <data_type>serial</data_type>            
-            <is_nullable>false</is_nullable> 
+            <data_type>number</data_type>
+            <numeric_precision>19</numeric_precision>
+            <numeric_scale>0</numeric_scale>            
+            <identity_generation>generated by default on null as identity</identity_generation>
         </column>
-        <!-- manager_name varchar(50) not null -->
+        <!-- manager_name varchar2(50) not null -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>manager</table_name>
+            <table_name>MANAGER</table_name>
             <column_name>manager_name</column_name>
-            <data_type>varchar</data_type>            
+            <data_type>varchar2</data_type>            
             <character_maximum_length>50</character_maximum_length>
             <is_nullable>false</is_nullable>
         </column>
 
         <!-- Table `office` -->
-        <!-- office_code varchar(10) not null -->
+        <!-- office_code varchar2(10) not null -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>office</table_name>
+            <table_name>OFFICE</table_name>
             <column_name>office_code</column_name>
-            <data_type>varchar</data_type>            
+            <data_type>varchar2</data_type>            
             <character_maximum_length>10</character_maximum_length>
             <is_nullable>false</is_nullable>
         </column>
-        <!-- address_line_first varchar(50) not null -->
+        <!-- address_line_first varchar2(50) not null -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>office</table_name>
+            <table_name>OFFICE</table_name>
             <column_name>address_line_first</column_name>
-            <data_type>varchar</data_type>            
+            <data_type>varchar2</data_type>            
             <character_maximum_length>50</character_maximum_length>
             <is_nullable>false</is_nullable>
         </column>
-        <!-- address_line_second varchar(50) -->
+        <!-- address_line_second varchar2(50) -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>office</table_name>
+            <table_name>OFFICE</table_name>
             <column_name>address_line_second</column_name>
-            <data_type>varchar</data_type>            
+            <data_type>varchar2</data_type>            
             <character_maximum_length>50</character_maximum_length>
         </column>
-        <!-- city varchar(50) not null -->
+        <!-- city varchar2(50) not null -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>office</table_name>
+            <table_name>OFFICE</table_name>
             <column_name>city</column_name>
-            <data_type>varchar</data_type>            
+            <data_type>varchar2</data_type>            
             <character_maximum_length>50</character_maximum_length>
             <is_nullable>false</is_nullable>
         </column>
-        <!-- country varchar(50) not null -->
+        <!-- country varchar2(50) not null -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>office</table_name>
+            <table_name>OFFICE</table_name>
             <column_name>country</column_name>
-            <data_type>varchar</data_type>            
+            <data_type>varchar2</data_type>            
             <character_maximum_length>50</character_maximum_length>
             <is_nullable>false</is_nullable>
         </column>
-        <!-- phone varchar(50) not null -->
+        <!-- phone varchar2(50) not null -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>office</table_name>
+            <table_name>OFFICE</table_name>
             <column_name>phone</column_name>
-            <data_type>varchar</data_type>            
+            <data_type>varchar2</data_type>            
             <character_maximum_length>50</character_maximum_length>
             <is_nullable>false</is_nullable>
         </column>
-        <!-- postal_code varchar(15) not null -->
+        <!-- postal_code varchar2(15) not null -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>office</table_name>
+            <table_name>OFFICE</table_name>
             <column_name>postal_code</column_name>
-            <data_type>varchar</data_type>            
+            <data_type>varchar2</data_type>            
             <character_maximum_length>15</character_maximum_length>
             <is_nullable>false</is_nullable>
         </column>
-        <!-- state varchar(50) -->
+        <!-- state varchar2(50) -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>office</table_name>
+            <table_name>OFFICE</table_name>
             <column_name>state</column_name>
             <data_type>varchar</data_type>            
             <character_maximum_length>50</character_maximum_length>
         </column>
-        <!-- territory varchar(10) not null -->
+        <!-- territory varchar2(10) not null -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>office</table_name>
+            <table_name>OFFICE</table_name>
             <column_name>territory</column_name>
             <data_type>varchar</data_type>            
             <character_maximum_length>10</character_maximum_length>
@@ -423,21 +433,23 @@
         </column>
 
         <!-- Table `office_has_manager` -->
-        <!-- offices_office_code varchar(10) not null -->
+        <!-- offices_office_code varchar2(10) not null -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>office_has_manager</table_name>
+            <table_name>OFFICE_HAS_MANAGER</table_name>
             <column_name>offices_office_code</column_name>
-            <data_type>varchar</data_type>            
+            <data_type>varchar2</data_type>            
             <character_maximum_length>10</character_maximum_length>
             <is_nullable>false</is_nullable>
         </column>
-        <!-- managers_manager_id bigint not null -->
+        <!-- managers_manager_id number(19,0) not null -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>office_has_manager</table_name>
+            <table_name>OFFICE_HAS_MANAGER</table_name>
             <column_name>managers_manager_id</column_name>
-            <data_type>bigint</data_type>
+            <data_type>number</data_type>
+            <numeric_precision>19</numeric_precision>
+            <numeric_scale>0</numeric_scale>  
             <is_nullable>false</is_nullable>
         </column>
 
@@ -689,35 +701,35 @@
             <constraint_name>customerdetail_pk</constraint_name>
             <constraint_type>PRIMARY KEY</constraint_type>
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>customerdetail</table_name>
+            <table_name>CUSTOMERDETAIL</table_name>
         </table_constraint>
         <table_constraint>
             <constraint_schema>CLASSICMODELS</constraint_schema>
             <constraint_name>employee_pk</constraint_name>
             <constraint_type>PRIMARY KEY</constraint_type>
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>employee</table_name>
+            <table_name>EMPLOYEE</table_name>
         </table_constraint>
         <table_constraint>
             <constraint_schema>CLASSICMODELS</constraint_schema>
             <constraint_name>manager_pk</constraint_name>
             <constraint_type>PRIMARY KEY</constraint_type>
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>manager</table_name>
+            <table_name>MANAGER</table_name>
         </table_constraint>
         <table_constraint>
             <constraint_schema>CLASSICMODELS</constraint_schema>
             <constraint_name>office_pk</constraint_name>
             <constraint_type>PRIMARY KEY</constraint_type>
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>office</table_name>
+            <table_name>OFFICE</table_name>
         </table_constraint>
         <table_constraint>
             <constraint_schema>CLASSICMODELS</constraint_schema>
             <constraint_name>office_manager_pk</constraint_name>
             <constraint_type>PRIMARY KEY</constraint_type>
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>office_has_manager</table_name>
+            <table_name>OFFICE_HAS_MANAGER</table_name>
         </table_constraint>
         <table_constraint>
             <constraint_schema>CLASSICMODELS</constraint_schema>
@@ -777,7 +789,7 @@
             <constraint_schema>CLASSICMODELS</constraint_schema>
             <constraint_name>customerdetail_pk</constraint_name>
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>customerdetail</table_name>
+            <table_name>CUSTOMERDETAIL</table_name>
             <column_name>customer_number</column_name>
             <ordinal_position>1</ordinal_position>
         </key_column_usage>
@@ -785,7 +797,7 @@
             <constraint_schema>CLASSICMODELS</constraint_schema>
             <constraint_name>employee_pk</constraint_name>
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>employee</table_name>
+            <table_name>EMPLOYEE</table_name>
             <column_name>employee_number</column_name>
             <ordinal_position>1</ordinal_position>
         </key_column_usage>
@@ -793,7 +805,7 @@
             <constraint_schema>CLASSICMODELS</constraint_schema>
             <constraint_name>manager_pk</constraint_name>
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>manager</table_name>
+            <table_name>MANAGER</table_name>
             <column_name>manager_id</column_name>
             <ordinal_position>1</ordinal_position>
         </key_column_usage>
@@ -801,7 +813,7 @@
             <constraint_schema>CLASSICMODELS</constraint_schema>
             <constraint_name>office_pk</constraint_name>
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>office</table_name>
+            <table_name>OFFICE</table_name>
             <column_name>office_code</column_name>
             <ordinal_position>1</ordinal_position>
         </key_column_usage>
@@ -809,7 +821,7 @@
             <constraint_schema>CLASSICMODELS</constraint_schema>
             <constraint_name>office_manager_pk</constraint_name>
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>office_has_manager</table_name>
+            <table_name>OFFICE_HAS_MANAGER</table_name>
             <column_name>offices_office_code</column_name>
             <ordinal_position>1</ordinal_position>
         </key_column_usage>
@@ -817,7 +829,7 @@
             <constraint_schema>CLASSICMODELS</constraint_schema>
             <constraint_name>office_manager_pk</constraint_name>
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>office_has_manager</table_name>
+            <table_name>OFFICE_HAS_MANAGER</table_name>
             <column_name>managers_manager_id</column_name>
             <ordinal_position>2</ordinal_position>
         </key_column_usage>
