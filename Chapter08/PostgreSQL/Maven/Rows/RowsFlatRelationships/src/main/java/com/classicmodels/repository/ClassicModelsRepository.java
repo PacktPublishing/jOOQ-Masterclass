@@ -35,7 +35,7 @@ public class ClassicModelsRepository {
                         CUSTOMERDETAIL.STATE, CUSTOMERDETAIL.CITY).as("customer_details"))
                 .from(CUSTOMER)
                 .join(CUSTOMERDETAIL)
-                .on(CUSTOMER.CUSTOMER_NUMBER.eq(CUSTOMERDETAIL.CUSTOMER_NUMBER))                
+                .on(CUSTOMER.CUSTOMER_NUMBER.eq(CUSTOMERDETAIL.CUSTOMER_NUMBER))
                 .orderBy(CUSTOMER.CUSTOMER_NAME)
                 .fetch();
 

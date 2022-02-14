@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.classicmodels</groupId>
-    <artifactId>Records</artifactId>
+    <artifactId>NestedRows</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>Records</name>
+    <name>NestedRows</name>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
