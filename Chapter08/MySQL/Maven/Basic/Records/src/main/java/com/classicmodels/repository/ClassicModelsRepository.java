@@ -84,7 +84,7 @@ public class ClassicModelsRepository {
 
         List<String> result2 = ctx.select(CUSTOMER.CUSTOMER_NAME)
                 .from(CUSTOMER)
-                .collect(intoList(r -> r.get(CUSTOMER.CUSTOMER_NAME)));
+                .collect(intoList()); // or, intoList(r -> r.get(CUSTOMER.CUSTOMER_NAME))
         System.out.println("Example 2.2\n" + result2);
 
         Map<Long, String> result3 = ctx.select(CUSTOMER.CUSTOMER_NUMBER, CUSTOMER.PHONE)

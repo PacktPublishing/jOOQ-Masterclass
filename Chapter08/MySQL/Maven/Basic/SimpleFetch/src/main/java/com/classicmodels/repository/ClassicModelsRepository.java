@@ -14,7 +14,6 @@ import org.jooq.DSLContext;
 import org.jooq.ResultQuery;
 import org.jooq.Record;
 import static org.jooq.Records.intoList;
-import static org.jooq.Records.mapping;
 import static org.jooq.impl.DSL.currentTimestamp;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
