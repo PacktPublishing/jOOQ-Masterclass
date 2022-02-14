@@ -62,9 +62,14 @@ public class ClassicModelsRepository {
 
     public void fetchGroupsExamples() {
 
-        Map<Long, Result<OrderRecord>> result1 = ctx.selectFrom(ORDER)
+        Map<Long, Result<OrderRecord>> result1_1 = ctx.selectFrom(ORDER)
                 .fetchGroups(ORDER.CUSTOMER_NUMBER);
-        System.out.println("Example 1\n" + prettyPrint(result1));
+        System.out.println("Example 1.1\n" + prettyPrint(result1_1));
+        
+        // using Records utility
+        Map<Long, List<OrderRecord>> result1_2 = ctx.selectFrom(ORDER)
+                .collect(intoGroups(r -> r.get(ORDER.CUSTOMER_NUMBER)));
+        System.out.println("Example 1.2\n" + prettyPrint(result1_2));
 
         Map<Long, Result<Record2<Long, BigDecimal>>> result2_1 = ctx.select(
                 BANK_TRANSACTION.CUSTOMER_NUMBER, BANK_TRANSACTION.TRANSFER_AMOUNT)
@@ -256,7 +261,7 @@ public class ClassicModelsRepository {
                 .fetchGroups(Manager.class, Office.class);
         System.out.println("Example 18\n" + prettyPrint(result18));
 
-        // same thing as the above uery but a little bit more verbose
+        // same thing as the above query but a little bit more verbose
         Map<Manager, List<Office>> result19 = ctx.select()
                 .from(MANAGER)
                 .join(select().from(OFFICE).join(OFFICE_HAS_MANAGER)
