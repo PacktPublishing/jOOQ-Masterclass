@@ -10,12 +10,12 @@ public class FlatProductline implements Serializable {
     private Long code;
     private String productName;    
     private String productVendor;    
-    private Short quantityInStock;
+    private Integer quantityInStock;
     
     public FlatProductline() {}
 
     public FlatProductline(String productLine, Long code, String productName, 
-            String productVendor, Short quantityInStock) {
+            String productVendor, Integer quantityInStock) {
         this.productLine = productLine;
         this.code = code;
         this.productName = productName;
