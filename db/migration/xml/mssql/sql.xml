@@ -75,7 +75,7 @@
     </tables>
 
     <columns>
-        <!-- Table `order` -->
+        <!-- Table [order] -->
         <!-- order_id bigint not null identity -->
         <column>
             <table_catalog>classicmodels</table_catalog>
@@ -139,7 +139,7 @@
             <data_type>bigint</data_type>
         </column>
 
-        <!-- Table `customer` -->
+        <!-- Table [customer] -->
         <!-- customer_number bigint not null identity -->
         <column>  
             <table_catalog>classicmodels</table_catalog>
@@ -207,7 +207,7 @@
             <data_type>bigint</data_type>                        
         </column>
 
-        <!-- Table `customerdetail` -->
+        <!-- Table [customerdetail] -->
         <!-- customer_number bigint not null -->
         <column>  
             <table_catalog>classicmodels</table_catalog>
@@ -275,7 +275,7 @@
             <character_maximum_length>50</character_maximum_length>
         </column>
 
-        <!-- Table `employee` -->
+        <!-- Table [employee] -->
         <!-- employee_number bigint not null -->
         <column>  
             <table_catalog>classicmodels</table_catalog>
@@ -362,7 +362,7 @@
             <data_type>bigint</data_type>
         </column>
 
-        <!-- Table `manager` -->
+        <!-- Table [manager] -->
         <!-- manager_id bigint not null identity -->
         <column>  
             <table_catalog>classicmodels</table_catalog>
@@ -384,7 +384,7 @@
             <is_nullable>false</is_nullable>
         </column>
 
-        <!-- Table `office` -->
+        <!-- Table [office] -->
         <!-- office_code varchar(10) not null -->
         <column>  
             <table_catalog>classicmodels</table_catalog>
@@ -474,7 +474,7 @@
             <is_nullable>false</is_nullable>
         </column>
 
-        <!-- Table `office_has_manager` -->
+        <!-- Table [office_has_manager] -->
         <!-- offices_office_code varchar(10) not null -->
         <column> 
             <table_catalog>classicmodels</table_catalog>
@@ -495,7 +495,7 @@
             <is_nullable>false</is_nullable>
         </column>
 
-        <!-- Table `orderdetail` -->
+        <!-- Table [orderdetail] -->
         <!-- order_id bigint not null -->
         <column>  
             <table_catalog>classicmodels</table_catalog>
@@ -542,7 +542,7 @@
             <is_nullable>false</is_nullable>
         </column>
 
-        <!-- Table `payment` -->
+        <!-- Table [payment] -->
         <!-- check_number varchar(50) not null -->
         <column>  
             <table_catalog>classicmodels</table_catalog>
@@ -589,7 +589,7 @@
             <is_nullable>false</is_nullable>
         </column>
 
-        <!-- Table `product` -->
+        <!-- Table [product] -->
         <!-- product_id bigint not null identity -->
         <column>  
             <table_catalog>classicmodels</table_catalog>
@@ -676,7 +676,7 @@
             <character_maximum_length>50</character_maximum_length>
         </column>
 
-        <!-- Table `productline` -->
+        <!-- Table [productline] -->
         <!-- product_line varchar(50) not null -->
         <column>  
             <table_catalog>classicmodels</table_catalog>
@@ -714,7 +714,7 @@
             <character_maximum_length>4000</character_maximum_length>
         </column>
 
-        <!-- Table `sale` -->
+        <!-- Table [sale] -->
         <!-- sale_id bigint not null identity -->
         <column>  
             <table_catalog>classicmodels</table_catalog>
