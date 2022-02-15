@@ -10,7 +10,6 @@ import static jooq.generated.tables.Productline.PRODUCTLINE;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.multiset;
 import static org.jooq.impl.DSL.select;
-import static org.jooq.impl.DSL.selectDistinct;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,7 +50,7 @@ public class ClassicModelsRepository {
         var result = ctx.select(
                 PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.TEXT_DESCRIPTION,
                 multiset(
-                        selectDistinct(
+                        select( // or selectDistinct() if you are in a case with duplicates
                                 PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_VENDOR, PRODUCT.QUANTITY_IN_STOCK)
                                 .from(PRODUCT)
                                 .where(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE))
@@ -71,7 +70,7 @@ public class ClassicModelsRepository {
         var result1 = ctx.select(
                 MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME,
                 multiset(
-                        selectDistinct(
+                        select(
                                 OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.STATE)
                                 .from(OFFICE)
                                 .join(OFFICE_HAS_MANAGER)
@@ -90,7 +89,7 @@ public class ClassicModelsRepository {
         var result2 = ctx.select(
                 OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.STATE,
                 multiset(
-                        selectDistinct(
+                        select(
                                 MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME)
                                 .from(MANAGER)
                                 .join(OFFICE_HAS_MANAGER)
