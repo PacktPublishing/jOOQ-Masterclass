@@ -17,7 +17,7 @@ import static jooq.generated.tables.Productline.PRODUCTLINE;
 import org.jooq.DSLContext;
 import static org.jooq.Records.mapping;
 import static org.jooq.impl.DSL.multiset;
-import static org.jooq.impl.DSL.selectDistinct;
+import static org.jooq.impl.DSL.select;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,7 +37,7 @@ public class ClassicModelsRepository {
         List<SimpleProductLine> resultPojo = ctx.select(
                 PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.TEXT_DESCRIPTION,
                 multiset(
-                        selectDistinct(
+                        select(
                                 PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_VENDOR, PRODUCT.QUANTITY_IN_STOCK)
                                 .from(PRODUCT)
                                 .where(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE))
@@ -52,7 +52,7 @@ public class ClassicModelsRepository {
         List<RecordProductLine> resultRecord = ctx.select(
                 PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.TEXT_DESCRIPTION,
                 multiset(
-                        selectDistinct(
+                        select( // or selectDistinct() if you are in a case with duplicates
                                 PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_VENDOR, PRODUCT.QUANTITY_IN_STOCK)
                                 .from(PRODUCT)
                                 .where(PRODUCTLINE.PRODUCT_LINE.eq(PRODUCT.PRODUCT_LINE))
@@ -70,7 +70,7 @@ public class ClassicModelsRepository {
         List<SimpleManager> resultPojo = ctx.select(
                 MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME,
                 multiset(
-                        selectDistinct(
+                        select(
                                 OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.STATE)
                                 .from(OFFICE)
                                 .join(OFFICE_HAS_MANAGER)
@@ -87,7 +87,7 @@ public class ClassicModelsRepository {
         List<RecordManager> resultRecord = ctx.select(
                 MANAGER.MANAGER_ID, MANAGER.MANAGER_NAME,
                 multiset(
-                        selectDistinct(
+                        select(
                                 OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.STATE)
                                 .from(OFFICE)
                                 .join(OFFICE_HAS_MANAGER)
