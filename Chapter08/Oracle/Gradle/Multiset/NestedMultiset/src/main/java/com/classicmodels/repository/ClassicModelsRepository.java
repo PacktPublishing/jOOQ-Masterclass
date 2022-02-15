@@ -119,6 +119,8 @@ public class ClassicModelsRepository {
 
     public void multisetCustomerPaymentBankTransactionCustomerdetail() {
 
+        // Result<Record4<String, BigDecimal, Result<Record4<Long, BigDecimal, LocalDateTime, 
+        //        Result<Record2<String, BigDecimal>>>>, Result<Record3<String, String, String>>>>
         var result = ctx.select(
                 CUSTOMER.CUSTOMER_NAME, CUSTOMER.CREDIT_LIMIT,
                 multiset(select(PAYMENT.CUSTOMER_NUMBER, PAYMENT.INVOICE_AMOUNT, PAYMENT.CACHING_DATE,
