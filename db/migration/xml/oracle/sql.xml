@@ -454,76 +454,86 @@
         </column>
 
         <!-- Table `orderdetail` -->
-        <!-- order_id bigint not null -->
+        <!-- order_id number(19,0) not null -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>orderdetail</table_name>
+            <table_name>ORDERDETAIL</table_name>
             <column_name>order_id</column_name>
-            <data_type>bigint</data_type>
+            <data_type>number</data_type>
+            <numeric_precision>19</numeric_precision>
+            <numeric_scale>0</numeric_scale>  
             <is_nullable>false</is_nullable>
         </column>
-        <!-- product_id bigint not null -->
+        <!-- product_id number(19,0) not null -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>orderdetail</table_name>
+            <table_name>ORDERDETAIL</table_name>
             <column_name>product_id</column_name>
-            <data_type>bigint</data_type>
+            <data_type>number</data_type>
+            <numeric_precision>19</numeric_precision>
+            <numeric_scale>0</numeric_scale> 
             <is_nullable>false</is_nullable>
         </column>
-        <!-- order_line_number smallint not null -->
+        <!-- order_line_number number(5,0) not null -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>orderdetail</table_name>
+            <table_name>ORDERDETAIL</table_name>
             <column_name>order_line_number</column_name>
-            <data_type>smallint</data_type>
+            <data_type>number</data_type>
+            <numeric_precision>5</numeric_precision>
+            <numeric_scale>0</numeric_scale>
             <is_nullable>false</is_nullable>
         </column>
         <!-- price_each float not null -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>orderdetail</table_name>
+            <table_name>ORDERDETAIL</table_name>
             <column_name>price_each</column_name>
             <data_type>float</data_type>
             <is_nullable>false</is_nullable>
         </column>
-        <!-- quantity_ordered integer not null -->
+        <!-- quantity_ordered number(10,0) not null -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>orderdetail</table_name>
+            <table_name>ORDERDETAIL</table_name>
             <column_name>quantity_ordered</column_name>
-            <data_type>integer</data_type>
+            <data_type>number</data_type>
+            <numeric_precision>10</numeric_precision>
+            <numeric_scale>0</numeric_scale>
             <is_nullable>false</is_nullable>
         </column>
 
         <!-- Table `payment` -->
-        <!-- check_number varchar(50) not null -->
+        <!-- check_number varchar2(50) not null -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>payment</table_name>
+            <table_name>PAYMENT</table_name>
             <column_name>check_number</column_name>
-            <data_type>varchar</data_type>            
+            <data_type>varchar2</data_type>            
             <character_maximum_length>50</character_maximum_length>
             <is_nullable>false</is_nullable>
         </column>
-        <!-- customer_number bigint not null -->
+        <!-- customer_number number(19,0) not null -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>payment</table_name>
+            <table_name>PAYMENT</table_name>
             <column_name>customer_number</column_name>
-            <data_type>bigint</data_type>
+            <data_type>number</data_type>
+            <numeric_precision>19</numeric_precision>
+            <numeric_scale>0</numeric_scale>
             <is_nullable>false</is_nullable>
         </column>
         <!-- caching_date date -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>payment</table_name>
+            <table_name>PAYMENT</table_name>
             <column_name>caching_date</column_name>
             <data_type>date</data_type>
         </column>
         <!-- invoice_amount float not null -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>payment</table_name>
+            <table_name>PAYMENT</table_name>
             <column_name>invoice_amount</column_name>
             <data_type>float</data_type>
             <is_nullable>false</is_nullable>
@@ -531,25 +541,28 @@
         <!-- payment_date date not null -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>payment</table_name>
+            <table_name>PAYMENT</table_name>
             <column_name>payment_date</column_name>
             <data_type>date</data_type>
             <is_nullable>false</is_nullable>
         </column>
 
         <!-- Table `product` -->
-        <!-- product_id serial not null -->
+        <!-- product_id number(19,0) generated by default on null as identity -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>product</table_name>
+            <table_name>PRODUCT</table_name>
             <column_name>product_id</column_name>
-            <data_type>serial</data_type>
+            <data_type>number</data_type>
+            <numeric_precision>19</numeric_precision>
+            <numeric_scale>0</numeric_scale>            
+            <identity_generation>generated by default on null as identity</identity_generation>
             <is_nullable>false</is_nullable>
         </column>
         <!-- buy_price float not null -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>product</table_name>
+            <table_name>PRODUCT</table_name>
             <column_name>buy_price</column_name>
             <data_type>float</data_type>
             <is_nullable>false</is_nullable>
@@ -557,127 +570,136 @@
         <!-- msrp float not null -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>product</table_name>
+            <table_name>PRODUCT</table_name>
             <column_name>msrp</column_name>
             <data_type>float</data_type>
             <is_nullable>false</is_nullable>
         </column>
-        <!-- product_description text not null -->
+        <!-- product_description clob not null -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>product</table_name>
+            <table_name>PRODUCT</table_name>
             <column_name>product_description</column_name>
-            <data_type>text</data_type>
+            <data_type>clob</data_type>
             <is_nullable>false</is_nullable>
         </column>
-        <!-- product_name varchar(70) not null -->
+        <!-- product_name varchar2(70) not null -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>payment</table_name>
+            <table_name>PRODUCT</table_name>
             <column_name>product_name</column_name>
-            <data_type>varchar</data_type>            
+            <data_type>varchar2</data_type>            
             <character_maximum_length>70</character_maximum_length>
             <is_nullable>false</is_nullable>
         </column>
-        <!-- product_scale varchar(10) not null -->
+        <!-- product_scale varchar2(10) not null -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>payment</table_name>
+            <table_name>PRODUCT</table_name>
             <column_name>product_scale</column_name>
-            <data_type>varchar</data_type>            
+            <data_type>varchar2</data_type>            
             <character_maximum_length>10</character_maximum_length>
             <is_nullable>false</is_nullable>
         </column>
-        <!-- product_vendor varchar(50) not null -->
+        <!-- product_vendor varchar2(50) not null -->
         <column>
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>payment</table_name>
+            <table_name>PRODUCT</table_name>
             <column_name>product_vendor</column_name>
-            <data_type>varchar</data_type>            
+            <data_type>varchar2</data_type>            
             <character_maximum_length>50</character_maximum_length>
             <is_nullable>false</is_nullable>
         </column>
-        <!-- quantity_in_stock smallint not null -->
+        <!-- quantity_in_stock number(5,0) not null -->
         <column>
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>payment</table_name>
+            <table_name>PRODUCT</table_name>
             <column_name>quantity_in_stock</column_name>
-            <data_type>smallint</data_type>            
+            <data_type>number</data_type>
+            <numeric_precision>5</numeric_precision>
+            <numeric_scale>0</numeric_scale> 
             <is_nullable>false</is_nullable>
         </column>
-        <!-- product_line varchar(50) -->
+        <!-- product_line varchar2(50) -->
         <column>
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>payment</table_name>
+            <table_name>PRODUCT</table_name>
             <column_name>product_line</column_name>
-            <data_type>varchar</data_type>            
+            <data_type>varchar2</data_type>            
             <character_maximum_length>50</character_maximum_length>
         </column>
 
         <!-- Table `productline` -->
-        <!-- product_line varchar(50) not null -->
+        <!-- product_line varchar2(50) not null -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>productline</table_name>
+            <table_name>PRODUCTLINE</table_name>
             <column_name>product_line</column_name>
-            <data_type>varchar</data_type>            
+            <data_type>varchar2</data_type>            
             <character_maximum_length>50</character_maximum_length>
             <is_nullable>false</is_nullable>
         </column>
-        <!-- html_description text -->
+        <!-- html_description clob -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>productline</table_name>
+            <table_name>PRODUCTLINE</table_name>
             <column_name>html_description</column_name>
-            <data_type>text</data_type>
+            <data_type>clob</data_type>
         </column>
-        <!-- image bytea -->
+        <!-- image blob -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>productline</table_name>
+            <table_name>PRODUCTLINE</table_name>
             <column_name>image</column_name>
-            <data_type>bytea</data_type>
+            <data_type>blob</data_type>
         </column>
-        <!-- text_description varchar(4000) -->
+        <!-- text_description varchar2(4000) -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>productline</table_name>
+            <table_name>PRODUCTLINE</table_name>
             <column_name>text_description</column_name>
-            <data_type>varchar</data_type>            
+            <data_type>varchar2</data_type>            
             <character_maximum_length>4000</character_maximum_length>
         </column>
 
         <!-- Table `sale` -->
-        <!-- sale_id serial not null -->
+        <!-- sale_id number(19,0) generated by default on null as identity -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>sale</table_name>
+            <table_name>SALE</table_name>
             <column_name>sale_id</column_name>
-            <data_type>serial</data_type>
+            <data_type>number</data_type>
+            <numeric_precision>19</numeric_precision>
+            <numeric_scale>0</numeric_scale>            
+            <identity_generation>generated by default on null as identity</identity_generation>
             <is_nullable>false</is_nullable>
         </column>
-        <!-- fiscal_year integer not null -->
+        <!-- fiscal_year number(10,0) not null -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>sale</table_name>
+            <table_name>SALE</table_name>
             <column_name>fiscal_year</column_name>
-            <data_type>integer</data_type>
+            <data_type>number</data_type>
+            <numeric_precision>10</numeric_precision>
+            <numeric_scale>0</numeric_scale> 
             <is_nullable>false</is_nullable>
         </column>
         <!-- sale float not null -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>sale</table_name>
+            <table_name>SALE</table_name>
             <column_name>sale</column_name>
             <data_type>float</data_type>
             <is_nullable>false</is_nullable>
         </column>
-        <!-- employee_number bigint -->
+        <!-- employee_number number(19,0) -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>sale</table_name>
+            <table_name>SALE</table_name>
             <column_name>employee_number</column_name>
-            <data_type>bigint</data_type>
+            <data_type>number</data_type>
+            <numeric_precision>19</numeric_precision>
+            <numeric_scale>0</numeric_scale> 
         </column>
     </columns>
 
@@ -736,35 +758,35 @@
             <constraint_name>orderdetail_pk</constraint_name>
             <constraint_type>PRIMARY KEY</constraint_type>
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>orderdetail</table_name>
+            <table_name>ORDERDETAIL</table_name>
         </table_constraint>
         <table_constraint>
             <constraint_schema>CLASSICMODELS</constraint_schema>
             <constraint_name>payment_pk</constraint_name>
             <constraint_type>PRIMARY KEY</constraint_type>
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>payment</table_name>
+            <table_name>PAYMENT</table_name>
         </table_constraint>
         <table_constraint>
             <constraint_schema>CLASSICMODELS</constraint_schema>
             <constraint_name>product_pk</constraint_name>
             <constraint_type>PRIMARY KEY</constraint_type>
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>product</table_name>
+            <table_name>PRODUCT</table_name>
         </table_constraint>
         <table_constraint>
             <constraint_schema>CLASSICMODELS</constraint_schema>
             <constraint_name>productline_pk</constraint_name>
             <constraint_type>PRIMARY KEY</constraint_type>
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>productline</table_name>
+            <table_name>PRODUCTLINE</table_name>
         </table_constraint>
         <table_constraint>
             <constraint_schema>CLASSICMODELS</constraint_schema>
             <constraint_name>sale_pk</constraint_name>
             <constraint_type>PRIMARY KEY</constraint_type>
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>sale_id</table_name>
+            <table_name>SALE</table_name>
         </table_constraint>
     </table_constraints>
 
@@ -837,7 +859,7 @@
             <constraint_schema>CLASSICMODELS</constraint_schema>
             <constraint_name>orderdetail_pk</constraint_name>
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>orderdetail</table_name>
+            <table_name>ORDERDETAIL</table_name>
             <column_name>order_id</column_name>
             <ordinal_position>1</ordinal_position>
         </key_column_usage>
@@ -845,7 +867,7 @@
             <constraint_schema>CLASSICMODELS</constraint_schema>
             <constraint_name>orderdetail_pk</constraint_name>
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>orderdetail</table_name>
+            <table_name>ORDERDETAIL</table_name>
             <column_name>product_id</column_name>
             <ordinal_position>2</ordinal_position>
         </key_column_usage>
@@ -853,7 +875,7 @@
             <constraint_schema>CLASSICMODELS</constraint_schema>
             <constraint_name>payment_pk</constraint_name>
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>payment</table_name>
+            <table_name>PAYMENT</table_name>
             <column_name>check_number</column_name>
             <ordinal_position>1</ordinal_position>
         </key_column_usage>
@@ -861,7 +883,7 @@
             <constraint_schema>CLASSICMODELS</constraint_schema>
             <constraint_name>payment_pk</constraint_name>
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>payment</table_name>
+            <table_name>PAYMENT</table_name>
             <column_name>customer_number</column_name>
             <ordinal_position>2</ordinal_position>
         </key_column_usage>
@@ -869,7 +891,7 @@
             <constraint_schema>CLASSICMODELS</constraint_schema>
             <constraint_name>product_pk</constraint_name>
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>product</table_name>
+            <table_name>PRODUCT</table_name>
             <column_name>product_id</column_name>
             <ordinal_position>1</ordinal_position>
         </key_column_usage>
@@ -877,7 +899,7 @@
             <constraint_schema>CLASSICMODELS</constraint_schema>
             <constraint_name>productline_pk</constraint_name>
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>productline</table_name>
+            <table_name>PRODUCTLINE</table_name>
             <column_name>product_line</column_name>
             <ordinal_position>1</ordinal_position>
         </key_column_usage>
@@ -885,7 +907,7 @@
             <constraint_schema>CLASSICMODELS</constraint_schema>
             <constraint_name>sale_pk</constraint_name>
             <table_schema>CLASSICMODELS</table_schema>
-            <table_name>sale</table_name>
+            <table_name>SALE</table_name>
             <column_name>sale_id</column_name>
             <ordinal_position>1</ordinal_position>
         </key_column_usage>

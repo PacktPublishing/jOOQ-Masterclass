@@ -552,7 +552,7 @@
         <!-- product_name varchar(70) not null -->
         <column>  
             <table_schema>public</table_schema>
-            <table_name>payment</table_name>
+            <table_name>product</table_name>
             <column_name>product_name</column_name>
             <data_type>varchar</data_type>            
             <character_maximum_length>70</character_maximum_length>
@@ -561,7 +561,7 @@
         <!-- product_scale varchar(10) not null -->
         <column>  
             <table_schema>public</table_schema>
-            <table_name>payment</table_name>
+            <table_name>product</table_name>
             <column_name>product_scale</column_name>
             <data_type>varchar</data_type>            
             <character_maximum_length>10</character_maximum_length>
@@ -570,7 +570,7 @@
         <!-- product_vendor varchar(50) not null -->
         <column>
             <table_schema>public</table_schema>
-            <table_name>payment</table_name>
+            <table_name>product</table_name>
             <column_name>product_vendor</column_name>
             <data_type>varchar</data_type>            
             <character_maximum_length>50</character_maximum_length>
@@ -579,7 +579,7 @@
         <!-- quantity_in_stock smallint not null -->
         <column>
             <table_schema>public</table_schema>
-            <table_name>payment</table_name>
+            <table_name>product</table_name>
             <column_name>quantity_in_stock</column_name>
             <data_type>smallint</data_type>            
             <is_nullable>false</is_nullable>
@@ -587,7 +587,7 @@
         <!-- product_line varchar(50) -->
         <column>
             <table_schema>public</table_schema>
-            <table_name>payment</table_name>
+            <table_name>product</table_name>
             <column_name>product_line</column_name>
             <data_type>varchar</data_type>            
             <character_maximum_length>50</character_maximum_length>
@@ -743,7 +743,7 @@
             <constraint_name>sale_pk</constraint_name>
             <constraint_type>PRIMARY KEY</constraint_type>
             <table_schema>public</table_schema>
-            <table_name>sale_id</table_name>
+            <table_name>sale</table_name>
         </table_constraint>
     </table_constraints>
 
