@@ -91,7 +91,7 @@ public class ClassicModelsRepository {
             }
         }
 
-        // approach 2 (more queries
+        // approach 2 (more queries)
         for (SaleRecord sale : ctx.fetch(SALE, SALE.SALE_.lt(2000d))) {
 
             if ("Sales Rep".equals(sale.fetchParent(
