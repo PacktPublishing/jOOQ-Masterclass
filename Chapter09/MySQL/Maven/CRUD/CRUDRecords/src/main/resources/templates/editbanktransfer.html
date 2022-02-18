@@ -5,7 +5,7 @@
     </head>
     <body>        
         <fieldset style="width: 50%">                        
-            <legend><b>STEP 3:</b> EDIT BANK TRANSFER AMOUNT</legend>
+            <legend><b>STEP 4:</b> EDIT BANK TRANSFER AMOUNT</legend>
             <p th:if="${bt == null}">No bank transaction was loaded</p>                                
             <div th:if="${bt != null}">       
                 <table>
@@ -28,7 +28,7 @@
                     </table>  
                     <hr/>
                     <input type="submit" value="Finish"style="float: right; margin-left: 10px;" />                     
-                    <input type="button" onclick="location.href = '/editbankiban';" value="&laquo; Back" style="float: right;" />
+                    <input type="button" onclick="location.href = '/editcardtype';" value="&laquo; Back" style="float: right;" />
                     <input type="button" onclick="location.href = '/cancel';" value="Cancel" style="float: left; margin-right: 10px;" />
                     <input type="button" onclick="location.href = '/reset/editbanktransfer';" value="Reset" style="float: left;" />
                     <input type="button" onclick="location.href = '/delete';" value="Delete" style="float: left; margin-left: 10px; background-color: orange;" />

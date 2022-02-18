@@ -54,10 +54,16 @@ public class ClassicModelsController {
     public String editBankName(@ModelAttribute(BANK_TRANSACTION_ATTR) BankTransactionRecord btr) {
 
         return "redirect:editbankiban";
-    }
-
+    }    
+    
     @PostMapping("/iban")
     public String editBankIban(@ModelAttribute(BANK_TRANSACTION_ATTR) BankTransactionRecord btr) {
+
+        return "redirect:editcardtype";
+    }
+    
+    @PostMapping("/cardtype")
+    public String editCardType(@ModelAttribute(BANK_TRANSACTION_ATTR) BankTransactionRecord btr) {
 
         return "redirect:editbanktransfer";
     }
@@ -152,6 +158,11 @@ public class ClassicModelsController {
     public String editBankIbanPage() {
         return "editbankiban";
     }
+    
+    @GetMapping(value = "/editcardtype")
+    public String editCardTypePage() {
+        return "editcardtype";
+    }
 
     @GetMapping(value = "/editbanktransfer")
     public String editBankTransferPage() {
@@ -161,6 +172,6 @@ public class ClassicModelsController {
     @InitBinder
     void allowFields(WebDataBinder webDataBinder) {
         webDataBinder.setAllowedFields("bankName", "bankIban", "uin",
-                "transferAmount", "${_csrf.parameterName}");
+                "transferAmount", "cardType", "${_csrf.parameterName}");
     }
 }
