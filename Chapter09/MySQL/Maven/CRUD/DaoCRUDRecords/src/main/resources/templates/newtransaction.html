@@ -32,9 +32,20 @@
                             <td>
                                 <input id="transferAmount" type="number" step=".01" th:field="*{transferAmount}" placeholder="0.00"/>
                             </td>
-                        </tr>                        
+                        </tr>     
+                        <tr>
+                            <td>
+                                <label for="cardType">Card type:</label>
+                            </td>
+                            <td>
+                                <select name="cardType" id="cardType" th:field="*{cardType}">
+                                    <option th:value="'VisaElectron'" th:text="VisaElectron"></option>
+                                    <option th:value="'MasterCard'" th:text="MasterCard"></option>                                    
+                                </select>
+                            </td>
+                        </tr>
                     </table>
-                    <input type="submit" value="Next &raquo;" style="float: right; margin-left: 10px;" /> 
+                    <input type="submit" value="Save" style="float: right; margin-left: 10px;" /> 
                     <input type="button" onclick="location.href = '/transactions';" value="Cancel" style="float: right;" />
 
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>

@@ -54,10 +54,16 @@ public class ClassicModelsController {
     public String editBankName(@ModelAttribute(BANK_TRANSACTION_ATTR) BankTransaction bt) {
 
         return "redirect:editbankiban";
-    }
-
+    }    
+    
     @PostMapping("/iban")
     public String editBankIban(@ModelAttribute(BANK_TRANSACTION_ATTR) BankTransaction bt) {
+
+        return "redirect:editcardtype";
+    }
+    
+    @PostMapping("/cardtype")
+    public String editCardType(@ModelAttribute(BANK_TRANSACTION_ATTR) BankTransaction bt) {
 
         return "redirect:editbanktransfer";
     }
@@ -85,8 +91,8 @@ public class ClassicModelsController {
 
     @PostMapping("/new")
     public String newBankTransaction(@ModelAttribute BankTransaction bt,
-            RedirectAttributes redirectAttributes) {        
-
+            RedirectAttributes redirectAttributes) {
+       
         classicModelsService.newBankTransaction(bt);
         redirectAttributes.addFlashAttribute(INSERT_DELETE_OR_UPDATE_BANK_TRANSACTION_ATTR, bt);
 
@@ -121,7 +127,7 @@ public class ClassicModelsController {
     }
 
     @GetMapping("/reset/{page}")
-    public String refresh(@PathVariable(name = "page") String page, Model model) {
+    public String reset(@PathVariable(name = "page") String page, Model model) {
 
         if (model.containsAttribute(BANK_TRANSACTION_ATTR)) {
             model.addAttribute(BANK_TRANSACTION_ATTR,
@@ -155,6 +161,11 @@ public class ClassicModelsController {
     public String editBankIbanPage() {
         return "editbankiban";
     }
+    
+    @GetMapping(value = "/editcardtype")
+    public String editCardTypePage() {
+        return "editcardtype";
+    }
 
     @GetMapping(value = "/editbanktransfer")
     public String editBankTransferPage() {
@@ -164,6 +175,6 @@ public class ClassicModelsController {
     @InitBinder
     void allowFields(WebDataBinder webDataBinder) {
         webDataBinder.setAllowedFields("bankName", "bankIban", "uin",
-                "transferAmount", "${_csrf.parameterName}");
+                "transferAmount", "cardType", "${_csrf.parameterName}");
     }
 }
