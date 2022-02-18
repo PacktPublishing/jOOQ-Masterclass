@@ -2,6 +2,7 @@ package com.classicmodels.controller;
 
 import com.classicmodels.service.ClassicModelsService;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import jooq.generated.tables.pojos.Payment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,14 +31,14 @@ public class ClassicModelsController {
                 classicModelsService.loadAllPayment103());
                 
         model.addAttribute(PAYMENT_ATTR,
-                new Payment(103L, null, null, BigDecimal.ONE, null));
+                new Payment(103L, null, null, BigDecimal.ONE, LocalDateTime.now(), null, null));
 
         return "payments";
     }
 
     @PostMapping("/merge")
     public String mergePayment(Payment p) {
-
+        
         classicModelsService.mergePayment(p);
 
         return "redirect:payments";
@@ -46,6 +47,6 @@ public class ClassicModelsController {
     @InitBinder
     void allowFields(WebDataBinder webDataBinder) {
         webDataBinder.setAllowedFields("checkNumber", "customerNumber",
-                "invoiceAmount", "${_csrf.parameterName}");
+                "invoiceAmount", "cachingDate", "${_csrf.parameterName}");
     }
 }
