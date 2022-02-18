@@ -32,27 +32,27 @@ public class ClassicModelsRepository {
 
         ctx.attach(dr);
 
-        return dr.fetchParent(Keys.DEPARTMENT_IBFK_1);
+        return dr.fetchParent(Keys.DEPARTMENT_OFFICE_FK);
     }
 
     public Result<EmployeeRecord> fetchEmployeesOfOffice(OfficeRecord or) {
 
         ctx.attach(or);
 
-        return or.fetchChildren(Keys.EMPLOYEES_IBFK_2);
+        return or.fetchChildren(Keys.EMPLOYEE_OFFICE_FK);
     }
 
     public Result<CustomerRecord> fetchCustomersOfEmployee(EmployeeRecord er) {
 
         ctx.attach(er);
 
-        return er.fetchChildren(Keys.CUSTOMERS_IBFK_1);
+        return er.fetchChildren(Keys.CUSTOMER_EMPLOYEE_FK);
     }
 
     public CustomerdetailRecord fetchCustomerdetailOfCustomer(CustomerRecord cr) {
 
         ctx.attach(cr);
 
-        return cr.fetchChild(Keys.CUSTOMERS_DETAILS_IBFK_1);
+        return cr.fetchChild(Keys.CUSTOMERDETAIL_CUSTOMER_FK);
     }
 }
