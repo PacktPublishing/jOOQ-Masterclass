@@ -419,7 +419,7 @@
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>OFFICE</table_name>
             <column_name>state</column_name>
-            <data_type>varchar</data_type>            
+            <data_type>varchar2</data_type>            
             <character_maximum_length>50</character_maximum_length>
         </column>
         <!-- territory varchar2(10) not null -->
@@ -427,7 +427,7 @@
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>OFFICE</table_name>
             <column_name>territory</column_name>
-            <data_type>varchar</data_type>            
+            <data_type>varchar2</data_type>            
             <character_maximum_length>10</character_maximum_length>
             <is_nullable>false</is_nullable>
         </column>
