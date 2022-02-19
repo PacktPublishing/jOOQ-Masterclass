@@ -44,7 +44,7 @@ public class ClassicModelsRepository {
         // reset a certain field
         sr.reset(SALE.FISCAL_YEAR); // sr.reset("fiscal_year");
         
-        // refersh the record (execute a SELECT to load it from the database)
+        // refresh the record (execute a SELECT to load it from the database)
         sr.refresh();
         System.out.println("Refreshed record:\n" + sr + " [" + sr.changed() + "]");
         // refresh certain fields
@@ -64,6 +64,8 @@ public class ClassicModelsRepository {
         sr.setFiscalYear(2021);
         sr.setSale(4500.25);
         sr.setEmployeeNumber(1504L);
+        sr.setFiscalMonth(1);
+        sr.setRevenueGrowth(0.0);
 
         // Before insert (or any other DML) we attach the record to the current configuration        
         ctx.attach(sr); // or, sr.attach(ctx.configuration());
@@ -83,6 +85,8 @@ public class ClassicModelsRepository {
         anotherSr.setFiscalYear(2021);
         anotherSr.setSale(4500.25);
         anotherSr.setEmployeeNumber(1504L);
+        anotherSr.setFiscalMonth(1);
+        anotherSr.setRevenueGrowth(0.0);
         
         anotherSr.insert();
         
@@ -106,6 +110,8 @@ public class ClassicModelsRepository {
         sr.changed(SALE.SALE_ID, false);
         sr.changed(SALE.FISCAL_YEAR, true);
         sr.changed(SALE.SALE_, true);
+        sr.changed(SALE.FISCAL_MONTH, true);        
+        sr.changed(SALE.REVENUE_GROWTH, true);        
         sr.insert();
         
         System.out.println("The inserted record ID: " + sr.getSaleId());
@@ -140,6 +146,8 @@ public class ClassicModelsRepository {
         // Modify the *sr* record in-memory to insert a new row with different data without creating a new record                        
         sr.setFiscalYear(2005);
         sr.setSale(101010.11);
+        sr.setFiscalMonth(1);
+        sr.setRevenueGrowth(0.0);
         System.out.println("Modified record:\n" + sr + " [" + sr.changed() + "]");
         sr.insert(); // insert a new row with different data without creating a new record                        
         
@@ -165,6 +173,8 @@ public class ClassicModelsRepository {
         srNoReturnId.setFiscalYear(2021);
         srNoReturnId.setSale(4500.25);
         srNoReturnId.setEmployeeNumber(1504L);
+        srNoReturnId.setFiscalMonth(1);
+        srNoReturnId.setRevenueGrowth(0.0);
         
         srNoReturnId.insert();
         
@@ -277,8 +287,8 @@ public class ClassicModelsRepository {
         // The fetched record is auto-attached to the current configuration by jOOQ
         // so, there is no need to manually attach *sr*
         SaleRecord sr = ctx.selectFrom(SALE)
-                .where(SALE.SALE_ID.eq(1L))
-                .fetchSingle();                
+                .where(SALE.SALE_ID.gt(10L))                
+                .fetchAny();                
                 
         System.out.println("Record to be deleted is:\n" + sr);
         
@@ -295,11 +305,15 @@ public class ClassicModelsRepository {
                 .fetchSingle();                
         srFetched.setFiscalYear(2005);
         srFetched.changed(SALE.SALE_, true); // this field is just marked as changed, so it will be rendered in SQL
+        srFetched.changed(SALE.FISCAL_MONTH, true); // this field is just marked as changed, so it will be rendered in SQL
+        srFetched.changed(SALE.REVENUE_GROWTH, true); // this field is just marked as changed, so it will be rendered in SQL
         
         SaleRecord srNew = ctx.newRecord(SALE);
         srNew.setFiscalYear(2000);
         srNew.setSale(100.25);
         srNew.setEmployeeNumber(1370L);
+        srNew.setFiscalMonth(1);
+        srNew.setRevenueGrowth(0.0);
                 
         // *srFetched* will be updated
         srFetched.merge();
@@ -319,16 +333,20 @@ public class ClassicModelsRepository {
         sr.setFiscalYear(2000);
         sr.setSale(8888.88);
         sr.setTrend("UP");
+        sr.changed(SALE.FISCAL_MONTH, true); // this field is just marked as changed, so it will be rendered in SQL
+        sr.changed(SALE.REVENUE_GROWTH, true); // this field is just marked as changed, so it will be rendered in SQL
         
         // since TREND is not part of merge() this will not merge anything
-        sr.merge(SALE.FISCAL_YEAR, SALE.SALE_); 
+        sr.merge(SALE.FISCAL_YEAR, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH); 
         
         System.out.println("The merged record is (certain fields):\n" + sr);         
         
         // this merge TREND as well
         sr.changed(SALE.FISCAL_YEAR, true); // if we don't mark this field as changed it will be ignored even if is mentioned in the following merge()
         sr.changed(SALE.SALE_, true);       // if we don't mark this field as changed it will be ignored even if is mentioned in the following merge()
-        sr.merge(SALE.FISCAL_YEAR, SALE.SALE_, SALE.TREND); 
+        sr.changed(SALE.FISCAL_MONTH, true); // this field is just marked as changed, so it will be rendered in SQL
+        sr.changed(SALE.REVENUE_GROWTH, true); // this field is just marked as changed, so it will be rendered in SQL        
+        sr.merge(SALE.FISCAL_YEAR, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH, SALE.TREND); 
         
         System.out.println("The merged record is (certain fields):\n" + sr);         
         
@@ -351,6 +369,8 @@ public class ClassicModelsRepository {
         srNew.setFiscalYear(2000);
         srNew.setSale(100.25);
         srNew.setEmployeeNumber(1370L);
+        srNew.setFiscalMonth(1);
+        srNew.setRevenueGrowth(0.0);
                         
         // *srNew* will be inserted (jOOQ decide to execute an insert)
         srNew.store(); // render an INSERT      
@@ -360,7 +380,7 @@ public class ClassicModelsRepository {
         // =====================================================================
         
         SaleRecord srFetched = ctx.selectFrom(SALE)
-                .where(SALE.SALE_ID.eq(1L))
+                .where(SALE.SALE_ID.eq(5L))
                 .fetchSingle();                
         srFetched.setFiscalYear(2005);
         srFetched.changed(SALE.SALE_, true); // this field is just marked as changed, so it will be rendered in SQL
@@ -395,7 +415,7 @@ public class ClassicModelsRepository {
     public void storeRecordAfterUpdatePrimaryKeyViaInsert() {
         
         SaleRecord sr = ctx.selectFrom(SALE)
-                .where(SALE.SALE_ID.eq(1L))
+                .where(SALE.SALE_ID.eq(4L))
                 .fetchSingle();      
                 
         sr.setSaleId((long) (Math.random() * 999999999L));
@@ -413,9 +433,9 @@ public class ClassicModelsRepository {
         DSLContext derivedCtx = ctx.configuration().derive(new Settings()
                 .withUpdatablePrimaryKeys(true)).dsl();
         
-        SaleRecord sr = derivedCtx.selectFrom(SALE)
-                .where(SALE.SALE_ID.eq(2L))
-                .fetchSingle();      
+        SaleRecord sr = derivedCtx.selectFrom(SALE)                
+                .where(SALE.SALE_ID.gt(10L))
+                .fetchAny();      
         
         // Forcing an UPDATE can be done via Settings.isUpdatablePrimaryKeys() 
         // By default, isUpdatablePrimaryKeys() return false

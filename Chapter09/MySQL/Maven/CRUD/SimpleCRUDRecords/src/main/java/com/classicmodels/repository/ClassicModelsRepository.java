@@ -1,7 +1,5 @@
 package com.classicmodels.repository;
 
-import static java.lang.Long.max;
-import java.math.BigDecimal;
 import static jooq.generated.tables.Sale.SALE;
 import static jooq.generated.tables.Token.TOKEN;
 import jooq.generated.tables.records.SaleRecord;
