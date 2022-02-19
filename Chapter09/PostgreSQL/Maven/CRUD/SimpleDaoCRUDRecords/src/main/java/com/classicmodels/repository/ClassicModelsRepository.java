@@ -34,6 +34,7 @@ public class ClassicModelsRepository {
 
         // insert jOOQ POJO        
         jooqProduct.setProductName("Giant Motor XP");
+        jooqProduct.setCode(599302L);
         productRepository.insert(jooqProduct);
 
         // insert user-defined POJO
@@ -41,6 +42,7 @@ public class ClassicModelsRepository {
         extraProduct.setProductScale("1:20");
         extraProduct.setProductConsumption("30 kWh/100 mi"); // transient field
         extraProduct.setProductStatus("available");          // transient field
+        extraProduct.setCode(599302L);
         productRepository.insert(extraProduct);
     }
 
