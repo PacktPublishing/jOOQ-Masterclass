@@ -1,5 +1,0 @@
-insert into product_stats values (80, 35.29, 36.3876000000000000, 41.03);
-insert into product_stats values (29, 108.06, 114.2360714285714286, 127.13);
-insert into product_stats values (33, 167.06, 149.8875000000000000, 168.75);
-insert into product_stats values (61, 32.53, 29.9300000000000000, 33.19);
-insert into product_stats values (64, 44.35, 40.2564285714285714, 44.80);

@@ -2,6 +2,7 @@ package com.classicmodels.repository;
 
 import java.util.logging.Logger;
 import static jooq.generated.tables.Employee.EMPLOYEE;
+import static jooq.generated.tables.EmployeeStatus.EMPLOYEE_STATUS;
 import static jooq.generated.tables.Sale.SALE;
 import jooq.generated.tables.records.SaleRecord;
 import org.jooq.DSLContext;
@@ -65,11 +66,16 @@ public class ClassicModelsRepository {
                         TransactionStatus status) {
 
                     log.info("Starting second transaction (B) ...");
-                    log.info("Second transaction (B) successfully updates the product name ...");
+                    log.info("Second transaction (B) successfully updates "
+                            + "the product name and deletes from employee_status ...");
 
                     ctx.update(EMPLOYEE)
                             .set(EMPLOYEE.EMAIL, "ghernandez@yahoo.com")
                             .where(EMPLOYEE.EMPLOYEE_NUMBER.eq(1370L))
+                            .execute();
+                    
+                    ctx.deleteFrom(EMPLOYEE_STATUS)
+                            .where(EMPLOYEE_STATUS.EMPLOYEE_NUMBER.eq(1370L))
                             .execute();
 
                     log.info("Second transaction (B) attempts to update the product PK but it must wait for transaction (A) to release the lock  ...");
