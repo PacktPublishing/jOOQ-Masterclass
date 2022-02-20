@@ -2,6 +2,7 @@ package com.classicmodels.controller;
 
 import com.classicmodels.service.ClassicModelsService;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.UUID;
 import jooq.generated.tables.records.PaymentRecord;
 import org.springframework.stereotype.Controller;
@@ -43,6 +44,7 @@ public class ClassicModelsController {
             pr.setCustomerNumber(103L);
             pr.setCheckNumber(UUID.randomUUID().toString().substring(0, 8).toUpperCase());
             pr.setInvoiceAmount(BigDecimal.ONE);
+            pr.setCachingDate(LocalDateTime.now());
             
             model.addAttribute(PAYMENT_ATTR, pr);
         }
