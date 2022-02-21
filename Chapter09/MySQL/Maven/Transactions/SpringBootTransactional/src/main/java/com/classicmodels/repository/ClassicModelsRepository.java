@@ -157,8 +157,7 @@ public class ClassicModelsRepository {
     public void updateWithTransactionTemplate() {
 
         // The transaction and the database connection is not opened so far
-    
-        template.setReadOnly(true);
+            
         template.execute(new TransactionCallbackWithoutResult() {
 
             @Override
