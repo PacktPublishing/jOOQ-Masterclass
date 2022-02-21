@@ -23,6 +23,8 @@ public class FirstService {
         ctx.insertInto(SALE)                
                 .set(SALE.SALE_, 12222.22)
                 .set(SALE.FISCAL_YEAR, 2022)
+                .set(SALE.FISCAL_MONTH, 1)
+                .set(SALE.REVENUE_GROWTH, 0.0)
                 .execute();
         
         secondService.insertSecondSale();
