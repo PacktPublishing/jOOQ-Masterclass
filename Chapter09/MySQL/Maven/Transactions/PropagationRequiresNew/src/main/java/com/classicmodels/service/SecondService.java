@@ -22,6 +22,8 @@ public class SecondService {
         ctx.insertInto(SALE)                
                 .set(SALE.SALE_, 91111.11)
                 .set(SALE.FISCAL_YEAR, 2021)
+                .set(SALE.FISCAL_MONTH, 1)
+                .set(SALE.REVENUE_GROWTH, 0.0)
                 .execute();
         
         if(new Random().nextBoolean()) {
