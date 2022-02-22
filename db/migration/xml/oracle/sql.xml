@@ -63,7 +63,7 @@
         <column>
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>ORDER</table_name>
-            <column_name>order_id</column_name>
+            <column_name>ORDER_ID</column_name>
             <data_type>number</data_type>
             <numeric_precision>19</numeric_precision>
             <numeric_scale>0</numeric_scale>            
@@ -73,7 +73,7 @@
         <column>
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>ORDER</table_name>
-            <column_name>comments</column_name>
+            <column_name>COMMENTS</column_name>
             <data_type>clob</data_type>
             <column_default>null</column_default>
         </column>
@@ -81,7 +81,7 @@
         <column> 
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>ORDER</table_name>
-            <column_name>order_date</column_name>
+            <column_name>ORDER_DATE</column_name>
             <data_type>date</data_type>            
             <is_nullable>false</is_nullable> 
         </column>
@@ -89,7 +89,7 @@
         <column>
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>ORDER</table_name>
-            <column_name>required_date</column_name>
+            <column_name>REQUIRED_DATE</column_name>
             <data_type>date</data_type>            
             <is_nullable>false</is_nullable> 
         </column>
@@ -97,14 +97,14 @@
         <column>
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>ORDER</table_name>
-            <column_name>shipped_date</column_name>
+            <column_name>SHIPPED_DATE</column_name>
             <data_type>date</data_type>
         </column>
         <!-- status varchar2(50) not null -->
         <column>
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>ORDER</table_name>
-            <column_name>status</column_name>
+            <column_name>STATUS</column_name>
             <data_type>varchar2</data_type>     
             <character_maximum_length>50</character_maximum_length>
             <is_nullable>false</is_nullable> 
@@ -113,7 +113,7 @@
         <column>
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>ORDER</table_name>
-            <column_name>customer_number</column_name>
+            <column_name>CUSTOMER_NUMBER</column_name>
             <data_type>number</data_type>
             <numeric_precision>19</numeric_precision>
             <numeric_scale>0</numeric_scale>            
@@ -124,7 +124,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>CUSTOMER</table_name>
-            <column_name>customer_number</column_name>
+            <column_name>CUSTOMER_NUMBER</column_name>
             <data_type>number</data_type>
             <numeric_precision>19</numeric_precision>
             <numeric_scale>0</numeric_scale>  
@@ -134,7 +134,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>CUSTOMER</table_name>
-            <column_name>contact_first_name</column_name>
+            <column_name>CONTACT_FIRST_NAME</column_name>
             <data_type>varchar2</data_type>            
             <character_maximum_length>50</character_maximum_length>
             <is_nullable>false</is_nullable> 
@@ -143,7 +143,7 @@
         <column>
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>CUSTOMER</table_name>
-            <column_name>contact_last_name</column_name>
+            <column_name>CONTACT_LAST_NAME</column_name>
             <data_type>varchar2</data_type>            
             <character_maximum_length>50</character_maximum_length>
             <is_nullable>false</is_nullable> 
@@ -152,14 +152,14 @@
         <column>
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>CUSTOMER</table_name>
-            <column_name>credit_limit</column_name>
+            <column_name>CREDIT_LIMIT</column_name>
             <data_type>float</data_type>
         </column>
         <!-- customer_name varchar2(50) not null -->
         <column>
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>CUSTOMER</table_name>
-            <column_name>customer_name</column_name>
+            <column_name>CUSTOMER_NAME</column_name>
             <data_type>varchar2</data_type>            
             <character_maximum_length>50</character_maximum_length>
             <is_nullable>false</is_nullable> 
@@ -168,7 +168,7 @@
         <column>
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>CUSTOMER</table_name>
-            <column_name>phone</column_name>
+            <column_name>PHONE</column_name>
             <data_type>varchar2</data_type>            
             <character_maximum_length>50</character_maximum_length>
             <is_nullable>false</is_nullable> 
@@ -177,7 +177,7 @@
         <column>
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>CUSTOMER</table_name>
-            <column_name>sales_rep_employee_number</column_name>
+            <column_name>SALES_REP_EMPLOYEE_NUMBER</column_name>
             <data_type>number</data_type>
             <numeric_precision>19</numeric_precision>
             <numeric_scale>0</numeric_scale>  
@@ -188,7 +188,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>CUSTOMERDETAIL</table_name>
-            <column_name>customer_number</column_name>
+            <column_name>CUSTOMER_NUMBER</column_name>
             <data_type>number</data_type>
             <numeric_precision>19</numeric_precision>
             <numeric_scale>0</numeric_scale>           
@@ -198,7 +198,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>CUSTOMERDETAIL</table_name>
-            <column_name>address_line_first</column_name>
+            <column_name>ADDRESS_LINE_FIRST</column_name>
             <data_type>varchar2</data_type>            
             <character_maximum_length>50</character_maximum_length>
             <is_nullable>false</is_nullable> 
@@ -207,7 +207,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>CUSTOMERDETAIL</table_name>
-            <column_name>address_line_second</column_name>
+            <column_name>ADDRESS_LINE_SECOND</column_name>
             <data_type>varchar2</data_type>            
             <character_maximum_length>50</character_maximum_length>
         </column>
@@ -215,7 +215,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>CUSTOMERDETAIL</table_name>
-            <column_name>city</column_name>
+            <column_name>CITY</column_name>
             <data_type>varchar2</data_type>            
             <character_maximum_length>50</character_maximum_length>
             <is_nullable>false</is_nullable> 
@@ -224,7 +224,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>CUSTOMERDETAIL</table_name>
-            <column_name>country</column_name>
+            <column_name>COUNTRY</column_name>
             <data_type>varchar2</data_type>            
             <character_maximum_length>50</character_maximum_length>
             <is_nullable>false</is_nullable> 
@@ -233,7 +233,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>CUSTOMERDETAIL</table_name>
-            <column_name>postal_code</column_name>
+            <column_name>POSTAL_CODE</column_name>
             <data_type>varchar2</data_type>            
             <character_maximum_length>15</character_maximum_length>
         </column>
@@ -241,7 +241,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>CUSTOMERDETAIL</table_name>
-            <column_name>state</column_name>
+            <column_name>STATE</column_name>
             <data_type>varchar2</data_type>            
             <character_maximum_length>50</character_maximum_length>
         </column>
@@ -251,7 +251,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>EMPLOYEE</table_name>
-            <column_name>employee_number</column_name>
+            <column_name>EMPLOYEE_NUMBER</column_name>
             <data_type>number</data_type>
             <numeric_precision>19</numeric_precision>
             <numeric_scale>0</numeric_scale>      
@@ -261,7 +261,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>EMPLOYEE</table_name>
-            <column_name>email</column_name>
+            <column_name>EMAIL</column_name>
             <data_type>varchar2</data_type>            
             <character_maximum_length>100</character_maximum_length>
             <is_nullable>false</is_nullable> 
@@ -270,7 +270,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>EMPLOYEE</table_name>
-            <column_name>extension</column_name>
+            <column_name>EXTENSION</column_name>
             <data_type>varchar2</data_type>            
             <character_maximum_length>10</character_maximum_length>
             <is_nullable>false</is_nullable>
@@ -279,7 +279,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>EMPLOYEE</table_name>
-            <column_name>first_name</column_name>
+            <column_name>FIRST_NAME</column_name>
             <data_type>varchar2</data_type>            
             <character_maximum_length>50</character_maximum_length>
             <is_nullable>false</is_nullable>
@@ -288,7 +288,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>EMPLOYEE</table_name>
-            <column_name>job_title</column_name>
+            <column_name>JOB_TITLE</column_name>
             <data_type>varchar2</data_type>            
             <character_maximum_length>50</character_maximum_length>
             <is_nullable>false</is_nullable>
@@ -297,7 +297,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>EMPLOYEE</table_name>
-            <column_name>last_name</column_name>
+            <column_name>LAST_NAME</column_name>
             <data_type>varchar2</data_type>            
             <character_maximum_length>50</character_maximum_length>
             <is_nullable>false</is_nullable>
@@ -306,7 +306,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>EMPLOYEE</table_name>
-            <column_name>salary</column_name>
+            <column_name>SALARY</column_name>
             <data_type>number</data_type>
             <numeric_precision>10</numeric_precision>
             <numeric_scale>0</numeric_scale>      
@@ -316,7 +316,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>EMPLOYEE</table_name>
-            <column_name>office_code</column_name>
+            <column_name>OFFICE_CODE</column_name>
             <data_type>varchar2</data_type>            
             <character_maximum_length>10</character_maximum_length>
         </column>
@@ -324,7 +324,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>EMPLOYEE</table_name>
-            <column_name>reports_to</column_name>
+            <column_name>REPORTS_TO</column_name>
             <data_type>number</data_type>
             <numeric_precision>19</numeric_precision>
             <numeric_scale>0</numeric_scale>  
@@ -335,7 +335,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>MANAGER</table_name>
-            <column_name>manager_id</column_name>
+            <column_name>MANAGER_ID</column_name>
             <data_type>number</data_type>
             <numeric_precision>19</numeric_precision>
             <numeric_scale>0</numeric_scale>            
@@ -345,7 +345,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>MANAGER</table_name>
-            <column_name>manager_name</column_name>
+            <column_name>MANAGER_NAME</column_name>
             <data_type>varchar2</data_type>            
             <character_maximum_length>50</character_maximum_length>
             <is_nullable>false</is_nullable>
@@ -356,7 +356,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>OFFICE</table_name>
-            <column_name>office_code</column_name>
+            <column_name>OFFICE_CODE</column_name>
             <data_type>varchar2</data_type>            
             <character_maximum_length>10</character_maximum_length>
             <is_nullable>false</is_nullable>
@@ -365,7 +365,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>OFFICE</table_name>
-            <column_name>address_line_first</column_name>
+            <column_name>ADDRESS_LINE_FIRST</column_name>
             <data_type>varchar2</data_type>            
             <character_maximum_length>50</character_maximum_length>
             <is_nullable>false</is_nullable>
@@ -374,7 +374,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>OFFICE</table_name>
-            <column_name>address_line_second</column_name>
+            <column_name>ADDRESS_LINE_SECOND</column_name>
             <data_type>varchar2</data_type>            
             <character_maximum_length>50</character_maximum_length>
         </column>
@@ -382,7 +382,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>OFFICE</table_name>
-            <column_name>city</column_name>
+            <column_name>CITY</column_name>
             <data_type>varchar2</data_type>            
             <character_maximum_length>50</character_maximum_length>
             <is_nullable>false</is_nullable>
@@ -391,7 +391,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>OFFICE</table_name>
-            <column_name>country</column_name>
+            <column_name>COUNTRY</column_name>
             <data_type>varchar2</data_type>            
             <character_maximum_length>50</character_maximum_length>
             <is_nullable>false</is_nullable>
@@ -400,7 +400,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>OFFICE</table_name>
-            <column_name>phone</column_name>
+            <column_name>PHONE</column_name>
             <data_type>varchar2</data_type>            
             <character_maximum_length>50</character_maximum_length>
             <is_nullable>false</is_nullable>
@@ -409,7 +409,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>OFFICE</table_name>
-            <column_name>postal_code</column_name>
+            <column_name>POSTAL_CODE</column_name>
             <data_type>varchar2</data_type>            
             <character_maximum_length>15</character_maximum_length>
             <is_nullable>false</is_nullable>
@@ -418,7 +418,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>OFFICE</table_name>
-            <column_name>state</column_name>
+            <column_name>STATE</column_name>
             <data_type>varchar2</data_type>            
             <character_maximum_length>50</character_maximum_length>
         </column>
@@ -426,7 +426,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>OFFICE</table_name>
-            <column_name>territory</column_name>
+            <column_name>TERRITORY</column_name>
             <data_type>varchar2</data_type>            
             <character_maximum_length>10</character_maximum_length>
             <is_nullable>false</is_nullable>
@@ -437,7 +437,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>OFFICE_HAS_MANAGER</table_name>
-            <column_name>offices_office_code</column_name>
+            <column_name>OFFICES_OFFICE_CODE</column_name>
             <data_type>varchar2</data_type>            
             <character_maximum_length>10</character_maximum_length>
             <is_nullable>false</is_nullable>
@@ -446,7 +446,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>OFFICE_HAS_MANAGER</table_name>
-            <column_name>managers_manager_id</column_name>
+            <column_name>MANAGERS_MANAGER_ID</column_name>
             <data_type>number</data_type>
             <numeric_precision>19</numeric_precision>
             <numeric_scale>0</numeric_scale>  
@@ -458,7 +458,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>ORDERDETAIL</table_name>
-            <column_name>order_id</column_name>
+            <column_name>ORDER_ID</column_name>
             <data_type>number</data_type>
             <numeric_precision>19</numeric_precision>
             <numeric_scale>0</numeric_scale>  
@@ -468,7 +468,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>ORDERDETAIL</table_name>
-            <column_name>product_id</column_name>
+            <column_name>PRODUCT_ID</column_name>
             <data_type>number</data_type>
             <numeric_precision>19</numeric_precision>
             <numeric_scale>0</numeric_scale> 
@@ -478,7 +478,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>ORDERDETAIL</table_name>
-            <column_name>order_line_number</column_name>
+            <column_name>ORDER_LINE_NUMBER</column_name>
             <data_type>number</data_type>
             <numeric_precision>5</numeric_precision>
             <numeric_scale>0</numeric_scale>
@@ -488,7 +488,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>ORDERDETAIL</table_name>
-            <column_name>price_each</column_name>
+            <column_name>PRICE_EACH</column_name>
             <data_type>float</data_type>
             <is_nullable>false</is_nullable>
         </column>
@@ -496,7 +496,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>ORDERDETAIL</table_name>
-            <column_name>quantity_ordered</column_name>
+            <column_name>QUANTITY_ORDERED</column_name>
             <data_type>number</data_type>
             <numeric_precision>10</numeric_precision>
             <numeric_scale>0</numeric_scale>
@@ -508,7 +508,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>PAYMENT</table_name>
-            <column_name>check_number</column_name>
+            <column_name>CHECK_NUMBER</column_name>
             <data_type>varchar2</data_type>            
             <character_maximum_length>50</character_maximum_length>
             <is_nullable>false</is_nullable>
@@ -517,7 +517,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>PAYMENT</table_name>
-            <column_name>customer_number</column_name>
+            <column_name>CUSTOMER_NUMBER</column_name>
             <data_type>number</data_type>
             <numeric_precision>19</numeric_precision>
             <numeric_scale>0</numeric_scale>
@@ -527,14 +527,14 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>PAYMENT</table_name>
-            <column_name>caching_date</column_name>
+            <column_name>CACHING_DATE</column_name>
             <data_type>date</data_type>
         </column>
         <!-- invoice_amount float not null -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>PAYMENT</table_name>
-            <column_name>invoice_amount</column_name>
+            <column_name>INVOICE_AMOUNT</column_name>
             <data_type>float</data_type>
             <is_nullable>false</is_nullable>
         </column>
@@ -542,7 +542,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>PAYMENT</table_name>
-            <column_name>payment_date</column_name>
+            <column_name>PAYMENT_DATE</column_name>
             <data_type>date</data_type>
             <is_nullable>false</is_nullable>
         </column>
@@ -552,7 +552,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>PRODUCT</table_name>
-            <column_name>product_id</column_name>
+            <column_name>PRODUCT_ID</column_name>
             <data_type>number</data_type>
             <numeric_precision>19</numeric_precision>
             <numeric_scale>0</numeric_scale>            
@@ -563,7 +563,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>PRODUCT</table_name>
-            <column_name>buy_price</column_name>
+            <column_name>BUY_PRICE</column_name>
             <data_type>float</data_type>
             <is_nullable>false</is_nullable>
         </column>
@@ -571,7 +571,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>PRODUCT</table_name>
-            <column_name>msrp</column_name>
+            <column_name>MSRP</column_name>
             <data_type>float</data_type>
             <is_nullable>false</is_nullable>
         </column>
@@ -579,7 +579,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>PRODUCT</table_name>
-            <column_name>product_description</column_name>
+            <column_name>PRODUCT_DESCRIPTION</column_name>
             <data_type>clob</data_type>
             <is_nullable>false</is_nullable>
         </column>
@@ -587,7 +587,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>PRODUCT</table_name>
-            <column_name>product_name</column_name>
+            <column_name>PRODUCT_NAME</column_name>
             <data_type>varchar2</data_type>            
             <character_maximum_length>70</character_maximum_length>
             <is_nullable>false</is_nullable>
@@ -596,7 +596,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>PRODUCT</table_name>
-            <column_name>product_scale</column_name>
+            <column_name>PRODUCT_SCALE</column_name>
             <data_type>varchar2</data_type>            
             <character_maximum_length>10</character_maximum_length>
             <is_nullable>false</is_nullable>
@@ -605,7 +605,7 @@
         <column>
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>PRODUCT</table_name>
-            <column_name>product_vendor</column_name>
+            <column_name>PRODUCT_VENDOR</column_name>
             <data_type>varchar2</data_type>            
             <character_maximum_length>50</character_maximum_length>
             <is_nullable>false</is_nullable>
@@ -614,7 +614,7 @@
         <column>
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>PRODUCT</table_name>
-            <column_name>quantity_in_stock</column_name>
+            <column_name>QUANTITY_IN_STOCK</column_name>
             <data_type>number</data_type>
             <numeric_precision>5</numeric_precision>
             <numeric_scale>0</numeric_scale> 
@@ -624,7 +624,7 @@
         <column>
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>PRODUCT</table_name>
-            <column_name>product_line</column_name>
+            <column_name>PRODUCT_LINE</column_name>
             <data_type>varchar2</data_type>            
             <character_maximum_length>50</character_maximum_length>
         </column>
@@ -634,7 +634,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>PRODUCTLINE</table_name>
-            <column_name>product_line</column_name>
+            <column_name>PRODUCT_LINE</column_name>
             <data_type>varchar2</data_type>            
             <character_maximum_length>50</character_maximum_length>
             <is_nullable>false</is_nullable>
@@ -643,21 +643,21 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>PRODUCTLINE</table_name>
-            <column_name>html_description</column_name>
+            <column_name>HTML_DESCRIPTION</column_name>
             <data_type>clob</data_type>
         </column>
         <!-- image blob -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>PRODUCTLINE</table_name>
-            <column_name>image</column_name>
+            <column_name>IMAGE</column_name>
             <data_type>blob</data_type>
         </column>
         <!-- text_description varchar2(4000) -->
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>PRODUCTLINE</table_name>
-            <column_name>text_description</column_name>
+            <column_name>TEXT_DESCRIPTION</column_name>
             <data_type>varchar2</data_type>            
             <character_maximum_length>4000</character_maximum_length>
         </column>
@@ -667,7 +667,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>SALE</table_name>
-            <column_name>sale_id</column_name>
+            <column_name>SALE_ID</column_name>
             <data_type>number</data_type>
             <numeric_precision>19</numeric_precision>
             <numeric_scale>0</numeric_scale>            
@@ -678,7 +678,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>SALE</table_name>
-            <column_name>fiscal_year</column_name>
+            <column_name>FISCAL_YEAR</column_name>
             <data_type>number</data_type>
             <numeric_precision>10</numeric_precision>
             <numeric_scale>0</numeric_scale> 
@@ -688,7 +688,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>SALE</table_name>
-            <column_name>sale</column_name>
+            <column_name>SALE</column_name>
             <data_type>float</data_type>
             <is_nullable>false</is_nullable>
         </column>
@@ -696,7 +696,7 @@
         <column>  
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>SALE</table_name>
-            <column_name>employee_number</column_name>
+            <column_name>EMPLOYEE_NUMBER</column_name>
             <data_type>number</data_type>
             <numeric_precision>19</numeric_precision>
             <numeric_scale>0</numeric_scale> 
@@ -706,84 +706,84 @@
     <table_constraints>
         <table_constraint>
             <constraint_schema>CLASSICMODELS</constraint_schema>
-            <constraint_name>order_pk</constraint_name>
+            <constraint_name>ORDER_PK</constraint_name>
             <constraint_type>PRIMARY KEY</constraint_type>
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>ORDER</table_name>
         </table_constraint>
         <table_constraint>
             <constraint_schema>CLASSICMODELS</constraint_schema>
-            <constraint_name>customer_pk</constraint_name>
+            <constraint_name>CUSTOMER_PK</constraint_name>
             <constraint_type>PRIMARY KEY</constraint_type>
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>CUSTOMER</table_name>
         </table_constraint>
         <table_constraint>
             <constraint_schema>CLASSICMODELS</constraint_schema>
-            <constraint_name>customerdetail_pk</constraint_name>
+            <constraint_name>CUSTOMERDETAIL_PK</constraint_name>
             <constraint_type>PRIMARY KEY</constraint_type>
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>CUSTOMERDETAIL</table_name>
         </table_constraint>
         <table_constraint>
             <constraint_schema>CLASSICMODELS</constraint_schema>
-            <constraint_name>employee_pk</constraint_name>
+            <constraint_name>EMPLOYEE_PK</constraint_name>
             <constraint_type>PRIMARY KEY</constraint_type>
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>EMPLOYEE</table_name>
         </table_constraint>
         <table_constraint>
             <constraint_schema>CLASSICMODELS</constraint_schema>
-            <constraint_name>manager_pk</constraint_name>
+            <constraint_name>MANAGER_PK</constraint_name>
             <constraint_type>PRIMARY KEY</constraint_type>
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>MANAGER</table_name>
         </table_constraint>
         <table_constraint>
             <constraint_schema>CLASSICMODELS</constraint_schema>
-            <constraint_name>office_pk</constraint_name>
+            <constraint_name>OFFICE_PK</constraint_name>
             <constraint_type>PRIMARY KEY</constraint_type>
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>OFFICE</table_name>
         </table_constraint>
         <table_constraint>
             <constraint_schema>CLASSICMODELS</constraint_schema>
-            <constraint_name>office_manager_pk</constraint_name>
+            <constraint_name>OFFICE_MANAGER_PK</constraint_name>
             <constraint_type>PRIMARY KEY</constraint_type>
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>OFFICE_HAS_MANAGER</table_name>
         </table_constraint>
         <table_constraint>
             <constraint_schema>CLASSICMODELS</constraint_schema>
-            <constraint_name>orderdetail_pk</constraint_name>
+            <constraint_name>ORDERDETAIL_PK</constraint_name>
             <constraint_type>PRIMARY KEY</constraint_type>
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>ORDERDETAIL</table_name>
         </table_constraint>
         <table_constraint>
             <constraint_schema>CLASSICMODELS</constraint_schema>
-            <constraint_name>payment_pk</constraint_name>
+            <constraint_name>PAYMENT_PK</constraint_name>
             <constraint_type>PRIMARY KEY</constraint_type>
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>PAYMENT</table_name>
         </table_constraint>
         <table_constraint>
             <constraint_schema>CLASSICMODELS</constraint_schema>
-            <constraint_name>product_pk</constraint_name>
+            <constraint_name>PRODUCT_PK</constraint_name>
             <constraint_type>PRIMARY KEY</constraint_type>
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>PRODUCT</table_name>
         </table_constraint>
         <table_constraint>
             <constraint_schema>CLASSICMODELS</constraint_schema>
-            <constraint_name>productline_pk</constraint_name>
+            <constraint_name>PRODUCTLINE_PK</constraint_name>
             <constraint_type>PRIMARY KEY</constraint_type>
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>PRODUCTLINE</table_name>
         </table_constraint>
         <table_constraint>
             <constraint_schema>CLASSICMODELS</constraint_schema>
-            <constraint_name>sale_pk</constraint_name>
+            <constraint_name>SALE_PK</constraint_name>
             <constraint_type>PRIMARY KEY</constraint_type>
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>SALE</table_name>
@@ -793,122 +793,122 @@
     <key_column_usages>
         <key_column_usage>
             <constraint_schema>CLASSICMODELS</constraint_schema>
-            <constraint_name>order_pk</constraint_name>
+            <constraint_name>ORDER_PK</constraint_name>
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>ORDER</table_name>
-            <column_name>order_id</column_name>
+            <column_name>ORDER_ID</column_name>
             <ordinal_position>1</ordinal_position>
         </key_column_usage>
         <key_column_usage>
             <constraint_schema>CLASSICMODELS</constraint_schema>
-            <constraint_name>customer_pk</constraint_name>
+            <constraint_name>CUSTOMER_PK</constraint_name>
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>CUSTOMER</table_name>
-            <column_name>customer_number</column_name>
+            <column_name>CUSTOMER_NUMBER</column_name>
             <ordinal_position>1</ordinal_position>
         </key_column_usage>
         <key_column_usage>
             <constraint_schema>CLASSICMODELS</constraint_schema>
-            <constraint_name>customerdetail_pk</constraint_name>
+            <constraint_name>CUSTOMERDETAIL_PK</constraint_name>
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>CUSTOMERDETAIL</table_name>
-            <column_name>customer_number</column_name>
+            <column_name>CUSTOMER_NUMBER</column_name>
             <ordinal_position>1</ordinal_position>
         </key_column_usage>
         <key_column_usage>
             <constraint_schema>CLASSICMODELS</constraint_schema>
-            <constraint_name>employee_pk</constraint_name>
+            <constraint_name>EMPLOYEE_PK</constraint_name>
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>EMPLOYEE</table_name>
-            <column_name>employee_number</column_name>
+            <column_name>EMPLOYEE_NUMBER</column_name>
             <ordinal_position>1</ordinal_position>
         </key_column_usage>
         <key_column_usage>
             <constraint_schema>CLASSICMODELS</constraint_schema>
-            <constraint_name>manager_pk</constraint_name>
+            <constraint_name>MANAGER_PK</constraint_name>
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>MANAGER</table_name>
-            <column_name>manager_id</column_name>
+            <column_name>MANAGER_ID</column_name>
             <ordinal_position>1</ordinal_position>
         </key_column_usage>
         <key_column_usage>
             <constraint_schema>CLASSICMODELS</constraint_schema>
-            <constraint_name>office_pk</constraint_name>
+            <constraint_name>OFFICE_PK</constraint_name>
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>OFFICE</table_name>
-            <column_name>office_code</column_name>
+            <column_name>OFFICE_CODE</column_name>
             <ordinal_position>1</ordinal_position>
         </key_column_usage>
         <key_column_usage>
             <constraint_schema>CLASSICMODELS</constraint_schema>
-            <constraint_name>office_manager_pk</constraint_name>
+            <constraint_name>OFFICE_MANAGER_PK</constraint_name>
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>OFFICE_HAS_MANAGER</table_name>
-            <column_name>offices_office_code</column_name>
+            <column_name>OFFICES_OFFICE_CODE</column_name>
             <ordinal_position>1</ordinal_position>
         </key_column_usage>
         <key_column_usage>
             <constraint_schema>CLASSICMODELS</constraint_schema>
-            <constraint_name>office_manager_pk</constraint_name>
+            <constraint_name>OFFICE_MANAGER_PK</constraint_name>
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>OFFICE_HAS_MANAGER</table_name>
-            <column_name>managers_manager_id</column_name>
+            <column_name>MANAGERS_MANAGER_ID</column_name>
             <ordinal_position>2</ordinal_position>
         </key_column_usage>
         <key_column_usage>
             <constraint_schema>CLASSICMODELS</constraint_schema>
-            <constraint_name>orderdetail_pk</constraint_name>
+            <constraint_name>ORDERDETAIL_PK</constraint_name>
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>ORDERDETAIL</table_name>
-            <column_name>order_id</column_name>
+            <column_name>ORDER_ID</column_name>
             <ordinal_position>1</ordinal_position>
         </key_column_usage>
         <key_column_usage>
             <constraint_schema>CLASSICMODELS</constraint_schema>
-            <constraint_name>orderdetail_pk</constraint_name>
+            <constraint_name>ORDERDETAIL_PK</constraint_name>
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>ORDERDETAIL</table_name>
-            <column_name>product_id</column_name>
+            <column_name>PRODUCT_ID</column_name>
             <ordinal_position>2</ordinal_position>
         </key_column_usage>
         <key_column_usage>
             <constraint_schema>CLASSICMODELS</constraint_schema>
-            <constraint_name>payment_pk</constraint_name>
+            <constraint_name>PAYMENT_PK</constraint_name>
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>PAYMENT</table_name>
-            <column_name>check_number</column_name>
+            <column_name>CHECK_NUMBER</column_name>
             <ordinal_position>1</ordinal_position>
         </key_column_usage>
         <key_column_usage>
             <constraint_schema>CLASSICMODELS</constraint_schema>
-            <constraint_name>payment_pk</constraint_name>
+            <constraint_name>PAYMENT_PK</constraint_name>
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>PAYMENT</table_name>
-            <column_name>customer_number</column_name>
+            <column_name>CUSTOMER_NUMBER</column_name>
             <ordinal_position>2</ordinal_position>
         </key_column_usage>
         <key_column_usage>
             <constraint_schema>CLASSICMODELS</constraint_schema>
-            <constraint_name>product_pk</constraint_name>
+            <constraint_name>PRODUCT_PK</constraint_name>
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>PRODUCT</table_name>
-            <column_name>product_id</column_name>
+            <column_name>PRODUCT_ID</column_name>
             <ordinal_position>1</ordinal_position>
         </key_column_usage>
         <key_column_usage>
             <constraint_schema>CLASSICMODELS</constraint_schema>
-            <constraint_name>productline_pk</constraint_name>
+            <constraint_name>PRODUCTLINE_PK</constraint_name>
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>PRODUCTLINE</table_name>
-            <column_name>product_line</column_name>
+            <column_name>PRODUCT_LINE</column_name>
             <ordinal_position>1</ordinal_position>
         </key_column_usage>
         <key_column_usage>
             <constraint_schema>CLASSICMODELS</constraint_schema>
-            <constraint_name>sale_pk</constraint_name>
+            <constraint_name>SALE_PK</constraint_name>
             <table_schema>CLASSICMODELS</table_schema>
             <table_name>SALE</table_name>
-            <column_name>sale_id</column_name>
+            <column_name>SALE_ID</column_name>
             <ordinal_position>1</ordinal_position>
         </key_column_usage>
     </key_column_usages>
