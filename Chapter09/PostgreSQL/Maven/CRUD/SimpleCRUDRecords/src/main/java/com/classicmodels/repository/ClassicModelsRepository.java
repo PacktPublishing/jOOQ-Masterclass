@@ -434,8 +434,8 @@ public class ClassicModelsRepository {
                 .withUpdatablePrimaryKeys(true)).dsl();
         
         SaleRecord sr = derivedCtx.selectFrom(SALE)                
-                .where(SALE.SALE_ID.gt(10L))
-                .fetchAny();      
+                .where(SALE.SALE_ID.eq(7L))
+                .fetchSingle();         
         
         // Forcing an UPDATE can be done via Settings.isUpdatablePrimaryKeys() 
         // By default, isUpdatablePrimaryKeys() return false
