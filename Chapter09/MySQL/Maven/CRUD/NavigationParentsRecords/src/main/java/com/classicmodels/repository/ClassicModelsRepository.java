@@ -72,7 +72,18 @@ public class ClassicModelsRepository {
     @Transactional
     public void deleteSales() {
 
-        // approach 1 (less queries, but extra-loop)        
+        // Approach 1 (best approach)
+        /*
+        ctx.deleteFrom(SALE)
+                .where(SALE.SALE_.lt(2000d)
+                        .and(SALE.EMPLOYEE_NUMBER.in(
+                                select(EMPLOYEE.EMPLOYEE_NUMBER)
+                                        .from(EMPLOYEE)
+                                        .where(EMPLOYEE.JOB_TITLE.eq("Sales Rep")))))
+                .execute();
+        */
+                
+        // Approach 2 (less queries, but extra-loop)        
         List<SaleRecord> sales = ctx.fetch(SALE, SALE.SALE_.lt(2000d));
         List<EmployeeRecord> employees = Keys.SALE_EMPLOYEE_FK.fetchParents(sales);
         
@@ -83,7 +94,7 @@ public class ClassicModelsRepository {
             for (EmployeeRecord employee : employees) {
 
                 if (Objects.equals(sale.getEmployeeNumber(), employee.getEmployeeNumber())
-                        && "Sales Rep".equals(employee.getJobTitle())) {
+                        && "Sales Rep".equals(employee.getJobTitle())) {                    
                     sale.delete();
 
                     break;
@@ -91,7 +102,8 @@ public class ClassicModelsRepository {
             }
         }
 
-        // approach 2 (more queries)
+        // Approach 3 (more queries)        
+        /*
         for (SaleRecord sale : ctx.fetch(SALE, SALE.SALE_.lt(2000d))) {
 
             if ("Sales Rep".equals(sale.fetchParent(
@@ -99,5 +111,6 @@ public class ClassicModelsRepository {
                 sale.delete();
             }
         }
+        */
     }
 }
