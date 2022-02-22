@@ -287,8 +287,8 @@ public class ClassicModelsRepository {
         // The fetched record is auto-attached to the current configuration by jOOQ
         // so, there is no need to manually attach *sr*
         SaleRecord sr = ctx.selectFrom(SALE)
-                .where(SALE.SALE_ID.gt(10L))                
-                .fetchAny();                
+                .where(SALE.SALE_ID.eq(5L))                
+                .fetchSingle();                  
                 
         System.out.println("Record to be deleted is:\n" + sr);
         

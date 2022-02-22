@@ -33,7 +33,7 @@ public class ClassicModelsController {
     @PostMapping("/save")
     public String save(@ModelAttribute(PRODUCT_ATTR) ProductRecord product) {
 
-        System.out.println("Product: " + product);
+        System.out.println("Product:\n" + product);
 
         return "redirect:index";
     }
