@@ -63,6 +63,7 @@ public class ClassicModelsController {
     public String storePayment(SessionStatus sessionStatus,
             @ModelAttribute(PAYMENT_ATTR) PaymentRecord pr) {
 
+        pr.setCachingDate(LocalDateTime.now());
         classicModelsService.storePayment(pr);
 
         sessionStatus.setComplete();
