@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>All payments</title>        
+        <link th:href="@{/style.css}" rel="stylesheet" />
+    </head>
+    <body>                
+        <h3>All payments</h3>
+
+        <fieldset style="width: 50%; margin: auto;">            
+            <legend>INSERT/UPDATE PAYMENT</legend>           
+            <div th:if="${payment != null}">                                       
+                <form action="#" th:action="@{/store}" th:object="${payment}" method="post">                    
+                    <table>
+                        <tr>                       
+                            <td>                                
+                                <label for="customerNumber">Customer Number: </label>
+                            </td>
+                            <td>
+                                <input id="customerNumber" type="text" th:field="*{customerNumber}" readonly="readonly" style="background-color: lightgray;" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="checkNumber">Check Number: </label>
+                            </td>
+                            <td>
+                                <input id="checkNumber" type="text" th:field="*{checkNumber}" placeholder="N/A" readonly="readonly" style="background-color: lightgray;"/>
+                            </td>
+                        </tr>                                                
+                        <tr>
+                            <td>
+                                <label for="invoiceAmount">Invoice amount: </label>
+                            </td>
+                            <td>
+                                <input id="invoiceAmount" type="number" step=".01" th:field="*{invoiceAmount}" placeholder="1.00" min="1"/>
+                            </td>
+                        </tr>                        
+                    </table>                    
+                    <hr/>                    
+                    <div th:object="${payment}" th:remove="tag">
+                        <div th:if="${#fields.hasGlobalErrors()}" style="font-size: 15px; ">  
+                            <div>                                
+                                <input type="button" value="Refresh" onclick="location.href = '/refresh';" style="float: left; margin-left: 10px;" /> 
+                                <span th:errors="*{global}" style="float: left; margin-left: 10px;"/>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="submit" value="Finish" style="float: right; margin-right: 10px;" /> 
+
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                </form>  
+            </div>
+        </fieldset>
+
+        <hr/>
+
+        <div th:if="${all != null}">       
+            <table>                       
+                <tr>
+                    <th>Customer Number</th>
+                    <th>Check Number</th>
+                    <th>Payment Date</th>
+                    <th>Invoice Amount</th>
+                    <th>Caching Date</th>                    
+                </tr>
+                <tr th:if="${all.empty}">
+                    <td colspan="5"> No Payments Available </td>
+                </tr>
+                <tr th:each="t : ${all}">
+                    <td><span th:text="${t.customerNumber}">Customer Number</span></td>            
+                    <td><span th:text="${t.checkNumber}">Check Number</span></td>            
+                    <td><span th:text="${t.paymentDate}">Payment Date</span></td>            
+                    <td><span th:text="${t.invoiceAmount}">Invoice Amount</span></td>            
+                    <td><span th:text="${t.cachingDate}">Caching Date</span></td> 
+                    <td><a th:href="@{/payment/{nr}/{ch}(nr=${t.customerNumber},ch=${t.checkNumber})}">Load</a></td> 
+                </tr>                
+            </table>            
+        </div>
+    </body>
+</html>
