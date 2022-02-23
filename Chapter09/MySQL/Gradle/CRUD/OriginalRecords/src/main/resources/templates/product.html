@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Load Product</title>   
+        <link th:href="@{/style.css}" rel="stylesheet" />
+    </head>
+    <body>                
+        <fieldset style="width: 50%">            
+            <legend>ORIGINAL PRODUCT</legend>
+            <p th:if="${product == null}">Product unavailable</p>                                
+            <div th:if="${product != null}">       
+                <table>
+                    <tr>
+                        <td> Product ID</td> 
+                        <td th:text = "${product.productId}"></td>                        
+                    </tr> 
+                    <tr>
+                        <td> Product Name:</td>
+                        <td th:text = "${product.productName}"></td>                        
+                    </tr>
+                    <tr>
+                        <td> Product Buy Price:</td>
+                        <td th:text = "${product.original('buy_price')}"/></td>                        
+                    </tr>
+                    <tr>
+                        <td> Product MSRP:</td> 
+                        <td th:text = "${product.original('msrp')}"/></td>                        
+                    </tr>
+                </table>
+            </div>    
+        </fieldset>
+        <fieldset style="width: 50%">            
+            <legend>SUGGESTED PRODUCT</legend>
+            <p th:if="${product == null}">Product unavailable</p>                                
+            <div th:if="${product != null}">       
+                <form action="#" th:action="@{/save}" th:object="${product}" method="post"> 
+                    <table>
+                        <tr>
+                            <td> Product ID</td> 
+                            <td>
+                                <p th:text = "${product.productId}" />
+                                <input type="hidden" th:name="productId" th:value="${product.productId}"/>
+                            </td>                        
+                        </tr> 
+                        <tr>
+                            <td> Product Name:</td>
+                            <td>
+                                <p th:text = "${product.productName}" />
+                                <input type="hidden" th:name="productName" th:value="${product.productName}"/>
+                            </td>                        
+                        </tr>
+                        <tr>
+                            <td> Suggested Buy Price:</td>
+                            <td><input name="buyPrice" type="text" th:field="${product.buyPrice}"/></td>                        
+                        </tr>
+                        <tr>
+                            <td> Suggested MSRP:</td> 
+                            <td><input name="msrp" type="text" th:field="${product.msrp}"/></td>                        
+                        </tr>                        
+                    </table>
+                    <input type="submit" value="Submit" style="float: right;" />
+                </form>
+            </div>    
+        </fieldset>
+    </body>
+</html>

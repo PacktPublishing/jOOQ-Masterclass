@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Departments</title>        
+        <link th:href="@{/style.css}" rel="stylesheet" />
+    </head>
+    <body>                
+        <h3>Departments</h3>
+
+        <fieldset style="width: 90%; margin: auto;">            
+            <legend>DEPARTMENTS</legend>           
+            <div th:if="${departments != null}">                       
+                <div th:if="${departments.empty}">
+                    No Departments Are Available
+                </div>                
+                <div class="div-table" th:each="d : ${departments}">
+                    <div class="div-table-row">
+                        <form class="tr" action="#" th:action="@{/office}" method="post">                        
+                            <div class="div-table-col" th:text="${d.departmentId}"/>
+                            <input type="hidden" th:name="departmentId" th:value="${d.departmentId}"/>
+
+                            <div class="div-table-col" th:text="${d.name}"/>
+                            <input type="hidden" th:name="name" th:value="${d.name}"/>
+
+                            <div class="div-table-col" th:text="${d.officeCode}"/>
+                            <input type="hidden" th:name="officeCode" th:value="${d.officeCode}"/>
+
+                            <div class="div-table-col">...</div>  
+                            <div class="div-table-col"><input class="td" type="submit" value="View Office"/></div>                               
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </body>
+</html>

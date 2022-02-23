@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Employees</title>        
+        <link th:href="@{/style.css}" rel="stylesheet" />
+    </head>
+    <body>                
+        <h3>Employees</h3>
+
+        <fieldset style="width: 90%; margin: auto;">            
+            <legend>EMPLOYEES</legend>           
+            <div th:if="${employees != null}">                       
+                <div th:if="${employees.empty}">
+                    No Employees Are Available
+                </div>                
+                <div class="div-table" th:each="e : ${employees}">
+                    <div class="div-table-row">
+                        <form class="tr" action="#" th:action="@{/customers}" method="post">                        
+                            <div class="div-table-col" th:text="${e.employeeNumber}"/>
+                            <input type="hidden" th:name="employeeNumber" th:value="${e.employeeNumber}"/>
+
+                            <div class="div-table-col" th:text="${e.lastName}"/>
+                            <input type="hidden" th:name="lastName" th:value="${e.lastName}"/>
+
+                            <div class="div-table-col" th:text="${e.firstName}"/>
+                            <input type="hidden" th:name="firstName" th:value="${e.firstName}"/>
+
+                            <div class="div-table-col">...</div>  
+                            <div class="div-table-col"><input class="td" type="submit" value="View Customers"/></div>                               
+                        </form>
+                    </div>
+                </div>
+            </div>            
+        </fieldset>
+    </body>
+</html>
