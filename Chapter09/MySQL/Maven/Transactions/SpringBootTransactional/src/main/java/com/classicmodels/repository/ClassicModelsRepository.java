@@ -219,9 +219,8 @@ public class ClassicModelsRepository {
         
         ctx.selectFrom(EMPLOYEE)
                 .fetch() // jOOQ fetches the whole result set into memory via the database connection opened by @Transactional
-                .stream() // stream over the in-memory result set (database connection is active)
-                .filter(rs -> rs.getValue(EMPLOYEE.SALARY) > 5000)
-                // .map(), ... more time-consuming pipeline operations holds the transaction open
+                .stream() // stream over the in-memory result set (database connection is active)                
+                // .map(), ... time-consuming pipeline operations holds the transaction open
                 .forEach(System.out::println);
     }
 
@@ -238,8 +237,7 @@ public class ClassicModelsRepository {
                     .fetch();
         });
         
-        result.stream() // stream over the in-memory result set (database connection is closed)
-                .filter(rs -> rs.getValue(EMPLOYEE.SALARY) > 5000)
+        result.stream() // stream over the in-memory result set (database connection is closed)                
                 // .map(), ... more time-consuming pipeline operations, but the transaction is closed
                 .forEach(System.out::println);
     }
@@ -262,8 +260,7 @@ public class ClassicModelsRepository {
             }
         });
         
-        result.stream() // stream over the in-memory result set (database connection is closed)
-                .filter(rs -> rs.getValue(EMPLOYEE.SALARY) > 5000)
+        result.stream() // stream over the in-memory result set (database connection is closed)                
                 // .map(), ... more time-consuming pipeline operations, but the transaction is closed
                 .forEach(System.out::println);
     }            
