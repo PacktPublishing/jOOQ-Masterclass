@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>All transactions</title>        
+        <link rel="stylesheet" href="style.css"/>
+    </head>
+    <body>                
+        <h3>All bank transactions</h3>
+        <div th:if="${all != null}">       
+            <table>                       
+                <tr>
+                    <th>Id</th>
+                    <th>Bank Name</th>
+                    <th>Bank IBAN</th>
+                    <th>Transfer amount</th>
+                    <th>Card type</th>
+                    <th>Caching Date</th>
+                    <th>Customer Number</th>
+                    <th>Check Number</th>
+                    <th>Status</th>
+                </tr>
+                <tr th:if="${all.empty}">
+                    <td colspan="9"> No Transactions Available </td>
+                </tr>
+                <tr th:each="t : ${all}">
+                    <td><span th:text="${t.transactionId}">ID</span></td>            
+                    <td><span th:text="${t.bankName}">Bank Name</span></td>            
+                    <td><span th:text="${t.bankIban}">Bank IBAN</span></td>            
+                    <td><span th:text="${t.transferAmount}">Transfer Amount</span></td>            
+                    <td><span th:text="${t.cardType}">Card Type</span></td>            
+                    <td><span th:text="${t.cachingDate}">Caching Date</span></td>            
+                    <td><span th:text="${t.customerNumber}">Customer Number</span></td>            
+                    <td><span th:text="${t.checkNumber}">Check Number</span></td>            
+                    <td><span th:text="${t.status}">Status</span></td>                                
+                    <td><a th:href="@{/editbankname/{id}(id=${t.transactionId})}">Modify</a></td>                    
+                </tr>
+                <tr>
+                    <td colspan="9" style="text-align: center;">
+                        <a href="/newbanktransaction">Insert new bank transaction</a>
+                    </td>
+                </tr>
+            </table>            
+        </div>
+    </body>
+</html>
