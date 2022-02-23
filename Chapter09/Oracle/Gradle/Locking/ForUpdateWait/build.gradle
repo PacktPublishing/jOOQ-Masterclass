@@ -142,7 +142,7 @@ tasks.named('generateJooq').configure {
     dependsOn tasks.named('flywayMigrate')
 
     // declare Flyway migration scripts as inputs on the jOOQ task
-    inputs.files(fileTree('${rootDir}/../../../../db/migration/dev/oracle'))
+    inputs.files(fileTree('${rootDir}/../../../../../db/migration/dev/oracle'))
         .withPropertyName('migrations')
         .withPathSensitivity(PathSensitivity.RELATIVE)
 
