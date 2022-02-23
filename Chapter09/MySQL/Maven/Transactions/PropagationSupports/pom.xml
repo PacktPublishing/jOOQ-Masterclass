@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.classicmodels</groupId>
-    <artifactId>PropagationNotSupports</artifactId>
+    <artifactId>PropagationSupports</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>PropagationNotSupports</name>
+    <name>PropagationSupports</name>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
