@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Edit bank transfer amount</title>        
+    </head>
+    <body>        
+        <fieldset style="width: 50%">                        
+            <legend><b>STEP 4:</b> EDIT BANK TRANSFER AMOUNT</legend>
+            <p th:if="${bt == null}">No bank transaction was loaded</p>                                
+            <div th:if="${bt != null}">       
+                <table>
+                    <tr>
+                        <td><p th:text = "'Customer number: ' + ${bt.customerNumber}"/></td>
+                        <td><p th:text = "'Check number: ' + ${bt.checkNumber}"/></td>
+                    </tr> 
+                </table>
+                <hr/>               
+                <form action="#" th:action="@{/transfer}" th:object="${bt}" method="post">                    
+                    <table>
+                        <tr>
+                            <td>
+                                <label for="transferAmount">Transfer amount: </label>
+                            </td>
+                            <td>
+                                <input id="transferAmount" type="number" step=".01" th:field="*{transferAmount}" placeholder="0.00"/>
+                            </td>                            
+                        </tr>                        
+                    </table>  
+                    <hr/>
+                    <input type="submit" value="Finish"style="float: right; margin-left: 10px;" />                     
+                    <input type="button" onclick="location.href = '/editcardtype';" value="&laquo; Back" style="float: right;" />
+                    <input type="button" onclick="location.href = '/cancel';" value="Cancel" style="float: left; margin-right: 10px;" />
+                    <input type="button" onclick="location.href = '/reset/editbanktransfer';" value="Reset" style="float: left;" />
+                    <input type="button" onclick="location.href = '/delete';" value="Delete" style="float: left; margin-left: 10px; background-color: orange;" />
+
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                </form>  
+            </div>
+        </fieldset>
+    </body>
+</html>

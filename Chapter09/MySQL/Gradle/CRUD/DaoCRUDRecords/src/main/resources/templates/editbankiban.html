@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Edit bank IBAN</title>        
+    </head>
+    <body>                
+        <fieldset style="width: 50%">            
+            <legend><b>STEP 2:</b> EDIT BANK IBAN</legend>
+            <p th:if="${bt == null}">No bank transaction was loaded</p>                                
+            <div th:if="${bt != null}">       
+                <table>
+                    <tr>
+                        <td> <p th:text = "'Customer number: ' + ${bt.customerNumber}"/></td>
+                        <td> <p th:text = "'Check number: ' + ${bt.checkNumber}"/></td>
+                    </tr> 
+                </table>
+                <hr/>               
+                <form action="#" th:action="@{/iban}" th:object="${bt}" method="post">
+                    <table>                        
+                        <tr>
+                            <td>
+                                <label for="bankIban">Bank IBAN: </label>
+                            </td>
+                            <td>
+                                <input id="bankIban" type="text" th:field="*{bankIban}" placeholder="N/A"/>
+                            </td>
+                        </tr>                        
+                    </table>
+                    <hr/>
+                    <input type="submit" value="Next &raquo;" style="float: right; margin-left: 10px;" /> 
+                    <input type="button" onclick="location.href = '/editbankname';" value="&laquo; Back" style="float: right;" />
+                    <input type="button" onclick="location.href = '/cancel';" value="Cancel" style="float: left; margin-right: 10px;" />
+                    <input type="button" onclick="location.href = '/reset/editbankiban';" value="Reset" style="float: left;" />
+                    <input type="button" onclick="location.href='/delete';" value="Delete" style="float: left; margin-left: 10px; background-color: orange;" />
+
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                </form>  
+            </div>
+        </fieldset>
+    </body>
+</html>

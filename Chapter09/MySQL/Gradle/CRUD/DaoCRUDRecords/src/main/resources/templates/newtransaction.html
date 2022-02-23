@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Edit bank transactions</title>        
+    </head>
+    <body>                
+        <fieldset style="width: 50%">            
+            <legend>NEW BANK TRANSACTION</legend>
+            <div th:if="${nbt != null}">                                       
+                <form action="#" th:action="@{/new}" th:object="${nbt}" method="post">
+                    <table>
+                        <tr>
+                            <td>
+                                <label for="bankName">Bank name: </label>
+                            </td>
+                            <td>
+                                <input id="bankName" type="text" th:field="*{bankName}" placeholder="N/A"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="bankIban">Bank IBAN: </label>
+                            </td>
+                            <td>
+                                <input id="bankIban" type="text" th:field="*{bankIban}" placeholder="N/A"/>
+                            </td>
+                        </tr>                        
+                        <tr>
+                            <td>
+                                <label for="transferAmount">Transfer amount: </label>
+                            </td>
+                            <td>
+                                <input id="transferAmount" type="number" step=".01" th:field="*{transferAmount}" placeholder="0.00"/>
+                            </td>
+                        </tr>     
+                        <tr>
+                            <td>
+                                <label for="cardType">Card type:</label>
+                            </td>
+                            <td>
+                                <select name="cardType" id="cardType" th:field="*{cardType}">
+                                    <option th:value="'VisaElectron'" th:text="VisaElectron"></option>
+                                    <option th:value="'MasterCard'" th:text="MasterCard"></option>                                    
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+                    <input type="submit" value="Save" style="float: right; margin-left: 10px;" /> 
+                    <input type="button" onclick="location.href = '/transactions';" value="Cancel" style="float: right;" />
+
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                </form>  
+            </div>
+        </fieldset>
+    </body>
+</html>
