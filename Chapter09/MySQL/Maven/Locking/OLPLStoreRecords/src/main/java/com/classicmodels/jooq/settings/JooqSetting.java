@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Configuration;
 public class JooqSetting {
 
     @Bean
-    public Settings jooqSettings() {
-        return new Settings()
+    public Settings jooqSettings() {        
+        return new Settings()                
                 .withExecuteWithOptimisticLocking(true);
                 // .withExecuteWithOptimisticLockingExcludeUnversioned(true) // disable optimistic locking, unless versioned (numeric/timestamp) is not used
     }
