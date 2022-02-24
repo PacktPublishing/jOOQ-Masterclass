@@ -38,7 +38,8 @@ public class ClassicModelsRepository {
                     // .batchNone()             - default
                     // .commitNone()            - default
                     .loadArrays(Arrays.stream(result))
-                    .fields(null, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.HOT, SALE.RATE, SALE.VAT, SALE.TREND)
+                    .fields(null, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.HOT, 
+                            SALE.RATE, SALE.VAT, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH, SALE.TREND)
                     .execute();
 
         } catch (IOException ex) {
@@ -55,7 +56,8 @@ public class ClassicModelsRepository {
         try {
             int processed = ctx.loadInto(SALE)
                     .loadArrays(Arrays.asList(result))
-                    .fields(null, SALE.FISCAL_YEAR, SALE.SALE_, null, null, null, null, SALE.TREND)
+                    .fields(null, SALE.FISCAL_YEAR, SALE.SALE_, null, null, null, null, 
+                            SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH, SALE.TREND)
                     .execute()
                     .processed(); // optional
 
@@ -74,8 +76,8 @@ public class ClassicModelsRepository {
                     .onDuplicateKeyIgnore()
                     .loadArrays(
                             new Object[]{11199, "Australian Home", "Paoule", "Sart", "40.11.2555", 1370, 21000.00, 20210, 11199, "43 Rue 2", "", "Paris", "", 25017, "France"},
-                            new Object[]{111100, "Joliyon", "Schmitt,Rue", "10.22.2535", 1370, 21000.00, 20201, 111100, "51, Avenue 3", "", "", "", 43000, ""},
-                            new Object[]{111101, "Marquez Xioa", "Calor", "Sar", "11.12.2525", 1370, 21000.00, 21805, 111101, "51, St 5", "", "", "", 44000, "USA"}
+                            new Object[]{111100, "Joliyon", "Schmitt,Rue", "10.22.2535", 1370, 21000.00, 20201, 111100, "51, Avenue 3", "SILVER", "MIN", "", 43000, ""},
+                            new Object[]{111101, "Marquez Xioa", "Calor", "Sar", "11.12.2525", 1370, 21000.00, 21805, 111101, "51, St 5", "SILVER", "MIN", "", 44000, "USA"}
                     )
                     .fields(CUSTOMER.CUSTOMER_NUMBER, CUSTOMER.CUSTOMER_NAME, CUSTOMER.CONTACT_LAST_NAME,
                             CUSTOMER.CONTACT_FIRST_NAME, CUSTOMER.PHONE, CUSTOMER.SALES_REP_EMPLOYEE_NUMBER,
@@ -89,8 +91,8 @@ public class ClassicModelsRepository {
                     .onDuplicateKeyIgnore()
                     .loadArrays(
                             new Object[]{11199, "Australian Home", "Paoule", "Sart", "40.11.2555", 1370, 21000.00, 20210, 11199, "43 Rue 2", "", "Paris", "", 25017, "France"},
-                            new Object[]{111100, "Joliyon", "Schmitt,Rue", "10.22.2535", 1370, 21000.00, 20201, 111100, "51, Avenue 3", "", "", "", 43000, ""},
-                            new Object[]{111101, "Marquez Xioa", "Calor", "Sar", "11.12.2525", 1370, 21000.00, 21805, 111101, "51, St 5", "", "", "", 44000, "USA"}
+                            new Object[]{111100, "Joliyon", "Schmitt,Rue", "10.22.2535", 1370, 21000.00, 20201, 111100, "51, Avenue 3", "SILVER", "MIN", "", 43000, ""},
+                            new Object[]{111101, "Marquez Xioa", "Calor", "Sar", "11.12.2525", 1370, 21000.00, 21805, 111101, "51, St 5", "SILVER", "MIN", "", 44000, "USA"}
                     )
                     .fields(null, null, null, null, null, null, null, null,
                             CUSTOMERDETAIL.CUSTOMER_NUMBER, CUSTOMERDETAIL.ADDRESS_LINE_FIRST,
@@ -112,11 +114,12 @@ public class ClassicModelsRepository {
         try {
             ctx.loadInto(SALE)
                     .loadArrays(
-                            new Object[]{1, 2003, 5282.64, 1370, 0, "", "", "UP"},
-                            new Object[]{2, 2004, 1938.24, 1370, 0, "", "", "UP"},
-                            new Object[]{3, 2004, 1676.14, 1370, 0, "", "", "DOWN"}
+                            new Object[]{1, 2003, 5282.64, 1370, 0, "SILVER", "MIN", 1, 0.0, "UP"},
+                            new Object[]{2, 2004, 1938.24, 1370, 0, "SILVER", "MIN", 1, 0.0, "UP"},
+                            new Object[]{3, 2004, 1676.14, 1370, 0, "SILVER", "MIN", 1, 0.0, "DOWN"}
                     )
-                    .fields(null, SALE.FISCAL_YEAR, SALE.SALE_, null, null, null, null, SALE.TREND)
+                    .fields(null, SALE.FISCAL_YEAR, SALE.SALE_, null, null, null, null, 
+                            SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH, SALE.TREND)
                     .onRowEnd(ll -> {
                         System.out.println("Just processed row: " + Arrays.toString(ll.row()));
                         System.out.format("Executed: %d, ignored: %d, processed: %d, stored: %d\n",
@@ -146,11 +149,12 @@ public class ClassicModelsRepository {
                     // -> If you remove @Transactional and set auto-commit to false then nothing commits
                     
                     .loadArrays(
-                            new Object[]{1, 2005, 582.64, 1370, 0, "", "", "UP"},
-                            new Object[]{2, 2005, 138.24, 1370, 0, "", "", " CONSTANT"},
-                            new Object[]{3, 2005, 176.14, 1370, 0, "", "", "DOWN"}
+                            new Object[]{1, 2005, 582.64, 1370, 0, "SILVER", "MIN", 1, 0.0, "UP"},
+                            new Object[]{2, 2005, 138.24, 1370, 0, "SILVER", "MIN", 1, 0.0, "CONSTANT"},
+                            new Object[]{3, 2005, 176.14, 1370, 0, "SILVER", "MIN", 1, 0.0, "DOWN"}
                     )
-                    .fields(SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.HOT, SALE.RATE, SALE.VAT, SALE.TREND)
+                    .fields(SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, 
+                            SALE.HOT, SALE.RATE, SALE.VAT, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH, SALE.TREND)
                     .execute()
                     .executed();
 
@@ -168,11 +172,12 @@ public class ClassicModelsRepository {
             int executed = ctx.loadInto(SALE)
                     .onDuplicateKeyUpdate()
                     .loadArrays(
-                            new Object[]{1, 2005, 582.64, 1370, 0, "", "", "UP"},
-                            new Object[]{2, 2005, 138.24, 1370, 0, "", "", " CONSTANT"},
-                            new Object[]{3, 2005, 176.14, 1370, 0, "", "", "DOWN"}
+                            new Object[]{1, 2005, 582.64, 1370, 0, "SILVER", "MIN", 1, 0.0, "UP"},
+                            new Object[]{2, 2005, 138.24, 1370, 0, "SILVER", "MIN", 1, 0.0, "CONSTANT"},
+                            new Object[]{3, 2005, 176.14, 1370, 0, "SILVER", "MIN", 1, 0.0, "DOWN"}
                     )
-                    .fields(SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.HOT, SALE.RATE, SALE.VAT, SALE.TREND)
+                    .fields(SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, 
+                            SALE.HOT, SALE.RATE, SALE.VAT, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH, SALE.TREND)
                     .execute()
                     .executed();
 
@@ -192,11 +197,12 @@ public class ClassicModelsRepository {
                     .batchAfter(2) // each *batch* has 2 rows
                     .commitEach() // commit after each batch
                     .loadArrays(
-                            new Object[]{1, 2005, 582.64, 1370, 0, "", "", "UP"},
-                            new Object[]{2, 2005, 138.24, 1370, 0, "", "", " CONSTANT"},
-                            new Object[]{3, 2005, 176.14, 1370, 0, "", "", "DOWN"}
+                            new Object[]{1, 2005, 582.64, 1370, 0, "SILVER", "MIN", 1, 0.0, "UP"},
+                            new Object[]{2, 2005, 138.24, 1370, 0, "SILVER", "MIN", 1, 0.0, "CONSTANT"},
+                            new Object[]{3, 2005, 176.14, 1370, 0, "SILVER", "MIN", 1, 0.0, "DOWN"}
                     )
-                    .fields(SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.HOT, SALE.RATE, SALE.VAT, SALE.TREND)
+                    .fields(SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, 
+                            SALE.HOT, SALE.RATE, SALE.VAT, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH, SALE.TREND)
                     .execute()
                     .ignored();
 
@@ -216,30 +222,31 @@ public class ClassicModelsRepository {
                     .batchAfter(3) // each *batch* has 3 *bulks*, so 6 rows
                     .commitAfter(3) // commit after 3 *batches*, so after 9 *bulks*, so after 18 rows
                     .loadArrays(
-                            new Object[]{2005, 582.64, 1370, 0, "", "", "UP"},
-                            new Object[]{2005, 138.24, 1370, 0, "", "", " CONSTANT"},
-                            new Object[]{2005, 176.14, 1370, 0, "", "", "DOWN"},
-                            new Object[]{2003, 2582.64, 1504, 0, "", "", "DOWN"},
-                            new Object[]{2005, 1338.21, 1370, 0, "", "", " CONSTANT"},
-                            new Object[]{2005, 1746.12, 1504, 0, "", "", "DOWN"},
-                            new Object[]{2005, 6426.12, 1504, 0, "", "", "DOWN"},
-                            new Object[]{2004, 2746.12, 1504, 0, "", "", "DOWN"},
-                            new Object[]{2003, 1336.12, 1166, 0, "", "", "DOWN"},
-                            new Object[]{2005, 646.12, 1166, 0, "", "", "DOWN"},
-                            new Object[]{2003, 1746.12, 1504, 0, "", "", "DOWN"},
-                            new Object[]{2005, 582.64, 1370, 0, "", "", "UP"},
-                            new Object[]{2005, 138.24, 1370, 0, "", "", " CONSTANT"},
-                            new Object[]{2005, 176.14, 1370, 0, "", "", "DOWN"},
-                            new Object[]{2003, 2582.64, 1504, 0, "", "", "DOWN"},
-                            new Object[]{2005, 1338.21, 1370, 0, "", "", " CONSTANT"},
-                            new Object[]{2005, 1746.12, 1504, 0, "", "", "DOWN"},
-                            new Object[]{2005, 6426.12, 1504, 0, "", "", "DOWN"},
-                            new Object[]{2004, 2746.12, 1504, 0, "", "", "DOWN"},
-                            new Object[]{2003, 1336.12, 1166, 0, "", "", "DOWN"},
-                            new Object[]{2005, 646.12, 1166, 0, "", "", "DOWN"},
-                            new Object[]{2003, 1746.12, 1504, 0, "", "", "DOWN"}
+                            new Object[]{2005, 582.64, 1370, 0, "SILVER", "MIN", 1, 0.0, "UP"},
+                            new Object[]{2005, 138.24, 1370, 0, "SILVER", "MIN", 1, 0.0, "CONSTANT"},
+                            new Object[]{2005, 176.14, 1370, 0, "SILVER", "MIN", 1, 0.0, "DOWN"},
+                            new Object[]{2003, 2582.64, 1504, 0, "SILVER", "MIN", 1, 0.0, "DOWN"},
+                            new Object[]{2005, 1338.21, 1370, 0, "SILVER", "MIN", 1, 0.0, "CONSTANT"},
+                            new Object[]{2005, 1746.12, 1504, 0, "SILVER", "MIN", 1, 0.0, "DOWN"},
+                            new Object[]{2005, 6426.12, 1504, 0, "SILVER", "MIN", 1, 0.0, "DOWN"},
+                            new Object[]{2004, 2746.12, 1504, 0, "SILVER", "MIN", 1, 0.0, "DOWN"},
+                            new Object[]{2003, 1336.12, 1166, 0, "SILVER", "MIN", 1, 0.0, "DOWN"},
+                            new Object[]{2005, 646.12, 1166, 0, "SILVER", "MIN", 1, 0.0, "DOWN"},
+                            new Object[]{2003, 1746.12, 1504, 0, "SILVER", "MIN", 1, 0.0, "DOWN"},
+                            new Object[]{2005, 582.64, 1370, 0, "SILVER", "MIN", 1, 0.0, "UP"},
+                            new Object[]{2005, 138.24, 1370, 0, "SILVER", "MIN", 1, 0.0, "CONSTANT"},
+                            new Object[]{2005, 176.14, 1370, 0, "SILVER", "MIN", 1, 0.0, "DOWN"},
+                            new Object[]{2003, 2582.64, 1504, 0, "SILVER", "MIN", 1, 0.0, "DOWN"},
+                            new Object[]{2005, 1338.21, 1370, 0, "SILVER", "MIN", 1, 0.0, "CONSTANT"},
+                            new Object[]{2005, 1746.12, 1504, 0, "SILVER", "MIN", 1, 0.0, "DOWN"},
+                            new Object[]{2005, 6426.12, 1504, 0, "SILVER", "MIN", 1, 0.0, "DOWN"},
+                            new Object[]{2004, 2746.12, 1504, 0, "SILVER", "MIN", 1, 0.0, "DOWN"},
+                            new Object[]{2003, 1336.12, 1166, 0, "SILVER", "MIN", 1, 0.0, "DOWN"},
+                            new Object[]{2005, 646.12, 1166, 0, "SILVER", "MIN", 1, 0.0, "DOWN"},
+                            new Object[]{2003, 1746.12, 1504, 0, "SILVER", "MIN", 1, 0.0, "DOWN"}
                     )
-                    .fields(SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.HOT, SALE.RATE, SALE.VAT, SALE.TREND)
+                    .fields(SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.HOT, 
+                            SALE.RATE, SALE.VAT, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH, SALE.TREND)
                     .execute()
                     .stored();
 
@@ -259,11 +266,12 @@ public class ClassicModelsRepository {
                     .bulkAfter(1) // each *bulk* has 1 rows                           
                     .batchAfter(2) // each *batch* has 2 "bulks", so has 4 rows
                     .loadArrays(
-                            new Object[]{1, 2005, 582.64, 1370, 0, "", "", "UP"},
-                            new Object[]{2, 2005, 138.24, 1370, 0, "", "", " CONSTANT"},
-                            new Object[]{3, 2005, 176.14, 1370, 0, "", "", "DOWN"}
+                            new Object[]{1, 2005, 582.64, 1370, 0, "SILVER", "MIN", 1, 0.0, "UP"},
+                            new Object[]{2, 2005, 138.24, 1370, 0, "SILVER", "MIN", 1, 0.0, "CONSTANT"},
+                            new Object[]{3, 2005, 176.14, 1370, 0, "SILVER", "MIN", 1, 0.0, "DOWN"}
                     )
-                    .fields(SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.HOT, SALE.RATE, SALE.VAT, SALE.TREND)
+                    .fields(SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, 
+                            SALE.HOT, SALE.RATE, SALE.VAT, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH, SALE.TREND)
                     .execute();
 
         } catch (IOException ex) {
@@ -281,11 +289,12 @@ public class ClassicModelsRepository {
                     .batchNone() // don't batch (default)
                     .onErrorAbort() // or, continue via onErrorIgnore()
                     .loadArrays(
-                            new Object[]{1},
-                            new Object[]{0, "", "", " CONSTANT"},
-                            new Object[]{3, 2005, 176.14, 1370, 0, "", "", "DOWN"}
+                            new Object[]{1, 1, 0.0},
+                            new Object[]{0, "SILVER", "MIN", 1, 0.0, "CONSTANT"},
+                            new Object[]{3, 2005, 176.14, 1370, 0, "SILVER", "MIN", 1, 0.0, "DOWN"}
                     )
-                    .fields(SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.HOT, SALE.RATE, SALE.VAT, SALE.TREND)
+                    .fields(SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, 
+                            SALE.HOT, SALE.RATE, SALE.VAT, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH, SALE.TREND)
                     .execute()
                     .errors();
 
