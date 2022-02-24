@@ -51,18 +51,18 @@ public class ClassicModelsRepository {
 
         DSLContext ctxLocal = c.dsl();
 
-        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
-                .values(2005, 1370L, 1282.64).execute();
-        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
-                .values(2004, 1370L, 3938.24).execute();
-        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
-                .values(2004, 1370L, 4676.14).execute();
-        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
-                .values(2003, 1166L, 2223.0).execute();
-        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
-                .values(2004, 1166L, 4531.35).execute();
-        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
-                .values(2004, 1166L, 6751.33).execute();
+        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)
+                .values(2005, 1370L, 1282.64, 1, 0.0).execute();
+        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)
+                .values(2004, 1370L, 3938.24, 1, 0.0).execute();
+        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)
+                .values(2004, 1370L, 4676.14, 1, 0.0).execute();
+        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)
+                .values(2003, 1166L, 2223.0, 1, 0.0).execute();
+        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)
+                .values(2004, 1166L, 4531.35, 1, 0.0).execute();
+        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)
+                .values(2004, 1166L, 6751.33, 1, 0.0).execute();
 
         ctxLocal.update(EMPLOYEE)
                 .set(EMPLOYEE.SALARY, EMPLOYEE.SALARY.plus(1_000))
@@ -92,18 +92,18 @@ public class ClassicModelsRepository {
 
         DSLContext ctxLocal = c.dsl();
 
-        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
-                .values(2005, 1370L, 1282.64).execute();
-        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
-                .values(2004, 1370L, 3938.24).execute();
-        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
-                .values(2004, 1370L, 4676.14).execute();
-        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
-                .values(2003, 1166L, 2223.0).execute();
-        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
-                .values(2004, 1166L, 4531.35).execute();
-        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
-                .values(2004, 1166L, 6751.33).execute();
+        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)
+                .values(2005, 1370L, 1282.64, 1, 0.0).execute();
+        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)
+                .values(2004, 1370L, 3938.24, 1, 0.0).execute();
+        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)
+                .values(2004, 1370L, 4676.14, 1, 0.0).execute();
+        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)
+                .values(2003, 1166L, 2223.0, 1, 0.0).execute();
+        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)
+                .values(2004, 1166L, 4531.35, 1, 0.0).execute();
+        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)
+                .values(2004, 1166L, 6751.33, 1, 0.0).execute();
 
         ctxLocal.insertInto(EMPLOYEE, EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.LAST_NAME, EMPLOYEE.FIRST_NAME, EMPLOYEE.EXTENSION,
                 EMPLOYEE.EMAIL, EMPLOYEE.OFFICE_CODE, EMPLOYEE.SALARY, EMPLOYEE.JOB_TITLE)
@@ -123,18 +123,18 @@ public class ClassicModelsRepository {
 
         DSLContext ctxLocal = c.dsl();
 
-        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
-                .values(2005, 1370L, 1282.64).execute();
-        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
-                .values(2004, 1370L, 3938.24).execute();
-        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
-                .values(2004, 1370L, 4676.14).execute();
-        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
-                .values(2003, 1166L, 2223.0).execute();
-        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
-                .values(2004, 1166L, 4531.35).execute();
-        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
-                .values(2004, 1166L, 6751.33).execute();
+        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)
+                .values(2005, 1370L, 1282.64, 1, 0.0).execute();
+        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)
+                .values(2004, 1370L, 3938.24, 1, 0.0).execute();
+        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)
+                .values(2004, 1370L, 4676.14, 1, 0.0).execute();
+        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)
+                .values(2003, 1166L, 2223.0, 1, 0.0).execute();
+        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)
+                .values(2004, 1166L, 4531.35, 1, 0.0).execute();
+        ctxLocal.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)
+                .values(2004, 1166L, 6751.33, 1, 0.0).execute();
 
         ctxLocal.insertInto(EMPLOYEE, EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.LAST_NAME, EMPLOYEE.FIRST_NAME, EMPLOYEE.EXTENSION,
                 EMPLOYEE.EMAIL, EMPLOYEE.OFFICE_CODE, EMPLOYEE.SALARY, EMPLOYEE.JOB_TITLE)
@@ -189,14 +189,16 @@ public class ClassicModelsRepository {
         try ( BatchedConnection conn = new BatchedConnection(DriverManager.getConnection(
                 "jdbc:mysql://localhost:3306/classicmodels", "root", "root"), 2)) {
 
-            String sql1 = "insert into `classicmodels`.`sale` (`fiscal_year`, `employee_number`, `sale`) "
-                    + "values (?, ?, ?)";
+            String sql1 = "insert into `classicmodels`.`sale` (`fiscal_year`, `employee_number`, `sale`, `fiscal_month`, `revenue_growth`) "
+                    + "values (?, ?, ?, ?, ?)";
 
             // the next 2 statements will become the first batch                        
             try ( PreparedStatement stmt = conn.prepareStatement(sql1)) {
                 stmt.setInt(1, 2004);
                 stmt.setLong(2, 1166L);
                 stmt.setDouble(3, 543.33);
+                stmt.setInt(4, 1);
+                stmt.setDouble(5, 0.0);
                 stmt.executeUpdate();
             }
 
@@ -204,6 +206,8 @@ public class ClassicModelsRepository {
                 stmt.setInt(1, 2005);
                 stmt.setLong(2, 1370L);
                 stmt.setDouble(3, 9022.20);
+                stmt.setInt(4, 1);
+                stmt.setDouble(5, 0.0);
                 stmt.executeUpdate();
             }
 
@@ -212,18 +216,22 @@ public class ClassicModelsRepository {
                 stmt.setInt(1, 2003);
                 stmt.setLong(2, 1166L);
                 stmt.setDouble(3, 3213.0);
+                stmt.setInt(4, 1);
+                stmt.setDouble(5, 0.0);
                 stmt.executeUpdate();
             }
 
             // since the following SQL string is different, next statements represents the third batch
-            String sql2 = "insert into `classicmodels`.`sale` (`fiscal_year`, `employee_number`, `sale`, `trend`) "
-                    + "values (?, ?, ?, ?)";
+            String sql2 = "insert into `classicmodels`.`sale` (`fiscal_year`, `employee_number`, `sale`, `fiscal_month`, `revenue_growth`, `trend`) "
+                    + "values (?, ?, ?, ?, ?, ?)";
 
             try ( PreparedStatement stmt = conn.prepareStatement(sql2)) {
                 stmt.setInt(1, 2004);
                 stmt.setLong(2, 1166L);
                 stmt.setDouble(3, 4541.35);
-                stmt.setString(4, "UP");
+                stmt.setInt(4, 1);
+                stmt.setDouble(5, 0.0);
+                stmt.setString(6, "UP");
                 stmt.executeUpdate();
             }
 
@@ -231,7 +239,9 @@ public class ClassicModelsRepository {
                 stmt.setInt(1, 2005);
                 stmt.setLong(2, 1370L);
                 stmt.setDouble(3, 1282.64);
-                stmt.setString(4, "DOWN");
+                stmt.setInt(4, 1);
+                stmt.setDouble(5, 0.0);
+                stmt.setString(6, "DOWN");
                 stmt.executeUpdate();
             }
         } catch (SQLException ex) {
@@ -242,41 +252,51 @@ public class ClassicModelsRepository {
         try ( BatchedConnection conn = new BatchedConnection(DriverManager.getConnection(
                 "jdbc:mysql://localhost:3306/classicmodels", "root", "root"), 2)) {
 
-            try ( PreparedStatement stmt = conn.prepareStatement("insert into `classicmodels`.`sale` (`fiscal_year`, `employee_number`, `sale`) "
-                    + "values (?, ?, ?);")) {
+            try ( PreparedStatement stmt = conn.prepareStatement("insert into `classicmodels`.`sale` (`fiscal_year`, `employee_number`, `sale`, `fiscal_month`, `revenue_growth`) "
+                    + "values (?, ?, ?, ?, ?);")) {
 
                 // the next 2 statements will become the first batch                        
                 stmt.setInt(1, 2004);
                 stmt.setLong(2, 1166L);
                 stmt.setDouble(3, 543.33);
+                stmt.setInt(4, 1);
+                stmt.setDouble(5, 0.0);
                 stmt.executeUpdate();
 
                 stmt.setInt(1, 2005);
                 stmt.setLong(2, 1370L);
                 stmt.setDouble(3, 9022.20);
+                stmt.setInt(4, 1);
+                stmt.setDouble(5, 0.0);
                 stmt.executeUpdate();
 
                 // reached batch limit so this is the second batch
                 stmt.setInt(1, 2003);
                 stmt.setLong(2, 1166L);
                 stmt.setDouble(3, 3213.0);
+                stmt.setInt(4, 1);
+                stmt.setDouble(5, 0.0);
                 stmt.executeUpdate();
             }
 
             // since the following SQL string is different, next statements represents the third batch
-            try ( PreparedStatement stmt = conn.prepareStatement("insert into `classicmodels`.`sale` (`fiscal_year`, `employee_number`, `sale`, `trend`) "
-                    + "values (?, ?, ?, ?);")) {
+            try ( PreparedStatement stmt = conn.prepareStatement("insert into `classicmodels`.`sale` (`fiscal_year`, `employee_number`, `sale`, `fiscal_month`, `revenue_growth`, `trend`) "
+                    + "values (?, ?, ?, ?, ?, ?);")) {
 
                 stmt.setInt(1, 2004);
                 stmt.setLong(2, 1166L);
                 stmt.setDouble(3, 4541.35);
-                stmt.setString(4, "UP");
+                stmt.setInt(4, 1);
+                stmt.setDouble(5, 0.0);
+                stmt.setString(6, "UP");
                 stmt.executeUpdate();
 
                 stmt.setInt(1, 2005);
                 stmt.setLong(2, 1370L);
                 stmt.setDouble(3, 1282.64);
-                stmt.setString(4, "DOWN");
+                stmt.setInt(4, 1);
+                stmt.setDouble(5, 0.0);
+                stmt.setString(6, "DOWN");
                 stmt.executeUpdate();
             }
 
@@ -293,17 +313,17 @@ public class ClassicModelsRepository {
                     EMPLOYEE.EMAIL, EMPLOYEE.OFFICE_CODE, EMPLOYEE.SALARY, EMPLOYEE.JOB_TITLE)
                     .values(20001L, "Alison", "Joly", "x445", "ajoly@classicmodelcars.com", "3", 55000, "Sales Rep")
                     .onDuplicateKeyIgnore().execute();
-            c.dsl().insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(2005, 20001L, 1282.64).execute();
-            c.dsl().insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(2004, 20001L, 3938.24).execute();
-            c.dsl().insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(2004, 20001L, 4676.14).execute();
+            c.dsl().insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH).values(2005, 20001L, 1282.64, 1, 0.0).execute();
+            c.dsl().insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH).values(2004, 20001L, 3938.24, 1, 0.0).execute();
+            c.dsl().insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH).values(2004, 20001L, 4676.14, 1, 0.0).execute();
 
             c.dsl().insertInto(EMPLOYEE, EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.LAST_NAME, EMPLOYEE.FIRST_NAME, EMPLOYEE.EXTENSION,
                     EMPLOYEE.EMAIL, EMPLOYEE.OFFICE_CODE, EMPLOYEE.SALARY, EMPLOYEE.JOB_TITLE)
                     .values(20002L, "Tyler", "Seven", "x101", "tseven@classicmodelcars.com", "2", 57000, "Sales Rep")
                     .onDuplicateKeyIgnore().execute();
-            c.dsl().insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(2003, 20002L, 2223.0).execute();
-            c.dsl().insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(2004, 20002L, 4531.35).execute();
-            c.dsl().insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(2004, 20002L, 6751.33).execute();
+            c.dsl().insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH).values(2003, 20002L, 2223.0, 1, 0.0).execute();
+            c.dsl().insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH).values(2004, 20002L, 4531.35, 1, 0.0).execute();
+            c.dsl().insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH).values(2004, 20002L, 6751.33, 1, 0.0).execute();
         });
 
         // prefer this approach (executes 2 batches)
@@ -317,12 +337,12 @@ public class ClassicModelsRepository {
                     .values(20002L, "Tyler", "Seven", "x101", "tseven@classicmodelcars.com", "2", 57000, "Sales Rep")
                     .onDuplicateKeyIgnore().execute();
 
-            c.dsl().insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(2005, 20001L, 1282.64).execute();
-            c.dsl().insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(2004, 20001L, 3938.24).execute();
-            c.dsl().insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(2004, 20001L, 4676.14).execute();
-            c.dsl().insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(2003, 20002L, 2223.0).execute();
-            c.dsl().insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(2004, 20002L, 4531.35).execute();
-            c.dsl().insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(2004, 20002L, 6751.33).execute();
+            c.dsl().insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH).values(2005, 20001L, 1282.64, 1, 0.0).execute();
+            c.dsl().insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH).values(2004, 20001L, 3938.24, 1, 0.0).execute();
+            c.dsl().insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH).values(2004, 20001L, 4676.14, 1, 0.0).execute();
+            c.dsl().insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH).values(2003, 20002L, 2223.0, 1, 0.0).execute();
+            c.dsl().insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH).values(2004, 20002L, 4531.35, 1, 0.0).execute();
+            c.dsl().insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH).values(2004, 20002L, 6751.33, 1, 0.0).execute();
         });
     }
 }
