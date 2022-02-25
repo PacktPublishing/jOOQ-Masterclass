@@ -58,12 +58,12 @@ public class ClassicModelsRepository {
         //     - comma separator     
         
         String strcsv = """
-                        sale_id,fiscal_year,sale,employee_number,hot,rate,vat,trend
-                        1,2003,5282.64,1370,0,"","",UP
-                        2,2004,1938.24,1370,0,"","",UP
-                        3,2004,1676.14,1370,0,"","",DOWN
-                        4,2003,3213.0,1166,0,"","",DOWN
-                        5,2004,2121.35,1166,0,"","",DOWN                        
+                        sale_id,fiscal_year,sale,employee_number,hot,rate,vat,fiscal_month,revenue_growth,trend
+                        1,2003,5282.64,1370,0,"SILVER","MIN",1,0.0,UP
+                        2,2004,1938.24,1370,0,"SILVER","MIN",1,0.0,UP
+                        3,2004,1676.14,1370,0,"SILVER","MIN",1,0.0,DOWN
+                        4,2003,3213.0,1166,0,"SILVER","MIN",1,0.0,DOWN
+                        5,2004,2121.35,1166,0,"SILVER","MIN",1,0.0,DOWN                        
                         """;
        
         try {
@@ -99,7 +99,8 @@ public class ClassicModelsRepository {
         try {
             int processed = ctx.loadInto(SALE)
                     .loadCSV(Paths.get("data", "csv", "allColumnsHeaderCommaSeparator.csv").toFile(), StandardCharsets.UTF_8)
-                    .fields(null, SALE.FISCAL_YEAR, SALE.SALE_, null, null, null, null, SALE.TREND)
+                    .fields(null, SALE.FISCAL_YEAR, SALE.SALE_, null, null, null, null, 
+                            SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH, SALE.TREND)
                     .execute()
                     .processed(); // optional
 
@@ -156,7 +157,8 @@ public class ClassicModelsRepository {
         try {
             List<LoaderError> errors = ctx.loadInto(SALE)
                     .loadCSV(Paths.get("data", "csv", "allColumnsNoHeaderCertainSettings.csv").toFile(), StandardCharsets.UTF_8)
-                    .fields(SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.HOT, SALE.RATE, SALE.VAT, SALE.TREND)
+                    .fields(SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, 
+                            SALE.HOT, SALE.RATE, SALE.VAT, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH, SALE.TREND)
                     .ignoreRows(0) // this is a CSV file with no header and ignoreRows() is by default 1
                     .separator('|')
                     .nullString("{null}")
@@ -181,7 +183,8 @@ public class ClassicModelsRepository {
         try {
             ctx.loadInto(SALE)
                     .loadCSV(Paths.get("data", "csv", "allColumnsHeaderCommaSeparator.csv").toFile(), StandardCharsets.UTF_8)
-                    .fields(null, SALE.FISCAL_YEAR, SALE.SALE_, null, null, null, null, SALE.TREND)
+                    .fields(null, SALE.FISCAL_YEAR, SALE.SALE_, null, null, null, null, 
+                            SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH, SALE.TREND)
                     .onRowEnd(ll -> {
                         System.out.println("Just processed row: " + Arrays.toString(ll.row()));
                         System.out.format("Executed: %d, ignored: %d, processed: %d, stored: %d\n",
