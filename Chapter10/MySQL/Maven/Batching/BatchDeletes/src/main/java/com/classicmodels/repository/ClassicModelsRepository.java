@@ -94,16 +94,17 @@ public class ClassicModelsRepository {
         // The order of records is preserved.
         
         // Records batch deletes (single query, bind values)
-        int[] result = ctx.batchDelete(r1, r2, r3)
-                .execute();
-        
-        // Records batch deletes (multiple query, inlined values)
-        // Order of records is always preserved entirely
-        // ctx.configuration().derive(
-        //        new Settings().withStatementType(StatementType.STATIC_STATEMENT))
-        //        .dsl().batchDelete(...) ...
+        if (r1 != null && r2 != null && r3 != null) {
+            int[] result = ctx.batchDelete(r1, r2, r3)
+                    .execute();
 
-        System.out.println("EXAMPLE 2: " + Arrays.toString(result));
+            // Records batch deletes (multiple query, inlined values)
+            // Order of records is always preserved entirely
+            // ctx.configuration().derive(
+            //        new Settings().withStatementType(StatementType.STATIC_STATEMENT))
+            //        .dsl().batchDelete(...) ...
+            System.out.println("EXAMPLE 2: " + Arrays.toString(result));
+        }
     }
 
     public void batchDeleteRecords2() {
@@ -122,10 +123,12 @@ public class ClassicModelsRepository {
 
         // There are two batches, one for r1 abd r3, and one r2
         // The order of records is not preserved (check the log).
-        int[] result = ctx.batchDelete(r1, r2, r3)
-                .execute();
+        if (r1 != null && r2 != null && r3 != null) {
+            int[] result = ctx.batchDelete(r1, r2, r3)
+                    .execute();
 
-        System.out.println("EXAMPLE 3: " + Arrays.toString(result));
+            System.out.println("EXAMPLE 3: " + Arrays.toString(result));
+        }
     }
 
     public void batchDeleteRecords3() {
@@ -144,10 +147,12 @@ public class ClassicModelsRepository {
 
         // There are three batches, one for r1, one for r2, and one for r3 because the generated SQL with bind variables is not the same.
         // The order of records is preserved.
-        int[] result = ctx.batchDelete(r1, r2, r3)
-                .execute();
+        if (r1 != null && r2 != null && r3 != null) {
+            int[] result = ctx.batchDelete(r1, r2, r3)
+                    .execute();
 
-        System.out.println("EXAMPLE 4: " + Arrays.toString(result));
+            System.out.println("EXAMPLE 4: " + Arrays.toString(result));
+        }
     }
 
     // batch collection of Objects    
