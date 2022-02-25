@@ -10,6 +10,6 @@ public class JooqSetting {
     @Bean
     public Settings jooqSettings() {
         return new Settings()
-                .withBatchSize(4);
+                .withBatchSize(10);
     }
 }
