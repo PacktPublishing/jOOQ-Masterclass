@@ -24,7 +24,7 @@ public class ClassicModelsRepository {
 
         // execute an INSERT
         SaleRecord sr1 = new SaleRecord(pk(),
-                2005, 1223.23, 1370L, null, null, null, null);
+                2005, 1223.23, 1370L, null, null, null, 1, 0.0, null);
 
         // execute an UPDATE (if you modify the primary key that an INSERT is executed)
         SaleRecord sr2 = ctx.selectFrom(SALE)
@@ -49,9 +49,9 @@ public class ClassicModelsRepository {
         });
         
         // add more new sales
-        sales.add(new SaleRecord(pk(), 2004, 1323.23, 1370L, null, null, null, null));
-        sales.add(new SaleRecord(pk(), 2002, 1243.25, 1504L, null, null, null, null));
-        sales.add(new SaleRecord(pk(), 2003, 3323.26, 1504L, null, null, null, null));
+        sales.add(new SaleRecord(pk(), 2004, 1323.23, 1370L, null, null, null, 1, 0.0, null));
+        sales.add(new SaleRecord(pk(), 2002, 1243.25, 1504L, null, null, null, 1, 0.0, null));
+        sales.add(new SaleRecord(pk(), 2003, 3323.26, 1504L, null, null, null, 1, 0.0, null));
         
         int[] result2 = ctx.batchStore(sales)
                 .execute();
@@ -61,10 +61,10 @@ public class ClassicModelsRepository {
     
     public void batchStoresPreparedStatement1() {
 
-        SaleRecord i1 = new SaleRecord(pk(), 2005, 1223.23, 1370L, null, null, null, null);
-        SaleRecord i2 = new SaleRecord(pk(), 2005, 9022.21, 1166L, null, null, null, null);
-        SaleRecord i3 = new SaleRecord(pk(), 2003, 8002.22, 1504L, null, null, null, null);
-        SaleRecord i4 = new SaleRecord(pk(), 2003, 8002.22, 1611L, null, null, null, null);
+        SaleRecord i1 = new SaleRecord(pk(), 2005, 1223.23, 1370L, null, null, null, 1, 0.0, null);
+        SaleRecord i2 = new SaleRecord(pk(), 2005, 9022.21, 1166L, null, null, null, 1, 0.0, null);
+        SaleRecord i3 = new SaleRecord(pk(), 2003, 8002.22, 1504L, null, null, null, 1, 0.0, null);
+        SaleRecord i4 = new SaleRecord(pk(), 2003, 8002.22, 1611L, null, null, null, 1, 0.0, null);
 
         SaleRecord u1 = ctx.selectFrom(SALE).where(SALE.SALE_ID.eq(1L)).fetchSingle();
         u1.setFiscalYear(2010);
@@ -88,16 +88,16 @@ public class ClassicModelsRepository {
     
     public void batchStoresPreparedStatement2() {
 
-        SaleRecord i1 = new SaleRecord(pk(), 2005, 1223.23, 1370L, null, null, null, null);
+        SaleRecord i1 = new SaleRecord(pk(), 2005, 1223.23, 1370L, null, null, null, 1, 0.0, null);
         SaleRecord u1 = ctx.selectFrom(SALE).where(SALE.SALE_ID.eq(1L)).fetchSingle();
         u1.setFiscalYear(2006);
-        SaleRecord i2 = new SaleRecord(pk(), 2005, 9022.21, 1166L, null, null, null, null);
+        SaleRecord i2 = new SaleRecord(pk(), 2005, 9022.21, 1166L, null, null, null, 1, 0.0, null);
         SaleRecord u2 = ctx.selectFrom(SALE).where(SALE.SALE_ID.eq(2L)).fetchSingle();
         u2.setFiscalYear(2007);
-        SaleRecord i3 = new SaleRecord(pk(), 2003, 8002.22, 1504L, null, null, null, null);
+        SaleRecord i3 = new SaleRecord(pk(), 2003, 8002.22, 1504L, null, null, null, 1, 0.0, null);
         SaleRecord u3 = ctx.selectFrom(SALE).where(SALE.SALE_ID.eq(3L)).fetchSingle();
         u3.setFiscalYear(2008);
-        SaleRecord i4 = new SaleRecord(pk(), 2003, 8002.22, 1611L, null, null, null, null);
+        SaleRecord i4 = new SaleRecord(pk(), 2003, 8002.22, 1611L, null, null, null, 1, 0.0, null);
         SaleRecord u4 = ctx.selectFrom(SALE).where(SALE.SALE_ID.eq(4L)).fetchSingle();
         u4.setFiscalYear(2009);
 
@@ -114,16 +114,16 @@ public class ClassicModelsRepository {
     
     public void batchStoresPreparedStatement3() {
 
-        SaleRecord i1 = new SaleRecord(pk(), 2005, 1223.23, 1370L, null, null, null, null);
+        SaleRecord i1 = new SaleRecord(pk(), 2005, 1223.23, 1370L, null, null, null, 1, 0.0, null);
         SaleRecord u1 = ctx.selectFrom(SALE).where(SALE.SALE_ID.eq(1L)).fetchSingle();
         u1.setFiscalYear(2016);
-        SaleRecord i2 = new SaleRecord(pk(), 2005, 9022.21, 1166L, null, null, null, null);
+        SaleRecord i2 = new SaleRecord(pk(), 2005, 9022.21, 1166L, null, null, null, 1, 0.0, null);
         SaleRecord u2 = ctx.selectFrom(SALE).where(SALE.SALE_ID.eq(2L)).fetchSingle();
         u2.setTrend("CONSTANT");
-        SaleRecord i3 = new SaleRecord(pk(), 2003, 8002.22, 1504L, null, null, null, null);
+        SaleRecord i3 = new SaleRecord(pk(), 2003, 8002.22, 1504L, null, null, null, 1, 0.0, null);
         SaleRecord u3 = ctx.selectFrom(SALE).where(SALE.SALE_ID.eq(3L)).fetchSingle();
         u3.setSale(0.0);
-        SaleRecord i4 = new SaleRecord(pk(), 2003, 8002.22, 1611L, null, null, null, null);
+        SaleRecord i4 = new SaleRecord(pk(), 2003, 8002.22, 1611L, null, null, null, 1, 0.0, null);
         SaleRecord u4 = ctx.selectFrom(SALE).where(SALE.SALE_ID.eq(4L)).fetchSingle();
         u4.setFiscalYear(2017);
 
@@ -147,6 +147,8 @@ public class ClassicModelsRepository {
         i1.setFiscalYear(2005);
         i1.setSale(1223.23);
         i1.setEmployeeNumber(1370L);
+        i1.setFiscalMonth(1);
+        i1.setRevenueGrowth(0.0);
         i1.setTrend("UP");
         SaleRecord u1 = ctx.selectFrom(SALE).where(SALE.SALE_ID.eq(1L)).fetchSingle();
         u1.setFiscalYear(2018);
@@ -154,6 +156,8 @@ public class ClassicModelsRepository {
         i2.setSaleId(pk());
         i2.setFiscalYear(2005);
         i2.setSale(9022.21);
+        i2.setFiscalMonth(1);
+        i2.setRevenueGrowth(0.0);
         SaleRecord u2 = ctx.selectFrom(SALE).where(SALE.SALE_ID.eq(2L)).fetchSingle();
         u2.setTrend("DOWN");
         SaleRecord i3 = new SaleRecord();
@@ -161,6 +165,8 @@ public class ClassicModelsRepository {
         i3.setFiscalYear(2003);
         i3.setSale(8002.22);
         i3.setEmployeeNumber(1504L);
+        i3.setFiscalMonth(1);
+        i3.setRevenueGrowth(0.0);
         SaleRecord u3 = ctx.selectFrom(SALE).where(SALE.SALE_ID.eq(3L)).fetchSingle();
         u3.setSale(10000.0);
         SaleRecord i4 = new SaleRecord();
@@ -169,6 +175,8 @@ public class ClassicModelsRepository {
         i4.setSale(8002.22);
         i4.setEmployeeNumber(1611L);
         i4.setHot(true);
+        i4.setFiscalMonth(1);
+        i4.setRevenueGrowth(0.0);
         SaleRecord u4 = ctx.selectFrom(SALE).where(SALE.SALE_ID.eq(4L)).fetchSingle();
         u4.setEmployeeNumber(1165L);
 
@@ -184,10 +192,10 @@ public class ClassicModelsRepository {
     
     public void batchStoresStaticStatement() {
 
-        SaleRecord i1 = new SaleRecord(pk(), 2005, 1223.23, 1370L, null, null, null, null);
-        SaleRecord i2 = new SaleRecord(pk(), 2005, 9022.21, 1166L, null, null, null, null);
-        SaleRecord i3 = new SaleRecord(pk(), 2003, 8002.22, 1504L, null, null, null, null);
-        SaleRecord i4 = new SaleRecord(pk(), 2003, 8002.22, 1611L, null, null, null, null);
+        SaleRecord i1 = new SaleRecord(pk(), 2005, 1223.23, 1370L, null, null, null, 1, 0.0, null);
+        SaleRecord i2 = new SaleRecord(pk(), 2005, 9022.21, 1166L, null, null, null, 1, 0.0, null);
+        SaleRecord i3 = new SaleRecord(pk(), 2003, 8002.22, 1504L, null, null, null, 1, 0.0, null);
+        SaleRecord i4 = new SaleRecord(pk(), 2003, 8002.22, 1611L, null, null, null, 1, 0.0, null);
 
         SaleRecord u1 = ctx.selectFrom(SALE).where(SALE.SALE_ID.eq(1L)).fetchSingle();
         u1.setFiscalYear(2010);
