@@ -45,6 +45,18 @@
     {
       "schema": "classicmodels",
       "table": "sale",
+      "name": "fiscal_month",
+      "type": "INT"
+    },
+    {
+      "schema": "classicmodels",
+      "table": "sale",
+      "name": "revenue_growth",
+      "type": "FLOAT"
+    },
+    {
+      "schema": "classicmodels",
+      "table": "sale",
       "name": "trend",
       "type": "VARCHAR"
     }
@@ -58,6 +70,8 @@
       0,
       null,
       null,
+      1,
+      0.0,
       "UP"
     ],
     [
@@ -68,6 +82,8 @@
       0,
       null,
       null,
+      1,
+      0.0,
       "UP"
     ],
     [
@@ -78,6 +94,8 @@
       0,
       null,
       null,
+      1,
+      0.0,
       "DOWN"
     ],
     [
@@ -88,6 +106,8 @@
       0,
       null,
       null,
+      1,
+      0.0,
       "DOWN"
     ],
     [
@@ -98,6 +118,8 @@
       0,
       null,
       null,
+      1,
+      0.0,
       "DOWN"
     ],
     [
@@ -108,6 +130,8 @@
       0,
       null,
       null,
+      1,
+      0.0,
       "CONSTANT"
     ],
     [
@@ -118,6 +142,8 @@
       0,
       null,
       null,
+      1,
+      0.0,
       "CONSTANT"
     ],
     [
@@ -128,6 +154,8 @@
       0,
       null,
       null,
+      1,
+      0.0,
       "UP"
     ],
     [
@@ -138,6 +166,8 @@
       0,
       null,
       null,
+      1,
+      0.0,
       "CONSTANT"
     ],
     [
@@ -148,6 +178,8 @@
       0,
       null,
       null,
+      1,
+      0.0,
       "UP"
     ],
     [
@@ -158,6 +190,8 @@
       0,
       null,
       null,
+      1,
+      0.0,
       "DOWN"
     ],
     [
@@ -168,6 +202,8 @@
       0,
       null,
       null,
+      1,
+      0.0,
       "DOWN"
     ],
     [
@@ -178,6 +214,8 @@
       0,
       null,
       null,
+      1,
+      0.0,
       "DOWN"
     ],
     [
@@ -188,6 +226,8 @@
       0,
       null,
       null,
+      1,
+      0.0,
       "UP"
     ],
     [
@@ -198,6 +238,8 @@
       0,
       null,
       null,
+      1,
+      0.0,
       "CONSTANT"
     ],
     [
@@ -208,6 +250,8 @@
       0,
       null,
       null,
+      1,
+      0.0,
       "DOWN"
     ],
     [
@@ -218,6 +262,8 @@
       0,
       null,
       null,
+      1,
+      0.0,
       "CONSTANT"
     ],
     [
@@ -228,6 +274,8 @@
       0,
       null,
       null,
+      1,
+      0.0,
       "DOWN"
     ],
     [
@@ -238,6 +286,8 @@
       0,
       null,
       null,
+      1,
+      0.0,
       "CONSTANT"
     ],
     [
@@ -248,6 +298,8 @@
       0,
       null,
       null,
+      1,
+      0.0,
       "DOWN"
     ],
     [
@@ -258,6 +310,8 @@
       0,
       null,
       null,
+      1,
+      0.0,
       "DOWN"
     ],
     [
@@ -268,6 +322,8 @@
       0,
       null,
       null,
+      1,
+      0.0,
       "DOWN"
     ],
     [
@@ -278,6 +334,8 @@
       0,
       null,
       null,
+      1,
+      0.0,
       "UP"
     ],
     [
@@ -288,6 +346,8 @@
       0,
       null,
       null,
+      1,
+      0.0,
       "DOWN"
     ],
     [
@@ -298,6 +358,8 @@
       0,
       null,
       null,
+      1,
+      0.0,
       "DOWN"
     ],
     [
@@ -308,6 +370,8 @@
       0,
       null,
       null,
+      1,
+      0.0,
       "DOWN"
     ],
     [
@@ -318,6 +382,8 @@
       0,
       null,
       null,
+      1,
+      0.0,
       "UP"
     ],
     [
@@ -328,6 +394,8 @@
       0,
       null,
       null,
+      1,
+      0.0,
       "DOWN"
     ],
     [
@@ -338,6 +406,8 @@
       0,
       null,
       null,
+      1,
+      0.0,
       "DOWN"
     ],
     [
@@ -348,6 +418,8 @@
       0,
       null,
       null,
+      1,
+      0.0,
       "DOWN"
     ],
     [
@@ -358,6 +430,8 @@
       0,
       null,
       null,
+      1,
+      0.0,
       "DOWN"
     ],
     [
@@ -368,6 +442,8 @@
       0,
       null,
       null,
+      1,
+      0.0,
       "DOWN"
     ],
     [
@@ -378,6 +454,8 @@
       0,
       null,
       null,
+      1,
+      0.0,
       "DOWN"
     ],
     [
@@ -388,6 +466,8 @@
       0,
       null,
       null,
+      1,
+      0.0,
       "UP"
     ],
     [
@@ -398,6 +478,8 @@
       0,
       null,
       null,
+      1,
+      0.0,
       "DOWN"
     ]
   ]

@@ -1,0 +1,58 @@
+[
+    {
+      "sale": 5282.64013671875,
+      "sale_id": 1,
+      "fiscal_year": 2003,
+      "fiscal_month": 1,
+      "revenue_growth": 0.0
+    },
+    {
+      "sale": 1938.239990234375,
+      "sale_id": 2,
+      "fiscal_year": 2004,
+      "fiscal_month": 1,
+      "revenue_growth": 0.0
+    },
+    {
+      "sale": 1676.1400146484375,
+      "sale_id": 3,
+      "fiscal_year": 2004,
+      "fiscal_month": 1,
+      "revenue_growth": 0.0
+    },  
+    {
+      "sale": 3213,
+      "sale_id": 4,
+      "fiscal_year": 2003,
+      "fiscal_month": 1,
+      "revenue_growth": 0.0
+    },
+    {
+      "sale": 2121.35009765625,
+      "sale_id": 5,
+      "fiscal_year": 2004,
+      "fiscal_month": 1,
+      "revenue_growth": 0.0
+    },
+    {
+      "sale": 3711.1201171875,
+      "sale_id": 6,
+      "fiscal_year": 2004,
+      "fiscal_month": 1,
+      "revenue_growth": 0.0
+    },
+    {
+      "sale": 3449.260009765625,
+      "sale_id": 7,
+      "fiscal_year": 2003,
+      "fiscal_month": 1,
+      "revenue_growth": 0.0
+    },
+    {
+      "sale": 4704.919921875,
+      "sale_id": 8,
+      "fiscal_year": 2003,
+      "fiscal_month": 1,
+      "revenue_growth": 0.0
+    }
+ ]

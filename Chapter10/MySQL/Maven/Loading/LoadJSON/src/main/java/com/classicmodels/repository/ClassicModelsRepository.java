@@ -92,7 +92,7 @@ public class ClassicModelsRepository {
         try {
             ctx.loadInto(SALE)
                     .loadJSON(Paths.get("data", "json", "jsonWithInlineFields3.json").toFile(), StandardCharsets.UTF_8)
-                    .fields(SALE.SALE_, SALE.SALE_ID, SALE.FISCAL_YEAR)                    
+                    .fields(SALE.SALE_, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)                    
                     .execute();
 
         } catch (IOException ex) {
@@ -154,6 +154,18 @@ public class ClassicModelsRepository {
                             {
                               "schema": "classicmodels",
                               "table": "sale",
+                              "name": "fiscal_month",
+                              "type": "INT"
+                            },
+                            {
+                              "schema": "classicmodels",
+                              "table": "sale",
+                              "name": "revenue_growth",
+                              "type": "FLOAT"
+                            },
+                            {
+                              "schema": "classicmodels",
+                              "table": "sale",
                               "name": "trend",
                               "type": "VARCHAR"
                             }
@@ -167,6 +179,8 @@ public class ClassicModelsRepository {
                               0,
                               null,
                               null,
+                              1, 
+                              0.0,
                               "UP"
                             ],
                             [
@@ -177,6 +191,8 @@ public class ClassicModelsRepository {
                               0,
                               null,
                               null,
+                              1, 
+                              0.0,
                               "UP"
                             ],
                             [
@@ -187,6 +203,8 @@ public class ClassicModelsRepository {
                               0,
                               null,
                               null,
+                              1, 
+                              0.0,
                               "DOWN"
                             ],
                             [
@@ -197,6 +215,8 @@ public class ClassicModelsRepository {
                               0,
                               null,
                               null,
+                              1, 
+                              0.0,
                               "DOWN"
                             ],
                             [
@@ -207,6 +227,8 @@ public class ClassicModelsRepository {
                               0,
                               null,
                               null,
+                              1, 
+                              0.0,
                               "DOWN"
                             ]
                          ]
@@ -245,7 +267,8 @@ public class ClassicModelsRepository {
         try {
             int processed = ctx.loadInto(SALE)
                     .loadJSON(Paths.get("data", "json", "jsonWithoutFields1.json").toFile(), StandardCharsets.UTF_8)
-                    .fields(null, SALE.FISCAL_YEAR, SALE.SALE_, null, null, null, null, SALE.TREND)
+                    .fields(null, SALE.FISCAL_YEAR, SALE.SALE_, null, null, null, null, 
+                            SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH, SALE.TREND)
                     .execute()
                     .processed(); // optional
 
@@ -265,7 +288,7 @@ public class ClassicModelsRepository {
         try {
             int processed = ctx.loadInto(SALE)
                     .loadJSON(Paths.get("data", "json", "jsonWithoutFields2.json").toFile(), StandardCharsets.UTF_8)
-                    .fields(SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.SALE_)                    
+                    .fields(SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)                    
                     .execute()
                     .processed(); // optional
 
@@ -285,7 +308,8 @@ public class ClassicModelsRepository {
         try {
             int processed = ctx.loadInto(SALE)
                     .loadJSON(Paths.get("data", "json", "jsonWithInlineFields1.json").toFile(), StandardCharsets.UTF_8)
-                    .fields(null, null, null, SALE.SALE_, null, null, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER)
+                    .fields(SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH, null, null, null, 
+                            SALE.SALE_, null, null, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER)
                     .execute()
                     .processed(); // optional
 
@@ -305,7 +329,8 @@ public class ClassicModelsRepository {
         try {
             int processed = ctx.loadInto(SALE)
                     .loadJSON(Paths.get("data", "json", "jsonWithInlineFields2.json").toFile(), StandardCharsets.UTF_8)
-                    .fields(null, null, null, SALE.SALE_, null, null, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER)
+                    .fields(SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH, null, null, null, 
+                            SALE.SALE_, null, null, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER)
                     .execute()
                     .processed(); // optional
 
@@ -360,7 +385,8 @@ public class ClassicModelsRepository {
         try {
             ctx.loadInto(SALE)
                     .loadJSON(Paths.get("data", "json", "jsonWithFields.json").toFile(), StandardCharsets.UTF_8)
-                    .fields(null, SALE.FISCAL_YEAR, SALE.SALE_, null, null, null, null, SALE.TREND)
+                    .fields(null, SALE.FISCAL_YEAR, SALE.SALE_, null, null, null, null, 
+                            SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH, SALE.TREND)
                     .onRowEnd(ll -> {
                         System.out.println("Just processed row: " + Arrays.toString(ll.row()));
                         System.out.format("Executed: %d, ignored: %d, processed: %d, stored: %d\n",

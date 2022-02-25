@@ -1,5 +1,7 @@
 [
     {
+      "fiscal_month": 1,
+      "revenue_growth": 0.0,
       "hot": 0,
       "vat": null,
       "rate": null,
@@ -10,6 +12,8 @@
       "employee_number": 1370
     },
     {
+      "fiscal_month": 1,
+      "revenue_growth": 0.0,
       "hot": 0,
       "vat": null,
       "rate": null,
@@ -20,6 +24,8 @@
       "employee_number": 1370
     },
     {
+      "fiscal_month": 1,
+      "revenue_growth": 0.0,
       "hot": 0,
       "vat": null,
       "rate": null,
@@ -30,6 +36,8 @@
       "employee_number": 1370
     },  
     {
+      "fiscal_month": 1,
+      "revenue_growth": 0.0,
       "hot": 0,
       "vat": null,
       "rate": null,
@@ -40,6 +48,8 @@
       "employee_number": 1166
     },
     {
+      "fiscal_month": 1,
+      "revenue_growth": 0.0,
       "hot": 0,
       "vat": null,
       "rate": null,
@@ -50,6 +60,8 @@
       "employee_number": 1166
     },
     {
+      "fiscal_month": 1,
+      "revenue_growth": 0.0,
       "hot": 0,
       "vat": null,
       "rate": null,
@@ -60,6 +72,8 @@
       "employee_number": 1166
     },
     {
+      "fiscal_month": 1,
+      "revenue_growth": 0.0,
       "hot": 0,
       "vat": null,
       "rate": null,
@@ -70,6 +84,8 @@
       "employee_number": 1611
     },
     {
+      "fiscal_month": 1,
+      "revenue_growth": 0.0,
       "hot": 0,
       "vat": null,
       "rate": null,
