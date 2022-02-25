@@ -18,6 +18,7 @@ import org.jooq.Query;
 import org.jooq.Result;
 import org.jooq.Record;
 import org.jooq.Record3;
+import org.jooq.Record5;
 import org.jooq.exception.DataAccessException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,7 +46,8 @@ public class ClassicModelsRepository {
                     // .batchNone()             - default
                     // .commitNone()            - default
                     .loadRecords(result1)
-                    .fields(null, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.HOT, SALE.RATE, SALE.VAT, SALE.TREND)
+                    .fields(null, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, 
+                            SALE.HOT, SALE.RATE, SALE.VAT, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH, SALE.TREND)
                     .execute();
 
         } catch (IOException ex) {
@@ -71,7 +73,8 @@ public class ClassicModelsRepository {
             Logger.getLogger(ClassicModelsRepository.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        Result<Record3<Integer, Double, String>> result3 = ctx.select(SALE.FISCAL_YEAR, SALE.SALE_, SALE.TREND)
+        Result<Record5<Integer, Double, Integer, Double, String>> result3 
+                = ctx.select(SALE.FISCAL_YEAR, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH, SALE.TREND)
                 .from(SALE)
                 .fetch();
         
@@ -97,7 +100,8 @@ public class ClassicModelsRepository {
         try {
             int processed = ctx.loadInto(SALE)
                     .loadRecords(ctx.selectFrom(SALE).fetch())
-                    .fields(null, SALE.FISCAL_YEAR, SALE.SALE_, null, null, null, null, SALE.TREND)
+                    .fields(null, SALE.FISCAL_YEAR, SALE.SALE_, null, null, null, null, 
+                            SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH, SALE.TREND)
                     .execute()
                     .processed(); // optional
 
@@ -144,7 +148,8 @@ public class ClassicModelsRepository {
     @Transactional
     public void loadRecordsRowListeners() {
 
-        Record3<Integer, Double, String>[] result = ctx.select(SALE.FISCAL_YEAR, SALE.SALE_, SALE.TREND)
+        Record5<Integer, Double, Integer, Double, String>[] result 
+                = ctx.select(SALE.FISCAL_YEAR, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH, SALE.TREND)
                 .from(SALE)
                 .fetchArray();        
         
@@ -167,13 +172,13 @@ public class ClassicModelsRepository {
     @Transactional
     public void loadRecordsOnCommitNone() {
        
-        SaleRecord r1 = new SaleRecord(1L, 2005, 582.64, 1370L, null, null, null, "UP");
-        SaleRecord r2 = new SaleRecord(2L, 2005, 138.24, 1370L, null, null, null, "CONSTANT");
-        SaleRecord r3 = new SaleRecord(3L, 2005, 176.14, 1370L, null, null, null, "DOWN");
+        SaleRecord r1 = new SaleRecord(1L, 2005, 582.64, 1370L, null, null, null, 1, 0.0, "UP");
+        SaleRecord r2 = new SaleRecord(2L, 2005, 138.24, 1370L, null, null, null, 1, 0.0, "CONSTANT");
+        SaleRecord r3 = new SaleRecord(3L, 2005, 176.14, 1370L, null, null, null, 1, 0.0, "DOWN");
         
         try {
             int executed = ctx.loadInto(SALE)
-                    //.onDuplicateKeyIgnore() // for testing commit/rollback operations described below comment this line
+                    .onDuplicateKeyIgnore() // for testing commit/rollback operations described below comment this line
                     .batchAfter(2) // each *batch* has 2 rows
                     .commitNone() // (default, so it can be omitted) allow Spring Boot to handle transaction commit/rollback
                    
@@ -199,9 +204,9 @@ public class ClassicModelsRepository {
     @Transactional
     public void loadRecordsOnDuplicateKeyUpdate() {
        
-        SaleRecord r1 = new SaleRecord(1L, 2005, 582.64, 1370L, null, null, null, "UP");
-        SaleRecord r2 = new SaleRecord(2L, 2005, 138.24, 1370L, null, null, null, "CONSTANT");
-        SaleRecord r3 = new SaleRecord(3L, 2005, 176.14, 1370L, null, null, null, "DOWN");
+        SaleRecord r1 = new SaleRecord(1L, 2005, 582.64, 1370L, null, null, null, 1, 0.0, "UP");
+        SaleRecord r2 = new SaleRecord(2L, 2005, 138.24, 1370L, null, null, null, 1, 0.0, "CONSTANT");
+        SaleRecord r3 = new SaleRecord(3L, 2005, 176.14, 1370L, null, null, null, 1, 0.0, "DOWN");
         
         try {
             int executed = ctx.loadInto(SALE)
@@ -221,9 +226,9 @@ public class ClassicModelsRepository {
     @Transactional
     public void loadRecordsOnDuplicateKeyIgnore() {
         
-        SaleRecord r1 = new SaleRecord(1L, 2004, 33582.64, 1370L, null, null, null, "UP");
-        SaleRecord r2 = new SaleRecord(2L, 2004, 2138.24, 1504L, null, null, null, "UP");
-        SaleRecord r3 = new SaleRecord(3L, 2003, 1746.14, 1370L, null, null, null, "DOWN");
+        SaleRecord r1 = new SaleRecord(1L, 2004, 33582.64, 1370L, null, null, null, 1, 0.0, "UP");
+        SaleRecord r2 = new SaleRecord(2L, 2004, 2138.24, 1504L, null, null, null, 1, 0.0, "UP");
+        SaleRecord r3 = new SaleRecord(3L, 2003, 1746.14, 1370L, null, null, null, 1, 0.0, "DOWN");
         
         try {
             int ignored = ctx.loadInto(SALE)
@@ -245,7 +250,8 @@ public class ClassicModelsRepository {
     @Transactional
     public void loadRecordsBulkBatchCommit() {
         
-        Result<Record3<Integer, Double, String>> result = ctx.select(SALE.FISCAL_YEAR, SALE.SALE_, SALE.TREND)
+        Result<Record5<Integer, Double, Integer, Double, String>> result 
+                = ctx.select(SALE.FISCAL_YEAR, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH, SALE.TREND)
                 .from(SALE)
                 .fetch();
 
@@ -269,9 +275,9 @@ public class ClassicModelsRepository {
     @Transactional
     public void loadRecordsOnDuplicateKeyError() {
         
-        SaleRecord r1 = new SaleRecord(1L, 2004, 33582.64, 1370L, null, null, null, "UP");
-        SaleRecord r2 = new SaleRecord(2L, 2004, 2138.24, 1504L, null, null, null, "UP");
-        SaleRecord r3 = new SaleRecord(3L, 2003, 1746.14, 1370L, null, null, null, "DOWN");
+        SaleRecord r1 = new SaleRecord(1L, 2004, 33582.64, 1370L, null, null, null, 1, 0.0, "UP");
+        SaleRecord r2 = new SaleRecord(2L, 2004, 2138.24, 1504L, null, null, null, 1, 0.0, "UP");
+        SaleRecord r3 = new SaleRecord(3L, 2003, 1746.14, 1370L, null, null, null, 1, 0.0, "DOWN");
                 
         try {
             ctx.loadInto(SALE)
@@ -290,9 +296,9 @@ public class ClassicModelsRepository {
     @Transactional
     public void loadRecordsOnErrorAbort() {
                
-        SaleRecord r1 = new SaleRecord(1L, 2004, 33582.64, 1370L, null, null, null, "UP");
-        SaleRecord r2 = new SaleRecord(2L, 2004, 2138.24, 1504L, null, null, null, "UP");
-        SaleRecord r3 = new SaleRecord(3L, 2003, 1746.14, 1370L, null, null, null, "DOWN");
+        SaleRecord r1 = new SaleRecord(1L, 2004, 33582.64, 1370L, null, null, null, 1, 0.0, "UP");
+        SaleRecord r2 = new SaleRecord(2L, 2004, 2138.24, 1504L, null, null, null, 1, 0.0, "UP");
+        SaleRecord r3 = new SaleRecord(3L, 2003, 1746.14, 1370L, null, null, null, 1, 0.0, "DOWN");
         
         try {
             List<LoaderError> errors = ctx.loadInto(SALE)                   
