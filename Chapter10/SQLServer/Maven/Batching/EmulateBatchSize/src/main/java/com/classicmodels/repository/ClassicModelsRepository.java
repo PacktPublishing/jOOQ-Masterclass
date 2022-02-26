@@ -23,15 +23,15 @@ public class ClassicModelsRepository {
         this.queries = new ArrayList<>();
         
         this.queries.add(ctx.query("SET IDENTITY_INSERT [sale] ON"));
-        this.queries.add(ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(1L, 2000, 1370L, 1282.64));
-        this.queries.add(ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(2L, 2001, 1370L, 3938.24));
-        this.queries.add(ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(3L, 2002, 1370L, 4676.14));
-        this.queries.add(ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(4L, 2003, 1504L, 1222.64));
-        this.queries.add(ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(5L, 2004, 1504L, 1938.24));
-        this.queries.add(ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(6L, 2005, 1504L, 4446.14));
-        this.queries.add(ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(7L, 2006, 1611L, 5748.24));
+        this.queries.add(ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH).values(1L, 2000, 1370L, 1282.64, 1, 0.0));
+        this.queries.add(ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH).values(2L, 2001, 1370L, 3938.24, 1, 0.0));
+        this.queries.add(ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH).values(3L, 2002, 1370L, 4676.14, 1, 0.0));
+        this.queries.add(ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH).values(4L, 2003, 1504L, 1222.64, 1, 0.0));
+        this.queries.add(ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH).values(5L, 2004, 1504L, 1938.24, 1, 0.0));
+        this.queries.add(ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH).values(6L, 2005, 1504L, 4446.14, 1, 0.0));
+        this.queries.add(ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH).values(7L, 2006, 1611L, 5748.24, 1, 0.0));
         // contains a duplicate key that causes rollback
-        this.queries.add(ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_).values(1L, 2007, 1611L, 2216.14));
+        this.queries.add(ctx.insertInto(SALE, SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH).values(1L, 2007, 1611L, 2216.14, 1, 0.0));
         this.queries.add(ctx.query("SET IDENTITY_INSERT [sale] OFF"));
     }
 
