@@ -9,11 +9,15 @@ public class SimpleSale implements Serializable {
     private Integer fiscalYear;
     private Long employeeNumber;
     private Double sale;    
+    private Integer fiscalMonth;
+    private Double revenueGrowth;
 
-    public SimpleSale(Integer fiscalYear, Long employeeNumber, Double sale) {
+    public SimpleSale(Integer fiscalYear, Long employeeNumber, Double sale, Integer fiscalMonth, Double revenueGrowth) {
         this.fiscalYear = fiscalYear;
         this.employeeNumber = employeeNumber;
         this.sale = sale;
+        this.fiscalMonth = fiscalMonth;
+        this.revenueGrowth = revenueGrowth;
     }        
 
     public Integer getFiscalYear() {
@@ -39,4 +43,20 @@ public class SimpleSale implements Serializable {
     public void setSale(Double sale) {
         this.sale = sale;
     }        
+
+    public Integer getFiscalMonth() {
+        return fiscalMonth;
+    }
+
+    public void setFiscalMonth(Integer fiscalMonth) {
+        this.fiscalMonth = fiscalMonth;
+    }
+
+    public Double getRevenueGrowth() {
+        return revenueGrowth;
+    }
+
+    public void setRevenueGrowth(Double revenueGrowth) {
+        this.revenueGrowth = revenueGrowth;
+    }       
 }
