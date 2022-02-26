@@ -1,11 +1,14 @@
 package com.classicmodels.repository;
 
+import java.math.BigDecimal;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static jooq.generated.tables.Customer.CUSTOMER;
 import static jooq.generated.tables.Employee.EMPLOYEE;
+import static jooq.generated.tables.Payment.PAYMENT;
 import static jooq.generated.tables.Sale.SALE;
 import jooq.generated.tables.records.SaleRecord;
 import org.jooq.Configuration;
@@ -343,6 +346,30 @@ public class ClassicModelsRepository {
             c.dsl().insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH).values(2003, 20002L, 2223.0, 1, 0.0).execute();
             c.dsl().insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH).values(2004, 20002L, 4531.35, 1, 0.0).execute();
             c.dsl().insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH).values(2004, 20002L, 6751.33, 1, 0.0).execute();
+        });
+        
+        ctx.batched((Configuration c) -> {
+            long c1 = c.dsl().insertInto(CUSTOMER, CUSTOMER.CUSTOMER_NAME, CUSTOMER.CONTACT_FIRST_NAME,
+                    CUSTOMER.CONTACT_LAST_NAME, CUSTOMER.PHONE)
+                    .values("customer_1","","","")                    
+                    .returningResult(CUSTOMER.CUSTOMER_NUMBER).fetchOneInto(Long.class);            
+            long c2 = c.dsl().insertInto(CUSTOMER, CUSTOMER.CUSTOMER_NAME, CUSTOMER.CONTACT_FIRST_NAME,
+                    CUSTOMER.CONTACT_LAST_NAME, CUSTOMER.PHONE)
+                    .values("customer_2","","","")                    
+                    .returningResult(CUSTOMER.CUSTOMER_NUMBER).fetchOneInto(Long.class);
+            
+            // only the following queries are batched
+            c.dsl().insertInto(PAYMENT, PAYMENT.CUSTOMER_NUMBER, PAYMENT.CHECK_NUMBER, PAYMENT.INVOICE_AMOUNT)
+                    .values(c1, "ER998871", BigDecimal.valueOf(102.22)).execute();
+            c.dsl().insertInto(PAYMENT, PAYMENT.CUSTOMER_NUMBER, PAYMENT.CHECK_NUMBER, PAYMENT.INVOICE_AMOUNT)
+                    .values(c1, "GH998872", BigDecimal.valueOf(233.42)).execute();
+            c.dsl().insertInto(PAYMENT, PAYMENT.CUSTOMER_NUMBER, PAYMENT.CHECK_NUMBER, PAYMENT.INVOICE_AMOUNT)
+                    .values(c1, "YU998873", BigDecimal.valueOf(82.25)).execute();
+            
+            c.dsl().insertInto(PAYMENT, PAYMENT.CUSTOMER_NUMBER, PAYMENT.CHECK_NUMBER, PAYMENT.INVOICE_AMOUNT)
+                    .values(c2, "NM125563", BigDecimal.valueOf(656.23)).execute();
+            c.dsl().insertInto(PAYMENT, PAYMENT.CUSTOMER_NUMBER, PAYMENT.CHECK_NUMBER, PAYMENT.INVOICE_AMOUNT)
+                    .values(c2, "IO125564", BigDecimal.valueOf(678.88)).execute();
         });
     }
 }
