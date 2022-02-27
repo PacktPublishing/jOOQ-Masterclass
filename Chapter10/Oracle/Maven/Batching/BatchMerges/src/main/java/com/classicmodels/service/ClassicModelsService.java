@@ -16,6 +16,6 @@ public class ClassicModelsService {
 
         classicModelsRepository.batchMerges1();
         classicModelsRepository.batchMerges2();
-        classicModelsRepository.batchMerges3();
+        // classicModelsRepository.batchMerges3(); - this may contain a bug, uncomment to check 
     }
 }
