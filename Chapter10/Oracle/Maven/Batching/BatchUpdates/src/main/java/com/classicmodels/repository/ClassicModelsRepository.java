@@ -32,16 +32,16 @@ public class ClassicModelsRepository {
         int[] result1 = ctx.batch(
                         ctx.update(EMPLOYEE)
                                 .set(EMPLOYEE.SALARY, EMPLOYEE.SALARY.plus(1_000))
-                                .where(EMPLOYEE.SALARY.between(BigInteger.valueOf(100_000), BigInteger.valueOf(120_000))),
+                                .where(EMPLOYEE.SALARY.between(100_000, 120_000)),
                         ctx.update(EMPLOYEE)
                                 .set(EMPLOYEE.SALARY, EMPLOYEE.SALARY.plus(5_000))
-                                .where(EMPLOYEE.SALARY.between(BigInteger.valueOf(65_000), BigInteger.valueOf(80_000))),
+                                .where(EMPLOYEE.SALARY.between(65_000, 80_000)),
                         ctx.update(EMPLOYEE)
                                 .set(EMPLOYEE.SALARY, EMPLOYEE.SALARY.plus(10_000))
-                                .where(EMPLOYEE.SALARY.between(BigInteger.valueOf(55_000), BigInteger.valueOf(60_000))),
+                                .where(EMPLOYEE.SALARY.between(55_000, 60_000)),
                         ctx.update(EMPLOYEE)
                                 .set(EMPLOYEE.SALARY, EMPLOYEE.SALARY.plus(15_000))
-                                .where(EMPLOYEE.SALARY.between(BigInteger.valueOf(50_000), BigInteger.valueOf(50_000)))) // or simply, eq(BigInteger.valueOf(50_000))
+                                .where(EMPLOYEE.SALARY.between(50_000, 50_000))) // or simply, eq(50_000)
                 .execute();
 
         System.out.println("EXAMPLE 1.1: " + Arrays.toString(result1));
@@ -50,7 +50,7 @@ public class ClassicModelsRepository {
         int[] result21 = ctx.batch(
                 ctx.update(EMPLOYEE)
                         .set(EMPLOYEE.SALARY, EMPLOYEE.SALARY.plus((Integer) null))
-                        .where(EMPLOYEE.SALARY.between((BigInteger) null, (BigInteger) null)))
+                        .where(EMPLOYEE.SALARY.between((Integer) null, (Integer) null)))
                 .bind(1_000, 100_000, 120_000)
                 .bind(5_000, 65_000, 80_000)
                 .bind(10_000, 55_000, 60_000)
@@ -65,7 +65,7 @@ public class ClassicModelsRepository {
                 .dsl().batch(
                         ctx.update(EMPLOYEE)
                                 .set(EMPLOYEE.SALARY, EMPLOYEE.SALARY.plus((Integer) null))
-                                .where(EMPLOYEE.SALARY.between((BigInteger) null, (BigInteger) null)))
+                                .where(EMPLOYEE.SALARY.between((Integer) null, (Integer) null)))
                 .bind(1_000, 100_000, 120_000)
                 .bind(5_000, 65_000, 80_000)
                 .bind(10_000, 55_000, 60_000)
@@ -83,11 +83,11 @@ public class ClassicModelsRepository {
                 .fetch();
 
         sales.get(0).setTrend("UP");
-        sales.get(0).setFiscalYear(BigInteger.valueOf(2004));
+        sales.get(0).setFiscalYear(2004);
         sales.get(1).setTrend("CONSTANT");
-        sales.get(1).setFiscalYear(BigInteger.valueOf(2007));
+        sales.get(1).setFiscalYear(2007);
         sales.get(2).setTrend("DOWN");
-        sales.get(2).setFiscalYear(BigInteger.valueOf(2003));
+        sales.get(2).setFiscalYear(2003);
 
         // There is a single batch since the generated SQL with bind variables is the same for sr1-sr5.
         // The order of records is preserved.
@@ -118,11 +118,11 @@ public class ClassicModelsRepository {
                 .fetch();
 
         sales.get(0).setTrend("CONSTANT");
-        sales.get(0).setFiscalYear(BigInteger.valueOf(2010));
+        sales.get(0).setFiscalYear(2010);
         sales.get(1).setTrend("DOWN");
-        sales.get(1).setFiscalYear(BigInteger.valueOf(2011));
+        sales.get(1).setFiscalYear(2011);
         sales.get(2).setTrend("UP");
-        sales.get(2).setFiscalYear(BigInteger.valueOf(2012));
+        sales.get(2).setFiscalYear(2012);
 
         trans.get(0).setBankName("Transavia Bank");
         trans.get(1).setBankName("N/A");
@@ -143,9 +143,9 @@ public class ClassicModelsRepository {
                 .fetch();
 
         sales.get(0).setTrend("CONSTANT");
-        sales.get(0).setFiscalYear(BigInteger.valueOf(2008));
+        sales.get(0).setFiscalYear(2008);
         sales.get(1).setSale(5664.2);
-        sales.get(2).setFiscalYear(BigInteger.valueOf(2009));
+        sales.get(2).setFiscalYear(2009);
         sales.get(2).setEmployeeNumber(1504L);
 
         // There are three batches, one for each SaleRecord because the generated SQL with bind variables is not the same.
@@ -167,7 +167,7 @@ public class ClassicModelsRepository {
 
         BatchBindStep batch = ctx.batch(
                 ctx.update(SALE)
-                .set(SALE.FISCAL_YEAR, (BigInteger) null)
+                .set(SALE.FISCAL_YEAR, (Integer) null)
                 .set(SALE.EMPLOYEE_NUMBER, (Long) null)
                 .set(SALE.SALE_, (Double) null)                     
         );
