@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static jooq.generated.tables.Customer.CUSTOMER;
@@ -172,6 +173,7 @@ public class ClassicModelsRepository {
 
     public void batchedRecords() {
 
+        // ad-hoc batching
         ctx.batched(c -> {
 
             Result<SaleRecord> records = c.dsl().selectFrom(SALE)
@@ -184,6 +186,26 @@ public class ClassicModelsRepository {
                 record.store();
             });
         });        
+        
+        // ad-hoc batching
+        List<SaleRecord> sales = List.of(
+                new SaleRecord(1L, 2005, 1223.23, 1370L, null, null, null, 1, 0.0, null),
+                new SaleRecord(2L, 2004, 543.33, 1166L, null, null, null, 1, 0.0, null),
+                new SaleRecord(1005L, 2005, 9022.21, 1370L, null, null, null, 1, 0.0, null),
+                new SaleRecord(2005L, 2003, 4333.22, 1504L, null, null, null, 1, 0.0, null),
+                new SaleRecord(3005L, 2003, 8002.22, 1504L, null, null, null, 1, 0.0, null)
+        );
+
+        ctx.batched(c -> {
+
+            for (SaleRecord sale : sales) {
+                c.dsl().insertInto(SALE)
+                        .set(sale)
+                        .onDuplicateKeyUpdate()
+                        .set(SALE.SALE_, sale.getSale())
+                        .execute();
+            }
+        }); // batching is happening here  
     }
 
     // use BatchedConnection    
