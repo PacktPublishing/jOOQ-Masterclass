@@ -1,0 +1,100 @@
+{
+  "records": [
+    {
+      "fiscal_month": 1,
+      "revenue_growth": 0.0,
+      "hot": 0,
+      "vat": null,
+      "rate": null,
+      "sale": 5282.64013671875,
+      "trend": "UP",
+      "sale_id": 1,
+      "fiscal_year": 2003,
+      "employee_number": 1370
+    },
+    {
+      "fiscal_month": 1,
+      "revenue_growth": 0.0,
+      "hot": 0,
+      "vat": null,
+      "rate": null,
+      "sale": 1938.239990234375,
+      "trend": "UP",
+      "sale_id": 2,
+      "fiscal_year": 2004,
+      "employee_number": 1370
+    },
+    {
+      "fiscal_month": 1,
+      "revenue_growth": 0.0,
+      "hot": 0,
+      "vat": null,
+      "rate": null,
+      "sale": 1676.1400146484375,
+      "trend": "DOWN",
+      "sale_id": 3,
+      "fiscal_year": 2004,
+      "employee_number": 1370
+    },  
+    {
+      "fiscal_month": 1,
+      "revenue_growth": 0.0,
+      "hot": 0,
+      "vat": null,
+      "rate": null,
+      "sale": 3213,
+      "trend": "DOWN",
+      "sale_id": 4,
+      "fiscal_year": 2003,
+      "employee_number": 1166
+    },
+    {
+      "fiscal_month": 1,
+      "revenue_growth": 0.0,
+      "hot": 0,
+      "vat": null,
+      "rate": null,
+      "sale": 2121.35009765625,
+      "trend": "DOWN",
+      "sale_id": 5,
+      "fiscal_year": 2004,
+      "employee_number": 1166
+    },
+    {
+      "fiscal_month": 1,
+      "revenue_growth": 0.0,
+      "hot": 0,
+      "vat": null,
+      "rate": null,
+      "sale": 3711.1201171875,
+      "trend": "CONSTANT",
+      "sale_id": 6,
+      "fiscal_year": 2004,
+      "employee_number": 1166
+    },
+    {
+      "fiscal_month": 1,
+      "revenue_growth": 0.0,
+      "hot": 0,
+      "vat": null,
+      "rate": null,
+      "sale": 3449.260009765625,
+      "trend": "CONSTANT",
+      "sale_id": 7,
+      "fiscal_year": 2003,
+      "employee_number": 1611
+    },
+    {
+      "fiscal_month": 1,
+      "revenue_growth": 0.0,
+      "hot": 0,
+      "vat": null,
+      "rate": null,
+      "sale": 4704.919921875,
+      "trend": "UP",
+      "sale_id": 8,
+      "fiscal_year": 2003,
+      "employee_number": 1611
+    }
+   ]
+  }

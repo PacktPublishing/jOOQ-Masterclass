@@ -1,0 +1,266 @@
+{
+  "fields": [
+    {
+      "schema": "classicmodels",
+      "table": "customer",
+      "name": "customer_number",
+      "type": "BIGINT"
+    },
+    {
+      "schema": "classicmodels",
+      "table": "customer",
+      "name": "customer_name",
+      "type": "VARCHAR"
+    },
+    {
+      "schema": "classicmodels",
+      "table": "customer",
+      "name": "contact_last_name",
+      "type": "VARCHAR"
+    },
+    {
+      "schema": "classicmodels",
+      "table": "customer",
+      "name": "contact_first_name",
+      "type": "VARCHAR"
+    },
+    {
+      "schema": "classicmodels",
+      "table": "customer",
+      "name": "phone",
+      "type": "VARCHAR"
+    },
+    {
+      "schema": "classicmodels",
+      "table": "customer",
+      "name": "sales_rep_employee_number",
+      "type": "BIGINT"
+    },
+    {
+      "schema": "classicmodels",
+      "table": "customer",
+      "name": "credit_limit",
+      "type": "DECIMAL"
+    },
+    {
+      "schema": "classicmodels",
+      "table": "customer",
+      "name": "first_buy_date",
+      "type": "INTEGER"
+    },
+    {
+      "schema": "classicmodels",
+      "table": "customerdetail",
+      "name": "customer_number",
+      "type": "BIGINT"
+    },
+    {
+      "schema": "classicmodels",
+      "table": "customerdetail",
+      "name": "address_line_first",
+      "type": "VARCHAR"
+    },
+    {
+      "schema": "classicmodels",
+      "table": "customerdetail",
+      "name": "address_line_second",
+      "type": "VARCHAR"
+    },
+    {
+      "schema": "classicmodels",
+      "table": "customerdetail",
+      "name": "city",
+      "type": "VARCHAR"
+    },
+    {
+      "schema": "classicmodels",
+      "table": "customerdetail",
+      "name": "state",
+      "type": "VARCHAR"
+    },
+    {
+      "schema": "classicmodels",
+      "table": "customerdetail",
+      "name": "postal_code",
+      "type": "VARCHAR"
+    },
+    {
+      "schema": "classicmodels",
+      "table": "customerdetail",
+      "name": "country",
+      "type": "VARCHAR"
+    }
+  ],
+  "records": [
+    [
+      99,
+      "Australian Home",
+      "Paoule",
+      "Sart ",
+      "40.11.2555",
+      1370,
+      21000,
+      20210,
+      99,
+      "43 Rue 2",
+      null,
+      "Paris",
+      null,
+      "25017",
+      "France"
+    ],
+    [
+      100,
+      "Joliyon",
+      "Schmitt",
+      "Rue ",
+      "10.22.2535",
+      1370,
+      21000,
+      20201,
+      100,
+      "51, Avenue 3",
+      null,
+      null,
+      null,
+      "43000",
+      null
+    ],
+    [
+      101,
+      "Marquez Xioa",
+      "Calor",
+      "Sar ",
+      "`11.12.2525",
+      1370,
+      21000,
+      21805,
+      101,
+      "51, St 5",
+      null,
+      null,
+      null,
+      "44000",
+      "USA"
+    ],
+    [
+      102,
+      "Falafel 3",
+      "Hor",
+      "Carine ",
+      "20.12.2525",
+      1370,
+      21000,
+      21805,
+      102,
+      "51, St AQ",
+      null,
+      "Bucharest",
+      null,
+      "12000",
+      null
+    ],
+    [
+      103,
+      "Atelier graphique",
+      "Schmitt",
+      "Carine ",
+      "40.32.2555",
+      1370,
+      21000,
+      20186,
+      103,
+      "54, rue Royale",
+      null,
+      "Nantes",
+      null,
+      "44000",
+      "France"
+    ],
+    [
+      112,
+      "Signal Gift Stores",
+      "King",
+      "Jean",
+      "7025551838",
+      1166,
+      71800,
+      21803,
+      112,
+      "8489 Strong St.",
+      null,
+      "Las Vegas",
+      "NV",
+      "83030",
+      "USA"
+    ],
+    [
+      114,
+      "Australian Collectors, Co.",
+      "Ferguson",
+      "Peter",
+      "03 9520 4555",
+      1611,
+      117300,
+      20105,
+      114,
+      "636 St Kilda Road",
+      "Level 3",
+      "Melbourne",
+      "Victoria",
+      "3004",
+      "Australia"
+    ],
+    [
+      119,
+      "La Rochelle Gifts",
+      "Labrune",
+      "Janine ",
+      "40.67.8555",
+      1370,
+      118200,
+      20140,
+      119,
+      "67, rue des Cinquante Otages",
+      null,
+      "Nantes",
+      null,
+      "44000",
+      "France"
+    ],
+    [
+      121,
+      "Baane Mini Imports",
+      "Bergulfsen",
+      "Jonas ",
+      "07-98 9555",
+      1504,
+      81700,
+      21403,
+      121,
+      "Erling Skakkes gate 78",
+      null,
+      "Stavern",
+      null,
+      "4110",
+      "Norway"
+    ],
+    [
+      124,
+      "Mini Gifts Distributors Ltd.",
+      "Nelson",
+      "Susan",
+      "4155551450",
+      1165,
+      210500,
+      20143,
+      124,
+      "5677 Strong St.",
+      null,
+      "San Rafael",
+      "CA",
+      "97562",
+      "USA"
+    ]
+  ]
+}
