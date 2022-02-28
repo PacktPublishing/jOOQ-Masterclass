@@ -1,12 +1,17 @@
 package com.classicmodels.repository;
 
 import java.time.LocalDate;
+import java.util.List;
+import jooq.generated.enums.SaleRate;
+import jooq.generated.enums.SaleVat;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import jooq.generated.tables.Order;
 import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Sale.SALE;
+import jooq.generated.tables.records.SaleRecord;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.case_;
+import static org.jooq.impl.DSL.row;
 import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.selectFrom;
 import static org.jooq.impl.DSL.val;
@@ -59,6 +64,38 @@ public class ClassicModelsRepository {
                                         )
                         )
                         .onDuplicateKeyIgnore() // or, use onDuplicateKeyUpdate().set(...)
+                        .execute()
+        );
+        
+        List<SaleRecord> listOfRecord
+                = List.of(
+                        new SaleRecord(null, 2003, 3443.22, 1370L,
+                                null, SaleRate.SILVER, SaleVat.MAX, 3, 14.55, null),
+                        new SaleRecord(null, 2005, 1221.12, 1504L,
+                                null, SaleRate.SILVER, SaleVat.MAX, 5, 22.11, "UP"),
+                        new SaleRecord(null, 2005, 1221.12, 1504L,
+                                (byte) 1, SaleRate.SILVER, SaleVat.MAX, 7, 65.59, null));
+        
+        System.out.println("EXAMPLE 1.3 (affected rows): "
+                + ctx.insertInto(SALE, SALE.fields())
+                        .valuesOfRecords(listOfRecord)
+                        .execute()
+        );
+        
+        var listOfRows
+                = List.of(row(2003, 3443.22, 1370L,
+                        SaleRate.SILVER, SaleVat.MAX, 3, 14.55),
+                        row(2005, 1221.12, 1504L,
+                                SaleRate.SILVER, SaleVat.MAX, 5, 22.11),
+                        row(2005, 1221.12, 1504L,
+                                SaleRate.SILVER, SaleVat.MAX, 7, 65.59));
+
+        System.out.println("EXAMPLE 1.4 (affected rows): "
+                + ctx.insertInto(SALE,
+                        SALE.FISCAL_YEAR, SALE.SALE_,
+                        SALE.EMPLOYEE_NUMBER, SALE.RATE, SALE.VAT,
+                        SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)
+                        .valuesOfRows(listOfRows)
                         .execute()
         );
     }

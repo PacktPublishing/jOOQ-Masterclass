@@ -167,7 +167,7 @@
                                     <excludes>
                                         flyway_schema_history | sequences 
                                         | customer_pgs | refresh_top3_product
-                                        | sale_.* | set_.* | get_.* | .*_master
+                                        | set_.* | get_.* | .*_master
                                     </excludes>
 
                                     <!-- Schema version provider -->            
