@@ -1,0 +1,21 @@
+city|country|department_id|name
+San Francisco|USA|1|Advertising
+San Francisco|USA|2|Sales
+{null}|{null}|{null}|{null}
+Paris|France|{null}|{null}
+Tokyo|Japan|14|Logistics
+Tokyo|Japan|15|HR
+Los Angeles|USA|{null}|{null}
+San Diego|USA|{null}|{null}
+Springfield|USA|{null}|{null}
+Boston|USA|3|Accounting
+Boston|USA|5|Sales
+NYC|USA|4|Finance
+Paris|France|6|Sales
+Paris|France|7|Marketing
+Tokyo|Japan|8|Marketing
+Sydney|Australia|9|Assembly
+Sydney|Australia|10|Accounting
+London|UK|11|Finance
+{null}|USA|12|Logistics
+Bucharest|""|13|Logistics
