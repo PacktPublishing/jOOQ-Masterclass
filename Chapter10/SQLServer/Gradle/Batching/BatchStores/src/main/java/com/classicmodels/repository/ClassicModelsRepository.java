@@ -37,7 +37,7 @@ public class ClassicModelsRepository {
 
         if (sr2 != null) {
             sr2.setFiscalYear(2006);
-        
+
             int[] result1 = ctx.batchStore(sr1, sr2)
                 .execute();
 
