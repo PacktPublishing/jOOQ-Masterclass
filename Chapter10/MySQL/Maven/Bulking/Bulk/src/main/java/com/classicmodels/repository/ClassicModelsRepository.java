@@ -1,5 +1,6 @@
 package com.classicmodels.repository;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import jooq.generated.enums.SaleRate;
@@ -34,16 +35,17 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 1.1 (affected rows): "
                 + ctx.insertInto(ORDER)
                         .columns(ORDER.ORDER_DATE, ORDER.REQUIRED_DATE,
-                                ORDER.SHIPPED_DATE, ORDER.STATUS, ORDER.COMMENTS, ORDER.CUSTOMER_NUMBER)
+                                ORDER.SHIPPED_DATE, ORDER.STATUS, ORDER.COMMENTS, 
+                                ORDER.CUSTOMER_NUMBER, ORDER.AMOUNT)
                         .values(LocalDate.of(2004, 10, 22), LocalDate.of(2004, 10, 23),
                                 LocalDate.of(2004, 10, 23), "Shipped",
-                                "New order inserted ...", 363L)
+                                "New order inserted ...", 363L, BigDecimal.valueOf(322.59))
                         .values(LocalDate.of(2003, 12, 2), LocalDate.of(2003, 1, 3),
                                 LocalDate.of(2003, 2, 26), "Resolved",
-                                "Important order ...", 128L)
+                                "Important order ...", 128L, BigDecimal.valueOf(455.33))
                         .values(LocalDate.of(2005, 12, 12), LocalDate.of(2005, 12, 23),
                                 LocalDate.of(2005, 12, 22), "On Hold",
-                                "Order of client ...", 181L)
+                                "Order of client ...", 181L, BigDecimal.valueOf(190.99))
                         .onDuplicateKeyIgnore() // or, use onDuplicateKeyUpdate().set(...)
                         .execute()
         );
@@ -52,10 +54,10 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 1.2 (affected rows): "
                 + ctx.insertInto(o)
                         .columns(o.ORDER_DATE, o.REQUIRED_DATE, o.SHIPPED_DATE,
-                                o.STATUS, o.COMMENTS, o.CUSTOMER_NUMBER)
+                                o.STATUS, o.COMMENTS, o.CUSTOMER_NUMBER, o.AMOUNT)
                         .select(
                                 select(val(LocalDate.of(2010, 10, 10)), val(LocalDate.of(2010, 11, 1)),
-                                        val(LocalDate.of(2010, 11, 5)), val("Shipped"), val(""), val(103L))
+                                        val(LocalDate.of(2010, 11, 5)), val("Shipped"), val(""), val(103L), val(BigDecimal.valueOf(230.99)))
                                         .whereNotExists(
                                                 selectFrom(o)
                                                         .where(val(LocalDate.of(2010, 10, 10)).between(o.ORDER_DATE).and(o.SHIPPED_DATE)
