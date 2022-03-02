@@ -201,7 +201,7 @@
                             <!-- A boolean property (or constant) can be specified here to tell the plugin not to do anything -->
                             <skip>false</skip>
 
-                            <!--Additional Maven-specific flags -->
+                            <!--Additional Maven-specific flags --> 
                             <!-- ============================== -->
                             <!-- Instead of providing an inline configuration here, you can specify an external XML configuration file here -->
                             <!-- <configurationFile>${externalfile}</configurationFile> -->
