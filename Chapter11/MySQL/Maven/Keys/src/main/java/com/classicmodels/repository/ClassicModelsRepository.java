@@ -29,8 +29,9 @@ public class ClassicModelsRepository {
     public void insertIntoAndReturnPrimaryKey() {
         
         // Record1<Long>
-        var insertedId = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
-                .values(2004, 2311.42, 1370L)
+        var insertedId = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER,
+                SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)
+                .values(2004, 2311.42, 1370L, 1, 0.0)
                 .returningResult(SALE.getIdentity().getField())
                 // or, .returningResult(SALE.SALE_ID)
                 .fetchOne(); // get directly the long value, .fetchOne().value1();
@@ -38,10 +39,11 @@ public class ClassicModelsRepository {
         System.out.println("Inserted ID:\n" + insertedId);
         
         // Result<Record1<Long>>
-        var insertedIds = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
-                .values(2004, 2311.42, 1370L)
-                .values(2003, 900.21, 1504L)
-                .values(2005, 1232.2, 1166L)
+        var insertedIds = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER,
+                SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)
+                .values(2004, 2311.42, 1370L, 1, 0.0)
+                .values(2003, 900.21, 1504L, 1, 0.0)
+                .values(2005, 1232.2, 1166L, 1, 0.0)
                 .returningResult(SALE.getIdentity().getField())
                 // or, .returningResult(SALE.SALE_ID)
                 .fetch();
@@ -49,8 +51,9 @@ public class ClassicModelsRepository {
         System.out.println("Inserted IDs:\n" + insertedIds);
         
         // use lastID()
-        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
-                .values(2002, 9876.96, 1504L)
+        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER,
+                SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)
+                .values(2002, 9876.96, 1504L, 1, 0.0)
                 .execute();
 
         // PAY ATTENTION TO THE FACT THAT, MEANWHILE, A CONCURRENT TRANSACTION CAN MODIFY THE CURRENT VALUE
@@ -73,6 +76,8 @@ public class ClassicModelsRepository {
         sr.setFiscalYear(2021);
         sr.setSale(4500.25);
         sr.setEmployeeNumber(1504L);
+        sr.setFiscalMonth(1);
+        sr.setRevenueGrowth(0.0);
 
         sr.insert();
 
@@ -83,6 +88,8 @@ public class ClassicModelsRepository {
         s.setFiscalYear(2020);
         s.setSale(643.23);
         s.setEmployeeNumber(1370L);
+        s.setFiscalMonth(1);
+        s.setRevenueGrowth(0.0);
         
         saleRepository.insert(s);
         
@@ -101,6 +108,8 @@ public class ClassicModelsRepository {
         srNoReturnId.setFiscalYear(2021);
         srNoReturnId.setSale(4500.25);
         srNoReturnId.setEmployeeNumber(1504L);
+        srNoReturnId.setFiscalMonth(1);
+        srNoReturnId.setRevenueGrowth(0.0);
 
         srNoReturnId.insert();
 
@@ -145,7 +154,7 @@ public class ClassicModelsRepository {
 
         var result2 = ctx.selectFrom(PRODUCTLINE)
                 .where(row(PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.CODE)
-                        .eq(row("Classic Cars", 599302L)))
+                        .eq(row("Classic Cars", 599302L))) // or, .eq("Classic Cars", 599302L))
                 .fetchSingle();
         System.out.println("Result 2:\n" + result2);
         
