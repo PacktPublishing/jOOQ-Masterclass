@@ -5,7 +5,6 @@ import java.util.List;
 import jooq.generated.embeddables.pojos.OfficeMasterPk;
 import jooq.generated.embeddables.records.OfficeMasterPkRecord;
 import static jooq.generated.tables.CustomerMaster.CUSTOMER_MASTER;
-import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.OfficeMaster.OFFICE_MASTER;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.count;
