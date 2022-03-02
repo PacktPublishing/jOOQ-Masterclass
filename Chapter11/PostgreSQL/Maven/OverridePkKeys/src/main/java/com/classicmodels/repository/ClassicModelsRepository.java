@@ -27,9 +27,8 @@ public class ClassicModelsRepository {
      
         cr.setPhone("4159009544");
         
-        // Because we use <overridePrimaryKeys>customer_name_uk</overridePrimaryKeys>,
-        // jOOQ will use 'customer_name_uk' as primary key instead of 'customer_number'
-        // Note that update(), merge(), delete(), refresh() are also affected (they use 'customer_name_uk'.)
+        // jOOQ will use 'customer_name' as primary key instead of 'customer_number'
+        // Note that update(), merge(), delete(), refresh() are also affected (they use 'customer_name'.)
         cr.store();                 
     }    
     
@@ -42,7 +41,8 @@ public class ClassicModelsRepository {
         
         dr.setTopic(new String[] {"promotion", "market", "research"});
         
-        // Note that update(), merge(), delete(), refresh() are also affected (they use 'customer_name_uk'.)
+        // jOOQ will use 'code' as primary key instead of 'department_id'
+        // Note that update(), merge(), delete(), refresh() are also affected (they use 'code'.)
         dr.store();
     }
 }
