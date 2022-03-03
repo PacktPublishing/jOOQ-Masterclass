@@ -1,7 +1,6 @@
 package com.classicmodels.service;
 
 import com.classicmodels.repository.ClassicModelsRepository;
-import com.classicmodels.repository.ClassicModelsRepository;
 import org.springframework.stereotype.Service;
 
 @Service
