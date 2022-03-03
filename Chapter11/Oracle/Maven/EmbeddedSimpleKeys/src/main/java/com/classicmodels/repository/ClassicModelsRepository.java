@@ -35,7 +35,7 @@ public class ClassicModelsRepository {
         // Record2<Double, Integer>
         var result2 = ctx.select(SALE.SALE_, SALE.FISCAL_YEAR)
                 .from(SALE)
-                .where(SALE.SALE_PK.eq(new EmbeddedSalePkRecord(BigInteger.ONE)))                
+                .where(SALE.SALE_PK.eq(new EmbeddedSalePkRecord(1L)))                
                 .fetchSingle();
         
         System.out.println("EXAMPLE 2:\n");
