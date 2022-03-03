@@ -149,38 +149,6 @@
                                 <name>org.jooq.codegen.JavaGenerator</name>
         
                                 <database>                            
-                                    
-                                    <!-- Prepare the synthetic keys -->
-                                    <syntheticObjects>                                                                
-                                        <primaryKeys>
-                                            <primaryKey>
-                                                <name>office_master_pk</name>                                        
-                                                <tables>office_master</tables>
-                                                <fields>
-                                                    <field>country</field>
-                                                    <field>state</field>
-                                                    <field>city</field>
-                                                </fields>
-                                            </primaryKey>                                     
-                                        </primaryKeys>
-                                        <foreignKeys>
-                                            <foreignKey>  
-                                                <name>office_master_fk</name>                                                                       
-                                                <tables>customer_master</tables>
-                                                <fields>
-                                                    <field>country</field>
-                                                    <field>state</field>
-                                                    <field>city</field>
-                                                </fields>
-                                                <referencedTable>office_master</referencedTable>                                        
-                                                <referencedFields>
-                                                    <field>country</field>
-                                                    <field>state</field>
-                                                    <field>city</field>
-                                                </referencedFields>
-                                            </foreignKey>
-                                        </foreignKeys>                                
-                                    </syntheticObjects>                            
 
                                     <!-- The database type. The format here is:
                                     org.jooq.meta.[database].[database]Database -->
@@ -217,6 +185,38 @@
                                     <!-- Give enough time to jOOQ to trigger the queries needed for generating sources 
                                     (default is 5 seconds) -->
                                     <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>
+
+                                    <!-- Prepare the synthetic keys -->
+                                    <syntheticObjects>                                                                
+                                        <primaryKeys>
+                                            <primaryKey>
+                                                <name>office_master_pk</name>                                        
+                                                <tables>office_master</tables>
+                                                <fields>
+                                                    <field>country</field>
+                                                    <field>state</field>
+                                                    <field>city</field>
+                                                </fields>
+                                            </primaryKey>                                     
+                                        </primaryKeys>
+                                        <foreignKeys>
+                                            <foreignKey>  
+                                                <name>office_master_fk</name>                                                                       
+                                                <tables>customer_master</tables>
+                                                <fields>
+                                                    <field>country</field>
+                                                    <field>state</field>
+                                                    <field>city</field>
+                                                </fields>
+                                                <referencedTable>office_master</referencedTable>                                        
+                                                <referencedFields>
+                                                    <field>country</field>
+                                                    <field>state</field>
+                                                    <field>city</field>
+                                                </referencedFields>
+                                            </foreignKey>
+                                        </foreignKeys>                                
+                                    </syntheticObjects>                            
                                 </database>
 
                                 <target>

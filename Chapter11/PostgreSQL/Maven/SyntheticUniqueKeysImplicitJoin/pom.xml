@@ -149,32 +149,6 @@
                                 <name>org.jooq.codegen.JavaGenerator</name>
         
                                 <database>                 
-                                    
-                                    <!-- Prepare the synthetic keys -->
-                                    <syntheticObjects>                                                                
-                                        <uniqueKeys>
-                                            <uniqueKey>
-                                                <name>office_master_uk</name>                                        
-                                                <tables>office_master</tables>
-                                                <fields>
-                                                    <field>postal_code</field>                                           
-                                                </fields>
-                                            </uniqueKey>                         
-                                        </uniqueKeys>
-                                        <foreignKeys>
-                                            <foreignKey>  
-                                                <name>office_master_fk</name>                                                                       
-                                                <tables>customer_master</tables>
-                                                <fields>
-                                                    <field>postal_code</field>                                            
-                                                </fields>
-                                                <referencedTable>office_master</referencedTable>                                        
-                                                <referencedFields>
-                                                    <field>postal_code</field>                                            
-                                                </referencedFields>
-                                            </foreignKey>
-                                        </foreignKeys>                                
-                                    </syntheticObjects>                            
            
                                     <!-- The database type. The format here is:
                                     org.jooq.meta.[database].[database]Database -->
@@ -211,6 +185,32 @@
                                     <!-- Give enough time to jOOQ to trigger the queries needed for generating sources 
                                     (default is 5 seconds) -->
                                     <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>
+
+                                    <!-- Prepare the synthetic keys -->
+                                    <syntheticObjects>                                                                
+                                        <uniqueKeys>
+                                            <uniqueKey>
+                                                <name>office_master_uk</name>                                        
+                                                <tables>office_master</tables>
+                                                <fields>
+                                                    <field>postal_code</field>                                           
+                                                </fields>
+                                            </uniqueKey>                         
+                                        </uniqueKeys>
+                                        <foreignKeys>
+                                            <foreignKey>  
+                                                <name>office_master_fk</name>                                                                       
+                                                <tables>customer_master</tables>
+                                                <fields>
+                                                    <field>postal_code</field>                                            
+                                                </fields>
+                                                <referencedTable>office_master</referencedTable>                                        
+                                                <referencedFields>
+                                                    <field>postal_code</field>                                            
+                                                </referencedFields>
+                                            </foreignKey>
+                                        </foreignKeys>                                
+                                    </syntheticObjects>                            
                                 </database>
 
                                 <target>
