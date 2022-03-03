@@ -37,20 +37,22 @@ public class ClassicModelsRepository {
     public void insertIntoAndReturnPrimaryKey() {
 
         // Record1<BigInteger>
-        var insertedId = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
-                .values(BigInteger.valueOf(2004), 2311.42, 1370L)
-                .returningResult(SALE.getIdentity().getField())
+        var insertedId = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER,
+                SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)
+                .values(2004, 2311.42, 1370L, 1, 0.0)
+                .returningResult(SALE.SALE_ID)
                 // or, .returningResult(SALE.SALE_ID)
-                .fetchOne(); // get directly the BigInteger value, .fetchOne().value1();
+                .fetchOne(); // get directly the Long value, .fetchOne().value1();
 
         System.out.println("Inserted ID:\n" + insertedId);
 
         // Result<Record1<BigInteger>>
-        var insertedIds = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
-                .values(BigInteger.valueOf(2004), 2311.42, 1370L)
-                .values(BigInteger.valueOf(2003), 900.21, 1504L)
-                .values(BigInteger.valueOf(2005), 1232.2, 1166L)
-                .returningResult(SALE.getIdentity().getField())
+        var insertedIds = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER,
+                SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)
+                .values(2004, 2311.42, 1370L, 1, 0.0)
+                .values(2003, 900.21, 1504L, 1, 0.0)
+                .values(2005, 1232.2, 1166L, 1, 0.0)
+                .returningResult(SALE.SALE_ID)
                 // or, .returningResult(SALE.SALE_ID)
                 .fetch();
 
@@ -65,9 +67,11 @@ public class ClassicModelsRepository {
         // insert record
         SaleRecord sr = ctx.newRecord(SALE);
 
-        sr.setFiscalYear(BigInteger.valueOf(2021));
+        sr.setFiscalYear(2021);
         sr.setSale(4500.25);
         sr.setEmployeeNumber(1504L);
+        sr.setFiscalMonth(1);
+        sr.setRevenueGrowth(0.0);
 
         sr.insert();
 
@@ -75,9 +79,11 @@ public class ClassicModelsRepository {
         
         // insert POJO
         Sale s = new Sale();
-        s.setFiscalYear(BigInteger.valueOf(2020));
+        s.setFiscalYear(2020);
         s.setSale(643.23);
         s.setEmployeeNumber(1370L);
+        s.setFiscalMonth(1);
+        s.setRevenueGrowth(0.0);
         
         saleRepository.insert(s);
         
@@ -93,9 +99,11 @@ public class ClassicModelsRepository {
 
         SaleRecord srNoReturnId = derivedCtx.newRecord(SALE);
 
-        srNoReturnId.setFiscalYear(BigInteger.valueOf(2021));
+        srNoReturnId.setFiscalYear(2021);
         srNoReturnId.setSale(4500.25);
         srNoReturnId.setEmployeeNumber(1504L);
+        srNoReturnId.setFiscalMonth(1);
+        srNoReturnId.setRevenueGrowth(0.0);
 
         srNoReturnId.insert();
 
@@ -109,13 +117,13 @@ public class ClassicModelsRepository {
                 .withUpdatablePrimaryKeys(true)).dsl();
 
         SaleRecord sr = derivedCtx.selectFrom(SALE)
-                .where(SALE.SALE_ID.eq(BigInteger.valueOf(2)))
+                .where(SALE.SALE_ID.eq(5L))
                 .fetchSingle();
 
         // Forcing an UPDATE can be done via Settings.isUpdatablePrimaryKeys() 
         // By default, isUpdatablePrimaryKeys() return false
-        sr.setSaleId(BigInteger.valueOf((int) (Math.random() * 99999L)));
-        sr.setFiscalYear(BigInteger.valueOf(2007));
+        sr.setSaleId((long) (Math.random() * 99999L));
+        sr.setFiscalYear(2007);
 
         sr.store();
 
@@ -123,7 +131,7 @@ public class ClassicModelsRepository {
 
         // update primary key via query
         ctx.update(SALE)
-                .set(SALE.SALE_ID, sr.getSaleId().add(BigInteger.ONE))
+                .set(SALE.SALE_ID, sr.getSaleId() + 1L)
                 .where(SALE.SALE_ID.eq(sr.getSaleId()))
                 .execute();
     }   
@@ -140,7 +148,7 @@ public class ClassicModelsRepository {
 
         var result2 = ctx.selectFrom(PRODUCTLINE)
                 .where(row(PRODUCTLINE.PRODUCT_LINE, PRODUCTLINE.CODE)
-                        .eq(row("Classic Cars", 599302L)))
+                        .eq(row("Classic Cars", 599302L))) // or, .eq("Classic Cars", 599302L))
                 .fetchSingle();
         System.out.println("Result 2:\n" + result2);
         
@@ -184,16 +192,17 @@ public class ClassicModelsRepository {
 
         // Avoid: ERROR: ORA-08002: sequence SALE_SEQ.CURRVAL is not yet defined in this session
         // SALE_SEQ.nextval(); - you can call this, but an INSERT will also call NEXTVAL
-        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
-                .values(BigInteger.valueOf(2020), 900.25, 1611L)
+        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, 
+                SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)
+                .values(2020, 900.25, 1611L, 1, 0.0)
                 .execute();
 
         // PAY ATTENTION TO THE FACT THAT, MEANWHILE, A CONCURRENT TRANSACTION CAN MODIFY THE CURRENT VALUE
         // SO, THERE IS NO GUARANTEE THAT THE BELOW FETCHED *cr* IS THE PRIMARY KEY OF THE PREVIOUS INSERT
         // IF YOU NEED THE PK OF THE ABOVE INSERT THEN RELY ON INSERT ... RETURNING
-        /* var pk = ctx.insertInto(SALE)
-                .values(default_(), 2020, 900.25, 1611L, 
-                        default_(), RateType.GOLD, VatType.MIN, default_())
+        /* var pk = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, 
+                SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)
+                .values(2020, 900.25, 1611L, 1, 0.0)
                 .returningResult(SALE.SALE_ID)
                 .execute(); 
          */
@@ -203,20 +212,21 @@ public class ClassicModelsRepository {
         // UPDATE the SALE having as ID the fetched *cr* 
         // (it is possible that this is not the current value anymore)
         ctx.update(SALE)
-                .set(SALE.FISCAL_YEAR, BigInteger.valueOf(2005))
-                .where(SALE.SALE_ID.eq(cr))
+                .set(SALE.FISCAL_YEAR, 2005)
+                .where(SALE.SALE_ID.coerce(BigInteger.class).eq(cr))
                 .execute();
 
         // DELETE the SALE having as ID the fetched *cr* 
         // (it is possible that this is not the current value anymore)        
         ctx.deleteFrom(SALE)
-                .where(SALE.SALE_ID.eq(cr))
+                .where(SALE.SALE_ID.coerce(BigInteger.class).eq(cr))
                 .execute();
 
         // this is prone to the same issue because it results in a SELECT and a DELETE and,
         // between them a concurrent transaction can affect the current value
         ctx.deleteFrom(SALE)
-                .where(SALE.SALE_ID.eq(ctx.select(SALE_SEQ.currval()).fetchSingle().value1()))
+                .where(SALE.SALE_ID.coerce(BigInteger.class)
+                        .eq(ctx.select(SALE_SEQ.currval()).fetchSingle().value1()))
                 .execute();                
     }  
 
@@ -227,8 +237,10 @@ public class ClassicModelsRepository {
         // default (e.g., NOT NULL DEFAULT NEXTVAL ('sale_seq')) there is no need 
         // to call currval() or nextval(). Simply omit the PK and let the database 
         // to generate it.
-        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_)
-                .values(BigInteger.valueOf(2005), 1370L, 1282.64D);
+        ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.EMPLOYEE_NUMBER, SALE.SALE_,
+                SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)
+                .values(2005, 1370L, 1282.64D, 1, 0.0)
+                .execute();
 
         // But, for SEQUENCE owned by non-auto-generated rows, you have to rely on nextval()/nextvals()
         // For instance, you can INSERT 10 employees via *EMPLOYEE_SEQ.nextval()* 
@@ -238,7 +250,7 @@ public class ClassicModelsRepository {
                     EMPLOYEE.REPORTS_TO, EMPLOYEE.JOB_TITLE)
                     .values(EMPLOYEE_SEQ.nextval(),
                             val("Lionel"), val("Andre"), val("x8990"), val("landre@gmail.com"), val("1"),
-                            val(BigInteger.valueOf(57000)), val(1143L), val("Sales Rep"))
+                            val(57000), val(1143L), val("Sales Rep"))
                     .execute();
         }
 
@@ -247,18 +259,21 @@ public class ClassicModelsRepository {
         List<Long> idsLong = ctx.fetch(EMPLOYEE_SEQ.nextvals(10)).into(Long.class);
 
         // This is also useful for Records to pre-set IDs:
-        // EmployeeRecord er = new EmployeeRecord(ids.get(0).value1(), // or, idsLong.get(0) 
-        //        "Lionel", "Andre", "x8990", "landre@gmail.com", "1", 
-        //                BigInteger.valueOf(57000), 1143L, "Sales Rep", null, null);        
+        /*
+        EmployeeRecord er = new EmployeeRecord(ids.get(0).value1(), // or, idsLong.get(0) 
+                "Lionel", "Andre", "x8990", "landre@gmail.com", "1", 
+                        57000, 0, 1143L, "Sales Rep", null, null);    
+        */
+        
         for (int i = 0; i < ids.size(); i++) {
 
             ctx.insertInto(EMPLOYEE, EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.LAST_NAME, EMPLOYEE.FIRST_NAME,
                     EMPLOYEE.EXTENSION, EMPLOYEE.EMAIL, EMPLOYEE.OFFICE_CODE, EMPLOYEE.SALARY,
                     EMPLOYEE.REPORTS_TO, EMPLOYEE.JOB_TITLE)
                     .values(// ids.get(i).value1(), // if you need Field<?> then ids.get(i).field1()
-                            idsLong.get(0),
+                            idsLong.get(i),
                             "Lionel", "Andre", "x8990", "landre@gmail.com", "1",
-                            BigInteger.valueOf(57000), 1143L, "Sales Rep")
+                            57000, 1143L, "Sales Rep")
                     .execute();
         }
     }   
@@ -267,20 +282,21 @@ public class ClassicModelsRepository {
         
         var sel = ctx.select(rowid(), SALE.FISCAL_YEAR)
                 .from(SALE)
-                .where(SALE.SALE_ID.eq(BigInteger.ONE))
+                .where(SALE.SALE_ID.eq(1L))
                 .fetchOne();
         
         System.out.println("RowID after select:\n" + sel);
         
         var del = ctx.deleteFrom(SALE)
-                .where(SALE.SALE_ID.eq(BigInteger.ONE))
+                .where(SALE.SALE_ID.eq(1L))
                 .returningResult(rowid())
                 .fetchOne();
         
         System.out.println("RowID after delete:\n" + del);
         
-         var ins = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER)
-                .values(BigInteger.valueOf(2004), 2311.42, 1370L)
+         var ins = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER,
+                 SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)
+                .values(2004, 2311.42, 1370L, 1, 0.0)
                 .returningResult(SALE.SALE_ID, rowid())
                 .fetchOne();
         
