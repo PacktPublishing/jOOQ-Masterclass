@@ -103,8 +103,7 @@
                 <executions>
                     <execution>
                         <phase>generate-sources</phase>
-                        <goals>
-                            <goal>clean</goal>
+                        <goals>                            
                             <goal>migrate</goal>
                         </goals>
                     </execution>
