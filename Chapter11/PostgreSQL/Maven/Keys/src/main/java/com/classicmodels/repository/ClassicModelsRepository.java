@@ -180,13 +180,25 @@ public class ClassicModelsRepository {
         Field<Long> inc = EMPLOYEE_SEQ.getIncrementBy();
 
         System.out.println("SEQUENCE: " + "\nName:" + name + "\n"
-                + "Start: " + start + "\nMin: " + min + "\nMax: " + max + "\nInc:" + inc);
+                + "Start: " + start + "\nMin: " + min + "\nMax: " + max + "\nInc:" + inc);       
+        
+        long nval1 = ctx.fetchValue(EMPLOYEE_SEQ.nextval());
+        long nval2 = ctx.select(EMPLOYEE_SEQ.nextval()).fetchSingle().value1();
+        long nval3 = ctx.select(EMPLOYEE_SEQ.nextval()).fetchSingleInto(Long.class); // or, fetchOneInto()
+        
+        System.out.println("Current val: " + nval1 + ", " + nval2 + ", " +nval3);
+        
+        var vals1 = ctx.fetchSingle(EMPLOYEE_SEQ.nextval(), EMPLOYEE_SEQ.currval());
+        var vals2 = ctx.select(EMPLOYEE_SEQ.nextval(), EMPLOYEE_SEQ.currval()).fetchSingle();        
 
-        var vals = ctx.select(EMPLOYEE_SEQ.nextval(), EMPLOYEE_SEQ.currval()).fetchSingle();
-        long val = ctx.select(EMPLOYEE_SEQ.nextval()).fetchSingleInto(Long.class); // or, fetchOneInto()
-
-        System.out.println("Next val: " + vals.get(0) + " Current val: " + vals.get(1));
-        System.out.println("Next val: " + val);
+        System.out.println("Next val: " + vals1.get(0) + " Current val: " + vals1.get(1));
+        System.out.println("Next val: " + vals2.get(0) + " Current val: " + vals2.get(1));        
+        
+        long cval1 = ctx.fetchValue(EMPLOYEE_SEQ.currval());
+        long cval2 = ctx.select(EMPLOYEE_SEQ.currval()).fetchSingle().value1();
+        long cval3 = ctx.select(EMPLOYEE_SEQ.currval()).fetchSingleInto(Long.class); // or, fetchOneInto()
+        
+        System.out.println("Current val: " + cval1 + ", " + cval2 + ", " +cval3);
 
         var next10Vals = ctx.fetch(EMPLOYEE_SEQ.nextvals(10));
         System.out.println("Next 10 vals:\n" + next10Vals);
