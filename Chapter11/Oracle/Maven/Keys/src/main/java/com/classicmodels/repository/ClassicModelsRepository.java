@@ -41,7 +41,6 @@ public class ClassicModelsRepository {
                 SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)
                 .values(2004, 2311.42, 1370L, 1, 0.0)
                 .returningResult(SALE.SALE_ID)
-                // or, .returningResult(SALE.SALE_ID)
                 .fetchOne(); // get directly the Long value, .fetchOne().value1();
 
         System.out.println("Inserted ID:\n" + insertedId);
@@ -52,8 +51,7 @@ public class ClassicModelsRepository {
                 .values(2004, 2311.42, 1370L, 1, 0.0)
                 .values(2003, 900.21, 1504L, 1, 0.0)
                 .values(2005, 1232.2, 1166L, 1, 0.0)
-                .returningResult(SALE.SALE_ID)
-                // or, .returningResult(SALE.SALE_ID)
+                .returningResult(SALE.SALE_ID)                
                 .fetch();
 
         System.out.println("Inserted IDs:\n" + insertedIds);                
