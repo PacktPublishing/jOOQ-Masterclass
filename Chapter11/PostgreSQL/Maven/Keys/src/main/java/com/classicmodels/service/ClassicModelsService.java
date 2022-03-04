@@ -17,8 +17,8 @@ public class ClassicModelsService {
         classicModelsRepository.insertIntoAndReturnPrimaryKey();
         classicModelsRepository.insertAndReturnPrimaryKey();       
         classicModelsRepository.suppressPrimaryKeyReturnOnUpdatableRecord();
-       // classicModelsRepository.updatePrimaryKeyOnUpdatableRecord();        
-        //classicModelsRepository.compareComposedPrimaryKey();
+        classicModelsRepository.updatePrimaryKeyOnUpdatableRecord();        
+        classicModelsRepository.compareComposedPrimaryKey();
 
         classicModelsRepository.getSequenceInfo();
         classicModelsRepository.currentSequenceVal1();

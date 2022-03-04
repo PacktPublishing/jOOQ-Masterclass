@@ -13,6 +13,8 @@ import jooq.generated.tables.records.SaleRecord;
 import org.jooq.DSLContext;
 import org.jooq.Field;
 import org.jooq.Query;
+import org.jooq.Record1;
+import org.jooq.Record2;
 import org.jooq.conf.Settings;
 import static org.jooq.impl.DSL.row;
 import static org.jooq.impl.DSL.val;
@@ -156,8 +158,8 @@ public class ClassicModelsRepository {
         
         System.out.println("Current val: " + nval1 + ", " + nval2 + ", " +nval3);
         
-        var vals1 = ctx.fetchSingle(EMPLOYEE_SEQ.nextval(), EMPLOYEE_SEQ.currval());
-        var vals2 = ctx.select(EMPLOYEE_SEQ.nextval(), EMPLOYEE_SEQ.currval()).fetchSingle();        
+        Record2<Long, Long> vals1 = ctx.fetchSingle(EMPLOYEE_SEQ.nextval(), EMPLOYEE_SEQ.currval());
+        Record2<Long, Long> vals2 = ctx.select(EMPLOYEE_SEQ.nextval(), EMPLOYEE_SEQ.currval()).fetchSingle();        
 
         System.out.println("Next val: " + vals1.get(0) + " Current val: " + vals1.get(1));
         System.out.println("Next val: " + vals2.get(0) + " Current val: " + vals2.get(1));        
@@ -168,11 +170,13 @@ public class ClassicModelsRepository {
         
         System.out.println("Current val: " + cval1 + ", " + cval2 + ", " +cval3);
 
-        var next10Vals = ctx.fetch(EMPLOYEE_SEQ.nextvals(10));
-        System.out.println("Next 10 vals:\n" + next10Vals);
+        List<Long> next10Vals1 = ctx.fetchValues(EMPLOYEE_SEQ.nextvals(10));
+        List<Long> next10Vals2 = ctx.fetch(EMPLOYEE_SEQ.nextvals(10)).into(Long.class);
+        List<Record1<Long>> next10Vals3 = ctx.fetch(EMPLOYEE_SEQ.nextvals(10));
         
-        List<Long> next10LongVals = ctx.fetch(EMPLOYEE_SEQ.nextvals(10)).into(Long.class);
-        System.out.println("Next 10 vals:\n" + next10LongVals);
+        System.out.println("Next 10 vals:\n" + next10Vals1);
+        System.out.println("Next 10 vals:\n" + next10Vals2);        
+        System.out.println("Next 10 vals:\n" + next10Vals3);
     }
 
     @Transactional
@@ -194,8 +198,8 @@ public class ClassicModelsRepository {
                 .returningResult(SALE.SALE_ID)
                 .execute(); 
          */
-        var cr = ctx.select(PRODUCT_UID_SEQ.currval()).fetchSingle().value1();
-        long crLong = ctx.select(PRODUCT_UID_SEQ.currval()).fetchSingleInto(Long.class); // or, fetchOneInto()
+
+        long cr = ctx.fetchValue(PRODUCT_UID_SEQ.currval());
 
         // UPDATE the PRODUCT having as PRODUCT_UID the fetched *cr* 
         // (it is possible that this is not the current value anymore)
@@ -213,7 +217,7 @@ public class ClassicModelsRepository {
         // this is prone to the same issue because it results in a SELECT and a DELETE and,
         // between them a concurrent transaction can affect the current value
         ctx.deleteFrom(PRODUCT)
-                .where(PRODUCT.PRODUCT_UID.eq(ctx.select(PRODUCT_UID_SEQ.currval()).fetchSingle().value1()))
+                .where(PRODUCT.PRODUCT_UID.eq(ctx.fetchValue(PRODUCT_UID_SEQ.currval())))
                 .execute();
         
         // this is not prone to the same issue because there will be a single UPDATE/DELETE, so
@@ -244,12 +248,11 @@ public class ClassicModelsRepository {
         }
 
         // Or, by fetching and caching 10 IDs
-        var ids = ctx.fetch(EMPLOYEE_SEQ.nextvals(10));
-        List<Long> idsLong = ctx.fetch(EMPLOYEE_SEQ.nextvals(10)).into(Long.class);
-
+        List<Long> ids = ctx.fetchValues(EMPLOYEE_SEQ.nextvals(10));
+        
         // This is also useful for Records to pre-set IDs:
         /*
-         EmployeeRecord er = new EmployeeRecord(ids.get(0).value1(), // or, idsLong.get(0) 
+         EmployeeRecord er = new EmployeeRecord(ids.get(0),
                 "Lionel", "Andre", "x8990", "landre@gmail.com", "1", 
                         57000, 0, 1143L, "Sales Rep", null, null);        
         */
@@ -259,8 +262,7 @@ public class ClassicModelsRepository {
             ctx.insertInto(EMPLOYEE, EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.LAST_NAME, EMPLOYEE.FIRST_NAME,
                     EMPLOYEE.EXTENSION, EMPLOYEE.EMAIL, EMPLOYEE.OFFICE_CODE, EMPLOYEE.SALARY,
                     EMPLOYEE.REPORTS_TO, EMPLOYEE.JOB_TITLE)
-                    .values(// ids.get(i).value1(), // if you need Field<?> then ids.get(i).field1()
-                            idsLong.get(i),
+                    .values(ids.get(i),
                             "Lionel", "Andre", "x8990", "landre@gmail.com", "1",
                             57000, 1143L, "Sales Rep")
                     .execute();
