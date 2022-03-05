@@ -1,11 +1,14 @@
 package com.classicmodels.repository;
 
+import java.util.List;
 import static jooq.generated.tables.Productline.PRODUCTLINE;
-import jooq.generated.tables.pojos.Sale;
 import static jooq.generated.tables.Sale.SALE;
+import jooq.generated.tables.pojos.Sale;
 import jooq.generated.tables.daos.SaleRepository;
 import jooq.generated.tables.records.SaleRecord;
 import org.jooq.DSLContext;
+import org.jooq.Record1;
+import static org.jooq.Records.intoList;
 import org.jooq.conf.Settings;
 import static org.jooq.impl.DSL.row;
 import org.springframework.stereotype.Repository;
@@ -28,18 +31,26 @@ public class ClassicModelsRepository {
     @Transactional
     public void insertIntoAndReturnPrimaryKey() {
         
-        // Record1<Long>
-        var insertedId = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER,
+        Record1<Long> insertedId1 = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER,
                 SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)
                 .values(2004, 2311.42, 1370L, 1, 0.0)
                 .returningResult(SALE.getIdentity().getField())
                 // or, .returningResult(SALE.SALE_ID)
-                .fetchOne(); // get directly the long value, .fetchOne().value1();
-        
-        System.out.println("Inserted ID:\n" + insertedId);
-        
+                .fetchOne();
+                
+        long insertedId2 = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER,
+                SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)
+                .values(2004, 2311.42, 1370L, 1, 0.0)
+                .returningResult(SALE.getIdentity().getField())
+                // or, .returningResult(SALE.SALE_ID)
+                .fetchOneInto(long.class); 
+                // or, .fetchOne().value1();
+
+        System.out.println("Inserted ID:\n" + insertedId1);
+        System.out.println("Inserted ID:\n" + insertedId2);
+
         // Result<Record1<Long>>
-        var insertedIds = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER,
+        var insertedIds1 = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER,
                 SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)
                 .values(2004, 2311.42, 1370L, 1, 0.0)
                 .values(2003, 900.21, 1504L, 1, 0.0)
@@ -48,7 +59,18 @@ public class ClassicModelsRepository {
                 // or, .returningResult(SALE.SALE_ID)
                 .fetch();
         
-        System.out.println("Inserted IDs:\n" + insertedIds);
+        List<Long> insertedIds2 = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER,
+                SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)
+                .values(2004, 2311.42, 1370L, 1, 0.0)
+                .values(2003, 900.21, 1504L, 1, 0.0)
+                .values(2005, 1232.2, 1166L, 1, 0.0)
+                .returningResult(SALE.getIdentity().getField())
+                // or, .returningResult(SALE.SALE_ID)
+                .collect(intoList());
+                // or, .fetchInto(Long.class);
+
+        System.out.println("Inserted IDs:\n" + insertedIds1);
+        System.out.println("Inserted IDs:\n" + insertedIds2);
         
         // use lastID()
         ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER,

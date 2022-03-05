@@ -14,6 +14,7 @@ import org.jooq.DSLContext;
 import org.jooq.Field;
 import org.jooq.Record1;
 import org.jooq.Record2;
+import static org.jooq.Records.intoList;
 import org.jooq.conf.Settings;
 import static org.jooq.impl.DSL.row;
 import static org.jooq.impl.DSL.val;
@@ -38,25 +39,42 @@ public class ClassicModelsRepository {
     @Transactional
     public void insertIntoAndReturnPrimaryKey() {
 
-        // Record1<BigInteger>
-        var insertedId = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER,
+        Record1<Long> insertedId1 = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER,
                 SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)
-                .values(2004, 2311.42, 1370L, 1, 0.0)
+                .values(2004, 2311.42, 1370L, 1, 0.0)                
                 .returningResult(SALE.SALE_ID)
-                .fetchOne(); // get directly the Long value, .fetchOne().value1();
+                .fetchOne();
+                
+        long insertedId2 = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER,
+                SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)
+                .values(2004, 2311.42, 1370L, 1, 0.0)                
+                .returningResult(SALE.SALE_ID)
+                .fetchOneInto(long.class); 
+                // or, .fetchOne().value1();
 
-        System.out.println("Inserted ID:\n" + insertedId);
+        System.out.println("Inserted ID:\n" + insertedId1);
+        System.out.println("Inserted ID:\n" + insertedId2);
 
-        // Result<Record1<BigInteger>>
-        var insertedIds = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER,
+        // Result<Record1<Long>>
+        var insertedIds1 = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER,
                 SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)
                 .values(2004, 2311.42, 1370L, 1, 0.0)
                 .values(2003, 900.21, 1504L, 1, 0.0)
-                .values(2005, 1232.2, 1166L, 1, 0.0)
-                .returningResult(SALE.SALE_ID)                
+                .values(2005, 1232.2, 1166L, 1, 0.0)                
+                .returningResult(SALE.SALE_ID)
                 .fetch();
+        
+        List<Long> insertedIds2 = ctx.insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER,
+                SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)
+                .values(2004, 2311.42, 1370L, 1, 0.0)
+                .values(2003, 900.21, 1504L, 1, 0.0)
+                .values(2005, 1232.2, 1166L, 1, 0.0)                
+                .returningResult(SALE.SALE_ID)
+                .collect(intoList());
+                // or, .fetchInto(Long.class);
 
-        System.out.println("Inserted IDs:\n" + insertedIds);                
+        System.out.println("Inserted IDs:\n" + insertedIds1);
+        System.out.println("Inserted IDs:\n" + insertedIds2);
     }
     
     /* Primary keys and updatable records */
