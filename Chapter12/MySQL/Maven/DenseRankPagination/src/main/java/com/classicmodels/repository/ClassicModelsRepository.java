@@ -9,6 +9,7 @@ import static jooq.generated.tables.Office.OFFICE;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.denseRank;
 import static org.jooq.impl.DSL.field;
+import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.select;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -71,10 +72,9 @@ public class ClassicModelsRepository {
                 .join(EMPLOYEE)
                 .on(OFFICE.OFFICE_CODE.eq(EMPLOYEE.OFFICE_CODE))
                 .asTable("t"))
-                .where(field("t.rank").between(start, end))
+                .where(field(name("t", "rank")).between(start, end))
                 .fetchGroups(Office.class, Employee.class);
 
         return result;
     }
-
 }
