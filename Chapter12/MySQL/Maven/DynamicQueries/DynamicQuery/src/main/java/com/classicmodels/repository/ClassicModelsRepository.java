@@ -103,7 +103,7 @@ public class ClassicModelsRepository {
 
         // create the SelectQuery having the fix parts like the table PRODUCT and a condition
         SelectQuery select = ctx.selectFrom(PRODUCT)
-                .where(PRODUCT.QUANTITY_IN_STOCK.gt((short) 0))
+                .where(PRODUCT.QUANTITY_IN_STOCK.gt(0))
                 .getQuery();
 
         // add the dynamic parts
@@ -126,7 +126,7 @@ public class ClassicModelsRepository {
             String productVendor, String productScale) {
 
         // create the fix condition
-        Condition condition = PRODUCT.QUANTITY_IN_STOCK.gt((short) 0);
+        Condition condition = PRODUCT.QUANTITY_IN_STOCK.gt(0);
         // Condition condition = trueCondition(); // or, start from a TRUE condition (there is falseCondition() as well)       
 
         // add the dynamic conditions
