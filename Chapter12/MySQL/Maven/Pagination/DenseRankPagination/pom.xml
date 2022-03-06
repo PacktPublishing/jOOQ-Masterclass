@@ -187,8 +187,7 @@
                                 <!-- jOOQ will generate POJOs on our behalf -->
                                 <generate>
                                     <pojos>true</pojos> 
-                                    <validationAnnotations>true</validationAnnotations>    
-                                    <springAnnotations>true</springAnnotations>                                                             
+                                    <validationAnnotations>true</validationAnnotations>                                        
                                     <pojosEqualsAndHashCode>true</pojosEqualsAndHashCode> 
                                 </generate>
                                 
