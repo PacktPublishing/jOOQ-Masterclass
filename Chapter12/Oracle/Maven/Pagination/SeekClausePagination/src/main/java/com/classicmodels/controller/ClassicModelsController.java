@@ -50,7 +50,7 @@ public class ClassicModelsController {
     @GetMapping("/orderdetail/{orderId}/{productId}/{quantityOrdered}/{size}")
     public List<Orderdetail> loadOrderdetailPageOrderIdAscProductIdQuantityOrderedDesc(
             @PathVariable(name = "orderId") long orderId, @PathVariable(name = "productId") long productId,
-            @PathVariable(name = "quantityOrdered") long quantityOrdered, @PathVariable(name = "size") int size) {
+            @PathVariable(name = "quantityOrdered") int quantityOrdered, @PathVariable(name = "size") int size) {
 
         return classicModelsService.loadOrderdetailPageOrderIdAscProductIdQuantityOrderedDesc(
                 orderId, productId, quantityOrdered, size);
