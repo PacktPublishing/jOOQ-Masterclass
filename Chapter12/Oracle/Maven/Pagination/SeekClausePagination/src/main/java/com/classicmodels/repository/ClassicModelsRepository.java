@@ -1,6 +1,5 @@
 package com.classicmodels.repository;
 
-import java.math.BigInteger;
 import java.util.List;
 import jooq.generated.embeddables.records.EmbeddedProductlinePkRecord;
 import static jooq.generated.tables.Employee.EMPLOYEE;
@@ -55,7 +54,7 @@ public class ClassicModelsRepository {
 
         List<Employee> result = ctx.selectFrom(EMPLOYEE)
                 .orderBy(EMPLOYEE.OFFICE_CODE, EMPLOYEE.SALARY.desc())
-                .seek(officeCode, BigInteger.valueOf(salary)) // or, seekAfter
+                .seek(officeCode, salary) // or, seekAfter
                 .limit(size)
                 .fetchInto(Employee.class);
 
@@ -67,7 +66,7 @@ public class ClassicModelsRepository {
 
         List<Employee> result = ctx.selectFrom(EMPLOYEE)
                 .orderBy(EMPLOYEE.OFFICE_CODE, EMPLOYEE.SALARY)
-                .seek(officeCode, BigInteger.valueOf(salary)) // or, seekAfter
+                .seek(officeCode, salary) // or, seekAfter
                 .limit(size)
                 .fetchInto(Employee.class);
 
@@ -75,7 +74,7 @@ public class ClassicModelsRepository {
     }
 
     public List<Orderdetail> fetchOrderdetailPageOrderIdAscProductIdQuantityOrderedDesc(
-            long orderId, long productId, long quantityOrdered, int size) {
+            long orderId, long productId, int quantityOrdered, int size) {
 
         List<Orderdetail> result = ctx.selectFrom(ORDERDETAIL)
                 .orderBy(ORDERDETAIL.ORDER_ID, ORDERDETAIL.PRODUCT_ID.desc(),

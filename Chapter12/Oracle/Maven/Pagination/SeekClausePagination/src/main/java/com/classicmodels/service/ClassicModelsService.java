@@ -39,7 +39,7 @@ public class ClassicModelsService {
     }
 
     public List<Orderdetail> loadOrderdetailPageOrderIdAscProductIdQuantityOrderedDesc(
-            long orderId, long productId, long quantityOrdered, int size) {
+            long orderId, long productId, int quantityOrdered, int size) {
 
         return classicModelsRepository.fetchOrderdetailPageOrderIdAscProductIdQuantityOrderedDesc(
                 orderId, productId, quantityOrdered, size);
