@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.classicmodels</groupId>
-    <artifactId>AggregatesOrderBy</artifactId>
+    <artifactId>AggregateWindowFunctions</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>AggregatesOrderBy</name>
+    <name>AggregateWindowFunctions</name>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -108,7 +108,7 @@
                     <user>${spring.datasource.username}</user>
                     <password>${spring.datasource.password}</password>                                          
                     <locations>
-                        <location>filesystem:./../../../../../../db/migration/dev/mysql</location>                        
+                        <location>filesystem:./../../../../../db/migration/dev/mysql</location>                        
                     </locations>                   
                 </configuration>                
             </plugin>
