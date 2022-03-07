@@ -57,17 +57,15 @@ public class ClassicModelsRepository {
                         .on(OFFICE.OFFICE_CODE.eq(EMPLOYEE.OFFICE_CODE)).asTable("t")
         ).where(field(name("t", "salary_rank")).eq(1))
                 .fetch();
-
-        // experimental
-        /*
-        select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY,
+       
+        // same query using QUALIFY
+        ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY,
                 OFFICE.CITY, OFFICE.COUNTRY, OFFICE.OFFICE_CODE)
                 .from(EMPLOYEE)
                 .innerJoin(OFFICE)
                 .on(OFFICE.OFFICE_CODE.eq(EMPLOYEE.OFFICE_CODE))
                 .qualify(denseRank().over().partitionBy(OFFICE.OFFICE_CODE)
-                        .orderBy(EMPLOYEE.SALARY.desc()).as("salary_rank").eq(1))
-                .fetch();
-        */
+                        .orderBy(EMPLOYEE.SALARY.desc()).eq(1))
+                .fetch();        
     }    
 }
