@@ -2,7 +2,6 @@ package com.classicmodels.repository;
 
 import java.math.BigDecimal;
 import static jooq.generated.tables.Employee.EMPLOYEE;
-import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.cast;
@@ -10,9 +9,10 @@ import static org.jooq.impl.DSL.concat;
 import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.cumeDist;
 import static org.jooq.impl.DSL.field;
+import static org.jooq.impl.DSL.inline;
+import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.round;
 import static org.jooq.impl.DSL.select;
-import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,7 +51,7 @@ public class ClassicModelsRepository {
     public void get25PercentTopSales() {
 
         ctx.select().from(
-                select(concat(EMPLOYEE.FIRST_NAME, val(" "), EMPLOYEE.LAST_NAME).as("name"),
+                select(concat(EMPLOYEE.FIRST_NAME, inline(" "), EMPLOYEE.LAST_NAME).as("name"),
                         SALE.SALE_, SALE.FISCAL_YEAR,
                         cumeDist().over().partitionBy(SALE.FISCAL_YEAR)
                                 .orderBy(SALE.SALE_.desc()).as("cume_dist"))
@@ -59,18 +59,18 @@ public class ClassicModelsRepository {
                         .join(SALE)
                         .on(EMPLOYEE.EMPLOYEE_NUMBER.eq(SALE.EMPLOYEE_NUMBER)
                                 .and(SALE.FISCAL_YEAR.in(2003, 2004))).asTable("t"))
-                .where(field("t.cume_dist").lt(0.25))
+                .where(field(name("t", "cume_dist")).lt(0.25))
                 .fetch();
 
         // same query via QUALIFY clause
-        ctx.select(concat(EMPLOYEE.FIRST_NAME, val(" "), EMPLOYEE.LAST_NAME).as("name"),
+        ctx.select(concat(EMPLOYEE.FIRST_NAME, inline(" "), EMPLOYEE.LAST_NAME).as("name"),
                 SALE.SALE_, SALE.FISCAL_YEAR)
                 .from(EMPLOYEE)
                 .join(SALE)
                 .on(EMPLOYEE.EMPLOYEE_NUMBER.eq(SALE.EMPLOYEE_NUMBER)
-                        .and(SALE.FISCAL_YEAR.in(2003, 2004)))
+                        .and(SALE.FISCAL_YEAR.in(2003, 2004)))                
                 .qualify(cumeDist().over().partitionBy(SALE.FISCAL_YEAR)
-                        .orderBy(SALE.SALE_.desc()).lt(BigDecimal.valueOf(0.25)))
+                                .orderBy(SALE.SALE_.desc()).lt(BigDecimal.valueOf(0.25)))
                 .fetch();
     }
 }
