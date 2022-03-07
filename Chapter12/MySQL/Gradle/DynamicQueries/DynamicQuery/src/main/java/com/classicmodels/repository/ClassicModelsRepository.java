@@ -25,8 +25,8 @@ import org.jooq.Record;
 import org.jooq.UpdateQuery;
 import static org.jooq.impl.DSL.avg;
 import static org.jooq.impl.DSL.count;
+import static org.jooq.impl.DSL.noCondition;
 import static org.jooq.impl.DSL.select;
-import static org.jooq.impl.DSL.trueCondition;
 import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,7 +44,7 @@ public class ClassicModelsRepository {
     public List<ProductRecord> fetchCarsOrNoCars(float buyPrice, boolean cars) {
 
         return ctx.selectFrom(PRODUCT)
-                .where((buyPrice > 0f ? PRODUCT.BUY_PRICE.gt(BigDecimal.valueOf(buyPrice)) : trueCondition())
+                .where((buyPrice > 0f ? PRODUCT.BUY_PRICE.gt(BigDecimal.valueOf(buyPrice)) : noCondition())
                         .and(cars ? PRODUCT.PRODUCT_LINE.in("Classic Cars", "Motorcycles", "Trucks and Buses", "Vintage Cars")
                                 : PRODUCT.PRODUCT_LINE.in("Plains", "Ships", "Trains")))
                 .fetch();

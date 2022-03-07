@@ -59,11 +59,11 @@ public class ClassicModelsRepository {
 
         return result;
     }
-
-    // using DENSE_RANK() to avoid result set truncation
+    
     public Map<Office, List<Employee>> fetchOfficeWithEmployeeDR(int start, int end) {
 
-        Map<Office, List<Employee>> result = ctx.select().from(select(OFFICE.OFFICE_CODE, OFFICE.CITY,
+        // using DENSE_RANK() to avoid result set truncation
+        Map<Office, List<Employee>> result1 = ctx.select().from(select(OFFICE.OFFICE_CODE, OFFICE.CITY,
                 OFFICE.COUNTRY, OFFICE.TERRITORY, OFFICE.STATE, OFFICE.ADDRESS_LINE_FIRST, OFFICE.PHONE,
                 EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.JOB_TITLE,
                 EMPLOYEE.SALARY, EMPLOYEE.EXTENSION, EMPLOYEE.EMAIL,
@@ -74,7 +74,21 @@ public class ClassicModelsRepository {
                 .asTable("t"))
                 .where(field(name("t", "rank")).between(start, end))
                 .fetchGroups(Office.class, Employee.class);
+        
+        // using DENSE_RANK() to avoid result set truncation
+        // using QUALIFY to express it more compact (no subquery needed)
+        // for brevity, we skipped the DENSE_RANK() output as a column
+        Map<Office, List<Employee>> result2 = ctx.select(OFFICE.OFFICE_CODE, OFFICE.CITY,
+                OFFICE.COUNTRY, OFFICE.TERRITORY, OFFICE.STATE, OFFICE.ADDRESS_LINE_FIRST, OFFICE.PHONE,
+                EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.JOB_TITLE,
+                EMPLOYEE.SALARY, EMPLOYEE.EXTENSION, EMPLOYEE.EMAIL)
+                .from(OFFICE)
+                .join(EMPLOYEE)
+                .on(OFFICE.OFFICE_CODE.eq(EMPLOYEE.OFFICE_CODE))
+                .qualify(denseRank().over()
+                        .orderBy(OFFICE.OFFICE_CODE, OFFICE.CITY).between(start, end))                                         
+                .fetchGroups(Office.class, Employee.class);
 
-        return result;
+        return result1;
     }
 }
