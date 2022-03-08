@@ -9,9 +9,9 @@ import static org.jooq.impl.DSL.concat;
 import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.cumeDist;
 import static org.jooq.impl.DSL.field;
+import static org.jooq.impl.DSL.inline;
 import static org.jooq.impl.DSL.round;
 import static org.jooq.impl.DSL.select;
-import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,7 +34,7 @@ public class ClassicModelsRepository {
     public void cumeDistSalary() {
 
         ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY,
-                round(cumeDist().over().orderBy(EMPLOYEE.SALARY), 2).as("cume_dist"))
+                round(cast(cumeDist().over().orderBy(EMPLOYEE.SALARY), Double.class), 2).as("cume_dist"))
                 .from(EMPLOYEE)
                 .fetch();
 
@@ -50,7 +50,7 @@ public class ClassicModelsRepository {
         public void get25PercentTopSales() {
 
         ctx.select().from(
-                select(concat(EMPLOYEE.FIRST_NAME, val(" "), EMPLOYEE.LAST_NAME).as("name"),
+                select(concat(EMPLOYEE.FIRST_NAME, inline(" "), EMPLOYEE.LAST_NAME).as("name"),
                         SALE.SALE_, SALE.FISCAL_YEAR,
                         cumeDist().over().partitionBy(SALE.FISCAL_YEAR)
                                 .orderBy(SALE.SALE_.desc()).as("cume_dist"))
@@ -62,7 +62,7 @@ public class ClassicModelsRepository {
                 .fetch();
 
         // same query via QUALIFY clause
-        ctx.select(concat(EMPLOYEE.FIRST_NAME, val(" "), EMPLOYEE.LAST_NAME).as("name"),
+        ctx.select(concat(EMPLOYEE.FIRST_NAME, inline(" "), EMPLOYEE.LAST_NAME).as("name"),
                 SALE.SALE_, SALE.FISCAL_YEAR)
                 .from(EMPLOYEE)
                 .join(SALE)
