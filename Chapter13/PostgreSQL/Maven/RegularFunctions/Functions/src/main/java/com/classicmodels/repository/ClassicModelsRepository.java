@@ -43,6 +43,7 @@ import static org.jooq.impl.DSL.localDate;
 import static org.jooq.impl.DSL.localDateAdd;
 import static org.jooq.impl.DSL.lower;
 import static org.jooq.impl.DSL.month;
+import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.nullif;
 import static org.jooq.impl.DSL.nvl;
 import static org.jooq.impl.DSL.nvl2;
@@ -160,10 +161,10 @@ public class ClassicModelsRepository {
         ctx.select(DEPARTMENT.NAME, DEPARTMENT.OFFICE_CODE, DEPARTMENT.FORECAST_PROFIT,
                 DEPARTMENT.PROFIT,
                 coalesce(DEPARTMENT.FORECAST_PROFIT,
-                        select(avg(field("t.forecast_profit", Double.class))).from(DEPARTMENT.as("t"))
-                                .where(coalesce(field("t.profit"), 0)
+                        select(avg(field(name("t", "forecast_profit"), Double.class))).from(DEPARTMENT.as("t"))
+                                .where(coalesce(field(name("t", "profit")), 0)
                                         .gt(coalesce(DEPARTMENT.PROFIT, 0))
-                                        .and(field("t.forecast_profit").isNotNull())))
+                                        .and(field(name("t", "forecast_profit")).isNotNull())))
                         .as("fill_forecast_profit"))
                 .from(DEPARTMENT)
                 .orderBy(DEPARTMENT.DEPARTMENT_ID)
