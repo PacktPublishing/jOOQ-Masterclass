@@ -119,6 +119,16 @@ public class ClassicModelsRepository {
                 .orderBy(field(name("t", "required_date")).desc())
                 .limit(1)
                 .fetchOne();
+        
+        var firstInGroup = field(lead(ORDER.STATUS).over().orderBy(ORDER.REQUIRED_DATE.desc())
+                        .isDistinctFrom(ORDER.STATUS));
+        ctx.select(ORDER.CUSTOMER_NUMBER, ORDER.ORDER_DATE, ORDER.REQUIRED_DATE, ORDER.STATUS,
+                firstInGroup.as("first_in_group"))
+                .from(ORDER)
+                .qualify(firstInGroup.isTrue())
+                .orderBy(field(name("required_date")).desc())
+                .limit(1)
+                .fetchOne();
     }
     
     // Calculating Funnel drop-off metrics
