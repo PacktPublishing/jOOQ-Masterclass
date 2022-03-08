@@ -59,7 +59,7 @@ public class ClassicModelsRepository {
         System.out.println("Result:\n" + result);
     }
 
-    // XML_AGG()
+    // XMLAGG()
     public void xmlAggCustomer() {
 
         String result = ctx.select(xmlagg(
