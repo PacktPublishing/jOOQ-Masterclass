@@ -86,12 +86,12 @@ public class ClassicModelsRepository {
 
     public void avgOfSumOfSales() {
 
-        ctx.select(field("t.en"), avg(field("t.ss", Double.class)).as("sale_avg"))
+        ctx.select(field(name("t", "en")), avg(field(name("t", "ss"), Double.class)).as("sale_avg"))
                 .from(ctx.select(SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR, sum(SALE.SALE_))
                         .from(SALE)
                         .groupBy(SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR)
                         .asTable("t", "en", "fy", "ss"))
-                .groupBy(field("t.en"))
+                .groupBy(field(name("t", "en")))
                 .fetch();
     }
 
@@ -227,7 +227,7 @@ public class ClassicModelsRepository {
         ctx.select(
                 listAgg(EMPLOYEE.FIRST_NAME).withinGroupOrderBy(EMPLOYEE.SALARY)
                         .filterWhere(EMPLOYEE.SALARY.gt(80000))
-                        .as("list_agg"))
+                        .as("listagg"))
                 .from(EMPLOYEE)
                 .fetch();
     }
