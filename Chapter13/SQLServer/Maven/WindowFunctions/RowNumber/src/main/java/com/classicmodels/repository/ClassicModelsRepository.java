@@ -42,7 +42,7 @@ public class ClassicModelsRepository {
 
     public void medianProductQuantityInStock() {
 
-        Field<Short> x = PRODUCT.QUANTITY_IN_STOCK.as("x");
+        Field<Integer> x = PRODUCT.QUANTITY_IN_STOCK.as("x");
         Field<Double> y = val(2.0d).mul(rowNumber().over().orderBy(PRODUCT.QUANTITY_IN_STOCK))
                 .minus(count().over()).as("y");
 
@@ -84,6 +84,12 @@ public class ClassicModelsRepository {
                 .from(select(PRODUCT.PRODUCT_NAME,
                         rowNumber().over().orderBy(PRODUCT.PRODUCT_NAME).as("seq")).from(PRODUCT))
                 .where(field("seq").mod(10).eq(0))
+                .fetch();
+        
+        // or, via QUALIFY
+        ctx.select(PRODUCT.PRODUCT_NAME)
+                .from(PRODUCT)
+                .qualify(rowNumber().over().orderBy(PRODUCT.PRODUCT_NAME).mod(10).eq(0))
                 .fetch();
     }
 }
