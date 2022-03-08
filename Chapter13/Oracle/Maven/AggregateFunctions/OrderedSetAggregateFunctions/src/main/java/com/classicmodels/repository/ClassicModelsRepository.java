@@ -57,6 +57,15 @@ public class ClassicModelsRepository {
                                 .withinGroupOrderBy(SALE.FISCAL_YEAR.desc(), SALE.SALE_))
                                 .from(SALE)))
                 .fetch();
+        
+        // same thing but using QUALIFY        
+        ctx.select(SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR, SALE.SALE_)
+                .from(SALE)
+                .qualify(denseRank().over().orderBy(SALE.FISCAL_YEAR.desc(), SALE.SALE_)
+                        .le(select(denseRank(val(2004), val(10000))
+                                .withinGroupOrderBy(SALE.FISCAL_YEAR.desc(), SALE.SALE_))
+                                .from(SALE)))
+                .fetch();   
     }
 
     // PERCENT_RANK()    
@@ -155,21 +164,21 @@ public class ClassicModelsRepository {
                 .fetch();
     }
 
-    // LIST_AGG()
+    // LISTAGG()
     public void listAggEmployee() {
 
         ctx.select(
-                listAgg(EMPLOYEE.FIRST_NAME).withinGroupOrderBy(EMPLOYEE.SALARY).as("list_agg"))
+                listAgg(EMPLOYEE.FIRST_NAME).withinGroupOrderBy(EMPLOYEE.SALARY).as("listagg"))
                 .from(EMPLOYEE)
                 .fetch();
         
         ctx.select(
-                listAgg(EMPLOYEE.FIRST_NAME, ";").withinGroupOrderBy(EMPLOYEE.SALARY).as("list_agg"))
+                listAgg(EMPLOYEE.FIRST_NAME, ";").withinGroupOrderBy(EMPLOYEE.SALARY).as("listagg"))
                 .from(EMPLOYEE)
                 .fetch();
                 
         String result = ctx.select(
-                listAgg(EMPLOYEE.FIRST_NAME, ",").withinGroupOrderBy(EMPLOYEE.SALARY).as("list_agg"))
+                listAgg(EMPLOYEE.FIRST_NAME, ",").withinGroupOrderBy(EMPLOYEE.SALARY).as("listagg"))
                 .from(EMPLOYEE)
                 .fetchOneInto(String.class);
         System.out.println("Result: " + result);        
@@ -177,7 +186,7 @@ public class ClassicModelsRepository {
         ctx.select(
                 listAgg(EMPLOYEE.FIRST_NAME).withinGroupOrderBy(EMPLOYEE.SALARY)
                         .filterWhere(EMPLOYEE.SALARY.gt(80000))
-                        .as("list_agg"))
+                        .as("listagg"))
                 .from(EMPLOYEE)
                 .fetch();
 
