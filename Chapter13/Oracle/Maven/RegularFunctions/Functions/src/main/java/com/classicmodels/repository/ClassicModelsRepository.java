@@ -42,6 +42,7 @@ import static org.jooq.impl.DSL.localDate;
 import static org.jooq.impl.DSL.localDateAdd;
 import static org.jooq.impl.DSL.lower;
 import static org.jooq.impl.DSL.month;
+import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.nullif;
 import static org.jooq.impl.DSL.nvl;
 import static org.jooq.impl.DSL.nvl2;
@@ -158,10 +159,10 @@ public class ClassicModelsRepository {
         ctx.select(DEPARTMENT.NAME, DEPARTMENT.OFFICE_CODE, DEPARTMENT.FORECAST_PROFIT,
                 DEPARTMENT.PROFIT,
                 coalesce(DEPARTMENT.FORECAST_PROFIT,
-                        select(avg(field("T.FORECAST_PROFIT", Double.class))).from(DEPARTMENT.as("T"))
-                                .where(coalesce(field("T.PROFIT"), 0)
+                        select(avg(field(name("T", "FORECAST_PROFIT"), Double.class))).from(DEPARTMENT.as("T"))
+                                .where(coalesce(field(name("T", "PROFIT")), 0)
                                         .gt(coalesce(DEPARTMENT.PROFIT, 0))
-                                        .and(field("T.FORECAST_PROFIT").isNotNull())))
+                                        .and(field(name("T", "FORECAST_PROFIT")).isNotNull())))
                         .as("FILL_FORECAST_PROFIT"))
                 .from(DEPARTMENT)
                 .orderBy(DEPARTMENT.DEPARTMENT_ID)
@@ -246,7 +247,7 @@ public class ClassicModelsRepository {
                 .fetch();
 
         ctx.select(ORDERDETAIL.PRODUCT_ID, ORDERDETAIL.QUANTITY_ORDERED,
-                iif(ORDERDETAIL.QUANTITY_ORDERED.gt(45L), "MORE", "LESS").as("45"))
+                iif(ORDERDETAIL.QUANTITY_ORDERED.gt(45), "MORE", "LESS").as("45"))
                 .from(ORDERDETAIL)
                 .fetch();
 
