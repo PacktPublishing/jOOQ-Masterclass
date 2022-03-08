@@ -21,6 +21,7 @@ import static org.jooq.impl.DSL.jsonEntry;
 import static org.jooq.impl.DSL.jsonObject;
 import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.min;
+import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.rowNumber;
 import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.selectOne;
@@ -56,7 +57,7 @@ public class ClassicModelsRepository {
         System.out.println("Result:\n" + result);
     }
 
-    // XML_AGG()
+    // XMLAGG()
     public void xmlAggCustomer() {
 
         String result = ctx.select(xmlagg(
@@ -169,26 +170,24 @@ public class ClassicModelsRepository {
                                 .and(t.ORDER_DATE.gt(ORDER.ORDER_DATE))))
                 .where(ORDER.ORDER_DATE.lt(LocalDate.of(2004, 6, 6))).fetch();
 
-        // using ROW_NUMBER()        
-        ctx.select(field("R.CUSTOMER_NUMBER"), field("R.ORDER_DATE"),
-                field("R.SHIPPED_DATE"), field("R.STATUS"))
+        // using ROW_NUMBER()            
+        ctx.select(field(name("R", "CUSTOMER_NUMBER")), field(name("R", "ORDER_DATE")),
+                field(name("R", "SHIPPED_DATE")), field(name("R", "STATUS")))
                 .from(select(ORDER.CUSTOMER_NUMBER, ORDER.ORDER_DATE,
                         ORDER.SHIPPED_DATE, ORDER.STATUS,
                         rowNumber().over().partitionBy(ORDER.CUSTOMER_NUMBER)
                                 .orderBy(ORDER.ORDER_DATE.desc()).as("RN"))
                         .from(ORDER)
                         .where(ORDER.ORDER_DATE.lt(LocalDate.of(2004, 6, 6))).asTable("R"))
-                .where(field("R.RN").eq(1))
+                .where(field(name("R", "RN")).eq(1))
                 .fetch();
 
-        /* EXPERIMENTAL
         ctx.select(ORDER.CUSTOMER_NUMBER, ORDER.ORDER_DATE, ORDER.SHIPPED_DATE, ORDER.STATUS)
                 .from(ORDER)
                 .where(ORDER.ORDER_DATE.lt(LocalDate.of(2004, 6, 6)))
                 .qualify(rowNumber().over().partitionBy(ORDER.CUSTOMER_NUMBER)
                         .orderBy(ORDER.ORDER_DATE.desc()).eq(1))
-                .fetch();
-         */
+                .fetch();        
         
         // using ORACLE's KEEP        
         ctx.select(ORDER.CUSTOMER_NUMBER,
