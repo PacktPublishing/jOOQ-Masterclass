@@ -28,6 +28,7 @@ public class ClassicModelsRepository {
 
     /*  The PERCENT_RANK() window function calculates the percentile  
         ((rank - 1) / (total_rows - 1)) rankings of rows in a result set. */
+    
     public void percentileRankEmployeesBySalary() {
 
         ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY,
@@ -38,7 +39,7 @@ public class ClassicModelsRepository {
         // emulate percentRank() via rank()        
         ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY, round(case_()
                 .when(count().over().orderBy(EMPLOYEE.SALARY).rangeBetweenUnboundedPreceding()
-                        .andUnboundedFollowing().eq(1), cast(0, Double.class))
+                        .andUnboundedFollowing().eq(1), 0.0)
                 .else_((cast(rank().over().orderBy(EMPLOYEE.SALARY), Double.class).minus(1d))
                         .divide((count().over().orderBy(EMPLOYEE.SALARY).rangeBetweenUnboundedPreceding()
                                 .andUnboundedFollowing()).minus(1d))), 2).as("percentile_rank"))
@@ -61,7 +62,7 @@ public class ClassicModelsRepository {
         ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY, round(case_()
                 .when(count().over().partitionBy(OFFICE.OFFICE_CODE)
                         .orderBy(EMPLOYEE.SALARY).rangeBetweenUnboundedPreceding()
-                        .andUnboundedFollowing().eq(1), cast(0, Double.class))
+                        .andUnboundedFollowing().eq(1), 0.0)
                 .else_((cast(rank().over().partitionBy(OFFICE.OFFICE_CODE)
                         .orderBy(EMPLOYEE.SALARY), Double.class).minus(1d))
                         .divide((count().over().partitionBy(OFFICE.OFFICE_CODE)
