@@ -1,7 +1,6 @@
 package com.classicmodels.repository;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import jooq.generated.tables.Employee;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Office.OFFICE;
@@ -77,8 +76,8 @@ public class ClassicModelsRepository {
                 .where(ORDERDETAIL.ORDER_ID
                         .in(select(ORDERDETAIL.ORDER_ID).from(ORDERDETAIL)
                                 .groupBy(ORDERDETAIL.ORDER_ID)
-                                .having(count().eq(1).and(min(ORDERDETAIL.QUANTITY_ORDERED).lt(20L))
-                                        .or(count().gt(1).and(min(ORDERDETAIL.QUANTITY_ORDERED).gt(40L))))
+                                .having(count().eq(1).and(min(ORDERDETAIL.QUANTITY_ORDERED).lt(20))
+                                        .or(count().gt(1).and(min(ORDERDETAIL.QUANTITY_ORDERED).gt(40))))
                         )).fetch();
     }
 
@@ -157,18 +156,18 @@ public class ClassicModelsRepository {
 
         // pivot via FILTER        
         ctx.select(SALE.FISCAL_YEAR,
-                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(BigInteger.valueOf(1))).as("Jan_sales"),
-                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(BigInteger.valueOf(2))).as("Feb_sales"),
-                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(BigInteger.valueOf(3))).as("Mar_sales"),
-                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(BigInteger.valueOf(4))).as("Apr_sales"),
-                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(BigInteger.valueOf(5))).as("May_sales"),
-                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(BigInteger.valueOf(6))).as("Jun_sales"),
-                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(BigInteger.valueOf(7))).as("Jul_sales"),
-                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(BigInteger.valueOf(8))).as("Aug_sales"),
-                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(BigInteger.valueOf(9))).as("Sep_sales"),
-                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(BigInteger.valueOf(10))).as("Oct_sales"),
-                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(BigInteger.valueOf(11))).as("Nov_sales"),
-                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(BigInteger.valueOf(12))).as("Dec_sales"))
+                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(1)).as("Jan_sales"),
+                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(2)).as("Feb_sales"),
+                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(3)).as("Mar_sales"),
+                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(4)).as("Apr_sales"),
+                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(5)).as("May_sales"),
+                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(6)).as("Jun_sales"),
+                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(7)).as("Jul_sales"),
+                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(8)).as("Aug_sales"),
+                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(9)).as("Sep_sales"),
+                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(10)).as("Oct_sales"),
+                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(11)).as("Nov_sales"),
+                sum(SALE.SALE_).filterWhere(SALE.FISCAL_MONTH.eq(12)).as("Dec_sales"))
                 .from(SALE)
                 .groupBy(SALE.FISCAL_YEAR)
                 .fetch();
@@ -203,7 +202,7 @@ public class ClassicModelsRepository {
         ctx.select(
                 listAgg(EMPLOYEE.FIRST_NAME).withinGroupOrderBy(EMPLOYEE.SALARY)
                         .filterWhere(EMPLOYEE.SALARY.gt(80000))
-                        .as("list_agg"))
+                        .as("listagg"))
                 .from(EMPLOYEE)
                 .fetch();
     }
