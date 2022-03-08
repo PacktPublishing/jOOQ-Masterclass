@@ -1,7 +1,6 @@
 package com.classicmodels.repository;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import static jooq.generated.tables.DailyActivity.DAILY_ACTIVITY;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Product.PRODUCT;
@@ -259,7 +258,7 @@ public class ClassicModelsRepository {
     public void bitsOperationsSample() {
 
         ctx.selectFrom(SALE)
-                .where(SALE.FISCAL_YEAR.bitXor(BigInteger.valueOf(2004)).eq(BigInteger.ZERO))
+                .where(SALE.FISCAL_YEAR.bitXor(2004).eq(0))
                 .fetch();
 
         /*
