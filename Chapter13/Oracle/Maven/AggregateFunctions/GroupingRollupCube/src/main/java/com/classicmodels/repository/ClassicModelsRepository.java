@@ -14,7 +14,7 @@ import static org.jooq.impl.DSL.rollup;
 import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.sum;
 import static org.jooq.impl.SQLDataType.BIGINT;
-import static org.jooq.impl.SQLDataType.DECIMAL_INTEGER;
+import static org.jooq.impl.SQLDataType.INTEGER;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,7 +42,7 @@ public class ClassicModelsRepository {
                 .fetch();
 
         // aggregated data for the previous two grouping sets 
-        ctx.select(SALE.EMPLOYEE_NUMBER, castNull(DECIMAL_INTEGER).as("fiscal_year"), sum(SALE.SALE_))
+        ctx.select(SALE.EMPLOYEE_NUMBER, castNull(INTEGER).as("fiscal_year"), sum(SALE.SALE_))
                 .from(SALE)
                 .groupBy(SALE.EMPLOYEE_NUMBER)
                 .unionAll(select(castNull(BIGINT).as("employee_number"), SALE.FISCAL_YEAR, sum(SALE.SALE_))
