@@ -18,6 +18,7 @@ import static org.jooq.impl.DSL.exp;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.ln;
 import static org.jooq.impl.DSL.max;
+import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.one;
 import static org.jooq.impl.DSL.product;
 import static org.jooq.impl.DSL.round;
@@ -96,10 +97,10 @@ public class ClassicModelsRepository {
                 select(avg(DAILY_ACTIVITY.VISITORS).as("mean"),
                         stddevSamp(DAILY_ACTIVITY.VISITORS).as("sd")).from(DAILY_ACTIVITY))
                 .select(DAILY_ACTIVITY.DAY_DATE,
-                        abs(DAILY_ACTIVITY.SALES.minus(field("sales_stats.mean")))
-                                .divide(field("sales_stats.sd", Float.class)).as("z_score_sales"),
-                        abs(DAILY_ACTIVITY.VISITORS.minus(field("visitors_stats.mean")))
-                                .divide(field("visitors_stats.sd", Float.class)).as("z_score_visitors"))
+                        abs(DAILY_ACTIVITY.SALES.minus(field(name("sales_stats", "mean"))))
+                                .divide(field(name("sales_stats", "sd"), Float.class)).as("z_score_sales"),
+                        abs(DAILY_ACTIVITY.VISITORS.minus(field(name("visitors_stats", "mean"))))
+                                .divide(field(name("visitors_stats", "sd"), Float.class)).as("z_score_visitors"))
                 .from(table("sales_stats"), table("visitors_stats"), DAILY_ACTIVITY)
                 .fetch();
     }
