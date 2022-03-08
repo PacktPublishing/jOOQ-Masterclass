@@ -45,7 +45,7 @@ public class ClassicModelsRepository {
                         .withinGroupOrderBy(SALE.FISCAL_YEAR.desc(), SALE.SALE_).as("sales_rank"))
                 .from(SALE)
                 .fetch();
-
+        
         ctx.select().from(
                 select(SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR, SALE.SALE_,
                         denseRank().over()
@@ -56,6 +56,15 @@ public class ClassicModelsRepository {
                                 .withinGroupOrderBy(SALE.FISCAL_YEAR.desc(), SALE.SALE_))
                                 .from(SALE)))
                 .fetch();
+
+        // same thing but using QUALIFY        
+        ctx.select(SALE.EMPLOYEE_NUMBER, SALE.FISCAL_YEAR, SALE.SALE_)
+                .from(SALE)
+                .qualify(denseRank().over().orderBy(SALE.FISCAL_YEAR.desc(), SALE.SALE_)
+                        .le(select(denseRank(val(2004), val(10000))
+                                .withinGroupOrderBy(SALE.FISCAL_YEAR.desc(), SALE.SALE_))
+                                .from(SALE)))
+                .fetch();        
     }
 
     // PERCENT_RANK()    
@@ -122,25 +131,25 @@ public class ClassicModelsRepository {
     public void listAggEmployee() {
 
         ctx.select(
-                listAgg(EMPLOYEE.FIRST_NAME).withinGroupOrderBy(EMPLOYEE.SALARY).as("list_agg"))
+                listAgg(EMPLOYEE.FIRST_NAME).withinGroupOrderBy(EMPLOYEE.SALARY).as("listagg"))
                 .from(EMPLOYEE)
                 .fetch();
-        
+
         ctx.select(
-                listAgg(EMPLOYEE.FIRST_NAME, ";").withinGroupOrderBy(EMPLOYEE.SALARY).as("list_agg"))
+                listAgg(EMPLOYEE.FIRST_NAME, ";").withinGroupOrderBy(EMPLOYEE.SALARY).as("listagg"))
                 .from(EMPLOYEE)
                 .fetch();
-        
+
         String result = ctx.select(
-                listAgg(EMPLOYEE.FIRST_NAME, ",").withinGroupOrderBy(EMPLOYEE.SALARY).as("list_agg"))
+                listAgg(EMPLOYEE.FIRST_NAME, ",").withinGroupOrderBy(EMPLOYEE.SALARY).as("listagg"))
                 .from(EMPLOYEE)
                 .fetchOneInto(String.class);
-        System.out.println("Result: " + result);        
+        System.out.println("Result: " + result);
 
         ctx.select(
                 listAgg(EMPLOYEE.FIRST_NAME).withinGroupOrderBy(EMPLOYEE.SALARY)
                         .filterWhere(EMPLOYEE.SALARY.gt(80000))
-                        .as("list_agg"))
+                        .as("listagg"))
                 .from(EMPLOYEE)
                 .fetch();
 
@@ -177,7 +186,7 @@ public class ClassicModelsRepository {
                 .from(ORDERDETAIL)
                 .fetch();
     }
-    
+
     public void modeFunctionsVs() {
 
         // mode() aggregation function (no explicit ordering)
@@ -200,7 +209,7 @@ public class ClassicModelsRepository {
                 .having(count().ge(all(select(count())
                         .from(SALE).groupBy(SALE.FISCAL_MONTH))))
                 .fetch();
-        
+
         // emulation of mode that returns all results (2)
         ctx.select(field("fiscal_month")).from(
                 select(SALE.FISCAL_MONTH, count(SALE.FISCAL_MONTH).as("cnt1"))
@@ -211,7 +220,7 @@ public class ClassicModelsRepository {
                                 .from(select(count(SALE.FISCAL_MONTH).as("cnt2"))
                                         .from(SALE).groupBy(SALE.FISCAL_MONTH))))
                 .fetch();
-                
+
         // emulation of mode using a percentage of the total number of occurrences
         ctx.select(avg(ORDERDETAIL.QUANTITY_ORDERED))
                 .from(ORDERDETAIL)
