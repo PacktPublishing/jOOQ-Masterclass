@@ -28,6 +28,7 @@ public class ClassicModelsRepository {
     
         - LAST_VALUE() returns the value of the specified expression with 
           respect to the last row in the window frame. */
+    
     public void cheapestAndMostExpensiveProduct() {
 
         ctx.select(PRODUCT.PRODUCT_NAME, PRODUCT.BUY_PRICE,
@@ -61,6 +62,13 @@ public class ClassicModelsRepository {
                         .from(PRODUCT))
                 .where(field(name("second_cheapest")).eq(2))
                 .fetch();
+        
+        // using QUALIFY
+        var secondCheapest = rowNumber().over().orderBy(PRODUCT.BUY_PRICE);
+        ctx.select(PRODUCT.PRODUCT_NAME, PRODUCT.BUY_PRICE, secondCheapest.as("second_cheapest"))
+                        .from(PRODUCT)
+                .qualify(secondCheapest.eq(2))
+                .fetch();
     }
 
     public void secondMostExpensiveProductByProductLine() {
@@ -73,6 +81,15 @@ public class ClassicModelsRepository {
                                 .orderBy(PRODUCT.BUY_PRICE.desc()).as("second_most_expensive"))
                         .from(PRODUCT))
                 .where(field(name("second_most_expensive")).eq(2))
+                .fetch();
+        
+        // using QUALIFY
+        var secondMostExpensive = rowNumber().over().partitionBy(PRODUCT.PRODUCT_LINE)
+                                .orderBy(PRODUCT.BUY_PRICE.desc());
+        ctx.select(PRODUCT.PRODUCT_LINE, PRODUCT.PRODUCT_NAME, PRODUCT.BUY_PRICE,
+                        secondMostExpensive.as("second_most_expensive"))
+                        .from(PRODUCT)
+                .qualify(secondMostExpensive.eq(2))
                 .fetch();
     }
 }
