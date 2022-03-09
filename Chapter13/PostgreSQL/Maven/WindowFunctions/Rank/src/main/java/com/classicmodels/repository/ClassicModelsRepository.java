@@ -5,8 +5,11 @@ import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.count;
+import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.month;
+import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.rank;
+import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.sum;
 import static org.jooq.impl.DSL.year;
 import org.springframework.stereotype.Repository;
@@ -76,6 +79,17 @@ public class ClassicModelsRepository {
                 rank().over().partitionBy(PRODUCT.PRODUCT_VENDOR, PRODUCT.PRODUCT_SCALE)
                         .orderBy(PRODUCT.PRODUCT_NAME))
                 .from(PRODUCT)
+                .fetch();
+    }
+
+    public void  rankWithinTop3Sells() {
+        
+        ctx.select(field(name("t", "fiscal_year")), field(name("t", "sum_price")),
+                rank().over().orderBy(field(name("t", "sum_price")).desc()))
+                .from(select(SALE.FISCAL_YEAR, sum(SALE.SALE_))
+                        .from(SALE)
+                        .groupBy(SALE.FISCAL_YEAR).asTable("t", "fiscal_year", "sum_price")
+                ).qualify(rank().over().orderBy(field(name("t", "sum_price")).desc()).le(3))
                 .fetch();
     }
 }
