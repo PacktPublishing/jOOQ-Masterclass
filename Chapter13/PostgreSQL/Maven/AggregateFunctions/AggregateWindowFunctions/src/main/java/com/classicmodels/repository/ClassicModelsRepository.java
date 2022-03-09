@@ -85,6 +85,17 @@ public class ClassicModelsRepository {
                                 .andUnboundedFollowing())), 2).as("em_cume_dist"))
                 .from(PRODUCT)
                 .fetch();
+
+        // example 5 - How many other employees have the same salary as me?        
+        ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME,
+                EMPLOYEE.JOB_TITLE, EMPLOYEE.SALARY,
+                count().over().partitionBy(EMPLOYEE.JOB_TITLE).orderBy(EMPLOYEE.SALARY)
+                        .groupsBetweenCurrentRow().andCurrentRow()
+                        .excludeCurrentRow().as("count_of_equal"))
+                .from(EMPLOYEE)
+                .orderBy(EMPLOYEE.JOB_TITLE, EMPLOYEE.SALARY)
+                .fetch();
+
     }
 
     // MIN(), MAX()
@@ -113,7 +124,7 @@ public class ClassicModelsRepository {
                         .rowsPreceding(2).as("avg_prec_3_prices"))
                 .from(ORDERDETAIL)
                 .fetch();
-        
+
         ctx.select(EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.JOB_TITLE, EMPLOYEE.SALARY,
                 avg(EMPLOYEE.SALARY)
                         .over()
