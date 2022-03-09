@@ -85,5 +85,11 @@ public class ClassicModelsRepository {
                         rowNumber().over().orderBy(PRODUCT.PRODUCT_NAME).as("seq")).from(PRODUCT))
                 .where(field(name("seq")).mod(10).eq(0))
                 .fetch();
+        
+        // or, via QUALIFY
+        ctx.select(PRODUCT.PRODUCT_NAME)
+                .from(PRODUCT)
+                .qualify(rowNumber().over().orderBy(PRODUCT.PRODUCT_NAME).mod(10).eq(0))
+                .fetch();
     }
 }
