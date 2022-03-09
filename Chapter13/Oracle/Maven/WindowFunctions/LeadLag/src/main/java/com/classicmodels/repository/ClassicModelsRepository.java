@@ -88,7 +88,7 @@ public class ClassicModelsRepository {
                 val(100).mul((SALE.SALE_.minus(lag(SALE.SALE_, 1).over().orderBy(SALE.FISCAL_MONTH)))
                         .divide(lag(SALE.SALE_, 1).over().orderBy(SALE.FISCAL_MONTH))).concat("%").as("MOM"))
                 .from(SALE)
-                .where(SALE.FISCAL_YEAR.eq(BigInteger.valueOf(2004)))                
+                .where(SALE.FISCAL_YEAR.eq(2004)) 
                 .orderBy(SALE.FISCAL_MONTH)
                 .fetch();
     }
@@ -117,6 +117,16 @@ public class ClassicModelsRepository {
                         .from(ORDER).asTable("T")
         ).where(field(name("T", "FIRST_IN_GROUP")).isTrue())
                 .orderBy(field(name("T", "REQUIRED_DATE")).desc())
+                .limit(1)
+                .fetchOne();
+        
+        var firstInGroup = field(lead(ORDER.STATUS).over().orderBy(ORDER.REQUIRED_DATE.desc())
+                        .isDistinctFrom(ORDER.STATUS));
+        ctx.select(ORDER.CUSTOMER_NUMBER, ORDER.ORDER_DATE, ORDER.REQUIRED_DATE, ORDER.STATUS,
+                firstInGroup.as("FIRST_IN_GROUP"))
+                .from(ORDER)
+                .qualify(firstInGroup.isTrue())
+                .orderBy(field(name("REQUIRED_DATE")).desc())
                 .limit(1)
                 .fetchOne();
     }
