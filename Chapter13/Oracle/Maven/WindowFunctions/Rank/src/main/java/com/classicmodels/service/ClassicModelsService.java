@@ -20,5 +20,6 @@ public class ClassicModelsService {
        classicModelsRepository.saleRankByNumberOfSales();
        classicModelsRepository.orderRankByOrderMonthDay();
        classicModelsRepository.productRankByVendorAndScale();
+       classicModelsRepository.rankWithinTop3Sells();
     }
 }
