@@ -1,6 +1,7 @@
 package com.classicmodels.repository;
 
 import static jooq.generated.tables.Product.PRODUCT;
+import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.firstValue;
 import static org.jooq.impl.DSL.lastValue;
@@ -46,6 +47,17 @@ public class ClassicModelsRepository {
                         .rangeBetweenUnboundedPreceding().andUnboundedFollowing().as("most_expensive"))
                 .from(PRODUCT)
                 .fetch();
+    }
+
+    public void saleOfAnImmediatelyBetterSalePerFiscalYear() {
+       
+        ctx.select(SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.SALE_,
+                firstValue(SALE.SALE_).over().partitionBy(SALE.FISCAL_YEAR).orderBy(SALE.SALE_)
+                        .groupsBetweenFollowing(1).andFollowing(1).as("sale_of_better"))
+                .from(SALE)
+                .orderBy(SALE.FISCAL_YEAR, SALE.SALE_)
+                .fetch();
+
     }
 
     public void secondCheapestProduct() {

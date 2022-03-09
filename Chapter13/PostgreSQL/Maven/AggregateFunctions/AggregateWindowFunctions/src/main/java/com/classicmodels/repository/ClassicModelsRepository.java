@@ -7,6 +7,7 @@ import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import static jooq.generated.tables.Product.PRODUCT;
+import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import org.jooq.Field;
 import static org.jooq.impl.DSL.avg;
@@ -14,6 +15,7 @@ import static org.jooq.impl.DSL.cast;
 import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.cumeDist;
 import static org.jooq.impl.DSL.field;
+import static org.jooq.impl.DSL.firstValue;
 import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.median;
 import static org.jooq.impl.DSL.name;
@@ -95,7 +97,14 @@ public class ClassicModelsRepository {
                 .from(EMPLOYEE)
                 .orderBy(EMPLOYEE.JOB_TITLE, EMPLOYEE.SALARY)
                 .fetch();
-
+  
+        // example 6 - how many sales are better by 5000 or less
+        ctx.select(SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.SALE_,
+                count().over().partitionBy(SALE.FISCAL_YEAR).orderBy(SALE.SALE_)
+                        .rangeBetweenCurrentRow().andFollowing(5000).excludeGroup().as("count_of_better"))
+                .from(SALE)
+                .orderBy(SALE.FISCAL_YEAR, SALE.SALE_)
+                .fetch();
     }
 
     // MIN(), MAX()

@@ -16,7 +16,8 @@ public class ClassicModelsService {
 
         classicModelsRepository.cheapestAndMostExpensiveProduct();
         classicModelsRepository.cheapestAndMostExpensiveProductByProductLine();
+        classicModelsRepository.saleOfAnImmediatelyBetterSalePerFiscalYear();
         classicModelsRepository.secondCheapestProduct();
-        classicModelsRepository.secondMostExpensiveProductByProductLine();
+        classicModelsRepository.secondMostExpensiveProductByProductLine();        
     }
 }
