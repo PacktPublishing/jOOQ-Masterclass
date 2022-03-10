@@ -1,6 +1,5 @@
 package com.classicmodels.repository;
 
-import java.math.BigInteger;
 import java.time.LocalDateTime;
 import static jooq.generated.tables.BankTransaction.BANK_TRANSACTION;
 import static jooq.generated.tables.Employee.EMPLOYEE;
