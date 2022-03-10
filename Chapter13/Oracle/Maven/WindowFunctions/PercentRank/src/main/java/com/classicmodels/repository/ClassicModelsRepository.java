@@ -31,7 +31,7 @@ public class ClassicModelsRepository {
     public void percentileRankEmployeesBySalary() {
 
         ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY,
-                round(percentRank().over().orderBy(EMPLOYEE.SALARY), 2).as("percentile_rank"))
+                round(percentRank().over().orderBy(EMPLOYEE.SALARY), 2).as("PERCENTILE_RANK"))
                 .from(EMPLOYEE)
                 .fetch();
 
@@ -41,7 +41,7 @@ public class ClassicModelsRepository {
                         .andUnboundedFollowing().eq(1), cast(0, Double.class))
                 .else_((cast(rank().over().orderBy(EMPLOYEE.SALARY), Double.class).minus(1d))
                         .divide((count().over().orderBy(EMPLOYEE.SALARY).rangeBetweenUnboundedPreceding()
-                                .andUnboundedFollowing()).minus(1d))), 2).as("percentile_rank"))
+                                .andUnboundedFollowing()).minus(1d))), 2).as("PERCENTILE_RANK"))
                 .from(EMPLOYEE)
                 .fetch();
     }
@@ -51,7 +51,7 @@ public class ClassicModelsRepository {
         ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY,
                 OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.COUNTRY,
                 round(percentRank().over().partitionBy(OFFICE.OFFICE_CODE)
-                        .orderBy(EMPLOYEE.SALARY).mul(100), 2).concat("%").as("percentile_rank"))
+                        .orderBy(EMPLOYEE.SALARY).mul(100), 2).concat("%").as("PERCENTILE_RANK"))
                 .from(EMPLOYEE)
                 .innerJoin(OFFICE)
                 .on(EMPLOYEE.OFFICE_CODE.eq(OFFICE.OFFICE_CODE))
@@ -66,7 +66,7 @@ public class ClassicModelsRepository {
                         .orderBy(EMPLOYEE.SALARY), Double.class).minus(1d))
                         .divide((count().over().partitionBy(OFFICE.OFFICE_CODE)
                                 .orderBy(EMPLOYEE.SALARY).rangeBetweenUnboundedPreceding()
-                                .andUnboundedFollowing()).minus(1d))), 2).as("percentile_rank"))
+                                .andUnboundedFollowing()).minus(1d))), 2).as("PERCENTILE_RANK"))
                 .from(EMPLOYEE)
                 .innerJoin(OFFICE)
                 .on(EMPLOYEE.OFFICE_CODE.eq(OFFICE.OFFICE_CODE))

@@ -58,7 +58,7 @@ public class ClassicModelsRepository {
 
         ctx.select(OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.COUNTRY,
                 EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY,
-                lead(EMPLOYEE.SALARY.coerce(Integer.class), 1, 0).over().partitionBy(OFFICE.OFFICE_CODE)
+                lead(EMPLOYEE.SALARY, 1, 0).over().partitionBy(OFFICE.OFFICE_CODE)
                         .orderBy(EMPLOYEE.SALARY).as("next_salary"))
                 .from(OFFICE)
                 .innerJoin(EMPLOYEE)
@@ -97,9 +97,9 @@ public class ClassicModelsRepository {
 
         ctx.select(OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.COUNTRY,
                 EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY,
-                lead(EMPLOYEE.SALARY.coerce(Integer.class), 1, 0).over().partitionBy(OFFICE.OFFICE_CODE)
+                lead(EMPLOYEE.SALARY, 1, 0).over().partitionBy(OFFICE.OFFICE_CODE)
                         .orderBy(EMPLOYEE.SALARY.desc().nullsLast()).as("next_salary"),
-                lag(EMPLOYEE.SALARY.coerce(Integer.class), 1, 0).over().partitionBy(OFFICE.OFFICE_CODE)
+                lag(EMPLOYEE.SALARY, 1, 0).over().partitionBy(OFFICE.OFFICE_CODE)
                         .orderBy(EMPLOYEE.SALARY.desc().nullsLast()).as("prev_salary"))
                 .from(OFFICE)
                 .innerJoin(EMPLOYEE)
