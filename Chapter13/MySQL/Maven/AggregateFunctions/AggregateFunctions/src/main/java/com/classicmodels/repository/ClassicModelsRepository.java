@@ -16,6 +16,7 @@ import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.every;
 import static org.jooq.impl.DSL.exp;
 import static org.jooq.impl.DSL.field;
+import static org.jooq.impl.DSL.inline;
 import static org.jooq.impl.DSL.ln;
 import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.name;
@@ -155,7 +156,7 @@ public class ClassicModelsRepository {
 
     public void mySqlConcatws() {
 
-        ctx.select(aggregate("concat_ws", String.class, val(" "), EMPLOYEE.FIRST_NAME,
+        ctx.select(aggregate("concat_ws", String.class, inline(" "), EMPLOYEE.FIRST_NAME,
                 EMPLOYEE.LAST_NAME).as("employee"))
                 .from(EMPLOYEE)
                 .fetch();

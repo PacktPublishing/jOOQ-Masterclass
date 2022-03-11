@@ -3,6 +3,7 @@ package com.classicmodels.repository;
 import java.math.BigDecimal;
 import static jooq.generated.tables.DailyActivity.DAILY_ACTIVITY;
 import static jooq.generated.tables.Employee.EMPLOYEE;
+import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
@@ -14,6 +15,8 @@ import static org.jooq.impl.DSL.boolAnd;
 import static org.jooq.impl.DSL.boolOr;
 import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.countDistinct;
+import static org.jooq.impl.DSL.covarPop;
+import static org.jooq.impl.DSL.covarSamp;
 import static org.jooq.impl.DSL.every;
 import static org.jooq.impl.DSL.exp;
 import static org.jooq.impl.DSL.field;
@@ -125,11 +128,15 @@ public class ClassicModelsRepository {
         ctx.select(varSamp(x)) // Sample Variance
                 .from(PRODUCT)
                 .fetch();
+        
+        ctx.select(aggregate("variance", Double.class, x).as("sample_variance")) // Sample Variance
+                .from(PRODUCT)
+                .fetch();
 
         ctx.select(varPop(x)) // Population Variance
                 .from(PRODUCT)
                 .fetch();
-
+                   
         ctx.select(SALE.FISCAL_YEAR,
                 varPop(SALE.SALE_).over().partitionBy(SALE.FISCAL_YEAR).orderBy(SALE.FISCAL_YEAR).as("pop"),
                 varSamp(SALE.SALE_).over().partitionBy(SALE.FISCAL_YEAR).orderBy(SALE.FISCAL_YEAR).as("samp"))
@@ -140,6 +147,13 @@ public class ClassicModelsRepository {
     // Covariance
     public void covarianceProductBuyPriceMSRP() {
 
+        ctx.select(PRODUCT.PRODUCT_LINE,
+                covarSamp(PRODUCT.BUY_PRICE, PRODUCT.MSRP).as("covar_samp"), // Covariance of the sample
+                covarPop(PRODUCT.BUY_PRICE, PRODUCT.MSRP).as("covar_pop")) // Covariance of the population
+                .from(PRODUCT)
+                .groupBy(PRODUCT.PRODUCT_LINE)
+                .fetch();
+        
         ctx.select(PRODUCT.PRODUCT_LINE,
                 aggregate("covar_samp", Double.class, PRODUCT.BUY_PRICE, PRODUCT.MSRP).as("covar_samp"), // Covariance of the sample
                 aggregate("covar_pop", Double.class, PRODUCT.BUY_PRICE, PRODUCT.MSRP).as("covar_pop")) // Covariance of the population
@@ -187,7 +201,7 @@ public class ClassicModelsRepository {
         // emulating regrSXY() as SUM(1) * COVAR_POP(expr1, expr2) for non-null pairs
         ctx.select(PRODUCT.PRODUCT_LINE,
                 (sum(val(1))
-                        .mul(aggregate("covar_pop", Double.class, PRODUCT.BUY_PRICE, PRODUCT.MSRP))).as("regr_sxy"))
+                        .mul(covarPop(PRODUCT.BUY_PRICE, PRODUCT.MSRP))).as("regr_sxy"))
                 .from(PRODUCT)
                 .groupBy(PRODUCT.PRODUCT_LINE)
                 .fetch();
@@ -237,6 +251,20 @@ public class ClassicModelsRepository {
                 .fetch();
     }
 
+    public void approxCountDistinct() {
+        
+        ctx.select(countDistinct(ORDERDETAIL.PRODUCT_ID).as("exact_count"),
+                aggregate("approx_count_distinct", Long.class, ORDERDETAIL.PRODUCT_ID).as("approx_count")) // Oracle's APPROX_COUNT_DISTINCT
+                .from(ORDERDETAIL)
+                .fetch();
+        
+        ctx.select(ORDERDETAIL.PRODUCT_ID, 
+                aggregate("approx_count_distinct", Long.class, ORDERDETAIL.ORDER_LINE_NUMBER).as("approx_count")) // Oracle's APPROX_COUNT_DISTINCT
+                .from(ORDERDETAIL)
+                .groupBy(ORDERDETAIL.PRODUCT_ID)
+                .fetch();        
+    }
+    
     // Using bool_and() / bool_or()
     public void boolAndOrSample() {
 

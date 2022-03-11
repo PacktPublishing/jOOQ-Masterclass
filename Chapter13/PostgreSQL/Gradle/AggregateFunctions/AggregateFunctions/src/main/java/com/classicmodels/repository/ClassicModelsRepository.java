@@ -15,6 +15,8 @@ import static org.jooq.impl.DSL.boolOr;
 import static org.jooq.impl.DSL.cast;
 import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.countDistinct;
+import static org.jooq.impl.DSL.covarPop;
+import static org.jooq.impl.DSL.covarSamp;
 import static org.jooq.impl.DSL.every;
 import static org.jooq.impl.DSL.exp;
 import static org.jooq.impl.DSL.field;
@@ -143,6 +145,13 @@ public class ClassicModelsRepository {
     public void covarianceProductBuyPriceMSRP() {
 
         ctx.select(PRODUCT.PRODUCT_LINE,
+                covarSamp(PRODUCT.BUY_PRICE, PRODUCT.MSRP).as("covar_samp"), // Covariance of the sample
+                covarPop(PRODUCT.BUY_PRICE, PRODUCT.MSRP).as("covar_pop")) // Covariance of the population
+                .from(PRODUCT)
+                .groupBy(PRODUCT.PRODUCT_LINE)
+                .fetch();
+        
+        ctx.select(PRODUCT.PRODUCT_LINE,
                 aggregate("covar_samp", Double.class, PRODUCT.BUY_PRICE, PRODUCT.MSRP).as("covar_samp"), // Covariance of the sample
                 aggregate("covar_pop", Double.class, PRODUCT.BUY_PRICE, PRODUCT.MSRP).as("covar_pop")) // Covariance of the population
                 .from(PRODUCT)
@@ -189,7 +198,7 @@ public class ClassicModelsRepository {
         // emulating regrSXY() as SUM(1) * COVAR_POP(expr1, expr2) for non-null pairs
         ctx.select(PRODUCT.PRODUCT_LINE,
                 (sum(val(1))
-                        .mul(aggregate("covar_pop", Double.class, PRODUCT.BUY_PRICE, PRODUCT.MSRP))).as("regr_sxy"))
+                        .mul(covarPop(PRODUCT.BUY_PRICE, PRODUCT.MSRP))).as("regr_sxy"))
                 .from(PRODUCT)
                 .groupBy(PRODUCT.PRODUCT_LINE)
                 .fetch();

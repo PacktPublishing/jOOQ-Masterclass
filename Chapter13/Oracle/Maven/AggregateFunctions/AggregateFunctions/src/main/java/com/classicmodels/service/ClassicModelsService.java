@@ -26,5 +26,6 @@ public class ClassicModelsService {
         classicModelsRepository.medianSample();
         classicModelsRepository.cmgrSale();        
         classicModelsRepository.modeSales();
+        classicModelsRepository.approxCountDistinct();
     }
 }
