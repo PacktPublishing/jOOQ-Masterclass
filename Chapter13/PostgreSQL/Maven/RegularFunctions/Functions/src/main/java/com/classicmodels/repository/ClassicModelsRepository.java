@@ -201,14 +201,14 @@ public class ClassicModelsRepository {
                 .fetch();
 
         // DECODE AND GROUP BY        
-        ctx.select(field("t.d"), count()).from(
+        ctx.select(field(name("t", "d")), count()).from(
                 select(decode(sign(PRODUCT.BUY_PRICE.minus(PRODUCT.MSRP.divide(2))),
                         1, "Buy price larger than half of MSRP",
                         0, "Buy price equal to half of MSRP",
                         -1, "Buy price smaller than half of MSRP").as("d"))
                         .from(PRODUCT)
                         .groupBy(PRODUCT.BUY_PRICE, PRODUCT.MSRP).asTable("t"))
-                .groupBy(field("t.d"))
+                .groupBy(field(name("t", "d")))
                 .fetch();
 
         // DECODE AND SUM        

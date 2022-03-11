@@ -41,6 +41,7 @@ import static org.jooq.impl.DSL.localDate;
 import static org.jooq.impl.DSL.localDateAdd;
 import static org.jooq.impl.DSL.lower;
 import static org.jooq.impl.DSL.month;
+import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.nullif;
 import static org.jooq.impl.DSL.nvl;
 import static org.jooq.impl.DSL.nvl2;
@@ -156,10 +157,10 @@ public class ClassicModelsRepository {
         ctx.select(DEPARTMENT.NAME, DEPARTMENT.OFFICE_CODE, DEPARTMENT.FORECAST_PROFIT,
                 DEPARTMENT.PROFIT,
                 coalesce(DEPARTMENT.FORECAST_PROFIT,
-                        select(avg(field("t.forecast_profit", Double.class))).from(DEPARTMENT.as("t"))
+                        select(avg(field(name("t", "forecast_profit"), Double.class))).from(DEPARTMENT.as("t"))
                                 .where(coalesce(field("t.profit"), 0)
                                         .gt(coalesce(DEPARTMENT.PROFIT, 0))
-                                        .and(field("t.forecast_profit").isNotNull())))
+                                        .and(field(name("t", "forecast_profit")).isNotNull())))
                         .as("fill_forecast_profit"))
                 .from(DEPARTMENT)
                 .orderBy(DEPARTMENT.DEPARTMENT_ID)
@@ -196,22 +197,22 @@ public class ClassicModelsRepository {
                 .fetch();
 
         // DECODE AND GROUP BY        
-        ctx.select(field("t.d"), count()).from(
+        ctx.select(field(name("t", "d")), count()).from(
                 select(decode(sign(PRODUCT.BUY_PRICE.minus(PRODUCT.MSRP.divide(2))),
                         1, "Buy price larger than half of MSRP",
                         0, "Buy price equal to half of MSRP",
                         -1, "Buy price smaller than half of MSRP").as("d"))
                         .from(PRODUCT)
                         .groupBy(PRODUCT.BUY_PRICE, PRODUCT.MSRP).asTable("t"))
-                .groupBy(field("t.d"))
+                .groupBy(field(name("t", "d")))
                 .fetch();
 
         // DECODE AND SUM        
         ctx.select(field("pl"),
-                sum(field("t.a", Integer.class)).as("< 35"),
-                sum(field("t.b", Integer.class)).as("36-55"),
-                sum(field("t.c", Integer.class)).as("56-75"),
-                sum(field("t.d", Integer.class)).as("76-150")).from(
+                sum(field(name("t", "a"), Integer.class)).as("< 35"),
+                sum(field(name("t", "b"), Integer.class)).as("36-55"),
+                sum(field(name("t", "c"), Integer.class)).as("56-75"),
+                sum(field(name("t", "d"), Integer.class)).as("76-150")).from(
                 select(PRODUCT.PRODUCT_LINE.as("pl"),
                         decode(greatest(PRODUCT.BUY_PRICE, 0), least(PRODUCT.BUY_PRICE, 35), 1, 0).as("a"),
                         decode(greatest(PRODUCT.BUY_PRICE, 36), least(PRODUCT.BUY_PRICE, 55), 1, 0).as("b"),
@@ -219,7 +220,7 @@ public class ClassicModelsRepository {
                         decode(greatest(PRODUCT.BUY_PRICE, 76), least(PRODUCT.BUY_PRICE, 150), 1, 0).as("d"))
                         .from(PRODUCT)
                         .groupBy(PRODUCT.PRODUCT_LINE, PRODUCT.BUY_PRICE).asTable("t"))
-                .groupBy(field("t.pl"))
+                .groupBy(field(name("t", "pl")))
                 .fetch();
 
         // of course, you can write the same thing as here        
