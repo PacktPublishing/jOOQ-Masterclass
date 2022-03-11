@@ -366,6 +366,13 @@ public class ClassicModelsRepository {
                 round((power(1.6180339, n).minus(power(-0.6180339, n)))
                         .divide(2.236067977), 0)
         ))).fetch();
+        
+        ctx.select(round((power(1.6180339, n).minus(power(-0.6180339, n)))
+                        .divide(2.236067977), 0))
+                .fetch();
+        
+         ctx.fetchValue(round((power(1.6180339, n).minus(power(-0.6180339, n)))
+                        .divide(2.236067977), 0));
 
         // Distance between two points
         // Banesti, Romania  
@@ -391,6 +398,13 @@ public class ClassicModelsRepository {
         ctx.select().from(values(row(val(6371d).mul(val(2d)
                 .mul(atan2(sqrt(a), sqrt(val(1d).minus(a))))))))
                 .fetch();
+        
+        ctx.select(val(6371d).mul(val(2d)
+                .mul(atan2(sqrt(a), sqrt(val(1d).minus(a))))))
+                .fetch();
+        
+        ctx.fetchValue(val(6371d).mul(val(2d)
+                .mul(atan2(sqrt(a), sqrt(val(1d).minus(a))))));
     }
 
     //////////////////////
