@@ -439,17 +439,20 @@ public class ClassicModelsRepository {
     // Datetime Functions //
     ////////////////////////
     public void dateTimeFunctionsExample() {
-
+        
         // get current date
-        Date cd = ctx.select(currentDate()).fetchOneInto(Date.class);
-        LocalDate ld = ctx.select(currentLocalDate()).fetchOneInto(LocalDate.class);
+        Date cd1 = ctx.select(currentDate()).fetchOneInto(Date.class);
+        LocalDate ld1 = ctx.select(currentLocalDate()).fetchOneInto(LocalDate.class);
+        Date cd2 = ctx.fetchValue(currentDate());
+        LocalDate ld2 = ctx.fetchValue(currentLocalDate());
 
-        System.out.println("Current date (java.sql.Date): " + cd);
-        System.out.println("Current date (java.time.LocalDate): " + ld);
+        System.out.println("Current date (java.sql.Date): \n" + cd1 + "\n" + cd2);
+        System.out.println("Current date (java.time.LocalDate): \n" + ld1 + "\n" + ld2);
 
         // convert an ISO 8601 DATE string literal into a java.sql.Date
-        Date ccd = ctx.select(date("2024-01-29")).fetchOneInto(Date.class);
-        System.out.println("Converted date (java.sql.Date): " + ccd);
+        Date ccd1 = ctx.select(date("2024-01-29")).fetchOneInto(Date.class);
+        Date ccd2 = ctx.fetchValue(date("2024-01-29"));
+        System.out.println("Converted date (java.sql.Date): \n" + ccd1 + "\n" + ccd2);
 
         // add an interval of 10 days to a date
         var dcd = ctx.select(date("2022-02-03"),
@@ -462,38 +465,50 @@ public class ClassicModelsRepository {
         System.out.println("After adding 3 months (java.sql.Date):\n" + mcd);
 
         // extract parts of a date
-        int day11 = ctx.select(dayOfWeek(Date.valueOf("2021-05-06"))).fetchOneInto(Integer.class);
-        int day12 = ctx.select(extract(Date.valueOf("2021-05-06"), DatePart.DAY_OF_WEEK)).fetchOneInto(Integer.class);
-        System.out.println("Day of week (1 = Sunday, 2 = Monday, ..., 7 = Saturday): " + day11);
-        System.out.println("Day of week (1 = Sunday, 2 = Monday, ..., 7 = Saturday): " + day12);
+        int day111 = ctx.select(dayOfWeek(Date.valueOf("2021-05-06"))).fetchOneInto(Integer.class);
+        int day112 = ctx.fetchValue(dayOfWeek(Date.valueOf("2021-05-06")));
+        int day121 = ctx.select(extract(Date.valueOf("2021-05-06"), DatePart.DAY_OF_WEEK)).fetchOneInto(Integer.class);
+        int day122 = ctx.fetchValue(extract(Date.valueOf("2021-05-06"), DatePart.DAY_OF_WEEK));
+        System.out.println("Day of week (1 = Sunday, 2 = Monday, ..., 7 = Saturday): \n" + day111 + "\n" + day112);
+        System.out.println("Day of week (1 = Sunday, 2 = Monday, ..., 7 = Saturday): \n" + day121 + "\n" + day122);
 
-        int day21 = ctx.select(dayOfYear(Date.valueOf("2021-05-06"))).fetchOneInto(Integer.class);
-        int day22 = ctx.select(extract(Date.valueOf("2021-05-06"), DatePart.DAY_OF_YEAR)).fetchOneInto(Integer.class);
-        System.out.println("Day of year (corresponds to ChronoField.DAY_OF_YEAR): " + day21);
-        System.out.println("Day of year (corresponds to ChronoField.DAY_OF_YEAR): " + day22);
+        int day211 = ctx.select(dayOfYear(Date.valueOf("2021-05-06"))).fetchOneInto(Integer.class);
+        int day212 = ctx.fetchValue(dayOfYear(Date.valueOf("2021-05-06")));
+        int day221 = ctx.select(extract(Date.valueOf("2021-05-06"), DatePart.DAY_OF_YEAR)).fetchOneInto(Integer.class);
+        int day222 = ctx.fetchValue(extract(Date.valueOf("2021-05-06"), DatePart.DAY_OF_YEAR));
+        System.out.println("Day of year (corresponds to ChronoField.DAY_OF_YEAR): \n" + day211 + "\n" + day212);
+        System.out.println("Day of year (corresponds to ChronoField.DAY_OF_YEAR): \n" + day221 + "\n" + day222);
 
-        int month1 = ctx.select(month(Date.valueOf("2021-05-06"))).fetchOneInto(Integer.class);
-        int month2 = ctx.select(extract(Date.valueOf("2021-05-06"), DatePart.MONTH)).fetchOneInto(Integer.class);
-        System.out.println("Month (corresponds  to ChronoField.MONTH_OF_YEAR): " + month1);
-        System.out.println("Month (corresponds  to ChronoField.MONTH_OF_YEAR): " + month2);
+        int month11 = ctx.select(month(Date.valueOf("2021-05-06"))).fetchOneInto(Integer.class);
+        int month12 = ctx.fetchValue(month(Date.valueOf("2021-05-06")));
+        int month21 = ctx.select(extract(Date.valueOf("2021-05-06"), DatePart.MONTH)).fetchOneInto(Integer.class);
+        int month22 = ctx.fetchValue(extract(Date.valueOf("2021-05-06"), DatePart.MONTH));
+        System.out.println("Month (corresponds  to ChronoField.MONTH_OF_YEAR): \n" + month11 + "\n" + month12);
+        System.out.println("Month (corresponds  to ChronoField.MONTH_OF_YEAR): \n" + month21 + "\n" + month22);
 
-        int day31 = ctx.select(day(Date.valueOf("2021-05-06"))).fetchOneInto(Integer.class);
-        int day32 = ctx.select(extract(Date.valueOf("2021-05-06"), DatePart.DAY)).fetchOneInto(Integer.class);
-        System.out.println("Day (corresponds  to ChronoField.DAY_OF_MONTH): " + day31);
-        System.out.println("Day (corresponds  to ChronoField.DAY_OF_MONTH): " + day32);
+        int day311 = ctx.select(day(Date.valueOf("2021-05-06"))).fetchOneInto(Integer.class);
+        int day312 = ctx.fetchValue(day(Date.valueOf("2021-05-06")));
+        int day321 = ctx.select(extract(Date.valueOf("2021-05-06"), DatePart.DAY)).fetchOneInto(Integer.class);
+        int day322 = ctx.fetchValue(extract(Date.valueOf("2021-05-06"), DatePart.DAY));
+        System.out.println("Day (corresponds  to ChronoField.DAY_OF_MONTH): \n" + day311 + "\n" + day312);
+        System.out.println("Day (corresponds  to ChronoField.DAY_OF_MONTH): \n" + day321 + "\n" + day322);
 
         // convert an ISO 8601 DATE string literal into java.time.LocalDate
-        LocalDate cld = ctx.select(localDate("2021-05-06")).fetchOneInto(LocalDate.class);
-        System.out.println("String to LocalDate: " + cld);
+        LocalDate cld1 = ctx.select(localDate("2021-05-06")).fetchOneInto(LocalDate.class);
+        LocalDate cld2 = ctx.fetchValue(localDate("2021-05-06"));
+        System.out.println("String to LocalDate: \n" + cld1 + "\n" + cld2);
 
         // add 3 days to a LocalDate       
-        var ldcd = ctx.select(localDateAdd(LocalDate.parse("2023-05-08"), 3)
+        var ldcd1 = ctx.select(localDateAdd(LocalDate.parse("2023-05-08"), 3)
                 .as("after_3_days")).fetch();
-        System.out.println("After adding 3 days (java.sql.Date):\n" + ldcd);
+        var ldcd2 = ctx.fetchValue(localDateAdd(LocalDate.parse("2023-05-08"), 3)
+                .as("after_3_days"));
+        System.out.println("After adding 3 days (java.sql.Date):\n" + ldcd1 + "\n" + ldcd2);
 
         // Parse a string value to a java.time.LocalDateTime
-        LocalDateTime fd = ctx.select(toLocalDateTime("20210501170000",
+        LocalDateTime fd1 = ctx.select(toLocalDateTime("20210501170000",
                 "YYYYMMDDHH24MISS")).fetchOneInto(LocalDateTime.class);
-        System.out.println("Format date: " + fd);
+        LocalDateTime fd2 = ctx.fetchValue(toLocalDateTime("20210501170000", "YYYYMMDDHH24MISS"));
+        System.out.println("Format date: \n" + fd1 + "\n" + fd2);
     }
 }
