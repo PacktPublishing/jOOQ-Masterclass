@@ -463,14 +463,16 @@ public class ClassicModelsRepository {
         System.out.println("Converted date (java.sql.Date): \n" + ccd1 + "\n" + ccd2);
 
         // add an interval of 10 days to a date
-        var dcd = ctx.select(date("2022-02-03"),
+        var dcd1 = ctx.select(date("2022-02-03"),
                 dateAdd(Date.valueOf("2022-02-03"), 10).as("after_10_days")).fetch();
-        System.out.println("After adding 10 days (java.sql.Date):\n" + dcd);
+        var dcd2 = ctx.fetchValue(dateAdd(Date.valueOf("2022-02-03"), 10).as("after_10_days"));
+        System.out.println("After adding 10 days (java.sql.Date):\n" + dcd1 + "\n" + dcd2);
 
         // add an interval of months to a date
-        var mcd = ctx.select(date("2022-02-03"),
+        var mcd1 = ctx.select(date("2022-02-03"),
                 dateAdd(Date.valueOf("2022-02-03"), new YearToMonth(0, 3)).as("after_3_month")).fetch();
-        System.out.println("After adding 3 months (java.sql.Date):\n" + mcd);
+        var mcd2 = ctx.fetchValue(dateAdd(Date.valueOf("2022-02-03"), new YearToMonth(0, 3)).as("after_3_month"));
+        System.out.println("After adding 3 months (java.sql.Date):\n" + mcd1 + "\n" + mcd2);
 
         // extract parts of a date
         int day111 = ctx.select(dayOfWeek(Date.valueOf("2021-05-06"))).fetchOneInto(Integer.class);
