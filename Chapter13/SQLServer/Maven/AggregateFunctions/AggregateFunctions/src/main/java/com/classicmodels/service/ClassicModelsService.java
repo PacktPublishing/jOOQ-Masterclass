@@ -18,6 +18,7 @@ public class ClassicModelsService {
         classicModelsRepository.saleGeometricMean();
         classicModelsRepository.sdSale();
         classicModelsRepository.productBuyPriceVariance();
+        classicModelsRepository.cumulativeVarianceOfSalaryInOffice1ByCommission();
         classicModelsRepository.covarianceProductBuyPriceMSRP();
         classicModelsRepository.regressionProductBuyPriceMSRP();
         classicModelsRepository.linearRegression();
