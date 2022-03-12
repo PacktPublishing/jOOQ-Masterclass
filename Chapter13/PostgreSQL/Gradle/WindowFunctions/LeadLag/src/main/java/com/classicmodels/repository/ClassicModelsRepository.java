@@ -12,6 +12,7 @@ import static org.jooq.impl.DSL.asterisk;
 import static org.jooq.impl.DSL.cast;
 import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.field;
+import static org.jooq.impl.DSL.inline;
 import static org.jooq.impl.DSL.lag;
 import static org.jooq.impl.DSL.lead;
 import static org.jooq.impl.DSL.max;
@@ -19,7 +20,6 @@ import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.round;
 import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.sum;
-import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -85,7 +85,7 @@ public class ClassicModelsRepository {
     public void monthOverMonthGrowthRateSale() {
         
         ctx.select(SALE.FISCAL_MONTH,
-                val(100).mul((SALE.SALE_.minus(lag(SALE.SALE_, 1).over().orderBy(SALE.FISCAL_MONTH)))
+                inline(100).mul((SALE.SALE_.minus(lag(SALE.SALE_, 1).over().orderBy(SALE.FISCAL_MONTH)))
                         .divide(lag(SALE.SALE_, 1).over().orderBy(SALE.FISCAL_MONTH))).concat("%").as("MOM"))
                 .from(SALE)
                 .where(SALE.FISCAL_YEAR.eq(2004))                

@@ -8,12 +8,12 @@ import org.jooq.Table;
 import static org.jooq.impl.DSL.avg;
 import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.field;
+import static org.jooq.impl.DSL.inline;
 import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.min;
 import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.rowNumber;
 import static org.jooq.impl.DSL.select;
-import static org.jooq.impl.DSL.val;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,7 +43,7 @@ public class ClassicModelsRepository {
     public void medianProductQuantityInStock() {
 
         Field<Integer> x = PRODUCT.QUANTITY_IN_STOCK.as("x");
-        Field<Double> y = val(2.0d).mul(rowNumber().over().orderBy(PRODUCT.QUANTITY_IN_STOCK))
+        Field<Double> y = inline(2.0d).mul(rowNumber().over().orderBy(PRODUCT.QUANTITY_IN_STOCK))
                 .minus(count().over()).as("y");
 
         ctx.select(avg(x).as("median"))
