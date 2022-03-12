@@ -20,5 +20,7 @@ public class ClassicModelsService {
         
         classicModelsRepository.calculateRunningTotals();
         classicModelsRepository.calculateRunningAverages();
+        
+        classicModelsRepository.cumulativeVarianceOfSalaryInOffice1ByCommission();
     }
 }

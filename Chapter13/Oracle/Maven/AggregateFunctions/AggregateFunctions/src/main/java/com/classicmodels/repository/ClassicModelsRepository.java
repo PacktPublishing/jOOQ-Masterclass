@@ -144,26 +144,6 @@ public class ClassicModelsRepository {
                 .fetch();
     }
     
-    // cumulative variance of salary values in office 1 ordered by commission
-    public void cumulativeVarianceOfSalaryInOffice1ByCommission() {
-        
-        ctx.select(EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY, 
-                varSamp(EMPLOYEE.SALARY).over().orderBy(EMPLOYEE.COMMISSION).as("cv"))
-                .from(EMPLOYEE)
-                .where(EMPLOYEE.OFFICE_CODE.eq("1"))
-                .orderBy(EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
-                .fetch();        
-        
-        // Oracle only
-        ctx.select(EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY, 
-                aggregate("variance", Double.class, EMPLOYEE.SALARY)
-                        .over().orderBy(EMPLOYEE.COMMISSION).as("cv"))
-                .from(EMPLOYEE)
-                .where(EMPLOYEE.OFFICE_CODE.eq("1"))
-                .orderBy(EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
-                .fetch();  
-    }
-
     // Covariance
     public void covarianceProductBuyPriceMSRP() {
 

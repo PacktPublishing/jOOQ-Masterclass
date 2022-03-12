@@ -17,8 +17,7 @@ public class ClassicModelsService {
         classicModelsRepository.saleHarmonicMean();
         classicModelsRepository.saleGeometricMean();
         classicModelsRepository.sdSale();
-        classicModelsRepository.productBuyPriceVariance();
-        classicModelsRepository.cumulativeVarianceOfSalaryInOffice1ByCommission();
+        classicModelsRepository.productBuyPriceVariance();        
         classicModelsRepository.covarianceProductBuyPriceMSRP();
         classicModelsRepository.mySqlConcatws();
         classicModelsRepository.regressionProductBuyPriceMSRP();

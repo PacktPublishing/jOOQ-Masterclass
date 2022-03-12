@@ -15,7 +15,6 @@ import static org.jooq.impl.DSL.cast;
 import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.cumeDist;
 import static org.jooq.impl.DSL.field;
-import static org.jooq.impl.DSL.firstValue;
 import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.median;
 import static org.jooq.impl.DSL.name;
@@ -24,6 +23,7 @@ import static org.jooq.impl.DSL.rowNumber;
 import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.sum;
 import static org.jooq.impl.DSL.val;
+import static org.jooq.impl.DSL.varSamp;
 import static org.jooq.impl.SQLDataType.NUMERIC;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -184,5 +184,17 @@ public class ClassicModelsRepository {
                 .groupBy(BANK_TRANSACTION.CACHING_DATE, BANK_TRANSACTION.CARD_TYPE)
                 .orderBy(BANK_TRANSACTION.CACHING_DATE)
                 .fetch();
+    }
+    
+    // VAR_SAMP()
+    // cumulative variance of salary values in office 1 ordered by commission
+    public void cumulativeVarianceOfSalaryInOffice1ByCommission() {
+        
+        ctx.select(EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY, 
+                varSamp(EMPLOYEE.SALARY).over().orderBy(EMPLOYEE.COMMISSION).as("cv"))
+                .from(EMPLOYEE)
+                .where(EMPLOYEE.OFFICE_CODE.eq("1"))
+                .orderBy(EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
+                .fetch();                       
     }
 }
