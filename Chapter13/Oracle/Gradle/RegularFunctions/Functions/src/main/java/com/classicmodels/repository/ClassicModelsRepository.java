@@ -391,16 +391,16 @@ public class ClassicModelsRepository {
                 .plus(cos(latitude1 * pi180).mul(cos(latitude2 * pi180))
                         .mul(power(sin(val((longitude2 - longitude1) * pi180).divide(2d)), 2d))));
 
-        ctx.select().from(values(row(val(6371d).mul(val(2d)
-                .mul(atan2(sqrt(a), sqrt(val(1d).minus(a))))))))
+        ctx.select().from(values(row(inline(6371d).mul(inline(2d)
+                .mul(atan2(sqrt(a), sqrt(inline(1d).minus(a))))))))
                 .fetch();
         
-        ctx.select(val(6371d).mul(val(2d)
-                .mul(atan2(sqrt(a), sqrt(val(1d).minus(a))))))
+        ctx.select(inline(6371d).mul(inline(2d)
+                .mul(atan2(sqrt(a), sqrt(inline(1d).minus(a))))))
                 .fetch();
         
-        ctx.fetchValue(val(6371d).mul(val(2d)
-                .mul(atan2(sqrt(a), sqrt(val(1d).minus(a))))));
+        ctx.fetchValue(inline(6371d).mul(inline(2d)
+                .mul(atan2(sqrt(a), sqrt(inline(1d).minus(a))))));
     }
 
     //////////////////////
