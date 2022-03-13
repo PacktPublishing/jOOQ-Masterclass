@@ -48,7 +48,7 @@ public class ClassicModelsRepository {
     // Harmonic mean
     public void saleHarmonicMean() {
 
-        ctx.select(SALE.FISCAL_YEAR, count().divide(sum(val(1d).divide(SALE.SALE_))).as("harmonic_mean"))
+        ctx.select(SALE.FISCAL_YEAR, count().divide(sum(inline(1d).divide(SALE.SALE_))).as("harmonic_mean"))
                 .from(SALE)
                 .groupBy(SALE.FISCAL_YEAR)
                 .fetch();
@@ -248,9 +248,9 @@ public class ClassicModelsRepository {
         int q = 4914;
         int p = 63;
 
-        Field<Integer> ones = val(0).bitNot().as("ones");
+        Field<Integer> ones = inline(0).bitNot().as("ones");
         Field<Integer> leftShiftJ = ones.shl(j + 1).as("leftShiftJ");
-        Field<Integer> leftShiftI = val(1).shl(i).minus(1).as("leftShiftI");
+        Field<Integer> leftShiftI = inline(1).shl(i).minus(1).as("leftShiftI");
         Field<Integer> mask = leftShiftJ.bitOr(leftShiftI).as("mask");
         Field<Integer> applyMaskToQ = val(q).bitAnd(mask).as("applyMaskToQ");
         Field<Integer> bringPInPlace = val(p).shl(i).as("bringPInPlace");
