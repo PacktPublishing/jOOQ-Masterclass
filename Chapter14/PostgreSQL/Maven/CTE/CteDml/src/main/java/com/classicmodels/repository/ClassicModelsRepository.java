@@ -55,8 +55,8 @@ public class ClassicModelsRepository {
 
     public void cte2() {
 
-        ctx.dropTableIfExists("product_history").execute();
-        ctx.createTable("product_history")
+        ctx.dropTableIfExists(name("product_history")).execute();
+        ctx.createTable(name("product_history"))
                 .column("product_id", SQLDataType.BIGINT.nullable(false))
                 .column("product_name", SQLDataType.VARCHAR(50).nullable(false))
                 .column("buy_price", SQLDataType.DECIMAL.nullable(false))
@@ -70,7 +70,7 @@ public class ClassicModelsRepository {
                         PRODUCT.BUY_PRICE, inline("Present Price").as("market_rate"))
                         .from(PRODUCT)
                         .unionAll(select(PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME,
-                                round(PRODUCT.BUY_PRICE.plus(PRODUCT.BUY_PRICE.mul(10).divide(100)), 2).as("buy_price"),
+                                round(PRODUCT.BUY_PRICE.plus(PRODUCT.BUY_PRICE.mul(10).divide(100).plus(1)), 2).as("buy_price"),
                                 inline("Future Price").as("market_rate"))
                                 .from(PRODUCT)))
                 .insertInto(table(name("product_history")))
