@@ -26,10 +26,9 @@ public class ClassicModelsRepository {
 
     // Fibonacci number
     public void cte1() {
-
+        
         ctx.withRecursive("fibonacci", "n", "f", "f1")
-                .as(select(cast(1, SQLDataType.BIGINT),
-                        cast(0, SQLDataType.BIGINT), cast(1, SQLDataType.BIGINT))
+                .as(select(inline(1L), inline(0L), inline(1L))
                         .unionAll(select(field(name("n"), Long.class).plus(1),
                                 field(name("f"), Long.class).plus(field(name("f1"))),
                                 field(name("f"), Long.class))
@@ -49,7 +48,7 @@ public class ClassicModelsRepository {
         ctx.withRecursive("flights", "arrival_town", "steps", "total_distance_km", "path")
                 .as(selectDistinct(OFFICE_FLIGHTS.DEPART_TOWN.as("arrival_town"),
                         inline(0).as("steps"), inline(0).as("total_distance_km"),
-                        cast(from, SQLDataType.VARCHAR).as("path"))
+                        cast(from, SQLDataType.VARCHAR(500)).as("path"))
                         .from(OFFICE_FLIGHTS)
                         .where(OFFICE_FLIGHTS.DEPART_TOWN.eq(from))
                         .unionAll(select(field(name("arrivals", "arrival_town"), String.class),
