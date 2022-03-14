@@ -69,7 +69,7 @@ public class ClassicModelsRepository {
                         PRODUCT.BUY_PRICE, inline("Present Price").as("market_rate"))
                         .from(PRODUCT)
                         .unionAll(select(PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME,
-                                round(PRODUCT.BUY_PRICE.plus(PRODUCT.BUY_PRICE.mul(10).divide(100)), 2).as("buy_price"),
+                                round(PRODUCT.BUY_PRICE.plus(PRODUCT.BUY_PRICE.mul(10).divide(100).plus(1)), 2).as("buy_price"),
                                 inline("Future Price").as("market_rate"))
                                 .from(PRODUCT)))
                 .insertInto(table(name("product_history")))
