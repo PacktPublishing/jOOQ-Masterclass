@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.classicmodels</groupId>
-    <artifactId>CTEAggRem</artifactId>
+    <artifactId>CteAggRem</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>CTEAggRem</name>
+    <name>CteAggRem</name>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
