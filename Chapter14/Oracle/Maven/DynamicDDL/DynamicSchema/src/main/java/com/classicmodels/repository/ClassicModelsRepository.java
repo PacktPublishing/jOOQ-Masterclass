@@ -1,6 +1,6 @@
 package com.classicmodels.repository;
 
-import static jooq.generated.System.SYSTEM;
+import static jooq.generated.Classicmodels.CLASSICMODELS;
 import static jooq.generated.tables.Office.OFFICE;
 import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Top3product.TOP3PRODUCT;
@@ -34,7 +34,7 @@ public class ClassicModelsRepository {
     public void ddlFromJavaSchema() {
 
         // Oracle DDL to MySQL DDL
-        Queries ddl = DSL.using(SQLDialect.MYSQL).ddl(SYSTEM);
+        Queries ddl = DSL.using(SQLDialect.MYSQL).ddl(CLASSICMODELS);
 
         System.out.println("Queries:\n" + ddl.queries().length);
         for (Query query : ddl.queries()) {
@@ -45,7 +45,7 @@ public class ClassicModelsRepository {
     @Transactional
     public void setSchema() {
 
-        ctx.setSchema("SYSTEM").execute();
+        ctx.setSchema("CLASSICMODELS").execute();
     }
 
     @Transactional
