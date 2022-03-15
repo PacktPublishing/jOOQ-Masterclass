@@ -34,7 +34,7 @@ public class ClassicModelsRepository {
     public void ddlFromJavaSchema() {
 
         // MySQL DDL to PostgreSQL DDL
-        Queries ddl = DSL.using(SQLDialect.POSTGRES).ddl(CLASSICMODELS);
+        Queries ddl = DSL.using(SQLDialect.POSTGRES).ddl(CLASSICMODELS.PRODUCT);
 
         System.out.println("Queries:\n" + ddl.queries().length);
         for (Query query : ddl.queries()) {
