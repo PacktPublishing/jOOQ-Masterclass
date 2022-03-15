@@ -28,8 +28,7 @@ public class ClassicModelsRepository {
     public void cte1() {
 
         ctx.withRecursive("fibonacci", "n", "f", "f1")
-                .as(select(cast(1, SQLDataType.BIGINT),
-                        cast(0, SQLDataType.BIGINT), cast(1, SQLDataType.BIGINT))
+                .as(select(inline(1L), inline(0L), inline(1L))
                         .unionAll(select(field(name("n"), Long.class).plus(1),
                                 field(name("f"), Long.class).plus(field(name("f1"))),
                                 field(name("f"), Long.class))
