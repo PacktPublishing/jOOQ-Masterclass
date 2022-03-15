@@ -84,7 +84,7 @@ public class ClassicModelsRepository {
         // jOOQ generates the derived table alias                
         System.out.println("EXAMPLE 1.1:\n"
                 + ctx.select().from(select(ORDERDETAIL.PRODUCT_ID, ORDERDETAIL.PRICE_EACH).from(ORDERDETAIL)
-                        .where(ORDERDETAIL.QUANTITY_ORDERED.gt(50L)))
+                        .where(ORDERDETAIL.QUANTITY_ORDERED.gt(50)))
                         .innerJoin(PRODUCT)
                         .on(field(name("PRICE_EACH")).eq(PRODUCT.BUY_PRICE))
                         .fetch());
@@ -92,7 +92,7 @@ public class ClassicModelsRepository {
         // explicit derived table alias, but not required by jOOQ
         System.out.println("EXAMPLE 1.2:\n"
                 + ctx.select().from(select(ORDERDETAIL.PRODUCT_ID, ORDERDETAIL.PRICE_EACH).from(ORDERDETAIL)
-                        .where(ORDERDETAIL.QUANTITY_ORDERED.gt(50L)).asTable("T"))
+                        .where(ORDERDETAIL.QUANTITY_ORDERED.gt(50)).asTable("T"))
                         .innerJoin(PRODUCT)
                         .on(field(name("T", "PRICE_EACH")).eq(PRODUCT.BUY_PRICE))
                         .fetch());
@@ -101,23 +101,23 @@ public class ClassicModelsRepository {
         System.out.println("EXAMPLE 1.3:\n"
                 + ctx.select(PRODUCT.PRODUCT_LINE, PRODUCT.PRODUCT_NAME, field(name("T", "PRICE_EACH")))
                         .from(select(ORDERDETAIL.PRODUCT_ID, ORDERDETAIL.PRICE_EACH).from(ORDERDETAIL)
-                                .where(ORDERDETAIL.QUANTITY_ORDERED.gt(50L)).asTable("T"))
+                                .where(ORDERDETAIL.QUANTITY_ORDERED.gt(50)).asTable("T"))
                         .innerJoin(PRODUCT)
                         .on(field(name("T", "PRODUCT_ID")).eq(PRODUCT.PRODUCT_ID))
                         .fetch());
 
         Table<?> t = select(ORDERDETAIL.PRODUCT_ID, ORDERDETAIL.PRICE_EACH).from(ORDERDETAIL)
-                .where(ORDERDETAIL.QUANTITY_ORDERED.gt(50L)).asTable("T");
+                .where(ORDERDETAIL.QUANTITY_ORDERED.gt(50)).asTable("T");
         // or, Table<?> t = table(select(ORDERDETAIL.PRODUCT_ID, ORDERDETAIL.PRICE_EACH).from(ORDERDETAIL)
         //                        .where(ORDERDETAIL.QUANTITY_ORDERED.gt(50L))).as("T");
 
         // this also works, but jOOQ will attach the alias for the derived table
         // var t = select(ORDERDETAIL.PRODUCT_ID, ORDERDETAIL.PRICE_EACH).from(ORDERDETAIL)
-        //        .where(ORDERDETAIL.QUANTITY_ORDERED.gt(50L));
+        //        .where(ORDERDETAIL.QUANTITY_ORDERED.gt(50));
         // var t = select(ORDERDETAIL.PRODUCT_ID, ORDERDETAIL.PRICE_EACH).from(ORDERDETAIL)
-        //       .where(ORDERDETAIL.QUANTITY_ORDERED.gt(50L)).asTable();
+        //       .where(ORDERDETAIL.QUANTITY_ORDERED.gt(50)).asTable();
         // var t = table(select(ORDERDETAIL.PRODUCT_ID, ORDERDETAIL.PRICE_EACH).from(ORDERDETAIL)
-        //        .where(ORDERDETAIL.QUANTITY_ORDERED.gt(50L)));
+        //        .where(ORDERDETAIL.QUANTITY_ORDERED.gt(50)));
         
         System.out.println("EXAMPLE 1.4:\n"
                 + ctx.select().from(t)
@@ -195,11 +195,11 @@ public class ClassicModelsRepository {
                 + ctx.selectFrom(PRODUCT)
                         .where(row(PRODUCT.PRODUCT_ID, PRODUCT.BUY_PRICE).in(
                                 select(ORDERDETAIL.PRODUCT_ID, ORDERDETAIL.PRICE_EACH).from(ORDERDETAIL)
-                                        .where(ORDERDETAIL.QUANTITY_ORDERED.gt(50L))))
+                                        .where(ORDERDETAIL.QUANTITY_ORDERED.gt(50))))
                         .fetch());
 
         var s = select(ORDERDETAIL.PRODUCT_ID, ORDERDETAIL.PRICE_EACH).from(ORDERDETAIL)
-                .where(ORDERDETAIL.QUANTITY_ORDERED.gt(50L));
+                .where(ORDERDETAIL.QUANTITY_ORDERED.gt(50));
 
         System.out.println("EXAMPLE 3.2:\n"
                 + ctx.selectFrom(PRODUCT)
