@@ -135,9 +135,11 @@ public class ClassicModelsRepository {
                         .from(table(name("order_truck")).as("t"), ORDER)
                         .where(ORDER.ORDER_ID.eq(field(name("t", "order_id"), Long.class)))
                         .union(select(field(name("t", "truck_id")), field(name("t", "order_id")),
-                                truck.field(name("free_from")), truck.field(name("free_to")))
+                                truck.field(name("free_from"), LocalDate.class), 
+                                truck.field(name("free_to"), LocalDate.class))
                                 .from(table(name("order_truck")).as("t"), truck)
-                                .where(truck.field(name("truck_id")).eq(field(name("t", "truck_id"))))))
+                                .where(truck.field(name("truck_id"), String.class)
+                                        .eq(field(name("t", "truck_id"), String.class)))))
                 .execute();
 
         System.out.println(
