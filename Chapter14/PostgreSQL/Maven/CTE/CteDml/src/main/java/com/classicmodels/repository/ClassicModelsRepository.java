@@ -1,17 +1,21 @@
 package com.classicmodels.repository;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import static jooq.generated.tables.Employee.EMPLOYEE;
+import static jooq.generated.tables.EmployeeStatus.EMPLOYEE_STATUS;
 import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Sale.SALE;
 import static jooq.generated.tables.Token.TOKEN;
 import org.jooq.CommonTableExpression;
 import org.jooq.DSLContext;
 import org.jooq.Record1;
+import static org.jooq.impl.DSL.currentTimestamp;
 import static org.jooq.impl.DSL.deleteFrom;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.insertInto;
+import static org.jooq.impl.DSL.localDate;
 import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.select;
 import static org.jooq.impl.DSL.update;
@@ -111,6 +115,22 @@ public class ClassicModelsRepository {
                 .insertInto(TOKEN, TOKEN.SALE_ID, TOKEN.AMOUNT)
                 .select(select(field(name("sale_id"), Long.class),
                         field(name("sale"), Double.class)).from(name("cte2")))
-                .execute();      
+                .execute();
+    }
+
+    public void cte3() {
+
+        ctx.with("cte", "employee_number")
+                .as(update(SALE).set(SALE.REVENUE_GROWTH, 0.0)
+                        .where(SALE.EMPLOYEE_NUMBER.in(
+                                select(EMPLOYEE.EMPLOYEE_NUMBER)
+                                        .from(EMPLOYEE)
+                                        .where(EMPLOYEE.COMMISSION.isNull())))
+                        .returningResult(SALE.EMPLOYEE_NUMBER))
+                .insertInto(EMPLOYEE_STATUS, EMPLOYEE_STATUS.EMPLOYEE_NUMBER,
+                        EMPLOYEE_STATUS.STATUS, EMPLOYEE_STATUS.ACQUIRED_DATE)
+                .select(select(field(name("employee_number"), Long.class), val("REGULAR"),
+                        val(LocalDate.now())).from(name("cte")))
+                .execute();
     }
 }

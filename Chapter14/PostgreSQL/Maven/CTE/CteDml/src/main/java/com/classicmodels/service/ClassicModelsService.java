@@ -16,6 +16,7 @@ public class ClassicModelsService {
 
         classicModelsRepository.cte1();
         classicModelsRepository.cte2();
+        classicModelsRepository.cte3();
         
     }
 }
