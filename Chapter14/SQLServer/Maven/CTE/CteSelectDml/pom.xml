@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.classicmodels</groupId>
-    <artifactId>CteDml</artifactId>
+    <artifactId>CteSelectDml</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>CteDml</name>
+    <name>CteSelectDml</name>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

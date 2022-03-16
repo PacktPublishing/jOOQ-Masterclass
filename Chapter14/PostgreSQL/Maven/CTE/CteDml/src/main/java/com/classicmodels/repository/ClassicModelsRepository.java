@@ -1,30 +1,22 @@
 package com.classicmodels.repository;
 
 import java.math.BigDecimal;
-import static jooq.generated.tables.Office.OFFICE;
-import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
+import java.util.List;
+import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Product.PRODUCT;
 import static jooq.generated.tables.Sale.SALE;
 import static jooq.generated.tables.Token.TOKEN;
+import org.jooq.CommonTableExpression;
 import org.jooq.DSLContext;
-import static org.jooq.impl.DSL.cast;
-import static org.jooq.impl.DSL.coalesce;
-import static org.jooq.impl.DSL.concat;
-import static org.jooq.impl.DSL.constraint;
+import org.jooq.Record1;
+import static org.jooq.impl.DSL.deleteFrom;
 import static org.jooq.impl.DSL.field;
-import static org.jooq.impl.DSL.inline;
-import static org.jooq.impl.DSL.max;
+import static org.jooq.impl.DSL.insertInto;
 import static org.jooq.impl.DSL.name;
-import static org.jooq.impl.DSL.rand;
-import static org.jooq.impl.DSL.round;
 import static org.jooq.impl.DSL.select;
-import static org.jooq.impl.DSL.selectDistinct;
-import static org.jooq.impl.DSL.selectFrom;
-import static org.jooq.impl.DSL.table;
-import static org.jooq.impl.DSL.unnest;
+import static org.jooq.impl.DSL.update;
+import static org.jooq.impl.DSL.val;
 import static org.jooq.impl.DSL.with;
-import org.jooq.impl.SQLDataType;
-import static org.jooq.impl.SQLDataType.NUMERIC;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,94 +30,87 @@ public class ClassicModelsRepository {
         this.ctx = ctx;
     }
 
-    // CTE and INSERT
     public void cte1() {
 
-        ctx.createTableIfNotExists("sale_training").as(
-                selectFrom(SALE)).withNoData().execute();
+        // EXAMPLE 1 (UPDATE)
+        ctx.with("cte", "msrp")
+                .as(update(PRODUCT).set(PRODUCT.MSRP, BigDecimal.ZERO).returningResult(PRODUCT.MSRP))
+                .select(field(name("msrp"))).from(name("cte"))
+                .fetch();
 
-        ctx.with("training_sale_ids", "sale_id")
-                .as(select(SALE.SALE_ID).from(SALE)
-                        .orderBy(rand()).limit(10))
-                .insertInto(table(name("sale_training")))
-                .select(select().from(SALE).where(SALE.SALE_ID.notIn(
-                        select(field(name("sale_id"), Long.class)).from(name("training_sale_ids")))))
-                .execute();
+        // same as previously but using selectFrom()
+        ctx.with("cte", "msrp")
+                .as(update(PRODUCT).set(PRODUCT.MSRP, BigDecimal.ZERO).returningResult(PRODUCT.MSRP))
+                .selectFrom(name("cte"))
+                .fetch();
+
+        // same as previously but using CommonTableExpression
+        CommonTableExpression<Record1<BigDecimal>> cte1 = name("cte").fields("msrp").as(
+                update(PRODUCT).set(PRODUCT.MSRP, BigDecimal.ZERO).returningResult(PRODUCT.MSRP));
+
+        List<BigDecimal> msrps = ctx.fetchValues(with(cte1).selectFrom(cte1));
+        System.out.println("MSRPs: " + msrps);
+
+        // EXAMPLE 2 (INSERT)
+        ctx.with("cte", "sale_id")
+                .as(insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)
+                        .values(2005, 1250.55, 1504L, 1, 0.0)
+                        .returningResult(SALE.SALE_ID))
+                .select(field(name("sale_id"))).from(name("cte"))
+                .fetch();
+
+        // same as previously but using selectFrom()
+        ctx.with("cte", "sale_id")
+                .as(insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)
+                        .values(2005, 1250.55, 1504L, 1, 0.0)
+                        .returningResult(SALE.SALE_ID))
+                .selectFrom(name("cte"))
+                .fetch();
+
+        // same as previously but using CommonTableExpression
+        CommonTableExpression<Record1<Long>> cte2 = name("cte").fields("sale_id").as(
+                insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER, SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)
+                        .values(2005, 1250.55, 1504L, 1, 0.0)
+                        .returningResult(SALE.SALE_ID));
+
+        long saleId = ctx.fetchValue(with(cte2).selectFrom(cte2));
+        System.out.println("SALE ID: " + saleId);
+
+        // EXAMPLE 3 (DELETE)
+        ctx.with("cte", "sale_id", "sale")
+                .as(deleteFrom(SALE)
+                        .where(SALE.SALE_ID.gt(1000000L))
+                        .returningResult(SALE.SALE_ID, SALE.SALE_))
+                .select(field(name("sale_id")), field(name("sale"))).from(name("cte"))
+                .fetch();
     }
 
     public void cte2() {
 
-        ctx.dropTableIfExists(name("product_history")).execute();
-        ctx.createTable(name("product_history"))
-                .column("product_id", SQLDataType.BIGINT.nullable(false))
-                .column("product_name", SQLDataType.VARCHAR(50).nullable(false))
-                .column("buy_price", SQLDataType.DECIMAL.nullable(false))
-                .column("market_rate", SQLDataType.VARCHAR(50).nullable(false))
-                .constraints(
-                        constraint("product_history_pk").primaryKey("product_id", "buy_price")
-                ).execute();
-
-        ctx.with("product_cte", "product_id", "product_name", "buy_price", "market_rate")
-                .as(select(PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME,
-                        PRODUCT.BUY_PRICE, inline("Present Price").as("market_rate"))
-                        .from(PRODUCT)
-                        .unionAll(select(PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME,
-                                round(PRODUCT.BUY_PRICE.plus(PRODUCT.BUY_PRICE.mul(10).divide(100).plus(1)), 2).as("buy_price"),
-                                inline("Future Price").as("market_rate"))
-                                .from(PRODUCT)))
-                .insertInto(table(name("product_history")))
-                .select(select().from(name("product_cte")).orderBy(field(name("product_id"))))
+        ctx.with("cte", "sale_id", "sale")
+                .as(insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER,
+                        SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)
+                        .values(2005, 1250.55, 1504L, 1, 0.0)
+                        .returningResult(SALE.SALE_ID, SALE.SALE_))
+                .insertInto(TOKEN, TOKEN.SALE_ID, TOKEN.AMOUNT)
+                .select(select(field(name("sale_id"), Long.class),
+                        field(name("sale"), Double.class)).from(name("cte")))
                 .execute();
+
+        ctx.with("cte1", "employee_number", "commission")
+                .as(select(EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.COMMISSION)
+                        .from(EMPLOYEE)
+                        .where(EMPLOYEE.COMMISSION.gt(0)))
+                .with("cte2", "sale_id", "sale")
+                .as(insertInto(SALE, SALE.FISCAL_YEAR, SALE.SALE_, SALE.EMPLOYEE_NUMBER,
+                        SALE.FISCAL_MONTH, SALE.REVENUE_GROWTH)
+                        .select(select(val(2008), field(name("commission"), Double.class),
+                                field(name("employee_number"), Long.class), val(1), val(0.0))
+                                .from(name("cte1")))
+                        .returningResult(SALE.SALE_ID, SALE.SALE_))
+                .insertInto(TOKEN, TOKEN.SALE_ID, TOKEN.AMOUNT)
+                .select(select(field(name("sale_id"), Long.class),
+                        field(name("sale"), Double.class)).from(name("cte2")))
+                .execute();      
     }
-
-    // UPDATE and CTE
-    public void cte3() {
-
-        ctx.with("product_cte", "product_id", "max_buy_price")
-                .as(select(ORDERDETAIL.PRODUCT_ID, max(ORDERDETAIL.PRICE_EACH))
-                        .from(ORDERDETAIL)
-                        .groupBy(ORDERDETAIL.PRODUCT_ID))
-                .update(PRODUCT)
-                .set(PRODUCT.BUY_PRICE, coalesce(field(select(field(name("max_buy_price"), BigDecimal.class))
-                        .from(name("product_cte"))
-                        .where(PRODUCT.PRODUCT_ID.eq(field(name("product_id"), Long.class)))), PRODUCT.BUY_PRICE))
-                .execute();
-    }
-
-    // DELETE and CTE
-    public void cte4() {
-
-        ctx.with("token_cte", "t_sale_id")
-                .as(selectDistinct(TOKEN.SALE_ID).from(TOKEN))
-                .delete(SALE).where(SALE.SALE_ID.in(
-                select(field(name("t_sale_id"), Long.class)).from(name("token_cte"))))
-                .execute();
-
-        ctx.deleteFrom(SALE).where(SALE.SALE_ID.in(with("token_cte", "t_sale_id")
-                .as(selectDistinct(TOKEN.SALE_ID).from(TOKEN))
-                .select(field(name("t_sale_id"), Long.class)).from(name("token_cte"))))
-                .execute();
-    }
-
-    // MERGE and CTE
-    public void cte5() {
-
-        ctx.with("office_cte")
-                .as(select(field(name("office_cte", "office_code")))
-                        .from(unnest(new String[]{"1", "3", "5", "16", "17"}).as("office_cte", "office_code")))
-                .insertInto(OFFICE)
-                .columns(OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.PHONE, OFFICE.ADDRESS_LINE_FIRST,
-                        OFFICE.COUNTRY, OFFICE.POSTAL_CODE, OFFICE.TERRITORY, OFFICE.INTERNAL_BUDGET)
-                .select(select(field(name("office_code"), String.class),
-                        inline("N/A"), inline("N/A"), inline("N/A"), inline("N/A"),
-                        concat(inline("NA"), cast(rand().mul(899).plus(100), NUMERIC(3, 0)), inline("NA")), // generate some unique postal code
-                        inline("N/A"), inline(0))
-                        .from(name("office_cte")))
-                .onConflict(OFFICE.OFFICE_CODE)
-                .doUpdate()
-                .set(OFFICE.INTERNAL_BUDGET, OFFICE.INTERNAL_BUDGET
-                        .plus(OFFICE.INTERNAL_BUDGET.mul(10)).divide(100))
-                .execute();
-    }
-
 }
