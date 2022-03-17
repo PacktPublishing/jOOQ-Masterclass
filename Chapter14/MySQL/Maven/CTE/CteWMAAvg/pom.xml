@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.classicmodels</groupId>
-    <artifactId>CteWMA</artifactId>
+    <artifactId>CteWMAAvg</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>CteWMA</name>
+    <name>CteWMAAvg</name>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
