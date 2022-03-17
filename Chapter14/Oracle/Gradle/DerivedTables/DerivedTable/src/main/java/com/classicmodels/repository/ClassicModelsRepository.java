@@ -120,7 +120,8 @@ public class ClassicModelsRepository {
         //        .where(ORDERDETAIL.QUANTITY_ORDERED.gt(50)));
         
         System.out.println("EXAMPLE 1.4:\n"
-                + ctx.select().from(t)
+                + ctx.select()
+                        .from(t)
                         .innerJoin(PRODUCT)
                         .on(t.field(name("PRICE_EACH"), BigDecimal.class).eq(PRODUCT.BUY_PRICE))
                         .fetch());
@@ -137,11 +138,12 @@ public class ClassicModelsRepository {
                 + ctx.select(PRODUCT.PRODUCT_LINE, PRODUCT.PRODUCT_NAME, t.field(ORDERDETAIL.PRICE_EACH))
                         .from(t)
                         .innerJoin(PRODUCT)
-                        .on(t.field(PRODUCT.PRODUCT_ID).eq(PRODUCT.PRODUCT_ID))
+                        .on(t.field(ORDERDETAIL.PRODUCT_ID).eq(PRODUCT.PRODUCT_ID))
                         .fetch());
 
         System.out.println("EXAMPLE 1.7:\n"
-                + ctx.select().from(t)
+                + ctx.select()
+                        .from(t)
                         .innerJoin(PRODUCT)
                         .on(t.field(ORDERDETAIL.PRICE_EACH).eq(PRODUCT.BUY_PRICE))
                         .fetch());
