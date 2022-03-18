@@ -192,7 +192,7 @@ public class ClassicModelsRepository {
 
     public void noNeedToTransformIntoTable() {
 
-        // a subquery that can be extracted as a SELECT, no need to trasform it into a derived table
+        // if a subquery is not a derived table then it can be extracted as a SELECT
         System.out.println("EXAMPLE 3.1:\n"
                 + ctx.selectFrom(PRODUCT)
                         .where(row(PRODUCT.PRODUCT_ID, PRODUCT.BUY_PRICE).in(
@@ -200,6 +200,7 @@ public class ClassicModelsRepository {
                                         .where(ORDERDETAIL.QUANTITY_ORDERED.gt(50))))
                         .fetch());
 
+        // SelectConditionStep<Record2<Long, BigDecimal>>
         var s = select(ORDERDETAIL.PRODUCT_ID, ORDERDETAIL.PRICE_EACH).from(ORDERDETAIL)
                 .where(ORDERDETAIL.QUANTITY_ORDERED.gt(50));
 
