@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.classicmodels</groupId>
-    <artifactId>ArrayFunction</artifactId>
+    <artifactId>CreateFunction</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>ArrayFunction</name>
+    <name>CreateFunction</name>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -25,7 +25,7 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         
-        <jooq.version>3.16.2</jooq.version>  
+        <jooq.version>3.16.4</jooq.version>  
         <codehaus.mojo.version>1.0.0</codehaus.mojo.version>              
     </properties>
 
@@ -39,7 +39,7 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>        
         <dependency>
-            <groupId>org.jooq</groupId>
+            <groupId>org.jooq.trial-java-8</groupId>
             <artifactId>jooq</artifactId>    
             <version>${jooq.version}</version>     
         </dependency>              
@@ -116,8 +116,9 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.jooq</groupId>
+                <groupId>org.jooq.trial-java-8</groupId>
                 <artifactId>jooq-codegen-maven</artifactId>               
+                <version>${jooq.version}</version>
                 <executions>
                     <execution>
                         <id>generate-for-postgresql</id>
@@ -170,7 +171,8 @@
                                     Excludes match before includes, i.e. excludes have a higher priority. -->
                                     <excludes>
                                         flyway_schema_history | akeys | avals | defined | delete.*
-                                        | dup | exist.* | fetchval | get_.* | ghstore.* | gin.* | hs.* | hstore.* 
+                                        | department_topic_arr | dup | employee_office_arr | exist.*                                   
+                                        | fetchval | get_.* | ghstore.* | gin.* | hs.* | hstore.* 
                                         | isdefined | isexists | make_array | new_salary | populate_record 
                                         | sale_price | slice.* | swap | tconvert | update_msrp | postal_code
                                         | evaluation_criteria | rate_type | vat_type | .*_master | each 
