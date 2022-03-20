@@ -19,12 +19,12 @@ public class ClassicModelsRepository {
 
     public void callCardCommissionFunc() {
 
-        // select "SYSTEM"."CARD_COMMISSION"("SYSTEM"."BANK_TRANSACTION"."CARD_TYPE") from "SYSTEM"."BANK_TRANSACTION"
+        // select "CLASSICMODELS"."CARD_COMMISSION"("CLASSICMODELS"."BANK_TRANSACTION"."CARD_TYPE") from "CLASSICMODELS"."BANK_TRANSACTION"
         ctx.select(cardCommission(BANK_TRANSACTION.CARD_TYPE))
                 .from(BANK_TRANSACTION)
                 .fetch();
 
-        // select (select "SYSTEM"."CARD_COMMISSION"("SYSTEM"."BANK_TRANSACTION"."CARD_TYPE") from DUAL) from "SYSTEM"."BANK_TRANSACTION"        
+        // select (select "CLASSICMODELS"."CARD_COMMISSION"("CLASSICMODELS"."BANK_TRANSACTION"."CARD_TYPE") from DUAL) from "CLASSICMODELS"."BANK_TRANSACTION"        
         ctx.configuration().derive(new Settings()
                 .withRenderScalarSubqueriesForStoredFunctions(true))
                 .dsl()

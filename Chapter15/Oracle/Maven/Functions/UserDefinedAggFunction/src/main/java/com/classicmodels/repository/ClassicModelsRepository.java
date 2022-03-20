@@ -1,7 +1,7 @@
 package com.classicmodels.repository;
 
 import java.math.BigDecimal;
-import static jooq.generated.Routines.secondmax;
+import static jooq.generated.Routines.secondMax;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
@@ -19,10 +19,10 @@ public class ClassicModelsRepository {
 
     public void callSecondMax() {
 
-        ctx.select(secondmax(ORDERDETAIL.QUANTITY_ORDERED), ORDERDETAIL.PRODUCT_ID)
+        ctx.select(secondMax(ORDERDETAIL.QUANTITY_ORDERED), ORDERDETAIL.PRODUCT_ID)
                 .from(ORDERDETAIL)
                 .groupBy(ORDERDETAIL.PRODUCT_ID)
-                .having(secondmax(ORDERDETAIL.QUANTITY_ORDERED).gt(BigDecimal.valueOf(55)))
+                .having(secondMax(ORDERDETAIL.QUANTITY_ORDERED).gt(BigDecimal.valueOf(55)))
                 .fetch();
     }
 
