@@ -4,7 +4,7 @@ import static jooq.generated.packages.DepartmentPkg.getBgt;
 import static jooq.generated.packages.DepartmentPkg.getMaxCash;
 import jooq.generated.packages.department_pkg.GetBgt;
 import jooq.generated.packages.department_pkg.GetMaxCash;
-import jooq.generated.packages.department_pkg.udt.records.BgtArrRecord;
+import jooq.generated.packages.department_pkg.udt.records.BgtRecord;
 import static jooq.generated.tables.Department.DEPARTMENT;
 import static jooq.generated.tables.Office.OFFICE;
 import org.jooq.DSLContext;
@@ -34,7 +34,7 @@ public class ClassicModelsRepository {
         GetBgt bgt = new GetBgt();
         bgt.setPProfit(50000.0);
         bgt.execute(ctx.configuration());
-        BgtArrRecord resultBgt1 = bgt.getReturnValue();
+        BgtRecord resultBgt1 = bgt.getReturnValue();
         System.out.println("Result (get_bgt, first value): " 
                 + resultBgt1.get(0)); // get the first element from array
 
@@ -42,15 +42,12 @@ public class ClassicModelsRepository {
         double resultGmc2 = getMaxCash(ctx.configuration());
         System.out.println("Max cash: " + resultGmc2);
 
-        BgtArrRecord resultBgt2 = getBgt(ctx.configuration(), 50000.0);
+        BgtRecord resultBgt2 = getBgt(ctx.configuration(), 50000.0);
         System.out.println("Bgt: " + resultBgt2);
 
         // EXECUTION 3        
         ctx.select(getMaxCash()).fetch();
-        ctx.select(count().as("c"))
-                .from(unnest(getBgt(ctx.configuration(), 50000.0)))
-                .fetch();
-
+        
         // EXECUTION 4
         ctx.select(OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.COUNTRY,
                 DEPARTMENT.NAME, DEPARTMENT.LOCAL_BUDGET)
@@ -65,7 +62,7 @@ public class ClassicModelsRepository {
                 .from(OFFICE)
                 .join(DEPARTMENT)
                 .on(OFFICE.OFFICE_CODE.eq(DEPARTMENT.OFFICE_CODE)
-                        .and(DEPARTMENT.LOCAL_BUDGET.in(getBgt(ctx.configuration(), 50000.0)))) // or, DEPARTMENT_PKG.getBgt(ctx.configuration(), 50000.0))
+                        .and(DEPARTMENT.LOCAL_BUDGET.eq(getBgt(ctx.configuration(), 50000.0).getLocalBudget()))) // or, DEPARTMENT_PKG.getBgt(ctx.configuration(), 50000.0))
                 .fetch();
 
         ctx.select(OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.COUNTRY,
@@ -74,7 +71,7 @@ public class ClassicModelsRepository {
                 .join(DEPARTMENT)
                 .on(OFFICE.OFFICE_CODE.eq(DEPARTMENT.OFFICE_CODE)
                         .and(DEPARTMENT.LOCAL_BUDGET.in(getBgt(ctx.configuration(),
-                                getMaxCash(ctx.configuration())))))
+                                getMaxCash(ctx.configuration())).getLocalBudget())))
                 .fetch();
     }
 }
