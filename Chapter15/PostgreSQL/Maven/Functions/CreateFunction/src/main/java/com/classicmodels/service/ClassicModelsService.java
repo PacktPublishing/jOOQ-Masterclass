@@ -19,5 +19,8 @@ public class ClassicModelsService {
         
         classicModelsRepository.createRecordFunction();
         classicModelsRepository.callRecordFunction();
+        
+        classicModelsRepository.createOutParamFunction();
+        classicModelsRepository.callOutParamFunction();
     }
 }
