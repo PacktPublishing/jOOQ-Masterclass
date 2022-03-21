@@ -43,27 +43,30 @@ public class ClassicModelsRepository {
     public void callProcedure() {
 
         // calling the previously created procedures via the generated code
+        
         /*
         // EXECUTION 1
-        GetAvgPriceByProductLineJooq avg = new GetAvgPriceByProductLineJooq();
-        avg.setPl("Classic Cars");
+        SalePriceJooq sp = new SalePriceJooq();
+        sp.setListPrice(23.44);
+        sp.setFractionOfPrice(0.25);
+        sp.setQuantity(100);
 
-        avg.execute(ctx.configuration());
+        sp.execute(ctx.configuration());
 
-        BigInteger result1 = avg.getAverage();
-        System.out.println("Avg: " + result1);
+        Double result1 = sp.getReturnValue();
+        System.out.println("Result: " + result1);
 
         // EXECUTION 2
-        BigInteger result2 = getAvgPriceByProductLine(ctx.configuration(), "Classic Cars");
+        Double result2 = salePriceJooq(ctx.configuration(), 100, 23.44, 0.25);
         System.out.println("Avg: " + result2);
 
         // EXECUTION 3         
         ctx.select(PRODUCT.PRODUCT_ID, PRODUCT.PRODUCT_NAME, PRODUCT.BUY_PRICE)
                 .from(PRODUCT)
-                .where(PRODUCT.BUY_PRICE.coerce(BigInteger.class).gt(getAvgPriceByProductLine(
-                        ctx.configuration(), "Classic Cars"))
+                .where(PRODUCT.BUY_PRICE.coerce(Double.class)
+                        .gt(salePriceJooq(ctx.configuration(), 1, 23.44, 0.25))
                         .and(PRODUCT.PRODUCT_LINE.eq("Classic Cars")))
-                .fetch();
+                .fetch();       
         */
     }   
 }

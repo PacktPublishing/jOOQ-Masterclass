@@ -138,12 +138,12 @@ public class ClassicModelsRepository {
     public void executeStoredProcedureViaCallStatement() {
         
         // CALL statement in an anonymous block
-        ctx.begin(call(name("refresh_top3_product"))
+        ctx.begin(call(name("REFRESH_TOP3_PRODUCT"))
                 .args(val("Trains")))
                 .execute();
 
         // CALL statement directly
-        ctx.call(name("refresh_top3_product"))
+        ctx.call(name("REFRESH_TOP3_PRODUCT"))
                 .args(val("Trains"))
                 .execute();
     }
