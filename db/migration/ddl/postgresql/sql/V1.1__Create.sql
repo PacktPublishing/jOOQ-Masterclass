@@ -430,11 +430,11 @@ CREATE OR REPLACE FUNCTION "get_salary_stat"(
   LANGUAGE plpgsql
 AS $$
   BEGIN  
-    SELECT MIN("employee"."salary"),
-           MAX("employee"."salary"),
-           AVG("employee"."salary")::NUMERIC(7,2)
+    SELECT MIN("public"."employee"."salary"),
+           MAX("public"."employee"."salary"),
+           AVG("public"."employee"."salary")::NUMERIC(7,2)
       INTO "min_sal", "max_sal", "avg_sal"
-      FROM "employee";
+      FROM "public"."employee";
   END;
 $$;
 
