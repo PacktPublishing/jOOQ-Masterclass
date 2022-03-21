@@ -47,6 +47,7 @@ public class ClassicModelsRepository {
 
         // EXECUTION 3        
         ctx.select(getMaxCash()).fetch();
+        double mc = ctx.fetchValue(getMaxCash());
         
         // EXECUTION 4
         ctx.select(OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.COUNTRY,
