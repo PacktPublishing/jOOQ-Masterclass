@@ -73,6 +73,7 @@ public class ClassicModelsRepository {
     public void executeMultipleCursorFunction() {
 
         Result<GetOfficesMultipleRecord> results = getOfficesMultiple(ctx.configuration());
+        // Result<GetOfficesMultipleRecord> results = ctx.selectFrom(getOfficesMultiple()).fetch();
 
         for (GetOfficesMultipleRecord result : results) {
             Result<Record> records = result.getGetOfficesMultiple();

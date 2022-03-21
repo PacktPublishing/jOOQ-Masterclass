@@ -55,15 +55,23 @@ public class ClassicModelsRepository {
         System.out.println("Execution 3: " + sp3);
 
         // EXECUTION 4
-        Field<Double> sp4 = Routines.salePrice(
+        Field<Double> sp41 = Routines.salePrice(
                 field(select(PRODUCT.QUANTITY_IN_STOCK)
                         .from(PRODUCT).where(PRODUCT.PRODUCT_ID.eq(1L))),
                 field(select(PRODUCT.MSRP.coerce(Double.class))
                         .from(PRODUCT).where(PRODUCT.PRODUCT_ID.eq(1L))),
                 val(0.75));
 
-        System.out.println("Execution 4:\n"
-                + ctx.fetchValue(sp4)); // or, ctx.select(sp4).fetch()
+        // ctx.select(sp41).fetch(), or
+        
+        double sp42 = ctx.fetchValue(salePrice(
+                field(select(PRODUCT.QUANTITY_IN_STOCK)
+                        .from(PRODUCT).where(PRODUCT.PRODUCT_ID.eq(1L))),
+                field(select(PRODUCT.MSRP.coerce(Double.class))
+                        .from(PRODUCT).where(PRODUCT.PRODUCT_ID.eq(1L))),
+                val(0.75))); 
+                
+        System.out.println("Execution 4:\n" + sp42);
 
         // EXECUTION 5
         ctx.select(ORDERDETAIL.ORDER_ID,

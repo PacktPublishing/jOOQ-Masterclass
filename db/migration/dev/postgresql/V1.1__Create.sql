@@ -446,7 +446,7 @@ AS $$
     RETURN NEXT "ref1"; 
  
     OPEN "ref2" FOR SELECT "public"."office"."city", "public"."office"."country"
-  	                FROM "public"."office" WHERE "public"."office"."internal_budget" > 100000;  
+                    FROM "public"."office" WHERE "public"."office"."internal_budget" > 100000;  
     RETURN NEXT "ref2";                                                 
   END;
 $$ LANGUAGE plpgsql;	
