@@ -58,5 +58,6 @@ public class ClassicModelsRepository {
 
         // EXECUTION 2
         ctx.select(val(dup(ctx.configuration(), 10).getF2())).fetch();
+        ctx.fetchValue(val(dup(ctx.configuration(), 10).getF2()));
     }
 }

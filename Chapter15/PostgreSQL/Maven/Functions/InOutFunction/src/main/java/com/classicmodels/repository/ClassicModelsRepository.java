@@ -41,8 +41,8 @@ public class ClassicModelsRepository {
         // EXECUTION 3
         ctx.select(val(getSalaryStat(ctx.configuration()).getMinSal()),
                 val(getSalaryStat(ctx.configuration()).getMaxSal()),
-                val(getSalaryStat(ctx.configuration()).getAvgSal())).fetch();
-        ctx.fetchValue(val(Routines.getSalaryStat(ctx.configuration()).getMinSal()));
+                val(getSalaryStat(ctx.configuration()).getAvgSal())).fetch();        
+        Integer minSal = ctx.fetchValue(val(Routines.getSalaryStat(ctx.configuration()).getMinSal()));
 
         // EXECUTION 4
         ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
