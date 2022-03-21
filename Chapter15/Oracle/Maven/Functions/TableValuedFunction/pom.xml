@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.classicmodels</groupId>
-    <artifactId>TableValueFunction</artifactId>
+    <artifactId>TableValuedFunction</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>TableValueFunction</name>
+    <name>TableValuedFunction</name>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -48,9 +48,13 @@
             <artifactId>flyway-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.microsoft.sqlserver</groupId>
-            <artifactId>mssql-jdbc</artifactId>
-        </dependency>              
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ojdbc8</artifactId>            
+        </dependency>
+        <dependency>
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ucp</artifactId>            
+        </dependency>       
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -66,7 +70,7 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>                        
+                <artifactId>maven-compiler-plugin</artifactId>    
                 <configuration>
                     <compilerArgs>
                         <arg>--enable-preview</arg>
@@ -108,18 +112,18 @@
                     <user>${spring.datasource.username}</user>
                     <password>${spring.datasource.password}</password>                                          
                     <locations>
-                        <location>filesystem:./../../../../../db/migration/dev/mssql</location>                        
-                    </locations>     
-                    <mixed>true</mixed>  
+                        <location>filesystem:./../../../../../db/migration/dev/oracle</location>                        
+                    </locations>          
+                    <baselineOnMigrate>true</baselineOnMigrate>         
                 </configuration>                
             </plugin>
             <plugin>
                 <groupId>org.jooq.trial-java-8</groupId>
-                <artifactId>jooq-codegen-maven</artifactId>               
-                <version>${jooq.version}</version>
+                <artifactId>jooq-codegen-maven</artifactId>  
+                <version>${jooq.version}</version>             
                 <executions>
                     <execution>
-                        <id>generate-for-sqlserver</id>
+                        <id>generate-for-oracle</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>generate</goal>
@@ -149,38 +153,42 @@
                                 <database>                            
                                     <!-- The database type. The format here is:
                                     org.jooq.meta.[database].[database]Database -->
-                                    <name>org.jooq.meta.sqlserver.SQLServerDatabase</name>
+                                    <name>org.jooq.meta.oracle.OracleDatabase</name>
             
                                     <!-- The database schema (or in the absence of schema support, in your RDBMS this
                                     can be the owner, user, database name) to be generated. This cannot be combined with the <schemata/> element.                                     
                                     If <inputSchema/> is missing then all schemas will be considered. -->
-                                    <inputCatalog>classicmodels</inputCatalog>
-                                    <inputSchema>dbo</inputSchema>
+                                    <inputSchema>CLASSICMODELS</inputSchema>                 
             
                                     <!-- All elements that are generated from your schema
                                     (A Java regular expression. Use the pipe to separate several expressions)
                                     Watch out for case-sensitivity. Depending on your database, this might be important! 
                                     You can create case-insensitive regular expressions using this syntax: (?i:expr).
                                     Whitespace is ignored and comments are possible. -->       
-                                    <includes>.*</includes>
-                                            
+                                    <includes>.*</includes>            
+                                    
                                     <!-- All elements that are excluded from your schema
                                     (A Java regular expression. Use the pipe to separate several expressions).
                                     Excludes match before includes, i.e. excludes have a higher priority. -->
                                     <excludes>
-                                        flyway_schema_history | concatenate | .*_master
-                                      | get_.* | refresh_top3_product | sale_price | split_part
-                                      | top_three_sales_per_employee | .*_jooq
+                                        flyway_schema_history | DEPARTMENT_PKG | GET_.*
+                                        | CARD_COMMISSION | REFRESH_TOP3_PRODUCT | SALE_PRICE | SECOND_MAX
+                                        | SET_COUNTER | SWAP | TOP_THREE_SALES_PER_EMPLOYEE
+                                        | EVALUATION_CRITERIA | SECOND_MAX_IMPL | TABLE_.*_OBJ
+                                        | .*_MASTER | BGT | .*_ARR | TABLE_POPL | TABLE_RES | .*_JOOQ
                                     </excludes>
 
                                     <!-- Schema version provider -->            
-                                    <schemaVersionProvider>SELECT MAX([version]) FROM [flyway_schema_history]</schemaVersionProvider>
-            
+                                    <schemaVersionProvider>SELECT MAX("version") FROM "flyway_schema_history"</schemaVersionProvider>
+                                               
                                     <!-- Give enough time to jOOQ to trigger the queries needed for generating sources 
                                     (default is 5 seconds) -->
                                     <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>
+                                    
+                                    <!-- allow the usage of routine as TVF -->
+                                     <tableValuedFunctions>true</tableValuedFunctions>
                                 </database>
-                                                           
+
                                 <target>
                                     <!-- The destination package of your generated classes (within the destination directory).
                                     jOOQ may append the schema name to this package if generating multiple schemas,
