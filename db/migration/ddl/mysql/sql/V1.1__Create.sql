@@ -350,7 +350,7 @@ CREATE FUNCTION `customer_pgs`(`credit` DECIMAL(10,2))
     END IF;
 	
 	RETURN `pgs`;
-  END$$
+  END $$
 DELIMITER;
 
 DELIMITER $$
@@ -359,7 +359,7 @@ CREATE FUNCTION `sale_price`(`quantity` INT, `list_price` REAL, `fraction_of_pri
   DETERMINISTIC
   BEGIN
     RETURN (`list_price` - (`list_price` * `fraction_of_price`)) * `quantity`;    
-  END$$
+  END $$
 DELIMITER;
 
 /* USER-DEFINED TRIGGER */
@@ -368,7 +368,7 @@ DELIMITER $$
 CREATE TRIGGER `product_uid_trigger` BEFORE INSERT ON `product` FOR EACH ROW BEGIN
   UPDATE `sequences` set `currval` = `currval` + 10 where `sequence_name` = 'product_uid_seq';
   SET NEW.`product_uid` = (SELECT `currval` FROM `sequences` WHERE `sequence_name` = 'product_uid_seq');
-END$$
+END $$
 DELIMITER;
 
 /* USER-DEFINED PROCEDURES */
@@ -377,7 +377,7 @@ DELIMITER $$
 CREATE PROCEDURE `get_product`(IN `pid` BIGINT)
   BEGIN
 	SELECT * FROM `product` WHERE `product`.`product_id` = `pid`;
-  END$$
+  END $$
 DELIMITER;
 
 DELIMITER $$
@@ -390,7 +390,7 @@ CREATE PROCEDURE `get_emps_in_office`(IN `in_office_code` VARCHAR(10))
     SELECT `employee`.`employee_number`, `employee`.`first_name`, `employee`.`last_name`
       FROM `employee`
       WHERE `employee`.`office_code`=`in_office_code`;
-  END$$
+  END $$
 DELIMITER;
 
 DELIMITER $$
@@ -401,7 +401,7 @@ CREATE PROCEDURE `get_avg_price_by_product_line` (
 	INTO `average`
 	FROM `product`
 	WHERE `product`.`product_line` = `pl`;
-  END$$
+  END $$
 DELIMITER;
 
 DELIMITER $$
@@ -409,7 +409,7 @@ CREATE PROCEDURE `set_counter`(
 	INOUT `counter` INT, IN `inc` INT)
   BEGIN
 	SET `counter` = `counter` + `inc`;
-  END$$
+  END $$
 DELIMITER;
 
 DELIMITER $$
@@ -426,7 +426,7 @@ CREATE PROCEDURE `refresh_top3_product`(IN `p_line_in` VARCHAR(50))
         GROUP BY `orderdetail`.`product_id`, `product_name`, `orderdetail`.`quantity_ordered` 
 		ORDER BY `orderdetail`.`quantity_ordered` 
 		LIMIT 3;         
-  END$$
+  END $$
 DELIMITER;
 /* [jooq ignore stop] */
 
