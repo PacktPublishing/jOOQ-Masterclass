@@ -346,7 +346,7 @@ CREATE FUNCTION `customer_pgs`(`credit` DECIMAL(10,2))
 	
 	RETURN `pgs`;
   END $$
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 CREATE FUNCTION `sale_price`(`quantity` INT, `list_price` REAL, `fraction_of_price` REAL)
@@ -355,7 +355,7 @@ CREATE FUNCTION `sale_price`(`quantity` INT, `list_price` REAL, `fraction_of_pri
   BEGIN
     RETURN (`list_price` - (`list_price` * `fraction_of_price`)) * `quantity`;    
   END $$
-DELIMITER;
+DELIMITER ;
 
 /* USER-DEFINED TRIGGER */
 
@@ -364,7 +364,7 @@ CREATE TRIGGER `product_uid_trigger` BEFORE INSERT ON `product` FOR EACH ROW BEG
   UPDATE `sequences` set `currval` = `currval` + 10 where `sequence_name` = 'product_uid_seq';
   SET NEW.`product_uid` = (SELECT `currval` FROM `sequences` WHERE `sequence_name` = 'product_uid_seq');
 END $$
-DELIMITER;
+DELIMITER ;
 
 /* USER-DEFINED PROCEDURES */
 
@@ -373,7 +373,7 @@ CREATE PROCEDURE `get_product`(IN `pid` BIGINT)
   BEGIN
 	SELECT * FROM `product` WHERE `product`.`product_id` = `pid`;
   END $$
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 CREATE PROCEDURE `get_emps_in_office`(IN `in_office_code` VARCHAR(10))
@@ -386,7 +386,7 @@ CREATE PROCEDURE `get_emps_in_office`(IN `in_office_code` VARCHAR(10))
       FROM `employee`
       WHERE `employee`.`office_code`=`in_office_code`;
   END$$
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 CREATE PROCEDURE `get_avg_price_by_product_line` (
@@ -397,7 +397,7 @@ CREATE PROCEDURE `get_avg_price_by_product_line` (
 	FROM `product`
 	WHERE `product`.`product_line` = `pl`;
   END $$
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 CREATE PROCEDURE `set_counter`(
@@ -405,7 +405,7 @@ CREATE PROCEDURE `set_counter`(
   BEGIN
 	SET `counter` = `counter` + `inc`;
   END $$
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 CREATE PROCEDURE `refresh_top3_product`(IN `p_line_in` VARCHAR(50))
@@ -422,7 +422,7 @@ CREATE PROCEDURE `refresh_top3_product`(IN `p_line_in` VARCHAR(50))
 		ORDER BY `orderdetail`.`quantity_ordered` 
 		LIMIT 3;         
   END $$
-DELIMITER;
+DELIMITER ;
 
 /* USER-DEFINED VIEWS */
 
