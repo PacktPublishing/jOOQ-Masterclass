@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.classicmodels</groupId>
-    <artifactId>UserDefinedFunction</artifactId>
+    <artifactId>UserDefinedAggFunction</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>UserDefinedFunction</name>
+    <name>UserDefinedAggFunction</name>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
