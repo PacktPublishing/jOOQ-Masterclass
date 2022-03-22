@@ -126,7 +126,7 @@ GO
 
 DROP ASSEMBLY IF EXISTS [StringUtilities];
 GO
-CREATE ASSEMBLY [StringUtilities] FROM 'C:\SBPBP\GitHub\Up-and-Running-with-jOOQ\Chapter15\SQLServer\Maven\Functions\StringUtilities.dll'  
+CREATE ASSEMBLY [StringUtilities] FROM 'C:\SBPBP\GitHub\Up-and-Running-with-jOOQ\Chapter15\SQLServer\StringUtilities.dll'  
 GO  
   
 CREATE AGGREGATE [concatenate](@input NVARCHAR(4000))  
