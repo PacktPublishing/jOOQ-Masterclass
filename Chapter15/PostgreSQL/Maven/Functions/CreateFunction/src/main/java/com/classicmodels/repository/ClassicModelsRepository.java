@@ -77,6 +77,19 @@ public class ClassicModelsRepository {
                 .as(begin(select(x, y).into(y, x)))
                 .execute();
     }
+    
+    public void callRecordFunction() {
+
+        // call this function (plain SQL)
+        Record1<Record> result = ctx.select(function(name("swap_jooq"),
+                RECORD, inline(1), inline(2)))
+                .fetchOne();
+
+        System.out.println("Result:\n" + result);
+
+        // calling the previously created functions via the generated code
+        // can be done as you already know        
+    }
 
     @Transactional
     public void createOutParamFunction() {
@@ -93,20 +106,7 @@ public class ClassicModelsRepository {
                         .from(EMPLOYEE)))
                 .execute();
     }
-
-    public void callRecordFunction() {
-
-        // call this function (plain SQL)
-        Record1<Record> result = ctx.select(function(name("swap_jooq"),
-                RECORD, inline(1), inline(2)))
-                .fetchOne();
-
-        System.out.println("Result:\n" + result);
-
-        // calling the previously created functions via the generated code
-        // can be done as you already know        
-    }
-    
+        
      public void callOutParamFunction() {
 
         // call this function (plain SQL)
