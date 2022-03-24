@@ -105,8 +105,8 @@ public class ClassicModelsRepository {
                 .fetch();
 
         ctx.query("""
-                  UPDATE product SET product.quantity_in_stock = ? 
-                      WHERE product.product_id = ?
+                  UPDATE product SET quantity_in_stock = ? 
+                      WHERE product_id = ?
                   """, 0, 2)
                 .execute();
         

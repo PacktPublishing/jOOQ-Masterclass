@@ -56,6 +56,7 @@ DROP VIEW IF EXISTS "product_master";
 /* [jooq ignore stop] */
 
 CREATE EXTENSION IF NOT EXISTS hstore;
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 -- TABLE OFFICE
 
