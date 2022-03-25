@@ -117,8 +117,9 @@ jooq {
                     }
                     
                     generate {                        
+                        deprecationOnUnknownTypes = 'false'
                     }
-                    
+
                     target {
                         packageName = 'jooq.generated'
                         directory = 'build/generated-sources'
