@@ -7,11 +7,15 @@ import jooq.generated.tables.records.ProductRecord;
 import org.jooq.DSLContext;
 import org.jooq.Field;
 import org.jooq.Table;
+import org.jooq.conf.RenderNameCase;
+import org.jooq.conf.RenderQuotedNames;
+import org.jooq.conf.Settings;
 import static org.jooq.impl.DSL.concat;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.inline;
 import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.selectCount;
+import static org.jooq.impl.DSL.table;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -123,5 +127,48 @@ public class ClassicModelsRepository {
                 EMPLOYEE.EMAIL.as("contact"),
                 EMPLOYEE.REPORTS_TO.as("boss_id"))
                 .from(EMPLOYEE).fetch();                 
+    }
+    
+    public void renderQuotedAndCase() {
+
+        // select t.first_name as "fn", t.last_name as "ln" from employee as "t"
+        ctx.configuration().derive(
+                new Settings()
+                        .withRenderQuotedNames(RenderQuotedNames.ALWAYS)
+                        .withRenderNameCase(RenderNameCase.LOWER))
+                .dsl()
+                .select(field("t.first_name").as("fn"), field("t.last_name").as("ln"))
+                .from(table("employee").as("t"))
+                .fetch();
+        
+        // select t.first_name as "fn", t.last_name as "ln" from "public"."employee" as "t"
+        ctx.configuration().derive(
+                new Settings()
+                        .withRenderQuotedNames(RenderQuotedNames.ALWAYS)
+                        .withRenderNameCase(RenderNameCase.LOWER))
+                .dsl()
+                .select(field("t.first_name").as("fn"), field("t.last_name").as("ln"))
+                .from(EMPLOYEE.as("t"))
+                .fetch();
+        
+        // select "t"."first_name" as "fn", "t"."last_name" as "ln" from "public"."employee" as "t"
+        ctx.configuration().derive(
+                new Settings()
+                        .withRenderQuotedNames(RenderQuotedNames.ALWAYS)
+                        .withRenderNameCase(RenderNameCase.LOWER))
+                .dsl()
+                .select(field(name("t", "first_name")).as("fn"), field(name("t", "last_name")).as("ln"))
+                .from(EMPLOYEE.as("t"))
+                .fetch();
+        
+        // select "public"."employee"."first_name" as "fn", "public"."employee"."last_name" as "ln" from "public"."employee"
+         ctx.configuration().derive(
+                new Settings()
+                        .withRenderQuotedNames(RenderQuotedNames.ALWAYS)
+                        .withRenderNameCase(RenderNameCase.LOWER))
+                .dsl()
+                .select(EMPLOYEE.FIRST_NAME.as("fn"), EMPLOYEE.LAST_NAME.as("ln"))
+                .from(EMPLOYEE)
+                .fetch();                                 
     }
 }
