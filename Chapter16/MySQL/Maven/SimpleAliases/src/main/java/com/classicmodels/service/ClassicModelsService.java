@@ -21,5 +21,7 @@ public class ClassicModelsService {
         classicModelsRepository.fieldEquality();
 
         classicModelsRepository.simpleSelectAndAs();
+        
+        classicModelsRepository.renderQuotedAndCase();
     }
 }
