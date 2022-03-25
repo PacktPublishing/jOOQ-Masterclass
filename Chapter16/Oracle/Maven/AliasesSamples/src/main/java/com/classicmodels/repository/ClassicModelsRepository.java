@@ -176,6 +176,13 @@ public class ClassicModelsRepository {
         ctx.select(c1, c2)
                 .from(t1, t2)
                 .fetch();
+        
+        // or, a minimalist approach
+        Customerdetail t = CUSTOMERDETAIL;
+
+        ctx.select(OFFICE.CITY, t.CITY)
+                .from(OFFICE, t)
+                .fetch();
     }
     
     public void sample1() {
@@ -210,6 +217,16 @@ public class ClassicModelsRepository {
                 .join(t2)
                 .on(t1.OFFICE_CODE.eq(t2.OFFICE_CODE))
                 .fetch();
+        
+        //======or, a minimalist approach =========//        
+        Department t = DEPARTMENT.as("T"); // or, Department t = DEPARTMENT;
+
+        ctx.select(OFFICE.CITY, t.NAME, t.PROFIT)
+                .from(OFFICE)
+                .join(t)
+                .on(OFFICE.OFFICE_CODE.eq(t.OFFICE_CODE))
+                .fetch();
+        //=========================================//
         
         Table<Record1<String>> t3 
                 = ctx.select(t1.CITY).from(t1).asTable("T3");
