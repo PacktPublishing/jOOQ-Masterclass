@@ -55,9 +55,9 @@ public class ClassicModelsRepository {
            .orderBy(pl1)
            .fetch();
 
-        // select "SYSTEM"."OFFICE"."CITY" from "SYSTEM"."OFFICE" "t"
-        // Since we assigned an alias to "SYSTEM"."OFFICE" table then 
-        // "SYSTEM"."OFFICE"."CITY" column become unknown   
+        // select "CLASSICMODELS"."OFFICE"."CITY" from "CLASSICMODELS"."OFFICE" "t"
+        // Since we assigned an alias to "CLASSICMODELS"."OFFICE" table then 
+        // "CLASSICMODELS"."OFFICE"."CITY" column become unknown   
         /*
         ctx.select(OFFICE.CITY)
                 .from(OFFICE.as("t"))
@@ -65,7 +65,7 @@ public class ClassicModelsRepository {
          */
         
         // This leads to ORA-00904: "T": invalid identifier
-        // select t from "SYSTEM"."OFFICE" "t"
+        // select t from "CLASSICMODELS"."OFFICE" "t"
         /*
         ctx.select(field("t", "city"))
                 .from(OFFICE.as("t"))
@@ -73,7 +73,7 @@ public class ClassicModelsRepository {
         */
         
         // This selects all columns, obviously not what we want
-        // select "t"."OFFICE_CODE", "t"."CITY", ... , "t"."LOCATION" from "SYSTEM"."OFFICE" "t"
+        // select "t"."OFFICE_CODE", "t"."CITY", ... , "t"."LOCATION" from "CLASSICMODELS"."OFFICE" "t"
         /*
         ctx.select(table("t").field("city"))
                 .from(OFFICE.as("t"))
@@ -82,14 +82,14 @@ public class ClassicModelsRepository {
         
         // The next one works, but is prone to ambiguities
         // It works because the unquoted city and CITY are the same identifiers
-        // select city from "SYSTEM"."OFFICE" "t"
+        // select city from "CLASSICMODELS"."OFFICE" "t"
         ctx.select(field("city"))
                 .from(OFFICE.as("t"))
                 .fetch();
 
         // This leads to ORA-00904: "city": invalid identifier
         // This doesn't work because the quoted "city" and "CITY" are not the same
-        // select "city" from "SYSTEM"."OFFICE" "t"
+        // select "city" from "CLASSICMODELS"."OFFICE" "t"
         /*
         ctx.select(field(name("city")))
                 .from(OFFICE.as("t"))
@@ -104,7 +104,7 @@ public class ClassicModelsRepository {
         */ 
         
         // This lead to ORA-00904: "T"."CITY": invalid identifier
-        // select t.city from "SYSTEM"."OFFICE" "t"
+        // select t.city from "CLASSICMODELS"."OFFICE" "t"
         /*
         ctx.select(field("t.city"))
                 .from(OFFICE.as("t"))
@@ -112,7 +112,7 @@ public class ClassicModelsRepository {
         */
 
         // This leads to ORA-00904: "T2"."CITY": invalid identifier
-        // select t1.city, t2.city from "SYSTEM"."OFFICE" "t1", "SYSTEM"."CUSTOMERDETAIL" "t2"
+        // select t1.city, t2.city from "CLASSICMODELS"."OFFICE" "t1", "CLASSICMODELS"."CUSTOMERDETAIL" "t2"
         /*
         ctx.select(field("t1.city"), field("t2.city"))
                 .from(OFFICE.as("t1"), CUSTOMERDETAIL.as("t2"))
@@ -120,7 +120,7 @@ public class ClassicModelsRepository {
         */
 
         // This leads to ORA-00904: "t"."city": invalid identifier
-        // select "t"."city" from "SYSTEM"."OFFICE" "t"
+        // select "t"."city" from "CLASSICMODELS"."OFFICE" "t"
         /*
         ctx.select(field(name("t", "city")))
                 .from(OFFICE.as("t"))
@@ -128,7 +128,7 @@ public class ClassicModelsRepository {
         */
         
         // This finally works (but, prefer the next one)
-        // select T.CITY from "SYSTEM"."OFFICE" "T"
+        // select T.CITY from "CLASSICMODELS"."OFFICE" "T"
         ctx.select(field("T.CITY"))
                 .from(OFFICE.as("T"))
                 .fetch();
@@ -139,11 +139,11 @@ public class ClassicModelsRepository {
                 .fetch();
         */
         
-        // select "T"."CITY" from "SYSTEM"."OFFICE" "T"
+        // select "T"."CITY" from "CLASSICMODELS"."OFFICE" "T"
         ctx.select(field(name("T", "CITY")))
                 .from(OFFICE.as("T"))
                 .fetch();
-        // select "t"."CITY" from "SYSTEM"."OFFICE" "t"
+        // select "t"."CITY" from "CLASSICMODELS"."OFFICE" "t"
         ctx.select(field(name("t", "CITY")))
                 .from(OFFICE.as("t"))
                 .fetch();
@@ -543,7 +543,7 @@ public class ClassicModelsRepository {
                 .fetch();
         */
         
-        // ORA-00904: "SYSTEM"."OFFICE"."OFFICE_CODE": invalid identifier
+        // ORA-00904: "CLASSICMODELS"."OFFICE"."OFFICE_CODE": invalid identifier
         /*        
         ctx.select().from(
                 OFFICE.as("O").leftOuterJoin(DEPARTMENT.as("D"))
