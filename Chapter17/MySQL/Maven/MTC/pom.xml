@@ -177,9 +177,7 @@
                                     (A Java regular expression. Use the pipe to separate several expressions).
                                     Excludes match before includes, i.e. excludes have a higher priority. -->
                                     <excludes>
-                                        flyway_schema_history | sequences 
-                                        | customer_pgs | refresh_top3_product
-                                        | sale_.* | set_.* | get_.* | .*_master
+                                        flyway_schema_history
                                     </excludes>
 
                                     <!-- Schema version provider -->            
