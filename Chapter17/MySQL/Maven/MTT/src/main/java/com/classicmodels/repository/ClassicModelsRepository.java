@@ -1,6 +1,6 @@
 package com.classicmodels.repository;
 
-import static jooq.generated.tables.Product.PRODUCT;
+import static jooq.generated.tables.ProductDev.PRODUCT_DEV;
 import org.jooq.DSLContext;
 import org.jooq.conf.MappedSchema;
 import org.jooq.conf.MappedTable;
@@ -37,9 +37,9 @@ public class ClassicModelsRepository {
                                     new MappedSchema().withInput("development")
                                             .withOutput(database)
                                             .withTables(
-                                                    new MappedTable().withInput("product")
+                                                    new MappedTable().withInput("product_dev")
                                                             .withOutput("product_" + database))))).dsl()
-                    .insertInto(PRODUCT, PRODUCT.PRODUCT_NAME, PRODUCT.QUANTITY_IN_STOCK)
+                    .insertInto(PRODUCT_DEV, PRODUCT_DEV.PRODUCT_NAME, PRODUCT_DEV.QUANTITY_IN_STOCK)
                     .values("Product", 100)
                     .execute();
         }
