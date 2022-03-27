@@ -4,17 +4,16 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.app</groupId>
-    <artifactId>jOOQSpringBootMavenProfiles</artifactId>
+    <artifactId>MP</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQSpringBootMavenProfiles</name>
-    <description>jOOQ - Spring Boot app</description>    
+    <name>MP</name>   
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.3.RELEASE</version>
+        <version>2.5.7</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -22,15 +21,12 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         
-        <java.version>14</java.version>                
-        <maven.compiler.source>14</maven.compiler.source>
-        <maven.compiler.target>14</maven.compiler.target>
+        <java.version>17</java.version>                
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         
-        <jooq.version>3.15.2</jooq.version>  
-        <mysql.connector.java.version>8.0.20</mysql.connector.java.version>                
-        <codehaus.mojo.version>1.0.0</codehaus.mojo.version>                
-        <hibernate.validator.version>5.2.4.Final</hibernate.validator.version>        
-        <maven.compiler.plugin.version>3.3</maven.compiler.plugin.version>  
+        <jooq.version>3.16.4</jooq.version>  
+        <codehaus.mojo.version>1.0.0</codehaus.mojo.version>                        
     </properties>
 
     <dependencies>        
@@ -62,11 +58,6 @@
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>          
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <version>${hibernate.validator.version}</version>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
@@ -119,8 +110,7 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven.compiler.plugin.version}</version>
+                <artifactId>maven-compiler-plugin</artifactId>        
                 <configuration>
                     <compilerArgs>
                         <arg>--enable-preview</arg>
@@ -177,7 +167,8 @@
                         </goals>
                     </execution>
                 </executions>   
-                <configuration>                                                 
+                <configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.16.0.xsd">        
+                    
                     <!-- Configure the database connection here -->
                     <jdbc>
                         <driver>${spring.datasource.driverClassName}</driver>
@@ -187,11 +178,15 @@
                     </jdbc>                                        
 
                     <generator>
-                        <!-- The default code generator. You can override this one, to generate your own code style.
-                        Supported generators:
-                        - org.jooq.codegen.JavaGenerator
-                        - org.jooq.codegen.ScalaGenerator
-                        Defaults to org.jooq.codegen.JavaGenerator -->
+                        <!-- The default code generator. 
+                             You can override this one, to generate your own code style.
+                                     
+                             Supported generators:                                
+                             - org.jooq.codegen.JavaGenerator
+                             - org.jooq.codegen.ScalaGenerator
+                             - org.jooq.codegen.KotlinGenerator
+                                
+                            Defaults to org.jooq.codegen.JavaGenerator -->
                         <name>org.jooq.codegen.JavaGenerator</name>
         
                         <database>                                                                                   
@@ -216,35 +211,7 @@
                             Excludes match before includes, i.e. excludes have a higher priority -->
                             <excludes>${spring.jooq.with-excludes}</excludes>                                                        
                         </database>
-                        
-                        <generate>
-                            <daos>true</daos> <!-- daos will generate pojos as well -->
-                            <!-- <pojos>true</pojos> --> <!-- this is needed to generated pojos without daos -->                             
-                            <validationAnnotations>true</validationAnnotations>
-                            <springAnnotations>true</springAnnotations>   
-                        </generate>
-                        
-                        <!-- Rename the generated DAO classes -->                      
-                        <strategy>
-                            <matchers>
-                                <tables>
-                                    <table>
-                                        <daoClass>
-                                            <expression>$0_Repository</expression>
-                                            <transform>PASCAL</transform>                                                                                      
-                                        </daoClass>
-                                    </table>
-                                </tables>
-                            </matchers>
-                        </strategy>
-                        
-                        <!-- jOOQ will generate DAOs and POJOs in your behalf -->
-                        <generate>
-                            <daos>true</daos> 
-                            <validationAnnotations>true</validationAnnotations>                            
-                            <springAnnotations>true</springAnnotations>   
-                        </generate>                        
-                        
+                      
                         <target>
                             <!-- The destination package of your generated classes (within the destination directory) -->
                             <packageName>${spring.jooq.with-package-name}</packageName>
