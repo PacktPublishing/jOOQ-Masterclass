@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />        
+
+        <title>index</title>
+    </head>
+    <body> 
+
+        <div sec:authorize="isAuthenticated()">
+            <b>User:</b> <span sec:authentication="name">NOT FOUND</span>
+          | <b>Roles:</b> <span sec:authentication="principal.authorities">NOT FOUND</span>            
+            <form th:action="@{/logout}" method="post">
+                <input type="submit" value="Logout"/>
+            </form>
+            <hr/>
+            Add a random product in database as <span sec:authentication="principal.authorities">NOT FOUND</span>
+            <form th:action="@{/add}" method="get">
+                <input type="submit" value="Add Product" />
+            </form>
+        </div>
+
+        <div sec:authorize="!isAuthenticated()">
+            <form th:action="@{/index}" method="post">
+                <label for="username"><b>Username</b></label>
+                <input type="text" name="username" id="username" required="required" autofocus="autofocus"/> <br/><br/>                 
+                <label for="password"><b>Password</b></label>
+                <input type="password" name="password" id="password" required="required"/> <br/><br/>
+                <input type="submit" value="Login"/>
+            </form>
+        </div>        
+    </body>
+</html>    
