@@ -3,7 +3,7 @@ package com.classicmodels.repository;
 import static jooq.generated.tables.Employee.EMPLOYEE;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.concat;
-import static org.jooq.impl.DSL.val;
+import static org.jooq.impl.DSL.inline;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,8 +21,8 @@ public class ClassicModelsRepository {
 
         /*
         System.out.println("DEFAULT GENERATOR STRATEGY:\n"
-                + ctx.select(concat(EMPLOYEE.FIRST_NAME, val(" "), EMPLOYEE.LAST_NAME).as("employee"),
-                        concat(EMPLOYEE.employee().FIRST_NAME, val(" "), EMPLOYEE.employee().LAST_NAME).as("reports_to"))
+                + ctx.select(concat(EMPLOYEE.FIRST_NAME, inline(" "), EMPLOYEE.LAST_NAME).as("employee"),
+                        concat(EMPLOYEE.employee().FIRST_NAME, inline(" "), EMPLOYEE.employee().LAST_NAME).as("reports_to"))
                         .from(EMPLOYEE)
                         .where(EMPLOYEE.JOB_TITLE.eq(EMPLOYEE.employee().JOB_TITLE))
                         .fetch()
@@ -30,8 +30,8 @@ public class ClassicModelsRepository {
         */
         
         System.out.println("CUSTOM GENERATOR STRATEGY:\n"
-                + ctx.select(concat(EMPLOYEE.FIRST_NAME, val(" "), EMPLOYEE.LAST_NAME).as("employee"),
-                        concat(EMPLOYEE.reportsTo().FIRST_NAME, val(" "), EMPLOYEE.reportsTo().LAST_NAME).as("reports_to"))
+                + ctx.select(concat(EMPLOYEE.FIRST_NAME, inline(" "), EMPLOYEE.LAST_NAME).as("employee"),
+                        concat(EMPLOYEE.reportsTo().FIRST_NAME, inline(" "), EMPLOYEE.reportsTo().LAST_NAME).as("reports_to"))
                         .from(EMPLOYEE)
                         .where(EMPLOYEE.JOB_TITLE.eq(EMPLOYEE.reportsTo().JOB_TITLE))
                         .fetch()

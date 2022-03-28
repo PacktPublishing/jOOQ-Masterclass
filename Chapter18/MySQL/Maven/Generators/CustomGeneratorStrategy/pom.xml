@@ -3,17 +3,17 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com-jooq-jpa</groupId>
-    <artifactId>jOOQSpringBootCustomGeneratorStrategyMySQL</artifactId>
+    <groupId>classicmodels.jooq.code.gen</groupId>
+    <artifactId>CustomGeneratorStrategy</artifactId>
     <version>1.0</version>
     <packaging>pom</packaging>    
     
-    <name>jOOQSpringBootCustomGeneratorStrategyMySQL</name>
+    <name>CustomGeneratorStrategy</name>
     
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.3.RELEASE</version>
+        <version>2.5.7</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>  
     
@@ -21,9 +21,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         
-        <java.version>14</java.version>                
-        <maven.compiler.source>14</maven.compiler.source>
-        <maven.compiler.target>14</maven.compiler.target>
+        <java.version>17</java.version>                
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
     </properties> 
 
     <modules>        
