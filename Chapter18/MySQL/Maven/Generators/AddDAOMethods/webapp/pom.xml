@@ -3,13 +3,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     
-    <groupId>jooq-custom</groupId>
+    <groupId>classicmodels.jooq.code.gen</groupId>
     <artifactId>webapp</artifactId>
     <version>1.0</version>        
     <name>webapp</name>
 
     <parent>
-        <groupId>jooq-custom</groupId>
+        <groupId>classicmodels.jooq.code.gen</groupId>
         <artifactId>AddDAOMethods</artifactId>
         <version>1.0</version>        
     </parent>
@@ -28,7 +28,7 @@
         
     <dependencies>               
         <dependency>
-            <groupId>jooq-custom</groupId>
+            <groupId>classicmodels.jooq.code.gen</groupId>
             <artifactId>jooq-generator</artifactId>
             <version>1.0</version>
         </dependency>       
@@ -192,7 +192,7 @@
                                     </matchers>
                                 </strategy>                                
                                                                                                
-                                <!-- jOOQ will generate POJOs and DAOs in your behalf -->
+                                <!-- jOOQ will generate POJOs and DAOs on our behalf -->
                                 <generate>
                                     <daos>true</daos>                                                                                                        
                                     <springAnnotations>true</springAnnotations>   
