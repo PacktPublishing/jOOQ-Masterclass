@@ -2,7 +2,6 @@ package com.classicmodels.entity;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -19,12 +18,12 @@ public class Payment implements Serializable {
     private PaymentId id;
 
     @Column(nullable=false)
-    private LocalDateTime paymentDate;
+    private LocalDate paymentDate;
 
     @Column(precision = 10, scale = 2, nullable=false)
     private Float invoiceAmount;
    
-    private LocalDateTime cachingDate;
+    private LocalDate cachingDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_number", insertable=false, updatable=false)
@@ -38,11 +37,11 @@ public class Payment implements Serializable {
         this.id = id;
     }
 
-    public LocalDateTime getPaymentDate() {
+    public LocalDate getPaymentDate() {
         return paymentDate;
     }
 
-    public void setPaymentDate(LocalDateTime paymentDate) {
+    public void setPaymentDate(LocalDate paymentDate) {
         this.paymentDate = paymentDate;
     }
 
@@ -54,11 +53,11 @@ public class Payment implements Serializable {
         this.invoiceAmount = invoiceAmount;
     }
 
-    public LocalDateTime getCachingDate() {
+    public LocalDate getCachingDate() {
         return cachingDate;
     }
 
-    public void setCachingDate(LocalDateTime cachingDate) {
+    public void setCachingDate(LocalDate cachingDate) {
         this.cachingDate = cachingDate;
     }
 

@@ -141,12 +141,4 @@ public class Customer implements Serializable {
 
         return customerNumber != null && customerNumber.equals(((Customer) obj).customerNumber);
     }
-
-    @Override
-    public String toString() {
-        return "Customer{" + "customerNumber=" + customerNumber + ", customerName=" 
-                + customerName + ", contactLastName=" + contactLastName 
-                + ", contactFirstName=" + contactFirstName + ", phone=" 
-                + phone + ", creditLimit=" + creditLimit + '}';
-    }        
 }

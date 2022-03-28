@@ -136,11 +136,4 @@ public class Order implements Serializable {
         return orderId != null && orderId.equals(((Order) obj).orderId);
     }
 
-    @Override
-    public String toString() {
-        return "Order{" + "orderId=" + orderId + ", orderDate=" 
-                + orderDate + ", requiredDate=" + requiredDate 
-                + ", shippedDate=" + shippedDate + ", status=" 
-                + status + ", comments=" + comments + '}';
-    }   
 }

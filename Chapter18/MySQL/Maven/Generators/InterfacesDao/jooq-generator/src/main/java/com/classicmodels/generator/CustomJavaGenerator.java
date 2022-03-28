@@ -51,14 +51,14 @@ public class CustomJavaGenerator extends JavaGenerator {
         
         List<ColumnDefinition> keyColumns = key.getKeyColumns();
         if (keyColumns.size() == 1) {
-            tType = getJavaType(keyColumns.get(0).getType(resolver(Mode.POJO)), Mode.POJO);
+            tType = getJavaType(keyColumns.get(0).getType(resolver(out, Mode.POJO)), out, Mode.POJO);
         } else if (keyColumns.size() <= Constants.MAX_ROW_DEGREE) {
             String generics = "";
             String separator = "";
 
             for (ColumnDefinition column : keyColumns) {
                 generics += separator + out.ref(getJavaType(
-                        column.getType(resolver(Mode.POJO)), Mode.POJO));
+                        column.getType(resolver(out, Mode.POJO)), out, Mode.POJO));
                 separator = ", ";
             }
             tType = org.jooq.Record.class.getName() + keyColumns.size() + "<" + generics + ">";
@@ -80,7 +80,7 @@ public class CustomJavaGenerator extends JavaGenerator {
 
         for (ColumnDefinition column : table.getColumns()) {
             final String colClass = getStrategy().getJavaClassName(column);
-            final String colTypeFull = getJavaType(column.getType(resolver(Mode.DAO)), Mode.DAO);
+            final String colTypeFull = getJavaType(column.getType(resolver(out, Mode.DAO)), out, Mode.DAO);
             final String colType = out.ref(colTypeFull);
 
             out.println("public %s<%s> fetchRangeOf%s(%s lowerInclusive, %s upperInclusive);",
