@@ -10,7 +10,7 @@
     
     <parent>
         <groupId>jooq-custom</groupId>
-        <artifactId>jOOQSpringBootAddDAOMethodsMySQL</artifactId>
+        <artifactId>AddDAOMethods</artifactId>
         <version>1.0</version>
     </parent>    
 
@@ -18,15 +18,17 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         
-        <java.version>14</java.version>                
-        <maven.compiler.source>14</maven.compiler.source>
-        <maven.compiler.target>14</maven.compiler.target>                        
+        <java.version>17</java.version>                
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>  
+        <jooq.version>3.16.4</jooq.version>                      
     </properties>
     
-    <dependencies>                                                         
+    <dependencies>                                                               
         <dependency>
             <groupId>org.jooq</groupId>
-            <artifactId>jooq-codegen</artifactId>         
+            <artifactId>jooq-codegen</artifactId>     
+            <version>${jooq.version}</version>                    
         </dependency>                          
     </dependencies>   
 </project>

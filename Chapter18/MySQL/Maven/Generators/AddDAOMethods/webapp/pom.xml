@@ -10,7 +10,7 @@
 
     <parent>
         <groupId>jooq-custom</groupId>
-        <artifactId>jOOQSpringBootAddDAOMethodsMySQL</artifactId>
+        <artifactId>AddDAOMethods</artifactId>
         <version>1.0</version>        
     </parent>
     
@@ -18,11 +18,12 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         
-        <java.version>14</java.version>                
-        <maven.compiler.source>14</maven.compiler.source>
-        <maven.compiler.target>14</maven.compiler.target>
+        <java.version>17</java.version>                
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
                     
         <codehaus.mojo.version>1.0.0</codehaus.mojo.version>      
+        <jooq.version>3.16.4</jooq.version>
     </properties>       
         
     <dependencies>               
@@ -46,19 +47,16 @@
         <dependency>
             <groupId>org.jooq</groupId>
             <artifactId>jooq</artifactId>         
+            <version>${jooq.version}</version>
         </dependency>               
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-        </dependency>        
+        </dependency>               
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>javax.validation</groupId>
-            <artifactId>validation-api</artifactId>
-        </dependency>                        
+        </dependency>                         
     </dependencies>
 
     <build>
@@ -110,7 +108,7 @@
                     <user>${spring.datasource.username}</user>
                     <password>${spring.datasource.password}</password>  
                     <locations>
-                        <location>filesystem:src/main/resources/db/migration</location>
+                        <location>filesystem:./../../../../../../db/migration/dev/mysql</location>
                     </locations>
                 </configuration>
             </plugin>
@@ -124,8 +122,9 @@
                         <goals>
                             <goal>generate</goal>
                         </goals>                                  
-                        <configuration>                                                 
-                            <!-- Configure the database connection here. -->
+                        <configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.16.0.xsd">                                                 
+
+                            <!-- Configure the database connection here -->
                             <jdbc>
                                 <driver>${spring.datasource.driverClassName}</driver>
                                 <url>${spring.datasource.url}</url>
@@ -135,13 +134,16 @@
 
                             <generator>
                                 <!-- The default code generator. 
-                                You can override this one, to generate your own code style.
-                                Supported generators:
+                                     You can override this one, to generate your own code style.
+                                     
+                                Supported generators:                                
                                 - org.jooq.codegen.JavaGenerator
                                 - org.jooq.codegen.ScalaGenerator
+                                - org.jooq.codegen.KotlinGenerator
+                                
                                 Defaults to org.jooq.codegen.JavaGenerator -->
-                                <name>com.classicmodels.generator.CustomJavaGenerator</name>                                                               
-                                                                       
+                                <name>com.classicmodels.generator.CustomJavaGenerator</name>
+        
                                 <database>                            
                                     <!-- The database type. The format here is:
                                     org.jooq.meta.[database].[database]Database -->
@@ -158,14 +160,18 @@
                                     You can create case-insensitive regular expressions using this syntax: (?i:expr).
                                     Whitespace is ignored and comments are possible. -->       
                                     <includes>.*</includes>
-            
-                                    <!-- Schema version provider -->            
-                                    <schemaVersionProvider>SELECT MAX(version) FROM flyway_schema_history</schemaVersionProvider>
-            
+                                                
                                     <!-- All elements that are excluded from your schema
                                     (A Java regular expression. Use the pipe to separate several expressions).
                                     Excludes match before includes, i.e. excludes have a higher priority. -->
-                                    <excludes>flyway_schema_history</excludes>
+                                    <excludes>
+                                        flyway_schema_history | sequences 
+                                        | customer_pgs | refresh_top3_product
+                                        | sale_.* | set_.* | get_.* | .*_master
+                                    </excludes>
+
+                                    <!-- Schema version provider -->            
+                                    <schemaVersionProvider>SELECT MAX(`version`) FROM `flyway_schema_history`</schemaVersionProvider>            
                                     
                                     <!-- Give enough time to jOOQ to trigger the queries needed for generating sources 
                                     (default is 5 seconds) -->
@@ -188,8 +194,7 @@
                                                                                                
                                 <!-- jOOQ will generate POJOs and DAOs in your behalf -->
                                 <generate>
-                                    <daos>true</daos>                                                                       
-                                    <validationAnnotations>true</validationAnnotations>                            
+                                    <daos>true</daos>                                                                                                        
                                     <springAnnotations>true</springAnnotations>   
                                 </generate>
                                 
@@ -201,7 +206,7 @@
                                     <packageName>jooq.generated</packageName>
             
                                     <!-- The destination directory of your generated classes. Using Maven directory layout here -->
-                                    <directory>target/generated-sources/jooq</directory>                                                                       
+                                    <directory>target/generated-sources</directory>                                                                       
                                 </target>
                             </generator>    
                                                                                               
