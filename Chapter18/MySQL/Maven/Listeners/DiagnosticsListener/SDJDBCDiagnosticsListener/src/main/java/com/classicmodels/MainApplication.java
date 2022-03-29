@@ -5,9 +5,10 @@ import com.classicmodels.service.ClassicModelsService;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.r2dbc.R2dbcAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 
-@SpringBootApplication
+@SpringBootApplication(exclude = {R2dbcAutoConfiguration.class})
 public class MainApplication {
 
     private final ClassicModelsService productLineService;
@@ -28,10 +29,10 @@ public class MainApplication {
             productlinesAndProduct.iterator().forEachRemaining(System.out::println);
             
             System.out.println("\n\nExample: Update a product line description via Spring Data JDBC");
-            productLineService.updateProductLineDescription("Classic cars");
+            productLineService.updateProductLineDescription("Classic Cars");
             
             System.out.println("\n\nExample: Update a product line description via jOOQ");
-            productLineService.updateProductLineDescriptionJooq("Classic cars");
+            productLineService.updateProductLineDescriptionJooq("Classic Cars");
         };
     }
 }

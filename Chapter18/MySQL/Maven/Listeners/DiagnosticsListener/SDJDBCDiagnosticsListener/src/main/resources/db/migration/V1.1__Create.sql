@@ -11,7 +11,7 @@ This is a modified version of the original schema for MySQL
 
 /* START */
 
-USE products;
+USE classicmodels;
 
 DROP TABLE IF EXISTS `product`;
 DROP TABLE IF EXISTS `productline`;

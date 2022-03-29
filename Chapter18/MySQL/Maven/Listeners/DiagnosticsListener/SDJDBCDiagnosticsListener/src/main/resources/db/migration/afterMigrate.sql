@@ -11,7 +11,7 @@ This is a modified version of the original schema
 
 /* START */
 
-USE `products`;
+USE `classicmodels`;
 
 insert  into `productline`(`product_line`,`text_description`,`html_description`,`image`) values 
 
