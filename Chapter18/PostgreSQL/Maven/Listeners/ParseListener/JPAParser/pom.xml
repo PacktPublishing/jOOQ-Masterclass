@@ -3,26 +3,25 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.jpa</groupId>
-    <artifactId>jOOQSpringJPAParserMySQLPostgreSQL</artifactId>
+    <groupId>com.classicmodels</groupId>
+    <artifactId>JPAParser</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>jOOQSpringJPAParserMySQLPostgreSQL</name>
-    <description>JPA project for Spring Boot</description>
+    <name>JPAParser</name>    
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.5.6</version>
+        <version>2.5.7</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>14</java.version>   
-        <jooq.version>3.15.4</jooq.version>                     
+        <java.version>17</java.version>   
+        <jooq.version>3.16.4</jooq.version>                     
     </properties>
 
     <dependencies>
@@ -67,8 +66,7 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.3</version>
+                <artifactId>maven-compiler-plugin</artifactId>                
                 <configuration>
                     <compilerArgs>
                         <arg>--enable-preview</arg>
