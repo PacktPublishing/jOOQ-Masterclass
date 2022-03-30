@@ -18,7 +18,7 @@ public class MyConverterProvider implements ConverterProvider {
         if (tType == JSON.class) {
             return Converter.ofNullable(tType, uType,
                     t -> {
-                        try {System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+                        try {
                             return new JSONDeserializer<U>().deserialize(((JSON) t).data());
                         } catch (Exception e) {
                             throw new DataTypeException("JSON mapping error", e);
