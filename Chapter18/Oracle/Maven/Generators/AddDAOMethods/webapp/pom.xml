@@ -3,14 +3,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     
-    <groupId>com-jooq-jpa</groupId>
+    <groupId>classicmodels.jooq.code.gen</groupId>
     <artifactId>webapp</artifactId>
     <version>1.0</version>        
     <name>webapp</name>
 
     <parent>
-        <groupId>com-jooq-jpa</groupId>
-        <artifactId>jOOQSpringBootAddDAOMethodsOracle</artifactId>
+        <groupId>classicmodels.jooq.code.gen</groupId>
+        <artifactId>AddDAOMethods</artifactId>
         <version>1.0</version>        
     </parent>
     
@@ -18,18 +18,17 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         
-        <java.version>14</java.version>                
-        <maven.compiler.source>14</maven.compiler.source>
-        <maven.compiler.target>14</maven.compiler.target>
+        <java.version>17</java.version>                
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         
-        <jooq.version>3.13.5</jooq.version>             
-        <codehaus.mojo.version>1.0.0</codehaus.mojo.version>
-        <maven.compiler.plugin.version>3.3</maven.compiler.plugin.version>
+        <jooq.version>3.16.4</jooq.version>             
+        <codehaus.mojo.version>1.0.0</codehaus.mojo.version>        
     </properties>
 
     <dependencies>       
         <dependency>
-            <groupId>com-jooq-jpa</groupId>
+            <groupId>classicmodels.jooq.code.gen</groupId>
             <artifactId>jooq-generator</artifactId>
             <version>1.0</version>
         </dependency>     
@@ -57,11 +56,7 @@
         <dependency>
             <groupId>com.oracle.database.jdbc</groupId>
             <artifactId>ucp</artifactId>            
-        </dependency>    
-        <dependency>
-            <groupId>javax.validation</groupId>
-            <artifactId>validation-api</artifactId>    
-        </dependency>   
+        </dependency>            
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -73,8 +68,7 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven.compiler.plugin.version}</version>
+                <artifactId>maven-compiler-plugin</artifactId>             
                 <configuration>
                     <compilerArgs>
                         <arg>--enable-preview</arg>
@@ -115,7 +109,7 @@
                     <user>${spring.datasource.username}</user>
                     <password>${spring.datasource.password}</password>  
                     <locations>
-                        <location>filesystem:src/main/resources/db/migration</location>
+                        <location>filesystem:./../../../../../../db/migration/dev/oracle</location>
                     </locations>
                 </configuration>
             </plugin>
@@ -141,10 +135,13 @@
 
                             <generator>
                                 <!-- The default code generator. 
-                                You can override this one, to generate your own code style.
-                                Supported generators:
+                                     You can override this one, to generate your own code style.
+                                     
+                                Supported generators:                                
                                 - org.jooq.codegen.JavaGenerator
                                 - org.jooq.codegen.ScalaGenerator
+                                - org.jooq.codegen.KotlinGenerator
+                                
                                 Defaults to org.jooq.codegen.JavaGenerator -->
                                 <name>com.classicmodels.generator.CustomJavaGenerator</name>
         
@@ -156,7 +153,7 @@
                                     <!-- The database schema (or in the absence of schema support, in your RDBMS this
                                     can be the owner, user, database name) to be generated. This cannot be combined with the <schemata/> element.                                     
                                     If <inputSchema/> is missing then all schemas will be considered. -->
-                                    <inputSchema>SYSTEM</inputSchema>                 
+                                    <inputSchema>CLASSICMODELS</inputSchema>                 
             
                                     <!-- All elements that are generated from your schema
                                     (A Java regular expression. Use the pipe to separate several expressions)
@@ -166,15 +163,18 @@
                                     <includes>.*</includes>
             
                                     <!-- Schema version provider -->            
-                                    <schemaVersionProvider>SELECT MAX("version") FROM "SYSTEM"."flyway_schema_history"</schemaVersionProvider>
+                                    <schemaVersionProvider>SELECT MAX("version") FROM "CLASSICMODELS"."flyway_schema_history"</schemaVersionProvider>
             
                                     <!-- All elements that are excluded from your schema
                                     (A Java regular expression. Use the pipe to separate several expressions).
                                     Excludes match before includes, i.e. excludes have a higher priority. -->
                                     <excludes>
-                                        flyway_schema_history | HELP | ROLLING.* | LOGMNR.* | PRODUCT_PRIVS
-                                        | AQ.* | MVIEW.* | LOGMNRC.* | LOGMNRGGC.* | LOGMNRP.* 
-                                        | LOGMNRT.* | OL.* | REDO.* | SCHEDULER.* | SQLPLUS.* | LOGSTDBY.*
+                                        flyway_schema_history | DEPARTMENT_PKG | GET_.*
+                                        | CARD_COMMISSION | PRODUCT_OF_PRODUCT_LINE
+                                        | REFRESH_TOP3_PRODUCT | SALE_PRICE | SECOND_MAX
+                                        | SET_COUNTER | SWAP | TOP_THREE_SALES_PER_EMPLOYEE
+                                        | EVALUATION_CRITERIA | SECOND_MAX_IMPL | TABLE_.*_OBJ
+                                        | .*_MASTER | BGT | .*_ARR | TABLE_POPL | TABLE_RES
                                     </excludes>
                                     
                                     <!-- Give enough time to jOOQ to trigger the queries needed for generating sources 
@@ -196,10 +196,9 @@
                                     </matchers>
                                 </strategy>
                                                                                                
-                                <!-- jOOQ will generate POJOs and DAOs in your behalf -->
+                                <!-- jOOQ will generate POJOs and DAOs on our behalf -->
                                 <generate>
-                                    <daos>true</daos>                                   
-                                    <validationAnnotations>true</validationAnnotations>                            
+                                    <daos>true</daos>                                                                      
                                     <springAnnotations>true</springAnnotations>   
                                 </generate>
                                 
@@ -211,7 +210,7 @@
                                     <packageName>jooq.generated</packageName>
             
                                     <!-- The destination directory of your generated classes. Using Maven directory layout here. -->
-                                    <directory>target/generated-sources/jooq</directory>
+                                    <directory>target/generated-sources</directory>
                                 </target>
                             </generator>    
                                                                                               

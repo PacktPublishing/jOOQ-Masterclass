@@ -3,14 +3,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com-jooq-jpa</groupId>
+    <groupId>classicmodels.jooq.code.gen</groupId>
     <artifactId>jooq-generator</artifactId>
     <version>1.0</version>        
     <name>jooq-generator</name>    
     
     <parent>
-        <groupId>com-jooq-jpa</groupId>
-        <artifactId>jOOQSpringBootAddDAOMethodsOracle</artifactId>
+        <groupId>classicmodels.jooq.code.gen</groupId>
+        <artifactId>AddDAOMethods</artifactId>
         <version>1.0</version>
     </parent>    
 
@@ -18,11 +18,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         
-        <java.version>14</java.version>                
-        <maven.compiler.source>14</maven.compiler.source>
-        <maven.compiler.target>14</maven.compiler.target>                        
+        <java.version>17</java.version>                
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>                        
         
-        <jooq.version>3.13.5</jooq.version> 
+        <jooq.version>3.16.4</jooq.version> 
     </properties>
     
     <dependencies>                                                         
