@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.classicmodels</groupId>
-    <artifactId>250MyTransactionProvider</artifactId>
+    <artifactId>A250MyTransactionProvider</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>250MyTransactionProvider</name>
+    <name>A250MyTransactionProvider</name>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

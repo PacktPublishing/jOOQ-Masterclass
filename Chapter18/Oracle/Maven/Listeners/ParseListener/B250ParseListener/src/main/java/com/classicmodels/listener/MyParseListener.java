@@ -1,6 +1,5 @@
 package com.classicmodels.listener;
 
-import java.util.ArrayList;
 import java.util.List;
 import org.jooq.Field;
 import org.jooq.ParseContext;
@@ -17,20 +16,14 @@ public class MyParseListener extends DefaultParseListener {
     public Field parseField(ParseContext pcx) {
 
         if (pcx.parseFunctionNameIf("CONCAT_WS")) {
-
+            
             pcx.parse('(');
-            pcx.parse('\'');
-            char separator = pcx.character(); // get the separator of CONCAT_WS()
-            pcx.position(pcx.position() + 1); // move to next position (jump over the separator)
-            pcx.parse('\'');
+            
+            String separator = pcx.parseStringLiteral();           
+            
             pcx.parse(',');
 
-            List<Field<?>> fields = new ArrayList<>(); // extract the variadic list of fields
-            fields.add(pcx.parseField());  // get the first field (assuming at least one)
-
-            while (pcx.parseIf(",")) { // get the rest of fields (if any)
-                fields.add(pcx.parseField());
-            }
+            List<Field<?>> fields = pcx.parseList(",", c -> c.parseField()); // extract the variadic list of fields
 
             pcx.parse(')'); // the function CONCAT_WS() was parsed                
 

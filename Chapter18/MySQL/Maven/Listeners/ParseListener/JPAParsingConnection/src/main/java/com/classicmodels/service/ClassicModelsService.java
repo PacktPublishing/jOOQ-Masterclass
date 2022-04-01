@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import org.jooq.SQLDialect;
+import org.jooq.conf.Settings;
 import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,8 +47,8 @@ public class ClassicModelsService {
 
         try ( Connection c = DSL.using(url, user, pass)
                 .configuration()
-                .set(SQLDialect.MYSQL)
-                .dsl()
+                .set(new Settings().withParseDialect(SQLDialect.MYSQL))               
+                .dsl()                
                 .parsingConnection();  
                 
                 PreparedStatement ps = c.prepareStatement(sql);) {
@@ -82,7 +83,7 @@ public class ClassicModelsService {
 
         try ( Connection c = DSL.using(url, user, pass)
                 .configuration()
-                .set(SQLDialect.MYSQL)
+                .set(new Settings().withParseDialect(SQLDialect.MYSQL))               
                 .dsl()
                 .parsingConnection();  
                 
