@@ -74,6 +74,14 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>            
+                <configuration>
+                    <skipTests>false</skipTests>                    
+                    <argLine>--enable-preview -Dfile.encoding=UTF-8</argLine>                    
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>    
                 <configuration>
                     <compilerArgs>
@@ -189,9 +197,9 @@
                                 </database>
                                 <target>
                                     <!-- The destination package of your generated classes (within the destination directory).
-                                    jOOQ may append the schema name to this package if generating multiple schemas,
-                                       e.g. org.jooq.your.packagename.schema1
-                                       org.jooq.your.packagename.schema2 -->                                    
+                                 jOOQ may append the schema name to this package if generating multiple schemas,
+                                    e.g. org.jooq.your.packagename.schema1
+                                    org.jooq.your.packagename.schema2 -->                                    
                                     <packageName>jooq.generated</packageName>
             
                                     <!-- The destination directory of your generated classes. Using Maven directory layout here -->
