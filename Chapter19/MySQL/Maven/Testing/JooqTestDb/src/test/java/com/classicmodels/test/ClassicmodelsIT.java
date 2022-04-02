@@ -164,7 +164,7 @@ public class ClassicmodelsIT {
                                     row(PAYMENT.CUSTOMER_NUMBER, PAYMENT.CHECK_NUMBER)
                                             .eq(103L, "HQ336336"));
 
-                            record.setInvoiceAmount(BigDecimal.valueOf(0));
+                            record.setInvoiceAmount(BigDecimal.ZERO);
 
                             record.store();
                         }
