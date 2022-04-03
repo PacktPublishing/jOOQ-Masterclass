@@ -10,4 +10,4 @@
 | Testcontainers  | Using the Testcontainers library for testing jOOQ code.     |
 | TestR2DBC       | Test the production R2DBC database.                         |
 | TestR2DBCDb     | Testing using a R2DBC test database.                        |
-| TestR2DBCInMem  | Testing using an in-mmeory R2DBC H2 test database.          |
+| TestR2DBCInMem  | Testing using an in-mmeory R2DBC H2 test database.          |                                                                             |
