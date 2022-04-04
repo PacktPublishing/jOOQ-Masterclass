@@ -24,7 +24,7 @@ public class JooqConfig {
                                 .withName("org.jooq.meta.xml.XMLDatabase")       
                                 .withProperties(
                                         new Property().withKey("dialect").withValue("MYSQL"),
-                                        new Property().withKey("xmlFile").withValue("./../../../../../db/migration/xml/mysql/sql.xml")
+                                        new Property().withKey("xmlFile").withValue("./../../../../../../db/migration/xml/mysql/sql.xml")
                                 )
                                 .withIncludes(".*")
                                 .withExcludes("flyway_schema_history | sequences"
@@ -49,8 +49,8 @@ public class JooqConfig {
                         )
                         .withTarget(new Target()
                                 .withPackageName("jooq.generated")
-                                .withDirectory(System.getProperty("user.dir")  
-                                + "/../webapp/build/generated-sources")));
+                                .withDirectory(System.getProperty("user.dir") 
+								+ "/../webapp/build/generated-sources")));
 
         GenerationTool.generate(configuration);
     }

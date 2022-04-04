@@ -23,6 +23,7 @@ dependencies {
     implementation 'org.flywaydb:flyway-core'
     implementation 'org.jooq:jooq'
     implementation 'mysql:mysql-connector-java'
+    implementation 'jakarta.validation:jakarta.validation-api:3.0.1'
     implementation project(':jooq-code-generator')
 }
 

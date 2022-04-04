@@ -5,7 +5,6 @@ import org.jooq.meta.jaxb.Configuration;
 import org.jooq.meta.jaxb.Database;
 import org.jooq.meta.jaxb.Generate;
 import org.jooq.meta.jaxb.Generator;
-import org.jooq.meta.jaxb.Jdbc;
 import org.jooq.meta.jaxb.MatcherRule;
 import org.jooq.meta.jaxb.MatcherTransformType;
 import org.jooq.meta.jaxb.Matchers;

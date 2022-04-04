@@ -5,7 +5,6 @@ import org.jooq.meta.jaxb.Configuration;
 import org.jooq.meta.jaxb.Database;
 import org.jooq.meta.jaxb.Generate;
 import org.jooq.meta.jaxb.Generator;
-import org.jooq.meta.jaxb.Jdbc;
 import org.jooq.meta.jaxb.MatcherRule;
 import org.jooq.meta.jaxb.MatcherTransformType;
 import org.jooq.meta.jaxb.Matchers;
@@ -18,12 +17,7 @@ public class JooqConfig {
 
     public static void main(String[] args) throws Exception {
 
-        Configuration configuration = new Configuration()
-                .withJdbc(new Jdbc()
-                        .withDriver("com.mysql.cj.jdbc.Driver")
-                        .withUrl("jdbc:mysql://localhost:3306/classicmodels?createDatabaseIfNotExist=true")
-                        .withUser("root")
-                        .withPassword("root"))
+        Configuration configuration = new Configuration()                
                 .withGenerator(new Generator()
                         .withName("org.jooq.codegen.JavaGenerator")
                         .withDatabase(new Database()
