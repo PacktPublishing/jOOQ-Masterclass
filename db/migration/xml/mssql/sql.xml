@@ -702,7 +702,7 @@
             <table_name>productline</table_name>
             <column_name>image</column_name>
             <data_type>varbinary</data_type>
-            <character_maximum_length>max</character_maximum_length>
+            <character_maximum_length>8000</character_maximum_length>
         </column>
         <!-- text_description varchar(4000) -->
         <column>  
