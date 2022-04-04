@@ -2,8 +2,8 @@ plugins {
     id 'application'
     id 'org.springframework.boot' version '2.5.7'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-    id 'org.flywaydb.flyway' version '8.2.0'
-    id 'nu.studer.jooq' version '7.1.1'
+    id 'org.flywaydb.flyway' version '7.7.3'
+    id 'nu.studer.jooq' version '6.0.1'
     id 'java'
 }
 
@@ -24,13 +24,13 @@ repositories {
 }
 
 dependencies {            
-    jooqGenerator 'org.postgresql:postgresql' 
+    jooqGenerator 'com.microsoft.sqlserver:mssql-jdbc' 
     jooqGenerator 'jakarta.xml.bind:jakarta.xml.bind-api:3.0.1'
-    implementation 'org.springframework.boot:spring-boot-starter-jdbc'    
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.postgresql:postgresql'
-    implementation 'jakarta.xml.bind:jakarta.xml.bind-api:3.0.1'
     implementation 'jakarta.validation:jakarta.validation-api:3.0.1'
+    implementation 'jakarta.xml.bind:jakarta.xml.bind-api:3.0.1'
+    implementation 'com.microsoft.sqlserver:mssql-jdbc'
     implementation 'org.flywaydb:flyway-core'
 }
 
@@ -45,12 +45,13 @@ flyway {
     url = project.properties['url']
     user = project.properties['username']
     password = project.properties['password']    
-    locations = ['filesystem:./../../../../../db/migration/min/postgresql']
+    locations = ['filesystem:./../../../../../db/migration/min/mssql']
+    mixed = true
 }
 
 jooq {
     version = project.properties['jooq']
-    edition = nu.studer.gradle.jooq.JooqEdition.OSS
+    edition = nu.studer.gradle.jooq.JooqEdition.TRIAL_JAVA_8
 
     configurations {
         main {
@@ -80,13 +81,13 @@ jooq {
                             // Use any of the SQLDialect values here
                             property {
                                 key = 'dialect'
-                                value = 'POSTGRES'
+                                value = 'SQLSERVER'
                             }
 
                             // Specify the location of your database file
                             property {
                                 key = 'xmlFile'
-                                value = './../../../../../db/migration/xml/postgresql/sql.xml'
+                                value = './../../../../../db/migration/xml/mssql/sql.xml'
                             }
                         }
                         
@@ -95,8 +96,8 @@ jooq {
                         // Watch out for case-sensitivity. Depending on your database, this might be important! 
                         // You can create case-insensitive regular expressions using this syntax: (?i:expr).
                         // Whitespace is ignored and comments are possible.
-                        includes = '.*'
-                                               
+                        includes = '.*'                       
+                                   
                         // Schema version provider
                         schemaVersionProvider=schemaVersion                        
                     }                                        
@@ -139,7 +140,7 @@ tasks.named('generateJooq').configure {
     dependsOn tasks.named('flywayMigrate')
 
     // declare Flyway migration scripts as inputs on the jOOQ task
-    inputs.files(fileTree('${rootDir}/../../../../../db/migration/min/postgresql'))
+    inputs.files(fileTree('${rootDir}/../../../../../db/migration/min/mssql'))
     .withPropertyName('migrations')
     .withPathSensitivity(PathSensitivity.RELATIVE)
 
