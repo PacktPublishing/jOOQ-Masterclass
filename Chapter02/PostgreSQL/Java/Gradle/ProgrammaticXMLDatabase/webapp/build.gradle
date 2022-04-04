@@ -1,0 +1,82 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'org.springframework.boot' version '2.5.7'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'org.flywaydb.flyway' version '7.7.3'    
+    id 'nu.studer.jooq' version '7.1.1'
+}
+
+group = 'com.classicmodels'
+version = '1.0'
+sourceCompatibility = '17'
+targetCompatibility = '17'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {    
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'    
+    implementation 'org.springframework.boot:spring-boot-starter-web'    
+    implementation 'org.flywaydb:flyway-core'
+    implementation 'org.jooq:jooq'
+    implementation 'org.postgresql:postgresql'
+    implementation 'jakarta.validation:jakarta.validation-api:3.0.1'
+    implementation project(':jooq-code-generator')
+}
+
+application {
+    mainClass = 'com.classicmodels.MainApplication'
+}
+
+processResources {
+    filesMatching("**/application.properties") {
+        expand( project.properties )
+    }
+}
+
+jooq {
+    version = project.properties['jooq']
+    edition = nu.studer.gradle.jooq.JooqEdition.OSS
+}
+
+flyway {
+    driver = project.properties['driverClassName']
+    url = project.properties['url']
+    user = project.properties['username']
+    password = project.properties['password']   
+    locations = ['filesystem:./../../../../../../db/migration/min/postgresql']
+}
+
+task runProgrammaticGenerator(type: JavaExec) {    
+
+    dependsOn tasks.named('flywayMigrate')
+    dependsOn(':jooq-code-generator:compileJava')
+
+    configurations {
+      codegen   
+      metaext
+      jakarta
+    }
+
+    dependencies {
+       codegen "org.jooq:jooq-codegen"       
+       metaext "org.jooq:jooq-meta-extensions"
+       jakarta "jakarta.xml.bind:jakarta.xml.bind-api:3.0.1"
+    }
+
+    classpath = files([
+         "${rootDir}/jooq-code-generator/build/classes/java/main",
+         configurations.codegen, configurations.metaext, 
+         configurations.jakarta
+    ])
+	
+    mainClass = 'com.classicmodels.jooq.config.JooqConfig'	
+}
+
+sourceSets.main.java.srcDirs = ['build/generated-sources/jooq', 'src/main/java']
+
+assemble.dependsOn('runProgrammaticGenerator')
+compileJava.dependsOn('runProgrammaticGenerator')
