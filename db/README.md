@@ -1,4 +1,4 @@
-# Good to know
+# Good to know before running the code
 
 The database schema (`classicmodels`) is available for four dialects: MySQL, PostgreSQL, SQL Server, and Oracle. Depending on dialect, the corresponding schema may contain things (e.g., data types) that are specific to that dialect. Most of the applications (80%+) are available for all these dialects, and they may differ from each other depending on dialect particularities. Also, most applications uses the schema from the `db/migration/dev` folder, but some applications (detailed in the book) may use a smaller (reduced) version of this schema.
 
