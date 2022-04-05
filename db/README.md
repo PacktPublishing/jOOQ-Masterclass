@@ -1,6 +1,8 @@
 # Give yourself the chance to learn jOOQ and SQL
 
-![https://twitter.com/anghelleonard/status/1504041764025511937](https://github.com/PacktPublishing/Up-and-Running-with-jOOQ/blob/master/db/Learn%20SQL%20Quiz.png)]
+https://twitter.com/anghelleonard/status/1504041764025511937
+![](https://github.com/PacktPublishing/Up-and-Running-with-jOOQ/blob/master/db/Learn%20SQL%20Quiz.png)
+https://twitter.com/anghelleonard/status/1504041764025511937
 
 # Good to know before running the code
 
