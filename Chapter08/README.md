@@ -5,3 +5,4 @@ Fetching result sets and mapping them in the shape and format expected by the cl
 There is no more reason to choose the most improper (less performant) option: 
 - https://twitter.com/anghelleonard/status/1505805514218692609
 - https://twitter.com/anghelleonard/status/1496016256553652224
+- https://twitter.com/anghelleonard/status/1486663121146101765
