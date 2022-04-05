@@ -1,3 +1,7 @@
+# Give yourself the chance to learn jOOQ and SQL
+
+![https://twitter.com/anghelleonard/status/1504041764025511937](https://github.com/PacktPublishing/Up-and-Running-with-jOOQ/blob/master/db/Learn%20SQL%20Quiz.png)]
+
 # Good to know before running the code
 
 The database schema (`classicmodels`) is available for four dialects: MySQL, PostgreSQL, SQL Server, and Oracle. Depending on dialect, the corresponding schema may contain things (e.g., data types) that are specific to that dialect. Most of the applications (80%+) are available for all these dialects, and they may differ from each other depending on dialect particularities. Also, most applications uses the schema from the `db/migration/dev` folder, but some applications (detailed in the book) may use a smaller (reduced) version of this schema available in separate folders. While all applications are available for Maven, most of all are available for Gradle as well.
