@@ -22,11 +22,16 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         
-        <jooq.version>3.15.5</jooq.version>
+        <jooq.version>3.16.5</jooq.version>
+        
+        <!-- when Spring Boot recognize 'jakarta' namespace you can modify 
+             the entities and switch the following version to 3.16.5+ -->
         <jooq.meta.extensions.hibernate.version>3.15.5</jooq.meta.extensions.hibernate.version>        
+        
         <codehaus.mojo.version>1.0.0</codehaus.mojo.version>    
         <javax.persistence.api.version>2.2</javax.persistence.api.version>     
         <validation.api.version>2.0.1.Final</validation.api.version>
+        <jakarta.version>3.0.1</jakarta.version>
         
         <!-- property used as a schema version provider -->
         <schema.version>1</schema.version>
@@ -57,13 +62,10 @@
             <version>${jooq.version}</version>                             
         </dependency>                      
         <dependency>
-            <groupId>javax.validation</groupId>
-            <artifactId>validation-api</artifactId>         
-        </dependency>       
-        <dependency>
-            <groupId>org.hibernate.validator</groupId>
-            <artifactId>hibernate-validator</artifactId>    
-        </dependency>           
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+            <version>${jakarta.version}</version>
+        </dependency>             
     </dependencies>
 
     <build>
@@ -116,6 +118,7 @@
             <plugin>
                 <groupId>org.jooq</groupId>
                 <artifactId>jooq-codegen-maven</artifactId>            
+                <version>${jooq.version}</version>
                 <executions>
                     <execution>
                         <id>generate-jooq-from-jpa-entities</id>
@@ -123,7 +126,7 @@
                         <goals>
                             <goal>generate</goal>
                         </goals>
-                        <configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.15.0.xsd">
+                        <configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.16.0.xsd">
                             <generator>
 
                                 <!-- The default code generator. 
@@ -244,7 +247,7 @@
                         <groupId>javax.validation</groupId>
                         <artifactId>validation-api</artifactId>
                         <version>${validation.api.version}</version>
-                    </dependency>                  
+                    </dependency>            
                 </dependencies>                  
             </plugin>            
         </plugins>
