@@ -27,7 +27,7 @@
         
         <jooq.version>3.16.5</jooq.version>     
         <codehaus.mojo.version>1.0.0</codehaus.mojo.version>  
-        <jakarta.version>3.0.1</jakarta.version>  
+        <jakarta.validation.version>3.0.1</jakarta.validation.version>  
                 
         <main.class>com.classicmodels.MainApplicationKt</main.class>
     </properties>
@@ -74,7 +74,7 @@
         <dependency>
             <groupId>jakarta.validation</groupId>
             <artifactId>jakarta.validation-api</artifactId>
-            <version>${jakarta.version}</version>
+            <version>${jakarta.validation.version}</version>
         </dependency>      
         <dependency>
             <groupId>org.springframework.boot</groupId>
