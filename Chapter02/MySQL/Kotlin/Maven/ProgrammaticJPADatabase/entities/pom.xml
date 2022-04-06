@@ -22,7 +22,10 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>   
         
-        <jooq.version>3.15.5</jooq.version>
+        <jooq.version>3.16.5</jooq.version>
+        
+        <!-- when Spring Boot recognize 'jakarta' namespace you can modify 
+             the entities and switch the following version to 3.16.5+ -->
         <jooq.meta.extensions.hibernate.version>3.15.5</jooq.meta.extensions.hibernate.version>                               
     </properties>
     

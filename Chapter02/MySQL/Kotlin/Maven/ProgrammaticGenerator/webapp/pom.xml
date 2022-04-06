@@ -8,8 +8,7 @@
     <version>1.0</version>    
 
     <name>webapp</name>
-    <description>Using jOOQ to build the typesafe SQL and to execute it</description>    
-
+    
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -26,9 +25,11 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         
-        <jooq.version>3.15.5</jooq.version>     
+        <jooq.version>3.16.5</jooq.version>     
         <codehaus.mojo.version>1.0.0</codehaus.mojo.version>    
         <exec.maven.plugin>3.0.0</exec.maven.plugin>
+        <jakarta.validation.api.version>3.0.1</jakarta.validation.api.version>
+        <jakarta.xml.bind.version>3.0.1</jakarta.xml.bind.version>
                 
         <main.class>com.classicmodels.MainApplicationKt</main.class>
     </properties>
@@ -73,13 +74,15 @@
             <artifactId>mysql-connector-java</artifactId>
         </dependency>   
         <dependency>
-            <groupId>javax.validation</groupId>
-            <artifactId>validation-api</artifactId>    
-        </dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+            <version>${jakarta.validation.api.version}</version>
+        </dependency>     
         <dependency>
-            <groupId>org.hibernate.validator</groupId>
-            <artifactId>hibernate-validator</artifactId>            
-        </dependency>         
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+            <version>${jakarta.xml.bind.version}</version>
+        </dependency>     
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>

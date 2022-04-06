@@ -8,8 +8,7 @@
     <version>1.0</version>    
 
     <name>WriteTypesafeSQL</name>
-    <description>Using jOOQ to build the typesafe SQL and to execute it</description>    
-
+ 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -26,7 +25,7 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         
-        <jooq.version>3.15.5</jooq.version>     
+        <jooq.version>3.16.5</jooq.version>     
         <codehaus.mojo.version>1.0.0</codehaus.mojo.version>    
                 
         <main.class>com.classicmodels.MainApplicationKt</main.class>
@@ -217,7 +216,8 @@
             </plugin>
             <plugin>
                 <groupId>org.jooq</groupId>
-                <artifactId>jooq-codegen-maven</artifactId>               
+                <artifactId>jooq-codegen-maven</artifactId>   
+                <version>${jooq.version}</version>            
                 <executions>
                     <execution>
                         <id>generate-for-mysql</id>
@@ -225,7 +225,7 @@
                         <goals>
                             <goal>generate</goal>
                         </goals>                                  
-                        <configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.15.0.xsd">                                                 
+                        <configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.16.0.xsd">                                                 
 
                             <!-- Configure the database connection here -->
                             <jdbc>
@@ -270,7 +270,7 @@
                                     <excludes>
                                         flyway_schema_history | sequences 
                                         | customer_pgs | refresh_top3_product
-                                        | sale_.* | set_.* | get_.* | .*_master
+                                        | sale_.* | set_.* | get_.* | .*_master | .*_jooq
                                     </excludes>
 
                                     <!-- Schema version provider -->            

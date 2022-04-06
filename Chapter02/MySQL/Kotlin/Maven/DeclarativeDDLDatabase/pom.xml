@@ -8,8 +8,7 @@
     <version>1.0</version>    
 
     <name>DeclarativeDDLDatabase</name>
-    <description>Using jOOQ to build the typesafe SQL and to execute it</description>    
-
+ 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -26,8 +25,9 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         
-        <jooq.version>3.15.5</jooq.version>     
-        <codehaus.mojo.version>1.0.0</codehaus.mojo.version>    
+        <jooq.version>3.16.5</jooq.version>     
+        <codehaus.mojo.version>1.0.0</codehaus.mojo.version>  
+        <jakarta.version>3.0.1</jakarta.version>  
                 
         <main.class>com.classicmodels.MainApplicationKt</main.class>
     </properties>
@@ -72,13 +72,10 @@
             <artifactId>mysql-connector-java</artifactId>
         </dependency>   
         <dependency>
-            <groupId>javax.validation</groupId>
-            <artifactId>validation-api</artifactId>    
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate.validator</groupId>
-            <artifactId>hibernate-validator</artifactId>            
-        </dependency>         
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+            <version>${jakarta.version}</version>
+        </dependency>      
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -191,7 +188,8 @@
             </plugin>   
             <plugin>
                 <groupId>org.jooq</groupId>
-                <artifactId>jooq-codegen-maven</artifactId>                   
+                <artifactId>jooq-codegen-maven</artifactId>         
+                <version>${jooq.version}</version>          
                 <executions>
                     <execution>
                         <id>generate-for-mysql</id>
@@ -199,7 +197,7 @@
                         <goals>
                             <goal>generate</goal>
                         </goals>                                  
-                        <configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.15.0.xsd">
+                        <configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.16.0.xsd">
                             <generator>
                                 
                                 <!-- The default code generator. 
@@ -272,19 +270,9 @@
                                     You can create case-insensitive regular expressions using this syntax: (?i:expr).
                                     Whitespace is ignored and comments are possible. -->       
                                     <includes>.*</includes>
-                                    
-                                    <!-- All elements that are excluded from your schema
-                                    (A Java regular expression. Use the pipe to separate several expressions).
-                                    Excludes match before includes, i.e. excludes have a higher priority. -->
-                                    <excludes>
-                                        flyway_schema_history | sequences 
-                                        | customer_pgs | refresh_top3_product
-                                        | sale_.* | set_.* | get_.* | .*_master
-                                    </excludes>
-
+                                                                       
                                     <!-- Schema version provider -->            
-                                    <schemaVersionProvider>${schema.version}</schemaVersionProvider>                                                                        
-                                    
+                                    <schemaVersionProvider>${schema.version}</schemaVersionProvider>                                                                                                            
                                 </database>
                                 
                                 <!-- Rename the generated POJOs and DAOs classes -->                      
