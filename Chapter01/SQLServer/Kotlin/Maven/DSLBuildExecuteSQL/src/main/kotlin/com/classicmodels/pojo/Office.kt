@@ -10,4 +10,6 @@ data class Office(val officecode: String?,
                   val phone: String?,
                   val postalCode: String?,
                   val state: String?,
-                  val territory: String?): Serializable
+                  val location: Any?,
+                  val territory: String?,
+                  val internalBudget: Int?): Serializable

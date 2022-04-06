@@ -8,7 +8,6 @@
     <version>1.0</version>    
 
     <name>DSLBuildExecuteSQL</name>
-    <description>Using jOOQ DSL to build and execute SQL</description>    
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -26,7 +25,7 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         
-        <jooq.version>3.15.5</jooq.version>     
+        <jooq.version>3.16.5</jooq.version>     
                 
         <main.class>com.classicmodels.MainApplicationKt</main.class>
     </properties>
@@ -53,7 +52,7 @@
             <artifactId>jackson-module-kotlin</artifactId>    
         </dependency>
         <dependency>
-            <groupId>org.jooq</groupId>
+            <groupId>org.jooq.trial-java-8</groupId>
             <artifactId>jooq</artifactId>         
             <version>${jooq.version}</version>
         </dependency>                   

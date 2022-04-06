@@ -15,12 +15,15 @@ public class Office implements Serializable {
     private String postalCode;
     private String state;
     private String territory;
+    private Object location;
+    private Integer internalBudget;
 
     private Office() {
     }
 
     public Office(String officeCode, String addressLineFirst, String addressLineSecond,
-            String city, String country, String phone, String postalCode, String state, String territory) {
+            String city, String country, String phone, String postalCode, 
+            String state, Object location, String territory, Integer internalBudget) {
         this.officeCode = officeCode;
         this.addressLineFirst = addressLineFirst;
         this.addressLineSecond = addressLineSecond;
@@ -29,7 +32,9 @@ public class Office implements Serializable {
         this.phone = phone;
         this.postalCode = postalCode;
         this.state = state;
+        this.location = location;
         this.territory = territory;
+        this.internalBudget = internalBudget;
     }
 
     public Office(Office value) {
@@ -41,7 +46,9 @@ public class Office implements Serializable {
         this.phone = value.phone;
         this.postalCode = value.postalCode;
         this.state = value.state;
+        this.location = location;
         this.territory = value.territory;
+        this.internalBudget = internalBudget;
     }
 
     public String getOfficeCode() {
@@ -116,11 +123,28 @@ public class Office implements Serializable {
         this.territory = territory;
     }
 
+    public Object getLocation() {
+        return location;
+    }
+
+    public void setLocation(Object location) {
+        this.location = location;
+    }
+
+    public Integer getInternalBudget() {
+        return internalBudget;
+    }
+
+    public void setInternalBudget(Integer internalBudget) {
+        this.internalBudget = internalBudget;
+    }        
+
     @Override
     public String toString() {
-        return "Office{" + "officeCode=" + officeCode + ", addressLineFirst=" + addressLineFirst 
-                + ", addressLineSecond=" + addressLineSecond + ", city=" + city 
-                + ", country=" + country + ", phone=" + phone + ", postalCode=" + postalCode 
-                + ", state=" + state + ", territory=" + territory + '}';
-    }   
+        return "Office{" + "officeCode=" + officeCode + ", addressLineFirst=" 
+                + addressLineFirst + ", addressLineSecond=" + addressLineSecond 
+                + ", city=" + city + ", country=" + country + ", phone=" + phone 
+                + ", postalCode=" + postalCode + ", state=" + state + ", territory=" 
+                + territory + ", location=" + location + ", internalBudget=" + internalBudget + '}';
+    }    
 }
