@@ -25,7 +25,7 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         
-        <jooq.version>3.16.2</jooq.version>       
+        <jooq.version>3.16.5</jooq.version>       
         <codehaus.mojo.version>1.0.0</codehaus.mojo.version>              
         <jakarta.validation>3.0.1</jakarta.validation>
         
@@ -85,6 +85,7 @@
             <plugin>
                 <groupId>org.jooq</groupId>
                 <artifactId>jooq-codegen-maven</artifactId>                   
+                <version>${jooq.version}</version>
                 <executions>
                     <execution>
                         <id>generate-for-mysql</id>

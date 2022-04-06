@@ -22,9 +22,12 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
                 
-        <jooq.version>3.15.5</jooq.version>
+        <jooq.version>3.16.5</jooq.version>
         <codehaus.mojo.version>1.0.0</codehaus.mojo.version>                    
-        <exec.maven.plugin>3.0.0</exec.maven.plugin>                
+        <exec.maven.plugin>3.0.0</exec.maven.plugin>         
+        <jakarta.version>3.0.1</jakarta.version>       
+        <jakarta.xml.bind.version>3.0.1</jakarta.xml.bind.version>
+        <javax.xml.bind.version>2.1</javax.xml.bind.version>
     </properties>       
         
     <dependencies>               
@@ -37,7 +40,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>        
-         <dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency> 
@@ -56,13 +59,20 @@
             <scope>runtime</scope>
         </dependency>                               
         <dependency>
-            <groupId>javax.validation</groupId>
-            <artifactId>validation-api</artifactId>        
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+            <version>${jakarta.version}</version>
         </dependency>      
         <dependency>
-            <groupId>org.hibernate.validator</groupId>
-            <artifactId>hibernate-validator</artifactId>    
-        </dependency>            
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+            <version>${jakarta.xml.bind.version}</version>
+        </dependency>      
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>${javax.xml.bind.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

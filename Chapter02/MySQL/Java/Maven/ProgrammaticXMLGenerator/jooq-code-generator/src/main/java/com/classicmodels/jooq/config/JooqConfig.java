@@ -26,10 +26,7 @@ public class JooqConfig {
                                         new Property().withKey("dialect").withValue("MYSQL"),
                                         new Property().withKey("xmlFile").withValue("./../../../../../db/migration/xml/mysql/sql.xml")
                                 )
-                                .withIncludes(".*")
-                                .withExcludes("flyway_schema_history | sequences"
-                                        + " | customer_pgs | refresh_top3_product"
-                                        + " | sale_.* | set_.* | get_.* | .*_master")                                
+                                .withIncludes(".*")                             
                                 .withSchemaVersionProvider("com.classicmodels.jooq.config.MySchemaVersionProvider")                                
                         )
                         .withGenerate(new Generate()
