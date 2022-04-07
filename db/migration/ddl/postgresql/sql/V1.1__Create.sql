@@ -112,7 +112,9 @@ CREATE TABLE "department" (
   "st_borrowing"        FLOAT       DEFAULT NULL,
   "accrued_liabilities" FLOAT       DEFAULT NULL,
   CONSTRAINT "department_pk" PRIMARY KEY ("department_id"),
+  /* [jooq ignore start] */
   CONSTRAINT "department_code_uk" UNIQUE ("code"),
+  /* [jooq ignore stop] */
   CONSTRAINT "department_office_fk" FOREIGN KEY ("office_code") REFERENCES "office" ("office_code")
 );
 
