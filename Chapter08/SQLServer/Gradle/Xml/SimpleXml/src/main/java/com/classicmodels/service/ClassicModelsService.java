@@ -16,5 +16,6 @@ public class ClassicModelsService {
         
         classicModelsRepository.fetchOfficesAsXMLAuto();
         classicModelsRepository.fetchOfficesAsXMLPath();
+		classicModelsRepository.fetchOfficesAsXMLExplicit();
     }
 }

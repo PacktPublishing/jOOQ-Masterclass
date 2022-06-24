@@ -1,11 +1,22 @@
 package com.classicmodels.repository;
 
+import static jooq.generated.tables.Employee.EMPLOYEE;
 import static jooq.generated.tables.Office.OFFICE;
+import static jooq.generated.tables.Sale.SALE;
 import org.jooq.DSLContext;
 import org.jooq.Record1;
 import org.jooq.Result;
 import org.jooq.XML;
 import org.jooq.XMLFormat;
+import static org.jooq.impl.DSL.field;
+import static org.jooq.impl.DSL.inline;
+import static org.jooq.impl.DSL.name;
+import static org.jooq.impl.DSL.one;
+import static org.jooq.impl.DSL.select;
+import static org.jooq.impl.DSL.two;
+import static org.jooq.impl.SQLDataType.BIGINT;
+import static org.jooq.impl.SQLDataType.DOUBLE;
+import static org.jooq.impl.SQLDataType.INTEGER;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -127,5 +138,32 @@ public class ClassicModelsRepository {
                 .fetch()
                 .formatXML(XMLFormat.DEFAULT_FOR_RECORDS);
         System.out.println("Example 1.7.2:\n" + result72);
+    }
+	
+	public void fetchOfficesAsXMLExplicit() {
+
+        String result1 = ctx.select().from(select(
+                one().as("Tag"), inline(null, INTEGER).as("Parent"),
+                EMPLOYEE.EMPLOYEE_NUMBER.as("employee!1!employee_number"),
+                EMPLOYEE.FIRST_NAME.as("employee!1!first_name!ELEMENT"),
+                EMPLOYEE.LAST_NAME.as("employee!1!last_name!ELEMENT"),
+                EMPLOYEE.JOB_TITLE.as("employee!1!job_title!ELEMENT"),
+                EMPLOYEE.SALARY.as("employee!1!salary!ELEMENT"),
+                inline(null, BIGINT).as("sale!2!sale_id"),
+                inline(null, INTEGER).as("sale!2!fiscal_year!ELEMENT"),
+                inline(null, DOUBLE).as("sale!2!sale!ELEMENT"))
+                .from(EMPLOYEE)
+                .unionAll(select(two().as("Tag"), one().as("Parent"),
+                        EMPLOYEE.EMPLOYEE_NUMBER, EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, 
+                        EMPLOYEE.JOB_TITLE, EMPLOYEE.SALARY,
+                        SALE.SALE_ID, SALE.FISCAL_YEAR, SALE.SALE_)
+                        .from(EMPLOYEE)
+                        .innerJoin(SALE)
+                        .on(EMPLOYEE.EMPLOYEE_NUMBER.eq(SALE.EMPLOYEE_NUMBER))))
+                .orderBy(field(name("employee!1!salary!ELEMENT")), field(name("sale!2!fiscal_year!ELEMENT")))
+                .forXML().explicit()
+                .fetch()
+                .formatXML(XMLFormat.DEFAULT_FOR_RECORDS);
+        System.out.println("Example 1.1:\n" + result1);
     }
 }
