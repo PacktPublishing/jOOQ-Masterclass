@@ -2,6 +2,7 @@
 
 | Application                     | Description
 | --------------------------------|-----------------------------------------------------------------|
+| JOOQReactiveTransaction         | Working with jOOQ 3.17+ reactive transactions                   |
 | JOOQTransaction                 | Nesting jOOQ transactions via transaction()/transactionResult() | 
 | JOOQTransactionNotIgnored       | Avoid transactions being ignored                                |
 | PropagationMandatory            | @Transactional(propagation = Propagation.MANDATORY)             |
