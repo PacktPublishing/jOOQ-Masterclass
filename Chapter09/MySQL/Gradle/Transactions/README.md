@@ -15,3 +15,4 @@
 | ThreadLocalTransactionProvider1 | Using jOOQ ThreadLocalTransactionProvider                       |
 | ThreadLocalTransactionProvider2 | Using jOOQ ThreadLocalTransactionProvider                       |
 | TransactionAsync                | Using jOOQ asynchronous transactions                            |
+| jOOQReactiveTransaction         | Working with jOOQ 3.17+ reactive transactions                   |
