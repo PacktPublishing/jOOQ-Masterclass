@@ -15,9 +15,9 @@ import org.jooq.DSLContext;
 import org.jooq.SelectQuery;
 import static org.jooq.impl.DSL.asterisk;
 import static org.jooq.impl.DSL.field;
+import static org.jooq.impl.DSL.min;
 import static org.jooq.impl.DSL.nvl;
 import static org.jooq.impl.DSL.select;
-import static org.jooq.impl.DSL.table;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -412,25 +412,50 @@ public class ClassicModelsRepository {
         );
     }
 
-    // EXAMPLE 13
-    /*
-    select
-        "public"."employee"."first_name",
-        "public"."employee"."last_name",
-        "public"."employee"."salary" 
-    from
-        "public"."employee" 
-    order by
-        "public"."employee"."salary" offset ? rows fetch next ? rows only
-     */
+    // EXAMPLE 13    
     public void findEmployeeLimitOffset() {
 
-        System.out.println("EXAMPLE 13\n"
+        /*
+        select
+            "public"."employee"."first_name",
+            "public"."employee"."last_name",
+            "public"."employee"."salary" 
+        from
+            "public"."employee" 
+        order by
+            "public"."employee"."salary" offset ? rows fetch next ? rows only
+        */
+        System.out.println("EXAMPLE 13.1\n"
                 + ctx.select(EMPLOYEE.FIRST_NAME, EMPLOYEE.LAST_NAME, EMPLOYEE.SALARY)
                         .from(EMPLOYEE)
-                        .orderBy(EMPLOYEE.SALARY)
+                        .orderBy(EMPLOYEE.SALARY)                        
                         .limit(10)
                         .offset(5)
+                        .fetch()
+        );
+
+        /*        
+        select 
+          "public"."orderdetail"."order_id", 
+          "public"."orderdetail"."product_id", 
+          "public"."orderdetail"."quantity_ordered" 
+        from 
+          "public"."orderdetail" 
+        order by 
+          "public"."orderdetail"."quantity_ordered" fetch next (
+            select 
+              min(
+                "public"."orderdetail"."quantity_ordered"
+              ) 
+            from 
+              "public"."orderdetail"
+          ) rows only        
+        */
+        System.out.println("EXAMPLE 13.2\n"
+                + ctx.select(ORDERDETAIL.ORDER_ID, ORDERDETAIL.PRODUCT_ID, ORDERDETAIL.QUANTITY_ORDERED)
+                        .from(ORDERDETAIL)
+                        .orderBy(ORDERDETAIL.QUANTITY_ORDERED)                        
+                        .limit(field(select(min(ORDERDETAIL.QUANTITY_ORDERED)).from(ORDERDETAIL)))                        
                         .fetch()
         );
     }
