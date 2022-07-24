@@ -184,8 +184,8 @@
                                     <syntheticObjects>                                
                                         <columns>
                                             <column>
-                                                <name>refund_amount</name>                                        
-                                                <tables>bank_transaction</tables>
+                                                <name>REFUND_AMOUNT</name>                                        
+                                                <tables>BANK_TRANSACTION</tables>
                                                 <type>DECIMAL(10,2)</type>
                                             </column>                                     
                                         </columns>
@@ -196,7 +196,7 @@
                                         <forcedType>
                                             <generator>ctx -> payment().INVOICE_AMOUNT.minus(DSL.sum(TRANSFER_AMOUNT))
                                             </generator>
-                                            <includeExpression>refund_amount</includeExpression>
+                                            <includeExpression>REFUND_AMOUNT</includeExpression>
                                         </forcedType>                                        
                                     </forcedTypes>  
                                 </database>

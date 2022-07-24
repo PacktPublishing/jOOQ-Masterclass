@@ -17,13 +17,7 @@ public class ClassicModelsRepository {
     }
 
     @Transactional
-    public void remainingToTransfer() {
-
-        System.out.println(
-                ctx.select(sum(BANK_TRANSACTION.REFUND_AMOUNT))
-                        .from(BANK_TRANSACTION)                           
-                        .fetch()
-        );
+    public void remainingToTransfer() {       
         
         System.out.println(
                 ctx.select(
