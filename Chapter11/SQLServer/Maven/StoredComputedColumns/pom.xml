@@ -180,7 +180,7 @@
                                     (default is 5 seconds) -->
                                     <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>
                                                                        
-                                    <!-- Tell the code generator how to compute the values for an exiting column -->
+                                    <!-- Tell the code generator how to compute the values for an existing column -->
                                     <forcedTypes>
                                         <forcedType>
                                             <generator>ctx -> DSL.concat(OFFICE.COUNTRY, DSL.inline(", "), 
