@@ -124,7 +124,7 @@
                         <goals>
                             <goal>generate</goal>
                         </goals>                                  
-                        <configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.16.0.xsd">                                                 
+                        <configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.17.0.xsd">                                                 
 
                             <!-- Configure the database connection here -->
                             <jdbc>
@@ -179,24 +179,14 @@
                                     <!-- Give enough time to jOOQ to trigger the queries needed for generating sources 
                                     (default is 5 seconds) -->
                                     <logSlowQueriesAfterSeconds>20</logSlowQueriesAfterSeconds>
-                                    
-                                    <!-- Prepare the synthetic keys -->
-                                    <syntheticObjects>                                
-                                        <columns>
-                                            <column>
-                                                <name>transfer_amount</name>                                        
-                                                <tables>bank_transaction</tables>
-                                                <type>DECIMAL(10,2)</type>
-                                            </column>                                     
-                                        </columns>
-                                    </syntheticObjects> 
-                                    
-                                    <!-- Now tell the code generator how to compute the values -->
+                                                                       
+                                    <!-- Tell the code generator how to compute the values for an exiting column -->
                                     <forcedTypes>
                                         <forcedType>
-                                            <generator>ctx -> TRANSFER_AMOUNT.minus(TRANSFER_AMOUNT)
+                                            <generator>ctx -> DSL.concat(OFFICE.COUNTRY, DSL.inline(", "), 
+                                                              OFFICE.STATE, DSL.inline(", "), OFFICE.CITY)
                                             </generator>
-                                            <includeExpression>transfer_amount</includeExpression>
+                                            <includeExpression>OFFICE.ADDRESS_LINE_FIRST</includeExpression>
                                         </forcedType>                                        
                                     </forcedTypes>  
                                 </database>

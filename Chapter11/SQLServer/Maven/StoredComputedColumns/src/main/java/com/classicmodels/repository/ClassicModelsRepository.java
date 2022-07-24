@@ -1,7 +1,6 @@
 package com.classicmodels.repository;
 
-import java.math.BigDecimal;
-import static jooq.generated.tables.BankTransaction.BANK_TRANSACTION;
+import static jooq.generated.tables.Office.OFFICE;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,10 +16,16 @@ public class ClassicModelsRepository {
     }
 
     @Transactional
-    public void remainingToTransfer() {
+    public void insertNewOffice() {
         
-                ctx.update(BANK_TRANSACTION)
-                        .set(BANK_TRANSACTION.TRANSFER_AMOUNT, BigDecimal.valueOf(50))
-                        .execute();        
+                // The computed column OFFICE.ADDRESS_LINE_FIRST will be added by jOOQ
+                ctx.insertInto(OFFICE)
+                        .columns(OFFICE.OFFICE_CODE, OFFICE.CITY, OFFICE.PHONE,
+                                OFFICE.STATE, OFFICE.COUNTRY, OFFICE.POSTAL_CODE, 
+                                OFFICE.TERRITORY, OFFICE.INTERNAL_BUDGET)
+                        .values("55", "Banesti", "+021 984 333", "Prahova", "Romania",
+                                "107051", "PH", 0)
+                        .onDuplicateKeyIgnore()
+                        .execute();
     }
 }
