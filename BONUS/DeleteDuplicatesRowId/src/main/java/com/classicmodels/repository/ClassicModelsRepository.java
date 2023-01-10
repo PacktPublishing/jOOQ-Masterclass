@@ -1,6 +1,5 @@
 package com.classicmodels.repository;
 
-import static jooq.generated.tables.Order.ORDER;
 import static jooq.generated.tables.Orderdetail.ORDERDETAIL;
 import org.jooq.DSLContext;
 import static org.jooq.impl.DSL.min;
